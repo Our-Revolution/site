@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.template.defaultfilters import yesno
 
 
 class Candidate(models.Model):
@@ -61,7 +62,7 @@ class Initiative(models.Model):
     cta_link = models.URLField(blank=True, null=True)
 
     def __unicode__(self):
-        return self.name
+        return "%s on %s %s: %s" % (yesno(self.vote).title(), self.state, self.title, self.name)
 
 
 class Issue(models.Model):

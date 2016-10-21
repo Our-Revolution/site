@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from bs4 import BeautifulSoup
 from django.contrib.contenttypes.models import ContentType
 from django.db import migrations
+from django.template.defaultfilters import slugify, yesno
 from wagtail.wagtailcore.models import Page
 import requests
 
@@ -21,14 +22,16 @@ def populate_candidate_pages(apps, schema_edtior):
         req = requests.get("http://ourrevolution.com/candidates/%s" % candidate.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
-        except:
-            print "Failed on %s" % req.url
+            signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
+        except BaseException, e:
+            print "Failed on %s: %s" % (req.url, e.message)
             continue
 
         page = CandidateEndorsementPage(**{
                 'title': candidate.name,
                 'body': html_content,
-                'candidate': candidate
+                'candidate': candidate,
+                'signup_tagline': signup_tagline
                 # 'content_type': ContentType.objects.get_for_model(CandidateEndorsementPage),
             })
 
@@ -51,14 +54,19 @@ def populate_initiative_pages(apps, schema_edtior):
         req = requests.get("http://ourrevolution.com/ballot-initiatives/%s" % initiative.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
-        except:
-            print "Failed on %s" % req.url
+            signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
+        except BaseException, e:
+            print "Failed on %s: %s" % (req.url, e.message)
             continue
 
+        page_title = "%s on %s %s: %s" % (yesno(initiative.vote).title(), initiative.state, initiative.title, initiative.name)
+
         page = InitiativeEndorsementPage(**{
-                'title': initiative.name,
+                'title': page_title,
+                'slug': slugify(initiative.state + ' ' + initiative.title),
                 'body': html_content,
-                'initiative': initiative
+                'initiative': initiative,
+                'signup_tagline': signup_tagline
                 # 'content_type': ContentType.objects.get_for_model(CandidateEndorsementPage),
             })
 
@@ -79,15 +87,19 @@ def populate_issue_pages(apps, schema_edtior):
     for issue in Issue.objects.all():
         req = requests.get("http://ourrevolution.com/issues/%s" % issue.slug)
         try:
-            html_content = "\n".join([unicode(c).strip() for c in BeautifulSoup(req.text, "html5lib").select('.issues__content')[0].contents])
-        except:
-            print "Failed on %s" % req.url
+            html_content = BeautifulSoup(req.text, "html5lib").select('.issues__content')[0]
+            signup_tagline = html_content.select('.sign-up-form h3')[0].text.strip()
+            [form.extract() for form in html_content.select('.sign-up-form')]
+            html_content = "\n".join([unicode(c).strip() for c in html_content])
+        except BaseException, e:
+            print "Failed on %s: %s" % (req.url, e.message)
             continue
 
         page = IssuePage(**{
                 'title': issue.name,
                 'body': html_content,
-                'issue': issue
+                'issue': issue,
+                'signup_tagline': signup_tagline
                 # 'content_type': ContentType.objects.get_for_model(CandidatePage),
             })
 

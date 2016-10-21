@@ -1,0 +1,55 @@
+{% extends "pages/base_page.html" %}
+
+  {% block content %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="container">
+        <div class='page-heading'>
+          <h1>{{ page.get_parent.title }}</h1>
+        </div>
+
+        <div class="issues">
+          <div class="col-md-3">
+            <div class="toggle-nav hidden-md hidden-lg" id="toggle-nav">Issues <i class="glyphicon glyphicon-menu-hamburger toggle-nav__icon"></i></div>
+            <ul class="nav nav-pills nav-stacked issues__nav">
+              <!-- todo: make these sortable / dynamic -->
+              <li role="presentation"><a href="/issues/tpp">TPP</a></span></li>
+              <li role="presentation"><a href="/issues/income-inequality">Income Inequality</a></span></li>
+              <li role="presentation"><a href="/issues/college-tuition">College Tuition</a></span></li>
+              <li role="presentation"><a href="/issues/big-money-in-politics">Big Money in Politics</a></span></li>
+              <li role="presentation"><a href="/issues/foreign-policy">Foreign Policy</a></span></li>
+              <li role="presentation"><a href="/issues/immigration">Immigration</a></span></li>
+              <li role="presentation"><a href="/issues/creating-decent-paying-jobs">Creating Decent Paying Jobs</a></span></li>
+              <li role="presentation"><a href="/issues/a-living-wage">A Living Wage</a></span></li>
+              <li role="presentation"><a href="/issues/climate-change">Climate Change</a></span></li>
+              <li role="presentation"><a href="/issues/racial-justice">Racial Justice</a></span></li>
+              <li role="presentation"><a href="/issues/puerto-rico">Puerto Rico</a></span></li>
+              <li role="presentation"><a href="/issues/affordable-housing">Affordable Housing</a></span></li>
+              <li role="presentation"><a href="/issues/womens-rights">Women&#x27;s Rights</a></span></li>
+              <li role="presentation"><a href="/issues/aids-and-hiv">AIDS and HIV</a></span></li>
+              <li role="presentation"><a href="/issues/lgbt-equality">LGBT Equality</a></span></li>
+              <li role="presentation"><a href="/issues/empowering-tribal-nations">Empowering Tribal Nations</a></span></li>
+              <li role="presentation"><a href="/issues/caring-for-our-veterans">Caring for Our Veterans</a></span></li>
+              <li role="presentation"><a href="/issues/medicare-for-all">Medicare for All</a></span></li>
+              <li role="presentation"><a href="/issues/strengthen-social-security">Strengthen Social Security</a></span></li>
+              <li role="presentation"><a href="/issues/prescription-drug-prices">Prescription Drug Prices</a></span></li>
+              <li role="presentation"><a href="/issues/disability-rights">Disability Rights</a></span></li>
+            </ul>
+          </div>
+          <div class="col-md-9 issues__content">
+            
+            {{ page.body | safe }}
+
+            {% if page.signup_tagline %}
+                {% with page.signup_tagline as tagline %}
+                    {% include "partials/sign-up.html" %}
+                {% endwith %}
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

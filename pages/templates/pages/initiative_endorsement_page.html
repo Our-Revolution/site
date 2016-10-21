@@ -1,0 +1,69 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+    {% with page.initiative as initiative %}
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="container">
+                    <div class="page-sub-nav">
+                        <a href=""><span class="glyphicon glyphicon-chevron-left"></span></a> Our Initiatives / {{ initiative.state }} / {{ initiative.title }}: {{ initiative.name }}
+                    </div>
+
+                    <div class="page-heading">
+                        <div>
+                            <h1>{{ initiative.vote | yesno | title }} on {{ initiative.title }}: {{ initiative.name }}</h1>
+                            <span>{{ initiative.state }}</span>
+                        </div>
+                    </div>
+
+                    <div class="candidate-content clearfix">
+                        <div class="col-md-6 col-md-offset-3">
+                            <p class="candidate-bio">
+                                {{ page.body | safe }}
+                            </p>
+                        </div>
+
+                        {% if state_initiatives.exists %}
+                            <div class="col-md-10 col-md-offset-1">
+                                <h2>Other Initiatives in {{ initiative.state }}</h2>
+                                <ul class="card-list third list">
+                                    {% for initiative_page in state_initiatives %}
+                                        {% with initiative_page.initiative as initiative %}
+                                            {% include "partials/initiative_card.html" %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if state_initiatives.exists %}
+                            <div class="col-md-10 col-md-offset-1">
+                                <h2>Similar Initiatives</h2>
+                                <ul class="card-list third list">
+                                    {% for initiative_page in similar_initiatives %}
+                                        {% with initiative_page.initiative as initiative %}
+                                            {% include "partials/initiative_card.html" %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.signup_tagline %}
+                        {% with page.signup_tagline as tagline %}
+                            {% include "partials/sign-up.html" %}
+                        {% endwith %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    {% endwith %}
+
+{% endblock %}

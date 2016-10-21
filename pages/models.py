@@ -39,7 +39,7 @@ class CandidateEndorsementIndexPage(Page):
     
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
-        context['candidates'] = self.get_children().live().select_related('candidateendorsementpage', 'candidateendorsementpage__candidate')
+        context['candidates'] = self.get_children().live().select_related('candidateendorsementpage', 'candidateendorsementpage__candidate').order_by('candidateendorsementpage__candidate__state', 'candidateendorsementpage__candidate__district')
         return context
 
 
@@ -59,13 +59,19 @@ class InitiativeEndorsementPage(Page):
             FieldPanel('signup_tagline')
         ]
 
+    def get_context(self, *args, **kwargs):
+        context = super(InitiativeEndorsementPage, self).get_context(*args, **kwargs)
+        context['state_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__state=self.initiativeendorsementpage.initiative.state).exclude(id=self.id).select_related('initiative')
+        context['similar_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__category=self.initiativeendorsementpage.initiative.category).exclude(id=self.id).select_related('initiative')
+        return context
+
 
 class InitiativeEndorsementIndexPage(Page):
     subpage_types = ['pages.InitiativeEndorsementPage']
     
     def get_context(self, *args, **kwargs):
         context = super(InitiativeEndorsementIndexPage, self).get_context(*args, **kwargs)
-        context['initiatives'] = self.get_children().live().select_related('initiativeendorsementpage', 'initiativeendorsementpage__initiative')
+        context['initiatives'] = self.get_children().live().select_related('initiativeendorsementpage', 'initiativeendorsementpage__initiative').order_by('-initiativeendorsementpage__initiative__featured', 'initiativeendorsementpage__initiative__state')
         return context
 
 
@@ -88,7 +94,6 @@ class IssuePage(Page):
 class IssueIndexPage(Page):
     subpage_types = ['pages.IssuePage']
     
-    def get_context(self, *args, **kwargs):
-        context = super(IssueIndexPage, self).get_context(*args, **kwargs)
-        context['issues'] = self.get_children().live().select_related('issuepage', 'issuepage__issue')
-        return context
+    def serve(self, request):
+        # trickeryyyy...
+        return IssuePage.objects.get(title='TPP').serve(request)

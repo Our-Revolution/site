@@ -63,11 +63,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="main-navbar">
                 <ul class="nav navbar-nav navbar-nav--centered">
-                    <li class="about"><a href="/about" id="about-nav-link">About</a></li>
-                    <li class="action"><a href="/action" id="action-nav-link">Take Action</a></li>
-                    <li class="issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
-                    <li class="active candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
-                    <li class="initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
+                    <li class="{% if "/about" in request.path %}active{% endif %} about"><a href="/about" id="about-nav-link">About</a></li>
+                    <li class="{% if "/action" in request.path %}active{% endif %} action"><a href="/action" id="action-nav-link">Take Action</a></li>
+                    <li class="{% if "/issues" in request.path %}active{% endif %} issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
+                    <li class="{% if "/candidates" in request.path %}active{% endif %} candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
+                    <li class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
                 </ul>
                 <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="pull-right btn btn-donate navbar-btn" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
             </div><!-- /.navbar-collapse -->
@@ -79,7 +79,11 @@
 
     {% endblock %}
 
+
 </div>
+
+{% block footer_scripts %}
+{% endblock %}
 
 {% include "partials/footer.html" %}
 {% include "partials/footer-js.html" %}
