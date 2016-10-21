@@ -1,0 +1,377 @@
+// Modules
+.module-container {
+  @include clearfix();
+  overflow: hidden;
+  margin: 20px 0;
+  height: 600px;
+  display: flex;
+  border-radius: 3px;
+
+  &--video {
+    display: block;
+  }
+}
+
+.module {
+  height: auto;
+  display: flex;
+
+  &__heading {
+    margin: 0;
+  }
+
+  &.centered {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  &.align-bottom {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &.align-left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &.align-middle {
+    display: flex;
+    justify-content: center;
+  }
+
+  &.align-center {
+    display: flex;
+    align-items: center;
+  }
+
+  &.blue {
+    background: $blue;
+  }
+
+  &.dark-blue {
+    background: darken($blue, 30);
+    color: white;
+
+    &-transparent {
+      @extend .dark-blue;
+      background: transparentize(darken($blue, 30), 0.5);
+    }
+  }
+
+  &.white {
+    background: white;
+  }
+
+  &.crowd {
+    background-image: url('../img/nina_bg.jpg');
+    background-size: cover;
+    color: white;
+  }
+
+  &.tpp-bg {
+    background: $blue url('../img/tpp_bg.png');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+
+  &.shailene-bg {
+    background: $blue url('../img/shailene-arrest.png');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+
+  &.lucy-and-bernie {
+    background: $blue url('../img/lucy-and-bernie.jpg');
+    background-size: cover;
+    background-position: bottom center;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+
+  &.flag-bg {
+    background: black url('../img/bg_flag.jpg');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+
+  &.connolly {
+    background-image: url('../img/bg_connolly.jpg');
+    background-position: center;
+    background-size: cover;
+    color: white;
+  }
+
+  &.jehlen {
+    background-image: url('../img/bg_jehlen.jpg');
+    background-position: center;
+    background-size: cover;
+    color: white;
+  }
+
+  &.vassell {
+    background-image: url('../img/bg_vassell.jpg');
+    background-position: right center;
+    background-size: cover;
+    color: white;
+  }
+
+  &.calkin {
+    background-image: url('../img/bg_calkin.jpg');
+    background-position: right center;
+    background-size: cover;
+    color: white;
+  }
+
+  &.eramo {
+    background-image: url('../img/bg_eramo.jpg');
+    background-position: right center;
+    background-size: cover;
+    color: white;
+  }
+
+  &.border-left {
+    border-left: 5px solid lighten($blue, 10);
+  }
+
+  &.border-right {
+    border-right: 5px solid lighten($blue, 10);
+  }
+
+  &--video {
+    display: block;
+
+    .module__content {
+      max-width: 100%;
+      padding:0;
+    }
+  }
+
+  &__content {
+    padding: 30px;
+    max-width: 600px;
+    // margin: auto;
+
+    &.flex {
+      @extend .module__content;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+    }
+
+    &.full {
+      flex: 1;
+      max-width: 100%;
+    }
+
+    &.align-left {
+      width: 100%;
+      text-align: left;
+      max-width: 100%;
+      padding: 30px;
+    }
+
+    &.max-70 {
+      max-width: 70%;
+    }
+  }
+
+  &__button {
+    margin-top: 10px;
+  }
+
+  &--small-bottom {
+    background: $blue;
+    width: 100%;
+    align-self: flex-end;
+    margin-bottom: 0;
+    flex: 0 0 100px;
+    max-width: 100%;
+    border-radius: 0 0 0 3px;
+
+    @media (max-width:767px) {
+      border-radius: 0;
+    }
+  }
+
+  &--two-thirds--full {
+    width: 66%;
+    float: left;
+  }
+
+  &--one-third--full {
+    width: 34%;
+    float: left;
+    background: #f5f5f5;
+    height: 100%;
+  }
+}
+
+
+// Module Grid
+.module-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &.third {
+    width: 34%;
+    @include until($medium) {
+      order: 5;
+    }
+  }
+
+  &.half {
+    width: 50%;
+  }
+
+  &.two-thirds {
+    width: 66%;
+  }
+
+  @include until($medium) {
+    width: 100% !important;
+    flex-flow: row wrap;
+  }
+}
+
+.module {
+  height: 100%;
+  width: 100%;
+
+  &.half {
+    height: 50%;
+  }
+
+  &.full {
+    height: 100%;
+  }
+
+  &.fill {
+    height: auto;
+    flex: auto;
+    min-height: 150px;
+
+    @include until($small) {
+      min-height: 200px;
+    };
+  }
+
+  &.top {
+    height: auto;
+    align-self: flex-start;
+    flex: 0 0 auto;
+  }
+
+  &.bottom {
+    height: auto;
+    align-self: flex-end;
+  }
+}
+
+// Video Stuff
+@media (max-width: 991px) {
+  .module-container--video {
+    .module--video {
+      padding: 20px;
+      border-radius: 0 0 3px 3px;
+    }
+
+    .module--centered {
+      display: block;
+      height: auto;
+    }
+
+    .video-wrapper {
+      margin-top: 10px;
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding-bottom: 45%;
+    }
+  }
+}
+
+@media (max-width: 991px) and (max-width: 768px) {
+  .module-container .sign-up-form .form-group {
+    margin-bottom: 10px;
+
+    &.email {
+      width: 60%;
+    }
+
+    &.zip {
+      width: 36%;
+      margin-right: 0;
+    }
+
+    &.submit {
+      display: block;
+      width: 100%;
+    }
+
+  }
+}
+
+@media (max-width: 767px) {
+  .module-container {
+    height: auto;
+    flex-flow: row wrap;
+
+    .module--centered {
+      flex: 0 0 100%;
+    }
+  }
+
+  .navbar .btn-donate {
+    display: block;
+    width: 100%;
+    float: none !important;
+  }
+}

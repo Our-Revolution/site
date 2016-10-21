@@ -1,0 +1,27 @@
+// Footer
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: #fafafa;
+
+  p {
+    font-size: 14px;
+  }
+
+  &__info {
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__nav {
+    margin-bottom: 0;
+  }
+}

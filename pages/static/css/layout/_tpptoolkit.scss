@@ -1,0 +1,246 @@
+.tpp-toolkit {
+  p {
+    font-size: 18px;
+  }
+
+  .twitter-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    background: url('../img/stop-tpp/twitter-icon.svg') center center no-repeat;
+    float: right;
+  }
+
+  .facebook-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    background: url('../img/stop-tpp/facebook-icon.svg') center center no-repeat;
+    float: right;
+  }
+
+  section {
+    padding: 80px 0;
+
+    &.flex {
+      display: flex;
+      align-items: center;
+
+      @include until($medium) {
+        display: block;
+      }
+
+      & .flex-one {
+        flex: 1;
+      }
+    }
+  }
+
+  .intro {
+    .btn {
+      margin: 20px 20px 0 0;
+    }
+  }
+
+  .tpp-header {
+    background: url('../img/stop-tpp/tpp-toolkit-header.svg') center center no-repeat;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 10%;
+  }
+
+  .row--tpp-pattern {
+    background: darken($blue,5) url('../img/stop-tpp/tpp-pattern.png') repeat;
+    color: white;
+  }
+
+  .row--blue {
+    background: $blue;
+    color: white;
+  }
+
+  .row--dark-blue {
+    background: darken($blue,40);
+    color: white;
+  }
+
+  .sub-nav {
+    padding: 20px;
+    width: 100%;
+    background: darken($blue,40);
+    color: white;
+    text-align: center;
+
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    a {
+      color: white;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      margin: 0 40px 0 0;
+      height: 30px;
+      line-height: 30px;
+    }
+
+    @include until($small) {
+      font-size: 12px;
+
+      li {
+        margin: 0 10px 0 0;
+      }
+    }
+  }
+
+  .no-tpp, .tpp-people {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 40px auto;
+  }
+
+  .tpp-phone {
+    background: $green;
+    border-radius: 3px;
+    padding: 20px;
+    // height: 120px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+    transition: 0.1s;
+    margin-top: 20px;
+
+    &:hover, &:focus {
+      font-weight: bolder;
+      transform: scale(1.05);
+    }
+
+    .phone-icon {
+      height: 50px;
+      width: 50px;
+      background: url('../img/stop-tpp/phone-icon.svg') center center no-repeat;
+      display: inline-block;
+      float: left;
+      margin: 20px 40px 20px 20px;
+    }
+
+    &__content {
+      flex: auto;
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    h4 {
+      font-size: 32px;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      @include until($small) {
+        font-size: 26px;
+      };
+    }
+  }
+
+  .social-buttons {
+    margin-top: 20px;
+    font-size: 20px;
+
+    .btn {
+      margin-bottom: 20px;
+    }
+
+    // .btn-facebook {
+    //   margin-bottom: 0;
+    // }
+  }
+
+  .social-preview {
+    // margin-top: 20px;
+    color: #333;
+
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 3px;
+
+    .uppercase {
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+    }
+  }
+
+  .btn-giant {
+    border: 2px solid $blue;
+    padding: 40px;
+    border-radius: 10px;
+    display: block;
+    transition: 0.1s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    // margin-top: 40px;
+
+    &:hover {
+      background: $blue;
+      color: white;
+    }
+
+    &__content {
+      float: left;
+      width: 80%;
+    }
+
+    &__icon {
+      width: 20%;
+      float: right;
+      text-align: center;
+      font-size: 70px;
+    }
+  }
+
+  .flyers {
+    margin-bottom: 30px;
+
+    .flyer {
+      color: white;
+      margin-top: 20px;
+
+      img {
+        width: 100%;
+        height: auto;
+        background: #fafafa;
+        padding: 10px;
+        border-radius: 3px;
+        transition: 0.25s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+}

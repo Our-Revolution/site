@@ -1,0 +1,88 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{% block page_title %}Our Revolution - {% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
+
+    {% block meta %}
+        
+        {% block meta_seo %}
+            <meta name="description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+        {% endblock %}
+
+        {% block meta_og %}
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
+            <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+            <meta property="og:url" content="https://ourrevolution.com" />
+            <meta property="og:site_name" content="Our Revolution" />
+            <meta property="og:image" content="https://ourrevolution.com/img/fb.png" />
+        {% endblock %}
+
+        {% block meta_twitter %}
+            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:title" content="Our Revolution"/>
+            <meta name="twitter:description" content="The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in."/>
+            <meta name="twitter:site" content="@OurRevolution"/>
+            <meta name="twitter:image" content="https://ourrevolution.com/img/fb.png"/>
+        {% endblock %}
+
+        {% block meta_google_site_verification %}
+            <meta name="google-site-verification" content="ULKRcIZysCOsq4SLKSbW7ymdJ93OyRWwSMZpBfBPJN0" />
+        {% endblock %}
+        
+    {% endblock %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static "components/bootstrap/dist/css/bootstrap.min.css" %}" />
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand  home" href="/">
+                    <img alt="Our Revolution" class="logo" src="{% static "img/logo.svg" %}">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="nav navbar-nav navbar-nav--centered">
+                    <li class="about"><a href="/about" id="about-nav-link">About</a></li>
+                    <li class="action"><a href="/action" id="action-nav-link">Take Action</a></li>
+                    <li class="issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
+                    <li class="active candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
+                    <li class="initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
+                </ul>
+                <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="pull-right btn btn-donate navbar-btn" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+{% include "partials/footer.html" %}
+{% include "partials/footer-js.html" %}
+
+</body>
+</html>

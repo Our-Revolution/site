@@ -1,0 +1,29 @@
+.sign-up-form {
+  .module__heading {
+    margin-bottom: 10px;
+  }
+
+  &.small {
+
+    .form-group {
+      margin-bottom: 10px;
+
+      &.email {
+        width: 59%;
+      }
+
+      &.zip {
+        width: 36%;
+        margin-right: 0;
+      }
+
+      &.submit {
+        display: block;
+        width: 100%;
+      }
+
+    }
+
+  }
+
+}

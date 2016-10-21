@@ -1,0 +1,206 @@
+// Buttons
+.btn {
+  font-weight: 700;
+  height: 40px;
+  padding: 10px 15px;
+  // text-transform: uppercase;
+  // letter-spacing: 1px;
+}
+
+.btn-round {
+  border-radius: 50px;
+}
+
+.btn-primary,
+.btn-primary:visited {
+  background-color: $green;
+  color: white;
+  border: 1px solid $green;
+  outline: none;
+}
+
+.btn-primary:hover,
+.btn-primary:active:hover,
+.btn-primary.active:hover {
+  background-color: darken($green, 8);
+  color: white;
+  border: 1px solid darken($green, 8);
+  outline: none;
+}
+
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary:active,
+.btn-primary.active {
+  border: 1px solid darken($green, 15);
+  background-color: darken($green, 15);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-secondary,
+.btn-secondary:visited {
+  background-color: $blue;
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:active:hover,
+.btn-secondary.active:hover {
+  background-color: darken($blue, 10);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-secondary:focus,
+.btn-secondary.focus,
+.btn-secondary:active,
+.btn-secondary.active {
+  background-color: darken($blue, 15);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-dark, .btn-dark:visited {
+  background-color: darken($blue, 20);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-dark:hover,
+.btn-dark:active:hover,
+.btn-dark.active:hover {
+  background-color: darken($blue, 25);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-dark:focus,
+.btn-dark.focus,
+.btn-dark:active,
+.btn-dark.active {
+  background-color: darken($blue, 30);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-donate,
+.btn-donate:visited {
+  background-color: $red;
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-donate:hover,
+.btn-donate:active:hover,
+.btn-donate.active:hover {
+  background-color: darken($red, 10);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-donate:focus,
+.btn-donate.focus,
+.btn-donate:active,
+.btn-donate.active {
+  background-color: darken($red, 15);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-outline,
+.btn-outline:visited {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  outline: none;
+  border-radius: 0;
+}
+
+.btn-outline:hover,
+.btn-outline:active:hover,
+.btn-outline.active:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid white;
+  outline: none;
+  border-radius: 0;
+}
+
+.btn-outline:focus,
+.btn-outline.focus,
+.btn-outline:active,
+.btn-outline.active {
+  background-color: rgba(255,255,255,0.4);
+  color: white;
+  border: 1px solid white;
+  outline: none;
+  border-radius: 0;
+}
+
+.btn-twitter,
+.btn-twitter:visited {
+  background-color: #1da1f2;
+  color: white;
+  border: 1px solid #1da1f2;
+  outline: none;
+}
+
+.btn-twitter:hover,
+.btn-twitter:active:hover,
+.btn-twitter.active:hover {
+  background-color: darken(#1da1f2, 8);
+  color: white;
+  border: 1px solid darken(#1da1f2, 8);
+  outline: none;
+}
+
+.btn-twitter:focus,
+.btn-twitter.focus,
+.btn-twitter:active,
+.btn-twitter.active {
+  border: 1px solid darken(#1da1f2, 15);
+  background-color: darken(#1da1f2, 15);
+  color: white;
+  border: none;
+  outline: none;
+}
+
+.btn-facebook,
+.btn-facebook:visited {
+  background-color: #3b5998;
+  color: white;
+  border: 1px solid #3b5998;
+  outline: none;
+}
+
+.btn-facebook:hover,
+.btn-facebook:active:hover,
+.btn-facebook.active:hover {
+  background-color: darken(#3b5998, 8);
+  color: white;
+  border: 1px solid darken(#3b5998, 8);
+  outline: none;
+}
+
+.btn-facebook:focus,
+.btn-facebook.focus,
+.btn-facebook:active,
+.btn-facebook.active {
+  border: 1px solid darken(#3b5998, 15);
+  background-color: darken(#3b5998, 15);
+  color: white;
+  border: none;
+  outline: none;
+}

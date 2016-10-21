@@ -1,0 +1,477 @@
+.prop-61-toolkit {
+  p {
+    font-size: 18px;
+  }
+
+  .intro{
+    h1 {
+      font-size: 60px;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 28px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    &.row {
+      @include until($medium){
+        padding: 40px 0 0;
+
+        h1 {
+          font-size: 40px;
+        }
+
+        h2 {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .cta-header {
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .main-ctas {
+    margin-top: 50px;
+  }
+
+  @include until($medium){
+    .cta {
+      max-width: 400px;
+      width: 100%;
+      float: none;
+      margin: auto;
+    }
+  }
+
+  .cta-body {
+    max-width: 85%;
+    margin: 30px auto;
+    background: white;
+    border-radius: 3px;
+    padding: 20px;
+    color: #0c56a0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    opacity: 0.6;
+    transition: 0.25s;
+
+    &.feature, &:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    &.complete {
+      &:hover {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+      opacity: 0.6;
+    }
+
+    @include clearfix();
+
+    &.block {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+      background: url('../img/prop-61/map.png') no-repeat;
+      border: 20px solid white;
+
+      .host-an-event {
+        flex: 1;
+      }
+    }
+  }
+
+  .success {
+    display: none;
+
+    &.green {
+      background: $green;
+      padding: 30px;
+      border-radius: 3px;
+      color: white;
+
+      a {
+        color: white;
+        text-decoration: none;
+      }
+    }
+
+    .glyphicon {
+      font-size: 5em;
+    }
+  }
+
+  .error {
+    background: $red;
+    border-radius: 3px;
+    margin-top: 10px;
+    color: white;
+    padding: 10px;
+    display: none;
+
+    p {
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+  }
+
+  .video-share-content {
+    background: url('../img/prop-61/thumbnail.jpg') center no-repeat;
+    background-size: cover;
+    border-radius: 3px;
+    color: white;
+    height: 150px;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .share-icons {
+    transition: 0.25s;
+    margin: auto;
+    width: 100px;
+    vertical-align: middle;
+
+    .uppercase {
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+  }
+
+  .twitter-icon-round {
+    height: 40px;
+    width: 40px;
+    display: inline-block;
+    background: url('../img/stop-tpp/twitter-icon-round.svg') center center no-repeat;
+    float: left;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @include text-indent();
+  }
+
+  .facebook-icon-round {
+    height: 40px;
+    width: 40px;
+    display: inline-block;
+    background: url('../img/stop-tpp/facebook-icon-round.svg') center center no-repeat;
+    float: right;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @include text-indent();
+  }
+
+  .twitter-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    background: url('../img/stop-tpp/twitter-icon.svg') center center no-repeat;
+    float: left;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @include text-indent();
+  }
+
+  .facebook-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    background: url('../img/stop-tpp/facebook-icon.svg') center center no-repeat;
+    float: right;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @include text-indent();
+  }
+
+  .sign-up-form.block {
+    .form-group {
+      text-align: left;
+      display: block;
+      width: 100%;
+
+      &.submit {
+        margin-bottom: 0;
+      }
+    }
+
+    button {
+      margin-bottom: 0;
+    }
+  }
+
+  section {
+    padding: 80px 0;
+
+    &.flex {
+      display: flex;
+      align-items: center;
+
+      @include until($medium) {
+        display: block;
+      }
+
+      & .flex-one {
+        flex: 1;
+      }
+    }
+  }
+
+  .row--medical {
+    background: darken($blue,30) url('../img/prop-61/medical-bg.png') repeat;
+    color: white;
+  }
+
+  .row--blue {
+    background: $blue;
+    color: white;
+  }
+
+  .row--dark-blue {
+    background: darken($blue,40);
+    color: white;
+  }
+
+  .problem:before {
+    pointer-events: none;
+    z-index: -9;
+    content: "";
+    height: 250px;
+    width: 250px;
+    background: url(../img/prop-61/problem.png) center/100% no-repeat;
+    left: -125px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    margin: auto;
+  }
+
+  .solution:before {
+    pointer-events: none;
+    z-index: 0;
+    content: "";
+    height: 250px;
+    width: 250px;
+    background: url(../img/prop-61/solution.png) center/100% no-repeat;
+    left: -125px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    margin: auto;
+  }
+
+  .phone-bank:before {
+    pointer-events: none;
+    z-index: -9;
+    content: "";
+    height: 250px;
+    width: 250px;
+    background: url(../img/prop-61/phone-bank.png) center/100% no-repeat;
+    left: -125px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    margin: auto;
+  }
+
+  .sub-nav {
+    padding: 20px;
+    width: 100%;
+    background: darken($blue,40);
+    color: white;
+    text-align: center;
+
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    a {
+      color: white;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      margin: 0 40px 0 0;
+      height: 30px;
+      line-height: 30px;
+    }
+
+    @include until($small) {
+      font-size: 12px;
+
+      li {
+        margin: 0 10px 0 0;
+      }
+    }
+  }
+
+  .no-tpp, .tpp-people {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 40px auto;
+  }
+
+  .tpp-phone {
+    background: $green;
+    border-radius: 3px;
+    padding: 20px;
+    // height: 120px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: normal;
+    text-decoration: none;
+    transition: 0.1s;
+    margin-top: 20px;
+
+    &:hover, &:focus {
+      font-weight: bolder;
+      transform: scale(1.05);
+    }
+
+    .phone-icon {
+      height: 50px;
+      width: 50px;
+      background: url('../img/stop-tpp/phone-icon.svg') center center no-repeat;
+      display: inline-block;
+      float: left;
+      margin: 20px 40px 20px 20px;
+    }
+
+    &__content {
+      flex: auto;
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    h4 {
+      font-size: 32px;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      @include until($small) {
+        font-size: 26px;
+      };
+    }
+  }
+
+  .social-buttons {
+    margin-top: 20px;
+    font-size: 20px;
+
+    .btn {
+      margin-bottom: 20px;
+    }
+
+    // .btn-facebook {
+    //   margin-bottom: 0;
+    // }
+  }
+
+  .social-preview {
+    // margin-top: 20px;
+    color: #333;
+
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 3px;
+
+    .uppercase {
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+    }
+  }
+
+  .btn-giant {
+    border: 2px solid $blue;
+    padding: 40px;
+    border-radius: 10px;
+    display: block;
+    transition: 0.1s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    // margin-top: 40px;
+
+    &:hover {
+      background: $blue;
+      color: white;
+    }
+
+    &__content {
+      float: left;
+      width: 80%;
+    }
+
+    &__icon {
+      width: 20%;
+      float: right;
+      text-align: center;
+      font-size: 70px;
+    }
+  }
+
+  .flyers {
+    margin-bottom: 30px;
+
+    .flyer {
+      color: white;
+      margin-top: 20px;
+
+      img {
+        width: 100%;
+        height: auto;
+        background: #fafafa;
+        padding: 10px;
+        border-radius: 3px;
+        transition: 0.25s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+}
