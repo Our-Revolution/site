@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "Installing requirements from requirements.txt ..."
+pip install -r requirements.txt
+
+echo "Creating Postgres user & database..."
+createuser ourrevolution && createdb -Oourrevolution -Eutf8 ourrevolution
+
+echo "Filling out .env file..."
+echo "DATABASE_URL=postgres://ourrevolution@localhost:5432/ourrevolution" >> .env
+echo "DEBUG=1" >> .env
+key=`date | md5` && echo "SECRET_KEY=$key" >> .env
+
+
+echo "Migrating database..."
+./manage.py migrate
+
+echo "Creating an admin user for you..."
+./manage.py createsuperuser
+

@@ -35,4 +35,14 @@ class Migration(migrations.Migration):
             },
             bases=('wagtailcore.page',),
         ),
+        migrations.CreateModel(
+            name='IndexPage',
+            fields=[
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('wagtailcore.page',),
+        ),
     ]

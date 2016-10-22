@@ -6,13 +6,17 @@ from django.db import migrations
 
 
 def create_base_pages(apps, schema_editor):
-    from pages.models import BasePage, CandidateEndorsementIndexPage, IssueIndexPage, InitiativeEndorsementIndexPage
+    from pages.models import IndexPage, CandidateEndorsementIndexPage, IssueIndexPage, InitiativeEndorsementIndexPage
     from wagtail.wagtailcore.models import Page
 
     root = Page.objects.first()
 
+    Page.objects.filter(title='Welcome to your new Wagtail site!').first().delete()
+
+    root.numchild = 0
+
     # Home Page
-    base_page = BasePage(title='Our Revolution')
+    base_page = IndexPage(title='Our Revolution')
     root.add_child(instance=base_page)
 
     # Our Candidates
@@ -30,6 +34,7 @@ def create_base_pages(apps, schema_editor):
 
 
 def clear_base_pages(apps, schema_editor):
+    from django import VERSION as DJANGO_VERSION
     from wagtail.wagtailcore.models import Page
 
     root = Page.objects.first()
@@ -37,13 +42,35 @@ def clear_base_pages(apps, schema_editor):
     for page in root.get_children().all():
         page.delete()
 
+    Page = apps.get_model('wagtailcore', 'Page')
+    ContentType = apps.get_model('contenttypes', 'ContentType')
+
+    page_content_type, created = ContentType.objects.get_or_create(
+        model='page',
+        app_label='wagtailcore',
+        defaults={'name': 'page'} if DJANGO_VERSION < (1, 8) else {}
+    )
+
+    page, created = Page.objects.get_or_create(
+            title="Welcome to your new Wagtail site!",
+            slug='home',
+            content_type=page_content_type,
+            path='00010001',
+            depth=2,
+            numchild=0,
+            url_path='/home/',
+        )
+
 
 def create_site(apps, schema_editor):
     from django.conf import settings
     from wagtail.wagtailcore.models import Site
-    from pages.models import BasePage
+    from pages.models import IndexPage
 
-    base_page = BasePage.objects.filter(title='Our Revolution').first()
+    # dangeroso, but...
+    Site.objects.filter(id=1).delete()
+
+    base_page = IndexPage.objects.filter(title='Our Revolution').first()
 
     site_data = {
         'hostname': 'localhost' if settings.DEBUG else 'ourrevolution.com',
@@ -57,15 +84,48 @@ def create_site(apps, schema_editor):
 
 
 def clear_site(apps, schema_editor):
-    from wagtail.wagtailcore.models import Site
+    from django import VERSION as DJANGO_VERSION
+    from wagtail.wagtailcore.models import Page, Site
+    from django.contrib.contenttypes.models import ContentType
 
     Site.objects.all().delete()
+    Page.objects.get(path='00010001').delete()
+
+    try:
+        homepage = Page.objects.get(slug='home')
+    except Page.DoesNotExist:
+
+        page_content_type, created = ContentType.objects.get_or_create(
+            model='page',
+            app_label='wagtailcore',
+            defaults={'name': 'page'} if DJANGO_VERSION < (1, 8) else {}
+        )
+
+        homepage = Page.objects.create(
+                title="Welcome to your new Wagtail site!",
+                slug='home',
+                content_type=page_content_type,
+                path='00010001',
+                depth=2,
+                numchild=0,
+                url_path='/home/',
+            )
+    
+    # revert
+    Site.objects.get_or_create(
+        hostname='localhost',
+        root_page_id=homepage.id,
+        is_default_site=True
+    )
+
 
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('wagtailforms', '0003_capitalizeverbose'),
+        ('wagtailredirects', '0005_capitalizeverbose'),
         ('pages', '0005_initiativeendorsementindexpage_initiativeendorsementpage_issueindexpage_issuepage'),
     ]
 

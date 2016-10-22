@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('wagtailcore', '0029_unicode_slugfield_dj19'),
         ('endorsements', '0006_populate_issues'),
-        ('pages', '0004_basepage_templatepage'),
+        ('pages', '0004_basepage_templatepage_indexpage'),
     ]
 
     operations = [

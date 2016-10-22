@@ -18,6 +18,10 @@ class TemplatePage(Page):
         return super(TemplatePage, self).get_template(request)
 
 
+class IndexPage(Page):
+    template = "pages/index.html"
+
+
 ## CANDIDATES
 
 class CandidateEndorsementPage(Page):

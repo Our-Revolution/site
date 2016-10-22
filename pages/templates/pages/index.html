@@ -1,0 +1,180 @@
+{% block "pages/base_page.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row row--main home">
+    <div class="container">
+      <section class="module-container clearfix">
+
+        <div class="module-col third">
+          <div class="module fill centered white border-right">
+            <div class="module__content">
+              <div class="sign-up-form small">
+                <h2>Join us for the future of our political movement.</h2>
+
+                <form action="https://go.ourrevolution.com/page/s/join?source=ourrevolution.com/-module-small" method="POST">
+                  <span class="form-group email">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+                  </span>
+
+                  <span class="form-group zip ">
+                    <label for="zip">Zip Code</label>
+                    <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+                  </span>
+
+                  <span class="form-group submit">
+                    <button class="btn btn-primary btn-block">Join</button>
+                  </span>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="module bottom centered dark-blue border-right">
+            <div class="module__content">
+              <div class="info">
+
+                <h1 class="module__heading">Start Phone Banking for Our Revolution Today</h1>
+
+                <a href="https://go.ourrevolution.com/page/content/phonebank/" class="btn btn-secondary btn-block module__button">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="module-col two-thirds">
+          <div class="module fill centered map-bg" id="news-module-home">
+            <div class="module__content">
+              <div class="info">
+
+                <span class="article-type">Take Action</span>
+                <h1 class="module__heading">Find an Our Revolution event near you</h1>
+
+                <a href="http://map.ourrevolution.com" onclick="trackOutboundLink('http://map.ourrevolution.com'); return false;" class="btn btn-secondary btn-block module__button">Find or Host an Event</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <section class='home-section--info col-md-10 col-md-offset-1'>
+        <div class='col-md-8 col-md-offset-2'>
+          <h2>It's time to get back to work.</h2>
+          <p class="info__description">Our Revolution will reclaim democracy for the working people of our country by harnessing the transformative energy of the “political revolution.”  Through supporting a new generation of progressive leaders, empowering millions to fight for progressive change and elevating the political consciousness, Our Revolution will transform American politics to make our political and economic systems once again responsive to the needs of working families.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="action-list">
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="action-secondary-link" href="/action">
+                  <h3>Take Action</h3>
+                  <p class="action__description">Volunteer today and help continue our political revolution through grassroots organization.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="issues-secondary-link" href="/issues">
+                  <h3>Learn About the Issues</h3>
+                  <p class="action__description">Learn about the important issues facing our country today, and what you can do to fix them.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="candidates-secondary-link" href="/candidates">
+                  <h3>Explore Our Candidates</h3>
+                  <p class="action__description">Find out who will continue the political revolution, and what you can do to help them win.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row row--dark">
+    <div class="container">
+      <section class="home-section--news col-md-10 col-md-offset-1" id="news-section">
+        <h2 class="section-heading">In the News</h2>
+        <div class="col-md-4 content">
+          <div class="news-item">
+            <a href="/press/our-revolution-reacts-final-presidential-debate"><h4 class="content__heading">Our Revolution Reacts: Final Presidential Debate</h4></a>
+            <div class="attribution"><strong>Press Release</strong></div>
+            <p class="content__copy">Jeff Weaver, president of Our Revolution, released the following statement after tonight’s final presidential debate.</p>
+            <a href="/press/our-revolution-reacts-final-presidential-debate" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+        </div>
+        <div class="col-md-4 content">
+          <div class="news-item">
+            <a href="/press/our-revolution-substantive-discussion"><h4 class="content__heading">Give the Voters What They Want: A Substantive Discussion</h4></a>
+            <div class="attribution"><strong>Press Release</strong></div>
+            <p class="content__copy">One of the most valuable lessons Sen. Bernie Sanders and his presidential campaign taught us was that it's possible to have substantive debates and inspire people to engage in the political process-- and it can be done with respect and dignity.</p>
+            <a href="/press/our-revolution-substantive-discussion" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+        </div>
+        <div class="col-md-4 content">
+          <div class="news-item">
+            <a href="/press/our-revolution-statement-on-shailene-woodley-arrest"><h4 class="content__heading">Our Revolution Statement on Board Member Shailene Woodley's Arrest</h4></a>
+            <div class="attribution"><strong>Statement</strong></div>
+            <p class="content__copy">Our Revolution stands with board member Shailene Woodley following her arrest at Standing Rock Reservation protesting the Dakota Access Pipeline. We all have a duty to defend and protect sacred lands and waters for future generations.</p>
+            <a href="/press/our-revolution-statement-on-shailene-woodley-arrest" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <section class="home-section--sign-up col-md-6 col-md-offset-3 sign-up-form">
+        <h2>Join us for the future of our political movement.</h2>
+
+        <form action="https://go.ourrevolution.com/page/s/join?source=ourrevolution.com/-secondary" method="POST">
+          <span class="form-group email">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+          </span>
+
+          <span class="form-group zip ">
+            <label for="zip">Zip Code</label>
+            <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+          </span>
+
+          <span class="form-group submit">
+            <button class="btn btn-primary btn-block">Join</button>
+          </span>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="row row--dark">
+    <div class="container">
+      <section class="home-section--donate col-md-6 col-md-offset-3">
+        <h3>Donate to Our Revolution</h3>
+        <p>Our Revolution is a non-profit that runs off of funds from contributors like you. Help us continue this movement.</p>
+        <form id="quick-donate" class="quick-donate" action="https://secure.actblue.com/contribute/page/ourrevolution?amount=15" method="GET">
+          <button type="button" class="btn btn-default btn-amount" value="15">$15</button>
+          <button type="button" class="btn btn-primary btn-amount" value="27">$27</button>
+          <button type="button" class="btn btn-default btn-amount" value="50">$50</button>
+          <button type="button" class="btn btn-default btn-amount" value="100">$100</button>
+          <input type="text" placeholder="$___" class="input-amount">
+          <button class="btn btn-continue btn-secondary" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
+          <input type="hidden" name="amount" id="amount">
+          <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
