@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+# this bit isn't dialed in, tbqh.
+pip install virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv ourrevolution
+
 echo "Installing requirements from requirements.txt ..."
 pip install -r requirements.txt
 
