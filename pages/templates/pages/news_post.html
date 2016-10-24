@@ -1,0 +1,35 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailimages_tags %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            {% image page.header_photo width-1200 as header_photo %}
+            <div class="page-heading--press" {% if header_photo %}style="background: url({{ tmp_photo.url }}) center center; background-size: cover;"{% endif %}>
+            <span class="article-type">{{ page.get_post_type_display }}</span>
+                <h1>{{ page.title }}</h1>
+                {% if page.go_live_at %}
+                    <span class="article-date">{{ page.go_live_at | date:"F j, Y" }}</span>
+                {% else %}
+                    <span class="article-date">{{ page.latest_revision_created_at | date:"F j, Y" }}</span>
+                {% endif %}
+                <span class="attribution">{{ page.header_photo_byline }}</span>
+            </div>
+
+            <section class="home-section">
+                <div class="col-md-8 col-md-offset-2">
+                    {{ page.body | safe }}
+                </div>
+            </section>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

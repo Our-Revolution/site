@@ -1,5 +1,7 @@
 {% extends "pages/base_page.html" %}
 
+{% load wagtailcore_tags %}
+
 {% block content %}
 
 <div class="container-fluid">
@@ -101,37 +103,25 @@
     </div>
   </div>
 
-  <div class="row row--dark">
-    <div class="container">
-      <section class="home-section--news col-md-10 col-md-offset-1" id="news-section">
-        <h2 class="section-heading">In the News</h2>
-        <div class="col-md-4 content">
-          <div class="news-item">
-            <a href="/press/our-revolution-reacts-final-presidential-debate"><h4 class="content__heading">Our Revolution Reacts: Final Presidential Debate</h4></a>
-            <div class="attribution"><strong>Press Release</strong></div>
-            <p class="content__copy">Jeff Weaver, president of Our Revolution, released the following statement after tonight’s final presidential debate.</p>
-            <a href="/press/our-revolution-reacts-final-presidential-debate" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
-          </div>
-        </div>
-        <div class="col-md-4 content">
-          <div class="news-item">
-            <a href="/press/our-revolution-substantive-discussion"><h4 class="content__heading">Give the Voters What They Want: A Substantive Discussion</h4></a>
-            <div class="attribution"><strong>Press Release</strong></div>
-            <p class="content__copy">One of the most valuable lessons Sen. Bernie Sanders and his presidential campaign taught us was that it's possible to have substantive debates and inspire people to engage in the political process-- and it can be done with respect and dignity.</p>
-            <a href="/press/our-revolution-substantive-discussion" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
-          </div>
-        </div>
-        <div class="col-md-4 content">
-          <div class="news-item">
-            <a href="/press/our-revolution-statement-on-shailene-woodley-arrest"><h4 class="content__heading">Our Revolution Statement on Board Member Shailene Woodley's Arrest</h4></a>
-            <div class="attribution"><strong>Statement</strong></div>
-            <p class="content__copy">Our Revolution stands with board member Shailene Woodley following her arrest at Standing Rock Reservation protesting the Dakota Access Pipeline. We all have a duty to defend and protect sacred lands and waters for future generations.</p>
-            <a href="/press/our-revolution-statement-on-shailene-woodley-arrest" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
-          </div>
-        </div>
-      </section>
+  {% if news %}
+    <div class="row row--dark">
+      <div class="container">
+        <section class="home-section--news col-md-10 col-md-offset-1" id="news-section">
+            <h2 class="section-heading">In the News</h2>
+            {% for news_item in news %}
+              <div class="col-md-4 content">
+                <div class="news-item">
+                  <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
+                  <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
+                  <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
+                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+              </div>
+            {% endfor %}
+        </section>
+      </div>
     </div>
-  </div>
+  {% endif %}
 
   <div class="row">
     <div class="container">
