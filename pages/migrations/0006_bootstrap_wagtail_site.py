@@ -11,7 +11,10 @@ def create_base_pages(apps, schema_editor):
 
     root = Page.objects.first()
 
-    Page.objects.filter(title='Welcome to your new Wagtail site!').first().delete()
+    try:
+        Page.objects.filter(title='Welcome to your new Wagtail site!').first().delete()
+    except:
+        pass
 
     root.numchild = 0
 
