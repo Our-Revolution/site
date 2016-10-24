@@ -20,8 +20,6 @@ def populate_news_index(apps, schema_editor):
 def remove_news_index(apps, schema_editor):
     from wagtail.wagtailcore.models import Page
 
-    print Page.objects.get(title='Our Revolution').get_children()
-
     news_index = Page.objects.get(title='News')
     news_index.delete()
 
