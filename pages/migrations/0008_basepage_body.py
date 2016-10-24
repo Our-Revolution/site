@@ -13,9 +13,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='basepage',
-            name='body',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, null=True),
-        ),
     ]
