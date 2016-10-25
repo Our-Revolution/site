@@ -13,7 +13,7 @@ def populate_news_index(apps, schema_editor):
 
 
     # Our Candidates
-    news_index = NewsIndex(title='News', slug='news')
+    news_index = NewsIndex(title='News', slug='press')
     home_page.add_child(instance=news_index)
 
 

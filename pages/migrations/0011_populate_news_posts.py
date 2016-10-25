@@ -40,6 +40,7 @@ def populate_news_pages(apps, schema_editor):
 
         data = {
             'title': soup.select('h1')[0].text,
+            'slug': page,
             'post_type': post_type_by_title[soup.select('.article-type')[0].text.strip()],
             'go_live_at': datetime.datetime.strptime(soup.select('.article-date')[0].text, "%B %d, %Y"),
             'body': unicode(soup.select('.home-section div')[0]),
