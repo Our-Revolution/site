@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="container">
                     <div class="page-sub-nav">
-                        <a href=""><span class="glyphicon glyphicon-chevron-left"></span></a> Our Initiatives / {{ initiative.state }} / {{ initiative.title }}: {{ initiative.name }}
+                        <a href="{% pageurl page.get_parent %}"><span class="glyphicon glyphicon-chevron-left"></span></a> Our Initiatives / {{ initiative.state }} / {{ initiative.title }}: {{ initiative.name }}
                     </div>
 
                     <div class="page-heading">
