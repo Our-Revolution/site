@@ -161,6 +161,7 @@ if os.environ.get('env', 'development') == 'production':
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
     AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+    AWS_QUERYSTRING_AUTH = False
 
     AWS_AUTO_CREATE_BUCKET = True
     # AWS_DEFAULT_ACL
