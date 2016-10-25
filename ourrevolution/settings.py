@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
     
+    
     # Django core
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'debug_toolbar',
+    
     # Wagtail
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',
@@ -64,7 +67,12 @@ INSTALLED_APPS = [
     'pages',
 ]
 
+INTERNAL_IPS = ['127.0.0.1']
+
 MIDDLEWARE = [
+
+    # debug
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     # Django core
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +86,7 @@ MIDDLEWARE = [
     # Wagtail
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+
 ]
 
 ROOT_URLCONF = 'ourrevolution.urls'

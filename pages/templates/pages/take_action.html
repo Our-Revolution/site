@@ -1,0 +1,73 @@
+{% extends "pages/base_page.html" %}
+
+
+{% block content %}
+    
+<div class="container-fluid">
+    <div class="row row--main">
+        <div class="container">
+            <section class="module-container">
+
+                <div class="module-col third">
+                    <div class="module fill centered white map-bg">
+                        <div class="module__content text-left">
+                            <h2>Attend or Host an Event</h2>
+                            <p>Help our candidates and initiatives win through grassroots organizing.</p>
+                            <a href="http://map.ourrevolution.com" onclick="trackOutboundLink('http://map.ourrevolution.com'); return false;" class="btn btn-secondary btn-block module__button">Find or Host an Event</a>
+                        </div>
+                    </div>
+
+                    <div class="module bottom centered white">
+                        <div class="module__content text-left">
+                            <h2>Phone Bank</h2>
+                            <p>Start phone banking for Our Revolution's endorsed candidates and issues today.</p>
+                            <a href="https://go.ourrevolution.com/page/content/phonebank/" class='btn btn-secondary btn-block'>Get Started</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-col two-thirds">
+                    <div class="module full centered dark-blue">
+                        <div class="module__content volunteer-form">
+                            <h2>Volunteer for the future of our political movement.</h2>
+
+                            <form action="https://go.ourrevolution.com/page/s/volunteer?source=ourrevolution.com/action" method="POST">
+                                <span class="form-group email">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+                                </span>
+
+                                <span class="form-group first-name">
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" name="firstname" id="firstname" class="firstname" placeholder="Jane" required>
+                                </span>
+
+                                <span class="form-group last-name">
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" name="lastname" id="lastname" class="lastname" placeholder="Doe" required>
+                                </span>
+
+                                <span class="form-group zip">
+                                    <label for="zip">Zip Code</label>
+                                    <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required>
+                                </span>
+
+                                <span class="form-group phone">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" name="phone" id="phone" class="phone" placeholder="5554576142" required>
+                                </span>
+
+                                <span class="form-group submit">
+                                    <button class="btn btn-primary btn-block">Join the Fight</button>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
