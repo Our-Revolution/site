@@ -165,3 +165,6 @@ if os.environ.get('env', 'development') == 'production':
 
     AWS_AUTO_CREATE_BUCKET = True
     # AWS_DEFAULT_ACL
+
+
+TEST_RUNNER = 'pages.tests.NoDbTestRunner'
