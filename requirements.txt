@@ -6,6 +6,7 @@ Willow==0.4
 appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
 beautifulsoup4==4.5.1
+boto==2.43.0
 decorator==4.0.10
 dj-database-url==0.4.1
 django-dotenv==1.4.1
