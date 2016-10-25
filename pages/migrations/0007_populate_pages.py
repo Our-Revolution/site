@@ -29,6 +29,7 @@ def populate_candidate_pages(apps, schema_edtior):
 
         page = CandidateEndorsementPage(**{
                 'title': candidate.name,
+                'slug': candidate.slug,
                 'body': html_content,
                 'candidate': candidate,
                 'signup_tagline': signup_tagline

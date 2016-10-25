@@ -1,0 +1,204 @@
+{% extends "pages/base_page.html" %}
+
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="tpp-toolkit">
+    <div class="row row--tpp-pattern">
+      <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+          <section class="text-center intro">
+            <h1 class="tpp-header">TPP Toolkit</h1>
+            <h2>Join our push to stop the disastrous Trans-Pacific Partnership.</h2>
+
+            <div class="text-center" id="main-ctas">
+              <a data-scroll href="#intro" class="btn btn-primary btn-round">Learn More <span class="glyphicon glyphicon-chevron-down"></span></a>
+
+              <a data-scroll href="#call" class="btn btn-donate btn-round">Call Congress <span class="glyphicon glyphicon-chevron-down"></span></a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="sub-nav" id="sub-nav">
+        <ul>
+          <li><a data-scroll href="#call">1. Call</a></li>
+          <li><a data-scroll href="#share">2. Share</a></li>
+          <li><a data-scroll href="#take-action">3. Take Action</a></li>
+          <li><a data-scroll href="#learn">4. Educate</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <section class="clearfix flex" id="intro">
+
+            <div class="col-md-8 flex-one">
+              <h2>The Problem</h2>
+
+              <p>
+                The disastrous Trans-Pacific Partnership trade deal would expand the same failed "free trade" policies that have already cost millions of jobs across the United States.
+              </p>
+
+              <p>Last year President Obama sought, and won, approval from Congress to "fast track" trade deals. That means that he can submit the TPP to Congress and put it up for a vote without any amendments. Congress can approve it as-is, or reject it. <strong>That's it.</strong></p>
+
+              <p>President Obama has said before that he would like to pass TPP in the lame duck session. We don't know if he's going to try this week, next week, or after the election, but we need to be ready to stop it in case he does try.</p>
+            </div>
+
+            <div class="col-sm-4 text-center">
+              <img class="img-full no-tpp" src="{% static "img/stop-tpp/no-tpp.svg" %}">
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row--blue">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <section class="clearfix" id="call">
+            <div class="row">
+              <div class="col-sm-8 col-xs-12">
+                <h2>The Solution</h2>
+
+                <p>If President Obama does force a vote, realistically our best chance at defeating TPP is in the House of Representatives.</p>
+
+                <p>Congress has a window of 90 days to take up the TPP, and we must use this window to defeat this trade deal.</p>
+
+                <p>
+                  <strong>Our goal is to drive 50,000 calls to Congress today to find out where our representatives stand on TPP. Use the button below to call your member of Congress (we'll call your phone to connect), or dial 844-311-2016 from your phone to be automatically connected to your representative.</strong>
+                </p>
+              </div>
+
+              <div class="col-sm-4 text-center hidden-xs">
+                <img class="img-full tpp-people" src="{% static "img/stop-tpp/tpp-people.png" %}">
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-8" id="call-cta">
+                <h2><strong>1. Call Your Representative</strong></h2>
+
+                <a href="tel:8443112016" onCLick="ga('send', 'event', 'Tel Link', 'click', '8443112016');" class="tpp-phone text-center">
+                  <span class="phone-icon hidden-xs"></span>
+
+                  <div class="tpp-phone__content">
+                    <h3>Dial this Number:</h3>
+                    <h4>844-311-2016</h4>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row--dark-blue">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <section class="clearfix" id="share">
+            <h2><strong>2. Share This Page</strong></h2>
+
+            <p>
+              Once you’ve called your Representative, help us reach our goal of 50,000 calls today by telling your friends you made the call to stand against the TPP.
+            </p>
+
+            <div class="row social-buttons clearfix">
+              <div class="col-md-6">
+                <a class="btn btn-twitter btn-block" href="https://twitter.com/intent/retweet?tweet_id=776054178934161411" onclick="ga('send', 'social', 'Twitter', 'share', 'https://twitter.com/intent/retweet?tweet_id=776054178934161411');">Share on Twitter <span class="twitter-icon"></span></a>
+              </div>
+
+              <div class="col-md-6">
+                <a class="btn btn-facebook btn-block" onClick="FB.ui({method: 'share', href: 'https://www.facebook.com/PoliticalRevolution/photos/p.1246120298773517/1246120298773517/?type=3&theater',}, function(response){ga('send', 'social', 'Facebook', 'share', 'https://www.facebook.com/PoliticalRevolution/photos/p.1246120298773517/1246120298773517/?type=3&theater');});">Share on Facebook <span class="facebook-icon"></span></a>
+              </div>
+            </div>
+
+            <div class="social-preview">
+              <img src="{% static "img/stop-tpp/i_took_a_stand.png" %}">
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row--blue">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <section class="clearfix" id="take-action">
+            <h2><strong>3. Take Action</strong></h2>
+
+            <p>Print and share these flyers and fact sheets to help spread the word about the disastrous Trans-Pacific Partnership.</p>
+
+            <div class="row flyers" id="flyers">
+              <a href="/img/stop-tpp/flyers/stop_tpp_poster20by16.png" target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Poster</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/poster-thumb.png" %}">
+              </a>
+              <a href="http://files.cwa-union.org/national/issues/PolicyIssues/Trade/TPPFlyers/TPP-Bad-For-America-Flyer.pdf" target="_blank" onclick="trackOutboundLink('http://files.cwa-union.org/national/issues/PolicyIssues/Trade/TPPFlyers/TPP-Bad-For-America-Flyer.pdf'); return false;" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Bad Deal</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-Bad-For-America-Flyer.png" %}">
+              </a>
+              <a href="http://stopthetpp.org/tell-congress-no-fast-track-for-tpp/" onclick="trackOutboundLink('http://stopthetpp.org/tell-congress-no-fast-track-for-tpp/'); return false;" target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Fast Track</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-TELL-CONGRESS-NO.png" %}">
+              </a>
+              <a href="http://stopthetpp.org/the-trans-pacific-partnership-an-attack-on-u-s-jobs/" onclick="trackOutboundLink('http://stopthetpp.org/the-trans-pacific-partnership-an-attack-on-u-s-jobs/'); return false;" target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Jobs</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-JOBS.png" %}">
+              </a>
+              <a href="http://stopthetpp.org/the-trans-pacific-partnership-an-attack-on-u-s-wages/" onclick="trackOutboundLink('http://stopthetpp.org/the-trans-pacific-partnership-an-attack-on-u-s-wages/'); return false;" target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Wages</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-WAGES.png" %}">
+              </a>
+              <a href="http://stopthetpp.org/we-live-in-one-world-the-trans-pacific-partnership-and-the-environment/" onclick="trackOutboundLink('http://stopthetpp.org/we-live-in-one-world-the-trans-pacific-partnership-and-the-environment/'); return false;"  target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Environment</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-ENVIRONMENT.png" %}">
+              </a>
+              <a href="http://stopthetpp.org/the-trans-pacific-partnership-a-threat-to-u-s-health-care/" onclick="trackOutboundLink('http://stopthetpp.org/the-trans-pacific-partnership-a-threat-to-u-s-health-care/'); return false;"  target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">Health Care</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/TPP-Health-Care.png" %}">
+              </a>
+              <a href="http://files.cwa-union.org/national/issues/PolicyIssues/Trade/TPPFlyers/no-tpp_apala.pdf" onclick="trackOutboundLink('http://files.cwa-union.org/national/issues/PolicyIssues/Trade/TPPFlyers/no-tpp_apala.pdf'); return false;"  target="_blank" class="col-xs-4 col-sm-3 flyer">
+                <span class="flyer__title">APALA</span>
+                <img src="{% static "img/stop-tpp/flyers/thumbnails/no-tpp_apala.png" %}">
+              </a>
+            </div>
+
+            <a href="http://stopthetpp.org/flyers/" target="_blank" onclick="trackOutboundLink('http://stopthetpp.org/flyers/'); return false;" class="btn btn-block btn-primary">Browse More at StopTheTPP.org <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <section class="clearfix" id="learn">
+
+            <a href="/issues/tpp" class="btn-giant clearfix">
+              <div class="btn-giant__content">
+                <h2><strong>4. Learn More About the TPP</strong></h2>
+                <p>The TPP is a complex trade agreement negotiated in secret for years. Learn more about it and other issues facing our nation on Our Issues page.</p>
+              </div>
+
+              <span class="btn-giant__icon glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -31,7 +31,7 @@ class RoutesTestCase(TestCase):
 
     def test_act(self):
       response = self.client.get('/act/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_action(self):
@@ -181,7 +181,7 @@ class RoutesTestCase(TestCase):
 
     def test_candidates_elizabeth_thompson(self):
       response = self.client.get('/candidates/elizabeth-thompson/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_candidates_elizabeth_thomson(self):
@@ -381,7 +381,7 @@ class RoutesTestCase(TestCase):
 
     def test_candidates_martin_quezeda(self):
       response = self.client.get('/candidates/martin-quezeda/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_candidates_mary_keefe(self):
@@ -976,12 +976,12 @@ class RoutesTestCase(TestCase):
 
     def test_signup(self):
       response = self.client.get('/signup/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_stop_the_tpp(self):
       response = self.client.get('/stop-the-tpp/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_stop_tpp_now(self):
@@ -996,9 +996,9 @@ class RoutesTestCase(TestCase):
 
     def test_tpp(self):
       response = self.client.get('/tpp/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
     
 
     def test_volunteer_signup(self):
       response = self.client.get('/volunteer-signup/')
-      self.assertEqual(response.status_code, 200)
+      self.assertEqual(response.status_code, 301)
