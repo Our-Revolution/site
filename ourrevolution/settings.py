@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
 
+    # S3
+    'storages',
+
     # OR.
     'endorsements',
     'pages',
@@ -149,3 +152,15 @@ WAGTAIL_SITE_NAME = 'Our Revolution'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
+
+if os.environ.get('env', 'development') == 'production':
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+
+    AWS_AUTO_CREATE_BUCKET = True
+    # AWS_DEFAULT_ACL

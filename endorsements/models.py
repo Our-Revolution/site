@@ -33,8 +33,12 @@ class Candidate(models.Model):
     polling_locator = models.URLField(null=True, blank=True)
 
     # visuals
-    photo = models.URLField(null=True, blank=True)
-    header_photo = models.URLField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
+    photo_source = models.URLField(null=True, blank=True)
+    header_photo = models.ImageField(null=True, blank=True)
+    header_photo_source = models.URLField(null=True, blank=True)
+
+
 
     # links
     facebook = models.URLField(null=True, blank=True)

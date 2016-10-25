@@ -18,7 +18,7 @@
                         <li class="card clearfix ">
                             <a href="{% pageurl candidate_page %}">
                                 {% with candidate_page.candidateendorsementpage.candidate as candidate %}
-                                    <div class="card__photo" style="background-image: url('{% static "img/candidates/profile/" + candidate.slug + ".jpg" %}')"></div>
+                                    <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
                                     <div class="card__content">
                                         <span class="card__item">{{ candidate.name }}</span>
                                         <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
