@@ -63,7 +63,7 @@ def populate_initiative_pages(apps, schema_edtior):
 
         page = InitiativeEndorsementPage(**{
                 'title': page_title,
-                'slug': slugify(initiative.state + ' ' + initiative.title),
+                'slug': initiative.slug,
                 'body': html_content,
                 'initiative': initiative,
                 'signup_tagline': signup_tagline
