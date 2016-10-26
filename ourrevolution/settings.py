@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    
-    
+
+
     # Django core
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'debug_toolbar',
-    
+
     # Wagtail
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',

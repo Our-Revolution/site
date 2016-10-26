@@ -7,7 +7,7 @@
     <title>{% block page_title %}Our Revolution - {% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
 
     {% block meta %}
-        
+
         {% block meta_seo %}
             <meta name="description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
         {% endblock %}
@@ -32,15 +32,13 @@
         {% block meta_google_site_verification %}
             <meta name="google-site-verification" content="ULKRcIZysCOsq4SLKSbW7ymdJ93OyRWwSMZpBfBPJN0" />
         {% endblock %}
-        
+
     {% endblock %}
 
     {% load static %}
-    <link rel="stylesheet" href="{% static "components/bootstrap/dist/css/bootstrap.min.css" %}" />
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}">
+    <script src="{% static "dist/js/bundle.min.js" %}"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
@@ -56,7 +54,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand  home" href="/">
-                    <img alt="Our Revolution" class="logo" src="{% static "img/logo.svg" %}">
+                    <img alt="Our Revolution" class="logo" src="{% static "dist/img/logo.svg" %}">
                 </a>
             </div>
 

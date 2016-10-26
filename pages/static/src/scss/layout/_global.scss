@@ -1,0 +1,1145 @@
+// Global
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  padding-top: 80px;
+  margin-bottom: 300px;
+  -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+  p {
+    font-size: 16px;
+  }
+
+  @include until($medium) {
+    padding-top: 50px;
+  }
+}
+
+input {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+h4, h1 {
+  font-weight: 700;
+}
+
+.notification-banner {
+  padding: 10px;
+  background: $red;
+  color: white;
+  text-align: center;
+  font-weight: bolder;
+
+  &__link {
+    font-weight: bolder;
+    margin-left: 10px;
+
+    &.btn {
+      height: 30px;
+      padding: 4px 5px;
+    }
+  }
+
+  @include until($medium) {
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+    }
+
+    &__content {
+      text-align: left;
+      flex: auto;
+    }
+
+    &__link {
+      flex: 0 0 100px;
+    }
+
+  }
+}
+
+.email {
+  p {
+    font-size: 18px;
+  }
+
+  img {
+    display: block;
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    margin: auto;
+    padding: 20px 0;
+  }
+
+  .inset {
+    background: #f5f5f5;
+    border-radius: 3px;
+    padding: 40px;
+    margin-bottom: 30px;
+    text-align: center;
+
+    .btn {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+
+  .btn {
+    margin: 20px auto;
+    display: block;
+    width: 275px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 18px;
+    height: 45px;
+    text-decoration: none;
+  }
+}
+
+.sub-heading {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.row--dark {
+  background: #f5f5f5;
+}
+
+.row--main {
+  background: #f5f5f5 url('../img/homepage-mosaic-lg-transparent.png') repeat;
+}
+
+.row--colored {
+  background-color: $blue;
+  background: url('../img/bg_3.png') top center;
+  background-size: cover;
+  color: white;
+  text-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+.page-heading {
+  background: url('../img/bg_4.png') center center;
+  background-size: cover;
+  color: white;
+  border-radius: 3px;
+  padding: 20px;
+  margin: 10px 0;
+  vertical-align: bottom;
+
+  h1 {
+    margin: 140px 0 5px 0;
+  }
+
+  h3 {
+    margin-top: 0;
+    font-weight: normal;
+  }
+
+  p {
+    max-width: 600px;
+  }
+}
+
+.icon {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: top right;
+  opacity: 0.4;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  path {
+  fill: red;
+  }
+
+  &.animal-rights {
+    background-image: url("../img/icons/initiatives/animal-rights.svg");
+  }
+
+  &.corporate-tax {
+    background-image: url("../img/icons/initiatives/corporate-tax.svg");
+  }
+
+  &.death-penalty {
+    background-image: url("../img/icons/initiatives/death-penalty.svg");
+  }
+
+  &.education {
+    background-image: url("../img/icons/initiatives/education.svg");
+  }
+
+  &.election-reform {
+    background-image: url("../img/icons/initiatives/election-reform.svg");
+  }
+
+  &.environment {
+    background-image: url("../img/icons/initiatives/environment.svg");
+  }
+
+  &.health-care {
+    background-image: url("../img/icons/initiatives/healthcare.svg");
+  }
+
+  &.labor {
+    background-image: url("../img/icons/initiatives/labor-1.svg");
+  }
+
+  &.labor-2 {
+    background-image: url("../img/icons/initiatives/labor-2.svg");
+  }
+
+  &.marijuana {
+    background-image: url("../img/icons/initiatives/marijuana.svg");
+  }
+
+  &.minimum-wage {
+    background-image: url("../img/icons/initiatives/minimum-wage.svg");
+  }
+
+  &.money-in-politics {
+    background-image: url("../img/icons/initiatives/money-in-politics.svg");
+  }
+
+}
+
+.no-result {
+  display: none;
+}
+
+.dark {
+  background: #fafafa;
+}
+
+.content {
+  background: white;
+  border-radius: 3px;
+  padding: 20px;
+
+  .content__heading {
+    margin-top: 0;
+  }
+
+  .content__copy {
+    flex: 1;
+  }
+
+  .content__btn {
+    display: block;
+  }
+}
+
+.video-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  right: 20px;
+  margin-top: -30%;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+  overflow: hidden;
+
+  iframe {
+    position: absolute;
+  	top: 0;
+  	left: 0;
+  	width: 100%;
+  	height: 100%;
+    border-radius: 3px;
+  }
+}
+
+.col-md-4 .sign-up-form .form-group {
+  margin-bottom: 10px;
+
+  &.email {
+    width: 59%;
+  }
+
+  &.zip {
+    width: 36%;
+    margin-right: 0;
+  }
+
+  &.submit {
+    display: block;
+    width: 100%;
+  }
+
+}
+
+.sign-up-form {
+  .form-group {
+    display: inline-block;
+    margin-right: 2%;
+    margin-bottom: 0;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.email {
+      width: 48%;
+    }
+
+    &.zip {
+      width: 26%;
+    }
+
+    &.submit {
+        width: 20%;
+    }
+  }
+
+  input {
+    height: 40px;
+    line-height: 40px;
+    text-indent: 10px;
+    width: 100%;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  button {
+    height: 40px;
+    width: 100%;
+  }
+
+  &--blue {
+    background-color: $blue;
+    color: white;
+    padding: 40px;
+    border-radius: 3px;
+
+    input {
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .sign-up-form .form-group {
+    margin-bottom: 10px;
+
+    &.email {
+      width: 59%;
+    }
+
+    &.zip {
+      width: 36%;
+      margin-right: 0;
+    }
+
+    &.submit {
+      display: block;
+      width: 100%;
+    }
+
+  }
+}
+
+// Home
+.home-section {
+  padding: 80px 0;
+
+  &:before {
+    display: table;
+    content: " ";
+  }
+
+  &:after {
+    clear: both;
+    display: table;
+    content: " ";
+  }
+
+  &.ballot-initiatives {
+    h3 {
+      margin-top: 40px;
+    }
+  }
+
+  h2, h3 {
+    margin-top: 0;
+  }
+
+  &--sign-up {
+    @extend .home-section;
+    label, input {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+
+  &--info, &--news, &--donate {
+    @extend .home-section;
+  }
+
+  .info__description {
+    margin-bottom: 40px;
+  }
+
+  .content {
+    margin: 10px;
+  }
+
+  .news-item {
+    display: flex;
+    flex-direction: column;
+
+    .content__heading {
+      margin-bottom: 5px;
+    }
+
+    .attribution {
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .home-section--news {
+    display: flex;
+    flex-flow: row wrap;
+
+    .section-heading {
+      flex: 0 0 100%;
+    }
+
+    .content {
+      display: flex;
+      flex: 1;
+    }
+  }
+}
+
+.quick-donate {
+  .btn-amount, input {
+    width: 12%;
+    margin-right: 1%;
+    text-align: center;
+    height: 40px;
+  }
+
+  .btn-amount {
+    padding: 9px 12px;
+  }
+
+  .btn-continue {
+    height: 40px;
+    border-radius: 40px;
+    width: 30%;
+  }
+}
+
+@media (max-width: 600px) {
+  .quick-donate {
+    .btn-amount, input {
+      width: 17%;
+    }
+
+    .btn-continue {
+      display: block;
+      width: 50%;
+      margin: auto;
+      margin-top: 10px;
+    }
+  }
+}
+
+// About
+.mission {
+  margin-top: 40px;
+}
+
+.goals {
+  background: #f5f5f5;
+  border-radius: 3px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  &__title {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-width: 0 1px 1px 0;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: 0.25s;
+
+    &:hover {
+      background: lighten($blue, 30);
+    }
+
+    &.active {
+      background: $blue;
+      color: white;
+    }
+
+    &:first-child {
+      border-radius: 3px 0 0 0;
+    }
+
+    &:last-child {
+      border-right: none;
+      border-radius: 0 3px 0 0;
+    }
+  }
+
+  &__description {
+    padding: 40px;
+  }
+}
+
+// Take Action
+.action-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  &__action {
+    position: relative;
+    padding: 0;
+    background: $blue;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    margin: 20px;
+    transition: 0.1s;
+
+    .action__description {
+      margin-right: 40px;
+    }
+
+    &:hover, &:focus {
+      background: darken($blue, 10);
+      color: white;
+      text-decoration: none;
+      transform: scale(1.05);
+    }
+
+    .action__link {
+      color: white;
+      text-align: none;
+      padding: 20px;
+      display: block;
+
+      &:hover, &:focus {
+        color: white;
+        text-decoration: none;
+      }
+    }
+
+    .glyphicon {
+      display: table;
+      position: absolute;
+      right: 40px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      vertical-align: middle;
+    }
+  }
+}
+
+.volunteer-form {
+
+  .form-group {
+    display: inline-block;
+    margin-right: 2%;
+    margin-bottom: 10px;
+
+    &.email {
+      width: 97%;
+    }
+
+    &.first-name, &.last-name {
+      width:47%;
+    }
+
+    &.phone {
+      width:68%;
+    }
+
+    &.zip {
+      width: 26%;
+    }
+
+    &.submit {
+      margin-top: 5px;
+      width: 97%;
+    }
+
+    input {
+      height: 40px;
+      line-height: 40px;
+      text-indent: 10px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+    }
+
+    button {
+      height: 40px;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 991px) {
+    &.email {
+      width: 97%;
+    }
+
+    &.first-name,
+    &.last-name,
+    &.submit {
+      width:47%;
+    }
+
+  }
+
+}
+
+@media (max-width: 1200px) and (min-width: 768px) {
+
+  .action-list__action .action__description {
+    margin-right: 0;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .action-list {
+    display: flex;
+
+      &__action {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+  }
+}
+
+// Footer
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Candidates Page
+@media (max-width:767px) {
+  .btn-suggest {
+    float: none !important;
+    display: block;
+    margin-top: 10px;
+  }
+}
+.card-list {
+  list-style-type: none;
+  margin: 0 0 1% 0;
+  padding: 0;
+
+  &.third {
+    margin: 0 -15px 10px;
+
+    .card {
+      width: 32.3%;
+      margin: 0 1% 1% 0;
+
+      &:nth-child(even) {
+        margin-right: 1%;
+      }
+
+      &:nth-child(3n) {
+        margin-right: 0;
+      }
+
+      @include until($medium) {
+        width: 49%;
+        margin-right: 1%;
+
+        &:nth-child(3n) {
+          margin-right: 1%;
+        }
+
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      };
+
+      @include until($small) {
+        width: 100%;
+        margin-right: 0%;
+
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      };
+    }
+  }
+
+  .card {
+    width: 23.5%;
+    height: 100px;
+    background: #f5f5f5;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 3px;
+    margin: 1% 1% 0 0;
+    transition: 0.1s;
+
+    .icon {
+      width: 25px;
+      height: 25px;
+      display: block;
+      float: right;
+      margin-left: 10px;
+    }
+
+    &.featured {
+      border-right: 4px solid $red;
+    }
+
+    &__content {
+      height: 100px;
+      position: relative;
+    }
+
+    &__name {
+      line-height: 12px;
+    }
+
+    &__location {
+      font-size: 12px;
+      // letter-spacing: 1px;
+      font-weight: bolder;
+      line-height: 12px;
+    }
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    a {
+      color: #333;
+    }
+  }
+
+  .card__photo {
+    display: inline-block;
+    border-radius: 3px 0 0 3px;
+    height: 100px;
+    width: 100px;
+    background: #999;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .card__item {
+    display: block;
+    line-height: 1.25em;
+
+    &.bold {
+      font-weight: bolder;
+    }
+
+    &.smaller {
+      font-size: 12px;
+      line-height: 12px;
+    }
+
+    &.bottom {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+    }
+  }
+
+  .card__content {
+    width: calc(100% - 100px);
+    float: right;
+    padding: 10px;
+
+    &.full {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .card-list {
+    .card {
+      width: 32%;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .card-list {
+    .card {
+      width: 49%;
+
+      &:nth-child(even) {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .card-list {
+    .card {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+}
+
+// Candidate Page {
+.candidate-photo {
+  background: #999;
+  background-size: cover;
+  background-position: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  margin: 40px 0;
+
+  @media (max-width:768px) {
+    width: 100%;
+    border-radius: 3px;
+    background-position: center top;
+  }
+}
+
+.candidate-bio {
+  padding: 40px 0;
+  white-space: pre-line;
+}
+
+.page-sub-nav {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 3px;
+  margin-top: 10px;
+
+  a {
+    color: #333;
+  }
+
+  &.filter {
+    margin-bottom: 10px;
+  }
+}
+
+.candidate-action-bar {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 3px;
+  height: auto;
+  padding-bottom: 0;
+
+  .btn {
+        margin: 0 10px 10px 0;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+
+  .social-icon {
+    height: 40px;
+    width: auto;
+    margin-left: 5px;
+    margin-bottom: 10px;
+
+    &:hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+  }
+}
+
+.candidate-sign-up {
+  background: #f5f5f5;
+  padding: 40px 20px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+
+  input {
+    color: #333;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+// Issues
+.issues__content {
+  background: #f5f5f5;
+  border-radius: 3px;
+  padding: 80px;
+  margin-bottom: 10px;
+
+  .sign-up-form {
+    background: $blue;
+    color: white;
+    margin: 80px -80px -80px;
+    padding: 80px;
+    border-radius: 0 0 3px 3px;
+
+    input {
+      color: #333;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+  }
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+.issues__nav {
+  transition: 0.25s;
+  margin-left: -15px;
+
+  .icon {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+    display: inline-block;
+    background-position: center center;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  .issues__content {
+    padding: 40px;
+
+    .sign-up-form {
+      padding: 40px;
+      margin: 40px -40px -40px;
+    }
+  }
+
+  ul.issues__nav {
+    margin-right: -15px;
+    position: absolute;
+    z-index: 10;
+    background: $blue;
+    /* left: 0; */
+    width: 100%;
+    left: -210%;
+    right: 110%;
+    top: 70px;
+    padding: 0;
+    // border: 1px solid #eee;
+    border-radius: 3px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    height: 300px;
+    overflow-y: scroll;
+
+    > li {
+      max-width: 300px;
+      margin: auto;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin: 10px auto;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      a {
+        background: transparent;
+        color: white;
+        border-radius: 0;
+        font-weight: bolder;
+
+        &:hover, &:focus, &:active {
+          background: rgba(0,0,0,0.1);
+          color: white;
+          border-radius: 3px;
+        }
+      }
+    }
+
+    &.expanded {
+      left: 15px;
+      right: 15px;
+      width: auto;
+    }
+  }
+}
+
+// Press
+.page-heading--press {
+  @extend .page-heading;
+  padding-top: 140px;
+  position: relative;
+
+  &.shailene-bg-pr {
+    background: $blue url('../img/shailene.jpg') center;
+    background-size: cover;
+    padding-top: 200px;
+
+    text-shadow: 0 0 3px  rgba(0,0,0,1);
+    font-weight: bolder;
+  }
+
+  .attribution {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: none;
+    a {
+      color: white;
+    }
+  }
+
+
+  h1 {
+    margin-top: 0;
+  }
+}
+
+.article-type {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.candidate-showcase {
+  .btn-secondary {
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    margin-bottom: 0;
+  }
+
+  .office {
+    padding-bottom: 20px;
+    display: block;
+  }
+}
+
+.toggle-nav {
+  position: relative;
+  margin-left: -15px;
+  width: auto;
+  margin-bottom: 10px;
+  background: darken($blue, 10);
+  padding: 20px;
+  padding-right:40px;
+  margin-right: -15px;
+  border-radius: 3px;
+  color: white;
+  font-weight: bolder;
+  transition: 0.25s;
+
+  &__text {
+    margin-right: 40px;
+  }
+
+  &__icon {
+    position: absolute;
+    right: 15px;
+    top: 20px;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+//Initiatives
+.page-sub-nav.filter {
+
+  .filter__search {
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 30px;
+    width: 250px;
+  }
+
+  .sort-buttons {
+    .desc {
+      .caret {
+        transform: rotateZ(180deg);
+      }
+    }
+
+    .btn {
+      padding: 5px 10px;
+      height: 30px;
+    }
+  }
+
+  @include until($small) {
+    .filter__search, .form-inline {
+      width: 100%;
+      float: none;
+      display: block;
+    }
+
+    .filter__sort {
+      width: 100%;
+      text-align: right;
+    }
+  }
+
+}

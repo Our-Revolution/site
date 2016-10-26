@@ -1,2 +1,7 @@
 *.pyc
 media/
+.env
+.sass-cache
+node_modules
+bower_components
+.DS_Store

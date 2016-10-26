@@ -18,4 +18,5 @@ Because 'site' is not a descriptive project name ...
 
 ## Usage
 
-`./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
+1. `source ~/.virtualenvs/ourrevolution/bin/activate`
+2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
