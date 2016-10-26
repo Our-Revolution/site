@@ -11,6 +11,8 @@ REDIRECTS = {
     "/stop-the-tpp": "stop-tpp-now",
     "/volunteer-signup": "action",
     "/signup": "/",
+    "/candidate-questionnaire": "candidates",
+    "/august-30-primary-candidates": "candidates",
     "/tpp": "https://go.berniesanders.com/page/s/stop-the-TPP?source=webslashtpp",
     "/act": "https://go.berniesanders.com/page/s/volunteer-our-revolution?source=webslashact"
 }
