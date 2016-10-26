@@ -22,6 +22,10 @@ class TemplatePage(Page):
             return self.template
         return super(TemplatePage, self).get_template(request)
 
+    content_panels = Page.content_panels + [
+            FieldPanel('template')
+        ]
+
 
 class IndexPage(Page):
     template = "pages/index.html"
