@@ -6133,7 +6133,7 @@ html {
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
-  margin-bottom: 300px;
+  margin-bottom: 350px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
   body p {
@@ -6190,6 +6190,35 @@ h4, h1 {
       -webkit-flex: 0 0 100px;
       -ms-flex: 0 0 100px;
       flex: 0 0 100px; } }
+
+.twitter-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background: url("../img/stop-tpp/twitter-icon.svg") center center no-repeat;
+  float: left;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden; }
+  .twitter-icon:hover {
+    opacity: 0.8; }
+
+.facebook-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background: url("../img/stop-tpp/facebook-icon.svg") center center no-repeat;
+  float: left;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden; }
+  .facebook-icon:hover {
+    opacity: 0.8; }
+
+.press-share {
+  margin-bottom: 30px; }
+  .press-share .btn {
+    margin-bottom: 10px; }
 
 .email p {
   font-size: 18px; }
@@ -6269,29 +6298,29 @@ h4, h1 {
   .icon path {
     fill: red; }
   .icon.animal-rights {
-    background-image: url("../img/icons/initiatives/animal-rights.svg"); }
+    background-image: url("../images/icons/initiatives/animal-rights.svg"); }
   .icon.corporate-tax {
-    background-image: url("../img/icons/initiatives/corporate-tax.svg"); }
+    background-image: url("../images/icons/initiatives/corporate-tax.svg"); }
   .icon.death-penalty {
-    background-image: url("../img/icons/initiatives/death-penalty.svg"); }
+    background-image: url("../images/icons/initiatives/death-penalty.svg"); }
   .icon.education {
-    background-image: url("../img/icons/initiatives/education.svg"); }
+    background-image: url("../images/icons/initiatives/education.svg"); }
   .icon.election-reform {
-    background-image: url("../img/icons/initiatives/election-reform.svg"); }
+    background-image: url("../images/icons/initiatives/election-reform.svg"); }
   .icon.environment {
-    background-image: url("../img/icons/initiatives/environment.svg"); }
+    background-image: url("../images/icons/initiatives/environment.svg"); }
   .icon.health-care {
-    background-image: url("../img/icons/initiatives/healthcare.svg"); }
+    background-image: url("../images/icons/initiatives/healthcare.svg"); }
   .icon.labor {
-    background-image: url("../img/icons/initiatives/labor-1.svg"); }
+    background-image: url("../images/icons/initiatives/labor-1.svg"); }
   .icon.labor-2 {
-    background-image: url("../img/icons/initiatives/labor-2.svg"); }
+    background-image: url("../images/icons/initiatives/labor-2.svg"); }
   .icon.marijuana {
-    background-image: url("../img/icons/initiatives/marijuana.svg"); }
+    background-image: url("../images/icons/initiatives/marijuana.svg"); }
   .icon.minimum-wage {
-    background-image: url("../img/icons/initiatives/minimum-wage.svg"); }
+    background-image: url("../images/icons/initiatives/minimum-wage.svg"); }
   .icon.money-in-politics {
-    background-image: url("../img/icons/initiatives/money-in-politics.svg"); }
+    background-image: url("../images/icons/initiatives/money-in-politics.svg"); }
 
 .no-result {
   display: none; }
@@ -6498,6 +6527,20 @@ h4, h1 {
       border-radius: 0 3px 0 0; }
   .goals__description {
     padding: 40px; }
+
+.about-action-bar {
+  margin-bottom: 10px; }
+
+.board-section .bylaws {
+  display: none; }
+.board-section.bylaws .bylaws {
+  display: block; }
+.board-section.bylaws .board {
+  display: none; }
+.board-section.statement .bylaws {
+  display: none; }
+.board-section.statement .board {
+  display: block; }
 
 .action-list {
   list-style-type: none;
@@ -7755,7 +7798,7 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 300px;
+  height: 350px;
   background: #fafafa; }
   .footer p {
     font-size: 14px; }
@@ -7874,6 +7917,16 @@ a {
     .module.tpp-bg .module__heading {
       text-shadow: 0 0 5px black; }
     .module.tpp-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.map-bg {
+    background: #53A2F2 url("../img/map-bg.jpg");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .module.map-bg .module__heading {
+      text-shadow: 0 0 5px black; }
+    .module.map-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.shailene-bg {

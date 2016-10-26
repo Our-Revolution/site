@@ -7,7 +7,7 @@ html {
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
-  margin-bottom: 300px;
+  margin-bottom: 350px;
   -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
@@ -64,6 +64,42 @@ h4, h1 {
       flex: 0 0 100px;
     }
 
+  }
+}
+
+.twitter-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background: url('../img/stop-tpp/twitter-icon.svg') center center no-repeat;
+  float: left;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @include text-indent();
+}
+
+.facebook-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background: url('../img/stop-tpp/facebook-icon.svg') center center no-repeat;
+  float: left;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @include text-indent();
+}
+
+.press-share {
+  margin-bottom: 30px;
+
+  .btn {
+    margin-bottom: 10px;
   }
 }
 
@@ -173,51 +209,51 @@ h4, h1 {
   }
 
   &.animal-rights {
-    background-image: url("../img/icons/initiatives/animal-rights.svg");
+    background-image: url("../images/icons/initiatives/animal-rights.svg");
   }
 
   &.corporate-tax {
-    background-image: url("../img/icons/initiatives/corporate-tax.svg");
+    background-image: url("../images/icons/initiatives/corporate-tax.svg");
   }
 
   &.death-penalty {
-    background-image: url("../img/icons/initiatives/death-penalty.svg");
+    background-image: url("../images/icons/initiatives/death-penalty.svg");
   }
 
   &.education {
-    background-image: url("../img/icons/initiatives/education.svg");
+    background-image: url("../images/icons/initiatives/education.svg");
   }
 
   &.election-reform {
-    background-image: url("../img/icons/initiatives/election-reform.svg");
+    background-image: url("../images/icons/initiatives/election-reform.svg");
   }
 
   &.environment {
-    background-image: url("../img/icons/initiatives/environment.svg");
+    background-image: url("../images/icons/initiatives/environment.svg");
   }
 
   &.health-care {
-    background-image: url("../img/icons/initiatives/healthcare.svg");
+    background-image: url("../images/icons/initiatives/healthcare.svg");
   }
 
   &.labor {
-    background-image: url("../img/icons/initiatives/labor-1.svg");
+    background-image: url("../images/icons/initiatives/labor-1.svg");
   }
 
   &.labor-2 {
-    background-image: url("../img/icons/initiatives/labor-2.svg");
+    background-image: url("../images/icons/initiatives/labor-2.svg");
   }
 
   &.marijuana {
-    background-image: url("../img/icons/initiatives/marijuana.svg");
+    background-image: url("../images/icons/initiatives/marijuana.svg");
   }
 
   &.minimum-wage {
-    background-image: url("../img/icons/initiatives/minimum-wage.svg");
+    background-image: url("../images/icons/initiatives/minimum-wage.svg");
   }
 
   &.money-in-politics {
-    background-image: url("../img/icons/initiatives/money-in-politics.svg");
+    background-image: url("../images/icons/initiatives/money-in-politics.svg");
   }
 
 }
@@ -521,6 +557,36 @@ h4, h1 {
 
   &__description {
     padding: 40px;
+  }
+}
+
+.about-action-bar {
+  margin-bottom: 10px;
+}
+
+.board-section {
+  .bylaws {
+    display: none;
+  }
+
+  &.bylaws {
+    .bylaws {
+      display: block;
+    }
+
+    .board {
+      display: none;
+    }
+  }
+
+  &.statement {
+    .bylaws {
+      display: none;
+    }
+
+    .board {
+      display: block;
+    }
   }
 }
 
