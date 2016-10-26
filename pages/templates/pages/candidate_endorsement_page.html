@@ -47,25 +47,25 @@
                     <div class="pull-right">
                         {% if page.candidate.twitter %}
                             <a href="{{ page.candidate.twitter }}" onclick="trackOutboundLink('{{ page.candidate.twitter }}'); return false;" target="_blank">
-                                <img alt="Twitter" src="{% static "img/icons/twitter.svg" %}" class="social-icon">
+                                <img alt="Twitter" src="{% static "dist/img/icons/twitter.svg" %}" class="social-icon">
                             </a>
                         {% endif %}
 
                         {% if page.candidate.facebook %}
                             <a href="{{ page.candidate.facebook }}" onclick="trackOutboundLink('{{ page.candidate.facebook }}'); return false;" target="_blank">
-                                <img alt="Facebook" src="{% static "img/icons/facebook.svg" %}" class="social-icon">
+                                <img alt="Facebook" src="{% static "dist/img/icons/facebook.svg" %}" class="social-icon">
                             </a>
                         {% endif %}
 
                         {% if page.candidate.youtube %}
                             <a href="{{ page.candidate.youtube }}" onclick="trackOutboundLink('{{ page.candidate.youtube }}'); return false;" target="_blank">
-                                <img alt="YouTube" src="{% static "img/icons/youtube.svg" %}" class="social-icon">
+                                <img alt="YouTube" src="{% static "dist/img/icons/youtube.svg" %}" class="social-icon">
                             </a>
                         {% endif %}
 
                         {% if page.candidate.instagram %}
                             <a href="{{ page.candidate.instagram }}" onclick="trackOutboundLink('{{ page.candidate.instagram }}'); return false;" target="_blank">
-                                <img alt="Instagram" src="{% static "img/icons/instagram.svg" %}" class="social-icon">
+                                <img alt="Instagram" src="{% static "dist/img/icons/instagram.svg" %}" class="social-icon">
                             </a>
                         {% endif %}
 
@@ -89,7 +89,7 @@
                     {% include "partials/sign-up.html" %}
                 {% endwith %}
             {% endif %}
-            
+
         </div>
     </div>
 </div>

@@ -92,17 +92,18 @@ gulp.task('watch', function() {
     livereload.listen();
 
     /* Trigger SASS and a live reload on SCSS changes */
-    gulp.watch('pages/static/src/scss/**/*.scss', ['sass']);
+    gulp.watch('pages/static/src/scss/**/*.scss', {interval: 500}, ['sass']);
 
     /* Trigger imagemin and live reload on image changes */
-    gulp.watch('pages/static/src/img/**/*', ['images']);
+    gulp.watch('pages/static/src/img/**/*', {interval: 500}, ['images']);
 
     /* Trigger browserify and live reload on JS changes */
-    gulp.watch('pages/static/src/js/**/*', ['js']);
+    gulp.watch('pages/static/src/js/**/*', {interval: 500}, ['js']);
 
     /* Trigger a live reload on any Django template changes */
-    gulp.watch('**/templates/*').on('change', livereload.changed);
+    gulp.watch('**/templates/*', {interval: 500}).on('change', livereload.changed);
 
 });
 
-gulp.task('default', ['sass', 'js', 'images', 'fonts', 'watch']);
+gulp.task('build', ['sass', 'js', 'images', 'fonts']);
+gulp.task('default', ['watch']);
