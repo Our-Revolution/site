@@ -41,8 +41,12 @@ class RoutesTestCase(TestCase):
 
     def test_august_30_primary_candidates(self):
         response = self.client.get('/august-30-primary-candidates/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 301)
     
+
+    def test_bylaws_redirect(self):
+        response = self.client.get('/page/bylaws/')
+        self.assertEqual(response.status_code, 301)
 
     def test_bylaws(self):
         response = self.client.get('/bylaws/')
@@ -604,11 +608,6 @@ class RoutesTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
     
 
-    def test_founding_statement_of_our_revolution_board(self):
-        response = self.client.get('/founding-statement-of-our-revolution-board/')
-        self.assertEqual(response.status_code, 200)
-    
-
     def test_initiatives_(self):
         response = self.client.get('/ballot-initiatives/')
         self.assertEqual(response.status_code, 200)
@@ -707,12 +706,7 @@ class RoutesTestCase(TestCase):
     def test_initiatives_missouri_amendment_6(self):
         response = self.client.get('/ballot-initiatives/missouri-amendment-6/')
         self.assertEqual(response.status_code, 200)
-    
 
-    def test_initiatives_montana_initiative_177(self):
-        response = self.client.get('/ballot-initiatives/montana-initiative-177/')
-        self.assertEqual(response.status_code, 200)
-    
 
     def test_initiatives_montana_initiative_182(self):
         response = self.client.get('/ballot-initiatives/montana-initiative-182/')
@@ -885,7 +879,7 @@ class RoutesTestCase(TestCase):
     
 
     def test_press_join_lucy_flores_support_women_leaders(self):
-        response = self.client.get('/press/join-lucy-flores-support-women-leaders/')
+        response = self.client.get('/page/join-lucy-flores-support-women-leaders/')
         self.assertEqual(response.status_code, 200)
     
 
@@ -951,6 +945,11 @@ class RoutesTestCase(TestCase):
 
     def test_press_our_revolution_substantive_discussion(self):
         response = self.client.get('/press/our-revolution-substantive-discussion/')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_founding_statement_of_our_revolution_board(self):
+        response = self.client.get('/press/founding-statement-of-our-revolution-board/')
         self.assertEqual(response.status_code, 200)
     
 
