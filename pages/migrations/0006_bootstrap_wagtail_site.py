@@ -88,7 +88,11 @@ def clear_site(apps, schema_editor):
     from django.contrib.contenttypes.models import ContentType
 
     Site.objects.all().delete()
-    Page.objects.get(path='00010001').delete()
+    
+    try:
+        Page.objects.get(path='00010001').delete()
+    except Page.DoesNotExist:
+        pass
 
     try:
         homepage = Page.objects.get(slug='home')
