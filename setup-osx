@@ -24,4 +24,3 @@ echo "Migrating database..."
 
 echo "Creating an admin user for you..."
 ./manage.py createsuperuser
-

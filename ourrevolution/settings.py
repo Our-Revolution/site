@@ -38,6 +38,8 @@ ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
 
+    #Django gulp
+    'django_gulp',
 
     # Django core
     'django.contrib.admin',

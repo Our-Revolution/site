@@ -19,7 +19,7 @@ Because 'site' is not a descriptive project name ...
 
 ## Usage
 
-1. `source ~/.virtualenvs/ourrevolution/bin/activate`
+1. `workon ourrevolution` or `source ~/.virtualenvs/ourrevolution/bin/activate`
 2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
 
 ## GULP and the Front End
