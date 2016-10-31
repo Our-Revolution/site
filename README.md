@@ -4,7 +4,7 @@
 
 1. [Pip](https://pip.pypa.io/en/stable/installing/)
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
-3. (Optional) [Node + NPM](https://nodejs.org/en/download/) for building front-end. 
+3. [Node + NPM](https://nodejs.org/en/download/) for building front-end. 
 
 ## Installation
 Because 'site' is not a descriptive project name ...
@@ -14,8 +14,9 @@ Because 'site' is not a descriptive project name ...
 3. `cd our-revolution`
 4. Run `./setup-osx` (it will take a minute; it's making a number of installs HTTP requests)
 5. It should prompt you to create a super user account. Enter your username, email and password.
-6. ???
-7. Profit!
+6. `npm install` for build tools
+7. ???
+8. Profit!
 
 ## Usage
 
