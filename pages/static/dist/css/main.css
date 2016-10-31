@@ -7920,13 +7920,23 @@ a {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.map-bg {
-    background: #53A2F2 url("../img/map-bg.jpg");
+    background: #0c56a0 url("../img/map-bg.jpg");
     background-size: cover;
     color: white;
     font-weight: bolder; }
     .module.map-bg .module__heading {
       text-shadow: 0 0 5px black; }
     .module.map-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.dapl-bg {
+    background: #0c56a0 url("../img/dapl_module_1.png");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .module.dapl-bg .module__heading {
+      text-shadow: 0 0 5px black; }
+    .module.dapl-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.shailene-bg {

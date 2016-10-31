@@ -90,7 +90,23 @@
   }
 
   &.map-bg {
-    background: $blue url('../img/map-bg.jpg');
+    background: darken($blue, 30) url('../img/map-bg.jpg');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+  
+  &.dapl-bg {
+    background: darken($blue, 30) url('../img/dapl_module_1.png');
     background-size: cover;
     color: white;
     font-weight: bolder;
