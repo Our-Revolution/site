@@ -90,28 +90,12 @@
   var sortingBy = "featured";
   var sortingAsc = true;
 
-  var options = {
-      valueNames: [
-        'state',
-        'name',
-        'title',
-        'vote',
-        'category',
-        { name: 'featured', data: 'is-featured' }
-      ],
-      plugins: [
-        ListFuzzySearch()
-      ]
-  };
-
-  var initiativesList = new List('initiatives-list', options);
-
+  // Functions
   function fuzzySearch(e) {
     initiativesList.fuzzySearch.search(e.value);
   }
 
   function sort(sortBy) {
-
     if (sortingBy === sortBy) {
       if (sortingAsc) {
         initiativesList.sort(sortBy, { order: 'desc'});
@@ -130,7 +114,7 @@
   }
 
   function filter(category) {
-    if (category) {
+    if (category && category != 'all') {
       initiativesList.filter(function (item) {
         if(category == item._values.category)
           return true;
@@ -142,7 +126,74 @@
     }
   }
 
+  function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  function isCategory(category) {
+    var nav = $('.issues__nav');
+
+    if (nav.find("[category='" + category + "']").length > 0)
+      return true;
+    else
+      return false;
+  }
+
+  function setActive(category) {
+    var nav = $('.issues__nav');
+
+    // set active state
+    nav.find('li').each(function () {
+      $(this).removeClass("active");
+    })
+
+    nav.find("[category='" + category + "']").toggleClass("active");
+
+    updateUrl(category);
+  }
+
+  function updateUrl(category) {
+    if (category)
+      window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives?category=' + category);
+    else
+      window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
+  }
+
+  var options = {
+      valueNames: [
+        'state',
+        'name',
+        'title',
+        'vote',
+        'category',
+        { name: 'featured', data: 'is-featured' }
+      ],
+      plugins: [
+        ListFuzzySearch()
+      ]
+  };
+
+  var initiativesList = new List('initiatives-list', options);
+
   var self = this;
+
+  // Filter list by URL category
+  if (getParameterByName('category')) {
+    var category = getParameterByName('category');
+
+    if (isCategory(category)) {
+      setActive(category);
+      self.filter(category);
+    }
+  }
 
   $("#initiatives-nav").on("click", function(e) {
     e.preventDefault();
@@ -156,17 +207,12 @@
     $("#fuzzy-search").val("");
     initiativesList.fuzzySearch.search();
 
-    var category = $(e.target).closest("li").attr("category");
+    var category = $(e.target).closest("li").attr("category") || false;
 
-    // set active state
-    $($(this).find("li")).each(function (e) {
-      $(this).removeClass("active");
-    })
-
-    $(e.target).closest("li").toggleClass("active");
-
-    //filter
-    self.filter(category);
+    if (category) {
+      setActive(category);
+      self.filter(category);
+    }
   });
 
   initiativesList.on("updated", function(list) {

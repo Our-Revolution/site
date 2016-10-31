@@ -952,6 +952,9 @@ class RoutesTestCase(TestCase):
         response = self.client.get('/press/founding-statement-of-our-revolution-board/')
         self.assertEqual(response.status_code, 200)
     
+    def test_our_revolution_stands_with_dakota_access_pipeline_protestors(self):
+        response = self.client.get('/press/our-revolution-stands-with-dakota-access-pipeline-protestors')
+        self.assertEqual(response.status_code, 200)
 
     def test_privacy_policy(self):
         response = self.client.get('/privacy-policy/')
