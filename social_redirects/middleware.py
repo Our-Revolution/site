@@ -64,7 +64,7 @@ class RedirectFallbackMiddleware(MiddlewareMixin):
             if r.new_path == '':
                 return self.response_gone_class()
 
-            if 'HTTP_USER_AGENT' in request.META and re.match("|".join(SOCIAL_USER_AGENTS), request.META['HTTP_USER_AGENT']):
+            if 'HTTP_USER_AGENT' in request.META and re.match("|".join(SOCIAL_USER_AGENTS), request.META['HTTP_USER_AGENT'], flags=re.I):
                 return render(request, "social_redirect.html", {'redirect': r})
 
             return self.response_redirect_class(r.new_path)
