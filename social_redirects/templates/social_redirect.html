@@ -5,7 +5,7 @@
     <meta name="description" content="{{ redirect.description }}" />
     <meta property="og:title" content="{{ redirect.title }}" />
     <meta property="og:description" content="{{ redirect.description }}" />
-    <meta property="og:image" content="{{ MEDIA_URL }}{{ redirect.social_image }}" />
+    <meta property="og:image" content="{{ redirect.social_image.url }}" />
     <meta http-equiv="refresh" content="0;url={{ redirect.new_path }}" />
 </head>
 <body>
