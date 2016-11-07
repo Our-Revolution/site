@@ -16,7 +16,8 @@ var gulp = require('gulp'),
   buffer = require('vinyl-buffer'),
   gutil = require('gulp-util'),
   _ = require('lodash'),
-  gulpcopy = require('gulp-copy');
+  gulpcopy = require('gulp-copy'),
+  exit = require('gulp-exit');
 
 var gzipOptions = {
     threshold: '1kb',
@@ -34,7 +35,7 @@ var opts = _.assign({}, watchify.args, browserifyOptions);
 var b = watchify(browserify(opts));
 
 gulp.task('js', bundle); // so you can run `gulp js` to build the file
-b.on('update', bundle); // on any dep update, runs the bundler
+// b.on('update', bundle); // on any dep update, runs the bundler
 b.on('log', gutil.log); // output build logs to terminal
 
 // Compile JS, minify
@@ -53,6 +54,7 @@ function bundle() {
     .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest('pages/static/dist/js'))
     .pipe(livereload());
+    .pipe(exit());
 }
 
 /* Compile SASS */
@@ -75,12 +77,12 @@ gulp.task('sass', function() {
 });
 
 /* Optimize Images */
-gulp.task('images', () =>
-  gulp.src('pages/static/src/img/**/*')
+gulp.task('images', function() {
+  return gulp.src('pages/static/src/img/**/*')
     .pipe(changed('pages/static/dist/img/'))
     .pipe(imagemin())
     .pipe(gulp.dest('pages/static/dist/img/'))
-);
+});
 
 /* Copy Fonts to Dist */
 gulp.task('fonts', function() {
