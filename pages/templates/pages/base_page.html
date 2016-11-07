@@ -18,7 +18,7 @@
             <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
             <meta property="og:url" content="https://ourrevolution.com" />
             <meta property="og:site_name" content="Our Revolution" />
-            <meta property="og:image" content="https://ourrevolution.com/img/fb.png" />
+            <meta property="og:image" content="{% firstof page.social_image.url "https://ourrevolution.com/img/fb.png" %}" />
         {% endblock %}
 
         {% block meta_twitter %}
