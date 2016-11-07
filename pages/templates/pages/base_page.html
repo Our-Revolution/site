@@ -19,7 +19,7 @@
             <meta property="og:url" content="https://ourrevolution.com" />
             <meta property="og:site_name" content="Our Revolution" />
             {% if request.GET.category %}
-                {% with "images/meta/"|add:request.GET.category|add:".png" as social_image %}
+                {% with "img/dist/meta/"|add:request.GET.category|add:".png" as social_image %}
                     <meta property="og:image" content="{% static social_image %}" />
                 {% endwith %}
             {% else %}
