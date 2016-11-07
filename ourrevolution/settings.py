@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
@@ -72,6 +73,7 @@ INSTALLED_APPS = [
     # OR.
     'endorsements',
     'pages',
+    'social_redirects'
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
@@ -94,6 +96,9 @@ MIDDLEWARE = [
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
 
+    # OR
+    'social_redirects.middleware.RedirectFallbackMiddleware'    
+
 ]
 
 ROOT_URLCONF = 'ourrevolution.urls'
@@ -107,6 +112,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],

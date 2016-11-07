@@ -1,0 +1,25 @@
+{% extends "pages/base_page.html" %}
+
+{% block title %}404 - {{ block.super }}{% endblock %}
+{% block page_title %}404{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+                <section class="home-section text-center">
+                    <h1>Not Found</h1>
+                    <div class="row text">
+                        <a class="btn btn-primary" href="/"><span class="glyphicon glyphicon-chevron-left"></span> Go Home</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

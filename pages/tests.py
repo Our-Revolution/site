@@ -599,9 +599,18 @@ class RoutesTestCase(TestCase):
     
 
     def test_check_registration(self):
+        response = self.client.get('/page/check-registration/')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_page_check_registration(self):
+        response = self.client.get('/page/check-registration/')
+        self.assertEqual(response.status_code, 301)
+
+    def test_check_registration(self):
         response = self.client.get('/check-registration/')
         self.assertEqual(response.status_code, 200)
-    
+
 
     def test_dakota_access_filmmaker(self):
         response = self.client.get('/dakota-access-filmmaker/')
@@ -878,10 +887,14 @@ class RoutesTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
     
 
-    def test_press_join_lucy_flores_support_women_leaders(self):
+    def test_page_join_lucy_flores_support_women_leaders(self):
         response = self.client.get('/page/join-lucy-flores-support-women-leaders/')
+        self.assertEqual(response.status_code, 301)
+
+    def test_join_lucy_flores_support_women_leaders(self):
+        response = self.client.get('/join-lucy-flores-support-women-leaders/')
         self.assertEqual(response.status_code, 200)
-    
+
 
     def test_press_josh_fox_and_our_revolution_team_up(self):
         response = self.client.get('/press/josh-fox-and-our-revolution-team-up/')
