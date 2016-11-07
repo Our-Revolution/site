@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
   livereload = require('gulp-livereload'),
-  sass = require('gulp-ruby-sass'),
+  sass = require('gulp-sass'),
   imagemin = require('gulp-imagemin'),
   autoprefixer = require('gulp-autoprefixer'),
   sourcemaps = require('gulp-sourcemaps'),
