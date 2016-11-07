@@ -78,7 +78,7 @@ gulp.task('sass', function() {
 
 /* Optimize Images */
 gulp.task('images', function() {
-  return gulp.src('pages/static/src/img/**/*.{jpg,png,svg}')
+  return gulp.src('pages/static/src/img/**')
     .pipe(changed('pages/static/dist/img/'))
     .pipe(imagemin())
     .pipe(gulp.dest('pages/static/dist/img/'))
