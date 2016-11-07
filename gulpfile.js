@@ -78,11 +78,25 @@ gulp.task('sass', function() {
 
 /* Optimize Images */
 gulp.task('images', function() {
-  return gulp.src('pages/static/src/img/**')
+  return gulp.src('pages/static/src/img/**.{png}')
     .pipe(changed('pages/static/dist/img/'))
-    .pipe(imagemin())
+    .pipe(imagemin({
+      verbose: true
+    }))
     .pipe(gulp.dest('pages/static/dist/img/'))
 });
+
+// SVGs
+// gulp.task('images', function() {
+//   return gulp.src('pages/static/src/img/**')
+//     .pipe(changed('pages/static/dist/img/'))
+//     .pipe(imagemin())
+//     .pipe(gulp.dest('pages/static/dist/img/'))
+// });
+// 
+// // PNGs
+// 
+// // JPGs
 
 /* Copy Fonts to Dist */
 gulp.task('fonts', function() {
