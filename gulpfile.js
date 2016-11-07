@@ -57,7 +57,8 @@ function bundle() {
 
 /* Compile SASS */
 gulp.task('sass', function() {
-  return sass('pages/static/src/scss/main.scss')
+  return gulp.src('pages/static/src/scss/main.scss')
+  .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.write())
   .pipe(autoprefixer({
       browsers: ['last 2 versions','iOS 7', 'iOS 8', 'ie 9-11', 'android 4.3'],
