@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "gulpfile.js",
-  "scripts": {
-    "postinstall": "./node_modules/.bin/gulp build"
-  },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "jquery": "^3.1.1",
