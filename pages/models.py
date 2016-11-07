@@ -8,14 +8,20 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
 class BasePage(Page):
     body = RichTextField(null=True, blank=True)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     content_panels = Page.content_panels + [
             FieldPanel('body', classname="full")
         ]
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 class TemplatePage(Page):
     template = models.CharField(max_length=128)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     def get_template(self, request):
         if self.template:
@@ -26,9 +32,14 @@ class TemplatePage(Page):
             FieldPanel('template')
         ]
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 class IndexPage(Page):
     template = "pages/index.html"
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['wagtailcore.Page']
 
     def get_context(self, *args, **kwargs):
@@ -39,6 +50,10 @@ class IndexPage(Page):
             pass
         return context
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 
 ## CANDIDATES
@@ -47,6 +62,7 @@ class CandidateEndorsementPage(Page):
     body = RichTextField()
     candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
     signup_tagline = models.CharField(max_length=128, blank=True, null=True)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.CandidateEndorsementIndexPage']
 
 
@@ -56,14 +72,23 @@ class CandidateEndorsementPage(Page):
             FieldPanel('signup_tagline')
         ]
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 class CandidateEndorsementIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.CandidateEndorsementPage']
     
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['candidates'] = self.get_children().live().select_related('candidateendorsementpage', 'candidateendorsementpage__candidate').order_by('candidateendorsementpage__candidate__state', 'candidateendorsementpage__candidate__district')
         return context
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
 
 
 
@@ -73,6 +98,7 @@ class InitiativeEndorsementPage(Page):
     body = RichTextField()
     initiative = models.ForeignKey('endorsements.Initiative', null=True, blank=True, on_delete=models.SET_NULL)
     signup_tagline = models.CharField(max_length=128, blank=True, null=True)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.InitiativeEndorsementIndexPage']
 
 
@@ -80,6 +106,10 @@ class InitiativeEndorsementPage(Page):
             FieldPanel('body', classname="full"),
             FieldPanel('initiative'),
             FieldPanel('signup_tagline')
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
         ]
 
     def get_context(self, *args, **kwargs):
@@ -90,12 +120,17 @@ class InitiativeEndorsementPage(Page):
 
 
 class InitiativeEndorsementIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.InitiativeEndorsementPage']
     
     def get_context(self, *args, **kwargs):
         context = super(InitiativeEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['initiatives'] = self.get_children().live().select_related('initiativeendorsementpage', 'initiativeendorsementpage__initiative').order_by('-initiativeendorsementpage__initiative__featured', 'initiativeendorsementpage__initiative__state')
         return context
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
 
 
 ## ISSUES
@@ -104,6 +139,7 @@ class IssuePage(Page):
     body = RichTextField()
     issue = models.ForeignKey('endorsements.Issue', null=True, blank=True, on_delete=models.SET_NULL)
     signup_tagline = models.CharField(max_length=128, blank=True, null=True)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.IssueIndexPage']
 
 
@@ -113,20 +149,34 @@ class IssuePage(Page):
             FieldPanel('signup_tagline')
         ]
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 class IssueIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.IssuePage']
     
     def serve(self, request):
         # trickeryyyy...
         return IssuePage.objects.get(title='TPP').serve(request)
 
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 # News / Statements / Press Releases
 
 class NewsIndex(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.IndexPage']
     subpage_types = ['pages.NewsPost']
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
 
 
 
@@ -141,6 +191,7 @@ class NewsPost(Page):
     header_photo_byline = models.CharField(max_length=256, blank=True, null=True)
     abstract = RichTextField()
     body = RichTextField()
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.NewsIndex']
     subpage_types = []
 
@@ -150,4 +201,8 @@ class NewsPost(Page):
             FieldPanel('header_photo_byline'),
             FieldPanel('abstract'),
             FieldPanel('body', classname="full"),
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
         ]
