@@ -1,0 +1,41 @@
+{% extends "pages/base_page.html" %}
+
+{% block title %}Find Your Polling Location | {{ block.super }}{% endblock %}
+{% block page_title %}Find Your Polling Location | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+
+ <div class="container-fluid">
+    <div class="row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 text-center pb2 pt2">
+        <h4><a href="https://go.ourrevolution.com/page/content/phonebank/" target="_blank">Volunteer to make calls and encourage people to get to the polls and support progressive candidates.</a></h4>
+        <a href="https://go.ourrevolution.com/page/content/phonebank/" target="_blank" class="btn btn-donate uppercase letter-spacing">Volunteer</a>
+      </div>
+      
+      <div class="col-md-8 col-md-offset-2 pb2">
+        <script type="text/javascript" src="https://tool.votinginfoproject.org/app.js"></script>
+          <div id="_vit" style="margin:auto;"></div>
+          <script type="text/javascript">vit.load({
+              modal: true,
+              officialOnly: false,
+              title: 'Find Your Polling Location',
+              width: '640px',
+              height: '480px',
+              logo: 'https://ourrevolution.com/img/favicon.png',
+              colors: {
+                'header': '#229acd',
+                'landscapeBackgroundHeader': '#228a9d'
+              },
+              language: 'en',
+          });</script>
+        </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+{% endblock %}

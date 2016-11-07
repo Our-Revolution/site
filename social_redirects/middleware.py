@@ -39,7 +39,10 @@ class RedirectFallbackMiddleware(MiddlewareMixin):
             return response
 
         full_path = request.get_full_path()
-        current_site = get_current_site(request)
+        try:
+            current_site = get_current_site(request)
+        except:
+            return response
 
         r = None
         try:
@@ -55,11 +58,7 @@ class RedirectFallbackMiddleware(MiddlewareMixin):
             except Redirect.DoesNotExist:
                 pass
 
-        print "maybe"
-
         if r is not None:
-
-            print "onward"
 
             if r.new_path == '':
                 return self.response_gone_class()

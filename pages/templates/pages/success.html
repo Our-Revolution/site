@@ -1,0 +1,70 @@
+{% extends "pages/base_page.html" %}
+
+
+{% block title %}Thanks for Signing Up | {{ block.super }}{% endblock %}
+{% block page_title %}Thanks for Signing Up | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+     <div class="container-fluid">
+        <div class="row">
+      <div class="container">
+        <div class="page-heading text-center">
+          <h1>Thanks for joining Our Revolution.</h1>
+        </div>
+        <section class='home-section--info col-md-10 col-md-offset-1'>
+          <div class='col-md-8 col-md-offset-2'>
+            <div class="success-message">
+              <p>Our political movement continues, and you've just signed up to be a part of it. We'll be in touch via the email you signed up with when we're ready to get to work.</p>
+            </div>
+
+            <div class="donate">
+              <p><strong>Our Revolution relies entirely on contributions from people like you. Can you pitch in and help fuel this movement?</strong></p>
+
+              <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=signup-success" class="btn btn-donate btn-block">Contribute <span class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="row row--dark">
+      <div class="container">
+        <section class="home-section clearfix">
+
+          <div class="col-md-10 col-md-offset-1">
+
+            <h1>Explore Our Revolution</h1>
+
+            <ul class="action-list">
+              <li class="action-list__action col-md-4">
+                <a class="action__link" href="/action">
+                  <h3>Take Action</h3>
+                  <p class="action__description">Volunteer today and help continue our political revolution through grassroots organization.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" href="/issues">
+                  <h3>Learn About the Issues</h3>
+                  <p class="action__description">Learn about the important issues facing our country today, and what you can do to fix them.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" href="/candidates">
+                  <h3>Explore Our Candidates</h3>
+                  <p class="action__description">Find out who will continue the political revolution, and what you can do to help them win.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+
+      </div>
+
+
+{% endblock %}
