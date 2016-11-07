@@ -53,7 +53,7 @@ function bundle() {
      // Add transformation tasks to the pipeline here.
     .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest('pages/static/dist/js'))
-    .pipe(livereload());
+    .pipe(livereload())
     .pipe(exit());
 }
 
