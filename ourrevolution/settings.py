@@ -218,3 +218,4 @@ IGNORABLE_404_URLS = [
         re.compile(r'^favicon\.ico'),
         re.compile(r'^/img/candidates/.*')
     ]
+
