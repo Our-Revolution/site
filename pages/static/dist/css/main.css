@@ -8368,6 +8368,9 @@ a {
   float: left;
   border-radius: 3px 0 0; }
 
+.election-tracker .card__content.initiative {
+  height: auto; }
+
 .election-tracker .card__results--seperator {
   -webkit-align-self: center;
   -ms-flex-item-align: center;
