@@ -24,6 +24,8 @@
                         <div class="col-md-6 col-md-offset-3">
                             <p class="candidate-bio">
                                 {{ page.body | safe }}
+
+                                {% if initiative.cta and initiative.cta_link %}<a class="btn btn-primary btn-block" href="{{ initiative.cta_link }}" target="_blank" onclick="trackOutboundLink('{{ initiative.cta_link }}'); return false;">{{ initiative.cta }}</a>{% endif %}
                             </p>
                         </div>
 
