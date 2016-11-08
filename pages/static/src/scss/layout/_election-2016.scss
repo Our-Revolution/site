@@ -1,7 +1,8 @@
 .election-tracker {
   .page-heading--full {
     width: 100%;
-    background: $blue url('../img/nina_bg.jpg') center no-repeat;
+    // background: $blue url('../img/nina_bg.jpg') center no-repeat;
+    background: $blue;
     background-size: cover;
     color: white;
     position: relative;
@@ -58,7 +59,8 @@
     // margin: 20px;
     align-items: center;
     justify-content: center;
-    background: #eee;
+    background: darken($blue, 20);
+    color: white;
     flex-direction: column;
     padding: 10px;
     border-top: 5px solid $blue;
@@ -75,7 +77,7 @@
     flex: 1;
     width: 100%;
     display: flex;
-    color: #666;
+    // color: #666;
   }
 
   .card__results--result {
@@ -99,6 +101,7 @@
   .card-list--results {
     .card {
       height: auto;
+      border: 1px solid #e7e7e7;
     }
     
     .card__photo {
@@ -106,6 +109,11 @@
       float: left;
       border-radius: 3px 0 0;
     }
+  }
+  
+  .card__content {
+    // background: #fafafa;
+    // border-width: 1px 1px 0 1px;
   }
   
   .card__content.initiative {
