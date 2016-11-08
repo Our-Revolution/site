@@ -40,15 +40,15 @@
                             {{ page.body | safe }}
                         {% endif %} -->
 
-                        {% if page.candidate_race_snippets %}
+                        {% if candidate_race_snippets.exists %}
                             <h2>Our Candidates</h2>
                             <hr>
                         
                             <ul class="card-list third list card-list--results">
-                                {% for candidate_race_snippet in page.candidate_race_snippets.all %}
+                                {% for candidate_race_snippet in candidate_race_snippets %}
 
                                     {% with candidate_race_snippet.candidate_race as candidate_race %}
-                                        {% with candidate_race.candidate as candidate %}
+                                {% with candidate_race.candidate as candidate %}
 
                                             <li class="card clearfix">
                                                 <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
@@ -100,12 +100,12 @@
 
 
 
-                        {% if page.initiative_race_snippets %}
+                        {% if initiative_race_snippets.exists %}
                             <h2>Our Initiatives</h2>
                             <hr>
 
                             <ul class="card-list third list card-list--results">
-                            {% for initiative_race_snippet in page.initiative_race_snippets.all %}
+                            {% for initiative_race_snippet in initiative_race_snippets %}
 
                                 {% with initiative_race_snippet.initiative_race as initiative_race %}
                                     {% with initiative_race.initiative as initiative %}
