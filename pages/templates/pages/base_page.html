@@ -23,7 +23,7 @@
                     <meta property="og:image" content="{% static social_image %}" />
                 {% endwith %}
             {% else %}
-                <meta property="og:image" content="{% firstof page.social_image.url "https://ourrevolution.com/img/fb.png" %}" />
+                <meta property="og:image" content="{% firstof page.social_image.url "https://ourrevolution.com/static/dist/img/fb.png" %}" />
             {% endif %}
         {% endblock %}
 
