@@ -215,7 +215,7 @@ ANYMAIL = {
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'anymail.backends.mailgun.MailgunBackend')
 
 IGNORABLE_404_URLS = [
-        re.compile(r'^favicon\.ico'),
+        re.compile(r'^/favicon\.ico'),
         re.compile(r'^/img/candidates/.*')
     ]
 
