@@ -31,7 +31,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost', 'ourrevolution.com', 'www.ourrevolution.com']
+
+ADMINS = [('Jon Culver', 'jon@ourrevolution.com'), ('Chris Mabry', 'chris@ourrevolution.com')]
+
+MANAGERS = ADMINS
 
 
 # Application definition
@@ -40,6 +44,8 @@ INSTALLED_APPS = [
 
     #Django gulp
     'django_gulp',
+
+    'anymail',
 
     # Django core
     'django.contrib.admin',
@@ -76,11 +82,14 @@ INSTALLED_APPS = [
     'social_redirects'
 ]
 
-INTERNAL_IPS = ['127.0.0.1']
+SERVER_EMAIL = "bugtroll@ourrevolution.com"
+
+INTERNAL_IPS = ['24.18.176.26', '24.158.161.75']
 
 MIDDLEWARE = [
 
     # debug
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     # Django core
@@ -190,3 +199,16 @@ if os.environ.get('env', 'development') == 'production':
 
 
 TEST_RUNNER = 'pages.tests.NoDbTestRunner'
+
+
+
+MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', None)
+MAILGUN_SENDER_DOMAIN = os.environ.get('MAILGUN_SENDER_DOMAIN', None)
+
+
+ANYMAIL = {
+    'MAILGUN_API_KEY': MAILGUN_API_KEY,
+    'MAILGUN_SENDER_DOMAIN': MAILGUN_SENDER_DOMAIN
+}
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'anymail.backends.mailgun.MailgunBackend')
