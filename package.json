@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "gulpfile.js",
+  "scripts":{
+    "postinstall":"chmod -R u+r node_modules"
+  },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "browserify": "^13.1.1",
