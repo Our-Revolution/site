@@ -2,7 +2,7 @@
   .page-heading--full {
     width: 100%;
     // background: $blue url('../img/nina_bg.jpg') center no-repeat;
-    background: $blue;
+    background: $blue url('../img/bg_image.jpg') top no-repeat;
     
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f43737+0,53a2f2+100 */
     // background: #f43737; /* Old browsers */
@@ -14,11 +14,12 @@
     background-size: cover;
     color: white;
     position: relative;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
     
     .heading-container {
       height: 100%;
       background: rgba(0,0,0,0.2);
-      padding: 200px 20px 20px;
+      padding: 150px 20px 20px;
     }
     
     h1 {
@@ -50,7 +51,7 @@
       }
       
       @include until(630px) {
-        width: 80%;
+        width: 100%;
         margin-right: 0%;
       
         &:nth-child(3n) {
@@ -207,26 +208,32 @@
     width: 100%;
     // height: 50px;
     // padding: 15px;
-    background: darken($blue, 40);
+    background: darken($blue, 10);
     text-align: center;
+    
+    .container {
+      padding: 0;
+    }
     
     a {
       text-align: center;
-      width: 49%;
-      display: inline-block;
+      width: 50%;
+      float: left;
+      display: block;
       padding: 1%;
       text-decoration: none;
-      color: white;
-      
+      color: #fff;
       font-size: 1.2em;
       letter-spacing: 2px;
       
+      background: rgba(255,255,255,0.1);
+      
       &:hover {
-        background: $blue;
+        background: darken($blue,10);
       }
       
       &.active {
-        background: $blue;
+        background: darken($blue,20)
       }
     }
   }

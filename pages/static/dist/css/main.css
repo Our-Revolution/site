@@ -8267,15 +8267,16 @@ a {
 
 .election-tracker .page-heading--full {
   width: 100%;
-  background: #53A2F2;
+  background: #53A2F2 url("../img/bg_image.jpg") top no-repeat;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f43737+0,53a2f2+100 */
   background-size: cover;
   color: white;
-  position: relative; }
+  position: relative;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8); }
   .election-tracker .page-heading--full .heading-container {
     height: 100%;
     background: rgba(0, 0, 0, 0.2);
-    padding: 200px 20px 20px; }
+    padding: 150px 20px 20px; }
   .election-tracker .page-heading--full h1 {
     margin: 0;
     font-size: 3em; }
@@ -8295,7 +8296,7 @@ a {
         margin-right: 0; } }
   @media screen and (max-width: 629px) {
     .election-tracker .card-list.third .card {
-      width: 80%;
+      width: 100%;
       margin-right: 0%; }
       .election-tracker .card-list.third .card:nth-child(3n) {
         margin-right: 0; }
@@ -8428,18 +8429,22 @@ a {
 
 .election-tracker .results-selector {
   width: 100%;
-  background: #093c70;
+  background: #2488ee;
   text-align: center; }
+  .election-tracker .results-selector .container {
+    padding: 0; }
   .election-tracker .results-selector a {
     text-align: center;
-    width: 49%;
-    display: inline-block;
+    width: 50%;
+    float: left;
+    display: block;
     padding: 1%;
     text-decoration: none;
-    color: white;
+    color: #fff;
     font-size: 1.2em;
-    letter-spacing: 2px; }
+    letter-spacing: 2px;
+    background: rgba(255, 255, 255, 0.1); }
     .election-tracker .results-selector a:hover {
-      background: #53A2F2; }
+      background: #2488ee; }
     .election-tracker .results-selector a.active {
-      background: #53A2F2; }
+      background: #106fcf; }
