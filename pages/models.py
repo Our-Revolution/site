@@ -1,9 +1,13 @@
 from __future__ import unicode_literals
 from django.db import models
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.wagtailcore.fields import RichTextField
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
+from wagtail.wagtailsnippets.models import register_snippet
+from modelcluster.fields import ParentalKey
+
 
 
 class BasePage(Page):
@@ -206,3 +210,112 @@ class NewsPost(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+@register_snippet
+class CandidateRace(models.Model):
+    RESULT_CHOICES = (
+            (None, ''),
+            ('win', 'Win'),
+            ('lose', 'Lose'),
+        )
+    candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
+    result = models.CharField(max_length=5, choices=RESULT_CHOICES, null=True, blank=True)
+    candidate_votes = models.IntegerField(default=0)
+    opponent_votes = models.IntegerField(default=0)
+    other_votes = models.IntegerField(default=0)
+    margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
+    source = models.URLField(null=True, blank=True)
+    notes = RichTextField(blank=True)
+
+    def __unicode__(self):
+        return self.candidate.name
+
+    panels = [
+        FieldPanel('candidate'),
+        FieldPanel('result'),
+        FieldPanel('candidate_votes'),
+        FieldPanel('opponent_votes'),
+        FieldPanel('other_votes'),
+        FieldPanel('margin_win_loss'),
+        FieldPanel('source'),
+        FieldPanel('notes')
+    ]
+
+
+@register_snippet
+class InitiativeRace(models.Model):
+    RESULT_CHOICES = (
+            (None, ''),
+            ('win', 'Win'),
+            ('lose', 'Lose'),
+        )
+    initiative = models.ForeignKey('endorsements.Initiative', null=True, blank=True, on_delete=models.SET_NULL)
+    result = models.CharField(max_length=5, choices=RESULT_CHOICES, null=True, blank=True)
+    initiative_votes = models.IntegerField(default=0)
+    opponent_votes = models.IntegerField(default=0)
+    other_votes = models.IntegerField(default=0)
+    margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
+    source = models.URLField(null=True, blank=True)
+    notes = RichTextField(blank=True)
+
+    def __unicode__(self):
+        return self.initiative.name
+
+    panels = [
+        FieldPanel('initiative'),
+        FieldPanel('result'),
+        FieldPanel('initiative_votes'),
+        FieldPanel('opponent_votes'),
+        FieldPanel('other_votes'),
+        FieldPanel('margin_win_loss'),
+        FieldPanel('source'),
+        FieldPanel('notes')
+    ]
+
+
+class CandidateRaceSnippet(Orderable, models.Model):
+    page = ParentalKey('pages.ElectionTrackingPage', related_name='candidate_race_snippets')
+    candidate_race = models.ForeignKey('pages.CandidateRace', related_name='+')
+
+    class Meta:
+        verbose_name = "Candidate Race"
+
+    panels = [
+        SnippetChooserPanel('candidate_race'),
+    ]
+
+    def __unicode__(self):
+        return unicode(self.canidate_race)
+
+
+
+class InitiativeeRaceSnippet(Orderable, models.Model):
+    page = ParentalKey('pages.ElectionTrackingPage', related_name='initiative_race_snippets')
+    initiative_race = models.ForeignKey('pages.InitiativeRace', related_name='+')
+
+    class Meta:
+        verbose_name = "Initiative Race"
+
+    panels = [
+        SnippetChooserPanel('initiative_race'),
+    ]
+
+    def __unicode__(self):
+        return unicode(self.initiative_race)
+
+
+
+class ElectionTrackingPage(Page):
+    abstract = RichTextField()
+    body = RichTextField()
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    content_panels = Page.content_panels + [
+        FieldPanel('abstract'),
+        FieldPanel('body', classname="full"),
+        InlinePanel('candidate_race_snippets', label="Candidates"),
+        InlinePanel('initiative_race_snippets', label="Initiatives"),
+    ]
+
+

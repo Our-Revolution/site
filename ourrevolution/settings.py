@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_gulp',
 
     'anymail',
+    'django.contrib.humanize',
 
     # Django core
     'django.contrib.admin',
