@@ -1,0 +1,99 @@
+{% extends "pages/base_page.html" %}
+
+{% load humanize %}
+
+{% block content %}
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="container">
+                    <div class="page-heading clearfix">
+                        <h1>{{ page.title }}</h1>
+                    </div>
+
+                    <!-- completely arbitrary; maybe this should be an admin setting, even -->
+                    <div class="col-sm-8 col-sm-offset-2">
+                        {% if page.body %}
+                            {{ page.body | safe }}
+                        {% endif %}
+
+                        {% if page.candidate_race_snippets %}
+                            <h3>Candidate Results:</h3>
+
+                            {% for candidate_race_snippet in page.candidate_race_snippets.all %}
+
+                                {% with candidate_race_snippet.candidate_race as candidate_race %}
+                                    {% with candidate_race.candidate as candidate %}
+
+                                        <div class="col-sm-6">
+                                            <img src="{{ candidate.photo.url }}" />
+                                            <h5>{{ candidate.name }} {% if candidate_race.result %} &mdash; {{ candidate_race.get_result_display }}{% endif %}</h5>
+                                            <p class="small">{{ candidate.office }}, {{ candidate.state }} {{ candidate.district }}</p>
+
+                                            {% comment %} almost-intentionally, very ugly {% endcomment %}
+
+                                            {% if candidate_race.candidate_votes %}Votes: {{ candidate_race.candidate_votes | intcomma }}<br />{% endif %}
+                                            {% if candidate_race.opponent_votes %}Challenger votes: {{ candidate_race.opponent_votes | intcomma }}<br />{% endif %}
+                                            {% if candidate_race.other_votes %}Other Votes:{{ candidate_race.other_votes | intcomma }}<br />{% endif %}
+                                            {% if candidate_race.margin_win_loss %}Margin: {{ candidate_race.margin_win_loss }}<br />{% endif %}
+                                            {% if candidate_race.source %}Source: <a href="{{ candidate_race.source }}">{{ candidate_race.source }}</a><br />{% endif %}
+                                            {% if candidate_race.notes %}Notes: {{ candidate_race.notes }}{% endif %}
+
+
+                                        </div>
+
+                                    {% endwith %}
+
+                                {% endwith %}
+
+                            {% endfor %}
+
+
+                        {% endif %}
+
+
+
+                        {% if page.initiative_race_snippets %}
+                            <h3>Initiative Results:</h3>
+
+                            {% for initiative_race_snippet in page.initiative_race_snippets.all %}
+
+                                {% with initiative_race_snippet.initiative_race as initiative_race %}
+                                    {% with initiative_race.initiative as initiative %}
+
+                                        <div class="col-sm-6">
+                                            {% comment %}<img src="{{ candidate.photo.url }}" />{% endcomment %}
+                                            <h5>{{ initiative.name }} {% if initiative_race.result %} &mdash; {{ initiative_race.get_result_display }}{% endif %}</h5>
+                                            <p class="small">{{ initiative.state }} {{ initiative.district }}</p>
+
+                                            {% comment %} almost-intentionally, very ugly {% endcomment %}
+
+                                            {% if initiative_race.initiative_votes %}Votes: {{ initiative_race.initiative_votes | intcomma }}<br />{% endif %}
+                                            {% if initiative_race.opponent_votes %}Challenger votes: {{ initiative_race.opponent_votes | intcomma }}<br />{% endif %}
+                                            {% if initiative_race.other_votes %}Other Votes:{{ initiative_race.other_votes | intcomma }}<br />{% endif %}
+                                            {% if initiative_race.margin_win_loss %}Margin: {{ initiative_race.margin_win_loss }}<br />{% endif %}
+                                            {% if initiative_race.source %}Source: <a href="{{ initiative_race.source }}">{{ initiative_race.source }}</a><br />{% endif %}
+                                            {% if initiative_race.notes %}Notes: {{ initiative_race.notes }}{% endif %}
+
+
+                                        </div>
+
+                                    {% endwith %}
+
+                                {% endwith %}
+
+                            {% endfor %}
+
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
