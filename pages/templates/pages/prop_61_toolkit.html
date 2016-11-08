@@ -263,4 +263,118 @@
   <script>
     smoothScroll.init();
   </script>
+  <script>
+  var numPrimaryShares = 0;
+
+  // Twitter share events
+  twttr.ready(
+    function(twttr) {
+      twttr.events.bind(
+        'click',
+        function (ev) {
+          if ($(ev.target).hasClass('primary-share')) {
+            numPrimaryShares++;
+
+            $(ev.target).find('twitter-icon-round').css("opacity", 0.6);
+
+            $('.cta-body.video').addClass('feature');
+            $('.cta-body.host').addClass('feature');
+
+            if(numPrimaryShares >= 2) {
+              $('.cta-body.video').removeClass('feature');
+              $('.cta-body.video').addClass('complete');
+            }
+
+          }
+
+          ga('send', 'event', 'Twitter', 'share', 'twitterurl');
+        }
+      );
+    }
+  );
+
+  // Facbeook Share events
+  $('.facebook-share').on('click', function(e) {
+    e.preventDefault();
+
+    FB.ui(
+      {
+        method: 'share',
+        href: 'https://www.facebook.com/PoliticalRevolution/videos/1271298162922397',
+      },
+      // callback
+      function(response) {
+        if (response && !response.error_message) {
+          if($(e.target).hasClass('primary-share')) {
+            numPrimaryShares++;
+
+            if(numPrimaryShares >= 2) {
+              $('.cta-body.video').removeClass('feature');
+              $('.cta-body.video').addClass('complete');
+            }
+          }
+
+          ga('send', 'event', 'Facebook', 'share', 'https://www.facebook.com/PoliticalRevolution/videos/1271298162922397');
+        } else {
+          //failure
+        }
+      }
+    );
+  });
+
+  $(document).ready(function() {
+    $('form').on('submit', function(e) {
+      e.preventDefault();
+      var self = this;
+
+      var values = {}
+      $.each($(this).serializeArray(), function(i, field) {
+        values[field.name] = field.value;
+      });
+
+      var url = "https://go.ourrevolution.com/page/sapi/join-the-fight-for-prop-61"
+
+      if ($(self).hasClass('primary-form')) {
+        url = "https://go.ourrevolution.com/page/sapi/join-the-fight-for-prop-61?source=toolkit-primary";
+      } else {
+        url = "https://go.ourrevolution.com/page/sapi/join-the-fight-for-prop-61?source=toolkit-secondary";
+      }
+
+      $.ajax({
+        method: 'POST',
+        url: url,
+        data: values,
+        crossDomain: true
+      })
+      .done(function(data) {
+        if ($(self).hasClass('primary-form')) {
+          $(self).closest('form').fadeOut(400, function() {
+            $(self).parent().find('.error').fadeOut();
+            $(self).parent().find('.success').fadeIn();
+
+            window.setTimeout(function () {
+              $('.cta-body.sign-up').removeClass('feature');
+              $('.cta-body.sign-up').addClass('complete');
+              $('.cta-body.video').addClass('feature');
+            }, 800)
+          });
+          ga('send', 'event', 'Sign Up', 'submit', 'Prop 61 Toolkit Primary Signup');
+        } else {
+          $(self).closest('form').fadeOut(400, function() {
+            $(self).parent().find('.error').fadeOut();
+            $(self).parent().find('.success').fadeIn();
+          });
+
+          ga('send', 'event', 'Sign Up', 'submit', 'Prop 61 Toolkit Secondary Signup');
+        }
+      })
+      .fail(function(data) {
+        $(self).parent().find('.error').fadeIn();
+      })
+
+    })
+
+  })
+
+</script>
 {% endblock %}
