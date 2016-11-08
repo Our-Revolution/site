@@ -232,6 +232,21 @@ class CandidateRace(models.Model):
     def __unicode__(self):
         return self.candidate.name
 
+    def candidate_votes_percentage(self):
+        try:
+            value = self.candidate_votes / float(self.candidate_votes + self.opponent_votes + self.other_votes)
+        except:
+            value = 0
+
+        return "{0:.0%}".format(value)
+
+    def opponent_votes_percentage(self):
+        try:
+            value = self.opponent_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+        except:
+            value = 0
+        return "{0:.0%}".format(value)
+
     panels = [
         FieldPanel('candidate'),
         FieldPanel('result'),
@@ -263,6 +278,19 @@ class InitiativeRace(models.Model):
 
     def __unicode__(self):
         return self.initiative.name
+
+    def initiative_votes_percentage(self):
+        try:
+            return self.initiative_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+        except:
+            return 0
+
+
+    def opponent_votes_percentage(self):
+        try:
+            return self.opponent_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+        except:
+            return 0
 
     panels = [
         FieldPanel('initiative'),

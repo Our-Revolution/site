@@ -67,24 +67,26 @@
                                                   
                                                   <div class="card__results">
                                                       <div class="card__results--status clearfix">
-                                                        <div class="card__results--reporting pull-left">45% reporting</div>
+                                                        <div class="card__results--reporting pull-left">{{ candidate_race.notes }}</div>
                                                         
-                                                        <div class="card__results--updated pull-right">Last updated 3 mins. ago</div>
+                                                        {% if candidate_race.last_updated %}
+                                                            <div class="card__results--updated pull-right">Last updated {{ candidate_race.last_updated | timesince }} ago</div>
+                                                        {% endif %}
                                                       </div>
                                                       
                                                       <div class="card__results--numbers">
                                                         <div class="card__results--result">
                                                             <div>{{candidate.name}}</div>
-                                                            <div class="card__results--percentage">0%</div>
-                                                            <div class="card__results--votes">14,387</div>
+                                                            <div class="card__results--percentage">{{ candidate_race.candidate_votes_percentage }}</div>
+                                                            <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                         </div>
                                                         
                                                         <div class="card__results--seperator">-</div>
                                                         
                                                         <div class="card__results--result">
                                                           <div>Opponent</div>
-                                                          <div class="card__results--percentage">0%</div>
-                                                          <div class="card__results--votes">412</div>
+                                                          <div class="card__results--percentage">{{ candidate_race.opponent_votes_percentage }}</div>
+                                                          <div class="card__results--votes">{{ candidate_race.opponent_votes | intcomma }}</div>
                                                         </div>
                                                       </div>
                                                   </div>
@@ -122,24 +124,26 @@
                                           
                                           <div class="card__results">
                                               <div class="card__results--status clearfix">
-                                                <div class="card__results--reporting pull-left">45% reporting</div>
+                                                <div class="card__results--reporting pull-left">{{ initiative_race.notes }}</div>
                                                 
-                                                <div class="card__results--updated pull-right">Last updated 3 mins. ago</div>
+                                                {% if initiative_race.last_updated %}
+                                                    <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
+                                                {% endif %}
                                               </div>
                                               
                                               <div class="card__results--numbers">
                                                 <div class="card__results--result">
-                                                    <div class="uppercase">Yes</div>
-                                                    <div class="card__results--percentage">0%</div>
-                                                    <div class="card__results--votes">14,387</div>
+                                                    <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
+                                                    <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}</div>
+                                                    <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                                 </div>
                                                 
                                                 <div class="card__results--seperator">-</div>
                                                 
                                                 <div class="card__results--result">
-                                                  <div class="uppercase">No</div>
-                                                  <div class="card__results--percentage">0%</div>
-                                                  <div class="card__results--votes">412</div>
+                                                  <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
+                                                  <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}</div>
+                                                  <div class="card__results--votes">{{ initiative_race.opponent_votes | intcomma }}</div>
                                                 </div>
                                               </div>
                                           </div>
@@ -155,8 +159,6 @@
                         {% endif %}
 
                     </div>
-
-
 
                 </div>
             </div>
