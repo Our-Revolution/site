@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     #Django gulp
     'django_gulp',
 
+    'anymail',
+
     # Django core
     'django.contrib.admin',
     'django.contrib.auth',
@@ -197,3 +199,16 @@ if os.environ.get('env', 'development') == 'production':
 
 
 TEST_RUNNER = 'pages.tests.NoDbTestRunner'
+
+
+
+MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', None)
+MAILGUN_SENDER_DOMAIN = os.environ.get('MAILGUN_SENDER_DOMAIN', None)
+
+
+ANYMAIL = {
+    'MAILGUN_API_KEY': MAILGUN_API_KEY,
+    'MAILGUN_SENDER_DOMAIN': MAILGUN_SENDER_DOMAIN
+}
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'anymail.backends.mailgun.MailgunBackend')
