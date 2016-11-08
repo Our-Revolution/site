@@ -31,7 +31,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost', 'ourrevolution.com', 'www.ourrevolution.com']
+
+ADMINS = [('Jon Culver', 'jon@ourrevolution.com'), ('Chris Mabry', 'chris@ourrevolution.com')]
+
+MANAGERS = ADMINS
 
 
 # Application definition
@@ -76,12 +80,15 @@ INSTALLED_APPS = [
     'social_redirects'
 ]
 
-INTERNAL_IPS = ['127.0.0.1']
+SERVER_EMAIL = "bugtroll@ourrevolution.com"
+
+INTERNAL_IPS = ['24.18.176.26', '24.158.161.75']
 
 MIDDLEWARE = [
 
     # debug
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
 
     # Django core
     'django.middleware.security.SecurityMiddleware',
