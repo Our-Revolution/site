@@ -69,14 +69,21 @@
                                                         <span class="card__item bold bigger name">{{ candidate.name }}</span>
                                                         <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                         <span class="card__item bottom">{{ candidate.office }}</span>
-                                                      </div>
-                                                      
-                                                      <div class="card__item card__item--share">
-                                                        <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                                        <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                                     </div>
                                                     </div>
                                                     
+                                                    <div class="card__item card__item--share">
+                                                      <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                                      <a href="https://twitter.com/intent/tweet?text={% spaceless %}
+                                                            {% if candidate_race.candidate_votes == 0 and candidate_race.opponent_votes == 0 %}
+                                                                Polls for {{ candidate.name }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
+                                                            {% elif candidate_race.candidate_votes > candidate_race.opponent_votes %}
+                                                                {{ candidate.name }} is leading {{ candidate_race.candidate_votes_percentage }} to {{ candidate_race.opponent_votes_percentage }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% else %}
+                                                                {{ candidate.name }} is trailing {{ candidate_race.opponent_votes_percentage }} to {{ candidate_race.candidate_votes_percentage }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                                   </div>
+                                                  </div>
+                                                  
                                                     <div class="card__results">
                                                         <div class="card__results--status clearfix">
                                                           <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
@@ -133,13 +140,20 @@
                                         <div class="card__content full initiative">
                                           <div>
                                             <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
-                                            <span class="card__item bold name"><span>{{ initiative.name }}</span></span>
+                                            <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
                                           
                                           <div class="card__item card__item--share">
                                             <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                            <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                            <a href="https://twitter.com/intent/tweet?text={% spaceless %}
+                                                            {% if initiative_race.initiative_votes == 0 and initiative_race.opponent_votes == 0 %}
+                                                                Polls for {{ initiative.title }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
+                                                            {% elif initiative_race.initiative_votes > initiative_race.opponent_votes %}
+                                                                {{ initiative.name }} is leading {{ initiative_race.initiative_votes_percentage }} to {{ initiative_race.opponent_votes_percentage }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% else %}
+                                                                {{ initiative.name }} is trailing {{ initiative_race.opponent_votes_percentage }} to {{ initiative_race.initiative_votes_percentage }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
                                          </div>
                                         </div>
                                         
@@ -305,7 +319,17 @@
                   btn.removeClass("asc");
                 }
               }
-            })
+            });
+
+            $('.card__item--share').on('click', '.facebook-icon', function(){
+
+                FB.ui(
+                  {
+                    method: 'share',
+                    href: 'https://ourrevolution.com/election-2016',
+                  });
+
+            });
             
             $('#fuzzy-search').on('keyup', function() {              
               fuzzySearch(this);
