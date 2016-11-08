@@ -8272,7 +8272,7 @@ a {
   background-size: cover;
   color: white;
   position: relative; }
-  .election-tracker .page-heading--full .container {
+  .election-tracker .page-heading--full .heading-container {
     height: 100%;
     background: rgba(0, 0, 0, 0.2);
     padding: 200px 20px 20px; }
@@ -8425,3 +8425,21 @@ a {
     height: 25px;
     width: 25px;
     background-size: 15px auto; }
+
+.election-tracker .results-selector {
+  width: 100%;
+  background: #093c70;
+  text-align: center; }
+  .election-tracker .results-selector a {
+    text-align: center;
+    width: 49%;
+    display: inline-block;
+    padding: 1%;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: 2px; }
+    .election-tracker .results-selector a:hover {
+      background: #53A2F2; }
+    .election-tracker .results-selector a.active {
+      background: #53A2F2; }

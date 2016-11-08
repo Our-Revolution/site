@@ -7,11 +7,20 @@
 
         <div class="container-fluid election-tracker">
           
-          <div class="row">
-            <div class="page-heading--full clearfix">
-                <div class="container">
+            <div class="row">
+              <div class="page-heading--full clearfix">
+                <div class="container heading-container">
                     <div class="status-indicator">Live Results</div>
                     <h1>{{ page.title }}</h1>
+                </div>
+                
+                <div class="results-selector">
+                  <div class="container text-center">
+                      <a href="#" class="uppercase active" data-show="candidates">Candidates</a>
+                    
+                      <a href="#" class="uppercase" data-show="initiatives">Initiatives</a>
+                  </div>
+                
                 </div>
               </div>
             </div>
@@ -35,7 +44,7 @@
                     </div>
                     
                     <!-- completely arbitrary; maybe this should be an admin setting, even -->
-                    <div>
+                    <div id="candidates">
                         <!-- {% if page.body %}
                             {{ page.body | safe }}
                         {% endif %} -->
@@ -100,73 +109,97 @@
 
                         {% endif %}
 
+                    </div>
+                    
+                    <div id="initiatives">
 
+                      {% if initiative_race_snippets.exists %}
+                          <h2>Our Initiatives</h2>
+                          <hr>
 
-                        {% if initiative_race_snippets.exists %}
-                            <h2>Our Initiatives</h2>
-                            <hr>
+                          <ul class="card-list third list card-list--results">
+                          {% for initiative_race_snippet in initiative_race_snippets %}
 
-                            <ul class="card-list third list card-list--results">
-                            {% for initiative_race_snippet in initiative_race_snippets %}
+                              {% with initiative_race_snippet.initiative_race as initiative_race %}
+                                  {% with initiative_race.initiative as initiative %}
 
-                                {% with initiative_race_snippet.initiative_race as initiative_race %}
-                                    {% with initiative_race.initiative as initiative %}
-
-                                        <li class="card clearfix">
-                                          <div class="card__content full initiative">
-                                            <div>
-                                              <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
-                                              <span class="card__item bold"><span>{{ initiative.name }}</span></span>
-                                              <span class="card__item name">{{this.name}}</span>
-                                            </div>
-                                            <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
-                                            
-                                            <div class="card__item card__item--share">
-                                              <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                              <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                           </div>
+                                      <li class="card clearfix">
+                                        <div class="card__content full initiative">
+                                          <div>
+                                            <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
+                                            <span class="card__item bold"><span>{{ initiative.name }}</span></span>
+                                            <span class="card__item name">{{this.name}}</span>
                                           </div>
+                                          <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
                                           
-                                          <div class="card__results">
-                                              <div class="card__results--status clearfix">
-                                                <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% else %} 0% reporting {% endif %}</div>
-                                                
-                                                {% if initiative_race.last_updated %}
-                                                    <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
-                                                {% endif %}
+                                          <div class="card__item card__item--share">
+                                            <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                            <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                         </div>
+                                        </div>
+                                        
+                                        <div class="card__results">
+                                            <div class="card__results--status clearfix">
+                                              <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% else %} 0% reporting {% endif %}</div>
+                                              
+                                              {% if initiative_race.last_updated %}
+                                                  <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
+                                              {% endif %}
+                                            </div>
+                                            
+                                            <div class="card__results--numbers">
+                                              <div class="card__results--result">
+                                                  <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
+                                                  <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}%</div>
+                                                  <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
                                               
-                                              <div class="card__results--numbers">
-                                                <div class="card__results--result">
-                                                    <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
-                                                    <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}%</div>
-                                                    <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
-                                                </div>
-                                                
-                                                <div class="card__results--seperator">-</div>
-                                                
-                                                <div class="card__results--result">
-                                                  <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
-                                                  <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}%</div>
-                                                  <div class="card__results--votes">{{ initiative_race.opponent_votes | intcomma }}</div>
-                                                </div>
+                                              <div class="card__results--seperator">-</div>
+                                              
+                                              <div class="card__results--result">
+                                                <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
+                                                <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}%</div>
+                                                <div class="card__results--votes">{{ initiative_race.opponent_votes | intcomma }}</div>
                                               </div>
-                                          </div>
-                                        </li>
+                                            </div>
+                                        </div>
+                                      </li>
 
-                                    {% endwith %}
+                                  {% endwith %}
 
-                                {% endwith %}
+                              {% endwith %}
 
-                            {% endfor %}
+                          {% endfor %}
 
 
-                        {% endif %}
-
+                      {% endif %}
+                    
                     </div>
 
                 </div>
             </div>
         </div>
+        
+        <script>
+          $(document).ready(function() {
+            $('#initiatives').hide();
+            
+            $('.results-selector a').on('click', function() {
+              var show = $(this).attr('data-show');
+              
+              console.log(show);
+              
+              $('.results-selector a').removeClass('active');
+              
+              $('#candidates').hide();
+              $('#initiatives').hide();
+              
+              $(this).addClass('active');
+              
+              $('#' + show).show();
+            })
+            
+          })
+        </script>
 
 {% endblock %}
