@@ -8268,6 +8268,7 @@ a {
 .election-tracker .page-heading--full {
   width: 100%;
   background: #53A2F2;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f43737+0,53a2f2+100 */
   background-size: cover;
   color: white;
   position: relative; }
@@ -8278,6 +8279,9 @@ a {
   .election-tracker .page-heading--full h1 {
     margin: 0;
     font-size: 3em; }
+
+.election-tracker .bigger {
+  font-size: 1.1em; }
 
 .election-tracker .card-list.third {
   margin: auto; }
@@ -8328,12 +8332,15 @@ a {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  padding: 10px;
+  height: auto;
+  width: 100%;
   border-top: 5px solid #53A2F2; }
 
 .election-tracker .card__results--status {
   width: 100%;
-  font-size: 0.8em; }
+  font-size: 0.8em;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 10px; }
 
 .election-tracker .card__results--numbers {
   -webkit-box-flex: 1;
@@ -8351,7 +8358,7 @@ a {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  margin-top: 10px; }
+  padding: 10px; }
   .election-tracker .card__results--result .card__results--percentage {
     font-size: 3em;
     font-weight: bolder; }
@@ -8369,8 +8376,15 @@ a {
   float: left;
   border-radius: 3px 0 0; }
 
+.election-tracker .card__content {
+  padding: 10px 75px 10px 10px; }
+
 .election-tracker .card__content.initiative {
   height: auto; }
+  .election-tracker .card__content.initiative .icon {
+    margin-left: 0; }
+  .election-tracker .card__content.initiative .card__item {
+    margin-left: 35px; }
 
 .election-tracker .card__results--seperator {
   -webkit-align-self: center;
@@ -8386,12 +8400,12 @@ a {
     margin-right: 5px;
     background-color: #106fcf;
     border-radius: 30px;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
     background-size: 7px auto; }
   .election-tracker .card__item--share .twitter-bg {
     background-color: #53A2F2;
     border-radius: 30px;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
     background-size: 15px auto; }

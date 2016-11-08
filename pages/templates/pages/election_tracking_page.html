@@ -54,8 +54,8 @@
                                                 <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
                                                   <div class="card__content">
                                                     <div class="candidate__info">
-                                                      <span class="card__item">{{ candidate.name }}</span>
-                                                      <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
+                                                      <span class="card__item bold bigger">{{ candidate.name }}</span>
+                                                      <span class="card__item smaller">{{ candidate.state }} {{ candidate.district }}</span>
                                                       <span class="card__item bottom">{{ candidate.office }}</span>
                                                     </div>
                                                     
@@ -113,11 +113,16 @@
                                         <li class="card clearfix">
                                           <div class="card__content full initiative">
                                             <div>
-                                              <span class="icon {{initiative.category}} category">{{initiative.category}}</span>
+                                              <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
                                               <span class="card__item bold"><span>{{ initiative.name }}</span></span>
                                               <span class="card__item name">{{this.name}}</span>
                                             </div>
                                             <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
+                                            
+                                            <div class="card__item card__item--share">
+                                              <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                              <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                           </div>
                                           </div>
                                           
                                           <div class="card__results">

@@ -3,6 +3,14 @@
     width: 100%;
     // background: $blue url('../img/nina_bg.jpg') center no-repeat;
     background: $blue;
+    
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f43737+0,53a2f2+100 */
+    // background: #f43737; /* Old browsers */
+    // background: -moz-linear-gradient(90deg, #f43737 0%, #53a2f2 100%); /* FF3.6-15 */
+    // background: -webkit-linear-gradient(90deg, #f43737 0%,#53a2f2 100%); /* Chrome10-25,Safari5.1-6 */
+    // background: linear-gradient(90deg, #f43737 0%,#53a2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f43737', endColorstr='#53a2f2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    
     background-size: cover;
     color: white;
     position: relative;
@@ -17,6 +25,10 @@
       margin: 0;
       font-size: 3em;
     }
+  }
+  
+  .bigger {
+    font-size: 1.1em;
   }
   
   .card-list.third {
@@ -62,13 +74,16 @@
     background: darken($blue, 20);
     color: white;
     flex-direction: column;
-    padding: 10px;
+    height: auto;
+    width: 100%;
     border-top: 5px solid $blue;
   }
 
   .card__results--status {
     width: 100%;
     font-size: 0.8em;
+    background: rgba(0,0,0,0.1);
+    padding: 10px;
     // text-transform: uppercase;
     // letter-spacing: 1px;
   }
@@ -82,7 +97,7 @@
 
   .card__results--result {
     flex: 1;
-    margin-top: 10px;
+    padding: 10px;
     
     .card__results--percentage {
       font-size: 3em;
@@ -114,10 +129,19 @@
   .card__content {
     // background: #fafafa;
     // border-width: 1px 1px 0 1px;
+    padding: 10px 75px 10px 10px;
   }
   
   .card__content.initiative {
     height: auto;
+    
+    .icon {
+      margin-left: 0;
+    }
+    
+    .card__item {
+      margin-left: 35px;
+    }
   }
   
   .card__results--seperator {
@@ -128,22 +152,23 @@
     position: absolute;
     right: 10px;
     top: 10px;
+    // float: right;
     
   
     .facebook-bg {
       margin-right: 5px;
       background-color: darken($blue, 20);
       border-radius: 30px;
-      height: 30px;
-      width: 30px;
+      height: 25px;
+      width: 25px;
       background-size: 7px auto;
     }
     
     .twitter-bg {
       background-color: $blue;
       border-radius: 30px;
-      height: 30px;
-      width: 30px;
+      height: 25px;
+      width: 25px;
       background-size: 15px auto;
     }
   }
