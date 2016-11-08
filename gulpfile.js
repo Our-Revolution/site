@@ -32,7 +32,7 @@ var browserifyOptions = {
   debug: true
 }
 var opts = _.assign({}, watchify.args, browserifyOptions);
-var b = watchify(browserify(opts));
+var b = browserify(opts);
 
 gulp.task('js', bundle); // so you can run `gulp js` to build the file
 // b.on('update', bundle); // on any dep update, runs the bundler
@@ -54,7 +54,6 @@ function bundle() {
     .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest('pages/static/dist/js'))
     .pipe(livereload())
-    .pipe(exit());
 }
 
 /* Compile SASS */
