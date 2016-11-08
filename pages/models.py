@@ -320,4 +320,10 @@ class ElectionTrackingPage(Page):
         InlinePanel('initiative_race_snippets', label="Initiatives"),
     ]
 
+    def get_context(self, *args, **kwargs):
+        context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
+        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district')
+        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state')
+        return context
+
 

@@ -18,10 +18,10 @@
                             {{ page.body | safe }}
                         {% endif %}
 
-                        {% if page.candidate_race_snippets %}
+                        {% if candidate_race_snippets.exists %}
                             <h3>Candidate Results:</h3>
 
-                            {% for candidate_race_snippet in page.candidate_race_snippets.all %}
+                            {% for candidate_race_snippet in candidate_race_snippets %}
 
                                 {% with candidate_race_snippet.candidate_race as candidate_race %}
                                     {% with candidate_race.candidate as candidate %}
@@ -49,15 +49,13 @@
 
                             {% endfor %}
 
-
                         {% endif %}
 
 
-
-                        {% if page.initiative_race_snippets %}
+                        {% if initiative_race_snippets.exists %}
                             <h3>Initiative Results:</h3>
 
-                            {% for initiative_race_snippet in page.initiative_race_snippets.all %}
+                            {% for initiative_race_snippet in initiative_race_snippets %}
 
                                 {% with initiative_race_snippet.initiative_race as initiative_race %}
                                     {% with initiative_race.initiative as initiative %}
