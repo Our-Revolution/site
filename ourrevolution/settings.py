@@ -89,8 +89,8 @@ INTERNAL_IPS = ['24.18.176.26', '24.158.161.75']
 MIDDLEWARE = [
 
     # debug
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     # Django core
     'django.middleware.security.SecurityMiddleware',
