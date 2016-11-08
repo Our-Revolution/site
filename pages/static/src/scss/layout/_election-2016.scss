@@ -1,0 +1,138 @@
+.election-tracker {
+  .page-heading--full {
+    width: 100%;
+    background: $blue url('../img/nina_bg.jpg') center no-repeat;
+    background-size: cover;
+    color: white;
+    position: relative;
+    
+    .container {
+      height: 100%;
+      background: rgba(0,0,0,0.2);
+      padding: 200px 20px 20px;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 3em;
+    }
+  }
+  
+  .card-list.third {
+    margin: auto;
+  }
+  
+  .card-list .card:hover {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .status-indicator {
+    font-size: 1.25em;
+    position: relative;
+    text-indent: 20px;
+    
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      
+      width: 15px;
+      height: 15px;
+      border-radius: 20px;
+      background: $green;
+    }
+  }
+
+  .card__results {
+    // font-size: 3em;
+    // font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    // margin: 20px;
+    align-items: center;
+    justify-content: center;
+    background: #eee;
+    flex-direction: column;
+    padding: 10px;
+    border-top: 5px solid $blue;
+  }
+
+  .card__results--status {
+    width: 100%;
+    font-size: 0.8em;
+    // text-transform: uppercase;
+    // letter-spacing: 1px;
+  }
+
+  .card__results--numbers {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    color: #666;
+  }
+
+  .card__results--result {
+    flex: 1;
+    margin-top: 10px;
+    
+    .card__results--percentage {
+      font-size: 3em;
+      font-weight: bolder;
+    }
+    // font-size: 2em;
+    // font-weight: bolder;
+  }
+
+  .card__content .candidate__info {
+    margin: -10px;
+    padding: 10px;
+    // background: #e7e7e7;
+  }
+
+  .card-list--results {
+    .card {
+      height: auto;
+    }
+    
+    .card__photo {
+      display: block;
+      float: left;
+      border-radius: 3px 0 0;
+    }
+  }
+  
+  .card__results--seperator {
+    align-self: center;
+  }
+  
+  .card__item--share {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    
+  
+    .facebook-bg {
+      margin-right: 5px;
+      background-color: darken($blue, 20);
+      border-radius: 30px;
+      height: 30px;
+      width: 30px;
+      background-size: 7px auto;
+    }
+    
+    .twitter-bg {
+      background-color: $blue;
+      border-radius: 30px;
+      height: 30px;
+      width: 30px;
+      background-size: 15px auto;
+    }
+  }
+}

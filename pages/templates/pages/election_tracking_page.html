@@ -5,49 +5,92 @@
 {% block content %}
 
 
-        <div class="container-fluid">
+        <div class="container-fluid election-tracker">
+          
+          <div class="row">
+            <div class="page-heading--full clearfix">
+                <div class="container">
+                    <div class="status-indicator">Live Results</div>
+                    <h1>{{ page.title }}</h1>
+                </div>
+              </div>
+            </div>
+          
             <div class="row">
                 <div class="container">
-                    <div class="page-heading clearfix">
-                        <h1>{{ page.title }}</h1>
-                    </div>
+                    <div class="page-sub-nav filter clearfix">
+                      <div class="form-inline pull-left">
+                        <div class="form-group">
+                          <label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
+                        </div>
+                      </div>
 
+                      <div class="filter__sort pull-right">
+                        Sort By:
+                        <div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
+                          <!-- <button type="button" class="btn btn-default active asc" sort-by="featured">Featured <span class="caret"></span></button> -->
+                          <button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
+                          <button type="button" class="btn btn-default" sort-by="category">Category <span class="caret"></span></button>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <!-- completely arbitrary; maybe this should be an admin setting, even -->
-                    <div class="col-sm-8 col-sm-offset-2">
-                        {% if page.body %}
+                    <div>
+                        <!-- {% if page.body %}
                             {{ page.body | safe }}
-                        {% endif %}
+                        {% endif %} -->
 
                         {% if page.candidate_race_snippets %}
-                            <h3>Candidate Results:</h3>
+                            <ul class="card-list third list card-list--results">
+                                {% for candidate_race_snippet in page.candidate_race_snippets.all %}
 
-                            {% for candidate_race_snippet in page.candidate_race_snippets.all %}
+                                    {% with candidate_race_snippet.candidate_race as candidate_race %}
+                                        {% with candidate_race.candidate as candidate %}
 
-                                {% with candidate_race_snippet.candidate_race as candidate_race %}
-                                    {% with candidate_race.candidate as candidate %}
-
-                                        <div class="col-sm-6">
-                                            <img src="{{ candidate.photo.url }}" />
-                                            <h5>{{ candidate.name }} {% if candidate_race.result %} &mdash; {{ candidate_race.get_result_display }}{% endif %}</h5>
-                                            <p class="small">{{ candidate.office }}, {{ candidate.state }} {{ candidate.district }}</p>
-
-                                            {% comment %} almost-intentionally, very ugly {% endcomment %}
-
-                                            {% if candidate_race.candidate_votes %}Votes: {{ candidate_race.candidate_votes | intcomma }}<br />{% endif %}
-                                            {% if candidate_race.opponent_votes %}Challenger votes: {{ candidate_race.opponent_votes | intcomma }}<br />{% endif %}
-                                            {% if candidate_race.other_votes %}Other Votes:{{ candidate_race.other_votes | intcomma }}<br />{% endif %}
-                                            {% if candidate_race.margin_win_loss %}Margin: {{ candidate_race.margin_win_loss }}<br />{% endif %}
-                                            {% if candidate_race.source %}Source: <a href="{{ candidate_race.source }}">{{ candidate_race.source }}</a><br />{% endif %}
-                                            {% if candidate_race.notes %}Notes: {{ candidate_race.notes }}{% endif %}
-
-
-                                        </div>
+                                            <li class="card clearfix">
+                                                <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
+                                                  <div class="card__content">
+                                                    <div class="candidate__info">
+                                                      <span class="card__item">{{ candidate.name }}</span>
+                                                      <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
+                                                      <span class="card__item bottom">{{ candidate.office }}</span>
+                                                    </div>
+                                                    
+                                                    <div class="card__item card__item--share">
+                                                      <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                                      <a href="#" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                                   </div>
+                                                  </div>
+                                                  
+                                                  <div class="card__results">
+                                                      <div class="card__results--status clearfix">
+                                                        <div class="card__results--reporting pull-left">45% reporting</div>
+                                                        
+                                                        <div class="card__results--updated pull-right">Last updated 3 mins. ago</div>
+                                                      </div>
+                                                      
+                                                      <div class="card__results--numbers">
+                                                        <div class="card__results--result">
+                                                            <div class="card__results--percentage">0%</div>
+                                                            <div class="card__results--votes">14,387</div>
+                                                        </div>
+                                                        
+                                                        <div class="card__results--seperator">-</div>
+                                                        
+                                                        <div class="card__results--result">
+                                                          <div class="card__results--percentage">0%</div>
+                                                          <div class="card__results--votes">412</div>
+                                                        </div>
+                                                      </div>
+                                                  </div>
+                                                  
+                                        {% endwith %}
 
                                     {% endwith %}
 
-                                {% endwith %}
-
-                            {% endfor %}
+                                {% endfor %}
+                            </ul>
 
 
                         {% endif %}

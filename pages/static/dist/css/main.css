@@ -8264,3 +8264,130 @@ a {
   .sign-up-form.small .form-group.submit {
     display: block;
     width: 100%; }
+
+.election-tracker .page-heading--full {
+  width: 100%;
+  background: #53A2F2 url("../img/nina_bg.jpg") center no-repeat;
+  background-size: cover;
+  color: white;
+  position: relative; }
+  .election-tracker .page-heading--full .container {
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 200px 20px 20px; }
+  .election-tracker .page-heading--full h1 {
+    margin: 0;
+    font-size: 3em; }
+
+.election-tracker .card-list.third {
+  margin: auto; }
+
+.election-tracker .card-list .card:hover {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1; }
+
+.election-tracker .status-indicator {
+  font-size: 1.25em;
+  position: relative;
+  text-indent: 20px; }
+  .election-tracker .status-indicator::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 15px;
+    height: 15px;
+    border-radius: 20px;
+    background: #58ea22; }
+
+.election-tracker .card__results {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding: 10px;
+  border-top: 5px solid #53A2F2; }
+
+.election-tracker .card__results--status {
+  width: 100%;
+  font-size: 0.8em; }
+
+.election-tracker .card__results--numbers {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  color: #666; }
+
+.election-tracker .card__results--result {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  margin-top: 10px; }
+  .election-tracker .card__results--result .card__results--percentage {
+    font-size: 3em;
+    font-weight: bolder; }
+
+.election-tracker .card__content .candidate__info {
+  margin: -10px;
+  padding: 10px; }
+
+.election-tracker .card-list--results .card {
+  height: auto; }
+
+.election-tracker .card-list--results .card__photo {
+  display: block;
+  float: left;
+  border-radius: 3px 0 0; }
+
+.election-tracker .card__results--seperator {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  -ms-grid-row-align: center;
+  align-self: center; }
+
+.election-tracker .card__item--share {
+  position: absolute;
+  right: 10px;
+  top: 10px; }
+  .election-tracker .card__item--share .facebook-bg {
+    margin-right: 5px;
+    background-color: #106fcf;
+    border-radius: 30px;
+    height: 30px;
+    width: 30px;
+    background-size: 7px auto; }
+  .election-tracker .card__item--share .twitter-bg {
+    background-color: #53A2F2;
+    border-radius: 30px;
+    height: 30px;
+    width: 30px;
+    background-size: 15px auto; }
