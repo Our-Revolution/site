@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
-ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost', 'ourrevolution.com', 'www.ourrevolution.com']
+ALLOWED_HOSTS = ['our-revolution-cms.herokuapp.com', 'localhost', 'ourrevolution.com', 'www.ourrevolution.com', 'beta.ourrevolution.com']
 
 ADMINS = [('Jon Culver', 'jon@ourrevolution.com'), ('Chris Mabry', 'chris@ourrevolution.com')]
 
