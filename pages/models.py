@@ -227,6 +227,7 @@ class CandidateRace(models.Model):
     margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
     source = models.URLField(null=True, blank=True)
     notes = RichTextField(blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.candidate.name
