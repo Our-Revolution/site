@@ -1012,3 +1012,7 @@ class RoutesTestCase(TestCase):
     def test_volunteer_signup(self):
         response = self.client.get('/volunteer-signup/')
         self.assertEqual(response.status_code, 301)
+ 
+    def test_polling_locator(self):
+        response = self.client.get('/polling-locator/')
+        self.assertEqual(response.status_code, 200)

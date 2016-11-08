@@ -1,0 +1,256 @@
+{% extends "pages/base_page.html" %}
+
+
+{% block content %}
+
+ <div class="container-fluid">
+    <div class="prop-61-toolkit">
+  <div class="row row--medical">
+    <div class="container">
+      <div class="col-md-10 col-md-offset-1">
+        <section class="text-center intro row">
+          <h1>Join the Fight for Prop 61</h1>
+          <h2>Together we can stop drug companies from overcharging by billions of dollars each year for life-saving drugs.</h2>
+
+          <div class="main-ctas row" id="main-ctas">
+            <div class="col-md-4 cta">
+              <h4 class="cta-header">1. Sign up to Phone Bank</h4>
+              <div class="cta-body sign-up feature">
+                <div class="sign-up-form block">
+                  <form id="primary-form" class="primary-form">
+                    <span class="form-group email">
+                      <label for="email">Email Address</label>
+                      <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+                    </span>
+
+                    <span class="form-group zip ">
+                      <label for="zip">Zip Code</label>
+                      <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+                    </span>
+
+                    <span class="form-group submit">
+                      <button class="btn btn-primary btn-block">Join</button>
+                    </span>
+                  </form>
+
+                  <div class="success text-center">
+                    <div class="glyphicon glyphicon-ok-sign"></div>
+                    <p>Thanks for signing up to phone bank! You will receive an email with info on how to get started soon.</p>
+
+                    <p><strong>Help spread the word now by sharing our video.</strong></p>
+                  </div>
+
+                  <div class="error text-center">
+                    <p>Please make sure all fields are filled correctly.</p>
+                  </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 cta">
+              <h4 class="cta-header">2. Share Our Video</h4>
+              <div class="cta-body video">
+                <div class="video-share text-center" id="share-cta">
+                  <div class="video-share-content">
+                    <div class="share-icons text-center">
+                      <div class="uppercase">Share:</div>
+                      <a href="https://twitter.com/intent/retweet?tweet_id=785971997167620096" class="twitter-icon-round primary-share">Retweet</a>
+                      <a href="#" class="facebook-icon-round facebook-share primary-share">Share on Facebook</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 cta">
+              <h4 class="cta-header">3. Host a Phone Bank</h4>
+              <div class="cta-body host block">
+                <div class="host-an-event" id="host-cta">
+                  <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary" target="_blank" class="btn btn-block btn-donate" onClick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary'); return false;">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="sub-nav" id="sub-nav">
+      <a data-scroll href="#intro" class="btn btn-donate uppercase">Learn About Prop 61 <span class="glyphicon glyphicon-chevron-down"></span></a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+        <section class="clearfix problem" id="intro">
+          <h2>The Problem</h2>
+
+          <p>Drug companies are overcharging taxpayers by billions of dollars each year for life-saving drugs. Profits over human life has become a terrible trend within the pharmaceutical industry, and your help in supporting this act will be the igniter that helps put an end to it.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row--blue">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+        <section class="clearfix solution" id="call">
+          <h2>The Solution</h2>
+
+          <p>The California Drug Price Relief Act (Prop 61) is a 2016 ballot initiative that will require the State of California to pay no more for prescription drugs than is paid for the same medication by the U.S. Department of Veterans Affairs (DVA), which provides healthcare services for nearly 22 million U.S. military veterans.</p>
+
+          <p>By obtaining equivalent savings as the U.S. Department of Veterans Affairs, California Taxpayers will have affordable access to prescription drugs; drugs that are life saving. The Drug Price Relief Act would save California taxpayers approximately $5.7 billion over 10 years.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+        <section class="clearfix phone-bank" id="call">
+          <h2><strong>1. Sign up to Phone Bank</strong></h2>
+
+          <p>The General Election is less than a month away — and we're reaching out to voters to pass Proposition 61 in California in 2016.</p>
+
+          <p>Sign up to phone bank so we can reach as many voters as possible.</p>
+
+          <div class="sign-up-form">
+            <form id="secondary-form">
+              <span class="form-group email">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+              </span>
+
+              <span class="form-group zip ">
+                <label for="zip">Zip Code</label>
+                <input type="text" name="zip" id="zip" class="zip" placeholder="20002" required>
+              </span>
+
+              <span class="form-group submit">
+                <button class="btn btn-primary btn-block">Sign Up</button>
+              </span>
+            </form>
+
+            <div class="success text-center green">
+              <p>Thanks for signing up to phone bank! You will receive an email with info on how to get started soon.</p>
+
+              <p><strong>Help spread the word now by sharing our video.</strong></p>
+
+              <a data-scroll href="#share"><span class="glyphicon glyphicon-chevron-down"></span></a>
+            </div>
+
+            <div class="error text-center">
+              <p>Please make sure all fields are filled correctly.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row--medical">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+        <section class="clearfix" id="share">
+          <h2><strong>2. Spread the Word</strong></h2>
+
+          <p>
+            Together we can defeat big pharma, but we’re going to need all hands on deck. Share this video online to help spread the word.
+          </p>
+
+          <div class="row social-buttons clearfix">
+            <div class="col-md-6">
+              <a class="btn btn-twitter btn-block" href="https://twitter.com/intent/retweet?tweet_id=785971997167620096">Share on Twitter <span class="twitter-icon"></span></a>
+            </div>
+
+            <div class="col-md-6">
+              <a class="btn btn-facebook btn-block facebook-share" href="#">Share on Facebook <span class="facebook-icon"></span></a>
+            </div>
+          </div>
+
+          <div class="social-preview">
+            <img src="/img/prop-61/thumbnail.jpg">
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+        <section class="clearfix" id="call">
+          <h2><strong>3. Host a Phone Bank</strong></h2>
+
+          <p>Hosting a phone bank is one of the most effective things you can do to help our fight for Prop 61.</p>
+
+          <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary" target="_blank" class="btn btn-donate" onclick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary'); return false;">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row--blue">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <section class="clearfix" id="take-action">
+          <h2><strong>Additional Resources</strong></h2>
+
+          <p>Print and share these flyers and fact sheets to help spread the word about Prop 61.</p>
+
+          <div class="row flyers" id="flyers">
+            <a href="/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf" onclick="trackOutboundLink('/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">English</span>
+              <img src="/img/prop-61/thumbnails/1016_en.jpg">
+            </a>
+            <a href="/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf" onclick="trackOutboundLink('/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">Español</span>
+              <img src="/img/prop-61/thumbnails/1016_es.jpg">
+            </a>
+            <a href="/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf" onclick="trackOutboundLink('/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">Fact Sheet</span>
+              <img src="/img/prop-61/thumbnails/drug-price.jpg">
+            </a>
+            <a href="/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf" onclick="trackOutboundLink('/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">Labor</span>
+              <img src="/img/prop-61/thumbnails/labor-fed.jpg">
+            </a>
+            <a href="/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf" onclick="trackOutboundLink('/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">Lies</span>
+              <img src="/img/prop-61/thumbnails/pharma.jpg">
+            </a>
+            <a href="/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf" onclick="trackOutboundLink('/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+              <span class="flyer__title">Veterans</span>
+              <img src="/img/prop-61/thumbnails/votevets.jpg">
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <section class="clearfix" id="learn">
+
+          <a href="/ballot-initiatives/california-prop-61" class="btn-giant clearfix">
+            <div class="btn-giant__content">
+              <h2><strong>Learn More About Prop 61</strong></h2>
+              <p>The future of prescription drug costs in America comes down to this: Do we have the guts to stand up to drug companies who are ripping us off?</p>
+            </div>
+
+            <span class="btn-giant__icon glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
