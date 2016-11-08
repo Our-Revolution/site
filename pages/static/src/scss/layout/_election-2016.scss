@@ -33,6 +33,36 @@
   
   .card-list.third {
     margin: auto;
+    
+    
+    .card {
+      @include until($large) {
+        width: 49%;
+        margin-right: 1%;
+
+        &:nth-child(3n) {
+          margin-right: 1%;
+        }
+
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      }
+      
+      @include until(630px) {
+        width: 80%;
+        margin-right: 0%;
+      
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      };
+    }
+    
   }
   
   .card-list .card:hover {

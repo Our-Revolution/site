@@ -8285,6 +8285,22 @@ a {
 
 .election-tracker .card-list.third {
   margin: auto; }
+  @media screen and (max-width: 991px) {
+    .election-tracker .card-list.third .card {
+      width: 49%;
+      margin-right: 1%; }
+      .election-tracker .card-list.third .card:nth-child(3n) {
+        margin-right: 1%; }
+      .election-tracker .card-list.third .card:nth-child(2n) {
+        margin-right: 0; } }
+  @media screen and (max-width: 629px) {
+    .election-tracker .card-list.third .card {
+      width: 80%;
+      margin-right: 0%; }
+      .election-tracker .card-list.third .card:nth-child(3n) {
+        margin-right: 0; }
+      .election-tracker .card-list.third .card:nth-child(2n) {
+        margin-right: 0; } }
 
 .election-tracker .card-list .card:hover {
   -webkit-transform: scale(1);

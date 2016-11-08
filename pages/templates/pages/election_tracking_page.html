@@ -21,7 +21,7 @@
                     <div class="page-sub-nav filter clearfix">
                       <div class="form-inline pull-left">
                         <div class="form-group">
-                          <label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
+                          <label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Filter by Name or State...">
                         </div>
                       </div>
 
@@ -48,7 +48,7 @@
                                 {% for candidate_race_snippet in candidate_race_snippets %}
 
                                     {% with candidate_race_snippet.candidate_race as candidate_race %}
-                                {% with candidate_race.candidate as candidate %}
+                                        {% with candidate_race.candidate as candidate %}
 
                                             <li class="card clearfix">
                                                 <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
@@ -67,7 +67,7 @@
                                                   
                                                   <div class="card__results">
                                                       <div class="card__results--status clearfix">
-                                                        <div class="card__results--reporting pull-left">{{ candidate_race.notes }}</div>
+                                                        <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                                         
                                                         {% if candidate_race.last_updated %}
                                                             <div class="card__results--updated pull-right">Last updated {{ candidate_race.last_updated | timesince }} ago</div>
@@ -129,7 +129,7 @@
                                           
                                           <div class="card__results">
                                               <div class="card__results--status clearfix">
-                                                <div class="card__results--reporting pull-left">{{ initiative_race.notes }}</div>
+                                                <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                                 
                                                 {% if initiative_race.last_updated %}
                                                     <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
@@ -139,7 +139,7 @@
                                               <div class="card__results--numbers">
                                                 <div class="card__results--result">
                                                     <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
-                                                    <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}</div>
+                                                    <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}%</div>
                                                     <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                                 </div>
                                                 
@@ -147,7 +147,7 @@
                                                 
                                                 <div class="card__results--result">
                                                   <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
-                                                  <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}</div>
+                                                  <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}%</div>
                                                   <div class="card__results--votes">{{ initiative_race.opponent_votes | intcomma }}</div>
                                                 </div>
                                               </div>
