@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import dj_database_url
 import mimetypes
 import os
+import re
 
 
 mimetypes.add_type('image/svg+xml', 'svg')
@@ -213,4 +214,7 @@ ANYMAIL = {
 
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'anymail.backends.mailgun.MailgunBackend')
 
-IGNORABLE_404_URLS = [r'^favicon\.ico', r'^\/img\/candidates\/.*']
+IGNORABLE_404_URLS = [
+        re.compile(r'^favicon\.ico'),
+        re.compile(r'^/img/candidates/.*')
+    ]
