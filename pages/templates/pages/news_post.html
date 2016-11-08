@@ -9,7 +9,7 @@
     <div class="row">
         <div class="container">
             {% image page.header_photo width-1200 as header_photo %}
-            <div class="page-heading--press" {% if header_photo %}style="background: url({{ tmp_photo.url }}) center center; background-size: cover;"{% endif %}>
+            <div class="page-heading--press" {% if header_photo %}style="background: url({{ header_photo.url }}) center center; background-size: cover;"{% endif %}>
             <span class="article-type">{{ page.get_post_type_display }}</span>
                 <h1>{{ page.title }}</h1>
                 {% if page.go_live_at %}
