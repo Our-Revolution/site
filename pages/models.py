@@ -227,6 +227,7 @@ class CandidateRace(models.Model):
     margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
     source = models.URLField(null=True, blank=True)
     notes = RichTextField(blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.candidate.name
@@ -318,5 +319,11 @@ class ElectionTrackingPage(Page):
         InlinePanel('candidate_race_snippets', label="Candidates"),
         InlinePanel('initiative_race_snippets', label="Initiatives"),
     ]
+
+    def get_context(self, *args, **kwargs):
+        context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
+        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district')
+        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state')
+        return context
 
 
