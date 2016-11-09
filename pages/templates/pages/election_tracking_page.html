@@ -169,7 +169,7 @@
                                             <div class="card__results--numbers">
                                               <div class="card__results--result">
                                                   <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
-                                                  <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}%</div>
+                                                  <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}</div>
                                                   <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
                                               
@@ -177,7 +177,7 @@
                                               
                                               <div class="card__results--result">
                                                 <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
-                                                <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}%</div>
+                                                <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}</div>
                                                 <div class="card__results--votes">{{ initiative_race.opponent_votes | intcomma }}</div>
                                               </div>
                                             </div>
