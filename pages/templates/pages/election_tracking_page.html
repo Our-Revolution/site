@@ -71,7 +71,7 @@
                         Sort By:
                         <div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
                           <button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
-                          <button type="button" class="btn btn-default" sort-by="category">Category <span class="caret"></span></button>
+                          <!-- <button type="button" class="btn btn-default" sort-by="wins">Wins <span class="caret"></span></button> -->
                         </div>
                       </div>
                     </div>
@@ -98,7 +98,7 @@
                                                   <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
                                                     <div class="card__content">
                                                       <div class="candidate__info">
-                                                        <span class="card__item bold bigger name">{{ candidate.name }}</span>
+                                                        <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
                                                         <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                         <span class="card__item bottom">{{ candidate.office }}</span>
                                                     </div>
@@ -118,7 +118,9 @@
                                                   
                                                     <div class="card__results {% if candidate_race.result %} 
                                                       {{ candidate_race.get_result_display }}
-                                                    {% endif %}">
+                                                    {% endif %}" {% if candidate_race.result %} 
+                                                    data-won="{{ candidate_race.get_result_display }}"
+                                                    {% endif %}>
                                                         <div class="card__results--status clearfix">
                                                           <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                                           
@@ -134,7 +136,7 @@
                                                               <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                           </div>
                                                           
-                                                          <div class="card__results--seperator">{% if candidate_race.result %} 
+                                                          <div class="card__results--seperator">{% if 'win' in candidate_race.result %} 
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                           {% else %}
                                                             -
@@ -213,7 +215,7 @@
                                                   <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
                                               
-                                              <div class="card__results--seperator">{% if initiative_race.result %} 
+                                              <div class="card__results--seperator">{% if 'win' in initiative_race.result %} 
                                                 <span class="glyphicon glyphicon-ok"></span>
                                               {% else %}
                                                 -
@@ -304,9 +306,7 @@
             var options = {
                 valueNames: [
                   'state',
-                  'name',
-                  'category',
-                  { name: 'featured', data: 'is-featured' }
+                  { attr: 'sort-by', data: 'wins' }
                 ],
                 plugins: [
                   ListFuzzySearch()
