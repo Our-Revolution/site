@@ -122,7 +122,7 @@
                                                     data-won="{{ candidate_race.get_result_display }}"
                                                     {% endif %}>
                                                         <div class="card__results--status clearfix">
-                                                          <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
+                                                          <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% endif %}</div>
                                                           
                                                           {% if candidate_race.last_updated %}
                                                               <div class="card__results--updated pull-right">Last updated {{ candidate_race.last_updated | timesince }} ago</div>
@@ -201,7 +201,7 @@
                                           {{ initiative_race.get_result_display }}
                                         {% endif %}">
                                             <div class="card__results--status clearfix">
-                                              <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% else %} 0% reporting {% endif %}</div>
+                                              <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% endif %}</div>
                                               
                                               {% if initiative_race.last_updated %}
                                                   <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
