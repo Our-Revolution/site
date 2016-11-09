@@ -17,6 +17,21 @@
     {% endif %}
 {% endblock %}
 
+{% block meta_twitter %}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Our Revolution"/>
+    <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+    <meta name="twitter:site" content="@OurRevolution"/>
+    {% if state %}
+        <meta name="twitter:image" content="{{ MEDIA_URL }}state-share/{{ state }}_race_updates.png" />
+    {% elif page.social_image %}
+        {% image page.social_image original as social_image_url %}            
+        <meta name="twitter:image" content="{{ social_image_url.url }}" />
+    {% else %}
+        <meta name="twitter:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+    {% endif %}
+{% endblock %}
+
 {% load humanize %}
 
 {% block content %}
