@@ -242,7 +242,7 @@ class CandidateRace(models.Model):
 
     def opponent_votes_percentage(self):
         try:
-            value = self.opponent_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+            value = self.opponent_votes / float(self.candidate_votes + self.opponent_votes + self.other_votes)
         except:
             value = 0
         return "{0:.0%}".format(value)
