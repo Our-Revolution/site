@@ -108,6 +108,11 @@
     height: auto;
     width: 100%;
     border-top: 5px solid $blue;
+    
+    &.Win {
+      border-top: 5px solid $green;
+      background: darken($green, 10);
+    }
   }
 
   .card__results--status {
