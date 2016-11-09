@@ -281,16 +281,20 @@ class InitiativeRace(models.Model):
 
     def initiative_votes_percentage(self):
         try:
-            return self.initiative_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+            value = self.initiative_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
         except:
-            return 0
+            value = 0
+        return "{0:.0%}".format(value)
+
 
 
     def opponent_votes_percentage(self):
         try:
-            return self.opponent_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
+            value = self.opponent_votes / float(self.initiative_votes + self.opponent_votes + self.other_votes)
         except:
-            return 0
+            value = 0
+        return "{0:.0%}".format(value)
+
 
     panels = [
         FieldPanel('initiative'),
