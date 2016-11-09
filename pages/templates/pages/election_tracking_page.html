@@ -98,7 +98,7 @@
                                                   <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
                                                     <div class="card__content">
                                                       <div class="candidate__info">
-                                                        <span class="card__item bold bigger name">{{ candidate.name }}</span>
+                                                        <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
                                                         <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                         <span class="card__item bottom">{{ candidate.office }}</span>
                                                     </div>
@@ -306,7 +306,7 @@
             var options = {
                 valueNames: [
                   'state',
-                  { attr: 'data-won', data: 'wins' }
+                  { attr: 'sort-by', data: 'wins' }
                 ],
                 plugins: [
                   ListFuzzySearch()
