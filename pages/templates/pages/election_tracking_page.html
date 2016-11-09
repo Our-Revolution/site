@@ -84,7 +84,9 @@
                                                    </div>
                                                   </div>
                                                   
-                                                    <div class="card__results">
+                                                    <div class="card__results {% if candidate_race.result %} 
+                                                      {{ candidate_race.get_result_display }}
+                                                    {% endif %}">
                                                         <div class="card__results--status clearfix">
                                                           <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                                           
@@ -100,7 +102,11 @@
                                                               <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                           </div>
                                                           
-                                                          <div class="card__results--seperator">-</div>
+                                                          <div class="card__results--seperator">{% if candidate_race.result %} 
+                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                          {% else %}
+                                                            -
+                                                          {% endif %}</div>
                                                           
                                                           <div class="card__results--result">
                                                             <div>Opponent</div>
@@ -157,7 +163,9 @@
                                          </div>
                                         </div>
                                         
-                                        <div class="card__results">
+                                        <div class="card__results {% if initiative_race.result %} 
+                                          {{ initiative_race.get_result_display }}
+                                        {% endif %}">
                                             <div class="card__results--status clearfix">
                                               <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                               
@@ -173,7 +181,11 @@
                                                   <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
                                               
-                                              <div class="card__results--seperator">-</div>
+                                              <div class="card__results--seperator">{% if initiative_race.result %} 
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                              {% else %}
+                                                -
+                                              {% endif %}</div>
                                               
                                               <div class="card__results--result">
                                                 <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>

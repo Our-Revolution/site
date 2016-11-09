@@ -8352,6 +8352,9 @@ a {
   height: auto;
   width: 100%;
   border-top: 5px solid #53A2F2; }
+  .election-tracker .card__results.Win {
+    border-top: 5px solid #58ea22;
+    background: #43c613; }
 
 .election-tracker .card__results--status {
   width: 100%;
