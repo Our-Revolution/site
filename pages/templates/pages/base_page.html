@@ -35,7 +35,12 @@
             <meta name="twitter:title" content="Our Revolution"/>
             <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
             <meta name="twitter:site" content="@OurRevolution"/>
-            <meta name="twitter:image" content="{% firstof page.social_image.url "https://ourrevolution.com/static/dist/img/fb.png" %}"/>
+            {% if page.social_image %}
+                {% image page.social_image original as social_image_url %}            
+                <meta name="twitter:image" content="{{ social_image_url.url }}" />
+            {% else %}
+                <meta name="twitter:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+            {% endif %}
         {% endblock %}
 
         {% block meta_google_site_verification %}
