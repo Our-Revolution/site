@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Page, Orderable
@@ -340,7 +341,7 @@ class InitiativeeRaceSnippet(Orderable, models.Model):
 
 
 
-class ElectionTrackingPage(Page):
+class ElectionTrackingPage(RoutablePageMixin, Page):
     abstract = RichTextField()
     body = RichTextField()
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -357,9 +358,22 @@ class ElectionTrackingPage(Page):
         ]
 
     def get_context(self, *args, **kwargs):
+
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
         context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district')
         context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state')
+        if 'state' in kwargs:
+            context['state'] = kwargs['state']
         return context
+
+
+    @route(r'^$')
+    def default_view(self, request, view=None, *args, **kwargs):
+        return super(ElectionTrackingPage, self).serve(request)
+
+    @route(r'^(?P<state>[\w\-]+)\/?$')
+    def state_view(self, request, state, view=None, *args, **kwargs):
+        kwargs['state'] = state
+        return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
 
 
