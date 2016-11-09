@@ -360,8 +360,8 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     def get_context(self, *args, **kwargs):
 
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
-        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district')
-        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state')
+        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district').order_by('candidate_race__result')
+        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state').order_by('initiative_race__result')
         if 'state' in kwargs:
             context['state'] = kwargs['state']
         return context
