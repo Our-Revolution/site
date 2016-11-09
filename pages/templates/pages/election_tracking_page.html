@@ -5,7 +5,7 @@
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
-    <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+    <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders'' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta property="og:site_name" content="Our Revolution" />
     {% if state %}
         <meta property="og:image" content="{{ MEDIA_URL }}state-share/{{ state }}_race_updates.png" />
@@ -56,7 +56,7 @@
                         Sort By:
                         <div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
                           <button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
-                          <button type="button" class="btn btn-default" sort-by="category">Category <span class="caret"></span></button>
+                          <!-- <button type="button" class="btn btn-default" sort-by="wins">Wins <span class="caret"></span></button> -->
                         </div>
                       </div>
                     </div>
@@ -103,7 +103,9 @@
                                                   
                                                     <div class="card__results {% if candidate_race.result %} 
                                                       {{ candidate_race.get_result_display }}
-                                                    {% endif %}">
+                                                    {% endif %}" {% if candidate_race.result %} 
+                                                    data-won="{{ candidate_race.get_result_display }}"
+                                                    {% endif %}>
                                                         <div class="card__results--status clearfix">
                                                           <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% else %} 0% reporting {% endif %}</div>
                                                           
@@ -119,7 +121,7 @@
                                                               <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                           </div>
                                                           
-                                                          <div class="card__results--seperator">{% if candidate_race.result %} 
+                                                          <div class="card__results--seperator">{% if 'win' in candidate_race.result %} 
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                           {% else %}
                                                             -
@@ -198,7 +200,7 @@
                                                   <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
                                               
-                                              <div class="card__results--seperator">{% if initiative_race.result %} 
+                                              <div class="card__results--seperator">{% if 'win' in initiative_race.result %} 
                                                 <span class="glyphicon glyphicon-ok"></span>
                                               {% else %}
                                                 -
@@ -289,9 +291,7 @@
             var options = {
                 valueNames: [
                   'state',
-                  'name',
-                  'category',
-                  { name: 'featured', data: 'is-featured' }
+                  { attr: 'data-won', data: 'wins' }
                 ],
                 plugins: [
                   ListFuzzySearch()
