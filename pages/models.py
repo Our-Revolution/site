@@ -378,3 +378,19 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
 
 
+class TypeformPage(Page):
+    abstract = RichTextField()
+    body = RichTextField(null=True, blank=True)
+    typeform_url = models.URLField()
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+
+    content_panels = Page.content_panels + [
+            FieldPanel('abstract', classname="full"),
+            FieldPanel('body', classname="full"),
+            FieldPanel('typeform_url'),
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
