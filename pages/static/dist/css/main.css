@@ -7006,6 +7006,11 @@ footer {
     width: 100%;
     text-align: right; } }
 
+.richtext-image.full-width {
+  max-width: 100%;
+  height: auto;
+  display: block; }
+
 .tpp-toolkit p {
   font-size: 18px; }
 
