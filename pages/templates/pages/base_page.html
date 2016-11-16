@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load wagtailcore_tags %}
     {% load wagtailimages_tags %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -105,7 +106,7 @@
                     <!-- completely arbitrary; maybe this should be an admin setting, even -->
                     <div class="col-sm-8 col-sm-offset-2">
                         {% if page.body %}
-                            {{ page.body | safe }}
+                            {{ page.body | richtext }}
                         {% endif %}
                     </div>
 

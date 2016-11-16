@@ -220,3 +220,5 @@ IGNORABLE_404_URLS = [
         re.compile(r'^/img/candidates/.*')
     ]
 
+
+WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
