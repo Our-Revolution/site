@@ -8003,6 +8003,16 @@ a {
     .module.tpp-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.gwu-bg {
+    background: #53A2F2 url("../img/gwu-bg.png");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .module.gwu-bg .module__heading {
+      text-shadow: 0 0 5px black; }
+    .module.gwu-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.map-bg {
     background: #0c56a0 url("../img/map-bg.jpg");
     background-position: center;
