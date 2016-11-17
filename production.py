@@ -1,0 +1,9 @@
+bind = '0.0.0.0:8000'
+pid = 'gunicorn.pid'
+django_settings = 'ourrevolution.settings'
+debug = True
+errorlog = 'gunicorn_error.log'
+workers = 20
+max_requests = 200
+timeout = 30
+graceful_timeout = 30
