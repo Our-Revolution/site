@@ -10,11 +10,11 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 urlpatterns = []
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ]
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns += [
+#         url(r'^__debug__/', include(debug_toolbar.urls)),
+#     ]
 
 urlpatterns += [
     url(r'^cms/', include(wagtailadmin_urls)),
