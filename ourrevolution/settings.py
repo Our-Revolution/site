@@ -91,6 +91,7 @@ INTERNAL_IPS = ['24.18.176.26', '24.158.161.75', '127.0.0.1']
 MIDDLEWARE = [
 
     # debug
+    'django.middleware.gzip.GZipMiddleware',
     # 'django.middleware.common.BrokenLinkEmailsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
