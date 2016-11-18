@@ -1,9 +1,40 @@
 vcl 4.0;
 
-
 backend default {
     .host = "localhost:8000";
 }
+
+acl purge {
+    "localhost";
+    "172.31.44.200"/32;
+    "172.31.39.24"/32;
+}
+
+
+sub vcl_recv {
+
+    if (req.request == "PURGE") {
+        if (!client.ip ~ purge) {
+            error 405 "Not allowed.";
+        }
+        return (lookup);
+    }
+}
+
+sub vcl_hit {
+    if (req.request == "PURGE") {
+        purge;
+        error 200 "Purged.";
+    }
+}
+
+sub vcl_miss {
+    if (req.request == "PURGE") {
+        purge;
+        error 200 "Purged.";
+    }
+}
+
 
 sub vcl_recv {
     

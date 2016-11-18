@@ -75,6 +75,9 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
 
+    #
+    'wagtail.contrib.wagtailfrontendcache',
+
     # S3
     'storages',
 
@@ -223,3 +226,15 @@ IGNORABLE_404_URLS = [
 
 
 WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
+
+
+WAGTAILFRONTENDCACHE = {
+    'varnish-cms-001': {
+        'BACKEND': 'wagtail.contrib.wagtailfrontendcache.backends.HTTPBackend',
+        'LOCATION': 'http://172.31.44.200:8000',
+    },
+    'varnish-cms-001': {
+        'BACKEND': 'wagtail.contrib.wagtailfrontendcache.backends.HTTPBackend',
+        'LOCATION': 'http://172.31.39.24:8000',
+    },
+}
