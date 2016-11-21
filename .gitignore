@@ -5,3 +5,4 @@ media/
 bower_components
 .DS_Store
 .static/
+node_modules
