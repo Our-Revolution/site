@@ -39,22 +39,21 @@
 
 $(document).ready(function () {
   
-  if (Cookies.get('dapl-splash-show') == 'true') {
-    console.log(true);
+  if (!Cookies.get('dapl-splash-hide')) {
     $('.splash').removeClass('minimized');
   }
   
   $('.splash__close').on("click", function() {
     
     $('.splash').addClass('minimized');
-    Cookies.set('dapl-splash-show','false');
+    Cookies.set('dapl-splash-hide','true');
     
   });
   
   $('.notification-banner__link').on("click", function() {
     
     $('.splash').removeClass('minimized');
-    Cookies.set('dapl-splash-show','true');
+    Cookies.remove('dapl-splash-hide');
     
   });  
   
