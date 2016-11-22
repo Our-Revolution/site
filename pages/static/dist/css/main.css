@@ -6144,6 +6144,8 @@ body {
   margin-bottom: 350px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
+  body.no-padding {
+    padding-top: 0; }
   body p {
     font-size: 16px; }
   @media screen and (max-width: 767px) {
@@ -6158,12 +6160,16 @@ input {
 h4, h1 {
   font-weight: 700; }
 
-.notification-banner {
+.notification-banner, .notification-banner--splash {
   padding: 10px;
   background: #F43737;
   color: white;
   text-align: center;
   font-weight: bolder; }
+  .notification-banner--splash {
+    z-index: 9;
+    position: relative;
+    background: transparent; }
   .notification-banner__link {
     font-weight: bolder;
     margin-left: 10px; }
@@ -6171,7 +6177,7 @@ h4, h1 {
       height: 30px;
       padding: 4px 5px; }
   @media screen and (max-width: 767px) {
-    .notification-banner .container {
+    .notification-banner .container, .notification-banner--splash .container {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -7839,7 +7845,8 @@ a {
 
 .navbar-default {
   margin-bottom: 0;
-  background: white; }
+  background: white;
+  border-width: 0 0 1px; }
 
 .nav-pills > li > a {
   background: #f5f5f5;
@@ -8279,6 +8286,65 @@ a {
   .sign-up-form.small .form-group.submit {
     display: block;
     width: 100%; }
+
+.splash {
+  width: 100%;
+  background-color: #052341;
+  text-shadow: 0 0 5px black; }
+  .splash.minimized {
+    min-height: 50px;
+    height: auto; }
+    .splash.minimized .splash__content {
+      display: none; }
+    .splash.minimized .splash__message {
+      display: block; }
+  .splash .splash__message {
+    display: none; }
+  .splash.dapl-bg {
+    position: relative;
+    background: #0c56a0 url("../img/mni-wiconi.jpg");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .splash.dapl-bg::before {
+      z-index: 1;
+      content: "";
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0; }
+    .splash.dapl-bg .btn .glyphicon {
+      font-size: 16px;
+      top: 2px; }
+  .splash__heading {
+    font-size: 44px; }
+    @media screen and (max-width: 479px) {
+      .splash__heading {
+        font-size: 32px; } }
+  .splash h2 {
+    margin-top: 0; }
+  .splash__content {
+    padding: 100px 0;
+    z-index: 9;
+    position: relative; }
+    @media screen and (max-width: 479px) {
+      .splash__content {
+        padding: 40px 0; } }
+    .splash__content .btn {
+      border-radius: 50px;
+      text-shadow: none;
+      margin-bottom: 20px; }
+  .splash__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer; }
+    .splash__close .glyphicon {
+      font-size: 2em; }
+    .splash__close:hover {
+      opacity: 0.5; }
 
 .election-tracker .page-heading--full {
   width: 100%;

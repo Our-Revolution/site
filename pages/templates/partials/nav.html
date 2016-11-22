@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand  home" href="/">
+                {% load static %}
+                <img alt="Our Revolution" class="logo" src="{% static "dist/img/logo.svg" %}">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav navbar-nav--centered">
+                <li class="{% if "/about" in request.path %}active{% endif %} about"><a href="/about" id="about-nav-link">About</a></li>
+                <li class="{% if "/action" in request.path %}active{% endif %} action"><a href="/action" id="action-nav-link">Take Action</a></li>
+                <li class="{% if "/issues" in request.path %}active{% endif %} issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
+                <li class="{% if "/candidates" in request.path %}active{% endif %} candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
+                <li class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
+            </ul>
+            <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="pull-right btn btn-donate navbar-btn" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

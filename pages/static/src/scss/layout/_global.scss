@@ -10,6 +10,10 @@ body {
   margin-bottom: 350px;
   -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+  
+  &.no-padding {
+    padding-top: 0;
+  }
 
   p {
     font-size: 16px;
@@ -36,6 +40,13 @@ h4, h1 {
   color: white;
   text-align: center;
   font-weight: bolder;
+  
+  &--splash {
+    @extend .notification-banner;
+    z-index: 9;
+    position: relative;
+    background: transparent;
+  }
 
   &__link {
     font-weight: bolder;
