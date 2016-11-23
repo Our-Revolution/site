@@ -6141,7 +6141,7 @@ html {
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
-  margin-bottom: 350px;
+  margin-bottom: 400px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
   body.no-padding {
@@ -7889,8 +7889,10 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 350px;
+  height: 400px;
   background: #fafafa; }
+  .footer .mt1 {
+    margin-top: 1em; }
   .footer p {
     font-size: 14px; }
   .footer__info {
@@ -7901,6 +7903,9 @@ a {
       margin: 0; }
   .footer__nav {
     margin-bottom: 0; }
+    .footer__nav p {
+      margin-bottom: 0;
+      margin-top: 0; }
 
 .module-container {
   overflow: hidden;
