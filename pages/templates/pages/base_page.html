@@ -27,7 +27,7 @@
                 {% image page.social_image original as social_image_url %}            
                 <meta property="og:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta property="og:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+                <meta property="og:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/dapl-meta.original.png" />
             {% endif %}
         {% endblock %}
 
@@ -40,7 +40,7 @@
                 {% image page.social_image original as social_image_url %}            
                 <meta name="twitter:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta name="twitter:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+                <meta name="twitter:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/dapl-meta.original.png" />
             {% endif %}
         {% endblock %}
 
