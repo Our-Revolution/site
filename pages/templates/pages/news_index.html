@@ -1,0 +1,31 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container">
+                <div class="page-heading clearfix">
+                    <h1>{{ page.title }}</h1>
+                </div>
+
+                <!-- completely arbitrary; maybe this should be an admin setting, even -->
+                <div class="col-sm-8 col-sm-offset-2">
+                    {% for news_item in news_posts %}
+                        <div class="news-item">
+                          <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
+                          <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
+                          <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
+                          <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

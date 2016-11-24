@@ -185,6 +185,12 @@ class NewsIndex(Page):
         ]
 
 
+    def get_context(self, *args, **kwargs):
+        context = super(NewsIndex, self).get_context(*args, **kwargs)
+        context['news_posts'] = self.get_children().live().order_by('-go_live_at', '-latest_revision_created_at')[0:3]
+        return context
+
+
 
 class NewsPost(Page):
     POST_TYPE_CHOICES = (
