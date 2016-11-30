@@ -1,29 +1,59 @@
-<nav class="navbar navbar-default">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand  home" href="/">
-                {% load static %}
-                <img alt="Our Revolution" class="logo" src="{% static "dist/img/logo.svg" %}">
-            </a>
-        </div>
+<div class="navbar-backdrop"></div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="main-navbar">
-            <ul class="nav navbar-nav navbar-nav--centered">
-                <li class="{% if "/about" in request.path %}active{% endif %} about"><a href="/about" id="about-nav-link">About</a></li>
-                <li class="{% if "/action" in request.path %}active{% endif %} action"><a href="/action" id="action-nav-link">Take Action</a></li>
-                <li class="{% if "/issues" in request.path %}active{% endif %} issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
-                <li class="{% if "/candidates" in request.path %}active{% endif %} candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
-                <li class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
-            </ul>
-            <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="pull-right btn btn-donate navbar-btn" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+<nav class="navbar collapsed" id="main-navbar">
+  <div class="navbar__upper container">
+    <div class="navbar__social pull-left">
+      <a href="https://facebook.com/PoliticalRevolution" target="_blank" class="social-icon--facebook">Facebook</a>
+      <a href="https://twitter.com/ourrevolution" target="_blank" class="social-icon--twitter">Twitter</a>
+    </div>
+    
+    <div class="navbar__mobile">
+      <button type="button" class="navbar-toggle" id="main-navbar-toggle">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <a href="/" class="navbar__logo"><h1>Our Revolution</h1></a>
+
+    <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="navbar__donate btn btn-donate pull-right" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
+  </div>
+
+  <div class="navbar__lower">
+      <div class="container">
+        <div class="row">
+        <ul class="nav-list uppercase" id="main-nav-list">
+          <li><a href="/about" class="{% if "/about" in request.path %}active{% endif %} about" id="about-nav-link">About</a></li>
+          <li><a href="/action" class="{% if "/action" in request.path %}active{% endif %} action" id="action-nav-link">Take Action</a></li>
+          <li><a href="/issues" class="{% if "/issues" in request.path %}active{% endif %} issues" id="issues-nav-link">Platform</a></li>
+          <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">Candidates</a></li>
+          <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
+          <!-- <li><a href="#">News</a></li> -->
+          <li class="visible-xs-block nav-list__button"><a href="#" class="btn btn-block btn-donate">Donate</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </nav>
+
+<script>
+  $(document).ready(function() {
+    
+    $('#main-nav-list').on('click', function(e) {
+      $(this).find('a').removeClass('active');
+      $(e.target).addClass('active');
+      
+      var str = $(e.target).text();
+      $('.page-banner h1').text(str);
+      str = str.replace(/\s+/g, '-').toLowerCase();
+      $('.page-banner').attr('class','page-banner ' + str);
+    })
+    
+    $('#main-navbar-toggle').on('click', function(e) {
+      $('#main-navbar').toggleClass('collapsed');
+    })
+    
+  });
+</script>

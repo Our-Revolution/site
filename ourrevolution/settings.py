@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'debug_toolbar',
+    # 'debug_toolbar',
 
     # Wagtail
     'wagtail.wagtailforms',
@@ -92,7 +92,7 @@ MIDDLEWARE = [
 
     # debug
     # 'django.middleware.common.BrokenLinkEmailsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     # Django core
     'django.middleware.security.SecurityMiddleware',
