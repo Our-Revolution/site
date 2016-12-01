@@ -4,7 +4,7 @@
   margin: 0;
   background: white;
   // border-bottom: 1px solid #e7e7e7 !important;
-  border-width: 0 0 1px;
+  border-width: 0;
 
   .navbar__logo {
     display: block;
@@ -40,7 +40,7 @@
   .navbar__lower {
     background: #fafafa;
     border-top: solid 1px #e7e7e7;
-    // border-bottom: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     width: 100%;
     z-index: -3;
     transition: 0.25s;
@@ -94,7 +94,7 @@
           display: block;
           position: absolute;
           bottom: 0;
-          transition: 0.2s;
+          transition: height 0.25s;
           z-index: -1;
         }
         
@@ -275,18 +275,19 @@
         
         &:nth-child(2) {
           background: darken($blue,30);
-          transform: translate(0, 3.5px) rotate(135deg);
+          transform: translate(0, 7px) rotate(135deg);
         }
         
         &:nth-child(3) {
           background: $light-purple;
           opacity: 0;
-          display: none;
+          transform: rotate(180deg);
+          // display: none;
         }
         
         &:nth-child(4) {
           background: darken($blue,30);
-          transform: translate(0, -3.5px) rotate(-135deg);
+          transform: translate(0, -7px) rotate(-135deg);
         }
       }
       
@@ -296,13 +297,23 @@
   @include until($medium) {
     border: 0;
     // box-shadow: 0 0px 10px rgba(0,0,0,0.3);
-    
-    &.collapsed {    
+    &.collapsed { 
+      .navbar__donate {
+        display: block;
+      }
+      
+      .navbar__social {
+        display: none;
+      }
+         
       .navbar__lower {
         max-height: 0;
         transition: 0.25s;
         overflow: auto;
-        border: 0;
+        
+        // fixes quick flash of black border on animate
+        border: 1px solid transparent;
+        border-width: 0;
       }
       
       .navbar__mobile {
@@ -315,7 +326,7 @@
           &:nth-child(3) {
             background: $light-purple;
             opacity: 1;
-            display: block;
+            // display: block;
           }
           
           &:nth-child(4) {
@@ -335,7 +346,7 @@
       padding: 5px;
       align-content: stretch;
       justify-content: initial;
-      border: none;
+      border-bottom: 1px solid #e7e7e7;
     }
     
     .nav-list {
@@ -370,10 +381,10 @@
           }
           
           &::before {
-            width: 5px;
+            width: 8px;
             height: 98%;
             bottom: 1px;
-            
+            transition: width 0.25s;
           }
           
           &.active::before {
@@ -407,10 +418,14 @@
     
     &__donate {
       float: right;
+      display: none;
     }
     
     &__social {
-      display: none;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      display: block;
     }
     
   };

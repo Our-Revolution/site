@@ -6167,9 +6167,13 @@ h4, h1 {
   text-align: center;
   font-weight: bolder; }
   .notification-banner--splash {
+    padding: 10px 0;
     z-index: 9;
     position: relative;
     background: transparent; }
+    .notification-banner--splash .container {
+      padding-left: 10px;
+      padding-right: 7px; }
   .notification-banner__link {
     font-weight: bolder;
     margin-left: 10px; }
@@ -7830,7 +7834,7 @@ footer {
   width: 100%;
   margin: 0;
   background: white;
-  border-width: 0 0 1px; }
+  border-width: 0; }
   .navbar .navbar__logo {
     display: block;
     background: url("../img/logo.svg") center no-repeat;
@@ -7867,6 +7871,7 @@ footer {
   .navbar .navbar__lower {
     background: #fafafa;
     border-top: solid 1px #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     width: 100%;
     z-index: -3;
     -webkit-transition: 0.25s;
@@ -7915,8 +7920,8 @@ footer {
           display: block;
           position: absolute;
           bottom: 0;
-          -webkit-transition: 0.2s;
-          transition: 0.2s;
+          -webkit-transition: height 0.25s;
+          transition: height 0.25s;
           z-index: -1; }
         .navbar .nav-list li a.active {
           color: white !important; }
@@ -8014,27 +8019,34 @@ footer {
       height: 3px; }
       .navbar__mobile .navbar-toggle .icon-bar:nth-child(2) {
         background: #0c56a0;
-        -webkit-transform: translate(0, 3.5px) rotate(135deg);
-        -ms-transform: translate(0, 3.5px) rotate(135deg);
-        transform: translate(0, 3.5px) rotate(135deg); }
+        -webkit-transform: translate(0, 7px) rotate(135deg);
+        -ms-transform: translate(0, 7px) rotate(135deg);
+        transform: translate(0, 7px) rotate(135deg); }
       .navbar__mobile .navbar-toggle .icon-bar:nth-child(3) {
         background: #8880b6;
         opacity: 0;
-        display: none; }
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg); }
       .navbar__mobile .navbar-toggle .icon-bar:nth-child(4) {
         background: #0c56a0;
-        -webkit-transform: translate(0, -3.5px) rotate(-135deg);
-        -ms-transform: translate(0, -3.5px) rotate(-135deg);
-        transform: translate(0, -3.5px) rotate(-135deg); }
+        -webkit-transform: translate(0, -7px) rotate(-135deg);
+        -ms-transform: translate(0, -7px) rotate(-135deg);
+        transform: translate(0, -7px) rotate(-135deg); }
   @media screen and (max-width: 767px) {
     .navbar {
       border: 0; }
+      .navbar.collapsed .navbar__donate {
+        display: block; }
+      .navbar.collapsed .navbar__social {
+        display: none; }
       .navbar.collapsed .navbar__lower {
         max-height: 0;
         -webkit-transition: 0.25s;
         transition: 0.25s;
         overflow: auto;
-        border: 0; }
+        border: 1px solid transparent;
+        border-width: 0; }
       .navbar.collapsed .navbar__mobile .icon-bar:nth-child(2) {
         background: #d74e5b;
         -webkit-transform: translate(0, 0) rotate(0);
@@ -8042,8 +8054,7 @@ footer {
         transform: translate(0, 0) rotate(0); }
       .navbar.collapsed .navbar__mobile .icon-bar:nth-child(3) {
         background: #8880b6;
-        opacity: 1;
-        display: block; }
+        opacity: 1; }
       .navbar.collapsed .navbar__mobile .icon-bar:nth-child(4) {
         background: #53a2f2;
         -webkit-transform: translate(0, 0) rotate(0);
@@ -8060,7 +8071,7 @@ footer {
         -webkit-justify-content: initial;
         -ms-flex-pack: initial;
         justify-content: initial;
-        border: none; }
+        border-bottom: 1px solid #e7e7e7; }
       .navbar .nav-list {
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
@@ -8084,9 +8095,11 @@ footer {
               height: 98%;
               bottom: 1px; }
             .navbar .nav-list li a::before {
-              width: 5px;
+              width: 8px;
               height: 98%;
-              bottom: 1px; }
+              bottom: 1px;
+              -webkit-transition: width 0.25s;
+              transition: width 0.25s; }
             .navbar .nav-list li a.active::before {
               width: 100%;
               height: 98%;
@@ -8107,9 +8120,13 @@ footer {
         width: 70px;
         position: relative; }
       .navbar__donate {
-        float: right; }
+        float: right;
+        display: none; }
       .navbar__social {
-        display: none; } }
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        display: block; } }
 
 .navbar-backdrop {
   display: none; }

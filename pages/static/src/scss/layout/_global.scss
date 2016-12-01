@@ -42,10 +42,16 @@ h4, h1 {
   font-weight: bolder;
   
   &--splash {
+    padding: 10px 0;
     @extend .notification-banner;
     z-index: 9;
     position: relative;
     background: transparent;
+    
+    .container {
+      padding-left: 10px;
+      padding-right: 7px;
+    }
   }
 
   &__link {
