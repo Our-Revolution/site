@@ -8154,6 +8154,12 @@ footer {
     right: 0;
     background: rgba(0, 0, 0, 0.7); }
 
+.nav-pills > li > a {
+  background: #f5f5f5;
+  margin-bottom: 10px; }
+  .nav-pills > li > a:hover {
+    background: gainsboro; }
+
 .footer {
   position: absolute;
   bottom: 0;

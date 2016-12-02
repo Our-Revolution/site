@@ -248,4 +248,20 @@
 
 </script>
 
+<script>
+  $(document).ready(function() {
+    $('.toggle-nav__icon').on('click touchstart', function(e) {
+      e.preventDefault();
+      $('.issues__nav').toggleClass('expanded');
+      if($('.toggle-nav__icon').hasClass('glyphicon-menu-hamburger')) {
+        $('.toggle-nav__icon').removeClass('glyphicon-menu-hamburger');
+        $('.toggle-nav__icon').addClass('glyphicon-remove');
+      } else {
+        $('.toggle-nav__icon').removeClass('glyphicon-remove');
+        $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
+      }
+    })
+  });
+</script>
+
 {% endblock %}
