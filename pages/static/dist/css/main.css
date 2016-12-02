@@ -7874,6 +7874,7 @@ footer {
     border-bottom: 1px solid #e7e7e7;
     width: 100%;
     z-index: -3;
+    overflow: auto;
     -webkit-transition: 0.25s;
     transition: 0.25s;
     max-height: 800px; }

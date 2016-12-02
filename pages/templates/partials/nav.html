@@ -31,7 +31,7 @@
           <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">Candidates</a></li>
           <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
           <!-- <li><a href="#">News</a></li> -->
-          <li class="visible-xs-block nav-list__button"><a href="#" class="btn btn-block btn-donate">Donate</a></li>
+          <li class="visible-xs-block nav-list__button"><a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="btn btn-block btn-donate" target="_blank" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a></li>
         </ul>
       </div>
     </div>
@@ -41,7 +41,7 @@
 <script>
   $(document).ready(function() {
     
-    $('#main-nav-list').on('click', function(e) {
+    $('#main-nav-list').on('click touchstart', function(e) {
       $(this).find('a').removeClass('active');
       $(e.target).addClass('active');
       
