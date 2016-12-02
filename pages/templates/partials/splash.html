@@ -43,14 +43,14 @@ $(document).ready(function () {
     $('.splash').removeClass('minimized');
   }
   
-  $('.splash__close').on("click vclick touchstart", function() {
+  $('.splash__close').on("click touchstart", function() {
     
     $('.splash').addClass('minimized');
     Cookies.set('dapl-splash-hide','true');
     
   });
   
-  $('.notification-banner__link').on("click vclick touchstart", function() {
+  $('.notification-banner__link').on("click touchstart", function() {
     
     $('.splash').removeClass('minimized');
     Cookies.remove('dapl-splash-hide');
