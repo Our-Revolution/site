@@ -6152,6 +6152,9 @@ body {
     body {
       padding-top: 50px; } }
 
+svg {
+  max-height: 100%; }
+
 input {
   border-radius: 3px;
   border: 1px solid #ccc;
@@ -7867,7 +7870,8 @@ footer {
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
-    justify-content: space-between; }
+    justify-content: space-between;
+    height: 61px; }
   .navbar .navbar__lower {
     background: #fafafa;
     border-top: solid 1px #e7e7e7;
@@ -7879,15 +7883,12 @@ footer {
     transition: 0.25s;
     max-height: 800px; }
   .navbar .nav-list {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
     margin: auto;
     list-style-type: none;
     padding: 0;
     margin: 0;
-    text-align: center; }
+    text-align: center;
+    position: relative; }
     .navbar .nav-list__button {
       padding: 5px;
       color: white !important;
@@ -7897,14 +7898,12 @@ footer {
         .navbar .nav-list__button a::before {
           display: none !important; }
     .navbar .nav-list li {
-      display: inline-block;
+      display: block;
+      width: 20%;
+      float: left;
       margin: 0;
       border: 1px solid #e7e7e7;
-      border-width: 0 1px 0 0;
-      -webkit-box-flex: 1;
-      -webkit-flex: 1;
-      -ms-flex: 1;
-      flex: 1; }
+      border-width: 0 1px 0 0; }
       .navbar .nav-list li:first-child {
         border-width: 0 1px 0 1px; }
       .navbar .nav-list li a {
@@ -7975,6 +7974,9 @@ footer {
     letter-spacing: 2px;
     font-weight: bold; }
   .navbar .navbar__donate {
+    position: absolute;
+    right: 10px;
+    top: 10px;
     padding: 14px 18px;
     font-weight: bold;
     -webkit-align-self: center;
@@ -7985,6 +7987,10 @@ footer {
     height: 40px;
     font-weight: bolder;
     font-size: 13px; }
+  .navbar__social {
+    position: absolute;
+    left: 10px;
+    top: 12px; }
   .navbar__social, .navbar__mobile {
     -webkit-box-flex: 1;
     -webkit-flex: auto;
@@ -8000,11 +8006,15 @@ footer {
     white-space: nowrap;
     overflow: hidden; }
     .navbar .social-icon--twitter {
-      background-size: 60% auto;
-      background-color: #53a2f2; }
+      background-size: 18px 15px;
+      background-color: #53a2f2;
+      background-position: center;
+      background-repeat: no-repeat; }
     .navbar .social-icon--facebook {
-      background-size: auto 50%;
-      background-color: #0c56a0; }
+      background-size: 7px 15px;
+      background-color: #0c56a0;
+      background-position: center;
+      background-repeat: no-repeat; }
   .navbar__mobile .navbar-toggle {
     margin: 0;
     float: none;
@@ -8072,7 +8082,8 @@ footer {
         -webkit-justify-content: initial;
         -ms-flex-pack: initial;
         justify-content: initial;
-        border-bottom: 1px solid #e7e7e7; }
+        border-bottom: 1px solid #e7e7e7;
+        height: 51px; }
       .navbar .nav-list {
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
@@ -8082,7 +8093,8 @@ footer {
         .navbar .nav-list li {
           height: 40px;
           border-width: 0 0 1px;
-          background: #f5f5f5; }
+          background: #f5f5f5;
+          width: 100%; }
           .navbar .nav-list li:first-child {
             border-width: 0 0 1px; }
           .navbar .nav-list li:last-child {
@@ -8113,20 +8125,22 @@ footer {
         display: block;
         border: 1px solid #e7e7e7;
         border-width: 0 1px 0 0;
-        height: 50px;
+        height: 51px;
         width: 50px; }
       .navbar .navbar__logo {
         margin: 0 auto 0 50px;
         top: 0;
         width: 70px;
         position: relative; }
-      .navbar__donate {
-        float: right;
-        display: none; }
+      .navbar .navbar__donate {
+        display: none;
+        top: 5px;
+        right: 5px; }
       .navbar__social {
         position: absolute;
         right: 5px;
         top: 5px;
+        left: auto;
         display: block; } }
 
 .navbar-backdrop {

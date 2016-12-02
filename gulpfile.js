@@ -62,7 +62,7 @@ gulp.task('sass', function() {
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.write())
   .pipe(autoprefixer({
-      browsers: ['last 2 versions','iOS 7', 'iOS 8', 'ie 9-11', 'android 4.3'],
+      browsers: ['last 2 versions','iOS 7', 'iOS 8', 'ie 9-11', 'android >= 4.2'],
       cascade: false
   }))
   .pipe(gulp.dest('pages/static/dist/css'))
