@@ -68,7 +68,7 @@
               <h4 class="cta-header">3. Host a Phone Bank</h4>
               <div class="cta-body host block">
                 <div class="host-an-event" id="host-cta">
-                  <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary" target="_blank" class="btn btn-block btn-donate" onClick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary'); return false;">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
+                  <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary" target="_blank" class="btn btn-block btn-donate" onClick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-primary', true);">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
               </div>
             </div>
@@ -191,7 +191,7 @@
 
           <p>Hosting a phone bank is one of the most effective things you can do to help our fight for Prop 61.</p>
 
-          <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary" target="_blank" class="btn btn-donate" onclick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary'); return false;">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
+          <a href="https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary" target="_blank" class="btn btn-donate" onclick="trackOutboundLink('https://go.ourrevolution.com/page/event/create?source=prop-61-toolkit-secondary', true);">Host an Event <span class="glyphicon glyphicon-chevron-right"></span></a>
         </section>
       </div>
     </div>
@@ -206,27 +206,27 @@
           <p>Print and share these flyers and fact sheets to help spread the word about Prop 61.</p>
 
           <div class="row flyers" id="flyers">
-            <a href="{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_FINAL.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">English</span>
               <img src="{% static "dist/img/prop-61/thumbnails/1016_en.jpg" %}">
             </a>
-            <a href="{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/1016_Prop61_UnionMember_Flyer_spanish.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">Español</span>
               <img src="{% static "dist/img/prop-61/thumbnails/1016_es.jpg" %}">
             </a>
-            <a href="{% static "dist/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/Drug-Price-Relief-Act-Fact-Sheet-FINAL.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">Fact Sheet</span>
               <img src="{% static "dist/img/prop-61/thumbnails/drug-price.jpg" %}">
             </a>
-            <a href="{% static "dist/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/LABOR-FED-HANDOUT-REVAMPED.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">Labor</span>
               <img src="{% static "dist/img/prop-61/thumbnails/labor-fed.jpg" %}">
             </a>
-            <a href="{% static "dist/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/PHARMA-6-Misleading-Arguments-FINAL.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">Lies</span>
               <img src="{% static "dist/img/prop-61/thumbnails/pharma.jpg" %}">
             </a>
-            <a href="{% static "dist/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf" %}'); return false;" target="_blank" class="col-xs-4 col-sm-4 flyer">
+            <a href="{% static "dist/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf" %}" onclick="trackOutboundLink('{% static "dist/img/prop-61/docs/VoteVets-Fights-PHARMA-LIES-0916statementbug.pdf" %}', true);" target="_blank" class="col-xs-4 col-sm-4 flyer">
               <span class="flyer__title">Veterans</span>
               <img src="{% static "dist/img/prop-61/thumbnails/votevets.jpg" %}">
             </a>

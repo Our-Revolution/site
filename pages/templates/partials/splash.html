@@ -17,19 +17,19 @@
     <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
       <h2>1. Sign the Petition</h2>
       <p>Tell President Obama to declare a "Standing Rock" national monument to stop the Dakota Access Pipeline.</p>
-      <a href="https://go.ourrevolution.com/page/s/standing-rock-monument" target="_blank" class="btn btn-block btn-secondary"><span class="pull-left glyphicon glyphicon-edit"></span> Sign the Petition</a>
+      <a href="https://go.ourrevolution.com/page/s/standing-rock-monument?source=dapl-splash" target="_blank" class="btn btn-block btn-secondary" onclick="trackOutBoundLink('https://go.ourrevolution.com/page/s/standing-rock-monument?source=dapl-splash',true)"><span class="pull-left glyphicon glyphicon-edit"></span> Sign the Petition</a>
     </div>
     
     <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
       <h2>2. Call the White House</h2>
       <p>Call the White House and tell them to call off the National Guard, send DOJ observers, and stop the pipeline.</p>
-      <a href="tel:+1-202-456-1111" class="btn btn-block btn-danger"><span class="pull-left glyphicon glyphicon-phone" onclick="ga('send', 'event', 'Tel Link', 'click', '+1-202-456-1111);"></span> 202-456-1111 </span></a>
+      <a href="tel:+1-202-456-1111" onclick="ga('send', 'event', 'Tel Link', 'click', '+1-202-456-1111');" class="btn btn-block btn-danger"><span class="pull-left glyphicon glyphicon-phone"></span> 202-456-1111 </span></a>
     </div>
     
     <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
       <h2>3. Tweet at <strong>@POTUS</strong></h2>
       <p>Tweet at President Obama: It's time to declare a "Standing Rock" national monument and stop the Dakota Access Pipeline.</p>
-      <a class="btn btn-twitter btn-block" href="https://twitter.com/intent/tweet?text=It%E2%80%99s%20time%20for%20%40POTUS%20to%20declare%20a%20%22Standing%20Rock%22%20national%20monument%20and%20stop%20DAPL.&hashtags=NoDAPL&via=ourrevolution&url=https://go.ourrevolution.com/page/s/standing-rock-monument" onclick="ga('send', 'social', 'Twitter', 'tweet', 'DAPL Splash Tweet');">Tweet the President <span class="twitter-icon"></span></a>
+      <a class="btn btn-twitter btn-block" href="https://twitter.com/intent/tweet?text=It%E2%80%99s%20time%20for%20%40POTUS%20to%20declare%20a%20%22Standing%20Rock%22%20national%20monument%20and%20stop%20DAPL.&hashtags=NoDAPL&via=ourrevolution&url=https://go.ourrevolution.com/page/s/standing-rock-monument?source=dapl-splash-tweet" onclick="ga('send', 'social', 'Twitter', 'tweet', 'DAPL Splash Tweet');">Tweet the President <span class="twitter-icon"></span></a>
     </div>
   </div>
 
@@ -43,14 +43,14 @@ $(document).ready(function () {
     $('.splash').removeClass('minimized');
   }
   
-  $('.splash__close').on("click", function() {
+  $('.splash__close').on("click touchstart", function() {
     
     $('.splash').addClass('minimized');
     Cookies.set('dapl-splash-hide','true');
     
   });
   
-  $('.notification-banner__link').on("click", function() {
+  $('.notification-banner__link').on("click touchstart", function() {
     
     $('.splash').removeClass('minimized');
     Cookies.remove('dapl-splash-hide');
