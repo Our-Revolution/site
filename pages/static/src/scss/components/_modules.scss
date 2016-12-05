@@ -136,6 +136,22 @@
       text-shadow: 0 0 5px rgba(0,0,0,1);
     }
   }
+  
+  &.dapl-victory-bg {
+    background: darken($blue, 30) url('../img/dapl-crowd.jpg');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
 
   &.shailene-bg {
     background: $blue url('../img/shailene-arrest.png');

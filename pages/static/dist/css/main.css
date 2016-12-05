@@ -8327,6 +8327,16 @@ footer {
     .module.dapl-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.dapl-victory-bg {
+    background: #0c56a0 url("../img/dapl-crowd.jpg");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .module.dapl-victory-bg .module__heading {
+      text-shadow: 0 0 5px black; }
+    .module.dapl-victory-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.shailene-bg {
     background: #53a2f2 url("../img/shailene-arrest.png");
     background-size: cover;
