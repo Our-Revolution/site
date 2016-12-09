@@ -1,0 +1,37 @@
+// Bylaws
+.bylaws {
+  
+  h1 {
+    font-size: 36px;
+  }
+  
+  h2 {
+    font-size: 30px;
+  }
+  
+  h3 {
+    font-size: 24px;
+  }
+  
+  &__article-heading {
+    // text-align: center;
+    border-bottom: 1px solid #e7e7e7;
+    
+    h2 {
+      margin-bottom: 0;
+    }
+    
+    h3 {
+      margin-top: 0;
+    }
+  }
+  
+  &__article {
+    margin: 40px 0;
+  }
+  
+  &__section-content {
+    margin-left: 40px;
+  }
+  
+}
