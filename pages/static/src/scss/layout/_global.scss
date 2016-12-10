@@ -590,7 +590,7 @@ h4, h1 {
 }
 
 .board-section {
-  .bylaws {
+  .bylaws, .membership {
     display: none;
   }
 
@@ -599,17 +599,27 @@ h4, h1 {
       display: block;
     }
 
-    .board {
+    .board, .membership {
       display: none;
     }
   }
 
   &.statement {
-    .bylaws {
+    .bylaws, .membership {
       display: none;
     }
 
     .board {
+      display: block;
+    }
+  }
+  
+  &.membership {
+    .bylaws, .board {
+      display: none;
+    }
+
+    .membership {
       display: block;
     }
   }

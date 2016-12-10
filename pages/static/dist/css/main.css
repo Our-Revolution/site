@@ -6577,19 +6577,25 @@ h4, h1 {
 .about-action-bar {
   margin-bottom: 10px; }
 
-.board-section .bylaws {
+.board-section .bylaws, .board-section .membership {
   display: none; }
 
 .board-section.bylaws .bylaws {
   display: block; }
 
-.board-section.bylaws .board {
+.board-section.bylaws .board, .board-section.bylaws .membership {
   display: none; }
 
-.board-section.statement .bylaws {
+.board-section.statement .bylaws, .board-section.statement .membership {
   display: none; }
 
 .board-section.statement .board {
+  display: block; }
+
+.board-section.membership .bylaws, .board-section.membership .board {
+  display: none; }
+
+.board-section.membership .membership {
   display: block; }
 
 .action-list {
