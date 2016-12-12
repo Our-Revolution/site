@@ -92,6 +92,10 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 if env.env_name == 'production':
                     run('sudo service varnish stop')
                     run('sudo cp /home/ubuntu/ourrevolution/varnish.vcl /etc/varnish/default.vcl')
+                    print "cat local:"
+                    run('cat /home/ubuntu/ourrevolution/varnish.vcl')
+                    print "cat /etc/varnish/default.vcl"
+                    run('cat /etc/varnish/default.vcl')
                     run('supervisorctl stop gunicorn')
 
                 run('git checkout .')
