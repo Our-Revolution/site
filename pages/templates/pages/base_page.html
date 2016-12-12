@@ -27,7 +27,7 @@
                 {% image page.social_image original as social_image_url %}            
                 <meta property="og:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta property="og:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+                <meta property="og:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/dapl-meta.original.png" />
             {% endif %}
         {% endblock %}
 
@@ -40,7 +40,7 @@
                 {% image page.social_image original as social_image_url %}            
                 <meta name="twitter:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta name="twitter:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
+                <meta name="twitter:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/dapl-meta.original.png" />
             {% endif %}
         {% endblock %}
 
@@ -51,48 +51,17 @@
     {% endblock %}
 
     {% load static %}
-    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=3">
-    <script src="{% static "dist/js/bundle.min.js" %}"></script>
+    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=9">
+    <script src="{% static "dist/js/bundle.min.js" %}?v=1"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 </head>
-<body>
+<body class="no-padding">
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand  home" href="/">
-                    <img alt="Our Revolution" class="logo" src="{% static "dist/img/logo.svg" %}">
-                </a>
-            </div>
+    {% include "partials/notification-banner.html" %}
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="main-navbar">
-                <ul class="nav navbar-nav navbar-nav--centered">
-                    <li class="{% if "/about" in request.path %}active{% endif %} about"><a href="/about" id="about-nav-link">About</a></li>
-                    <li class="{% if "/action" in request.path %}active{% endif %} action"><a href="/action" id="action-nav-link">Take Action</a></li>
-                    <li class="{% if "/issues" in request.path %}active{% endif %} issues"><a href="/issues" id="issues-nav-link">Issues</a></li>
-                    <li class="{% if "/candidates" in request.path %}active{% endif %} candidates"><a href="/candidates" id="candidates-nav-link">Candidates</a></li>
-                    <li class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives"><a href="/ballot-initiatives" id="initiatives-nav-link">Ballot Initiatives</a></li>
-                </ul>
-                <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="pull-right btn btn-donate navbar-btn" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00'); return false;">Donate</a>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-    
-      <div class="notification-banner">
-        <div class="container">
-          <span class="notification-banner__content">Read our Board of Directors' Statement on the Path Forward</span> <a href="/press/statement-our-revolution-board-directors/" class="btn btn-outline notification-banner__link" id="notification-banner" target="_blank">Read More</a>
-        </div>
-      </div>
-    
+    {% include "partials/nav.html" %}
+        
     {% block content %}
 
         <div class="container-fluid">

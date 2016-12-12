@@ -7,9 +7,13 @@ html {
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
-  margin-bottom: 350px;
+  margin-bottom: 400px;
   -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+  
+  &.no-padding {
+    padding-top: 0;
+  }
 
   p {
     font-size: 16px;
@@ -19,6 +23,8 @@ body {
     padding-top: 50px;
   }
 }
+
+svg { max-height: 100%; }
 
 input {
   border-radius: 3px;
@@ -36,6 +42,19 @@ h4, h1 {
   color: white;
   text-align: center;
   font-weight: bolder;
+  
+  &--splash {
+    padding: 10px 0;
+    @extend .notification-banner;
+    z-index: 9;
+    position: relative;
+    background: transparent;
+    
+    .container {
+      padding-left: 10px;
+      padding-right: 7px;
+    }
+  }
 
   &__link {
     font-weight: bolder;
@@ -71,7 +90,10 @@ h4, h1 {
   height: 20px;
   width: 20px;
   display: inline-block;
-  background: url('../img/stop-tpp/twitter-icon.svg') center center no-repeat;
+  background-image: url('../img/stop-tpp/twitter-icon.svg');
+  background-position: center center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
   float: left;
 
   &:hover {
@@ -85,7 +107,10 @@ h4, h1 {
   height: 20px;
   width: 20px;
   display: inline-block;
-  background: url('../img/stop-tpp/facebook-icon.svg') center center no-repeat;
+  background-image: url('../img/stop-tpp/facebook-icon.svg');
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
   float: left;
 
   &:hover {
@@ -565,7 +590,7 @@ h4, h1 {
 }
 
 .board-section {
-  .bylaws {
+  .bylaws, .membership {
     display: none;
   }
 
@@ -574,17 +599,27 @@ h4, h1 {
       display: block;
     }
 
-    .board {
+    .board, .membership {
       display: none;
     }
   }
 
   &.statement {
-    .bylaws {
+    .bylaws, .membership {
       display: none;
     }
 
     .board {
+      display: block;
+    }
+  }
+  
+  &.membership {
+    .bylaws, .board {
+      display: none;
+    }
+
+    .membership {
       display: block;
     }
   }

@@ -1,0 +1,100 @@
+.splash {
+  // height: 500px;
+  width: 100%;
+  background-color: darken($blue, 50);
+  text-shadow: 0 0 5px rgba(0,0,0,1);
+  
+  &.minimized {
+    min-height: 50px;
+    height: auto;
+    
+    .splash__content {
+      display: none;
+    }
+    
+    .splash__message {
+      display: block;
+    }
+  }
+  
+  .splash__message {
+    display: none;
+  }
+  
+  &.dapl-bg {
+    position: relative;
+    background: darken($blue, 30) url('../img/mni-wiconi.jpg');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+    
+    &::before {
+      z-index: 1;
+      content: "";
+      background-color: rgba(0,0,0,0.5);
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+    }
+    
+    .btn .glyphicon {
+      font-size: 16px;
+      top: 2px;
+    }
+  }
+  
+  &__heading {
+    font-size: 44px;
+    
+    @include until($small) {
+      font-size: 32px;
+    };
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+  
+  &__content {
+    padding: 100px 0;
+    z-index: 9;
+    position: relative;
+    
+    @include until($small) {
+      padding: 40px 0;
+    };
+    
+    .btn {
+    //   height: 70px;
+    //   padding: 20px 15px;
+    //   font-size: 20px;
+      // font-weight: bolder;
+      border-radius: 50px;
+      text-shadow: none;
+      margin-bottom: 20px;
+    }
+  }
+  
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    
+    .glyphicon {
+      font-size: 2em;
+    }
+    
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+  
+  // .facebook-icon, .twitter-icon {
+  //   height: 30px;
+  //   width: 30px;
+  //   margin-left: 8px;
+  // }
+}

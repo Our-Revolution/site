@@ -88,6 +88,22 @@
       text-shadow: 0 0 5px rgba(0,0,0,1);
     }
   }
+  
+  &.gwu-bg {
+    background: $blue url('../img/gwu-bg.png');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
 
   &.map-bg {
     background: darken($blue, 30) url('../img/map-bg.jpg');
@@ -107,6 +123,22 @@
   
   &.dapl-bg {
     background: darken($blue, 30) url('../img/dapl_module_1.png');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+  
+  &.dapl-victory-bg {
+    background: darken($blue, 30) url('../img/dapl-crowd.jpg');
     background-size: cover;
     color: white;
     font-weight: bolder;
@@ -401,9 +433,9 @@
     }
   }
 
-  .navbar .btn-donate {
-    display: block;
-    width: 100%;
-    float: none !important;
-  }
+  // .navbar .btn-donate {
+  //   display: block;
+  //   width: 100%;
+  //   float: none !important;
+  // }
 }
