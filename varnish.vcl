@@ -13,7 +13,7 @@ acl purge {
 
 sub vcl_recv {
 
-    if (req.request == "PURGE") {
+    if (req.method == "PURGE") {
         if (!client.ip ~ purge) {
             error 405 "Not allowed.";
         }
@@ -22,14 +22,14 @@ sub vcl_recv {
 }
 
 sub vcl_hit {
-    if (req.request == "PURGE") {
+    if (req.method == "PURGE") {
         purge;
         error 200 "Purged.";
     }
 }
 
 sub vcl_miss {
-    if (req.request == "PURGE") {
+    if (req.method == "PURGE") {
         purge;
         error 200 "Purged.";
     }
