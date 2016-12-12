@@ -88,18 +88,16 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
             with prefix('workon ourrevolution'):
 
                 run('supervisord -c supervisord.conf', warn_only=True)
+                time.sleep(1)
+
+                run('git checkout .')
+                run('git pull origin self_hosted')
 
                 if env.env_name == 'production':
                     run('sudo service varnish stop')
                     run('sudo cp /home/ubuntu/ourrevolution/varnish.vcl /etc/varnish/default.vcl')
-                    print "cat local:"
-                    run('cat /home/ubuntu/ourrevolution/varnish.vcl')
-                    print "cat /etc/varnish/default.vcl"
-                    run('cat /etc/varnish/default.vcl')
                     run('supervisorctl stop gunicorn')
 
-                run('git checkout .')
-                run('git pull origin self_hosted')
 
                 if str(npm_install).lower() == 'true':
                     run('npm install')
@@ -117,9 +115,7 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 if env.env_name != 'staging':
                     run('supervisorctl start gunicorn')
                     run('sudo service varnish start')
-                    run('sudo service varnish status')
-                
-                # todo: varnish?, etc.
+                    # run('sudo service varnish status')
 
 
 @elb_managed
@@ -131,7 +127,7 @@ def restart_gunicorn():
                 run('sudo service varnish stop')
                 run('supervisorctl restart gunicorn')
                 run('sudo service varnish start')
-                run('sudo service varnish status')
+                # run('sudo service varnish status')
 
 @elb_managed
 def config_set(**kwargs):
@@ -145,15 +141,16 @@ def config_set(**kwargs):
         for key, value in kwargs.iteritems():
             run('echo "\nexport %s=%s" >> activate' % (key, value))
 
-    with cd('ourrevolution'):
+    with cd('/home/ubuntu/ourrevolution'):
         with prefix('source $(which virtualenvwrapper.sh)'):
             with prefix('workon ourrevolution'):
                 # manually stop gunicorn
                 run('sudo service varnish stop')
                 run('supervisorctl stop gunicorn')
-                run('cat supervisord.pid | xargs kill')
-                run('supervisord')
+                run('cat supervisord.pid | xargs kill', warn_only=True)
+                run('supervisord -c supervisord.conf')
+                time.sleep(1)
                 run('supervisorctl reload')
                 run('supervisorctl start gunicorn')
                 run('sudo service varnish start')
-                run('sudo service varnish status')
+                # run('sudo service varnish status')

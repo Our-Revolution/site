@@ -229,12 +229,18 @@ WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 
 WAGTAILFRONTENDCACHE = {
-    'varnish-cms-001': {
-        'BACKEND': 'wagtail.contrib.wagtailfrontendcache.backends.HTTPBackend',
-        'LOCATION': 'http://172.31.44.200:8000',
+
+    'elb-varnish': {
+        'BACKEND': 'pages.frontend.backends.ElasticLoadBalancedVarnishBackend',
+        'LOAD_BALANCER_NAME': 'ourrevcms',
+        'REGION': 'us-west-2',
+        'PORT': 8080,
     },
-    'varnish-cms-001': {
-        'BACKEND': 'wagtail.contrib.wagtailfrontendcache.backends.HTTPBackend',
-        'LOCATION': 'http://172.31.39.24:8000',
-    },
+
+    'fastly': {
+        'BACKEND': 'pages.frontend.backends.FastlyBackend',
+        'HOST': 'http://beta.ourrevolution.com',
+        'API_KEY': os.environ.get('FASTLY_API_KEY', None)
+    }
+
 }
