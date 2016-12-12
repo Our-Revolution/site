@@ -81,20 +81,26 @@ def production():
 
 
 @elb_managed
-def deploy(pip_install=False, migrate=False):
+def deploy(pip_install=False, migrate=False, npm_install=False):
 
     with cd('ourrevolution'):
         with prefix('source $(which virtualenvwrapper.sh)'):
             with prefix('workon ourrevolution'):
 
-                if env.env_name != 'staging':
+                run('supervisord -c supervisord.conf', warn_only=True)
+
+                if env.env_name == 'production':
                     run('sudo service varnish stop')
                     run('sudo cp varnish.vcl /etc/varnish/default.vcl')
                     run('supervisorctl stop gunicorn')
 
+                run('git checkout .')
                 run('git pull origin self_hosted')
 
-                if env.env_name != 'staging':
+                if str(npm_install).lower() == 'true':
+                    run('npm install')
+
+                if env.env_name == 'production':
                     run('./manage.py collectstatic --noinput')
 
                 if str(pip_install).lower() == 'true':

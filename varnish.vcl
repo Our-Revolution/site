@@ -15,7 +15,7 @@ sub vcl_recv {
 
     if (req.method == "PURGE") {
         if (!client.ip ~ purge) {
-            error 405 "Not allowed.";
+            return (synth(405, "Not allowed."));
         }
         return (lookup);
     }
@@ -24,14 +24,14 @@ sub vcl_recv {
 sub vcl_hit {
     if (req.method == "PURGE") {
         purge;
-        error 200 "Purged.";
+        return (synth(200, "Purged."));
     }
 }
 
 sub vcl_miss {
     if (req.method == "PURGE") {
         purge;
-        error 200 "Purged.";
+        return (synth(200, "Purged."));
     }
 }
 
