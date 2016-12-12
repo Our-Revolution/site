@@ -23,15 +23,13 @@ sub vcl_recv {
 
 sub vcl_hit {
     if (req.method == "PURGE") {
-        purge;
-        return (synth(200, "Purged."));
+        return(purge);
     }
 }
 
 sub vcl_miss {
     if (req.method == "PURGE") {
-        purge;
-        return (synth(200, "Purged."));
+        return(purge);
     }
 }
 
