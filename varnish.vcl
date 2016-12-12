@@ -8,6 +8,7 @@ acl purge {
     "localhost";
     "172.31.44.200"/32;
     "172.31.39.24"/32;
+    "172.31.43.226"/32;
 }
 
 
@@ -16,23 +17,11 @@ sub vcl_recv {
     if (req.method == "PURGE") {
         if (!client.ip ~ purge) {
             return (synth(405, "Not allowed."));
+        } else {
+            return(purge);
         }
-        return (lookup);
     }
 }
-
-sub vcl_hit {
-    if (req.method == "PURGE") {
-        return(purge);
-    }
-}
-
-sub vcl_miss {
-    if (req.method == "PURGE") {
-        return(purge);
-    }
-}
-
 
 sub vcl_recv {
     
