@@ -337,6 +337,10 @@
   &.two-thirds {
     width: 66%;
   }
+  
+  &.full {
+    width: 100%;
+  }
 
   @include until($medium) {
     width: 100% !important;
