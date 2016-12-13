@@ -1,4 +1,4 @@
-from wagtail.contrib.wagtailfrontendcache.backends import BaseBackend
+from wagtail.contrib.wagtailfrontendcache.backends import BaseBackend, HTTPBackend
 import boto.ec2.elb
 import boto.ec2.connection
 import boto.ec2.instance
@@ -36,7 +36,10 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
     def purge(self, url):
 
         for host in self.hosts:
-            requests.request('PURGE', 'http://%s%s%s' % (host, self.port, url))
+            req = requests.request('PURGE', url)
+            print url
+            print req.status_code
+            print req.text
 
 
 
@@ -48,4 +51,4 @@ class FastlyBackend(HTTPBackend):
 
 
     def purge(self, url):
-        requests.request('PURGE', urlparse.urljoin(self.host, url), headers={'Fastly-Key': self.api_key})
+        requests.request('PURGE', urlparse.urljoin(self.host, urlparse.urlparse(url).path), headers={'Fastly-Key': self.api_key})

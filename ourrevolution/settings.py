@@ -233,6 +233,7 @@ WAGTAILFRONTENDCACHE = {
     'elb-varnish': {
         'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
         'LOAD_BALANCER_NAME': 'ourrevcms',
+        'PROFILE_NAME': 'ourrevcms',
         'REGION': 'us-west-2',
         'PORT': 8080,
     },
