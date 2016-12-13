@@ -83,7 +83,7 @@
         crossDomain: true
       })
       .done(function(data) {
-        $(self).parent.find('.alert-success').fadeIn();
+        $(self).parent().find('.alert-success').fadeIn();
         ga('send', 'event', 'Sign Up', 'submit', 'Keith Ellison DNC Livestream Petition');
       })
       .fail(function(data) {
