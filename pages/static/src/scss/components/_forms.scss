@@ -2,6 +2,17 @@
   .module__heading {
     margin-bottom: 10px;
   }
+  
+  label {
+    // font-size: 14px;
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  input {
+    font-size: 16px;
+  }
 
   &.small {
 
@@ -24,6 +35,38 @@
 
     }
 
+  }
+  
+  &.petition {
+    .form-group {
+      margin-bottom: 20px;
+
+      // display: block;
+
+      &.zip, &.first-name {
+        width: 48%;
+      }
+      
+      &.zip {
+        margin-right: 0;
+      }
+      
+      &.email {
+        width: 99%;
+        display: block;
+      }
+
+      &.submit {
+        display: block;
+        width: 99%;
+        margin-bottom: 0;
+      }
+
+    }
+  }
+  
+  .alert {
+    display: none;
   }
 
 }

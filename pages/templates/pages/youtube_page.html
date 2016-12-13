@@ -1,0 +1,99 @@
+{% extends "pages/base_page.html" %}
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row row--main home">	
+  	<div class="container">
+      <div class="row">
+    	  <div class="embed-responsive  embed-responsive-16by9 dark-wash">
+      		<iframe width="560" height="315" src="https://www.youtube.com/embed/Aq0ZsSK0_N8" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
+    	  </div>
+    	</div>  
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row dark-blue-bg">
+    <div class="pb3 pt3 white-text col-md-8 col-md-offset-2">
+      <h1 class="ma0 fs3">Join Our Revolution and Support Keith Ellison for DNC Chair</h1>
+    </div>
+  </div>
+  
+  <div class="row row--blue">
+    <div class="sign-up-form petition clearfix pb3 pt3 blue-bg white-text bs10">
+      <div class="col-md-8 col-md-offset-2">        
+        <div class="col-md-8 col-md-offset-2">
+          <form id="ellison-petition">
+            <span class="form-group email">
+              <label for="email">Email Address</label>
+              <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+            </span>
+            
+            <span class="form-group first-name">
+              <label for="first-name">First Name</label>
+              <input type="text" name="first-name" id="first-name" class="first-name" placeholder="Bernard" required>
+            </span>
+
+            <span class="form-group zip">
+              <label for="zip">Zip Code</label>
+              <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required>
+            </span>
+
+            <span class="form-group submit">
+              <button class="btn btn-primary btn-block uppercase ls2">Add Your Name</button>
+            </span>
+          </form>
+          
+          <div class="alert alert-success mt20 text-center">Thank you for signing our petition.</div>
+          <div class="alert alert-danger mt20 text-center">There was an error processing your submission. Please <a href="https://go.ourrevolution.com/page/s/keith-ellison-dnc?source=keith-dnc-stream" target="_blank">click here</a> to sign the petition.</div>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  <div class="row fafafa-bg pt4 pb4">
+    <div class="col-md-8 col-md-offset-2 fs18">
+      <p>You cannot be a party which on one hand says we're in favor of working people, we're in favor of the needs of young people but we don't quite have the courage to take on Wall Street and the billionaire class. People do not believe that. You've got to decide which side you're on. That's why Bernie Sanders supports Rep. Keith Ellison to be the next Chair of the DNC:</p>
+      
+      <p class="well gray-bg no-border mt20 mb20 dark-text">"We must also do everything we can to elect Democrats in Congress in 2018, and to take back the White House in 2020. We need a Democratic National Committee led by a progressive who understands the dire need to listen to working families, not the political establishment or the billionaire class. That is why I support Keith Ellison to be the next Chair of the Democratic National Committee, and why I hope you'll join me in advocating for him to lead the DNC." - <strong>Bernie Sanders</strong></p>
+      
+      <p>Add your name to this page if you agree with Bernie. We'll deliver your signature to members of the DNC to send a strong message about why Keith should be DNC Chair.</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    
+    $('#ellison-petition').on('submit', function(e) {
+      e.preventDefault();
+      
+      var data = $(this).serialize();
+      var self = $(this);
+            
+      $.ajax({
+        method: 'POST',
+        url: "https://go.ourrevolution.com/page/s/keith-ellison-dnc?source=keith-dnc-stream",
+        data: data,
+        crossDomain: true
+      })
+      .done(function(data) {
+        $(self).parent.find('.alert-success').fadeIn();
+        ga('send', 'event', 'Sign Up', 'submit', 'Keith Ellison DNC Livestream Petition');
+      })
+      .fail(function(data) {
+        console.log(data);
+        console.log($(self).parent().find('.alert-danger'))
+        $(self).parent().find('.alert-danger').fadeIn();
+      })
+      
+    })
+    
+  })
+</script>
+{% endblock %}
