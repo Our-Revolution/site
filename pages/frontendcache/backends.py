@@ -36,7 +36,7 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
     def purge(self, url):
 
         for host in self.hosts:
-            req = requests.request('PURGE', urlparse.urljoin('http://%s' % host, urlparse.urlparse(url).path))
+            req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path))
 
 
 
