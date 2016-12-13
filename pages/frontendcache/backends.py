@@ -6,10 +6,6 @@ import requests
 import urlparse
 
 
-
-logger = logging.getLogger('wagtail.frontendcache')
-
-
 class ElasticLoadBalancedVarnishBackend(BaseBackend):
 
     def __init__(self, params):
