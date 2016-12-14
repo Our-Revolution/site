@@ -238,9 +238,9 @@ WAGTAILFRONTENDCACHE = {
         'PORT': 8080,
     },
 
-    'fastly': {
+    'fastly-non-www': {
         'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-        'HOST': 'http://beta.ourrevolution.com',
+        'HOST': 'https://ourrevolution.com',
         'API_KEY': os.environ.get('FASTLY_API_KEY', None)
     }
 
