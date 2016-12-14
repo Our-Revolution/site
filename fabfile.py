@@ -91,7 +91,7 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 time.sleep(1)
 
                 run('git checkout .')
-                run('git pull origin self_hosted')
+                run('git pull origin master')
 
                 if env.env_name == 'production':
                     run('sudo service varnish stop')
