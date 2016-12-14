@@ -74,7 +74,7 @@
   }
 
   &.tpp-bg {
-    background: $blue url('../img/tpp_bg.png');
+    background: darken($blue,40) url('../img/tpp_bg.png');
     background-size: cover;
     color: white;
     font-weight: bolder;
@@ -90,7 +90,7 @@
   }
   
   &.gwu-bg {
-    background: $blue url('../img/gwu-bg.png');
+    background: darken($blue,40) url('../img/gwu-bg.png');
     background-size: cover;
     color: white;
     font-weight: bolder;
@@ -250,7 +250,9 @@
 
     .module__content {
       max-width: 100%;
+      width: 100%;
       padding:0;
+      height: 100%;
     }
   }
 
@@ -327,6 +329,30 @@
     width: 34%;
     @include until($medium) {
       order: 5;
+    }
+  }
+  
+  &.block {
+    display: block;
+    height: 600px;
+    float: left;
+    
+    @include until($medium) {
+      height: auto;
+    };
+    
+    .module {
+      height: 600px;
+      display: table;
+      
+      @include until($medium) {
+        height: auto;
+      };
+      
+      .module__content {
+        display: table-cell;
+        vertical-align: middle;
+      }
     }
   }
 
