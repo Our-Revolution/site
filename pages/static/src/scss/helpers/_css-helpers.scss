@@ -1,7 +1,99 @@
+.ma0 {
+  margin: 0 0 0 0; 
+}
+
 .mb0 {
   margin-bottom: 0;
 }
 
 .mt0 {
   margin-top: 0;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.pb3 {
+  padding-bottom: 3em;
+}
+
+.pt3 {
+  padding-top: 3em;
+}
+
+.pb4 {
+  padding-bottom: 4em;
+}
+
+.pt4 {
+  padding-top: 4em;
+}
+
+.pa20 {
+  padding: 20px;
+}
+
+.blue-bg {
+  background-color: $blue;
+}
+
+.fafafa-bg {
+  background-color: #fafafa;
+}
+
+// .gray-bg {
+//   background: #999;
+// }
+
+.dark-text {
+  color: #333;
+}
+
+.white-text {
+  color: white;
+}
+
+.dark-blue-bg {
+  background-color: darken($blue, 40);
+}
+
+.dark-wash {
+  background-color: rgba(0,0,0,0.6);
+}
+
+.br3 {
+  border-radius: 3px;
+}
+
+.no-border {
+  border: 0;
+}
+
+.bs10 {
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.25);
+}
+
+.ls2 {
+  letter-spacing: 2px;
+}
+
+.fs3 {
+  font-size: 3em;
+  
+  @include until($medium) {
+    font-size: 2em;
+  };
+}
+
+.fs18 {
+  font-size: 18px;
+  
+  p {
+    font-size: 18px;
+  }
 }

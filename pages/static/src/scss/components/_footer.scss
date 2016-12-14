@@ -5,7 +5,12 @@
   left: 0;
   right: 0;
   height: 400px;
-  background: #fafafa;
+  background: $blue;
+  color: white;
+  
+  a {
+    color: white;
+  }
 
   .mt1 {
     margin-top: 1em;
