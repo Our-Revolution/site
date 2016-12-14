@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import dj_database_url
-import mimetypes
-import os
-import re
+from collections import OrderedDict
+import dj_database_url, mimetypes, os, re
 
 
 mimetypes.add_type('image/svg+xml', 'svg')
@@ -228,20 +226,20 @@ IGNORABLE_404_URLS = [
 WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 
-WAGTAILFRONTENDCACHE = {
+WAGTAILFRONTENDCACHE = OrderedDict((
 
-    'elb-varnish': {
+    ('elb-varnish', {
         'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
         'LOAD_BALANCER_NAME': 'ourrevcms',
         'PROFILE_NAME': 'ourrevcms',
         'REGION': 'us-west-2',
         'PORT': 8080,
-    },
+    }),
 
-    'fastly-non-www': {
+    ('fastly', {
         'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-        'HOST': 'http://ourrevolution.com',
+        'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
         'API_KEY': os.environ.get('FASTLY_API_KEY', None)
-    }
+    })
 
-}
+))
