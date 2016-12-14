@@ -5810,6 +5810,13 @@ button.close {
 .white-text {
   color: white; }
 
+a.white-text {
+  border-bottom: 1px solid white; }
+  a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:active {
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px solid white; }
+
 .dark-blue-bg {
   background-color: #002a54; }
 
@@ -5825,6 +5832,12 @@ button.close {
 .bs10 {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
 
+.ts3 {
+  text-shadow: 0 0 3px black; }
+
+.nowrap {
+  white-space: nowrap; }
+
 .ls2 {
   letter-spacing: 2px; }
 
@@ -5838,6 +5851,9 @@ button.close {
   font-size: 18px; }
   .fs18 p {
     font-size: 18px; }
+
+.fs12 {
+  font-size: 12px; }
 
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
@@ -8370,7 +8386,7 @@ footer {
     background-size: cover;
     color: white; }
   .module.tpp-bg {
-    background: #218fff url("../img/tpp_bg.png");
+    background: #002a54 url("../img/tpp_bg.png");
     background-size: cover;
     color: white;
     font-weight: bolder; }
@@ -8380,7 +8396,7 @@ footer {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.gwu-bg {
-    background: #218fff url("../img/gwu-bg.png");
+    background: #002a54 url("../img/gwu-bg.png");
     background-size: cover;
     color: white;
     font-weight: bolder; }
@@ -8483,7 +8499,9 @@ footer {
     display: block; }
     .module--video .module__content {
       max-width: 100%;
-      padding: 0; }
+      width: 100%;
+      padding: 0;
+      height: 100%; }
   .module__content, .module__content.flex {
     padding: 30px;
     max-width: 600px; }
@@ -8566,6 +8584,22 @@ footer {
         -webkit-order: 5;
         -ms-flex-order: 5;
         order: 5; } }
+  .module-col.block {
+    display: block;
+    height: 600px;
+    float: left; }
+    @media screen and (max-width: 767px) {
+      .module-col.block {
+        height: auto; } }
+    .module-col.block .module {
+      height: 600px;
+      display: table; }
+      @media screen and (max-width: 767px) {
+        .module-col.block .module {
+          height: auto; } }
+      .module-col.block .module .module__content {
+        display: table-cell;
+        vertical-align: middle; }
   .module-col.half {
     width: 50%; }
   .module-col.two-thirds {

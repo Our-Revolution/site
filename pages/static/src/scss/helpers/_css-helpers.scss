@@ -58,6 +58,16 @@
   color: white;
 }
 
+a.white-text {
+  border-bottom: 1px solid white;
+  
+  &:hover, &:focus, &:visited, &:active {
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px solid white;
+  }
+}
+
 .dark-blue-bg {
   background-color: darken($blue, 40);
 }
@@ -78,6 +88,14 @@
   box-shadow: 0 0 10px 0 rgba(0,0,0,.25);
 }
 
+.ts3 {
+  text-shadow: 0 0 3px rgba(0,0,0,1);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
 .ls2 {
   letter-spacing: 2px;
 }
@@ -96,4 +114,8 @@
   p {
     font-size: 18px;
   }
+}
+
+.fs12 {
+  font-size: 12px;
 }
