@@ -45,9 +45,10 @@ class FastlyBackend(HTTPBackend):
     
     def __init__(self, params):
         self.api_key = params.pop('API_KEY')
-        self.host = params.pop('HOST')
+        self.hosts = params.pop('HOSTS')
 
 
     def purge(self, url):
-        req = requests.request('PURGE', urlparse.urljoin(self.host, urlparse.urlparse(url).path), headers={'Fastly-Key': self.api_key})
-        assert req.status_code == 200
+        for host in self.hosts:
+            req = requests.request('PURGE', urlparse.urljoin(host, urlparse.urlparse(url).path), headers={'Fastly-Key': self.api_key})
+            assert req.status_code == 200
