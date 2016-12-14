@@ -35,7 +35,7 @@
             
             <span class="form-group first-name">
               <label for="first-name">First Name</label>
-              <input type="text" name="first-name" id="first-name" class="first-name" placeholder="Bernard" required>
+              <input type="text" name="first-name" id="firstName" class="first-name" placeholder="Bernard" required>
             </span>
 
             <span class="form-group zip">
@@ -87,8 +87,6 @@
         ga('send', 'event', 'Sign Up', 'submit', 'Keith Ellison DNC Livestream Petition');
       })
       .fail(function(data) {
-        console.log(data);
-        console.log($(self).parent().find('.alert-danger'))
         $(self).parent().find('.alert-danger').fadeIn();
       })
       
