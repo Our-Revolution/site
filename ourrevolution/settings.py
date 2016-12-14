@@ -240,7 +240,7 @@ WAGTAILFRONTENDCACHE = {
 
     'fastly-non-www': {
         'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-        'HOST': 'https://ourrevolution.com',
+        'HOST': 'http://ourrevolution.com',
         'API_KEY': os.environ.get('FASTLY_API_KEY', None)
     }
 
