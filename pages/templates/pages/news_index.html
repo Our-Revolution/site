@@ -16,6 +16,8 @@
                     {% for news_item in news_posts %}
                         <div class="news-item">
                           <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
+                          <div class="hidden">go live at {{news_item.newspost.go_live_at}}</div>
+                          <div class="hidden">last revision created at {{news_item.newspost.latest_revision_created_at}}</div>
                           <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
                           <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
                           <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
