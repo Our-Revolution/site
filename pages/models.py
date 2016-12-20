@@ -51,7 +51,7 @@ class IndexPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(IndexPage, self).get_context(*args, **kwargs)
         try:
-            context['news'] = self.get_children().get(title='News').get_children().live().order_by('-go_live_at', '-latest_revision_created_at')[0:3]
+            context['news'] = self.get_children().get(title='News').get_children().live().order_by('-go_live_at')[0:3]
         except Page.DoesNotExist:
             pass
         return context
@@ -187,7 +187,7 @@ class NewsIndex(Page):
 
     def get_context(self, *args, **kwargs):
         context = super(NewsIndex, self).get_context(*args, **kwargs)
-        context['news_posts'] = self.get_children().live().order_by('-go_live_at', '-latest_revision_created_at')[0:3]
+        context['news_posts'] = self.get_children().live().order_by('-go_live_at')[0:3]
         return context
 
 
