@@ -187,7 +187,7 @@ class NewsIndex(Page):
 
     def get_context(self, *args, **kwargs):
         context = super(NewsIndex, self).get_context(*args, **kwargs)
-        context['news_posts'] = self.get_children().live().order_by('first_published_at')[0:3]
+        context['news_posts'] = self.get_children().live().order_by('-id')[0:3]
         return context
 
 
