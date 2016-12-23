@@ -13,6 +13,23 @@
   input {
     font-size: 16px;
   }
+  
+  &--block {
+    .form-group {
+      display: block;
+      margin-right: 0;
+      margin-top: 20px;
+      
+      &:first-child {
+        margin-top: 0;
+      }
+    
+      &.submit {
+        width: 100%;
+      }
+    
+    }
+  }
 
   &.small {
 

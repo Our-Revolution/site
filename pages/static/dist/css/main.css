@@ -5783,6 +5783,12 @@ button.close {
 .mb20 {
   margin-bottom: 20px; }
 
+.pb2 {
+  padding-bottom: 2em; }
+
+.pt2 {
+  padding-top: 2em; }
+
 .pb3 {
   padding-bottom: 3em; }
 
@@ -5846,6 +5852,11 @@ a.white-text {
   @media screen and (max-width: 767px) {
     .fs3 {
       font-size: 2em; } }
+
+.fs16 {
+  font-size: 16px; }
+  .fs16 p {
+    font-size: 16px; }
 
 .fs18 {
   font-size: 18px; }
@@ -8244,6 +8255,14 @@ footer {
         left: auto;
         display: block; } }
 
+.navbar--splash {
+  border-bottom: 1px solid #e7e7e7; }
+  @media screen and (max-width: 767px) {
+    .navbar--splash .navbar__logo {
+      margin: auto; }
+    .navbar--splash .navbar__upper {
+      border: 0; } }
+
 .navbar-backdrop {
   display: none; }
   .navbar-backdrop.active {
@@ -8694,6 +8713,15 @@ footer {
 
 .sign-up-form input {
   font-size: 16px; }
+
+.sign-up-form--block .form-group {
+  display: block;
+  margin-right: 0;
+  margin-top: 20px; }
+  .sign-up-form--block .form-group:first-child {
+    margin-top: 0; }
+  .sign-up-form--block .form-group.submit {
+    width: 100%; }
 
 .sign-up-form.small .form-group {
   margin-bottom: 10px; }

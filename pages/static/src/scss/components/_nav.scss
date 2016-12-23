@@ -455,6 +455,21 @@
   };
 }
 
+.navbar--splash {
+  border-bottom: 1px solid #e7e7e7;
+  
+  @include until($medium) {
+    .navbar__logo {
+      margin: auto;
+    }
+    
+    .navbar__upper {
+      border: 0;
+    }
+  };
+  
+}
+
 .navbar-backdrop {
   display: none;
   

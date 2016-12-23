@@ -18,6 +18,14 @@
   margin-bottom: 20px;
 }
 
+.pb2 {
+  padding-bottom: 2em;
+}
+
+.pt2 {
+  padding-top: 2em;
+}
+
 .pb3 {
   padding-bottom: 3em;
 }
@@ -106,6 +114,14 @@ a.white-text {
   @include until($medium) {
     font-size: 2em;
   };
+}
+
+.fs16 {
+  font-size: 16px;
+  
+  p {
+    font-size: 16px;
+  }
 }
 
 .fs18 {
