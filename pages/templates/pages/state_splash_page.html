@@ -87,8 +87,7 @@
           method: 'POST',
           url: "https://go.ourrevolution.com/page/sapi/our-revolution-texas?source=texas-splash-page",
           data: data,
-          crossDomain: true,
-          dataType: 'jsonp'
+          crossDomain: true
         })
         .done(function(data) {
           $(self).parent().find('.alert-success').fadeIn();
