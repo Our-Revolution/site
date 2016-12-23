@@ -5807,6 +5807,18 @@ button.close {
 .blue-bg {
   background-color: #218fff; }
 
+.texas-bg {
+  background-image: url("../img/states/texas/texas-bg.svg");
+  background-repeat: no-repeat;
+  background-size: auto 130%;
+  background-position: center; }
+
+.texas-flag-bg {
+  background-image: url("../img/states/texas/texas-flag.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; }
+
 .fafafa-bg {
   background-color: #fafafa; }
 
@@ -6309,6 +6321,10 @@ h4, h1 {
       -webkit-flex: 0 0 100px;
       -ms-flex: 0 0 100px;
       flex: 0 0 100px; } }
+
+@media screen and (max-width: 767px) {
+  .state-splash-intro h2 {
+    font-size: 22px; } }
 
 .twitter-icon, .navbar .social-icon--twitter {
   height: 20px;
@@ -8750,6 +8766,34 @@ footer {
 
 .sign-up-form .alert {
   display: none; }
+
+.sign-up-form.new .form-group {
+  margin-top: 10px; }
+  .sign-up-form.new .form-group:first-child {
+    margin-top: 0; }
+  .sign-up-form.new .form-group.full {
+    width: 100%;
+    margin-right: 0;
+    display: block; }
+  .sign-up-form.new .form-group.half {
+    width: 49%;
+    display: block;
+    float: left;
+    margin-right: 0; }
+    .sign-up-form.new .form-group.half.left {
+      margin-right: 1%; }
+    .sign-up-form.new .form-group.half.right {
+      margin-left: 1%; }
+    @media screen and (max-width: 767px) {
+      .sign-up-form.new .form-group.half {
+        width: 100%;
+        margin-right: 0;
+        display: block;
+        margin-left: 0;
+        margin-right: 0; } }
+
+.sign-up-form.new button {
+  margin-top: 10px; }
 
 .splash {
   width: 100%;

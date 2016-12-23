@@ -86,6 +86,14 @@ h4, h1 {
   }
 }
 
+.state-splash-intro {
+  h2 {
+    @include until($medium) {
+      font-size: 22px;
+    };
+  }
+}
+
 .twitter-icon {
   height: 20px;
   width: 20px;

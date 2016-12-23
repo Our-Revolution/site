@@ -85,5 +85,48 @@
   .alert {
     display: none;
   }
+  
+  &.new {
+    .form-group {
+      margin-top: 10px;
+      
+      &:first-child {
+        margin-top: 0;
+      }
+      
+      &.full {
+        width: 100%;
+        margin-right: 0;
+        display: block;
+      }
+      
+      &.half {
+        width: 49%;
+        display: block;
+        float: left;
+        margin-right: 0;
+        
+        &.left {
+          margin-right: 1%;
+        }
+        
+        &.right {
+          margin-left: 1%;
+        }
+        
+        @include until($medium) {
+          width: 100%;
+          margin-right: 0;
+          display: block;
+          margin-left: 0;
+          margin-right: 0;
+        };
+      }
+    }
+    
+    button {
+      margin-top: 10px;
+    }
+  }
 
 }

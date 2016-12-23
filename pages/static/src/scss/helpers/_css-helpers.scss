@@ -50,6 +50,20 @@
   background-color: $blue;
 }
 
+.texas-bg {
+  background-image: url('../img/states/texas/texas-bg.svg');
+  background-repeat: no-repeat;
+  background-size: auto 130%;
+  background-position: center; 
+}
+
+.texas-flag-bg {
+  background-image: url('../img/states/texas/texas-flag.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; 
+}
+
 .fafafa-bg {
   background-color: #fafafa;
 }
