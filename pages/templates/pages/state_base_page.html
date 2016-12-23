@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load wagtailcore_tags %}
+    {% load wagtailimages_tags %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{% block page_title %}{% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
+
+    {% block meta %}
+
+        {% block meta_seo %} 
+            <meta name="description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+        {% endblock %}
+
+        {% block meta_og %}
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
+            <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+            <meta property="og:site_name" content="Our Revolution" />
+            {% if request.GET.category %}
+                {% with "img/dist/meta/"|add:request.GET.category|add:".png" as social_image %}
+                    <meta property="og:image" content="{% static social_image %}" />
+                {% endwith %}
+            {% elif page.social_image %}
+                {% image page.social_image original as social_image_url %}            
+                <meta property="og:image" content="{{ social_image_url.url }}" />
+            {% else %}
+                <meta property="og:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png" />
+            {% endif %}
+        {% endblock %}
+
+        {% block meta_twitter %}
+            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:title" content="Our Revolution"/>
+            <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+            <meta name="twitter:site" content="@OurRevolution"/>
+            {% if page.social_image %}
+                {% image page.social_image original as social_image_url %}            
+                <meta name="twitter:image" content="{{ social_image_url.url }}" />
+            {% else %}
+                <meta name="twitter:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png" />
+            {% endif %}
+        {% endblock %}
+
+        {% block meta_google_site_verification %}
+            <meta name="google-site-verification" content="ULKRcIZysCOsq4SLKSbW7ymdJ93OyRWwSMZpBfBPJN0" />
+        {% endblock %}
+
+    {% endblock %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=11">
+    <script src="{% static "dist/js/bundle.min.js" %}?v=1"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    <meta name="google-site-verification" content="devyaHsbJD6w8nNEWsAu3SsODhEfijQqCOhFbuXdpCc" />
+</head>
+<body class="no-padding">
+    <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
+
+    {% include "partials/splash_nav.html" %}
+        
+    {% block content %}
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="container">
+                    <div class="page-heading clearfix">
+                        <h1>{{ page.title }}</h1>
+                    </div>
+
+                    <!-- completely arbitrary; maybe this should be an admin setting, even -->
+                    <div class="col-sm-8 col-sm-offset-2">
+                        {% if page.body %}
+                            {{ page.body | richtext }}
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+
+
+</div>
+
+{% include "partials/footer.html" %}
+{% include "partials/footer-js.html" %}
+
+{% block footer_scripts %}
+{% endblock %}
+
+</body>
+</html>

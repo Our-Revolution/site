@@ -1,0 +1,104 @@
+{% extends "pages/state_base_page.html" %}
+
+
+
+{% block content %}
+
+<div class="container-fluid blue-bg texas-flag-bg white-text pt4 pb4">
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="text-center pa20 state-splash-intro">
+            <h1 class="ma0 fs3"><strong>Our Revolution is coming to Texas</strong></h1>
+            <h2 class="mt0">Join us in launching our first official state organizing committee in the Lone Star state.</h2>
+          </div>
+        
+          <div class="sign-up-form new clearfix fafafa-bg pa20 dark-text br3 col-md-8 col-md-offset-2">
+            <form id="state-signup">
+              <span class="form-group mt0 full">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+                <div class="help-block with-errors"></div>
+              </span>
+              
+              <span class="form-group half left">
+                <label for="firstname">First Name</label>
+                <input type="text" name="firstname" id="firstname" placeholder="Bernard" required>
+                <div class="help-block with-errors"></div>
+              </span>
+              
+              <span class="form-group half right">
+                <label for="firstname">Last Name</label>
+                <input type="text" name="lastname" id="lastname" placeholder="Sanders" required>
+                <div class="help-block with-errors"></div>
+              </span>
+
+              <span class="form-group half left">
+                <label for="zip">Zip Code</label>
+                <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required>
+                <div class="help-block with-errors"></div>
+              </span>
+              
+              <span class="form-group half right">
+                <label for="zip">Phone Number</label>
+                <input type="tel" class="text" id="phone" name="phone" placeholder="555-867-5309">
+                <div class="help-block with-errors"></div>
+              </span>
+
+              <button class="btn btn-primary uppercase ls2">Sign Up</button>
+              
+              <div class="alert alert-success mt20 mb0 text-center">Thank you for signing up to be a part of Our Revolution Texas. We'll let you know when we're ready to get started!</div>
+              <div class="alert alert-danger mt20 mb0 text-center">There was an error processing your submission. Please <a href="https://go.ourrevolution.com/page/s/our-revolution-texas?source=texas-splash-page" target="_blank">click here</a> to sign up manually.</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid pt4 pb4">
+  <div class="row">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3 fs18">
+        <p>Our Revolution Texas will operate as a volunteer-based, grassroots political movement and will be structured around nine separate regions across the state.</p>
+
+        <p>Starting in January, we will be holding organizing meetings in all nine regions. We'll hear from local progressives about how we will build and shape our movement in Texas, and each region will choose a delegate to serve on the Statewide Organizing Committee.</p>
+
+        <p><strong>Sign up to become a member of the Texas state affiliate of Our Revolution.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#state-signup').validator();
+    
+    $('#state-signup').validator().on('submit', function(e) {
+      if(!e.isDefaultPrevented()) {
+        e.preventDefault();
+        
+        var data = $(this).serialize();
+        var self = $(this);
+              
+        $.ajax({
+          method: 'POST',
+          url: "https://go.ourrevolution.com/page/sapi/our-revolution-texas?source=texas-splash-page",
+          data: data,
+          crossDomain: true
+        })
+        .done(function(data) {
+          $(self).parent().find('.alert-success').fadeIn();
+          ga('send', 'event', 'Sign Up', 'submit', 'Signup 161223 Texas Splash Page');
+        })
+        .fail(function(data) {
+          $(self).parent().find('.alert-danger').fadeIn();
+        })
+      }
+    })
+  })
+</script>
+
+{% endblock %}
