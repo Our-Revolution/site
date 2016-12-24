@@ -5819,6 +5819,12 @@ button.close {
   background-size: cover;
   background-position: center; }
 
+.crowd-bg {
+  background-image: url("../img/bg_4.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; }
+
 .fafafa-bg {
   background-color: #fafafa; }
 
@@ -8027,7 +8033,7 @@ footer {
           display: none !important; }
     .navbar .nav-list li {
       display: block;
-      width: 20%;
+      width: 16.6%;
       float: left;
       margin: 0;
       border: 1px solid #e7e7e7;
