@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Case, IntegerField, Value, When
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.wagtailcore.fields import RichTextField
@@ -185,9 +186,25 @@ class NewsIndex(Page):
         ]
 
 
-    def get_context(self, *args, **kwargs):
-        context = super(NewsIndex, self).get_context(*args, **kwargs)
-        context['news_posts'] = self.get_children().live().order_by('-id')[0:3]
+    def get_context(self, request):
+        context = super(NewsIndex, self).get_context(request)
+        # context['news_posts'] = self.get_children().live().order_by('-id')
+        
+        all_posts = self.get_children().live().order_by('-id')
+        paginator = Paginator(all_posts, 6) # Show 5 resources per page
+        
+        page = request.GET.get('page')
+        try:
+            resources = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            resources = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            resources = paginator.page(paginator.num_pages)
+        
+        context['resources'] = resources
+        
         return context
 
 

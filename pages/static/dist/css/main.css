@@ -9041,6 +9041,43 @@ footer {
     .election-tracker .results-selector a.active {
       background: #005cba; }
 
+.news__item {
+  display: block;
+  -webkit-transition: 0.25s;
+  transition: 0.25s; }
+  .news__item:last-child {
+    border-bottom: 0; }
+  .news__item--first a {
+    color: white;
+    text-decoration: none; }
+  .news__item--first .full-link {
+    padding: 60px;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+    border-bottom: 0;
+    display: block;
+    color: white;
+    text-decoration: none; }
+    .news__item--first .full-link:hover {
+      background: #005cba;
+      text-decoration: none; }
+  .news__item .news__item__title {
+    font-weight: 700;
+    color: #218fff; }
+    .news__item .news__item__title a {
+      text-decoration: none; }
+  .news__item .full-link {
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 20px;
+    display: block;
+    color: #333; }
+    .news__item .full-link:hover {
+      background: #fafafa;
+      color: #218fff;
+      text-decoration: none; }
+
 .bylaws h1 {
   font-size: 36px; }
 
