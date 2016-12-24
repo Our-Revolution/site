@@ -5,263 +5,31 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="container">
-            <div class="page-heading clearfix">
-                <h1>Our Initiatives</h1>
-            </div>
-
-            <div class="page-sub-nav filter clearfix">
-                <div class="form-inline pull-left">
-                    <div class="form-group">
-                        <label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
-                    </div>
-                </div>
-
-                <div class="filter__sort pull-right">
-                    Sort By:
-                    <div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
-                        <button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
-                        <button type="button" class="btn btn-default" sort-by="category">Category <span class="caret"></span></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="toggle-nav hidden-md hidden-lg" id="toggle-nav">Ballot Initiatives <i class="glyphicon glyphicon-menu-hamburger toggle-nav__icon"></i></div>
-                <ul class="nav nav-pills nav-stacked issues__nav" id="initiatives-nav">
-                    <li role="presentation" category="all" class="active">
-                        <a href="#"><span class="icon labor-2"></span>All Initiatives</span></a>
-                    </li>
-                    <li role="presentation" category="corporate-tax">
-                        <a href="#"><span class="icon corporate-tax"></span>Corporate Tax</span></a>
-                    </li>
-                    <li role="presentation" category="death-penalty">
-                        <a href="#"><span class="icon death-penalty"></span>Death Penalty</span></a>
-                    </li>
-                    <li role="presentation" category="education">
-                        <a href="#"><span class="icon education"></span>Education</span></a>
-                    </li>
-                    <li role="presentation" category="election-reform">
-                        <a href="#"><span class="icon election-reform"></span>Election Reform</span></a>
-                    </li>
-                    <li role="presentation" category="environment">
-                        <a href="#"><span class="icon environment"></span>Environment</span></a>
-                    </li>
-                    <li role="presentation" category="health-care">
-                        <a href="#"><span class="icon health-care"></span>Health Care</span></a>
-                    </li>
-                    <li role="presentation" category="labor">
-                        <a href="#"><span class="icon labor"></span>Labor</span></a>
-                    </li>
-                    <li role="presentation" category="marijuana">
-                        <a href="#"><span class="icon marijuana"></span>Marijuana</span></a>
-                    </li>
-                    <li role="presentation" category="minimum-wage">
-                        <a href="#"><span class="icon minimum-wage"></span>Minimum Wage</span></a>
-                    </li>
-                    <li role="presentation" category="money-in-politics">
-                        <a href="#"><span class="icon money-in-politics"></span>Money in Politics</span></a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-md-9" id="initiatives-list">
-                <div class="no-result text-center"><h3>No Matching Initiatives Found</h3></div>
-                <ul class="card-list third list">
-                    {% for initiative_page in initiatives %}
-                        {% with initiative_page.initiativeendorsementpage.initiative as initiative %}
-                            {% include "partials/initiative_card.html" %}
-                        {% endwith %}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+  <div class="row">
+    <div class="page-heading page-heading--full clearfix">
+      <div class="container">
+        <h1>Our Initiatives</h1>
+      </div>
     </div>
+  </div>
 </div>
 
-{% endblock %}
-
-
-{% block footer_scripts %}
-
-<script>
-  var sortingBy = "featured";
-  var sortingAsc = true;
-
-  // Functions
-  function fuzzySearch(e) {
-    initiativesList.fuzzySearch.search(e.value);
-  }
-
-  function sort(sortBy) {
-    if (sortingBy === sortBy) {
-      if (sortingAsc) {
-        initiativesList.sort(sortBy, { order: 'desc'});
-        sortingAsc = false;
-      }
-      else {
-        initiativesList.sort(sortBy, { order: 'asc'});
-        sortingAsc = true;
-      }
-    } else {
-      initiativesList.sort(sortBy, { order: 'asc'});
-      sortingAsc = true;
-    }
-
-    sortingBy = sortBy;
-  }
-
-  function filter(category) {
-    if (category && category != 'all') {
-      initiativesList.filter(function (item) {
-        if(category == item._values.category)
-          return true;
-        else
-          return false;
-      });
-    } else {
-      initiativesList.filter();
-    }
-  }
-
-  function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
-
-  function isCategory(category) {
-    var nav = $('.issues__nav');
-
-    if (nav.find("[category='" + category + "']").length > 0)
-      return true;
-    else
-      return false;
-  }
-
-  function setActive(category) {
-    var nav = $('.issues__nav');
-
-    // set active state
-    nav.find('li').each(function () {
-      $(this).removeClass("active");
-    })
-
-    nav.find("[category='" + category + "']").toggleClass("active");
-
-    updateUrl(category);
-  }
-
-  function updateUrl(category) {
-    if (category)
-      window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives?category=' + category);
-    else
-      window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
-  }
-
-  var options = {
-      valueNames: [
-        'state',
-        'name',
-        'title',
-        'vote',
-        'category',
-        { name: 'featured', data: 'is-featured' }
-      ],
-      plugins: [
-        ListFuzzySearch()
-      ]
-  };
-
-  var initiativesList = new List('initiatives-list', options);
-
-  var self = this;
-
-  // Filter list by URL category
-  if (getParameterByName('category')) {
-    var category = getParameterByName('category');
-
-    if (isCategory(category)) {
-      setActive(category);
-      self.filter(category);
-    }
-  }
-
-  $("#initiatives-nav").on("click", function(e) {
-    e.preventDefault();
-
-    if($("#initiatives-nav").hasClass("expanded")) {
-      $("#initiatives-nav").removeClass("expanded");
-      $('.toggle-nav__icon').removeClass('glyphicon-remove');
-      $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
-    }
-
-    $("#fuzzy-search").val("");
-    initiativesList.fuzzySearch.search();
-
-    var category = $(e.target).closest("li").attr("category") || false;
-
-    if (category) {
-      setActive(category);
-      self.filter(category);
-    }
-  });
-
-  initiativesList.on("updated", function(list) {
-    if (list.matchingItems.length > 0) {
-      $('.no-result').hide()
-    } else {
-      $('.no-result').show()
-    }
-  })
-
-  $(".sort-buttons").on("click", function(e) {
-    var btn = $(e.target).closest(".btn");
-    var sortByData = btn.attr("sort-by");
-
-    sort(sortByData);
-
-    if (sortingBy == sortByData) {
-      $(".sort-buttons .btn").each(function(e) {
-        $(this).removeClass("active");
-        $(this).removeClass("asc");
-        $(this).removeClass("desc");
-      });
-      btn.toggleClass("active");
-
-      if (sortingAsc) {
-        btn.addClass("asc");
-        btn.removeClass("desc");
-      } else {
-        btn.addClass("desc");
-        btn.removeClass("asc");
-      }
-    }
-  })
-
-</script>
-
-<script>
-  $(document).ready(function() {
-    $('.toggle-nav__icon').on('click touchstart', function(e) {
-      e.preventDefault();
-      $('.issues__nav').toggleClass('expanded');
-      if($('.toggle-nav__icon').hasClass('glyphicon-menu-hamburger')) {
-        $('.toggle-nav__icon').removeClass('glyphicon-menu-hamburger');
-        $('.toggle-nav__icon').addClass('glyphicon-remove');
-      } else {
-        $('.toggle-nav__icon').removeClass('glyphicon-remove');
-        $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
-      }
-    })
-  });
-</script>
+<div class="container pt4 pb4">
+  <div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <h1>We haven't endorsed any new ballot initiatives yet.</h1>
+    
+    <p class="fs18">We're currently hard at work on upcoming elections, so check back soon to see our future ballot initiatives.</p>
+    
+    <p class="fs18"><strong>In the meantime, you can view our past election results below.</strong></p>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <a href="/election-2016" class="btn btn-primary btn-block ls2 uppercase mt20">View Election Results</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
 
 {% endblock %}

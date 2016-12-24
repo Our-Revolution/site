@@ -4,33 +4,35 @@
 
 {% block content %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="container">
-                <div class="page-heading clearfix">
-                    <h1>{{ page.title }}</h1>
-                </div>
-
-                <div>
-                <ul class="card-list">
-
-                    {% for candidate_page in candidates %}
-                        <li class="card clearfix ">
-                            <a href="{% pageurl candidate_page %}">
-                                {% with candidate_page.candidateendorsementpage.candidate as candidate %}
-                                    <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
-                                    <div class="card__content">
-                                        <span class="card__item">{{ candidate.name }}</span>
-                                        <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
-                                        <span class="card__item bottom">{{ candidate.office }}</span>
-                                    </div>
-                                {% endwith %}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="page-heading page-heading--full clearfix">
+        <div class="container">
+          <h1>Our Candidates</h1>
         </div>
+      </div>
     </div>
+  </div>
+
+	<div class="container pt4 pb4">
+	  <div class="row">
+		<div class="col-md-8 col-md-offset-2">
+		  <h1>We haven't endorsed any new candidates yet.</h1>
+		  
+		  <p class="fs18">We're currently hard at work on upcoming elections, so check back soon to see our future candidates.</p>
+      
+      <p class="fs18"><strong>In the meantime, view our past election results or suggest a candidate for us to endorse below.</strong></p>
+		  
+		  <div class="row">
+			<div class="col-md-6">
+			  <a href="/election-2016" class="btn btn-primary btn-block ls2 uppercase mt20">View Election Results</a>
+			</div>
+			<div class="col-md-6">
+			  <a href="http://ourrev.us/candidate-survey" target="_blank" onclick="trackOutboundLink('http://ourrev.us/candidate-survey', true);" class="btn btn-secondary btn-block ls2 uppercase mt20">Suggest a Candidate</a>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
 
 {% endblock %}

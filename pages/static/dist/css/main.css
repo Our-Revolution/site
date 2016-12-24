@@ -6424,7 +6424,7 @@ h4, h1 {
   color: white;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.5); }
 
-.page-heading, .page-heading--press {
+.page-heading, .page-heading--full, .page-heading--press {
   background: url("../img/bg_4.png") center center;
   background-size: cover;
   color: white;
@@ -6432,13 +6432,17 @@ h4, h1 {
   padding: 20px;
   margin: 10px 0;
   vertical-align: bottom; }
-  .page-heading h1, .page-heading--press h1 {
+  .page-heading h1, .page-heading--full h1, .page-heading--press h1 {
     margin: 140px 0 5px 0; }
-  .page-heading h3, .page-heading--press h3 {
+  .page-heading h3, .page-heading--full h3, .page-heading--press h3 {
     margin-top: 0;
     font-weight: normal; }
-  .page-heading p, .page-heading--press p {
+  .page-heading p, .page-heading--full p, .page-heading--press p {
     max-width: 600px; }
+  .page-heading--full {
+    border-radius: 0;
+    margin-top: 0;
+    margin-bottom: 0; }
 
 .icon {
   background-repeat: no-repeat;

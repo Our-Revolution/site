@@ -230,6 +230,14 @@ h4, h1 {
   p {
     max-width: 600px;
   }
+  
+  &--full {
+    @extend .page-heading;
+    
+    border-radius: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 }
 
 .icon {
