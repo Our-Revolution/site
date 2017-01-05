@@ -8566,7 +8566,7 @@ footer {
       height: 100%; }
   .module__content, .module__content.flex {
     padding: 30px;
-    max-width: 100%; }
+    max-width: 600px; }
     .flex.module__content {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
