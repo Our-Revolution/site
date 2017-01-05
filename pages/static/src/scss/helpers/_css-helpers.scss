@@ -50,6 +50,11 @@
   background-color: $blue;
 }
 
+.black-bg {
+  background-color: black;
+}
+
+
 .texas-bg {
   background-image: url('../img/states/texas/texas-bg.svg');
   background-repeat: no-repeat;
@@ -70,6 +75,13 @@
   background-size: cover;
   background-position: center; 
 }
+// 
+// .lopez-bg {
+//   background-image: url('../img/lopez-bg.jpg');
+//   background-repeat: no-repeat;
+//   background-size: cover;
+//   background-position: center; 
+// }
 
 .fafafa-bg {
   background-color: #fafafa;

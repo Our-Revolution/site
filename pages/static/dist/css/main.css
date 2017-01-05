@@ -5807,6 +5807,9 @@ button.close {
 .blue-bg {
   background-color: #218fff; }
 
+.black-bg {
+  background-color: black; }
+
 .texas-bg {
   background-image: url("../img/states/texas/texas-bg.svg");
   background-repeat: no-repeat;
@@ -8350,6 +8353,9 @@ footer {
     clear: both; }
   .module-container--video {
     display: block; }
+    @media screen and (max-width: 991px) {
+      .module-container--video {
+        height: 400px; } }
 
 .module {
   height: auto;
@@ -8438,6 +8444,17 @@ footer {
     .module.tpp-bg .module__heading {
       text-shadow: 0 0 5px black; }
     .module.tpp-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.lopez-bg {
+    background: #002a54 url("../img/lopez-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder; }
+    .module.lopez-bg .module__heading {
+      text-shadow: 0 0 5px black; }
+    .module.lopez-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.gwu-bg {
@@ -8549,7 +8566,7 @@ footer {
       height: 100%; }
   .module__content, .module__content.flex {
     padding: 30px;
-    max-width: 600px; }
+    max-width: 100%; }
     .flex.module__content {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
@@ -8583,6 +8600,8 @@ footer {
       padding: 30px; }
     .module__content.max-70 {
       max-width: 70%; }
+    .module__content.bottom {
+      vertical-align: bottom !important; }
   .module__button {
     margin-top: 10px; }
   .module--small-bottom {
@@ -8631,13 +8650,13 @@ footer {
         order: 5; } }
   .module-col.block {
     display: block;
-    height: 600px;
+    height: 100%;
     float: left; }
     @media screen and (max-width: 767px) {
       .module-col.block {
         height: auto; } }
     .module-col.block .module {
-      height: 600px;
+      height: 100%;
       display: table; }
       @media screen and (max-width: 767px) {
         .module-col.block .module {
@@ -8692,7 +8711,6 @@ footer {
 
 @media (max-width: 991px) {
   .module-container--video .module--video {
-    padding: 20px;
     border-radius: 0 0 3px 3px; }
   .module-container--video .module--centered {
     display: block;
