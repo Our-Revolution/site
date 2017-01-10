@@ -7,6 +7,10 @@
   display: flex;
   border-radius: 3px;
 
+  .alone .module {
+    border-radius: 3px; 
+  }
+
   &--video {
     display: block;
     
@@ -22,6 +26,11 @@
 
   &__heading {
     margin: 0;
+    
+    &--small {
+      @extend .module__heading;
+      font-size: 1.4em;
+    }
   }
 
   &.centered {
@@ -112,6 +121,22 @@
   
   &.gwu-bg {
     background: darken($blue,40) url('../img/gwu-bg.jpg');
+    background-size: cover;
+    color: white;
+    font-weight: bolder;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+  
+  &.bernie-bg {
+    background: darken($blue,40) url('../img/bernie-bg.jpg');
     background-size: cover;
     color: white;
     font-weight: bolder;
@@ -367,7 +392,7 @@
     };
     
     .module {
-      height: 100%;
+      // height: 100%;
       display: table;
       
       @include until($medium) {
@@ -387,6 +412,31 @@
 
   &.two-thirds {
     width: 66%;
+  }
+  
+  &.sixty {
+    width: 60%;
+    
+    &.alone {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-right: 10px;
+    }
+  }
+  
+  &.forty {
+    width:40%;
+    
+    &.alone {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-left: 10px;
+      
+      @include until($medium) {
+        margin-left: 0;
+        margin-top: 20px;
+      };
+    }
   }
   
   &.full {
@@ -419,6 +469,24 @@
     @include until($small) {
       min-height: 200px;
     };
+  }
+  
+  &.sixty {
+    height: 60%;
+    
+    &.alone {
+      height: calc(60% - 10px);
+      margin-bottom: 10px;
+    }
+  }
+  
+  &.forty {
+    height: 40%;
+    
+    &.alone {
+      height: calc(40% - 10px);
+      margin-top: 20px;
+    }
   }
 
   &.top {

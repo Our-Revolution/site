@@ -8351,6 +8351,8 @@ footer {
     display: table;
     content: "";
     clear: both; }
+  .module-container .alone .module {
+    border-radius: 3px; }
   .module-container--video {
     display: block; }
     @media screen and (max-width: 991px) {
@@ -8363,8 +8365,10 @@ footer {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex; }
-  .module__heading {
+  .module__heading, .module__heading--small {
     margin: 0; }
+    .module__heading--small {
+      font-size: 1.4em; }
   .module.centered {
     display: -webkit-box;
     display: -webkit-flex;
@@ -8441,7 +8445,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.tpp-bg .module__heading {
+    .module.tpp-bg .module__heading, .module.tpp-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.tpp-bg .article-type {
       font-weight: bolder;
@@ -8452,7 +8456,7 @@ footer {
     background-position: center;
     color: white;
     font-weight: bolder; }
-    .module.lopez-bg .module__heading {
+    .module.lopez-bg .module__heading, .module.lopez-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.lopez-bg .article-type {
       font-weight: bolder;
@@ -8462,9 +8466,19 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.gwu-bg .module__heading {
+    .module.gwu-bg .module__heading, .module.gwu-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.gwu-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.bernie-bg {
+    background: #002a54 url("../img/bernie-bg.jpg");
+    background-size: cover;
+    color: white;
+    font-weight: bolder; }
+    .module.bernie-bg .module__heading, .module.bernie-bg .module__heading--small {
+      text-shadow: 0 0 5px black; }
+    .module.bernie-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.map-bg {
@@ -8472,7 +8486,7 @@ footer {
     background-position: center;
     color: white;
     font-weight: bolder; }
-    .module.map-bg .module__heading {
+    .module.map-bg .module__heading, .module.map-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.map-bg .article-type {
       font-weight: bolder;
@@ -8482,7 +8496,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.dapl-bg .module__heading {
+    .module.dapl-bg .module__heading, .module.dapl-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.dapl-bg .article-type {
       font-weight: bolder;
@@ -8492,7 +8506,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.dapl-victory-bg .module__heading {
+    .module.dapl-victory-bg .module__heading, .module.dapl-victory-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.dapl-victory-bg .article-type {
       font-weight: bolder;
@@ -8502,7 +8516,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.shailene-bg .module__heading {
+    .module.shailene-bg .module__heading, .module.shailene-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.shailene-bg .article-type {
       font-weight: bolder;
@@ -8513,7 +8527,7 @@ footer {
     background-position: bottom center;
     color: white;
     font-weight: bolder; }
-    .module.lucy-and-bernie .module__heading {
+    .module.lucy-and-bernie .module__heading, .module.lucy-and-bernie .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.lucy-and-bernie .article-type {
       font-weight: bolder;
@@ -8523,7 +8537,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.flag-bg .module__heading {
+    .module.flag-bg .module__heading, .module.flag-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.flag-bg .article-type {
       font-weight: bolder;
@@ -8656,7 +8670,6 @@ footer {
       .module-col.block {
         height: auto; } }
     .module-col.block .module {
-      height: 100%;
       display: table; }
       @media screen and (max-width: 767px) {
         .module-col.block .module {
@@ -8668,6 +8681,22 @@ footer {
     width: 50%; }
   .module-col.two-thirds {
     width: 66%; }
+  .module-col.sixty {
+    width: 60%; }
+    .module-col.sixty.alone {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-right: 10px; }
+  .module-col.forty {
+    width: 40%; }
+    .module-col.forty.alone {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.forty.alone {
+          margin-left: 0;
+          margin-top: 20px; } }
   .module-col.full {
     width: 100%; }
   @media screen and (max-width: 767px) {
@@ -8694,6 +8723,16 @@ footer {
     @media screen and (max-width: 479px) {
       .module.fill {
         min-height: 200px; } }
+  .module.sixty {
+    height: 60%; }
+    .module.sixty.alone {
+      height: calc(60% - 10px);
+      margin-bottom: 10px; }
+  .module.forty {
+    height: 40%; }
+    .module.forty.alone {
+      height: calc(40% - 10px);
+      margin-top: 20px; }
   .module.top {
     height: auto;
     -webkit-align-self: flex-start;
@@ -8747,7 +8786,7 @@ footer {
       -ms-flex: 0 0 100%;
       flex: 0 0 100%; } }
 
-.sign-up-form .module__heading {
+.sign-up-form .module__heading, .sign-up-form .module__heading--small {
   margin-bottom: 10px; }
 
 .sign-up-form label {
