@@ -5768,6 +5768,11 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+.text-indent {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden; }
+
 .ma0 {
   margin: 0 0 0 0; }
 
@@ -5782,6 +5787,9 @@ button.close {
 
 .mb20 {
   margin-bottom: 20px; }
+
+.pa0 {
+  padding: 0; }
 
 .pb2 {
   padding-bottom: 2em; }
@@ -8481,6 +8489,18 @@ footer {
     .module.bernie-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.call-success-bg {
+    background: #002a54 url("../img/call-success.png");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.call-success-bg .module__heading, .module.call-success-bg .module__heading--small {
+      text-shadow: 0 0 5px black; }
+    .module.call-success-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.map-bg {
     background: #004387 url("../img/map-bg.jpg");
     background-position: center;
@@ -8580,7 +8600,8 @@ footer {
       height: 100%; }
   .module__content, .module__content.flex {
     padding: 30px;
-    max-width: 600px; }
+    max-width: 600px;
+    overflow: hidden; }
     .flex.module__content {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
