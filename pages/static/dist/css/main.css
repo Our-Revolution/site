@@ -8501,6 +8501,18 @@ footer {
     .module.call-success-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.stop-sessions-bg {
+    background: #002a54 url("../img/stop-sessions.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.stop-sessions-bg .module__heading, .module.stop-sessions-bg .module__heading--small {
+      text-shadow: 0 0 5px black; }
+    .module.stop-sessions-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.map-bg {
     background: #004387 url("../img/map-bg.jpg");
     background-position: center;
