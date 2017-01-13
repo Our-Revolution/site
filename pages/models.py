@@ -3,8 +3,9 @@ from django.db import models
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
-from wagtail.wagtailcore.fields import RichTextField
+from wagtail.wagtailcore import blocks
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
@@ -420,14 +421,19 @@ class TypeformPage(Page):
         
 class YoutubePage(Page):
     abstract = RichTextField()
-    body = RichTextField(null=True, blank=True)
+    body = StreamField([
+        ('rich_text', blocks.RichTextBlock()),
+        ('heading', blocks.CharBlock(classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('raw_html', blocks.RawHTMLBlock())
+    ])
     youtube_video_id = models.CharField(max_length=20)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
 
     content_panels = Page.content_panels + [
             FieldPanel('abstract', classname="full"),
-            FieldPanel('body', classname="full"),
+            StreamFieldPanel('body'),
             FieldPanel('youtube_video_id'),
         ]
 
