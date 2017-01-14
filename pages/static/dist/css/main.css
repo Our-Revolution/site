@@ -6578,6 +6578,11 @@ h4, h1 {
   .sign-up-form--blue h2 {
     margin-top: 0; }
 
+.sign-up-form.float .form-group {
+  float: left; }
+  .sign-up-form.float .form-group.email {
+    width: 62% !important; }
+
 @media (max-width: 520px) {
   .sign-up-form .form-group {
     margin-bottom: 10px; }
@@ -8513,6 +8518,18 @@ footer {
     .module.stop-sessions-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.stream-bg {
+    background: #002a54 url("../img/stream-announcement.png");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.stream-bg .module__heading, .module.stream-bg .module__heading--small {
+      text-shadow: 0 0 5px black; }
+    .module.stream-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.map-bg {
     background: #004387 url("../img/map-bg.jpg");
     background-position: center;
@@ -8649,6 +8666,8 @@ footer {
       max-width: 70%; }
     .module__content.bottom {
       vertical-align: bottom !important; }
+    .module__content.small {
+      padding: 5%; }
   .module__button {
     margin-top: 10px; }
   .module--small-bottom {

@@ -424,6 +424,16 @@ h4, h1 {
       margin-top: 0;
     }
   }
+  
+  &.float {
+    .form-group {
+      float: left;
+      
+      &.email {
+        width: 62% !important;
+      }
+    }
+  }
 }
 
 @media (max-width: 520px) {
