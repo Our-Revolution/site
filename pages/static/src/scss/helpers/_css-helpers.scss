@@ -104,12 +104,12 @@
 }
 
 a.white-text {
-  border-bottom: 1px solid white;
+  // border-bottom: 1px solid white;
   
   &:hover, &:focus, &:visited, &:active {
     color: white;
     text-decoration: none;
-    border-bottom: 2px solid white;
+    border-bottom: 1px solid white;
   }
 }
 

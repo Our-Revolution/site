@@ -5845,12 +5845,10 @@ button.close {
 .white-text {
   color: white; }
 
-a.white-text {
+a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:active {
+  color: white;
+  text-decoration: none;
   border-bottom: 1px solid white; }
-  a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:active {
-    color: white;
-    text-decoration: none;
-    border-bottom: 2px solid white; }
 
 .dark-blue-bg {
   background-color: #002a54; }
@@ -7173,6 +7171,13 @@ footer {
     width: 100%;
     text-align: right; } }
 
+.livestream-notice {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: auto; }
+
 .richtext-image.full-width {
   max-width: 100%;
   height: auto;
@@ -8458,7 +8463,7 @@ footer {
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.tpp-bg .module__heading, .module.tpp-bg .module__heading--small {
+    .module.tpp-bg .module__heading, .module.tpp-bg .module__heading--small, .module.tpp-bg p {
       text-shadow: 0 0 5px black; }
     .module.tpp-bg .article-type {
       font-weight: bolder;
@@ -8528,6 +8533,16 @@ footer {
     .module.stream-bg .module__heading, .module.stream-bg .module__heading--small {
       text-shadow: 0 0 5px black; }
     .module.stream-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.health-bg {
+    background: #218fff url("../img/health-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.health-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.map-bg {
@@ -8630,7 +8645,8 @@ footer {
   .module__content, .module__content.flex {
     padding: 30px;
     max-width: 600px;
-    overflow: hidden; }
+    overflow: hidden;
+    position: relative; }
     .flex.module__content {
       -webkit-box-flex: 1;
       -webkit-flex: 1;
@@ -8729,10 +8745,38 @@ footer {
       .module-col.block .module .module__content {
         display: table-cell;
         vertical-align: middle; }
+  .module-col.table {
+    display: table;
+    height: 100%;
+    float: left; }
+    @media screen and (max-width: 767px) {
+      .module-col.table {
+        height: auto; } }
+    .module-col.table .module {
+      display: table; }
+      @media screen and (max-width: 767px) {
+        .module-col.table .module {
+          height: auto; } }
+      .module-col.table .module .module__content {
+        display: table-cell;
+        vertical-align: middle; }
   .module-col.half {
     width: 50%; }
+  .module-col.third {
+    width: 34%; }
+    .module-col.third.alone {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-right: 10px; }
   .module-col.two-thirds {
     width: 66%; }
+    .module-col.two-thirds.alone {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.two-thirds.alone {
+          margin-left: 0; } }
   .module-col.sixty {
     width: 60%; }
     .module-col.sixty.alone {

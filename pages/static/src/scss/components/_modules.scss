@@ -92,7 +92,7 @@
     color: white;
     font-weight: bolder;
 
-    .module__heading {
+    .module__heading, p {
       text-shadow: 0 0 5px rgba(0,0,0,1);
     }
 
@@ -197,6 +197,24 @@
 
     .module__heading {
       text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+  
+  &.health-bg {
+    background: $blue url('../img/health-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px;
+
+    .module__heading {
+      // text-shadow: 0 0 5px rgba(0,0,0,1);
     }
 
     .article-type {
@@ -360,6 +378,7 @@
     padding: 30px;
     max-width: 600px;
     overflow: hidden;
+    position: relative;
     // margin: auto;
 
     &.flex {
@@ -464,13 +483,58 @@
       }
     }
   }
+  
+  &.table {
+    display: table;
+    height: 100%;
+    float: left;
+    
+    @include until($medium) {
+      height: auto;
+    };
+    
+    .module {
+      // height: 100%;
+      display: table;
+      
+      @include until($medium) {
+        height: auto;
+      };
+      
+      .module__content {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
 
   &.half {
     width: 50%;
   }
+  
+  &.third {
+    width: 34%;
+    
+    &.alone {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-right: 10px;
+    }
+  }
 
   &.two-thirds {
     width: 66%;
+    
+    &.alone {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-left: 10px;
+    
+      @include until($medium) {
+        margin-left: 0;
+        // margin-top: 20px;
+      };
+    }
   }
   
   &.sixty {
