@@ -18,6 +18,7 @@
             <meta property="og:locale" content="en_US" />
             <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
             <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+            <meta property="og:type" content="website" /> 
             <meta property="og:site_name" content="Our Revolution" />
             {% if request.GET.category %}
                 {% with "img/dist/meta/"|add:request.GET.category|add:".png" as social_image %}
