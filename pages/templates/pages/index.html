@@ -14,7 +14,7 @@
               <div class="sign-up-form small float">
                 <h2 class="module__heading mt0"><strong>Join the Fights Ahead</strong></h2>
 
-                <form action="https://go.ourrevolution.com/page/s/join-the-fights-ahead?source=ourrevolution-com-home" method="POST">
+                <form id="sign-up" class="clearfix">
                   <span class="form-group email">
                     <label for="email">Email Address</label>
                     <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required="">
@@ -29,6 +29,37 @@
                     <button class="btn btn-primary btn-block uppercase ls2">Join</button>
                   </span>
                 </form>
+                
+                <div class="alert alert-success mt0 text-center">Thank you for signing up.</div>
+                <div class="alert alert-danger mt0 text-center">There was an error processing your submission. Please <a href="https://go.ourrevolution.com/page/s/join-the-fights-ahead?source=ourrevolution-home" target="_blank">click here</a> to sign up.</div>
+                
+                <script>
+                  $(document).ready(function() {
+                    
+                    $('#sign-up').on('submit', function(e) {
+                      e.preventDefault();
+                      
+                      var data = $(this).serialize();
+                      var self = $(this);
+                            
+                      $.ajax({
+                        method: 'POST',
+                        url: "https://go.ourrevolution.com/page/sapi/join-the-fights-ahead?source=ourrevolution-home",
+                        data: data,
+                        crossDomain: true
+                      })
+                      .done(function(data) {
+                        $(self).parent().find('.alert-success').fadeIn();
+                        ga('send', 'event', 'Sign Up', 'submit', 'Our First Stand Home Sign-Up');
+                      })
+                      .fail(function(data) {
+                        $(self).parent().find('.alert-danger').fadeIn();
+                      })
+                      
+                    })
+                    
+                  })
+                </script>
               </div>
             </div>
           </div>
