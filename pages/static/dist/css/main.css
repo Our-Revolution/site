@@ -5865,6 +5865,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .bs10 {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
 
+.ts0 {
+  text-shadow: none !important; }
+
 .ts3 {
   text-shadow: 0 0 3px black; }
 
@@ -8543,6 +8546,16 @@ footer {
     font-weight: bolder;
     min-height: 300px; }
     .module.health-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
+  .module.oscar-free {
+    background: #218fff url("../img/oscar-free.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.oscar-free .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.map-bg {

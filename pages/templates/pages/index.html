@@ -8,109 +8,53 @@
   <div class="row row--main home">    
     <div class="container">
       <section class="module-container module-container--video clearfix">
-        <div class="module-col third alone table hidden-xs">
-          <div class="module full centered blue-bg health-bg white-text">
-            <div class="module__content small">
-              <div class="sign-up-form small float">
-                <h2 class="module__heading mt0"><strong>Join the Fights Ahead</strong></h2>
 
-                <form class="sign-up clearfix">
-                  <span class="form-group email">
-                    <label for="email">Email Address</label>
-                    <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required="">
-                  </span>
+        <div class="module-col sixty alone block">
+          <div class="module full centered blue-bg oscar-free white-text">
+            <div class="module__content bottom">
+              <span class="article-type ts0">Victory</span>
+              <h1 class="module__heading mb0 mt0 ts0">Freedom for Oscar Lopéz Rivera</h1>
+              <h3 class="mt0">¡Libre, al fin, Oscar es libre al fin!</h3>
 
-                  <span class="form-group zip ">
-                    <label for="zip">Zip Code</label>
-                    <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required="">
-                  </span>
-
-                  <span class="form-group submit mb0">
-                    <button class="btn btn-primary btn-block uppercase ls2">Join</button>
-                  </span>
-                </form>
-                
-                <div class="alert alert-success mt0 text-center">Thank you for signing up.</div>
-                <div class="alert alert-danger mt0 text-center">There was an error processing your submission. Please <a href="https://go.ourrevolution.com/page/s/join-the-fights-ahead?source=ourrevolution-home" target="_blank">click here</a> to sign up.</div>
-                
-                <script>
-                  $(document).ready(function() {
-                    
-                    $('.sign-up').on('submit', function(e) {
-                      e.preventDefault();
-                      
-                      var data = $(this).serialize();
-                      var self = $(this);
-                            
-                      $.ajax({
-                        method: 'POST',
-                        url: "https://go.ourrevolution.com/page/sapi/join-the-fights-ahead?source=ourrevolution-home",
-                        data: data,
-                        crossDomain: true
-                      })
-                      .done(function(data) {
-                        $(self).parent().find('.alert-success').fadeIn();
-                        ga('send', 'event', 'Sign Up', 'submit', 'Our First Stand Home Sign-Up');
-                      })
-                      .fail(function(data) {
-                        $(self).parent().find('.alert-danger').fadeIn();
-                      })
-                      
-                    })
-                    
-                  })
-                </script>
-              </div>
+              <a href="#" class="btn btn-dark btn-block module__button uppercase ls2" target="_blank">Read our Statement</a>
             </div>
           </div>
         </div>
-        
-        <div class="module-col two-thirds alone table">
-          <div class="module module--video full centered dark-blue-bg white-text" id="news-module-home">
-            <div class="module__content br3">
+
+        <div class="module-col forty alone block">
+          <div class="module module--video sixty alone centered black-bg" id="news-module-home">
+            <div class="module__content">
               <div class="embed-responsive embed-responsive-16by9 dark-wash">
-            		<iframe width="560" height="315" src="https://www.youtube.com/embed/EsHmK5tAxQU?start=201" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
+            		<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FPoliticalRevolution%2Fvideos%2F1373257456059800%2F&show_text=0&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>
           	  </div>
-              
-              <div class="text-center mt20 mb20 visible-xs">
-                <a href="http://ourrev.us/live" onclick="trackOutboundLink('http://ourrev.us/live',true);" class="uppercase ls2 white-text underline ts3 fs12">Watch on our Live Stream <span class="nowrap">Page ><span></a>
-              </div>
-              
-              <div class="livestream-notice text-center mt20 mb20">
-                <a href="http://ourrev.us/live" onclick="trackOutboundLink('http://ourrev.us/live',true);" class="uppercase ls2 white-text ts3 fs12">Watch on our Live Stream <span class="nowrap">Page ><span></a>
-              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="module-col third alone table visible-xs">
-          <div class="module full centered blue-bg health-bg white-text">
+          
+          <div class="module forty alone centered dark-blue-bg white-text" id="news-module-home">
             <div class="module__content small">
               <div class="sign-up-form small float">
-                <h2 class="module__heading mt0"><strong>Join the Fights Ahead</strong></h2>
+                <h2 class="mt0 hidden-sm">Join the Fight</h2>
 
-                <form class="sign-up clearfix">
+                <form action="https://go.ourrevolution.com/page/s/join?source=ourrevolution.com/-module-small" method="POST">
                   <span class="form-group email">
                     <label for="email">Email Address</label>
-                    <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required="">
+                    <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
                   </span>
 
                   <span class="form-group zip ">
                     <label for="zip">Zip Code</label>
-                    <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required="">
+                    <input type="text" name="zip" id="zip" class="zip" placeholder="05402" required>
                   </span>
 
-                  <span class="form-group submit mb0">
+                  <span class="form-group submit">
                     <button class="btn btn-primary btn-block uppercase ls2">Join</button>
                   </span>
                 </form>
-                
-                <div class="alert alert-success mt0 text-center">Thank you for signing up.</div>
-                <div class="alert alert-danger mt0 text-center">There was an error processing your submission. Please <a href="https://go.ourrevolution.com/page/s/join-the-fights-ahead?source=ourrevolution-home" target="_blank">click here</a> to sign up.</div>
               </div>
             </div>
           </div>
         </div>
+
       </section>
     </div>
   </div>
