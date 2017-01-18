@@ -3,6 +3,15 @@ from django.db import models
 from django.template.defaultfilters import yesno
 
 
+class Election(models.Model):
+    title = models.CharField(max_length=128)
+    is_active = models.BooleanField(default=False)
+    # others may become necessary for historical reasons?
+
+    def __unicode__(self):
+        return self.title
+
+
 class Candidate(models.Model):
     # info
     name = models.CharField(null=True, blank=True, max_length=128)
@@ -38,14 +47,14 @@ class Candidate(models.Model):
     header_photo = models.ImageField(null=True, blank=True)
     header_photo_source = models.URLField(null=True, blank=True)
 
-
-
     # links
     facebook = models.URLField(null=True, blank=True)
     instagram = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     youtube = models.URLField(null=True, blank=True)
+
+    election = models.ForeignKey(Election)
 
     def __unicode__(self):
         return self.name
@@ -64,6 +73,8 @@ class Initiative(models.Model):
     featured = models.BooleanField(default=False)
     cta = models.CharField(blank=True, null=True, max_length=32)
     cta_link = models.URLField(blank=True, null=True)
+
+    election = models.ForeignKey(Election)
 
     def __unicode__(self):
         return "%s on %s %s: %s" % (yesno(self.vote).title(), self.state, self.title, self.name)

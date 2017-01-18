@@ -20,38 +20,20 @@
       <h3>2017 Endorsements</h3>
       <hr>
       <ul class="card-list">
-        <li class="card clearfix ">
-          <a href="/candidates/keith-ellison/">
-            <div class="card__photo" style="background-image: url('https://our-revolution-dot-com.s3.amazonaws.com/keith-ellison.jpg')"></div>
-            <div class="card__content">
-              <span class="card__item">Keith Ellison</span>
-              <span class="card__item bold smaller">Minnesota</span>
-              <span class="card__item bottom">DNC Chair</span>
-            </div>
-          </a>
-        </li>
-        
-        <li class="card clearfix ">
-          <a href="/candidates/vincent-fort/">
-            <div class="card__photo" style="background-image: url('https://our-revolution-dot-com.s3.amazonaws.com/vincent-fort.jpg')"></div>
-            <div class="card__content">
-              <span class="card__item">Vincent Fort</span>
-              <span class="card__item bold smaller">Atlanta, GA</span>
-              <span class="card__item bottom">Mayor</span>
-            </div>
-          </a>
-        </li>
-        
-        <li class="card clearfix ">
-          <a href="/candidates/blair-lawton/">
-            <div class="card__photo" style="background-image: url('https://our-revolution-dot-com.s3.amazonaws.com/blair-lawton.jpg')"></div>
-            <div class="card__content">
-              <span class="card__item">Blair Lawton</span>
-              <span class="card__item bold smaller">Iowa</span>
-              <span class="card__item bottom">Chair of the Iowa Democratic Party</span>
-            </div>
-          </a>
-        </li>
+        {% for candidate_page in candidates %}
+            <li class="card clearfix">
+                <a href="{% pageurl candidate_page %}">
+                    {% with candidate_page.candidateendorsementpage.candidate as candidate %}
+                        <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
+                        <div class="card__content">
+                            <span class="card__item">{{ candidate.name }}</span>
+                            <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
+                            <span class="card__item bottom">{{ candidate.office }}</span>
+                        </div>
+                    {% endwith %}
+                </a>
+            </li>
+        {% endfor %}
     </ul>
   </div>
 

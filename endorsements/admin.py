@@ -2,6 +2,11 @@ from django.contrib import admin
 from .models import *
 
 
+@admin.register(Election)
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'is_active']
+
+
 @admin.register(Candidate)
 class CandidateAdmin(admin.ModelAdmin):
     list_display = ['name', 'office', 'state']
