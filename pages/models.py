@@ -122,8 +122,8 @@ class InitiativeEndorsementPage(Page):
 
     def get_context(self, *args, **kwargs):
         context = super(InitiativeEndorsementPage, self).get_context(*args, **kwargs)
-        context['state_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiativeendorsementpage__initiative__election__is_active=True, initiative__state=self.initiativeendorsementpage.initiative.state).exclude(id=self.id).select_related('initiative')
-        context['similar_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiativeendorsementpage__initiative__election__is_active=True, initiative__category=self.initiativeendorsementpage.initiative.category).exclude(id=self.id).select_related('initiative')
+        context['state_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__election__is_active=True, initiative__state=self.initiativeendorsementpage.initiative.state).exclude(id=self.id).select_related('initiative')
+        context['similar_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__election__is_active=True, initiative__category=self.initiativeendorsementpage.initiative.category).exclude(id=self.id).select_related('initiative')
         return context
 
 
