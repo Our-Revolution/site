@@ -41,7 +41,7 @@
   <div class="container">
 	<div class="page-sub-nav about-action-bar">
 	  <div class="btn-group">
-		<button class="btn btn-secondary active" value="statement">Board Statement</button><button class="btn btn-secondary" value="bylaws">Bylaws</button><button class="btn btn-secondary" value="membership">Membership</button>
+			<button class="btn btn-secondary active" value="statement">Board Statement</button><button class="btn btn-secondary" value="bylaws">Bylaws</button><button class="btn btn-secondary" value="membership">Membership Policy</button><button class="btn btn-secondary" value="disclosure">Disclosure Policy</button>
 	  </div>
 	</div>
   </div>
@@ -573,7 +573,16 @@
         </div>
       </div>
     </div>
-  </div>
+  
+		<div class="disclosure">
+      <div class="col-md-8 col-md-offset-2">
+				<h1>During the 2016 Annual Meeting of the Our Revolution Board of Directors, the following contribution policies were adopted:</h1>
+
+				<p>1. Any donor contributing $250 or more per year will be disclosed publicly at the end of each quarter on the Our Revolution web site, and</p>
+				<p>2. The annual contribution limit from a single source is $5,000 unless approved by a vote of the majority of the Board.</p>
+			</div>
+		</div>
+	</div>
 <div>
 
 <script>
@@ -585,7 +594,7 @@
 	  $('.about-action-bar .btn').removeClass('active');
 	  $(this).addClass('active');
 
-	  $('.board-section').removeClass('bylaws statement membership').addClass(e.target.value);
+	  $('.board-section').removeClass('bylaws statement membership disclosure').addClass(e.target.value);
 	})
 
   })

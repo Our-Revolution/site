@@ -6714,25 +6714,31 @@ h4, h1 {
 .about-action-bar {
   margin-bottom: 10px; }
 
-.board-section .bylaws, .board-section .membership {
+.board-section .bylaws, .board-section .membership, .board-section .disclosure {
   display: none; }
 
 .board-section.bylaws .bylaws {
   display: block; }
 
-.board-section.bylaws .board, .board-section.bylaws .membership {
+.board-section.bylaws .board, .board-section.bylaws .membership, .board-section.bylaws .disclosure {
   display: none; }
 
-.board-section.statement .bylaws, .board-section.statement .membership {
+.board-section.statement .bylaws, .board-section.statement .membership, .board-section.statement .disclosure {
   display: none; }
 
 .board-section.statement .board {
   display: block; }
 
-.board-section.membership .bylaws, .board-section.membership .board {
+.board-section.membership .bylaws, .board-section.membership .board, .board-section.membership .disclosure {
   display: none; }
 
 .board-section.membership .membership {
+  display: block; }
+
+.board-section.disclosure .bylaws, .board-section.disclosure .board, .board-section.disclosure .membership {
+  display: none; }
+
+.board-section.disclosure .disclosure {
   display: block; }
 
 .action-list {

@@ -620,7 +620,7 @@ h4, h1 {
 }
 
 .board-section {
-  .bylaws, .membership {
+  .bylaws, .membership, .disclosure {
     display: none;
   }
 
@@ -629,13 +629,13 @@ h4, h1 {
       display: block;
     }
 
-    .board, .membership {
+    .board, .membership, .disclosure {
       display: none;
     }
   }
 
   &.statement {
-    .bylaws, .membership {
+    .bylaws, .membership, .disclosure {
       display: none;
     }
 
@@ -645,11 +645,21 @@ h4, h1 {
   }
   
   &.membership {
-    .bylaws, .board {
+    .bylaws, .board, .disclosure {
       display: none;
     }
 
     .membership {
+      display: block;
+    }
+  }
+  
+  &.disclosure {
+    .bylaws, .board, .membership {
+      display: none;
+    }
+
+    .disclosure {
       display: block;
     }
   }
