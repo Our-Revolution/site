@@ -8544,6 +8544,18 @@ footer {
     .module.stream-bg .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
+  .module.erika-bg {
+    background: #218fff url("../img/erika-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px; }
+    .module.erika-bg .module__heading, .module.erika-bg .module__heading--small {
+      text-shadow: 0 0 5px black; }
+    .module.erika-bg .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px black; }
   .module.health-bg {
     background: #218fff url("../img/health-bg.jpg");
     background-size: cover;
