@@ -205,6 +205,24 @@
     }
   }
   
+  &.erika-bg {
+    background: $blue url('../img/erika-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bolder;
+    min-height: 300px;
+
+    .module__heading {
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+
+    .article-type {
+      font-weight: bolder;
+      text-shadow: 0 0 5px rgba(0,0,0,1);
+    }
+  }
+  
   &.health-bg {
     background: $blue url('../img/health-bg.jpg');
     background-size: cover;

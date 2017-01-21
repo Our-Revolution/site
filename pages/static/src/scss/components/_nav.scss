@@ -452,26 +452,7 @@
       display: block;
     }
     
-  }
-  
-  &__sub {
-    
-    ul {
-      margin: 0;
-    }
-    
-    .nav > li > a {
-      float: left;
-      
-      &:hover {
-        background: rgba(0,0,0,0.2);
-      }
-      
-      &:focus {
-        background: rgba(0,0,0,0.2);
-      }
-    }
-  }
+  };
 }
 
 .navbar--splash {
