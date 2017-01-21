@@ -5885,6 +5885,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .nowrap {
   white-space: nowrap; }
 
+.wsnormal {
+  white-space: normal; }
+
 .ls2 {
   letter-spacing: 2px; }
 
