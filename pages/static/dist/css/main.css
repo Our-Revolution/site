@@ -6288,7 +6288,7 @@ input {
   border: 1px solid #ccc;
   color: #333; }
 
-h4, h1 {
+h4, h1, h2, h3 {
   font-weight: 700; }
 
 .notification-banner, .notification-banner--splash {

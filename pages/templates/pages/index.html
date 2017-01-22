@@ -13,7 +13,7 @@
             <div class="module__content br3">
                 <div class="pa20 dark-wash">
                   <span class="article-type">Video</span>
-                  <h1 class="mb0 mt0">Watch Our Revolution's Erika Andiola Speak at the Women's March</h1>
+                  <h1 class="mb0 mt0">Watch Our Revolution's Erika Andiola Speak at the Women's March in DC</h1>
                 </div>
               
                <div class="embed-responsive embed-responsive-16by9 dark-wash">
@@ -152,6 +152,24 @@
           <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
         </form>
       </section>
+      
+      <script>
+        $(document).ready(function() {
+          var keycode;
+          $('.btn-amount').on('click touchstart', function(e) {
+            e.preventDefault();
+            $("input#amount").val(this.value);
+            $('form#quick-donate').submit();
+          });
+          $('.input-amount').on('keyup', function(e) {
+            keycode = (event.keyCode ? event.keyCode : event.which);
+            $("input#amount").val(this.value);
+            if(keycode == 13) {
+              $('form#quick-donate').submit();
+            }
+          });
+        });
+      </script>
     </div>
   </div>
 </div>
