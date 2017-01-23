@@ -7,24 +7,27 @@
 <div class="container-fluid">
   <div class="row row--main home">    
     <div class="container">
-      <section class="module-container module-container--video clearfix">
-
+      <section class="module-container module-container--video clearfix"> 
         <div class="module-col sixty alone block">
-          <div class="module full centered blue-bg erika-bg white-text">
-            <div class="module__content bottom">
-              <span class="article-type ts0">Day of Action</span>
-              <h1 class="module__heading mb0 mt0 ts0">Join Our Revolution at the Women's March in DC</h1>
-
-              <a href="https://go.ourrevolution.com/page/event/detail/volunteeractivityormeeting/gpl4tw" class="btn btn-dark btn-block module__button uppercase ls2" target="_blank" onclick="trackOutboundLink('https://go.ourrevolution.com/page/event/detail/volunteeractivityormeeting/gpl4tw', true)">Join the Event</a>
+          <div class="module module--video full centered dark-blue-bg white-text">
+            <div class="module__content br3">
+                <div class="pa20 dark-wash">
+                  <span class="article-type">Video</span>
+                  <h1 class="mb0 mt0">Watch Our Revolution's Erika Andiola Speak at the Women's March in DC</h1>
+                </div>
+              
+               <div class="embed-responsive embed-responsive-16by9 dark-wash">
+                <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FPoliticalRevolution%2Fvideos%2F1387974004588145%2F&show_text=0&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="module-col forty alone block">    
-          <div class="module full alone centered dark-blue-bg white-text" id="news-module-home">
+          <div class="module full alone centered tpp-bg white-text" id="news-module-home">
             <div class="module__content small">
               <div class="sign-up-form small float">
-                <h2 class="mt0">Sign Up for Our Revolution</h2>
+                <h2 class="mt0">Join the Fight</h2>
 
                 <form action="https://go.ourrevolution.com/page/s/join?source=ourrevolution.com/-module-small" method="POST">
                   <span class="form-group email">
@@ -38,7 +41,7 @@
                   </span>
 
                   <span class="form-group submit">
-                    <button class="btn btn-primary btn-block uppercase ls2">Join</button>
+                    <button class="btn btn-secondary btn-block uppercase ls2">Join</button>
                   </span>
                 </form>
               </div>
@@ -149,6 +152,24 @@
           <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
         </form>
       </section>
+      
+      <script>
+        $(document).ready(function() {
+          var keycode;
+          $('.btn-amount').on('click touchstart', function(e) {
+            e.preventDefault();
+            $("input#amount").val(this.value);
+            $('form#quick-donate').submit();
+          });
+          $('.input-amount').on('keyup', function(e) {
+            keycode = (event.keyCode ? event.keyCode : event.which);
+            $("input#amount").val(this.value);
+            if(keycode == 13) {
+              $('form#quick-donate').submit();
+            }
+          });
+        });
+      </script>
     </div>
   </div>
 </div>
