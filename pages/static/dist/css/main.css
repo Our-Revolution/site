@@ -5897,10 +5897,23 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     .fs3 {
       font-size: 2em; } }
 
+.fs14 {
+  font-size: 14px; }
+  .fs14 p {
+    font-size: 14px; }
+  .fs14--important {
+    font-size: 14px !important; }
+    .fs14--important p {
+      font-size: 14px !important; }
+
 .fs16 {
   font-size: 16px; }
   .fs16 p {
     font-size: 16px; }
+  .fs16--important {
+    font-size: 16px !important; }
+    .fs16--important p {
+      font-size: 16px !important; }
 
 .fs18 {
   font-size: 18px; }
@@ -5916,16 +5929,18 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .ha {
   height: auto !important; }
 
-.tpp-bg {
+.tpp-bg, .tpp-bg--bottom {
   background: #002a54 url("../img/tpp_bg.jpg");
   background-size: cover;
   color: white;
   font-weight: bolder; }
-  .tpp-bg .module__heading, .tpp-bg .module__heading--small, .tpp-bg p {
+  .tpp-bg .module__heading, .tpp-bg--bottom .module__heading, .tpp-bg .module__heading--small, .tpp-bg--bottom .module__heading--small, .tpp-bg p, .tpp-bg--bottom p {
     text-shadow: 0 0 5px black; }
-  .tpp-bg .article-type {
+  .tpp-bg .article-type, .tpp-bg--bottom .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
+  .tpp-bg--bottom {
+    background-position: bottom; }
 
 .lopez-bg {
   background: #002a54 url("../img/lopez-bg.jpg");
@@ -8668,14 +8683,14 @@ footer {
     background-image: url("../img/nina_bg.jpg");
     background-size: cover;
     color: white; }
-  .module.tpp-bg {
+  .module.tpp-bg, .module.tpp-bg--bottom {
     background: #002a54 url("../img/tpp_bg.jpg");
     background-size: cover;
     color: white;
     font-weight: bolder; }
-    .module.tpp-bg .module__heading, .module.tpp-bg .module__heading--small, .module.tpp-bg p {
+    .module.tpp-bg .module__heading, .module.tpp-bg--bottom .module__heading, .module.tpp-bg .module__heading--small, .module.tpp-bg--bottom .module__heading--small, .module.tpp-bg p, .module.tpp-bg--bottom p {
       text-shadow: 0 0 5px black; }
-    .module.tpp-bg .article-type {
+    .module.tpp-bg .article-type, .module.tpp-bg--bottom .article-type {
       font-weight: bolder;
       text-shadow: 0 0 5px black; }
   .module.lopez-bg {
