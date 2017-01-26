@@ -6105,7 +6105,7 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     text-shadow: 0 0 5px black; }
 
 .child-flag-bg {
-  background: black url("../img/child-flag.jpg");
+  background: #218fff url("../img/child-flag.jpg");
   background-size: cover;
   color: white; }
 
