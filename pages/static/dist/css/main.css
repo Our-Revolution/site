@@ -5773,6 +5773,9 @@ button.close {
   white-space: nowrap;
   overflow: hidden; }
 
+.block {
+  display: block; }
+
 .ma0 {
   margin: 0 0 0 0; }
 
@@ -5999,6 +6002,19 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   .stop-sessions-bg .module__heading, .stop-sessions-bg .module__heading--small {
     text-shadow: 0 0 5px black; }
   .stop-sessions-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
+.sessions-bg {
+  background: #002a54 url("../img/sessions-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px; }
+  .sessions-bg .module__heading, .sessions-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .sessions-bg .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 

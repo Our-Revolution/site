@@ -1,3 +1,7 @@
+.block {
+  display: block;
+}
+
 .ma0 {
   margin: 0 0 0 0; 
 }
@@ -320,6 +324,24 @@ a.white-text {
 
 .stop-sessions-bg {
   background: darken($blue,40) url('../img/stop-sessions.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+.sessions-bg {
+  background: darken($blue,40) url('../img/sessions-bg.jpg');
   background-size: cover;
   background-position: center;
   color: white;
