@@ -8623,7 +8623,7 @@ footer {
     display: block; }
     @media screen and (max-width: 991px) {
       .module-container--video {
-        height: 500px; } }
+        height: 550px; } }
 
 .module {
   height: auto;

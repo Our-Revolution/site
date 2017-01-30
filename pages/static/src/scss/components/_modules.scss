@@ -15,7 +15,7 @@
     display: block;
     
     @include until($large) {
-      height: 500px;
+      height: 550px;
     };
   }
 }
