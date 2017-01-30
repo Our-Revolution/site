@@ -38,7 +38,7 @@ h1, h2, h3, h4 {
 
 .notification-banner {
   padding: 10px;
-  background: $red;
+  background-color: $red;
   color: white;
   text-align: center;
   font-weight: bolder;
@@ -53,6 +53,12 @@ h1, h2, h3, h4 {
     .container {
       padding-left: 10px;
       padding-right: 7px;
+    }
+  }
+
+  &--link {
+    .notification-banner:hover {
+      background: darken($red, 10);
     }
   }
 

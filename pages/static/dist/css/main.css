@@ -6506,7 +6506,7 @@ h1, h2, h3, h4 {
 
 .notification-banner, .notification-banner--splash {
   padding: 10px;
-  background: #d74e5b;
+  background-color: #d74e5b;
   color: white;
   text-align: center;
   font-weight: bolder; }
@@ -6518,6 +6518,8 @@ h1, h2, h3, h4 {
     .notification-banner--splash .container {
       padding-left: 10px;
       padding-right: 7px; }
+  .notification-banner--link .notification-banner:hover, .notification-banner--link .notification-banner--splash:hover {
+    background: #c52d3b; }
   .notification-banner__link {
     font-weight: bolder;
     margin-left: 10px; }
@@ -8605,7 +8607,7 @@ footer {
     display: block; }
     @media screen and (max-width: 991px) {
       .module-container--video {
-        height: 400px; } }
+        height: 500px; } }
 
 .module {
   height: auto;
@@ -9016,12 +9018,44 @@ footer {
     width: 50%; }
   .module-col.third {
     width: 34%; }
+    .module-col.third.margin-right {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-right: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.third.margin-right {
+          margin-right: 0;
+          margin-left: 0; } }
+    .module-col.third.margin-left {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.third.margin-left {
+          margin-right: 0;
+          margin-left: 0;
+          margin-top: 20px; } }
     .module-col.third.alone {
       width: 32%;
       width: calc(34% - 10px);
       margin-right: 10px; }
   .module-col.two-thirds {
     width: 66%; }
+    .module-col.two-thirds.margin-right {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-right: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.two-thirds.margin-right {
+          margin-right: 0; } }
+    .module-col.two-thirds.margin-left {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.two-thirds.margin-left {
+          margin-left: 0;
+          margin-top: 20px; } }
     .module-col.two-thirds.alone {
       width: 64%;
       width: calc(66% - 10px);

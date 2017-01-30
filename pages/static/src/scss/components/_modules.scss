@@ -15,7 +15,7 @@
     display: block;
     
     @include until($large) {
-      height: 400px;
+      height: 500px;
     };
   }
 }
@@ -551,15 +551,62 @@
   &.third {
     width: 34%;
     
+    &.margin-right {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-right: 10px;
+      
+      @include until($medium) {
+        margin-right: 0;
+        margin-left: 0;
+        // margin-top: 20px;
+      };
+    }
+    
+    &.margin-left {
+      width: 32%;
+      width: calc(34% - 10px);
+      margin-left: 10px;
+      
+      @include until($medium) {
+        margin-right: 0;
+        margin-left: 0;
+        margin-top: 20px;
+      };
+    }
+    
     &.alone {
       width: 32%;
       width: calc(34% - 10px);
       margin-right: 10px;
     }
+    
   }
 
   &.two-thirds {
     width: 66%;
+    
+    &.margin-right {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-right: 10px;
+    
+      @include until($medium) {
+        margin-right: 0;
+        // margin-top: 20px;
+      };
+    }
+    
+    &.margin-left {
+      width: 64%;
+      width: calc(66% - 10px);
+      margin-left: 10px;
+    
+      @include until($medium) {
+        margin-left: 0;
+        margin-top: 20px;
+      };
+    }
     
     &.alone {
       width: 64%;
