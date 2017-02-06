@@ -6018,6 +6018,19 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.devos-bg {
+  background: #002a54 url("../img/devos-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px; }
+  .devos-bg .module__heading, .devos-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .devos-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .stream-bg {
   background: #002a54 url("../img/stream-announcement.png");
   background-size: cover;

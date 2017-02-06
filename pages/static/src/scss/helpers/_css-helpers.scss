@@ -358,6 +358,24 @@ a.white-text {
   }
 }
 
+.devos-bg {
+  background: darken($blue,40) url('../img/devos-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .stream-bg {
   background: darken($blue,40) url('../img/stream-announcement.png');
   background-size: cover;
