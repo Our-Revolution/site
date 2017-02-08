@@ -661,6 +661,18 @@
 
   &.half {
     height: 50%;
+    
+    &.margin-bottom {
+      height: 48%;
+      height: calc(50% - 20px);
+      margin-bottom: 20px;
+    }
+    
+    &.margin-top {
+      height: 48%;
+      height: calc(50% - 20px);
+      margin-top: 20px;
+    }
   }
 
   &.full {

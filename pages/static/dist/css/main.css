@@ -9152,6 +9152,14 @@ footer {
   width: 100%; }
   .module.half {
     height: 50%; }
+    .module.half.margin-bottom {
+      height: 48%;
+      height: calc(50% - 20px);
+      margin-bottom: 20px; }
+    .module.half.margin-top {
+      height: 48%;
+      height: calc(50% - 20px);
+      margin-top: 20px; }
   .module.full {
     height: 100%; }
   .module.fill {

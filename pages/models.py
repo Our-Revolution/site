@@ -168,7 +168,7 @@ class IssueIndexPage(Page):
     
     def serve(self, request):
         # trickeryyyy...
-        return IssuePage.objects.get(title='TPP').serve(request)
+        return IssuePage.objects.get(title='Income Inequality').serve(request)
 
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
