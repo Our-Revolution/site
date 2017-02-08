@@ -474,3 +474,18 @@ class ContentPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+        
+class DonorListPage(Page):
+    abstract = RichTextField()
+    body = RichTextField(null=False)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+
+    content_panels = Page.content_panels + [
+            FieldPanel('abstract', classname="full"),
+            FieldPanel('body', classname="full")
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
