@@ -4,44 +4,87 @@
 
 {% block content %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="container">
-                <div class="page-heading clearfix">
-                    <h1>{{ page.title }}</h1>
-                </div>
-
-                <div class="col-sm-8 col-sm-offset-2">
-                    {% if page.body %}
-                        {{ page.body | richtext }}
-                    {% endif %}
-
-                    {% regroup donations by range as donations_list %}
-
-                    <ul>
-                        {% for range in donations_list %}
-                            <li><h3>{% if range.grouper == '  Range ' %}
-                                    {% elif range.grouper == '  1 ' %}
-                                        $250 &ndash; 1,000
-                                    {% elif range.grouper == '  2 ' %}
-                                        $1,001 &ndash; 3,000
-                                    {% elif range.grouper == '  3 ' %}
-                                        $3,001 &ndash; 7,500
-                                    {% endif %}</h3>
-                            <ul>
-                                {% for donor in range.list %}
-                                  <li>{{ donor.first_name }} {{ donor.last_name }}</li>
-                                {% endfor %}
-                            </ul>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
-                </div>
-
+	<div class="container-fluid">
+		<div class="row">
+      <div class="blue-bg white-text pt6">
+        <div class="container pb2">
+          <div class="row">
+            <div class="col-md-7 fs18">
+              <h1 class="mb0">{{ page.title }}</h1>
+              {% if page.body %}
+                {{ page.body | richtext }}
+              {% endif %}
             </div>
+          </div>  
         </div>
+      </div>
     </div>
+  </div>
+      
+	<div class="container-fluid">
+    <div class="row">
+      <div class="candidate-action-bar" id="donor-buttons">
+        <div class="container">
+          <button type="button" class="btn btn-dark active ma10" data-range="1">$250 to $1,000</button>
+          <button type="button" class="btn btn-dark ma10" data-range="2">$1,001 to $3,000</button>
+          <button type="button" class="btn btn-dark ma10" data-range="3">$3,001 to $7,500</button>
+        </div>
+      </div>
+      
+      <div class="container pa20 pb20 fs16">
+  			<div class="col-md-12">
+  				{% regroup donations by range as donations_list %}
+
+  				<ul class="lst0 pa0">
+  					{% for range in donations_list %}
+  						<li class="donor-list" data-range={{range.grouper}}>
+                <h2>
+                  {% if range.grouper == '  Range ' %}
+  								{% elif range.grouper == '  1 ' %}
+  									$250 to $1,000
+  								{% elif range.grouper == '  2 ' %}
+  									$1,001 to $3,000
+  								{% elif range.grouper == '  3 ' %}
+  									$3,001 to $7,500
+  								{% endif %}
+                </h2>
+                <hr>
+                
+    						<ul class="lst0 list-3-col clearfix">
+    							{% for donor in range.list %}
+    							  <li>{{ donor.first_name }} {{ donor.last_name }}</li>
+    							{% endfor %}
+    						</ul>
+  						</li>
+  					{% endfor %}
+  				</ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      $('.donor-list').each(function(){
+        var range = $(this).data('range');
+        
+        if (range != "1") {
+          $(this).hide();
+        }
+      })
+      
+      $('#donor-buttons .btn').on('click touchstart', function() {
+        var currentRange = $(this).data('range');
+        
+        $('#donor-buttons .btn').removeClass('active');
+        $(this).addClass("active");
+        
+        $('.donor-list').hide();
+        console.log(currentRange);
+        $("li[data-range='" + currentRange +"']").show();
+      })
+    });
+  </script>
 
 
 {% endblock %}
