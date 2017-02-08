@@ -11,7 +11,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
-
+import csv
 
 
 class BasePage(Page):
@@ -474,3 +474,24 @@ class ContentPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+class DonationPage(Page):
+    abstract = RichTextField(null=True, blank=True)
+    body = RichTextField(null=True, blank=True)
+    csv_file = models.FileField(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+            FieldPanel('abstract', classname="full"),
+            FieldPanel('body', classname="full"),
+            FieldPanel('csv_file'),
+        ]
+
+    def get_context(self, *args, **kwargs):
+        context = super(DonationPage, self).get_context(*args, **kwargs)
+
+        reader = csv.DictReader(self.csv_file, fieldnames=['first_name','last_name','range'])
+        reader.next()
+        context['donations'] = list(reader)
+
+        return context
