@@ -1,0 +1,47 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container">
+                <div class="page-heading clearfix">
+                    <h1>{{ page.title }}</h1>
+                </div>
+
+                <div class="col-sm-8 col-sm-offset-2">
+                    {% if page.body %}
+                        {{ page.body | richtext }}
+                    {% endif %}
+
+                    {% regroup donations by range as donations_list %}
+
+                    <ul>
+                        {% for range in donations_list %}
+                            <li><h3>{% if range.grouper == '  Range ' %}
+                                    {% elif range.grouper == '  1 ' %}
+                                        $250 &ndash; 1,000
+                                    {% elif range.grouper == '  2 ' %}
+                                        $1,001 &ndash; 3,000
+                                    {% elif range.grouper == '  3 ' %}
+                                        $3,001 &ndash; 7,500
+                                    {% endif %}</h3>
+                            <ul>
+                                {% for donor in range.list %}
+                                  <li>{{ donor.first_name }} {{ donor.last_name }}</li>
+                                {% endfor %}
+                            </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
