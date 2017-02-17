@@ -6153,6 +6153,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.baseball-bg {
+  background: #004387 url("../img/baseball-bg.jpg") no-repeat bottom center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .baseball-bg .module__heading, .baseball-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .baseball-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .lucy-and-bernie {
   background: #218fff url("../img/lucy-and-bernie.jpg");
   background-size: cover;

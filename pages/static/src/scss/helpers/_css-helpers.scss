@@ -544,6 +544,23 @@ a.white-text {
   }
 }
 
+.baseball-bg {
+  background: darken($blue, 30) url('../img/baseball-bg.jpg') no-repeat bottom center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+
 .lucy-and-bernie {
   background: $blue url('../img/lucy-and-bernie.jpg');
   background-size: cover;
