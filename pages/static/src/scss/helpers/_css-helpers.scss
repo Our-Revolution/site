@@ -481,8 +481,9 @@ a.white-text {
 }
 
 .map-bg {
-  background: darken($blue, 30) url('../img/map-bg.jpg');
+  background: darken($blue, 30) url('../img/map-bg.jpg') no-repeat;
   background-position: center;
+  background-size: cover;
   color: white;
   font-weight: bolder;
 

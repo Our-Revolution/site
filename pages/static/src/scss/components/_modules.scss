@@ -628,12 +628,58 @@
       width: calc(60% - 10px);
       margin-right: 10px;
     }
+    
+    &.margin-right {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-right: 10px;
+      
+      @include until($medium) {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 20px;
+      };
+    }
+    
+    &.margin-left {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-left: 10px;
+      
+      @include until($medium) {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 20px;
+      };
+    }
   }
   
   &.forty {
     width:40%;
     
     &.alone {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-left: 10px;
+      
+      @include until($medium) {
+        margin-left: 0;
+        margin-top: 20px;
+      };
+    }
+    
+    &.margin-right {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-right: 10px;
+      
+      @include until($medium) {
+        margin-right: 0;
+        margin-top: 20px;
+      };
+    }
+    
+    &.margin-left {
       width: 38%;
       width: calc(40% - 10px);
       margin-left: 10px;
@@ -696,6 +742,18 @@
       height: calc(60% - 10px);
       margin-bottom: 10px;
     }
+    
+    &.margin-bottom {
+      height: 60%;
+      height: calc(60% - 20px);
+      margin-bottom: 20px;
+    }
+    
+    &.margin-top {
+      height: 60%;
+      height: calc(60% - 20px);
+      margin-top: 20px;
+    }
   }
   
   &.forty {
@@ -703,6 +761,18 @@
     
     &.alone {
       height: calc(40% - 10px);
+      margin-top: 20px;
+    }
+    
+    &.margin-bottom {
+      height: 40%;
+      height: calc(40% - 20px);
+      margin-bottom: 20px;
+    }
+    
+    &.margin-top {
+      height: 40%;
+      height: calc(40% - 20px);
       margin-top: 20px;
     }
   }

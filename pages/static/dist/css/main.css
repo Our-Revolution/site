@@ -6110,8 +6110,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     text-shadow: 0 0 5px black; }
 
 .map-bg {
-  background: #004387 url("../img/map-bg.jpg");
+  background: #004387 url("../img/map-bg.jpg") no-repeat;
   background-position: center;
+  background-size: cover;
   color: white;
   font-weight: bolder; }
   .map-bg .module__heading, .map-bg .module__heading--small {
@@ -9149,6 +9150,24 @@ footer {
       width: 58%;
       width: calc(60% - 10px);
       margin-right: 10px; }
+    .module-col.sixty.margin-right {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-right: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.sixty.margin-right {
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 20px; } }
+    .module-col.sixty.margin-left {
+      width: 58%;
+      width: calc(60% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.sixty.margin-left {
+          margin-left: 0;
+          margin-right: 0;
+          margin-top: 20px; } }
   .module-col.forty {
     width: 40%; }
     .module-col.forty.alone {
@@ -9157,6 +9176,22 @@ footer {
       margin-left: 10px; }
       @media screen and (max-width: 767px) {
         .module-col.forty.alone {
+          margin-left: 0;
+          margin-top: 20px; } }
+    .module-col.forty.margin-right {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-right: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.forty.margin-right {
+          margin-right: 0;
+          margin-top: 20px; } }
+    .module-col.forty.margin-left {
+      width: 38%;
+      width: calc(40% - 10px);
+      margin-left: 10px; }
+      @media screen and (max-width: 767px) {
+        .module-col.forty.margin-left {
           margin-left: 0;
           margin-top: 20px; } }
   .module-col.full {
@@ -9198,10 +9233,26 @@ footer {
     .module.sixty.alone {
       height: calc(60% - 10px);
       margin-bottom: 10px; }
+    .module.sixty.margin-bottom {
+      height: 60%;
+      height: calc(60% - 20px);
+      margin-bottom: 20px; }
+    .module.sixty.margin-top {
+      height: 60%;
+      height: calc(60% - 20px);
+      margin-top: 20px; }
   .module.forty {
     height: 40%; }
     .module.forty.alone {
       height: calc(40% - 10px);
+      margin-top: 20px; }
+    .module.forty.margin-bottom {
+      height: 40%;
+      height: calc(40% - 20px);
+      margin-bottom: 20px; }
+    .module.forty.margin-top {
+      height: 40%;
+      height: calc(40% - 20px);
       margin-top: 20px; }
   .module.top {
     height: auto;
