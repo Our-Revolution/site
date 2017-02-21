@@ -82,7 +82,8 @@ INSTALLED_APPS = [
     # OR.
     'endorsements',
     'pages',
-    'social_redirects'
+    'social_redirects',
+    'local_groups',
 ]
 
 SERVER_EMAIL = "bugtroll@ourrevolution.com"
