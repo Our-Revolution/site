@@ -14,9 +14,9 @@
   &--video {
     display: block;
     
-    // @include until($large) {
-    //   height: 550px;
-    // };
+    @include until($large) {
+      height: 400px;
+    };
   }
 }
 

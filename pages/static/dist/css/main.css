@@ -8697,6 +8697,9 @@ footer {
     border-radius: 3px; }
   .module-container--video {
     display: block; }
+    @media screen and (max-width: 991px) {
+      .module-container--video {
+        height: 400px; } }
 
 .module {
   height: auto;
