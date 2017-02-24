@@ -30,15 +30,13 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
             for i in reservation.instances:
                 hosts.append(i.public_dns_name)
 
-        hosts.append(elb.dns_name)
-
         return hosts
 
 
     def purge(self, url):
 
         for host in self.hosts:
-            req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port if not 'elb.amazonaws.com' in host else 80), urlparse.urlparse(url).path))
+            req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path))
             assert req.status_code == 200
 
 

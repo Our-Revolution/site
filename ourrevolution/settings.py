@@ -238,7 +238,7 @@ WAGTAILFRONTENDCACHE = OrderedDict((
 
     ('fastly', {
         'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-        'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
+        'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com', 'http://ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
         'API_KEY': os.environ.get('FASTLY_API_KEY', None)
     })
 
