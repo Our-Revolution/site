@@ -40,9 +40,9 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
             req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path))
             assert req.status_code == 200
 
-            # for host_name in self.host_names():
-            #     req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path), headers={'Host': host_name})
-            #     assert req.status_code == 200
+            for host_name in self.host_names:
+                req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path), headers={'Host': host_name})
+                assert req.status_code == 200
 
 
 
