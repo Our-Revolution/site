@@ -776,6 +776,27 @@
       margin-top: 20px;
     }
   }
+  
+  &.fifty {
+    height: 50%;
+    
+    &.alone {
+      height: calc(50% - 10px);
+      margin-top: 20px;
+    }
+    
+    &.margin-bottom {
+      height: 50%;
+      height: calc(50% - 20px);
+      margin-bottom: 20px;
+    }
+    
+    &.margin-top {
+      height: 50%;
+      height: calc(50% - 20px);
+      margin-top: 20px;
+    }
+  }
 
   &.top {
     height: auto;
