@@ -1,16 +1,17 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from localflavor.us.models import PhoneNumberField, USStateField, USZipCodeField
 
 
 class Group(models.Model):
     name = models.CharField(max_length=64, null=True, blank=True)
-    state = models.CharField(max_length=2, null=True, blank=True)
+    state = USStateField(max_length=2, null=True, blank=True)
     signup_date = models.DateTimeField(null=True, blank=True)
-    rep_email = models.CharField(max_length=31, null=True, blank=True)
+    rep_email = models.EmailField(null=True, blank=True)
     rep_first_name = models.CharField(max_length=9, null=True, blank=True)
     rep_last_name = models.CharField(max_length=12, null=True, blank=True)
-    rep_zip_code = models.CharField(max_length=12, null=True, blank=True)
+    rep_zip_code = USZipCodeField(null=True, blank=True)
     rep_phone = models.IntegerField(null=True, blank=True)
     county = models.CharField(max_length=11, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
