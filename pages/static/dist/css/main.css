@@ -9265,6 +9265,19 @@ footer {
       height: 40%;
       height: calc(40% - 20px);
       margin-top: 20px; }
+  .module.fifty {
+    height: 50%; }
+    .module.fifty.alone {
+      height: calc(50% - 10px);
+      margin-top: 20px; }
+    .module.fifty.margin-bottom {
+      height: 50%;
+      height: calc(50% - 20px);
+      margin-bottom: 20px; }
+    .module.fifty.margin-top {
+      height: 50%;
+      height: calc(50% - 20px);
+      margin-top: 20px; }
   .module.top {
     height: auto;
     -webkit-align-self: flex-start;
