@@ -14,6 +14,7 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
         self.region = params.pop('REGION')
         self.port = params.pop('PORT')
         self.hosts = self.get_hosts()
+        self.host_names = params.pop('HOST_NAMES')
 
 
     def get_hosts(self):
@@ -38,6 +39,10 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
         for host in self.hosts:
             req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path))
             assert req.status_code == 200
+
+            for host_name in self.host_names():
+                req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path), headers={'Host': host_name})
+                assert req.status_code == 200
 
 
 
