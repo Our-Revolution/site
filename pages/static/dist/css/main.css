@@ -8719,7 +8719,7 @@ footer {
     display: block; }
     @media screen and (max-width: 991px) {
       .module-container--video {
-        height: 400px; } }
+        height: 600px; } }
 
 .module {
   height: auto;
