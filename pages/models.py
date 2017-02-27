@@ -494,3 +494,30 @@ class DonationPage(Page):
         context['donations'] = list(reader)
 
         return context
+        
+## LOCAL GROUPS
+
+class GroupPage(Page):
+    body = RichTextField()
+    group = models.ForeignKey('local_groups.Group', null=True, blank=True, on_delete=models.SET_NULL)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    parent_page_types = ['pages.GroupIndexPage']
+
+
+    content_panels = Page.content_panels + [
+            FieldPanel('body', classname="full"),
+            FieldPanel('group')
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
+
+class GroupIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    subpage_types = ['pages.GroupPage']
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]

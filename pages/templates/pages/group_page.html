@@ -1,0 +1,77 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+{% with page.group as group %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="detail__header bg-blue pa4 pt6 white">  
+        <div class="detail__back pa3 f3 bg-black-10">
+          <div class="container">
+            <div class="row">
+              <a href="/" class="link dim white">< Browse All Groups</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="container">
+          <span>{{ group.city }}, {{ group.state }} | {{ group.county }} County</span>
+          <h1 class="fw7 mb0"> {{ group.name }}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Group Information</h2>
+    <p>{{ group.mission_vision }}</p>
+    <p>Types of organizing: {{ group.types_of_organizing }}</p>
+    
+    <h2>Contact</h2>
+    <p>
+      <div>{{ group.rep_first_name }} {{ group.rep_last_name }}</div>
+      <div>{{ group.rep_email }}</div>
+      <div>{{ group.rep_phone }}</div>
+    </p>
+    
+    <h2>Meeting Info</h2>
+    <p>
+      <div>Last meeting: {{ group.last_meeting }}</div>
+      <div>Recurring meeting: {{ group.recurring_meeting }}</div>
+    </p>
+    
+    <h2>Connect with {{ group.name }}</h2>
+    <p>
+      <div><a href="{{ group.facebook_url }}">Facebook</a></div>
+      <div><a href="{{ group.twitter_url }}">Twitter</a></div>
+      <div><a href="{{ group.website_url }}">Website</a></div>
+      <div><a href="{{ group.instagram_url }}">Instagram</a></div>
+      <div><a href="{{ group.meetup_url }}">Meetup</a></div>
+      <div>Other Social: {{ group.other_social|urlize }}</div>
+    </p>
+  </div>
+
+{% endwith %}
+
+<!-- <div class="container pt4 pb4">
+  <div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <h1>We presently have not endorsed any new initiatives for the 2017 elections.</h1>
+    
+    <p class="fs18">Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our new slate of ballot initiatives.</p>
+    
+    <p class="fs18"><strong>In the meantime, you can view our past election results below.</strong></p>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <a href="/election-2016" class="btn btn-primary btn-block ls2 uppercase mt20">View Election Results</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div> -->
+
+{% endblock %}
