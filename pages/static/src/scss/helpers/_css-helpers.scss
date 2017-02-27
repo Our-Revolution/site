@@ -59,7 +59,7 @@
 }
 
 .pt4 {
-  padding-top: 4em;
+  padding-top: 4em !important;
 }
 
 .pb6 {
@@ -266,12 +266,15 @@ a.white-text {
 }
 
 .attribution {
-  
+  text-shadow: 0 0 3px rgba(0,0,0,1);
   
   &--tr {
+    @extend .attribution;
+    
     position: absolute;
     top: 20px;
     right: 20px;
+    text-align: right;
   }
   
 }

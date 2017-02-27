@@ -5819,7 +5819,7 @@ button.close {
   padding-bottom: 4em; }
 
 .pt4 {
-  padding-top: 4em; }
+  padding-top: 4em !important; }
 
 .pb6 {
   padding-bottom: 6em; }
@@ -5962,10 +5962,13 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .ha {
   height: auto !important; }
 
-.attribution--tr {
-  position: absolute;
-  top: 20px;
-  right: 20px; }
+.attribution, .attribution--tr {
+  text-shadow: 0 0 3px black; }
+  .attribution--tr {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right; }
 
 .tpp-bg, .tpp-bg--bottom {
   background: #002a54 url("../img/tpp_bg.jpg");
@@ -6945,7 +6948,7 @@ h1, h2, h3, h4 {
     flex-direction: column; }
     .home-section .news-item .content__heading, .home-section--sign-up .news-item .content__heading, .home-section--info .news-item .content__heading, .home-section--news .news-item .content__heading, .home-section--donate .news-item .content__heading {
       margin-bottom: 5px; }
-    .home-section .news-item .attribution, .home-section--sign-up .news-item .attribution, .home-section--info .news-item .attribution, .home-section--news .news-item .attribution, .home-section--donate .news-item .attribution {
+    .home-section .news-item .attribution, .home-section--sign-up .news-item .attribution, .home-section--info .news-item .attribution, .home-section--news .news-item .attribution, .home-section--donate .news-item .attribution, .home-section .news-item .attribution--tr, .home-section--sign-up .news-item .attribution--tr, .home-section--info .news-item .attribution--tr, .home-section--news .news-item .attribution--tr, .home-section--donate .news-item .attribution--tr {
       margin-bottom: 10px;
       text-transform: uppercase;
       font-size: 10px;
@@ -7419,7 +7422,7 @@ footer {
     padding-top: 200px;
     text-shadow: 0 0 3px black;
     font-weight: bolder; }
-  .page-heading--press .attribution {
+  .page-heading--press .attribution, .page-heading--press .attribution--tr {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -7428,7 +7431,7 @@ footer {
     text-transform: uppercase;
     color: white;
     text-shadow: none; }
-    .page-heading--press .attribution a {
+    .page-heading--press .attribution a, .page-heading--press .attribution--tr a {
       color: white; }
   .page-heading--press h1 {
     margin-top: 0; }
