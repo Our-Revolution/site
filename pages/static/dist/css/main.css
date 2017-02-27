@@ -5962,6 +5962,11 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .ha {
   height: auto !important; }
 
+.attribution--tr {
+  position: absolute;
+  top: 20px;
+  right: 20px; }
+
 .tpp-bg, .tpp-bg--bottom {
   background: #002a54 url("../img/tpp_bg.jpg");
   background-size: cover;
@@ -6118,6 +6123,18 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   .map-bg .module__heading, .map-bg .module__heading--small {
     text-shadow: 0 0 5px black; }
   .map-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
+.ma-rally-bg {
+  background: #004387 url("../img/ma-2-25-rally.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .ma-rally-bg .module__heading, .ma-rally-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .ma-rally-bg .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
