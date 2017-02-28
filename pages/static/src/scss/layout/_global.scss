@@ -216,13 +216,14 @@ h1, h2, h3, h4 {
 }
 
 .page-heading {
-  background: url('../img/bg_4.jpg') center center;
+  background: $blue;
   background-size: cover;
   color: white;
   border-radius: 3px;
   padding: 20px;
   margin: 10px 0;
   vertical-align: bottom;
+  position: relative;
 
   h1 {
     margin: 140px 0 5px 0;
@@ -244,6 +245,11 @@ h1, h2, h3, h4 {
     margin-top: 0;
     margin-bottom: 0;
   }
+}
+
+.back-bar {
+  background: rgba(0,0,0,0.1);
+  padding: 15px;
 }
 
 .icon {

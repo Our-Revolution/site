@@ -8,50 +8,59 @@
 
   <div class="container-fluid">
     <div class="row">
-      <div class="detail__header bg-blue pa4 pt6 white">  
-        <div class="detail__back pa3 f3 bg-black-10">
+      <div class="prel pb2 blue-bg white-text">  
+        <div class="back-bar">
           <div class="container">
-            <div class="row">
-              <a href="/" class="link dim white">< Browse All Groups</a>
-            </div>
+            <a href="/" class="link dim white">< Browse All Groups</a>
           </div>
         </div>
         
-        <div class="container">
-          <span>{{ group.city }}, {{ group.state }} | {{ group.county }} County</span>
-          <h1 class="fw7 mb0"> {{ group.name }}</h1>
+        <div class="container pt6">
+          <p class="mb0">{{ group.city }}, {{ group.state }} {% if group.county %}| {{ group.county }} County{% endif %}</p>
+          <h1 class="fw7 mb0 mt0"> {{ group.name }}</h1>
+          <p><a href="#">{{ group.website_url }}</a></p>
         </div>
       </div>
     </div>
   </div>
   
-  <div class="container">
-    <h2>Group Information</h2>
-    <p>{{ group.mission_vision }}</p>
-    <p>Types of organizing: {{ group.types_of_organizing }}</p>
-    
-    <h2>Contact</h2>
-    <p>
-      <div>{{ group.rep_first_name }} {{ group.rep_last_name }}</div>
-      <div>{{ group.rep_email }}</div>
-      <div>{{ group.rep_phone }}</div>
-    </p>
-    
-    <h2>Meeting Info</h2>
-    <p>
-      <div>Last meeting: {{ group.last_meeting }}</div>
-      <div>Recurring meeting: {{ group.recurring_meeting }}</div>
-    </p>
-    
-    <h2>Connect with {{ group.name }}</h2>
-    <p>
-      <div><a href="{{ group.facebook_url }}">Facebook</a></div>
-      <div><a href="{{ group.twitter_url }}">Twitter</a></div>
-      <div><a href="{{ group.website_url }}">Website</a></div>
-      <div><a href="{{ group.instagram_url }}">Instagram</a></div>
-      <div><a href="{{ group.meetup_url }}">Meetup</a></div>
-      <div>Other Social: {{ group.other_social|urlize }}</div>
-    </p>
+  <div class="container pt2 pb2">
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-4">
+        <div class="fafafa-bg pa20 br3">
+          <h4 class="mt0">Contact</h4>
+          <hr>
+          <p>
+            <div>{{ group.rep_first_name }} {{ group.rep_last_name }}</div>
+            <div>{{ group.rep_email }}</div>
+            <div>{{ group.rep_phone }}</div>
+          </p>
+          
+          <p>
+            <div><a href="{{ group.facebook_url }}">Facebook</a></div>
+            <div><a href="{{ group.twitter_url }}">Twitter</a></div>
+            <div><a href="{{ group.website_url }}">Website</a></div>
+            <div><a href="{{ group.instagram_url }}">Instagram</a></div>
+            <div><a href="{{ group.meetup_url }}">Meetup</a></div>
+            <div>Other Social: {{ group.other_social|urlize }}</div>
+          </p>
+        </div>
+      </div>
+      
+      <div class="col-lg-9 col-md-8 col-sm-8">
+        <h2>Mission</h2>
+        <p>{{ group.mission_vision }}</p>
+        
+        <p>Types of organizing: {{ group.types_of_organizing }}</p>
+        
+        
+        <h2>Meeting Info</h2>
+        <p>
+          <div>Last meeting: {{ group.last_meeting }}</div>
+          <div>Recurring meeting: {{ group.recurring_meeting }}</div>
+        </p>
+      </div>
+    </div>
   </div>
 
 {% endwith %}
