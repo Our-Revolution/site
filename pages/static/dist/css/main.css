@@ -5962,13 +5962,12 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .ha {
   height: auto !important; }
 
-.attribution, .attribution--tr {
-  text-shadow: 0 0 3px black; }
-  .attribution--tr {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    text-align: right; }
+.attribution--tr {
+  text-shadow: 0 0 3px black;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-align: right; }
 
 .tpp-bg, .tpp-bg--bottom {
   background: #002a54 url("../img/tpp_bg.jpg");
