@@ -517,6 +517,11 @@ class GroupPage(Page):
 class GroupIndexPage(Page):
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.GroupPage']
+    
+    def get_context(self, *args, **kwargs):
+        context = super(GroupIndexPage, self).get_context(*args, **kwargs)
+        context['groups'] = self.get_children()
+        return context
 
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')

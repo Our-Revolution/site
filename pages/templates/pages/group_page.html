@@ -8,57 +8,103 @@
 
   <div class="container-fluid">
     <div class="row">
-      <div class="prel pb2 blue-bg white-text">  
+      <div class="blue-bg white-text">  
         <div class="back-bar">
           <div class="container">
-            <a href="/" class="link dim white">< Browse All Groups</a>
+            <a href="/groups" class="link dim white">< Browse All Groups</a>
           </div>
         </div>
         
         <div class="container pt6">
           <p class="mb0">{{ group.city }}, {{ group.state }} {% if group.county %}| {{ group.county }} County{% endif %}</p>
-          <h1 class="fw7 mb0 mt0"> {{ group.name }}</h1>
-          <p><a href="#">{{ group.website_url }}</a></p>
+          <h1 class="fw7 mt0">{{ group.name }}</h1>
+        </div>
+        
+        <div class="social-bar">
+          <div class="container">
+            {% if group.website_url %}
+              <a href="{{ group.website_url }}" class="pull-left">{{ group.website_url }}</a>
+            {% endif %}
+            
+            {% if group.facebook_url %}
+              <a href="{{ group.facebook_url }}" class="social-icon facebook-icon">Facebook</a>
+            {% endif %}
+            
+            {% if group.twitter_url %}
+              <a href="{{ group.twitter_url }}" class="social-icon twitter-icon">Twitter</a>
+            {% endif %}
+            
+            {% if group.instagram_url %}
+              <a href="{{ group.instagram_url }}" class="social-icon instagram-icon">Instagram</a>
+            {% endif %}
+            
+            {% if group.meetup_url %}
+              <a href="{{ group.meetup_url }}" class="social-icon meetup-icon">Meetup</a>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
   </div>
   
-  <div class="container pt2 pb2">
-    <div class="row">
+  <div class="container">
+    <div class="row pt2 pb2">
       <div class="col-lg-3 col-md-4 col-sm-4">
         <div class="fafafa-bg pa20 br3">
           <h4 class="mt0">Contact</h4>
-          <hr>
           <p>
             <div>{{ group.rep_first_name }} {{ group.rep_last_name }}</div>
-            <div>{{ group.rep_email }}</div>
+            <div><a href="mailto:{{ group.rep_email }}?Subject={{group.name|urlencode}}">{{ group.rep_email }}</a></div>
             <div>{{ group.rep_phone }}</div>
-          </p>
-          
-          <p>
-            <div><a href="{{ group.facebook_url }}">Facebook</a></div>
-            <div><a href="{{ group.twitter_url }}">Twitter</a></div>
-            <div><a href="{{ group.website_url }}">Website</a></div>
-            <div><a href="{{ group.instagram_url }}">Instagram</a></div>
-            <div><a href="{{ group.meetup_url }}">Meetup</a></div>
-            <div>Other Social: {{ group.other_social|urlize }}</div>
           </p>
         </div>
       </div>
-      
-      <div class="col-lg-9 col-md-8 col-sm-8">
-        <h2>Mission</h2>
+  
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <h2 class="mt0">Mission</h2>
+        <hr>
         <p>{{ group.mission_vision }}</p>
         
-        <p>Types of organizing: {{ group.types_of_organizing }}</p>
+        {% if group.types_of_organizing %}
+          <h2>Organizing Focus</h2>
+          <p>{{ group.types_of_organizing }}</p>
+        {% endif %}
         
+        {% if group.recurring_meeting %}
+          <h2>Meeting Info</h2>
+          <hr>
+          <p>{{ group.recurring_meeting }}</p>
+        {% endif %}
         
-        <h2>Meeting Info</h2>
-        <p>
-          <div>Last meeting: {{ group.last_meeting }}</div>
-          <div>Recurring meeting: {{ group.recurring_meeting }}</div>
-        </p>
+        {% if group.issues %}
+          <h2>Focus Issues</h2>
+          <hr>
+          
+          <p>{{ group.issues }}</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div cass="row">
+      <div class="mb20 pt2 pb2 sign-up-form fafafa-bg clearfix">
+        <div class="col-md-6 col-md-offset-3">
+    	    <h3 class="mt0 mb20">Join {{ group.name }}</h3>
+    	    <form action="#" method="POST">
+    	    	<span class="form-group email">
+    	    	  <label for="email">Email Address</label>
+    	    	  <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+    	    	</span>
+
+    	    	<span class="form-group zip ">
+    	    	  <label for="zip">Zip Code</label>
+    	    	  <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+    	    	</span>
+
+    	    	<span class="form-group submit">
+    	    	  <button class="btn btn-primary btn-block uppercase ls2">Join</button>
+    	    	</span>
+    	    </form>
+        </div>
       </div>
     </div>
   </div>
