@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from localflavor.us.models import PhoneNumberField, USStateField, USZipCodeField
+from localflavor.us.models import USStateField, USZipCodeField
+from phonenumber_field.modelfields import PhoneNumberField
+from multiselectfield import MultiSelectField
+from endorsements.models import Issue
 
 
-class Group(models.Model):
+class Group(models.Model):    
     name = models.CharField(max_length=64, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
     state = USStateField(max_length=2, null=True, blank=True)
@@ -14,7 +17,7 @@ class Group(models.Model):
     rep_first_name = models.CharField(max_length=9, null=True, blank=True)
     rep_last_name = models.CharField(max_length=12, null=True, blank=True)
     rep_zip_code = USZipCodeField(null=True, blank=True)
-    rep_phone = models.CharField(null=True, blank=True,max_length=26)
+    rep_phone = PhoneNumberField(null=True, blank=True)
     
     county = models.CharField(max_length=11, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
@@ -24,9 +27,18 @@ class Group(models.Model):
     last_meeting = models.DateTimeField(null=True, blank=True)
     recurring_meeting = models.DateTimeField(null=True, blank=True)
     
-    types_of_organizing = models.TextField(null=True, blank=True)
+    TYPES_OF_ORGANIZING_CHOICES = (
+        ('direct-action', 'Direct Action'),
+        ('electoral', 'Electoral Organizing'),
+        ('legistlative', 'Advocating for Legislation or Ballot Measures'),
+        ('community', 'Community Organizing'),
+        ('other', 'Other')
+    )
+    types_of_organizing = MultiSelectField(null=True, blank=True, choices=TYPES_OF_ORGANIZING_CHOICES)
+    other_types_of_organizing = models.TextField(Issue)
+    
     mission_vision = models.TextField(null=True, blank=True)
-    issues = models.CharField(max_length=257, null=True, blank=True)
+    issues = models.ManyToManyField(Issue)
     leadership_structure = models.TextField(null=True, blank=True)
     constituency = models.TextField(null=True, blank=True)
     leadership_positions = models.TextField(null=True, blank=True)

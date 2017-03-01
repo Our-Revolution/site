@@ -55,7 +55,7 @@
           <p>
             <div>{{ group.rep_first_name }} {{ group.rep_last_name }}</div>
             <div><a href="mailto:{{ group.rep_email }}?Subject={{group.name|urlencode}}">{{ group.rep_email }}</a></div>
-            <div>{{ group.rep_phone }}</div>
+              <div><a href="tel:{{ group.rep_phone }}">{{ group.rep_phone }}</a></div>
           </p>
         </div>
       </div>

@@ -8,3 +8,4 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter = ['state','city','name']
     search_fields = ['name', 'state','city']
     prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ('issues',)
