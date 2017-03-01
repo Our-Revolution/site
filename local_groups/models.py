@@ -35,7 +35,7 @@ class Group(models.Model):
         ('other', 'Other')
     )
     types_of_organizing = MultiSelectField(null=True, blank=True, choices=TYPES_OF_ORGANIZING_CHOICES)
-    other_types_of_organizing = models.TextField(Issue)
+    other_types_of_organizing = models.TextField(null=True, blank=True)
     
     mission_vision = models.TextField(null=True, blank=True)
     issues = models.ManyToManyField(Issue)
