@@ -14,7 +14,7 @@ class Group(models.Model):
     rep_first_name = models.CharField(max_length=9, null=True, blank=True)
     rep_last_name = models.CharField(max_length=12, null=True, blank=True)
     rep_zip_code = USZipCodeField(null=True, blank=True)
-    rep_phone = models.IntegerField(null=True, blank=True)
+    rep_phone = models.CharField(null=True, blank=True,max_length=26)
     
     county = models.CharField(max_length=11, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
