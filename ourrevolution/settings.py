@@ -245,6 +245,7 @@ WAGTAILFRONTENDCACHE = OrderedDict((
         'PROFILE_NAME': 'ourrevcms',
         'REGION': 'us-west-2',
         'PORT': 8080,
+        'HOST_NAMES': ['ourrevolution.com', 'www.ourrevolution.com', 'ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
     }),
 
     ('fastly', {
