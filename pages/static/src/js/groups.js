@@ -1,5 +1,4 @@
-(function($) {
-    
+module.exports = function() {  
   var map, active = null, usedSearch = false, data = {}, mapboxToken = 'pk.eyJ1Ijoib3VycmV2b2x1dGlvbiIsImEiOiJjaXpzdm91M3UwMDA3MzNvY2NhZXZtZ21hIn0.WBmvgFv12o8eEnv2GsZthA';
     
   function init(mapDiv) {
@@ -233,6 +232,5 @@
     getColor: getColor,
     setActive: setActive,
     getActive: getActive
-  }
-  
-})(jQuery);
+  };   
+}();
