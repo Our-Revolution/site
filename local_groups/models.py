@@ -5,27 +5,32 @@ from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
 from endorsements.models import Issue
-
+from django_countries.fields import CountryField
+from recurrence.fields import RecurrenceField
+from address.models import AddressField
 
 class Group(models.Model):    
     name = models.CharField(max_length=64, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
-    state = USStateField(max_length=2, null=True, blank=True)
     signup_date = models.DateTimeField(null=True, blank=True)
     
     rep_email = models.EmailField(null=True, blank=True)
     rep_first_name = models.CharField(max_length=9, null=True, blank=True)
     rep_last_name = models.CharField(max_length=12, null=True, blank=True)
-    rep_zip_code = USZipCodeField(null=True, blank=True)
+    rep_postal_code = models.CharField(max_length=12, null=True, blank=True)
     rep_phone = PhoneNumberField(null=True, blank=True)
     
     county = models.CharField(max_length=11, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
-    
+    state = USStateField(max_length=2, null=True, blank=True)
+    postal_code = models.CharField(max_length=12, null=True, blank=True)
+    country = CountryField(null=True)
+        
     size = models.CharField(max_length=21, null=True, blank=True)
     
     last_meeting = models.DateTimeField(null=True, blank=True)
-    recurring_meeting = models.DateTimeField(null=True, blank=True)
+    recurring_meeting = RecurrenceField(null=True, blank=True)
+    recurring_meeting_location = AddressField(null=True, blank=True)
     
     TYPES_OF_ORGANIZING_CHOICES = (
         ('direct-action', 'Direct Action'),
@@ -37,8 +42,10 @@ class Group(models.Model):
     types_of_organizing = MultiSelectField(null=True, blank=True, choices=TYPES_OF_ORGANIZING_CHOICES)
     other_types_of_organizing = models.TextField(null=True, blank=True)
     
-    mission_vision = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     issues = models.ManyToManyField(Issue)
+    other_issues = models.TextField(null=True, blank=True)
+    
     leadership_structure = models.TextField(null=True, blank=True)
     constituency = models.TextField(null=True, blank=True)
     leadership_positions = models.TextField(null=True, blank=True)

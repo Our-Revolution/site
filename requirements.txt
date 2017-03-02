@@ -12,7 +12,9 @@ boto==2.43.0
 configparser==3.5.0
 decorator==4.0.10
 dj-database-url==0.4.1
+django-address-0.1.5
 django-anymail==0.6.1
+django-countries==4.1
 django-debug-toolbar==1.6
 django-dotenv==1.4.1
 django-gulp==2.5.0
@@ -20,6 +22,7 @@ django-localflavor==1.4.1
 django-modelcluster==2.0
 django-multiselectfield==0.1.5
 django-phonenumber-field==1.1.0
+django-recurrence==1.4.1
 django-storages==1.5.1
 django-taggit==0.18.3
 django-treebeard==4.0.1
@@ -41,6 +44,7 @@ prompt-toolkit==1.0.8
 psutil==4.3.0
 psycopg2==2.6.2
 ptyprocess==0.5.1
+python-dateutil==2.6.0
 pytz==2016.7
 requests==2.11.1
 simplegeneric==0.8.1

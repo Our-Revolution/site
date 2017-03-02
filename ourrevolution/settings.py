@@ -76,9 +76,12 @@ INSTALLED_APPS = [
     #
     'wagtail.contrib.wagtailfrontendcache',
     
-    # Goodies
+    # Group Goodies
     'phonenumber_field',
     'multiselectfield',
+    'django_countries',
+    'recurrence',
+    'address',
 
     # S3
     'storages',
