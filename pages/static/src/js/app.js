@@ -5,4 +5,5 @@ window.smoothScroll = require('smooth-scroll')
 
 var bootstrap = require('bootstrap-sass'),
   List = require('list.js'),
-  validator = require('bootstrap-validator');
+  validator = require('bootstrap-validator'),
+  groups = require('./groups.js');
