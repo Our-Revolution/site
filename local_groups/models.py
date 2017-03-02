@@ -8,6 +8,7 @@ from endorsements.models import Issue
 from django_countries.fields import CountryField
 from recurrence.fields import RecurrenceField
 from address.models import AddressField
+from django.contrib.gis.db.models import PointField
 
 class Group(models.Model):    
     name = models.CharField(max_length=64, null=True, blank=True)
@@ -25,6 +26,7 @@ class Group(models.Model):
     state = USStateField(max_length=2, null=True, blank=True)
     postal_code = models.CharField(max_length=12, null=True, blank=True)
     country = CountryField(null=True)
+    point = PointField(null=True, blank=False)
         
     size = models.CharField(max_length=21, null=True, blank=True)
     

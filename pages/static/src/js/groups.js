@@ -74,63 +74,9 @@ module.exports = function() {
     
     feature.addTo(map);
   }
-
-  function populate() {
-    $.ajax({
-      url: "/api/1/territories",
-      data: {
-        'lat':47.606209,
-        'lng':-122.332071
-      }
-    }).done( function(data) {
-      $.each(data, function(key) {
-        paintGeoJson(JSON.parse(data[key]))
-        updateInfo(JSON.parse(data[key])['features'])
-      })
-    })
-  }
   
   function resetInfo() {
     $('.app-info__status').html('');
-    console.log('reset')
-  }
-  
-  function getColor(feature) {
-    if(feature.properties.model == "map.state") {      
-      if(feature.properties.limited_ice_cooperation == "yes-by-law") {
-        color = "#bf2";
-      } else if(feature.properties.limited_ice_cooperation == "yes-in-practice") {
-        color = "#ff8";
-      } else if(feature.properties.limited_ice_cooperation == "unlimited") {
-        color = "#f22";
-      } else {
-        color = "#bf2";
-      }
-    } else if (feature.properties.model == "map.city") {
-      if(feature.properties.limited_ice_cooperation == "yes-by-law") {
-        color = "#9d0";
-      } else if(feature.properties.limited_ice_cooperation == "yes-in-practice") {
-        color = "#dd6";
-      } else if(feature.properties.limited_ice_cooperation == "unlimited") {
-        color = "#d00";
-      } else {
-        color = "#999";
-      }
-    } else if (feature.properties.model == "map.county") {
-      if(feature.properties.jails_honor_ice_detainers == "yes-by-law") {
-        color = "#9d0";
-      } else if(feature.properties.jails_honor_ice_detainers == "yes-in-practice") {
-        color = "#dd6";
-      } else if(feature.properties.jails_honor_ice_detainers == "unlimited") {
-        color = "#d00";
-      } else {
-        color = "#999";
-      }
-    } else {
-      color = "#000";
-    }
-    
-    return color;
   }
   
   function updateInfo(layers) {
