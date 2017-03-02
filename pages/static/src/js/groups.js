@@ -49,7 +49,6 @@ module.exports = function() {
       
         input.value = '';
         setInterval(function(){
-          
           if(input.placeholder.indexOf('Oops') != -1){
 
             // undo Google grossness
@@ -231,6 +230,7 @@ module.exports = function() {
     getLocationsWithinBounds: getLocationsWithinBounds,
     getColor: getColor,
     setActive: setActive,
-    getActive: getActive
+    getActive: getActive, 
+    monitorAPI: monitorAPI
   };   
 }();

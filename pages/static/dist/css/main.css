@@ -6776,9 +6776,10 @@ h1, h2, h3, h4 {
   padding: 20px;
   margin: 10px 0;
   vertical-align: bottom;
-  position: relative; }
+  position: relative;
+  padding-top: 140px; }
   .page-heading h1, .page-heading--full h1, .page-heading--press h1 {
-    margin: 140px 0 5px 0; }
+    margin: 0 0 5px 0; }
   .page-heading h3, .page-heading--full h3, .page-heading--press h3 {
     margin-top: 0;
     font-weight: normal; }
@@ -6788,6 +6789,8 @@ h1, h2, h3, h4 {
     border-radius: 0;
     margin-top: 0;
     margin-bottom: 0; }
+  .page-heading--small {
+    padding-top: 100px; }
 
 .back-bar {
   background: rgba(0, 0, 0, 0.1);

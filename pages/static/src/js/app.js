@@ -7,13 +7,11 @@ window.Groups = require('./groups.js');
 var bootstrap = require('bootstrap-sass'),
   List = require('list.js'),
   validator = require('bootstrap-validator');
-  
-var autocomplete;
 
 window.initAutocomplete = function initAutocomplete() {		
-  var input = document.getElementById('autocomplete');
+  var input = document.getElementById('autocomplete-input');
   
-  autocomplete = new google.maps.places.Autocomplete(
+  window.autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */(input),
     {
       types: ['geocode'],

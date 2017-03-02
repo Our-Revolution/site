@@ -4,9 +4,15 @@
 
 {% block content %}
 
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
 <div class="container-fluid">
   <div class="row">
-    <div class="page-heading page-heading--full clearfix">
+    <div class="page-heading page-heading--full page-heading--small clearfix">
       <div class="container">
         <h1>Our Groups</h1>
       </div>
@@ -18,7 +24,7 @@
   <div class="row">
     <div class="groups-map-info">
       <div class="groups-map-info__search">
-        <input type="search" class="form-control maps-auto-complete" placeholder="Zip Code, City, or Address" id="autocomplete">
+        <input type="search" class="form-control maps-auto-complete" placeholder="Zip Code, City, or Address" id="autocomplete-input">
       </div>
       
       <div class="groups-map-info__status text-left">
@@ -28,6 +34,13 @@
     <div class="groups-map__map light-wash" id="map-container"></div>
   </div>  
 </div>
+
+<script>
+  var mapDiv = document.getElementById('map-container'),
+    inputDiv = document.getElementById('autocomplete-input');
+  Groups.init(mapDiv);
+  Groups.monitorAPI(inputDiv);
+</script>
 
 <!--  Places Libary for Autocomplete -->
 <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBbScgtw3tU0lX4OG1Ga_JW85Gqpwu0RmA&libraries=places&callback=initAutocomplete" async defer></script>
