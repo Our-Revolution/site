@@ -174,7 +174,6 @@ module.exports = function() {
     addFeature: addFeature,
     updateInfo: updateInfo,
     getLocationsWithinBounds: getLocationsWithinBounds,
-    getColor: getColor,
     setActive: setActive,
     getActive: getActive, 
     monitorAPI: monitorAPI
