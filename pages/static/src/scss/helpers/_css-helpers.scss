@@ -59,7 +59,7 @@
 }
 
 .pt4 {
-  padding-top: 4em;
+  padding-top: 4em !important;
 }
 
 .pb6 {
@@ -263,6 +263,20 @@ a.white-text {
 
 .ha {
   height: auto !important;
+}
+
+.attribution {
+  
+  &--tr {
+    text-shadow: 0 0 3px rgba(0,0,0,1);
+    @extend .attribution;
+    
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+  }
+  
 }
 
 // Backgrounds
@@ -482,6 +496,23 @@ a.white-text {
 
 .map-bg {
   background: darken($blue, 30) url('../img/map-bg.jpg') no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+.ma-rally-bg {
+  background: darken($blue, 30) url('../img/ma-2-25-rally.jpg') no-repeat;
   background-position: center;
   background-size: cover;
   color: white;
