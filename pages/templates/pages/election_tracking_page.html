@@ -42,7 +42,7 @@
             <div class="row">
               <div class="page-heading--full clearfix">
                 <div class="container heading-container">
-                    <div class="status-indicator">Live Results</div>
+                    <!-- <div class="status-indicator">Live Results</div> -->
                     <h1>{{ page.title }}</h1>
                 </div>
               </div>
@@ -103,6 +103,7 @@
                                                         <span class="card__item bottom">{{ candidate.office }}</span>
                                                     </div>
                                                     
+                                                    {% if candidate.}
                                                     <div class="card__item card__item--share">
                                                       <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
                                                       <a href="https://twitter.com/intent/tweet?text={% spaceless %}
@@ -238,6 +239,17 @@
                         </ul>
                       </div>
 
+                      {% else %}
+
+                        <h2>Our Initiatives</h2>
+                        <hr>
+                        
+                        <div id="initiatives-list">
+                        <div class="no-result text-center">
+                          <h3>No Initiatives To Show Yet</h3>
+                          <p>Head over to <a href="/ballot-initiatives/">Our Initiatives</a> to
+                            keep an eye on initiatives we may be endorsing.</p>
+                        </div>
 
                       {% endif %}
                     
@@ -370,7 +382,7 @@
                 FB.ui(
                   {
                     method: 'share',
-                    href: 'https://ourrevolution.com/election-2016',
+                    href: 'https://ourrevolution.com{{ request.path }}',
                   });
 
             });
