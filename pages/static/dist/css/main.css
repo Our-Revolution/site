@@ -9782,7 +9782,7 @@ footer {
 
 .group-map {
   border-top: solid 5px #218fff;
-  margin: 0 -20px -20px;
+  margin: 0 -20px -25px;
   border-radius: 0 0 3px 3px; }
   .group-map iframe {
     border-radius: 0 0 3px 3px; }
@@ -9800,7 +9800,7 @@ footer {
   .groups-map-info__status {
     max-height: calc(100% - 55px);
     overflow: auto;
-    padding: 15px; }
+    padding: 20px; }
   .groups-map-info__search {
     padding: 5px;
     border-bottom: 1px solid #ddd;
@@ -9827,3 +9827,15 @@ footer {
 
 .groups-map .component__description {
   font-size: 14px; }
+
+.groups-map .leaflet-container {
+  font-family: 'Lato', sans-serif; }
+
+.groups-map .leaflet-container a.btn {
+  color: white; }
+
+.groups-map .leaflet-popup-content {
+  margin: 20px; }
+
+.groups-map .leaflet-popup-content-wrapper {
+  border-radius: 3px; }

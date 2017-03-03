@@ -75,6 +75,20 @@ module.exports = function() {
     feature.addTo(map);
   }
   
+  function addMarker(point, popupHTML, tooltipHTML) {
+    var marker = L.marker(point);
+    
+    if (popupHTML) {
+      marker.bindPopup(popupHTML);
+    }
+    
+    if (tooltipHTML) {
+      marker.bindTooltip(tooltipHTML);
+    }
+    
+    marker.addTo(map);
+  }
+  
   function resetInfo() {
     $('.app-info__status').html('');
   }
@@ -176,6 +190,7 @@ module.exports = function() {
     getLocationsWithinBounds: getLocationsWithinBounds,
     setActive: setActive,
     getActive: getActive, 
-    monitorAPI: monitorAPI
+    monitorAPI: monitorAPI,
+    addMarker: addMarker
   };   
 }();

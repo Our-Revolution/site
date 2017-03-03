@@ -1,6 +1,6 @@
 .group-map {
   border-top: solid 5px $blue;
-  margin: 0 -20px -20px;
+  margin: 0 -20px -25px;
   border-radius: 0 0 3px 3px;
 
   iframe {
@@ -25,7 +25,7 @@
     &__status {
       max-height: calc(100% - 55px);
       overflow: auto;
-      padding: 15px;
+      padding: 20px;
     }
     
     &__search {
@@ -64,5 +64,21 @@
     &__description {
       font-size: 14px;
     }
+  }
+  
+  .leaflet-container {
+    font-family: 'Lato', sans-serif;
+  }
+  
+  .leaflet-container a.btn {
+    color: white;
+  }
+  
+  .leaflet-popup-content {
+    margin: 20px;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 3px;
   }
 }

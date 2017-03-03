@@ -10,7 +10,7 @@
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
-<div class="container">
+<div class="container groups-map">
   <div class="row">
     <div class="groups-map-info">
       <div class="groups-map-info__search">
@@ -18,6 +18,7 @@
       </div>
       
       <div class="groups-map-info__status text-left">
+        <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area, or <a href="#">start your own today</a>.</p>
       </div>
     </div>
     
@@ -30,6 +31,12 @@
     inputDiv = document.getElementById('autocomplete-input');
   Groups.init(mapDiv);
   Groups.monitorAPI(inputDiv);
+  
+  {% for group_page in groups %}
+    {% with group_page.grouppage.group as group %}
+      Groups.addMarker(['{{ group.point.y }}','{{ group.point.x }}'],'<h4>{{group.name}}</h4><a href="/groups/{{group.slug}}" class="btn btn-primary btn-block uppercase ls2 white-text">Get Involved</a>');
+    {% endwith %}
+  {% endfor %}
 </script>
 
 <!--  Places Libary for Autocomplete -->
