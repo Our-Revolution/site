@@ -226,21 +226,23 @@ IGNORABLE_404_URLS = [
 WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 
-WAGTAILFRONTENDCACHE = OrderedDict((
+if not DEBUG:
 
-    ('elb-varnish', {
-        'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
-        'LOAD_BALANCER_NAME': 'ourrevcms',
-        'PROFILE_NAME': 'ourrevcms',
-        'REGION': 'us-west-2',
-        'PORT': 8080,
-        'HOST_NAMES': ['ourrevolution.com', 'www.ourrevolution.com', 'ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
-    }),
+    WAGTAILFRONTENDCACHE = OrderedDict((
 
-    ('fastly', {
-        'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-        'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
-        'API_KEY': os.environ.get('FASTLY_API_KEY', None)
-    })
+        ('elb-varnish', {
+            'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
+            'LOAD_BALANCER_NAME': 'ourrevcms',
+            'PROFILE_NAME': 'ourrevcms',
+            'REGION': 'us-west-2',
+            'PORT': 8080,
+            'HOST_NAMES': ['ourrevolution.com', 'www.ourrevolution.com', 'ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
+        }),
 
-))
+        ('fastly', {
+            'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
+            'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
+            'API_KEY': os.environ.get('FASTLY_API_KEY', None)
+        })
+
+    ))

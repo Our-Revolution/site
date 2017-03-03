@@ -489,7 +489,7 @@ class DonationPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(DonationPage, self).get_context(*args, **kwargs)
 
-        reader = csv.DictReader(self.csv_file, fieldnames=['first_name','last_name','range'])
+        reader = csv.DictReader(self.csv_file, fieldnames=['first_name','last_name'])
         reader.next()
         context['donations'] = list(reader)
 
