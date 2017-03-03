@@ -48,9 +48,7 @@ class Group(models.Model):
     issues = models.ManyToManyField(Issue)
     other_issues = models.TextField(null=True, blank=True)
     
-    leadership_structure = models.TextField(null=True, blank=True)
     constituency = models.TextField(null=True, blank=True)
-    leadership_positions = models.TextField(null=True, blank=True)
     
     facebook_url = models.URLField(null=True, blank=True)
     twitter_url = models.URLField(null=True, blank=True)

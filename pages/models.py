@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.core import serializers
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -11,7 +12,8 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
-import csv
+from local_groups.models import Group
+import csv, json
 
 
 class BasePage(Page):
@@ -520,7 +522,19 @@ class GroupIndexPage(Page):
     
     def get_context(self, *args, **kwargs):
         context = super(GroupIndexPage, self).get_context(*args, **kwargs)
-        context['groups'] = self.get_children()
+        
+        groups = Group.objects.all()
+        
+        data = serializers.serialize("python",groups)
+        for d in data:
+            del d['model']
+            del d['pk']
+            del d['fields']['rep_postal_code']
+            del d['fields']['last_meeting']
+            del d['fields']['constituency']
+            d['fields']['signup_date'] = str(d['fields']['signup_date'])
+            
+        context['groups'] = json.dumps(data)
         return context
 
     promote_panels = Page.promote_panels + [

@@ -19,6 +19,7 @@
       
       <div class="groups-map-info__status text-left">
         <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area, or <a href="#">start your own today</a>.</p>
+        
       </div>
     </div>
     
@@ -32,11 +33,15 @@
   Groups.init(mapDiv);
   Groups.monitorAPI(inputDiv);
   
-  {% for group_page in groups %}
-    {% with group_page.grouppage.group as group %}
-      Groups.addMarker(['{{ group.point.y }}','{{ group.point.x }}'],'<h4>{{group.name}}</h4><a href="/groups/{{group.slug}}" class="btn btn-primary btn-block uppercase ls2 white-text">Get Involved</a>');
-    {% endwith %}
-  {% endfor %}
+  var data = {{groups|safe}}
+  
+  for(i=0; i<data.length; i++) {
+    Groups.addGroup(data[i].fields);
+  }
+  
+  
+      // Groups.addMarker(['{{ group.point.y }}','{{ group.point.x }}'],'<h4>{{group.name}}</h4><a href="/groups/{{group.slug}}" class="btn btn-primary btn-block uppercase ls2 white-text">Get Involved</a>');
+      // console.log('{{group|safe }}')
 </script>
 
 <!--  Places Libary for Autocomplete -->

@@ -86,7 +86,17 @@ module.exports = function() {
       marker.bindTooltip(tooltipHTML);
     }
     
+    marker.on('click touchstart', function(e) {
+      console.log(this);
+    });
+    
     marker.addTo(map);
+  }
+  
+  function addGroup(group) {
+    console.log(group);
+    
+    addMarker(group.)
   }
   
   function resetInfo() {
@@ -191,6 +201,7 @@ module.exports = function() {
     setActive: setActive,
     getActive: getActive, 
     monitorAPI: monitorAPI,
-    addMarker: addMarker
+    addMarker: addMarker,
+    addGroup: addGroup
   };   
 }();
