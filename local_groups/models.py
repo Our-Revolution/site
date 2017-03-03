@@ -58,6 +58,14 @@ class Group(models.Model):
     instagram_url = models.URLField(null=True, blank=True)
     meetup_url = models.URLField(null=True, blank=True)
     other_social = models.TextField(null=True, blank=True)
+    
+    STATUSES = (
+       ('submitted', 'Submitted'),
+       ('signed-mou', 'Signed MOU'),
+       ('approved', 'Approved'),
+       ('removed', 'Removed') # can flesh out later
+   ) 
+    status = models.CharField(max_length=16, choices=STATUSES, default='submitted')
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
     # i_p__address = models.CharField(max_length=16, null=True, blank=True)
