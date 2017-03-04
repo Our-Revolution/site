@@ -13,7 +13,7 @@
   &-info {
     padding: 0;
     height: 600px;
-    width: 300px;
+    width: 340px;
     float: left;
     background: #fafafa;
     border: solid 1px #ddd;
@@ -25,7 +25,7 @@
     &__status {
       max-height: calc(100% - 55px);
       overflow: auto;
-      padding: 20px;
+      // padding: 20px;
     }
     
     &__search {
@@ -42,27 +42,41 @@
   
   &__map {
     height: 600px;
-    margin-left: 300px; 
+    margin-left: 340px; 
   }
   
   .component { 
     &__heading{
-      background: #f4f4f4;
-      padding: 1em;
-      border-bottom: 1px solid rgba(0,0,0,.1)
+      // background: #f4f4f4;
+      padding: 20px;
+      // border-bottom: 1px solid rgba(0,0,0,.1)
+    }
+    
+    &__location {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
     }
     
     &__name {
       margin: 0;
+      font-size: 18px;
     }
     
     &__info {
-      padding: 1rem;
+      padding: 5px 20px 20px;
       border-bottom: 1px solid rgba(0,0,0,.1);
     }
     
     &__description {
       font-size: 14px;
+    }
+    
+    .btn {
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      height: auto;
     }
   }
   

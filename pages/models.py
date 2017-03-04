@@ -525,15 +525,17 @@ class GroupIndexPage(Page):
         
         groups = Group.objects.all()
         
-        data = serializers.serialize("python",groups)
-        for d in data:
-            del d['model']
-            del d['pk']
-            del d['fields']['rep_postal_code']
-            del d['fields']['last_meeting']
-            del d['fields']['constituency']
-            d['fields']['signup_date'] = str(d['fields']['signup_date'])
-            
+        geojson_data = serializers.serialize("geojson",groups)
+        
+        data = json.loads(geojson_data)
+        
+        for d in data['features']:
+            del d['properties']['rep_postal_code']
+            del d['properties']['last_meeting']
+            del d['properties']['constituency']
+            del d['properties']['pk']
+            d['properties']['signup_date'] = str(d['properties']['signup_date'])
+        
         context['groups'] = json.dumps(data)
         return context
 

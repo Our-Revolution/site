@@ -14,12 +14,13 @@
   <div class="row">
     <div class="groups-map-info">
       <div class="groups-map-info__search">
-        <input type="search" class="form-control maps-auto-complete" placeholder="Zip Code, City, or Address" id="autocomplete-input">
+        <input type="search" class="form-control maps-auto-complete" placeholder="Postal Code, City, or Address" id="autocomplete-input">
       </div>
-      
+
       <div class="groups-map-info__status text-left">
-        <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area, or <a href="#">start your own today</a>.</p>
-        
+        <div class="component">
+          <p class="pa20">Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area today.</p>
+        </div>
       </div>
     </div>
     
@@ -35,13 +36,9 @@
   
   var data = {{groups|safe}}
   
-  for(i=0; i<data.length; i++) {
-    Groups.addGroup(data[i].fields);
+  for(i=0; i<data.features.length; i++) {
+    Groups.addGroup(data.features[i]);
   }
-  
-  
-      // Groups.addMarker(['{{ group.point.y }}','{{ group.point.x }}'],'<h4>{{group.name}}</h4><a href="/groups/{{group.slug}}" class="btn btn-primary btn-block uppercase ls2 white-text">Get Involved</a>');
-      // console.log('{{group|safe }}')
 </script>
 
 <!--  Places Libary for Autocomplete -->

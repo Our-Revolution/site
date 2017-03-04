@@ -9790,7 +9790,7 @@ footer {
 .groups-map-info {
   padding: 0;
   height: 600px;
-  width: 300px;
+  width: 340px;
   float: left;
   background: #fafafa;
   border: solid 1px #ddd; }
@@ -9799,8 +9799,7 @@ footer {
       height: 300px; } }
   .groups-map-info__status {
     max-height: calc(100% - 55px);
-    overflow: auto;
-    padding: 20px; }
+    overflow: auto; }
   .groups-map-info__search {
     padding: 5px;
     border-bottom: 1px solid #ddd;
@@ -9811,22 +9810,32 @@ footer {
 
 .groups-map__map {
   height: 600px;
-  margin-left: 300px; }
+  margin-left: 340px; }
 
 .groups-map .component__heading {
-  background: #f4f4f4;
-  padding: 1em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+  padding: 20px; }
+
+.groups-map .component__location {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px; }
 
 .groups-map .component__name {
-  margin: 0; }
+  margin: 0;
+  font-size: 18px; }
 
 .groups-map .component__info {
-  padding: 1rem;
+  padding: 5px 20px 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
 
 .groups-map .component__description {
   font-size: 14px; }
+
+.groups-map .component .btn {
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  height: auto; }
 
 .groups-map .leaflet-container {
   font-family: 'Lato', sans-serif; }

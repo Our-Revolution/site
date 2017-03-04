@@ -39,7 +39,7 @@ module.exports = function() {
   }
   
   function positionMap(geometry) {       
-    map.flyTo(geometry, 12, {duration:1});
+    map.flyTo(geometry, 10, {duration:1});
   }
   
   function monitorAPI(input) {
@@ -75,75 +75,77 @@ module.exports = function() {
     feature.addTo(map);
   }
   
-  function addMarker(point, popupHTML, tooltipHTML) {
-    var marker = L.marker(point);
+  function addGroup(group) {
+    var coords = group.geometry.coordinates;
+    var marker = L.marker(coords.reverse());
     
-    if (popupHTML) {
-      marker.bindPopup(popupHTML);
-    }
+    marker.properties = group.properties;
     
-    if (tooltipHTML) {
-      marker.bindTooltip(tooltipHTML);
-    }
+    marker.bindPopup('<h4>'+ group.properties.name + '</h1>');
     
-    marker.on('click touchstart', function(e) {
-      console.log(this);
+    marker.on('click touchstart', function() {
+      updateInfo([this]);
     });
     
     marker.addTo(map);
-  }
-  
-  function addGroup(group) {
-    console.log(group);
     
-    addMarker(group.)
   }
   
   function resetInfo() {
-    $('.app-info__status').html('');
+    $('.groups-map-info__status').html('');
   }
   
-  function updateInfo(layers) {
+  function updateInfo(groups) {
+    var location = '', city, county, state, country;
+    
     resetInfo();
     
-    for (var i=0; i<layers.length; i++) {
+    console.log(groups);
     
-      var description, name = "";
+    for (var i=0; i<groups.length; i++) {    
+      city = groups[i].properties.city;
+      county = groups[i].properties.county;
+      state = groups[i].properties.state;
+      country = groups[i].properties.country;
       
-      if(layers[i].properties.model == "map.county") {
-        name = layers[i].properties.name;
-        
-        if (!layers[i].properties.jails_honor_ice_detainers_short_answer.includes('N/A')) {
-          description = layers[i].properties.jails_honor_ice_detainers_short_answer;
+      if (country == 'US') {
+        if (city && state) {
+          location = city + ', ' + state;
+        } else if (county && state) {
+          location = county + ' County, ' + state;
+        } else if (state) {
+          location = state + ', ' + country ;
+        } else {
+          location = country;
         }
       } else {
-        name = layers[i].properties.name;
-        
-        if (!layers[i].properties.limited_ice_cooperation_short_answer.includes('N/A')) {
-          description = layers[i].properties.limited_ice_cooperation_short_answer;
+        if (city && state) {
+          location = city + ', ' + state + ', ' + country;
+        } else if (county && state) {
+          location = county + ' County, ' + state + ', ' + country;
+        } else if (state) {
+          location = state + ', ' + country ;
+        } else if (city) {
+          location = city + ', ' + country;
+        } else {
+          location = country;
         }
       }
       
-      if (!description) {
-        description = "Click the button below to learn more about " + layers[i].properties.name + "'s policies and how you can get involved."
-      }
-                
-      layers[i].options.oldColor = layers[i].options.color;
-      
-      $('.app-info__status').prepend('\
+      // TODO: show recurring meeting here instead
+      description = groups[i].properties.description;
+       
+      $('.groups-map-info__status').append('\
         <div class="component">\
           <div class="component__heading">\
-            <h4 class="component__name">' + name + '</h4>\
+            <span class="component__location">' + location + '</span>\
+            <h4 class="component__name">' + groups[i].properties.name + '</h4>\
           </div>\
           <div class="component__info">\
-            <p class="component__description">\
-              ' + description + '\
-            </p>\
-            <a href="/'+ layers[i].properties.slug +'" class="component__cta btn btn-block btn-primary">Learn More & Get Involved</a>\
+            <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
           </div> \
         </div>\
       ');
-      
     }
     
   }
@@ -152,14 +154,15 @@ module.exports = function() {
     var layers = [], t0 = performance.now();
     
     map.eachLayer(function (layer) {
-      if(layer.properties) {
-        layer.eachLayer(function (sublayer) {              
-          if(bounds.intersects(sublayer.getBounds())) {
-            layers.push(layer);
-          }
-        })
-      }
+      console.log(12);
+      console.log(layer);
       
+      if(layer.properties) {
+        if(bounds.contains(layer._latlng)) {
+          console.log('eys');
+          layers.push(layer);
+        }
+      }
     });
     
     updateInfo(layers);
@@ -201,7 +204,6 @@ module.exports = function() {
     setActive: setActive,
     getActive: getActive, 
     monitorAPI: monitorAPI,
-    addMarker: addMarker,
     addGroup: addGroup
   };   
 }();
