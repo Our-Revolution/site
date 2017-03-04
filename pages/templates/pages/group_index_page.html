@@ -1,0 +1,47 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+<div class="container groups-map">
+  <div class="row">
+    <div class="groups-map-info">
+      <div class="groups-map-info__search">
+        <input type="search" class="form-control maps-auto-complete" placeholder="Postal Code, City, or Address" id="autocomplete-input">
+      </div>
+
+      <div class="groups-map-info__status text-left">
+        <div class="component">
+          <p class="pa20">Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area today.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="groups-map__map light-wash" id="map-container"></div>
+  </div>  
+</div>
+
+<script>
+  var mapDiv = document.getElementById('map-container'),
+    inputDiv = document.getElementById('autocomplete-input');
+  Groups.init(mapDiv);
+  Groups.monitorAPI(inputDiv);
+  
+  var data = {{groups|safe}}
+  
+  for(i=0; i<data.features.length; i++) {
+    Groups.addGroup(data.features[i]);
+  }
+</script>
+
+<!--  Places Libary for Autocomplete -->
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBbScgtw3tU0lX4OG1Ga_JW85Gqpwu0RmA&libraries=places&callback=initAutocomplete" async defer></script>
+
+{% endblock %}

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 
     # 'debug_toolbar',
 
@@ -75,6 +76,13 @@ INSTALLED_APPS = [
 
     #
     'wagtail.contrib.wagtailfrontendcache',
+    
+    # Group Goodies
+    'phonenumber_field',
+    'multiselectfield',
+    'django_countries',
+    'recurrence',
+    'address',
 
     # S3
     'storages',
@@ -82,8 +90,11 @@ INSTALLED_APPS = [
     # OR.
     'endorsements',
     'pages',
-    'social_redirects'
+    'social_redirects',
+    'local_groups',
 ]
+
+PHONENUMBER_DB_FORMAT = "E164"
 
 SERVER_EMAIL = "bugtroll@ourrevolution.com"
 

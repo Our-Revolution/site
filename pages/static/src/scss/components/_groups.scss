@@ -1,0 +1,98 @@
+.group-map {
+  border-top: solid 5px $blue;
+  margin: 0 -20px -25px;
+  border-radius: 0 0 3px 3px;
+
+  iframe {
+    border-radius: 0 0 3px 3px;
+  }
+}
+
+//groups-map
+.groups-map {
+  &-info {
+    padding: 0;
+    height: 600px;
+    width: 340px;
+    float: left;
+    background: #fafafa;
+    border: solid 1px #ddd;
+    
+    @include until($medium) {
+      height: 300px;
+    };
+    
+    &__status {
+      max-height: calc(100% - 55px);
+      overflow: auto;
+      // padding: 20px;
+    }
+    
+    &__search {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+      background: #f5f5f5;
+    
+      input {
+        border-radius: 3px;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+  
+  &__map {
+    height: 600px;
+    margin-left: 340px; 
+  }
+  
+  .component { 
+    &__heading{
+      // background: #f4f4f4;
+      padding: 20px;
+      // border-bottom: 1px solid rgba(0,0,0,.1)
+    }
+    
+    &__location {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    
+    &__name {
+      margin: 0;
+      font-size: 18px;
+    }
+    
+    &__info {
+      padding: 5px 20px 20px;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+    }
+    
+    &__description {
+      font-size: 14px;
+    }
+    
+    .btn {
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      height: auto;
+    }
+  }
+  
+  .leaflet-container {
+    font-family: 'Lato', sans-serif;
+  }
+  
+  .leaflet-container a.btn {
+    color: white;
+  }
+  
+  .leaflet-popup-content {
+    margin: 20px;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 3px;
+  }
+}

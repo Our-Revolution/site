@@ -134,6 +134,40 @@ h1, h2, h3, h4 {
   @include text-indent();
 }
 
+.instagram-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background-image: url('../img/icons/instagram-white.svg');
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  float: left;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @include text-indent();
+}
+
+.meetup-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background-image: url('../img/stop-tpp/facebook-icon.svg');
+  background-position: center center;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  float: left;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @include text-indent();
+}
+
 .press-share {
   margin-bottom: 30px;
 
@@ -216,16 +250,18 @@ h1, h2, h3, h4 {
 }
 
 .page-heading {
-  background: url('../img/bg_4.jpg') center center;
+  background: $blue;
   background-size: cover;
   color: white;
   border-radius: 3px;
   padding: 20px;
   margin: 10px 0;
   vertical-align: bottom;
+  position: relative;
+  padding-top: 140px;
 
   h1 {
-    margin: 140px 0 5px 0;
+    margin: 0 0 5px 0;
   }
 
   h3 {
@@ -243,6 +279,27 @@ h1, h2, h3, h4 {
     border-radius: 0;
     margin-top: 0;
     margin-bottom: 0;
+  }
+  
+  &--small {
+    padding-top: 100px;
+  }
+}
+
+.back-bar {
+  background: rgba(0,0,0,0.1);
+  padding: 15px;
+}
+
+.social-bar {
+  padding: 10px;
+  background: rgba(0,0,0,0.1);
+  
+  .social-icon {
+    margin: 2px 5px;
+    
+    height: 15px;
+    width: 15px;
   }
 }
 

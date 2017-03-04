@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.core import serializers
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -11,7 +12,8 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
-import csv
+from local_groups.models import Group
+import csv, json
 
 
 class BasePage(Page):
@@ -494,3 +496,49 @@ class DonationPage(Page):
         context['donations'] = list(reader)
 
         return context
+        
+## LOCAL GROUPS
+
+class GroupPage(Page):
+    body = RichTextField()
+    group = models.ForeignKey('local_groups.Group', null=True, blank=True, on_delete=models.SET_NULL)
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    parent_page_types = ['pages.GroupIndexPage']
+
+
+    content_panels = Page.content_panels + [
+            FieldPanel('body', classname="full"),
+            FieldPanel('group')
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
+
+class GroupIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    subpage_types = ['pages.GroupPage']
+    
+    def get_context(self, *args, **kwargs):
+        context = super(GroupIndexPage, self).get_context(*args, **kwargs)
+        
+        groups = Group.objects.all()
+        
+        geojson_data = serializers.serialize("geojson",groups)
+        
+        data = json.loads(geojson_data)
+        
+        for d in data['features']:
+            del d['properties']['rep_postal_code']
+            del d['properties']['last_meeting']
+            del d['properties']['constituency']
+            del d['properties']['pk']
+            d['properties']['signup_date'] = str(d['properties']['signup_date'])
+        
+        context['groups'] = json.dumps(data)
+        return context
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
