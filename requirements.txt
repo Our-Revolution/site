@@ -12,7 +12,7 @@ boto==2.43.0
 configparser==3.5.0
 decorator==4.0.10
 dj-database-url==0.4.1
-django-address-0.1.5
+django-address==0.1.5
 django-anymail==0.6.1
 django-countries==4.1
 django-debug-toolbar==1.6
