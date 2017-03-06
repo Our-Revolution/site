@@ -165,7 +165,7 @@ module.exports = function() {
       }
     });
     
-    updateInfo(layers);
+    updateInfo(layers.reverse());
     var t1 = performance.now();
     console.log("Call took " + (t1 - t0) + " milliseconds.")
     usedSearch = false;

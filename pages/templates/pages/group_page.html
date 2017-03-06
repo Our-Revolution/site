@@ -91,7 +91,7 @@
           <p>{{ group.description }}</p>
         
           {% if group.types_of_organizing %}
-            <h2>Organizing Focus</h2>
+            <h2>Types of Organizing</h2>
             <hr>
             <!-- TODO: Can we make this a list? -->
             <p>{{ group.get_types_of_organizing_display }}</p>
@@ -114,7 +114,7 @@
       </div>
     </div>
     
-    <div cass="row">
+    <!-- <div cass="row">
       <div class="mb20 pt2 pb2 sign-up-form f5f5f5-bg clearfix">
         <div class="col-md-6 col-md-offset-3">
     	    <h3 class="mt0 mb20">Join {{ group.name }}</h3>
@@ -135,27 +135,9 @@
     	    </form>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
 {% endwith %}
-
-<!-- <div class="container pt4 pb4">
-  <div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <h1>We presently have not endorsed any new initiatives for the 2017 elections.</h1>
-    
-    <p class="fs18">Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our new slate of ballot initiatives.</p>
-    
-    <p class="fs18"><strong>In the meantime, you can view our past election results below.</strong></p>
-    
-    <div class="row">
-      <div class="col-md-12">
-        <a href="/election-2016" class="btn btn-primary btn-block ls2 uppercase mt20">View Election Results</a>
-      </div>
-    </div>
-  </div>
-  </div>
-</div> -->
 
 {% endblock %}
