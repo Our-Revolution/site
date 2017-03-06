@@ -265,6 +265,10 @@ a.white-text {
   height: auto !important;
 }
 
+.prel {
+  position: relative;
+}
+
 .attribution {
   
   &--tr {
@@ -276,7 +280,6 @@ a.white-text {
     right: 20px;
     text-align: right;
   }
-  
 }
 
 // Backgrounds

@@ -1,0 +1,143 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+{% with page.group as group %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="blue-bg white-text">  
+        <div class="back-bar">
+          <div class="container">
+            <a href="/groups" class="link dim white"><strong>< Browse All Groups</strong></a>
+          </div>
+        </div>
+        
+        <div class="container pt6">
+          <p class="mb0">
+            {% with group.city|add:", "|default:"" as city %}
+              {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+            {% endwith %}</p>
+          <h1 class="fw7 mt0">{{ group.name }}</h1>
+        </div>
+        
+        {% if group.website_url or group.facebook_url or group.twitter_url or group.instagram_url %}
+          <div class="social-bar">
+            <div class="container">
+              {% if group.website_url %}
+                <a href="{{ group.website_url }}" class="pull-left">{{ group.website_url }}</a>
+              {% endif %}
+              
+              {% if group.facebook_url %}
+                <a href="{{ group.facebook_url }}" class="social-icon facebook-icon">Facebook</a>
+              {% endif %}
+              
+              {% if group.twitter_url %}
+                <a href="{{ group.twitter_url }}" class="social-icon twitter-icon">Twitter</a>
+              {% endif %}
+              
+              {% if group.instagram_url %}
+                <a href="{{ group.instagram_url }}" class="social-icon instagram-icon">Instagram</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="row pt2 pb2">
+      <div class="col-md-4 col-sm-5">
+        <div class="f5f5f5-bg pa20 br3 mb20">
+          {% if group.rep_email %}
+            <h3 class="mt0 mb0">Group Representative</h3>
+            <div><strong>{{ group.rep_first_name }} {{ group.rep_last_name }}</strong></div>
+            <div><a href="mailto:{{ group.rep_email }}?Subject={{group.name|urlencode}}">{{ group.rep_email }}</a></div>
+            <div><a href="tel:{{ group.rep_phone }}">{{ group.rep_phone }}</a></div>
+          {% else %}
+            <h4 class="mt0">Contact</h4>
+            <p>We don't have any contact information for this group. If you're a representative of {{ group.name }}, please email us at <a href="mailto:info@ourrevolution.com?Subject={{ 'Add my local group'|urlencode }}">info@ourrevolution.com</a>.</p>
+          {% endif %}
+          
+          {% if group.recurring_meeting %}
+            <h3 class="mb0">Meeting Info</h3>
+            {% for rule in group.recurring_meeting.rrules %}
+              <p class="mb0">{{ rule.to_text | capfirst }}</p>
+              {% if group.recurring_meeting_location %}
+                <p><a href="https://maps.google.com?q={{group.recurring_meeting_location.raw|urlencode}}" target="_blank">{{group.recurring_meeting_location.raw}}</a></p>
+                
+                <div class="group-map">
+                  <iframe
+                    width="100%"
+                    height="300"
+                    frameborder="0" style="border:0;"
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg
+                      &q={{group.recurring_meeting_location.raw|urlencode}}" class="light-wash" allowfullscreen>
+                  </iframe>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+  
+      <div class="col-md-8 col-sm-7">
+        {% if group.description %}
+          <h2 class="mt0">Mission</h2>
+          <hr>
+          <p>{{ group.description }}</p>
+        
+          {% if group.types_of_organizing %}
+            <h2>Types of Organizing</h2>
+            <hr>
+            <!-- TODO: Can we make this a list? -->
+            <p>{{ group.get_types_of_organizing_display }}</p>
+          {% endif %}
+          
+          {% if group.issues %}
+            <h2>Focus Issues</h2>
+            <hr>
+            
+            <ul>
+            {% for issue in group.issues.all %}
+              <li>{{ issue }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% else %}
+          <h2 class="mt0">We could use some help.</h2>
+          <p>We don't have much information on this group yet. If you're a representative of {{ group.name }}, please email us at <a href="mailto:info@ourrevolution.com?Subject={{ 'Add my local group'|urlencode }}">info@ourrevolution.com</a>.</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- <div cass="row">
+      <div class="mb20 pt2 pb2 sign-up-form f5f5f5-bg clearfix">
+        <div class="col-md-6 col-md-offset-3">
+    	    <h3 class="mt0 mb20">Join {{ group.name }}</h3>
+    	    <form action="#" method="POST">
+    	    	<span class="form-group email">
+    	    	  <label for="email">Email Address</label>
+    	    	  <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+    	    	</span>
+
+    	    	<span class="form-group zip ">
+    	    	  <label for="zip">Zip Code</label>
+    	    	  <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+    	    	</span>
+
+    	    	<span class="form-group submit">
+    	    	  <button class="btn btn-primary btn-block uppercase ls2">Join</button>
+    	    	</span>
+    	    </form>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+{% endwith %}
+
+{% endblock %}
