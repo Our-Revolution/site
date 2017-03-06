@@ -151,6 +151,7 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 
 # Password validation
