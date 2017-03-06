@@ -102,11 +102,11 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 if str(npm_install).lower() == 'true':
                     run('npm install')
 
-                if env.env_name == 'production':
-                    run('./manage.py collectstatic --noinput')
-
                 if str(pip_install).lower() == 'true':
                     run('pip install -r requirements.txt')
+
+                if env.env_name == 'production':
+                    run('./manage.py collectstatic --noinput')
 
                 if str(migrate).lower() == 'true':
                     run('./manage.py migrate')
