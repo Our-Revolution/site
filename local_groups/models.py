@@ -12,7 +12,7 @@ from django.contrib.gis.db.models import PointField
 
 class Group(models.Model):    
     name = models.CharField(max_length=64, null=True, blank=True)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     signup_date = models.DateTimeField(null=True, blank=True)
     
     rep_email = models.EmailField(null=True, blank=True)

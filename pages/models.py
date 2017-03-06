@@ -3,6 +3,7 @@ from django.db import models
 from django.core import serializers
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
@@ -499,30 +500,9 @@ class DonationPage(Page):
         
 ## LOCAL GROUPS
 
-class GroupPage(Page):
-    body = RichTextField()
-    group = models.ForeignKey('local_groups.Group', null=True, blank=True, on_delete=models.SET_NULL)
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-    parent_page_types = ['pages.GroupIndexPage']
-
-
-    content_panels = Page.content_panels + [
-            FieldPanel('body', classname="full"),
-            FieldPanel('group')
-        ]
-
-    promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
-
-
-class GroupIndexPage(Page):
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-    subpage_types = ['pages.GroupPage']
-    
-    def get_context(self, *args, **kwargs):
-        context = super(GroupIndexPage, self).get_context(*args, **kwargs)
-        
+class GroupPage(RoutablePageMixin, Page):    
+    @route(r'^$')
+    def index_view(self, request):
         groups = Group.objects.all()
         
         geojson_data = serializers.serialize("geojson",groups)
@@ -536,9 +516,18 @@ class GroupIndexPage(Page):
             del d['properties']['pk']
             d['properties']['signup_date'] = str(d['properties']['signup_date'])
         
-        context['groups'] = json.dumps(data)
-        return context
-
-    promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        groups_data = json.dumps(data)
+        
+        return render(request, 'pages/group_index_page.html', {
+            'page': self,
+            'groups':groups_data
+        })
+        
+    @route(r'^(.+)/$')
+    def group_view(self, request, group_slug):
+        group = get_object_or_404(Group, slug=group_slug)
+        
+        return render(request, 'pages/group_page.html', {
+            'page': self,
+            'group':group
+        })
