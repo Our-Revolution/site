@@ -76,6 +76,7 @@ INSTALLED_APPS = [
 
     #
     'wagtail.contrib.wagtailfrontendcache',
+    'wagtail.contrib.wagtailroutablepage',
     
     # Group Goodies
     'phonenumber_field',
