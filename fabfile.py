@@ -148,7 +148,7 @@ def config_set(**kwargs):
                 run('sudo service varnish stop')
                 run('supervisorctl stop gunicorn')
                 run('cat supervisord.pid | xargs kill', warn_only=True)
-                run('supervisord -c supervisord.conf')
+                run('supervisord -c supervisord.conf', warn_only=True)
                 time.sleep(1)
                 run('supervisorctl reload')
                 run('supervisorctl start gunicorn')
