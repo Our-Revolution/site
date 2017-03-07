@@ -3,6 +3,7 @@ from django.db import models
 from django.core import serializers
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404  
 from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -526,6 +527,9 @@ class GroupPage(RoutablePageMixin, Page):
     @route(r'^(.+)/$')
     def group_view(self, request, group_slug):
         group = get_object_or_404(Group, slug=group_slug)
+        
+        if group.status != 'approved':
+            raise Http404
         
         return render(request, 'pages/group_page.html', {
             'page': self,
