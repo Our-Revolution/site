@@ -79,8 +79,6 @@ module.exports = function() {
     var coords = group.geometry.coordinates;
     var marker = L.marker(coords.reverse());
     
-    console.log(coords)
-    
     marker.properties = group.properties;
     
     marker.bindPopup('<h4>'+ group.properties.name + '</h1>');
