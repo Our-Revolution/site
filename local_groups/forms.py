@@ -31,8 +31,8 @@ class GisForm(forms.ModelForm):
         try:    
             coordinates = kwargs['instance'].point.tuple    #If PointField exists 
             initial = kwargs.get('initial', {})    
-            initial['latitude'] = coordinates[0]    #Set Latitude from coordinates
-            initial['longitude'] = coordinates[1]    #Set Longitude from coordinates
+            initial['longitude'] = coordinates[0]    #Set Longitude from coordinates
+            initial['latitude'] = coordinates[1]    #Set Latitude from coordinates
             kwargs['initial'] = initial
         except (KeyError, AttributeError):
             pass
