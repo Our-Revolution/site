@@ -99,9 +99,7 @@ module.exports = function() {
     var location = '', city, county, state, country;
     
     resetInfo();
-    
-    console.log(groups);
-    
+        
     for (var i=0; i<groups.length; i++) {    
       city = groups[i].properties.city;
       county = groups[i].properties.county;
@@ -154,12 +152,9 @@ module.exports = function() {
     var layers = [], t0 = performance.now();
     
     map.eachLayer(function (layer) {
-      console.log(12);
-      console.log(layer);
       
       if(layer.properties) {
         if(bounds.contains(layer._latlng)) {
-          console.log('eys');
           layers.push(layer);
         }
       }
@@ -167,7 +162,6 @@ module.exports = function() {
     
     updateInfo(layers.reverse());
     var t1 = performance.now();
-    console.log("Call took " + (t1 - t0) + " milliseconds.")
     usedSearch = false;
   }
   
