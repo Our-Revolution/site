@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import *
-from .widgets import LatLongWidget
-from django.contrib.gis.db import models as geomodels
+from .forms import GisForm
 
 # Register your models here.
 @admin.register(Group)
@@ -11,6 +10,4 @@ class GroupAdmin(admin.ModelAdmin):
     search_fields = ['name', 'state','city']
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)
-    formfield_overrides = {
-        geomodels.PointField: {'widget': LatLongWidget}
-    }
+    form = GisForm
