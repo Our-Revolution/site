@@ -1,9 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    {% load static %}
-    {% load wagtailcore_tags %}
-    {% load wagtailimages_tags %}
+    {% load bootstrap3 static wagtailcore_tags wagtailimages_tags %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>{% block page_title %}Our Revolution - {% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
@@ -60,6 +58,8 @@
 </head>
 <body class="no-padding">
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
+
+    {% bootstrap_messages %}
         
     {% include "partials/nav.html" %}
         

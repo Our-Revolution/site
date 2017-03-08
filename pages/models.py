@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.core import serializers
+from django.core.mail import send_mail
+from django.contrib import messages
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect  
@@ -528,20 +530,31 @@ class GroupPage(RoutablePageMixin, Page):
     @route(r'^new/$')
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
+        form = GroupForm(request.POST or None)
+        
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:
-            form = GroupForm(request.POST)
             # check whether it's valid:
             if form.is_valid():
                 form.save()
                 # process the data in form.cleaned_data as required
-                # ...
+
+                send_mail(
+                    subject='Thank you for submitting your group',
+                    message='Message goes here.',
+                    from_email='Our Revolution Organizing <organizing@ourrevolution.com>',
+                    recipient_list=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
+                                                    form.cleaned_data['rep_last_name'],
+                                                    form.cleaned_data['rep_email'])],
+                    fail_silently=True)
+                
+                messages.success(request, 'Your group has been created.')
+
                 # redirect to a new URL:
                 return HttpResponseRedirect('/groups/')
 
-        # if a GET (or any other method) we'll create a blank form
-        else:
-            form = GroupForm()
+            else:
+                print form.errors
 
         return render(request, 'pages/add_group.html', {'form': form})
         
