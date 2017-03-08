@@ -25,8 +25,8 @@
     <div class="row">      
       <div class="container pa20 pb20 fs16">
   			<div class="col-md-12">
-          <h2>Individual Contributions</h2>
-          <hr />
+          <h2>Contributions</h2>
+          <hr/>
   				<ul class="lst0 pa0 list-3-col clearfix">
   					{% for donor in donations %}
     				  <li>{{ donor.first_name }} {{ donor.last_name }}</li>
@@ -35,18 +35,7 @@
         </div>
       </div>
     </div>
-
-    <div class="row">      
-      <div class="container pa20 pb20 fs16">
-        <div class="col-md-12">
-          <h2>Group Contributions</h2>
-          <hr />
-          <ul class="lst0 pa0 list-3-col clearfix">
-            <li>National Nurses United</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  </div>
 
   </div>
 {% endblock %}
