@@ -9475,6 +9475,10 @@ footer {
 .sign-up-form.new button {
   margin-top: 10px; }
 
+.form-group.required .control-label:after {
+  display: inline-block;
+  content: "*"; }
+
 .splash {
   width: 100%;
   background-color: #001021;

@@ -130,3 +130,10 @@
   }
 
 }
+
+.form-group.required {
+  .control-label:after {
+    display: inline-block;
+    content: "*";
+  }
+}
