@@ -1,0 +1,190 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+{% bootstrap_messages %}
+
+<div class="blue-bg white-text">  
+  <div class="back-bar">
+    <div class="container">
+      <a href="/groups" class="link dim white"><strong>< Browse All Groups</strong></a>
+    </div>
+  </div>
+  
+  <div class="container pt2 pb2">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1 class="fw7 mt0 mb0">Add Your Group</h1>
+        <p class="fs18">Our Revolution is made up of local groups from all around the world. To add your existing group to <a href="/groups"><strong>ourrevolution.com/groups</strong></a>, begin by filling out the form below.</p>
+        
+        <p class="fs18">Don't have a group? Visit our <a href="#"><strong>organizing resources</strong></a> to find out how you can start one.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid pb2">
+  <div class="row">
+    <form action="/groups/new/" method="post" class="form">
+      <script>
+        // @TODO: Remove this hack when django-recurrence internationalization detection
+        // is fixed or when i18n support is added to Knock
+        if (!pgettext) {
+          function pgettext(ignore, t) {
+              return gettext(t);
+          }
+        }
+      </script>
+      
+      {{form.media}}
+      {% csrf_token %}
+        <div class="pt2 pb2 clearfix">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
+                  <h2>1. Group Information</h2>
+                  <p>We need some basic information about your group, including your group's name, location, and a short description of your group's mission to display on our website.</p>
+                  
+                  {% bootstrap_field form.name placeholder="Our Revolution Burlington" %}
+                  {% bootstrap_field form.description placeholder="Our Revolution is the successor to the Bernie Sanders campaign, and empowers individuals to work toward furthering a platform that works for all of us." %}
+                </div>
+                
+                <div class="col-md-6">
+                  {% bootstrap_field form.county placeholder="Chittenden County" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.city placeholder="Burlington" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.state %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.country %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.size placeholder="27" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt2 pb2 clearfix f5f5f5-bg">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
+                  <h2>2. Public Group Representative</h2>
+                  <p>We want to drive people to your group, so we need to give them someone to reach out to. This information will be visible on our website, so don't share any information you don't want made public. Our Revolution will also use this information to get in touch with you regarding your local group.</p>
+                </div>
+                
+                <div class="col-md-12">
+                  {% bootstrap_field form.rep_email placeholder="organizing@ourrevolution.com" title="Group Name" %}
+                </div>
+                
+                <div class="col-md-6">
+                  {% bootstrap_field form.rep_first_name placeholder="Jane" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.rep_last_name placeholder="Doe" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.rep_phone placeholder="(555) 555-5555" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.rep_postal_code placeholder="05401" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt2 pb2 clearfix">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
+                  <h2>3. Online Presence</h2>
+                  <p>In order to grow and maintain your group, it's important for you to be easily discoverable and engaged with your members. We'll share your social media accounts and website with anyone who views your local group page on our website.</p>
+                </div>
+                
+                <div class="col-md-6">
+                  {% bootstrap_field form.website_url placeholder="https://ourrevolution.com" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.facebook_url placeholder="https://facebook.com/PoliticalRevolution" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.twitter_url placeholder="https://twitter.com/OurRevolution" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.instagram_url placeholder="https://www.instagram.com/berniesanders" %}
+                </div>
+                <div class="col-md-6">
+                  {% bootstrap_field form.other_social placeholder="https://meetup.com, https://plus.google.com, etc." %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt2 pb2 clearfix f5f5f5-bg">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
+                  <h2>4. Issues & Organizing Focus</h2>
+                  <p>If your group is organizing around specific issues, actions, or constituencies, let your potential members know.</p>
+                </div>
+                
+                <div class="col-md-12">
+                  {% bootstrap_field form.types_of_organizing %}
+                  <span id="#other_types_of_organizing" class="hidden">{% bootstrap_field form.other_types_of_organizing %}</span>
+                  {% bootstrap_field form.issues %}
+                  {% bootstrap_field form.other_issues %}
+                  {% bootstrap_field form.constituency %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt2 pb2 clearfix">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-12">
+                  <h2>5. Group Meeting Information</h2>
+                  <p>If you host local recurring meetings, we want to help you get people to them. If you haven't hosted any meetings or don't have any planned, you can leave this section blank. Visit our <a href="#">organizing resources</a> for help planning and hosting events.</p>
+                  {% bootstrap_field form.last_meeting %}
+                  <div class="clearfix mb20">
+                    <div>{% bootstrap_label "Recurring Meeting" label_for="recurring_meeting" %}</div>
+                    {{ form.recurring_meeting }}
+                  </div>
+                  {% bootstrap_field form.recurring_meeting_location %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary btn-block uppercase ls2">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

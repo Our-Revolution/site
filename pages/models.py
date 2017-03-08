@@ -3,7 +3,7 @@ from django.db import models
 from django.core import serializers
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404  
+from django.http import Http404, HttpResponseRedirect  
 from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -17,6 +17,7 @@ from modelcluster.fields import ParentalKey
 from local_groups.models import Group
 import csv, json
 
+from .forms import GroupForm
 
 class BasePage(Page):
     body = RichTextField(null=True, blank=True)
@@ -523,6 +524,26 @@ class GroupPage(RoutablePageMixin, Page):
             'page': self,
             'groups':groups_data
         })
+        
+    @route(r'^new/$')
+    def add_group_view(self, request):
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':
+            # create a form instance and populate it with data from the request:
+            form = GroupForm(request.POST)
+            # check whether it's valid:
+            if form.is_valid():
+                form.save()
+                # process the data in form.cleaned_data as required
+                # ...
+                # redirect to a new URL:
+                return HttpResponseRedirect('/groups/')
+
+        # if a GET (or any other method) we'll create a blank form
+        else:
+            form = GroupForm()
+
+        return render(request, 'pages/add_group.html', {'form': form})
         
     @route(r'^(.+)/$')
     def group_view(self, request, group_slug):

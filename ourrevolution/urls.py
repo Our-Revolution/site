@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.i18n import javascript_catalog
 
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
@@ -26,3 +27,12 @@ urlpatterns += [
     url(r'^admin/', admin.site.urls),
     url(r'', include(wagtail_urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# django-recurrence hack
+js_info_dict = {
+    'packages': ('recurrence', )
+}
+
+urlpatterns += [
+    url(r'^jsi18n/$', javascript_catalog, js_info_dict)
+]

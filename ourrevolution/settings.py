@@ -84,6 +84,8 @@ INSTALLED_APPS = [
     'django_countries',
     'recurrence',
     'address',
+    
+    'bootstrap3',
 
     # S3
     'storages',
@@ -222,6 +224,7 @@ TEST_RUNNER = 'pages.tests.NoDbTestRunner'
 MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', None)
 MAILGUN_SENDER_DOMAIN = os.environ.get('MAILGUN_SENDER_DOMAIN', None)
 
+GOOGLE_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', None)
 
 ANYMAIL = {
     'MAILGUN_API_KEY': MAILGUN_API_KEY,
