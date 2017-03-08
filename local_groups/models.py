@@ -26,7 +26,7 @@ class Group(models.Model):
     state = USStateField(max_length=2, null=True, blank=True)
     postal_code = models.CharField(max_length=12, null=True, blank=False, verbose_name="Postal Code")
     country = CountryField(null=True, blank=False)
-    point = PointField(null=True, blank=False)
+    point = PointField(null=True, blank=True)
         
     size = models.CharField(max_length=21, null=True, blank=True, verbose_name="Group Size")
     

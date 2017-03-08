@@ -145,10 +145,11 @@
                 </div>
                 
                 <div class="col-md-12">
-                  <span id="#other_types_of_organizing" class="hidden">{% bootstrap_field form.other_types_of_organizing %}</span>
+                  {% bootstrap_field form.types_of_organizing %}
+                  <span id="other_types_of_organizing" class="hidden">{% bootstrap_field form.other_types_of_organizing %}</span>
                   
                   <label>Issues</label>
-                  <div style="column-count:3" class="mb20">
+                  <div class="list-3-col mb20">
                     {% bootstrap_field form.issues show_label=False %}
                   </div>
                   {% bootstrap_field form.other_issues %}
@@ -192,5 +193,17 @@
   </div>
 </div>
 
+
+<script>
+  $('#id_types_of_organizing').on('change', function(e) {    
+    if($(e.target).val() == 'other'){
+      if($(e.target).prop('checked')) {
+        $('#other_types_of_organizing').removeClass('hidden');
+      } else {
+        $('#other_types_of_organizing').addClass('hidden');
+      }
+    }
+  })
+</script>
 
 {% endblock %}
