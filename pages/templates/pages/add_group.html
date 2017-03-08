@@ -149,13 +149,7 @@
                   
                   <label>Issues</label>
                   <div style="column-count:3" class="mb20">
-                    {% for value, text in form.issues.field.choices %}
-                      <div class="checkbox">
-                        <label>
-                          <input id="id_issues_{{ forloop.counter0 }}" name="{{ form.issues.name }}" type="checkbox" value="{{ value }}"{% if value in checked_issues %} checked="checked"{% endif %}> {{text}}
-                        </label>
-                      </div>
-                    {% endfor %}
+                    {% bootstrap_field form.issues show_label=False %}
                   </div>
                   {% bootstrap_field form.other_issues %}
                   {% bootstrap_field form.constituency %}
