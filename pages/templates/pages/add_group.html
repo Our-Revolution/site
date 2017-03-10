@@ -29,6 +29,8 @@
 <div class="container-fluid pb2">
   <div class="row">
     <form action="/groups/new/" method="post" class="form">
+      {% csrf_token %}
+      
       <script>
         // @TODO: Remove this hack when django-recurrence internationalization detection
         // is fixed or when i18n support is added to Knock
@@ -40,7 +42,6 @@
       </script>
       
       {{form.media}}
-      {% csrf_token %}
         <div class="pt2 pb2 clearfix">
           <div class="container">
             <div class="row">
