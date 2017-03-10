@@ -27,7 +27,7 @@ sub vcl_recv {
 
 sub vcl_recv {
     
-    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" || req.url !~ "^/groups/new") {
+    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/groups/new") {
         unset req.http.Cookie;
         unset req.http.Cache-Control;
     }
