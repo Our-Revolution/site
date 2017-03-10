@@ -59,13 +59,13 @@
                   {% bootstrap_field form.city placeholder="Burlington" %}
                 </div>
                 <div class="col-md-6">
+                  {% bootstrap_field form.state %}
+                </div>
+                <div class="col-md-6">
                   {% bootstrap_field form.county placeholder="Chittenden" %}
                 </div>
                 <div class="col-md-6">
                   {% bootstrap_field form.country %}
-                </div>
-                <div class="col-md-6">
-                  {% bootstrap_field form.state %}
                 </div>
                 <div class="col-md-6">
                   {% bootstrap_field form.postal_code %}
@@ -170,42 +170,41 @@
                 <div class="col-md-12">
                   <h2>5. Group Meeting Information</h2>
                   <p>If you host local recurring meetings, we want to help you get people to them. If you haven't hosted any meetings or don't have any planned, you can leave this section blank. Visit our <a href="/organizing-resources">organizing resources</a> for help planning and hosting events.</p>
+                </div>
                   
-                  <div class="form-group">
-                    {% bootstrap_field form.last_meeting form_group_class='datepicker' addon_before='<span class="glyphicon glyphicon-calendar"></span>' placeholder='03/01/2017' %}
+                <div class="form-group col-md-4">
+                  {% bootstrap_field form.last_meeting form_group_class='datepicker' addon_before='<span class="glyphicon glyphicon-calendar"></span>' placeholder='03/01/2017' %}
+                </div>
+                  
+                <div class="form-group col-md-12">
+                  <div>
+                    {% bootstrap_label "Does your group host regular recurring meetings?" %}
                   </div>
                   
-                  <div class="form-group">
-                    <div>
-                      {% bootstrap_label "Does your group host regular recurring meetings?" %}
-                    </div>
+                  <div class="btn-group" id="recurring-ask">
+                    <button type="button" class="btn btn-default" aria-label="Yes" value='yes'>Yes
+                    </button>
                     
-                    <div class="btn-group" id="recurring-ask">
-                      <button type="button" class="btn btn-default" aria-label="Yes" value='yes'>Yes
-                      </button>
-                      
-                      <button type="button" class="btn btn-default" aria-label="No" value='no'>No</button>
-                    </div>
-                  </div>
-                  
-                  <div class="recurring-field">
-                    <div class="clearfix mb20 mt20">
-                      <h4 class="mb0">{% bootstrap_label "Regular Meeting" label_for="recurring_meeting" %}</h4>
-                      <p>Add a rule below so we can let users know when you meet and where.</p>
-                      {{ form.recurring_meeting }}
-                    </div>
-                    
-                    {% bootstrap_field form.meeting_address_line1 placeholder='603 2nd Street, NE' %}
-                    {% bootstrap_field form.meeting_address_line2 %}
+                    <button type="button" class="btn btn-default" aria-label="No" value='no'>No</button>
                   </div>
                 </div>
-                
-                  <div class="recurring-field">
-                    {% bootstrap_field form.meeting_city form_group_class='col-md-6 form-group' placeholder='Washington'%}
-                    {% bootstrap_field form.meeting_state_province form_group_class='col-md-6 form-group' placeholder='District of Columbia' %}
-                    {% bootstrap_field form.meeting_postal_code form_group_class='col-md-6 form-group' placeholder='20002' %}
-                    {% bootstrap_field form.meeting_country form_group_class='col-md-6 form-group' %}
+                  
+                <div class="recurring-field col-md-12">
+                  <div class="clearfix mb20 mt20">
+                    <h4 class="mb0">{% bootstrap_label "Regular Meeting" label_for="recurring_meeting" %}</h4>
+                    <p>Add a rule below so we can let users know when you meet and where.</p>
+                    {{ form.recurring_meeting }}
                   </div>
+                  
+                  {% bootstrap_field form.meeting_address_line1 placeholder='603 2nd Street, NE' %}
+                  {% bootstrap_field form.meeting_address_line2 %}
+                </div>
+              
+                <div class="recurring-field">
+                  {% bootstrap_field form.meeting_city form_group_class='col-md-6 form-group' placeholder='Washington'%}
+                  {% bootstrap_field form.meeting_state_province form_group_class='col-md-6 form-group' placeholder='District of Columbia' %}
+                  {% bootstrap_field form.meeting_postal_code form_group_class='col-md-6 form-group' placeholder='20002' %}
+                  {% bootstrap_field form.meeting_country form_group_class='col-md-6 form-group' %}
                 </div>
               </div>
             </div>
