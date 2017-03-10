@@ -1,9 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    {% load static %}
-    {% load wagtailcore_tags %}
-    {% load wagtailimages_tags %}
+    {% load bootstrap3 static wagtailcore_tags wagtailimages_tags %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>{% block page_title %}Our Revolution - {% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
@@ -52,7 +50,7 @@
     {% endblock %}
 
     {% load static %}
-    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=57">
+    <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=59">
     <script src="{% static "dist/js/bundle.min.js" %}?v=7"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
     <meta name="google-site-verification" content="devyaHsbJD6w8nNEWsAu3SsODhEfijQqCOhFbuXdpCc" />
@@ -60,6 +58,9 @@
 </head>
 <body class="no-padding">
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
+
+    {% bootstrap_javascript jquery=1 %}
+    {% bootstrap_messages %}
         
     {% include "partials/nav.html" %}
         
