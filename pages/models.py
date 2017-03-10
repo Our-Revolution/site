@@ -548,7 +548,7 @@ class GroupPage(RoutablePageMixin, Page):
                                                     form.cleaned_data['rep_email'])],
                     fail_silently=True)
                 
-                messages.success(request, 'We have received your group information it will be added to our website once it is approved.')
+                messages.success(request, 'Success! We have received your group information, and it will be added to our website once it is approved.')
 
                 # redirect to a new URL:
                 return HttpResponseRedirect('/groups/')
