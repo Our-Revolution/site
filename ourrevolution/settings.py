@@ -98,6 +98,7 @@ INSTALLED_APPS = [
 ]
 
 PHONENUMBER_DB_FORMAT = "E164"
+PHONENUMBER_DEFAULT_REGION = "US"
 
 SERVER_EMAIL = "bugtroll@ourrevolution.com"
 

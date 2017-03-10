@@ -555,6 +555,7 @@ class GroupPage(RoutablePageMixin, Page):
 
             else:
                 print form.errors
+                messages.error(request, 'Please correct the errors marked in the form below.')
 
         return render(request, 'pages/add_group.html', {'form': form})
         
