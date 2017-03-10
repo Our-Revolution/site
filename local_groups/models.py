@@ -52,15 +52,15 @@ class Group(models.Model):
     
     description = models.TextField(null=True, blank=False, max_length=250, verbose_name="Description (250 characters or less)")
     issues = models.ManyToManyField(Issue, blank=True)
-    other_issues = models.TextField(null=True, blank=True, verbose_name="Other Issues")
+    other_issues = models.TextField(null=True, blank=True, max_length=250, verbose_name="Other Issues")
     
-    constituency = models.TextField(null=True, blank=True)
+    constituency = models.TextField(null=True, blank=True, max_length=250)
     
     facebook_url = models.URLField(null=True, blank=True, verbose_name="Facebook URL")
     twitter_url = models.URLField(null=True, blank=True, verbose_name="Twitter URL")
     website_url = models.URLField(null=True, blank=True, verbose_name="Website URL")
     instagram_url = models.URLField(null=True, blank=True, verbose_name="Instagram URL")
-    other_social = models.TextField(null=True, blank=True, verbose_name="Other Social Media")
+    other_social = models.TextField(null=True, blank=True, verbose_name="Other Social Media", max_length=250)
     
     STATUSES = (
        ('submitted', 'Submitted'),
