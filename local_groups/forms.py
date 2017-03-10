@@ -1,9 +1,11 @@
 from django import forms
 from .models import Group
 from django.contrib.gis.geos import Point
+from endorsements.models import Issue
 
 
 class GisForm(forms.ModelForm):
+    issues = forms.ModelMultipleChoiceField(queryset=Issue.objects.all(), widget=forms.CheckboxSelectMultiple(), required=True)
 
     latitude = forms.DecimalField(
         min_value=-90,

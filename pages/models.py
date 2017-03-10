@@ -1,6 +1,10 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+from django.contrib import messages
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect  
@@ -528,20 +532,40 @@ class GroupPage(RoutablePageMixin, Page):
     @route(r'^new/$')
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
+        form = GroupForm(request.POST or None)
+        
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:
-            form = GroupForm(request.POST)
             # check whether it's valid:
             if form.is_valid():
                 form.save()
                 # process the data in form.cleaned_data as required
-                # ...
+
+                plaintext = get_template('pages/email/add_group_success.txt')
+                htmly     = get_template('pages/email/add_group_success.html')
+                
+                d = Context({'group_id': 1652})
+
+                subject="Let's get your group on the map!"
+                from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
+                to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
+                                                form.cleaned_data['rep_last_name'],
+                                                form.cleaned_data['rep_email'])]
+                                                
+                text_content = plaintext.render(d)
+                html_content = htmly.render(d)
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                
+                messages.success(request, 'Success! We have received your group information, and it will be added to our website once it is approved.')
+
                 # redirect to a new URL:
                 return HttpResponseRedirect('/groups/')
 
-        # if a GET (or any other method) we'll create a blank form
-        else:
-            form = GroupForm()
+            else:
+                print form.errors
+                messages.error(request, 'Please correct the errors marked in the form below.')
 
         return render(request, 'pages/add_group.html', {'form': form})
         
