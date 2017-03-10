@@ -19,6 +19,7 @@ from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from local_groups.models import Group
+from random import randint
 import csv, json
 
 from .forms import GroupForm
@@ -537,15 +538,21 @@ class GroupPage(RoutablePageMixin, Page):
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:
             # check whether it's valid:
+            
             if form.is_valid():
-                form.save()
+                group_id = randint(796,9999)
+                                
+                group = form.save(commit=False)
+                group.group_id = group_id
+                group.save()
+                
                 # process the data in form.cleaned_data as required
 
                 plaintext = get_template('pages/email/add_group_success.txt')
                 htmly     = get_template('pages/email/add_group_success.html')
                 
-                d = Context({'group_id': 1652})
-
+                d = Context({'group_id': group_id})
+                
                 subject="Let's get your group on the map!"
                 from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
                 to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
@@ -557,17 +564,22 @@ class GroupPage(RoutablePageMixin, Page):
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
-                
-                messages.success(request, 'Success! We have received your group information, and it will be added to our website once it is approved.')
 
                 # redirect to a new URL:
-                return HttpResponseRedirect('/groups/')
+                return HttpResponseRedirect('/groups/success')
 
             else:
                 print form.errors
                 messages.error(request, 'Please correct the errors marked in the form below.')
 
         return render(request, 'pages/add_group.html', {'form': form})
+        
+    @route(r'^success/$')
+    def group_success_view(self, request):
+        return render(request, 'pages/group_success_page.html', {
+            'page': self
+        })
+
         
     @route(r'^(.+)/$')
     def group_view(self, request, group_slug):

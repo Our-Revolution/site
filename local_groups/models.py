@@ -13,6 +13,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
     slug = models.SlugField(null=True, blank=False, unique=True)
     signup_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    group_id = models.CharField(max_length=4,null=True, blank=False)
     
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email")
     rep_first_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="First Name")
