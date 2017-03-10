@@ -8,6 +8,7 @@ from endorsements.models import Issue
 from django_countries.fields import CountryField
 from recurrence.fields import RecurrenceField
 from django.contrib.gis.db.models import PointField
+from django.utils.text import slugify
 
 class Group(models.Model):    
     name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
@@ -75,5 +76,9 @@ class Group(models.Model):
     # constituent__id = models.IntegerField(null=True, blank=True)
     # signup__id = models.IntegerField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(string)
+        super(Need, self).save()
+        
     def __unicode__(self):
         return self.name
