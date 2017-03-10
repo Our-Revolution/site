@@ -10,7 +10,7 @@ We want everyone to attend an MOU call. The MOU outlines the relationship betwee
 
 Please keep this Group ID handy as we'll need it from time to time.
 
-YOUR GROUP ID NUMBER IS {{group_id}}
+YOUR GROUP ID NUMBER IS ID{{group_id}}
 
 Here are the upcoming MOU calls for this and next week:
 
