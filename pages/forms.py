@@ -1,9 +1,11 @@
-import django.forms as forms
+from django import forms
 from local_groups.models import Group
 from phonenumber_field.widgets import PhoneNumberPrefixWidget, PhoneNumberInternationalFallbackWidget
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class GroupForm(forms.ModelForm):
+
     required_css_class = 'required'
     
     class Meta:
@@ -16,4 +18,5 @@ class GroupForm(forms.ModelForm):
             'other_social': forms.Textarea(attrs={'rows':'2'}),
             'other_issues': forms.Textarea(attrs={'rows':'3'}),
             'constituency': forms.Textarea(attrs={'rows':'3'}),
+            'issues': forms.CheckboxSelectMultiple
         }
