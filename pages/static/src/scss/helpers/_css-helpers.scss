@@ -531,6 +531,23 @@ a.white-text {
   }
 }
 
+.five-endorsements-bg {
+  background: darken($blue, 30) url('../img/five-endorsements.jpg') no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .dapl-bg {
   background: darken($blue, 30) url('../img/dapl_module_1.jpg');
   background-size: cover;
