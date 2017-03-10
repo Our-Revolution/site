@@ -19,6 +19,8 @@ from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from local_groups.models import Group
+from django.utils.text import slugify
+
 from random import randint
 import csv, json
 
@@ -544,8 +546,15 @@ class GroupPage(RoutablePageMixin, Page):
                                 
                 group = form.save(commit=False)
                 group.group_id = group_id
-                group.save()
                 
+                slug = slugify(group.name)
+                
+                # TODO: unique slugs that aren't ugly
+                if not Group.objects.exclude(pk=group.pk).filter(slug=slug).exists():
+                    group.slug = slug
+                
+                group.save()
+                form.save_m2m()
                 # process the data in form.cleaned_data as required
 
                 plaintext = get_template('pages/email/add_group_success.txt')
