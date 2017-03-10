@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.core import serializers
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
 from django.contrib import messages
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -539,14 +541,22 @@ class GroupPage(RoutablePageMixin, Page):
                 form.save()
                 # process the data in form.cleaned_data as required
 
-                send_mail(
-                    subject='Thank you for submitting your group',
-                    message='Message goes here.',
-                    from_email='Our Revolution Organizing <organizing@ourrevolution.com>',
-                    recipient_list=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
-                                                    form.cleaned_data['rep_last_name'],
-                                                    form.cleaned_data['rep_email'])],
-                    fail_silently=True)
+                plaintext = get_template('pages/email/add_group_success.txt')
+                htmly     = get_template('pages/email/add_group_success.html')
+                
+                d = Context({'group_id': 1652})
+
+                subject="Let's get your group on the map!"
+                from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
+                to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
+                                                form.cleaned_data['rep_last_name'],
+                                                form.cleaned_data['rep_email'])]
+                                                
+                text_content = plaintext.render(d)
+                html_content = htmly.render(d)
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
                 
                 messages.success(request, 'Success! We have received your group information, and it will be added to our website once it is approved.')
 
