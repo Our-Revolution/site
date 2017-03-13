@@ -16,8 +16,8 @@ class Group(models.Model):
     group_id = models.CharField(max_length=4,null=True, blank=False)
     
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email")
-    rep_first_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="First Name")
-    rep_last_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Last Name")
+    rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
+    rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_postal_code = models.CharField(max_length=12, null=True, blank=True, verbose_name="Postal Code")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
     
