@@ -15,7 +15,7 @@ class Group(models.Model):
     signup_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     group_id = models.CharField(max_length=4,null=True, blank=False)
     
-    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email")
+    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
     rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_postal_code = models.CharField(max_length=12, null=True, blank=True, verbose_name="Postal Code")
@@ -56,10 +56,10 @@ class Group(models.Model):
     
     constituency = models.TextField(null=True, blank=True, max_length=250)
     
-    facebook_url = models.URLField(null=True, blank=True, verbose_name="Facebook URL")
-    twitter_url = models.URLField(null=True, blank=True, verbose_name="Twitter URL")
-    website_url = models.URLField(null=True, blank=True, verbose_name="Website URL")
-    instagram_url = models.URLField(null=True, blank=True, verbose_name="Instagram URL")
+    facebook_url = models.URLField(null=True, blank=True, verbose_name="Facebook URL", max_length=255)
+    twitter_url = models.URLField(null=True, blank=True, verbose_name="Twitter URL", max_length=255)
+    website_url = models.URLField(null=True, blank=True, verbose_name="Website URL", max_length=255)
+    instagram_url = models.URLField(null=True, blank=True, verbose_name="Instagram URL", max_length=255)
     other_social = models.TextField(null=True, blank=True, verbose_name="Other Social Media", max_length=250)
     
     STATUSES = (
