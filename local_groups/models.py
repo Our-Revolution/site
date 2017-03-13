@@ -21,7 +21,7 @@ class Group(models.Model):
     rep_postal_code = models.CharField(max_length=12, null=True, blank=True, verbose_name="Postal Code")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
     
-    county = models.CharField(max_length=11, null=True, blank=True)
+    county = models.CharField(max_length=30, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
     state = USStateField(max_length=2, null=True, blank=True)
     postal_code = models.CharField(max_length=12, null=True, blank=False, verbose_name="Postal Code")
