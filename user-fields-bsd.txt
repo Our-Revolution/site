@@ -1,0 +1,34 @@
++----------------------------+---------------+------+-----+---------+----------------+
+| Field                      | Type          | Null | Key | Default | Extra          |
++----------------------------+---------------+------+-----+---------+----------------+
+| cons_id                    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| cons_source_id             | int(11)       | NO   | MUL | 0       |                |
+| prefix                     | varchar(16)   | YES  |     | NULL    |                |
+| firstname                  | varchar(128)  | YES  | MUL | NULL    |                |
+| middlename                 | varchar(128)  | YES  |     | NULL    |                |
+| lastname                   | varchar(128)  | YES  | MUL | NULL    |                |
+| suffix                     | varchar(16)   | YES  |     | NULL    |                |
+| salutation                 | varchar(64)   | YES  |     | NULL    |                |
+| gender                     | char(1)       | YES  |     | NULL    |                |
+| birth_dt                   | datetime      | YES  |     | NULL    |                |
+| title                      | varchar(128)  | YES  |     | NULL    |                |
+| employer                   | varchar(128)  | YES  |     | NULL    |                |
+| occupation                 | varchar(128)  | YES  |     | NULL    |                |
+| income                     | decimal(12,2) | YES  |     | NULL    |                |
+| source                     | varchar(128)  | YES  | MUL | NULL    |                |
+| subsource                  | varchar(128)  | YES  | MUL | NULL    |                |
+| userid                     | varchar(128)  | YES  | MUL | NULL    |                |
+| password                   | varchar(128)  | YES  |     | NULL    |                |
+| is_validated               | tinyint(1)    | NO   |     | 0       |                |
+| is_banned                  | tinyint(1)    | NO   |     | 0       |                |
+| change_password_next_login | tinyint(1)    | NO   |     | 0       |                |
+| create_dt                  | datetime      | YES  | MUL | NULL    |                |
+| create_app                 | varchar(128)  | YES  |     | NULL    |                |
+| create_user                | varchar(128)  | YES  |     | NULL    |                |
+| modified_dt                | datetime      | YES  | MUL | NULL    |                |
+| modified_app               | varchar(128)  | YES  |     | NULL    |                |
+| modified_user              | varchar(128)  | YES  |     | NULL    |                |
+| status                     | int(11)       | NO   |     | 1       |                |
+| note                       | varchar(255)  | YES  |     | NULL    |                |
+| is_deleted                 | tinyint(1)    | YES  |     | 0       |                |
++----------------------------+---------------+------+-----+---------+----------------+

@@ -542,7 +542,7 @@ class GroupPage(RoutablePageMixin, Page):
             # check whether it's valid:
             
             if form.is_valid():
-                group_id = randint(796,9999)
+                group_id = randint(1000,9999)
                                 
                 group = form.save(commit=False)
                 group.group_id = group_id

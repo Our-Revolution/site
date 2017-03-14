@@ -1,0 +1,77 @@
++--------------------------------+--------------+------+-----+---------------------+----------------+
+| Field                          | Type         | Null | Key | Default             | Extra          |
++--------------------------------+--------------+------+-----+---------------------+----------------+
+| event_id                       | int(11)      | NO   | PRI | NULL                | auto_increment |
+| event_id_obfuscated            | varchar(16)  | YES  | MUL | NULL                |                |
+| event_type_id                  | int(11)      | NO   | MUL | 0                   |                |
+| creator_cons_id                | int(11)      | NO   | MUL | 0                   |                |
+| contribution_page_id           | int(11)      | YES  |     | NULL                |                |
+| outreach_page_id               | int(11)      | YES  |     | NULL                |                |
+| name                           | varchar(128) | NO   | MUL | NULL                |                |
+| description                    | text         | NO   |     | NULL                |                |
+| creator_name                   | varchar(255) | YES  | MUL | NULL                |                |
+| start_day                      | date         | NO   | MUL | 0000-00-00          |                |
+| start_time                     | time         | NO   | MUL | 00:00:00            |                |
+| start_dt                       | datetime     | NO   | MUL | 0000-00-00 00:00:00 |                |
+| start_tz                       | varchar(40)  | YES  |     | NULL                |                |
+| duration                       | int(11)      | YES  |     | NULL                |                |
+| parent_event_id                | int(11)      | NO   | MUL | 0                   |                |
+| venue_name                     | varchar(255) | NO   |     | NULL                |                |
+| venue_addr1                    | varchar(255) | NO   |     |                     |                |
+| venue_addr2                    | varchar(255) | YES  |     | NULL                |                |
+| venue_zip                      | varchar(16)  | YES  | MUL | NULL                |                |
+| venue_city                     | varchar(64)  | NO   |     | NULL                |                |
+| venue_state_cd                 | char(100)    | NO   | MUL | NULL                |                |
+| venue_country                  | char(2)      | NO   | MUL | US                  |                |
+| venue_directions               | text         | YES  |     | NULL                |                |
+| latitude                       | float(9,6)   | NO   | MUL | 0.000000            |                |
+| longitude                      | float(9,6)   | NO   | MUL | 0.000000            |                |
+| host_addr_addressee            | varchar(255) | YES  |     | NULL                |                |
+| host_addr_addr1                | varchar(255) | YES  |     | NULL                |                |
+| host_addr_addr2                | varchar(255) | YES  |     | NULL                |                |
+| host_addr_zip                  | varchar(16)  | YES  |     | NULL                |                |
+| host_addr_city                 | varchar(64)  | YES  |     | NULL                |                |
+| host_addr_state_cd             | char(100)    | YES  |     | NULL                |                |
+| host_addr_country              | char(2)      | NO   |     | US                  |                |
+| host_receive_rsvp_emails       | int(1)       | NO   |     | 1                   |                |
+| contact_phone                  | varchar(25)  | YES  |     | NULL                |                |
+| public_phone                   | int(1)       | NO   |     | 0                   |                |
+| capacity                       | int(11)      | NO   |     | 0                   |                |
+| all_shifts_full                | tinyint(4)   | NO   |     | 0                   |                |
+| closed_msg                     | text         | YES  |     | NULL                |                |
+| attendee_visibility            | int(11)      | NO   |     | 0                   |                |
+| attendee_require_phone         | int(1)       | NO   |     | 0                   |                |
+| attendee_volunteer_show        | int(1)       | NO   |     | 0                   |                |
+| attendee_volunteer_message     | text         | NO   |     | NULL                |                |
+| is_official                    | int(1)       | YES  |     | 0                   |                |
+| pledge_override_type           | int(1)       | NO   |     | 0                   |                |
+| pledge_show                    | int(1)       | NO   |     | 1                   |                |
+| pledge_source                  | varchar(128) | YES  |     | NULL                |                |
+| pledge_subsource               | varchar(128) | YES  |     | NULL                |                |
+| pledge_require                 | int(1)       | NO   |     | 0                   |                |
+| pledge_min                     | float        | YES  |     | NULL                |                |
+| pledge_max                     | float        | YES  |     | NULL                |                |
+| pledge_suggest                 | float        | YES  |     | NULL                |                |
+| rsvp_use_default_email_message | int(1)       | YES  |     | 1                   |                |
+| rsvp_email_message             | text         | YES  |     | NULL                |                |
+| rsvp_email_message_html        | text         | YES  |     | NULL                |                |
+| rsvp_use_reminder_email        | int(1)       | NO   |     | 0                   |                |
+| rsvp_reminder_email_sent       | int(1)       | NO   |     | 0                   |                |
+| rsvp_email_reminder_hours      | int(11)      | YES  |     | NULL                |                |
+| rsvp_allow                     | int(1)       | YES  |     | -1                  |                |
+| rsvp_require_signup            | int(1)       | YES  |     | -1                  |                |
+| rsvp_disallow_account          | int(1)       | YES  |     | -1                  |                |
+| rsvp_reason                    | text         | YES  |     | NULL                |                |
+| rsvp_redirect_url              | varchar(255) | NO   |     |                     |                |
+| is_searchable                  | int(1)       | NO   | MUL | 1                   |                |
+| flag_approval                  | int(1)       | NO   | MUL | 0                   |                |
+| chapter_id                     | int(11)      | NO   | MUL | NULL                |                |
+| create_dt                      | datetime     | YES  |     | NULL                |                |
+| create_app                     | varchar(128) | YES  |     | NULL                |                |
+| create_user                    | varchar(128) | YES  |     | NULL                |                |
+| modified_dt                    | datetime     | YES  |     | NULL                |                |
+| modified_app                   | varchar(128) | YES  |     | NULL                |                |
+| modified_user                  | varchar(128) | YES  |     | NULL                |                |
+| status                         | int(11)      | NO   |     | 1                   |                |
+| note                           | varchar(255) | YES  |     | NULL                |                |
++--------------------------------+--------------+------+-----+---------------------+----------------+
