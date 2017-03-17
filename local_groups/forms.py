@@ -5,17 +5,17 @@ from endorsements.models import Issue
 
 
 class GisForm(forms.ModelForm):
-    issues = forms.ModelMultipleChoiceField(queryset=Issue.objects.all(), widget=forms.CheckboxSelectMultiple(), required=True)
+    issues = forms.ModelMultipleChoiceField(queryset=Issue.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
 
     latitude = forms.DecimalField(
         min_value=-90,
         max_value=90,
-        required=True,
+        required=False,
     )
     longitude = forms.DecimalField(
         min_value=-180,
         max_value=180,
-        required=True,
+        required=False,
     )
 
     class Meta(object):
