@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
 from .forms import GisForm
+from .actions import export_as_csv_action
 
 # Register your models here.
 @admin.register(Group)
@@ -11,3 +12,4 @@ class GroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)
     form = GisForm
+    actions = [export_as_csv_action("CSV Export")]
