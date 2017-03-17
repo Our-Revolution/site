@@ -13,3 +13,6 @@ class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ('issues',)
     form = GisForm
     actions = [export_as_csv_action("CSV Export")]
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
