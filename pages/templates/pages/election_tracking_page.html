@@ -124,7 +124,7 @@
                                                     data-won="{{ candidate_race.get_result_display }}"
                                                     {% endif %}>
                                                         <div class="card__results--status clearfix">
-                                                          <div class="card__results--reporting pull-left">{% if candidate_race.notes %} {{ candidate_race.notes }} {% endif %}</div>
+                                                          <div class="card__results--reporting pull-left">{% if 'win' in candidate_race.result %}<span class="uppercase ls2 boldest">Win</span> {% elif 'lose' in candidate_race.result %} <span class="uppercase ls2 boldest">Loss</span> {% elif candidate_race.notes %} {{ candidate_race.notes }} {% endif %}</div>
                                                           
                                                           {% if candidate_race.last_updated %}
                                                               <div class="card__results--updated pull-right">Last updated {{ candidate_race.last_updated | timesince }} ago</div>
