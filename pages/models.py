@@ -557,22 +557,22 @@ class GroupPage(RoutablePageMixin, Page):
                 form.save_m2m()
                 # process the data in form.cleaned_data as required
 
-                plaintext = get_template('pages/email/add_group_success.txt')
-                htmly     = get_template('pages/email/add_group_success.html')
-                
-                d = Context({'group_id': group_id})
-                
-                subject="Let's get your group on the map!"
-                from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
-                to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
-                                                form.cleaned_data['rep_last_name'],
-                                                form.cleaned_data['rep_email'])]
-                                                
-                text_content = plaintext.render(d)
-                html_content = htmly.render(d)
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-                msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                # plaintext = get_template('pages/email/add_group_success.txt')
+                # htmly     = get_template('pages/email/add_group_success.html')
+                # 
+                # d = Context({'group_id': group_id})
+                # 
+                # subject="Let's get your group on the map!"
+                # from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
+                # to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
+                #                                 form.cleaned_data['rep_last_name'],
+                #                                 form.cleaned_data['rep_email'])]
+                #                                 
+                # text_content = plaintext.render(d)
+                # html_content = htmly.render(d)
+                # msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                # msg.attach_alternative(html_content, "text/html")
+                # msg.send()
 
                 # redirect to a new URL:
                 return HttpResponseRedirect('/groups/success')
