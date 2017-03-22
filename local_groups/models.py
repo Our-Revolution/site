@@ -31,7 +31,7 @@ class Group(models.Model):
     size = models.CharField(max_length=21, null=True, blank=True, verbose_name="Group Size")
     
     last_meeting = models.DateTimeField(null=True, blank=True, verbose_name="Date of Last Meeting")
-    recurring_meeting = RecurrenceField(null=True, blank=True, verbose_name="Recurring Meeting", help_text='test')
+    recurring_meeting = RecurrenceField(null=True, blank=True, verbose_name="Recurring Meeting")
     
     meeting_address_line1 = models.CharField("Address Line 1", max_length = 45, null=True, blank=True)
     meeting_address_line2 = models.CharField("Address Line 2", max_length = 45, null=True, blank=True)
