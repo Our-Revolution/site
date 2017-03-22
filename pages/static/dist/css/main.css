@@ -6170,6 +6170,18 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.takeover-bg {
+  background: #004387 url("../img/takeover-bg.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .takeover-bg .module__heading, .takeover-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .takeover-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .dapl-bg {
   background: #004387 url("../img/dapl_module_1.jpg");
   background-size: cover;
