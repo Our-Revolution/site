@@ -5836,6 +5836,9 @@ button.close {
 .blue-bg {
   background-color: #218fff; }
 
+.plaid-bg {
+  background: #218fff url("../img/or-plaid.svg") repeat; }
+
 .black-bg {
   background-color: black; }
 
