@@ -5837,7 +5837,8 @@ button.close {
   background-color: #218fff; }
 
 .plaid-bg {
-  background: #218fff url("../img/or-plaid.svg") repeat; }
+  background: #218fff url("../img/or-plaid.svg") repeat;
+  background-size: 500px; }
 
 .black-bg {
   background-color: black; }
