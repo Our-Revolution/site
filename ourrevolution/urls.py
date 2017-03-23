@@ -25,6 +25,7 @@ urlpatterns += [
         name='wagtaildocs_serve'),
     url(r'^cms/', include(wagtailadmin_urls)),
     url(r'^admin/', admin.site.urls),
+    url(r'', include('local_groups.urls')),
     url(r'', include(wagtail_urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
