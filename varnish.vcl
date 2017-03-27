@@ -27,7 +27,7 @@ sub vcl_recv {
 
 sub vcl_recv {
     
-    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/groups/new/"){
+    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/groups/new/" && req.url !~ "^/join-us-on-slack"){
         unset req.http.Cookie;
         unset req.http.Cache-Control;
     }
@@ -36,7 +36,7 @@ sub vcl_recv {
 sub vcl_backend_response {
     if (bereq.uncacheable) {
         return (deliver);
-    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/new/") {
+    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/new/" && req.url !~ "^/join-us-on-slack") {
         unset beresp.http.Set-Cookie;
         unset beresp.http.Cache-control;
         set beresp.ttl = 4h;
