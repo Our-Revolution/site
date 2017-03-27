@@ -36,7 +36,7 @@ sub vcl_recv {
 sub vcl_backend_response {
     if (bereq.uncacheable) {
         return (deliver);
-    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/new/" && req.url !~ "^/join-us-on-slack") {
+    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/new/" && bereq.url !~ "^/join-us-on-slack") {
         unset beresp.http.Set-Cookie;
         unset beresp.http.Cache-control;
         set beresp.ttl = 4h;
