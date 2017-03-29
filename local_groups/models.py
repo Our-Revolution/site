@@ -25,7 +25,7 @@ class Group(models.Model):
     county = models.CharField(max_length=64, null=True, blank=True)
     city = models.CharField(max_length=64, null=True, blank=True)
     state = USStateField(max_length=2, null=True, blank=True)
-    postal_code = models.CharField(max_length=12, null=True, blank=False, verbose_name="Postal Code")
+    postal_code = models.CharField(max_length=12, null=True, blank=True, verbose_name="Postal Code")
     country = CountryField(null=True, blank=False, default="US")
     point = PointField(null=True, blank=True)
         
