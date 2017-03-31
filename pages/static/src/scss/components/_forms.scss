@@ -86,6 +86,12 @@
     display: none;
   }
   
+  .alert-danger {
+    a {
+      color: #a94442;
+    }
+  }
+  
   &.new {
     .form-group {
       margin-top: 10px;
