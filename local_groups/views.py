@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.views.generic import FormView
 from .forms import SlackInviteForm
 import os
-
+import requests
 
 class SlackInviteView(FormView):
     form_class = SlackInviteForm
@@ -38,4 +38,3 @@ class SlackInviteView(FormView):
 
         # redirect
         return super(SlackInviteView, self).form_valid(form)
-
