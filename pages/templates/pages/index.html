@@ -82,6 +82,7 @@
           })
           .fail(function(data) {
             $(self).parent().find('.alert-danger').fadeIn();
+            ga('send', 'event', 'Sign Up Error', 'submit', 'Bernie Sanders and Elizabeth Warren Livestream Membership Signup Error');
           })
           
         })
