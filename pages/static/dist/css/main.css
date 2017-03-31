@@ -9505,6 +9505,9 @@ footer {
 .sign-up-form .alert {
   display: none; }
 
+.sign-up-form .alert-danger a {
+  color: #a94442; }
+
 .sign-up-form.new .form-group {
   margin-top: 10px; }
   .sign-up-form.new .form-group:first-child {
