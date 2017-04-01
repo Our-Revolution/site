@@ -7,32 +7,88 @@
 <div class="container-fluid">
   <div class="row row--main home">    
     <div class="container">
-      <section class="module-container module-container--video clearfix">
-        <div class="module-col sixty table br3">
-          <div class="module module--video full centered dark-blue-bg white-text br3" id="news-module-home">
-            <div class="module__content br3">
-              <div class="embed-responsive embed-responsive-16by9 dark-wash">
-            		<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FPoliticalRevolution%2Fvideos%2F1456694184382793%2F&show_text=0&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true" class="br3"></iframe>
-          	  </div>
-            </div>
-          </div>
+      <div class="row">
+    	  <div class="embed-responsive  embed-responsive-16by9 dark-wash">
+      		<iframe width="560" height="315" src="https://www.youtube.com/embed/F4cZczBPxw8?start=694" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
+    	  </div>
+    	</div>  
+      
+      <div class="row dark-blue-bg white-text pt4 pb4">
+        <div class="col-md-5 col-md-offset-1">
+          <h1 class="fs4">Become an Our Revolution member today</h1>
+          <p>Our Revolution is built upon the success of Bernie Sanders’ historic presidential campaign, and will continue to thrive with the support of an unprecedented level of grassroots organizers.</p>
+          
+          <p>Becoming a member of Our Revolution means being on the frontlines of change, having a real voice in our endorsements and issues, and being a part of grassroots campaigns to push the political revolution forward.</p>
+
+          <p><strong>After you've signed up, we'll send you a confirmation email with information on how you can immediately get involved.</strong></p>
         </div>
-        
-        <div class="module-col forty alone table">
-          <div class="module full centered dark-blue-bg white-text">
-            <div class="module__content">
-              <div>
-                <h1 class="fs4">Become an Our Revolution member today.</h1>
-                
-                <p>Becoming a member of Our Revolution means being on the frontlines of change, having a real voice in our endorsements and issues, and being a part of grassroots campaigns to push the political revolution forward.</p>
-                
-                <a href="https://go.ourrevolution.com/page/s/become-a-member?source=170331-homepage-module" class="btn btn-block btn-primary ls2 uppercase" onclick="trackOutboundLink('https://go.ourrevolution.com/page/s/become-a-member?source=170331-homepage-module',true);" target="_blank">Become a Member</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
+        <div class="sign-up-form petition clearfix col-md-4 col-md-offset-1 mt20">
+          <form id="signup">
+            <span class="form-group email">
+              <label for="email">Email Address*</label>
+              <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+            </span>
+            
+            <span class="form-group first-name">
+              <label for="firstname">First Name*</label>
+              <input type="text" name="firstname" id="firstname" class="first-name" placeholder="Bernard" required>
+            </span>
+
+            <span class="form-group zip">
+              <label for="lastname">Last Name*</label>
+              <input type="text" name="lastname" id="lastname" class="zip" placeholder="Sanders" required>
+            </span>
+
+            <span class="form-group first-name">
+              <label for="zip">Postal Code*</label>
+              <input type="text" name="zip" id="zip" class="first-name" placeholder="05402" required>
+            </span>
+            
+            <span class="form-group zip">
+              <label for="phone">Phone Number</label>
+              <input type="tel" name="phone" id="phone" class="zip" placeholder="5558675309">
+            </span>
+
+            <span class="form-group submit">
+              <button class="btn btn-primary btn-block uppercase ls2">Become a Member</button>
+            </span>
+          </form>
+          
+          <div class="alert alert-success mt20 text-center">Thank you for signing up to be a member of Our Revolution! Look out for a confirmation email soon.</div>
+          <div class="alert alert-danger mt20 text-center">There was an error processing your submission. Please <strong><a href="https://go.ourrevolution.com/page/s/become-a-member" target="_blank">click here</a></strong> to become a member.</div>
+        </div>    
+      </div>
     </div>
+
+    <script>
+      $(document).ready(function() {
+
+        $('#signup').on('submit', function(e) {
+          e.preventDefault();
+          
+          var data = $(this).serialize();
+          var self = $(this);
+                
+          $.ajax({
+            method: 'POST',
+            url: "https://go.ourrevolution.com/page/sapi/become-a-member?source=170331-ourrevolution-homepage",
+            data: data,
+            crossDomain: true
+          })
+          .done(function(data) {
+            $(self).parent().find('.alert-success').fadeIn();
+            ga('send', 'event', 'Sign Up', 'submit', 'Bernie Sanders and Elizabeth Warren Livestream Membership Signup');
+          })
+          .fail(function(data) {
+            $(self).parent().find('.alert-danger').fadeIn();
+            ga('send', 'event', 'Sign Up Error', 'submit', 'Bernie Sanders and Elizabeth Warren Livestream Membership Signup Error');
+          })
+          
+        })
+        
+      })
+    </script>
   </div>
 
   <div class="row">
