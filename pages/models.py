@@ -439,7 +439,7 @@ class YoutubePage(Page):
         ('paragraph', blocks.RichTextBlock()),
         ('raw_html', blocks.RawHTMLBlock())
     ])
-    youtube_video_id = models.CharField(max_length=20)
+    youtube_video_id = models.CharField(max_length=30)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
 
