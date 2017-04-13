@@ -6174,6 +6174,18 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.quist-bg {
+  background: #004387 url("../img/quist-bg.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .quist-bg .module__heading, .quist-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .quist-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .five-endorsements-bg {
   background: #004387 url("../img/five-endorsements.jpg") no-repeat;
   background-position: center;
@@ -9166,6 +9178,8 @@ footer {
       max-width: 70%; }
     .module__content.bottom {
       vertical-align: bottom !important; }
+    .module__content.top {
+      vertical-align: top !important; }
     .module__content.small {
       padding: 5%; }
   .module__button {
