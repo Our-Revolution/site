@@ -19,7 +19,21 @@ module.exports = function() {
       if (usedSearch) {
         getLocationsWithinBounds(map.getBounds());
       }  
-    })
+    });
+
+    $(function(){
+      google.maps.event.addDomListener(document.getElementById('autocomplete-input'), 'keydown', function(e) {
+        if (e.keyCode === 13 && !e.triggered && $('.pac-item-selected').length == 0) {
+          google.maps.event.trigger(this, 'keydown', {
+            keyCode: 40
+          })
+          google.maps.event.trigger(this, 'keydown', {
+            keyCode: 13,
+            triggered: true
+          })
+        }
+      });
+    });
     
     // populate(map);
   }
@@ -136,7 +150,7 @@ module.exports = function() {
         <div class="component">\
           <div class="component__heading">\
             <span class="component__location">' + location + '</span>\
-            <h4 class="component__name">' + groups[i].properties.name + '</h4>\
+            <h4 class="component__name">' + groups[i].properties.name + ((groups[i].properties.state_organizing_committee) ? " (SOC) " : "") + '</h4>\
           </div>\
           <div class="component__info">\
             <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\

@@ -62,6 +62,8 @@ class Group(models.Model):
     website_url = models.URLField(null=True, blank=True, verbose_name="Website URL", max_length=255)
     instagram_url = models.URLField(null=True, blank=True, verbose_name="Instagram URL", max_length=255)
     other_social = models.TextField(null=True, blank=True, verbose_name="Other Social Media", max_length=250)
+
+    state_organizing_committee = models.BooleanField(default=False)
     
     STATUSES = (
        ('submitted', 'Submitted'),
