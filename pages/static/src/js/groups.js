@@ -20,20 +20,6 @@ module.exports = function() {
         getLocationsWithinBounds(map.getBounds());
       }  
     });
-
-    $(function(){
-      google.maps.event.addDomListener(document.getElementById('autocomplete-input'), 'keydown', function(e) {
-        if (e.keyCode === 13 && !e.triggered && $('.pac-item-selected').length == 0) {
-          google.maps.event.trigger(this, 'keydown', {
-            keyCode: 40
-          })
-          google.maps.event.trigger(this, 'keydown', {
-            keyCode: 13,
-            triggered: true
-          })
-        }
-      });
-    });
     
     // populate(map);
   }
