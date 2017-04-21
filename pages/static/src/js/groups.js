@@ -19,7 +19,7 @@ module.exports = function() {
       if (usedSearch) {
         getLocationsWithinBounds(map.getBounds());
       }  
-    })
+    });
     
     // populate(map);
   }
@@ -33,8 +33,7 @@ module.exports = function() {
       console.log("We can't find that place - try again.");
       return;
     } else {
-      geometry = [place.geometry.location.lat(),place.geometry.location.lng()]; 
-      positionMap(geometry);
+      map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]]);
     }
   }
   
@@ -137,7 +136,7 @@ module.exports = function() {
         <div class="component">\
           <div class="component__heading">\
             <span class="component__location">' + location + '</span>\
-            <h4 class="component__name">' + groups[i].properties.name + '</h4>\
+            <h4 class="component__name">' + groups[i].properties.name + ((groups[i].properties.state_organizing_committee) ? " (SOC) " : "") + '</h4>\
           </div>\
           <div class="component__info">\
             <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
