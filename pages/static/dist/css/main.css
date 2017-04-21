@@ -5892,6 +5892,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .light-wash {
   background-color: rgba(0, 0, 0, 0.1); }
 
+.medium-wash {
+  background-color: rgba(0, 0, 0, 0.3); }
+
 .br3 {
   border-radius: 3px !important; }
 
@@ -7265,7 +7268,9 @@ h1, h2, h3, h4 {
   .volunteer-form .form-group label {
     display: block;
     font-size: 12px;
-    font-weight: normal; }
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 2px; }
   .volunteer-form .form-group button {
     height: 40px;
     width: 100%; }
@@ -9870,6 +9875,87 @@ div.recurrence-widget {
       background: #fafafa;
       color: #218fff;
       text-decoration: none; }
+
+.action-bg {
+  background: #218fff url("../img/action-bg.jpg") bottom no-repeat;
+  background-size: cover; }
+
+.campaigns__card {
+  color: white !important;
+  margin-right: 1%;
+  margin-bottom: 1%;
+  border-radius: 3px;
+  width: 48%;
+  display: inline-block;
+  height: 350px;
+  background: #218fff;
+  position: relative;
+  -webkit-transition: 0.25s;
+  transition: 0.25s; }
+  @media screen and (max-width: 767px) {
+    .campaigns__card {
+      width: 100%;
+      height: 300px; } }
+  .campaigns__card:hover {
+    text-decoration: none;
+    -webkit-transform: scale(1.02);
+    -ms-transform: scale(1.02);
+    transform: scale(1.02);
+    color: white; }
+  .campaigns__card:active, .campaigns__card:visited {
+    color: white; }
+  .campaigns__card:nth-child(1) {
+    background: #218fff url("../img/local-groups.jpg");
+    background-size: cover; }
+    .campaigns__card:nth-child(1) .campaigns__info {
+      background: #218fff; }
+  .campaigns__card:nth-child(2) {
+    background: #6e91d4 url("../img/events.jpg");
+    background-size: cover;
+    background-position: top; }
+    .campaigns__card:nth-child(2) .campaigns__info {
+      background: #6e91d4; }
+  .campaigns__card:nth-child(3) {
+    background: #8880b6 url("../img/transform.jpg");
+    background-size: cover; }
+    .campaigns__card:nth-child(3) .campaigns__info {
+      background: #8880b6; }
+  .campaigns__card:nth-child(4) {
+    background: #a37098 url("../img/sanctuary.jpg");
+    background-size: cover; }
+    .campaigns__card:nth-child(4) .campaigns__info {
+      background: #a37098; }
+  .campaigns__card:nth-child(5) {
+    background: #bd5f79 url("../img/resistance.jpg");
+    background-size: cover; }
+    .campaigns__card:nth-child(5) .campaigns__info {
+      background: #bd5f79; }
+  .campaigns__card:nth-child(6) {
+    background: #d74e5b url("../img/phonebank.jpg");
+    background-size: cover; }
+    .campaigns__card:nth-child(6) .campaigns__info {
+      background: #d74e5b; }
+
+.campaigns__photo {
+  background: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 150px; }
+
+.campaigns__title {
+  margin-top: 0;
+  margin-bottom: 0; }
+
+.campaigns__info {
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0 0 3px 3px;
+  background: #218fff; }
+
+.campaigns__description {
+  margin-bottom: 0; }
 
 .bylaws h1 {
   font-size: 36px; }

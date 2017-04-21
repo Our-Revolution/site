@@ -821,7 +821,9 @@ h1, h2, h3, h4 {
     label {
       display: block;
       font-size: 12px;
-      font-weight: normal;
+      font-weight: bolder;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     button {

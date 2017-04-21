@@ -1,0 +1,117 @@
+.action-bg {
+  background: $blue url('../img/action-bg.jpg') bottom no-repeat;
+  background-size: cover;
+}
+
+.campaigns {
+
+  &__card {
+    color: white !important;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    border-radius: 3px;
+    width: 48%;
+    // float: left;
+    display: inline-block;
+    height: 350px;
+    background: $blue;
+    position: relative;
+    transition: 0.25s;
+    
+    @include until($medium) {
+      width: 100%;
+      height: 300px;
+    };
+    
+    &:hover {
+      text-decoration: none;
+      transform: scale(1.02);
+      color: white;
+    }
+    
+    &:active, &:visited {
+      color: white;
+    }
+    
+    &:nth-child(1) {
+      background: $blue url('../img/local-groups.jpg');
+      background-size: cover;
+      
+      .campaigns__info {
+        background: $blue;
+      }
+    }
+    
+    &:nth-child(2) {
+      background: $periwinkle url('../img/events.jpg');
+      background-size: cover;
+      background-position: top;
+      
+      .campaigns__info {
+        background: $periwinkle;
+      }
+    }
+    
+    &:nth-child(3) {
+      background: $light-purple url('../img/transform.jpg');
+      background-size: cover;
+      
+      .campaigns__info {
+        background: $light-purple;
+      }
+    }
+    
+    &:nth-child(4) {
+      background: $mauve url('../img/sanctuary.jpg');
+      background-size: cover;
+      
+      .campaigns__info {
+        background: $mauve;
+      }
+    }
+    
+    &:nth-child(5) {
+      background: $maroon url('../img/resistance.jpg');
+      background-size: cover;
+      
+      .campaigns__info {
+        background: $maroon;
+      }
+    }
+    
+    &:nth-child(6) {
+      background: $red url('../img/phonebank.jpg');
+      background-size: cover;
+      
+      .campaigns__info {
+        background: $red;
+      }
+    }
+  }
+
+  &__photo {
+    background: rgba(0,0,0,0.2);
+    width: 100%;
+    height: 150px;
+  }
+  
+  &__title {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  &__info {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0 0 3px 3px;
+    background: $blue;
+  }
+  
+  &__description {
+    margin-bottom: 0;
+  }
+
+}
