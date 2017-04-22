@@ -33,7 +33,7 @@ module.exports = function() {
       console.log("We can't find that place - try again.");
       return;
     } else {
-      map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]]);
+      map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]], {duration: 1});
     }
   }
   
@@ -99,50 +99,63 @@ module.exports = function() {
     
     resetInfo();
         
-    for (var i=0; i<groups.length; i++) {    
-      city = groups[i].properties.city;
-      county = groups[i].properties.county;
-      state = groups[i].properties.state;
-      country = groups[i].properties.country;
-      
-      if (country == 'US') {
-        if (city && state) {
-          location = city + ', ' + state;
-        } else if (county && state) {
-          location = county + ' County, ' + state;
-        } else if (state) {
-          location = state + ', ' + country ;
+    console.log(groups.length)    
+        
+    if(groups.length != 0){    
+      for (var i=0; i<groups.length; i++) {    
+        city = groups[i].properties.city;
+        county = groups[i].properties.county;
+        state = groups[i].properties.state;
+        country = groups[i].properties.country;
+        
+        if (country == 'US') {
+          if (city && state) {
+            location = city + ', ' + state;
+          } else if (county && state) {
+            location = county + ' County, ' + state;
+          } else if (state) {
+            location = state + ', ' + country ;
+          } else {
+            location = country;
+          }
         } else {
-          location = country;
+          if (city && state) {
+            location = city + ', ' + state + ', ' + country;
+          } else if (county && state) {
+            location = county + ' County, ' + state + ', ' + country;
+          } else if (state) {
+            location = state + ', ' + country ;
+          } else if (city) {
+            location = city + ', ' + country;
+          } else {
+            location = country;
+          }
         }
-      } else {
-        if (city && state) {
-          location = city + ', ' + state + ', ' + country;
-        } else if (county && state) {
-          location = county + ' County, ' + state + ', ' + country;
-        } else if (state) {
-          location = state + ', ' + country ;
-        } else if (city) {
-          location = city + ', ' + country;
-        } else {
-          location = country;
-        }
-      }
-      
-      // TODO: show recurring meeting here instead
-      description = groups[i].properties.description;
-       
-      $('.groups-map-info__status').append('\
-        <div class="component">\
-          <div class="component__heading">\
-            <span class="component__location">' + location + '</span>\
-            <h4 class="component__name">' + groups[i].properties.name + ((groups[i].properties.state_organizing_committee) ? " (SOC) " : "") + '</h4>\
+        
+        // TODO: show recurring meeting here instead
+        description = groups[i].properties.description;
+        
+        $('.groups-map-info__status').append('\
+          <div class="component">\
+            <div class="component__heading">\
+              <span class="component__location">' + location + '</span>\
+              <h4 class="component__name">' + groups[i].properties.name + ((groups[i].properties.state_organizing_committee) ? " (SOC) " : "") + '</h4>\
+            </div>\
+            <div class="component__info">\
+              <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
+            </div> \
           </div>\
-          <div class="component__info">\
-            <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
-          </div> \
-        </div>\
-      ');
+        ');
+      }
+    } else {      
+      $('.groups-map-info__status').append('\
+        <div class="groups-map__add relative">\
+        <h4 class="mb20 mt0">We don\'t have any groups here yet.</h4>\
+        <a href="#" class="btn btn-block btn-primary uppercase ls2">Start a group</a>\
+        <a href="/groups/new" class="btn btn-block btn-secondary uppercase ls2">Add your group</a>\
+        \
+        <p class="mt20"><small>We\'re currently experiencing a high number of group applications,\ which may lead to delays in adding your group to the map.</small></p>\
+      </div>');
     }
     
   }

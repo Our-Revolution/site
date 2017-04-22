@@ -11,6 +11,7 @@
 //groups-map
 .groups-map {
   &-info {
+    position: relative;
     padding: 0;
     height: 600px;
     width: 340px;
@@ -55,6 +56,21 @@
       width: 100%;
       margin-left: 0;
     };
+  }
+  
+  &__add {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #eee;
+    padding: 20px;
+    border-top: solid 1px #ddd;
+    
+    &.relative {
+      position: relative;
+      border-bottom: solid 1px #ddd;
+    }
   }
   
   .component { 

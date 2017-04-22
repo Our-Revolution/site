@@ -16,7 +16,11 @@
       <div class="container pt6">
         <p class="mb0">
           {% with group.city|add:", "|default:"" as city %}
-            {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+            {% if city %}
+              {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+            {% else %}
+              {{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+            {% endif %}
           {% endwith %}</p>
         <h1 class="fw7 mt0">{{ group.name }}</h1>
       </div>
@@ -54,7 +58,7 @@
           <h3 class="mt0 mb0">Group Representative</h3>
           <div><strong>{{ group.rep_first_name }} {{ group.rep_last_name }}</strong></div>
           <div><a href="mailto:{{ group.rep_email }}?Subject={{group.name|urlencode}}">{{ group.rep_email }}</a></div>
-          <div><a href="tel:{{ group.rep_phone }}">{{ group.rep_phone }}</a></div>
+          {% if group.rep_phone %}<div><a href="tel:{{ group.rep_phone }}">{{ group.rep_phone }}</a></div>{% endif %}
         {% else %}
           <h4 class="mt0">Contact</h4>
           <p>We don't have any contact information for this group. If you're a representative of {{ group.name }}, please email us at <a href="mailto:info@ourrevolution.com?Subject={{ 'Add my local group'|urlencode }}">info@ourrevolution.com</a>.</p>

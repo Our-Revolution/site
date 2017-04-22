@@ -9987,6 +9987,7 @@ div.recurrence-widget {
     border-radius: 0 0 3px 3px; }
 
 .groups-map-info {
+  position: relative;
   padding: 0;
   height: 600px;
   width: 340px;
@@ -10021,6 +10022,18 @@ div.recurrence-widget {
       height: 400px;
       width: 100%;
       margin-left: 0; } }
+
+.groups-map__add {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #eee;
+  padding: 20px;
+  border-top: solid 1px #ddd; }
+  .groups-map__add.relative {
+    position: relative;
+    border-bottom: solid 1px #ddd; }
 
 .groups-map .component__heading {
   padding: 20px; }
