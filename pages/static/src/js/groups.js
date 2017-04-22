@@ -8,7 +8,7 @@ module.exports = function() {
   function initMap(mapDiv) {  
     map = L.map(mapDiv).setView([37.8, -96.9], 4);
     
-    var baseLayer = L.tileLayer('https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=' + mapboxToken, {
+    var baseLayer = L.tileLayer('https://api.mapbox.com/styles/v1/ourrevolution/cj1tl1d07001h2slqtzp1o8s5/tiles/256/{z}/{x}/{y}?access_token=' + mapboxToken, {
         maxZoom: 18 
       }
     ).addTo(map);
@@ -33,6 +33,7 @@ module.exports = function() {
       console.log("We can't find that place - try again.");
       return;
     } else {
+      $('.groups-map__intro').addClass('collapsed');
       map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]], {duration: 1});
     }
   }
