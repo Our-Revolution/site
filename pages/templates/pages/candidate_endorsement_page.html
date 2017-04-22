@@ -25,6 +25,7 @@
                     <h1>{{ page.candidate.name }}</h1>
                     <div>Running for {{ page.candidate.office }}</div>
                     <span>{{ page.candidate.state }}</span>
+                    {% if page.candidate.primary_date %}<div><strong>Election: {{page.candidate.primary_date}}</strong></div>{% endif %}
                 </div>
 
             </div>

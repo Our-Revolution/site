@@ -29,7 +29,7 @@
                             <div class="card__content">
                                 <span class="card__item">{{ candidate.name }}</span>
                                 <span class="card__item bold smaller">{{ candidate.state }} {{ candidate.district }}</span>
-                                <span class="card__item bottom">{{ candidate.office }}</span>
+                                <span class="card__item bottom">{% if candidate.primary_date %}<div class="card__item smaller bold">Election: {{ candidate.primary_date }}</div> {% endif %}{{ candidate.office }}</span>
                             </div>
                         </a>
                     </li>
