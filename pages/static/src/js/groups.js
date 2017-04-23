@@ -152,12 +152,13 @@ module.exports = function() {
       $('.groups-map-info__status').append('\
         <div class="groups-map__add relative">\
         <h4 class="mb20 mt0">We don\'t have any groups here yet.</h4>\
-        <a href="#" class="btn btn-block btn-primary uppercase ls2">Start a group</a>\
         <a href="/groups/new" class="btn btn-block btn-secondary uppercase ls2">Add your group</a>\
         \
         <p class="mt20"><small>We\'re currently experiencing a high number of group applications,\ which may lead to delays in adding your group to the map.</small></p>\
       </div>');
     }
+    
+    // <a href="#" class="btn btn-block btn-primary uppercase ls2">Start a group</a>\
     
   }
   
