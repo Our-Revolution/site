@@ -15,13 +15,15 @@
       
       <div class="container pt6">
         <p class="mb0">
-          {% with group.city|add:", "|default:"" as city %}
-            {% if city %}
-              {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
-            {% else %}
-              {{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
-            {% endif %}
-          {% endwith %}</p>
+          {% if not group.state_organizing_committee %}
+            {% with group.city|add:", "|default:"" as city %}
+              {% if city %}
+                {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+              {% else %}
+                {{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}
+              {% endif %}
+            {% endwith %}
+          {% endif %}</p>
         <h1 class="fw7 mt0">{{ group.name }}</h1>
       </div>
       
@@ -98,8 +100,9 @@
           <!-- TODO: Can we make this a list? -->
           <p>{{ group.get_types_of_organizing_display }}</p>
         {% endif %}
+
         
-        {% if group.issues %}
+        {% if group.issues.all %}
           <h2>Focus Issues</h2>
           <hr>
           
