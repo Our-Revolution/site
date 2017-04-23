@@ -10034,7 +10034,8 @@ div.recurrence-widget {
       border-radius: 3px;
       border: 1px solid #ccc;
       font-size: 16px;
-      height: 40px; }
+      height: 40px;
+      padding-right: 25px; }
       .groups-map-info__search input::-webkit-input-placeholder {
         color: #777; }
       .groups-map-info__search input::-moz-placeholder {
