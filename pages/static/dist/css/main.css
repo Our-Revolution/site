@@ -10004,7 +10004,7 @@ div.recurrence-widget {
       border-bottom: solid 1px #ddd;
       background: #f5f5f5; } }
   .groups-map-info__status {
-    max-height: calc(100% - 55px);
+    max-height: calc(100% - 120px);
     overflow: auto;
     background: #fafafa; }
   .groups-map-info__search {
