@@ -37,14 +37,78 @@
     
     &__search {
       padding: 5px;
-      border-bottom: 1px solid #ddd;
+      border: 1px solid #ddd;
+      border-width: 1px 0;
       background: #f5f5f5;
+      position: relative;
+      
+      &::after {
+        content: "\e003";
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translate(0, -50%);
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        color: #ccc;
+      }
+      
+      &.active::after {
+        color: $blue;
+      }
     
       input {
         border-radius: 3px;
         border: 1px solid #ccc;
+        font-size: 16px;
+        height: 40px;
+        padding-right: 25px;
+        
+        &::placeholder {
+          color:#777;
+          // font-weight: bold;
+        }
       }
     }
+  }
+  
+  &__heading {
+    position: relative;
+  }
+  
+  &__intro {
+    position: relative;
+    
+    .glyphicon {
+      position: absolute;
+      right: 0;
+      top: 38%;
+      transform: translate(0,-50%) rotate(180deg);
+      font-size: 15px;
+      transition: 0.25s;
+      cursor: pointer;
+      height: 15px;
+      line-height: 15px;
+      
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+    
+    &.collapsed {
+      .glyphicon {
+        transform: rotate(0);
+      }
+      
+      p {
+        display: none;
+      }
+    }
+  
   }
   
   &__map {

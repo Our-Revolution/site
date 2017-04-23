@@ -7357,7 +7357,7 @@ footer {
             margin-right: 0; } }
   .card-list .card {
     width: 23.5%;
-    height: 100px;
+    height: 125px;
     background: #f5f5f5;
     display: inline-block;
     overflow: hidden;
@@ -7374,7 +7374,7 @@ footer {
     .card-list .card.featured {
       border-right: 4px solid #d74e5b; }
     .card-list .card__content {
-      height: 100px;
+      height: 125px;
       position: relative; }
     .card-list .card__name {
       line-height: 12px; }
@@ -7392,7 +7392,7 @@ footer {
   .card-list .card__photo {
     display: inline-block;
     border-radius: 3px 0 0 3px;
-    height: 100px;
+    height: 125px;
     width: 100px;
     background: #999;
     background-size: cover;
@@ -9952,7 +9952,8 @@ div.recurrence-widget {
   left: 0;
   right: 0;
   border-radius: 0 0 3px 3px;
-  background: #218fff; }
+  background: #218fff;
+  min-height: 140px; }
 
 .campaigns__description {
   margin-bottom: 0; }
@@ -10008,11 +10009,68 @@ div.recurrence-widget {
     background: #fafafa; }
   .groups-map-info__search {
     padding: 5px;
-    border-bottom: 1px solid #ddd;
-    background: #f5f5f5; }
+    border: 1px solid #ddd;
+    border-width: 1px 0;
+    background: #f5f5f5;
+    position: relative; }
+    .groups-map-info__search::after {
+      content: "\e003";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      -ms-transform: translate(0, -50%);
+      transform: translate(0, -50%);
+      display: inline-block;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      color: #ccc; }
+    .groups-map-info__search.active::after {
+      color: #218fff; }
     .groups-map-info__search input {
       border-radius: 3px;
-      border: 1px solid #ccc; }
+      border: 1px solid #ccc;
+      font-size: 16px;
+      height: 40px;
+      padding-right: 25px; }
+      .groups-map-info__search input::-webkit-input-placeholder {
+        color: #777; }
+      .groups-map-info__search input::-moz-placeholder {
+        color: #777; }
+      .groups-map-info__search input:-ms-input-placeholder {
+        color: #777; }
+      .groups-map-info__search input::placeholder {
+        color: #777; }
+
+.groups-map__heading {
+  position: relative; }
+
+.groups-map__intro {
+  position: relative; }
+  .groups-map__intro .glyphicon {
+    position: absolute;
+    right: 0;
+    top: 38%;
+    -webkit-transform: translate(0, -50%) rotate(180deg);
+    -ms-transform: translate(0, -50%) rotate(180deg);
+    transform: translate(0, -50%) rotate(180deg);
+    font-size: 15px;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+    cursor: pointer;
+    height: 15px;
+    line-height: 15px; }
+    .groups-map__intro .glyphicon:hover {
+      opacity: 0.7; }
+  .groups-map__intro.collapsed .glyphicon {
+    -webkit-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0); }
+  .groups-map__intro.collapsed p {
+    display: none; }
 
 .groups-map__map {
   height: 600px;

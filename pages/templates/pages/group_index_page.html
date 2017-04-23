@@ -9,19 +9,51 @@
 
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<!-- 
+<div class="container-fluid">
+  <section class="row blue-bg pb6 white-text">
+    <div class="light-wash">
+      <div class="container">
+          <nav class="navbar__sub">
+            <ul class="nav navbar-nav no-collapse white-text">
+              <li><a data-scroll href="#mission">Mission</a></li>
+              <li><a data-scroll href="#membership">Membership</a></li>
+              <li><a data-scroll href="#board">Board</a></li>
+              <li><a data-scroll href="#staff">Staff</a></li>
+              <li><a data-scroll href="#transparency">Transparency & Legal</a></li>
+            </ul>
+          </nav>
+      </div>
+    </div>
+    
+    <div class="container pt6">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="pa20 br3 light-wash">
+            <h1 class="mt0 mb0">Campaigns end. Revolutions endure.</h1>
+            <p class="ts0">The next step for Bernie Sanders' movement is Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> -->
 
 <div class="container groups-map">
   <div class="row">
     <div class="groups-map-info">
+      <div class="groups-map__intro pa20 blue-bg action-bg white-text">
+        <h3 class="mt0 mb0 groups-map__heading">Local Groups <span class="glyphicon glyphicon-chevron-down"></h3>
+        <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area today.</p>
+      </div>
       <div class="groups-map-info__search">
+        <!-- <Label for="autocomplete-input" class="uppercase ls2">Search for a group</label> -->
         <input type="search" class="form-control maps-auto-complete" placeholder="Postal Code, City, or Address" id="autocomplete-input">
       </div>
 
       <div class="groups-map-info__status text-left">
-        <div class="component pa20">
-          <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area today.</p>
-          
-          <div class="groups-map__add hidden-xs">
+        <div class="component pa20 hidden-xs">          
+          <div class="groups-map__add">
             <h4 class="mb20 mt0">No group in your area?</h4>
             <a href="#" class="btn btn-block btn-primary uppercase ls2">Start a group</a>
             <a href="/groups/new" class="btn btn-block btn-secondary uppercase ls2">Add your group</a>
@@ -52,9 +84,21 @@
       Groups.addGroup(data.features[i]);
     }
   }
+  
+  $('#autocomplete-input').on('keyup', function(e) {
+    if(e.target.value.length > 0) {
+      $('.groups-map-info__search').addClass('active');
+    } else {
+      $('.groups-map-info__search').removeClass('active');
+    }
+  });
+  
+  $('.groups-map__heading .glyphicon').on('click touchstart', function(e) {
+    $('.groups-map__intro').toggleClass('collapsed');
+  })
 </script>
 
 <!--  Places Libary for Autocomplete -->
-<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBbScgtw3tU0lX4OG1Ga_JW85Gqpwu0RmA&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg&libraries=places&callback=initAutocomplete" async defer></script>
 
 {% endblock %}
