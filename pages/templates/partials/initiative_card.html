@@ -1,14 +1,16 @@
 {% load wagtailcore_tags %}
 
 <li class="card clearfix {% if initiative.featured %}featured{% endif %}">
-    <a href="{% pageurl initiative_page %}" {% if initiative.featured %}is-featured="true"{% endif %}>
-        <div class="card__content full">
-            <div>
-                <span class="icon {{ initiative.category }} category">{{ initiative.category }}</span>
-                <span class="card__item bold"><span class="uppercase vote">{{ initiative.vote | yesno }}</span> on <span class="title">{{ initiative.title }}</span></span>
-                <span class="card__item name">{{ initiative.name }}</span>
-            </div>
-            <span class="card__item bottom bold state">{{ initiative.state }}</span>
-        </div>
-    </a>
+    {% with initiative_page.slug as slug %}
+      <a href="{% pageurl initiative_page %}" {% if initiative.featured %}is-featured="true"{% endif %}>
+          <div class="card__content full">
+              <div>
+                  <span class="icon {{ initiative.category }} category">{{ initiative.category }}</span>
+                  <span class="card__item bold">{% if slug != 'voting-rights-restoration-felons-initiative-voting-restoration-amendment' %}<span class="uppercase vote">{{ initiative.vote | yesno }}</span> on {% endif %}<span class="title">{{ initiative.title }}</span></span>
+                  <span class="card__item name">{{ initiative.name }}</span>
+              </div>
+              <span class="card__item bottom bold state">{{ initiative.state }}</span>
+          </div>
+      </a>
+    {% endwith %}
 </li>

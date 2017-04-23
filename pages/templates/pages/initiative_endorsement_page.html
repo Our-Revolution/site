@@ -15,7 +15,7 @@
 
                     <div class="page-heading">
                         <div>
-                            <h1>{{ initiative.vote | yesno | title }} on {{ initiative.title }}: {{ initiative.name }}</h1>
+                            <h1>{% if initiative.slug not in 'voting-rights-restoration-felons-initiative-voting-restoration-amendment' %}{{ initiative.vote | yesno | title }} on {% endif %}{{ initiative.title }}: {{ initiative.name }}</h1>
                             <span>{{ initiative.state }}</span>
                         </div>
                     </div>
