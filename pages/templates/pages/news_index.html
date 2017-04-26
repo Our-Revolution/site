@@ -2,6 +2,8 @@
 
 {% load wagtailcore_tags %}
 
+{% load tz %}}
+
 {% block content %}
 
     <div class="container-fluid news">
@@ -16,7 +18,11 @@
                           <div class="col-md-8">
                             <h5 class="mb0 ls2 uppercase fs12">Latest</h5>
                             <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
-                            <p class="mt0">{% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}</p>
+                            <p class="mt0">
+                              {% timezone "America/New_York" %}
+                                {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
+                              {% endtimezone %}
+                            </p>
                             <p>{{post.newspost.abstract | striptags}}</p>
                           </div>
                         </a>
@@ -38,7 +44,11 @@
                         <div class="col-md-8 col-md-offset-2">
                           <h5 class="mb0 ls2 uppercase">{{post.newspost.get_post_type_display}}</h5>
                           <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
-                          <p class="mt0">{% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}</p>
+                          <p class="mt0">
+                            {% timezone "America/New_York" %}
+                              {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
+                            {% endtimezone %}
+                          </p>
                           <p>{{post.newspost.abstract | striptags}}</p>
                         </div>
                       </a>
