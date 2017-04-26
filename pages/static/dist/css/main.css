@@ -7653,6 +7653,13 @@ footer {
   right: 0;
   margin: auto; }
 
+.legal-blocks .block {
+  display: table;
+  height: 115px; }
+  .legal-blocks .block a {
+    display: table-cell;
+    vertical-align: middle; }
+
 .richtext-image.full-width {
   max-width: 100%;
   height: auto;

@@ -1363,6 +1363,20 @@ footer {
   margin: auto;
 }
 
+.legal-blocks {
+  .block {
+    display: table;
+    height: 115px;
+    
+    a {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  
+  
+}
+
 
 // hacks
 .richtext-image.full-width{
