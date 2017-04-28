@@ -76,9 +76,7 @@
   
   var data = {{groups|safe}}
   
-  for(i=0; i<data.features.length; i++) {
-    console.log(data.features[i])
-    
+  for(i=0; i<data.features.length; i++) {    
     if(data.features[i].properties.status == 'approved'){
       
       Groups.addGroup(data.features[i]);

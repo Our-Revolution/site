@@ -30,7 +30,6 @@ module.exports = function() {
 
     if (!place.geometry) {
       // TODO: Display this in .app__info
-      console.log("We can't find that place - try again.");
       return;
     } else {
       $('.groups-map__intro').addClass('collapsed');
@@ -99,9 +98,7 @@ module.exports = function() {
     var location = '', city, county, state, country;
     
     resetInfo();
-        
-    console.log(groups.length)    
-        
+                
     if(groups.length != 0){    
       for (var i=0; i<groups.length; i++) {    
         city = groups[i].properties.city;
