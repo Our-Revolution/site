@@ -6309,6 +6309,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   background-size: cover;
   color: white; }
 
+.groups-bg {
+  background: #218fff url("../img/local-groups.jpg");
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .groups-bg .module__heading, .groups-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .groups-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
@@ -9301,8 +9312,7 @@ footer {
       @media screen and (max-width: 767px) {
         .module-col.third.margin-left {
           margin-right: 0;
-          margin-left: 0;
-          margin-top: 20px; } }
+          margin-left: 0; } }
     .module-col.third.alone {
       width: 32%;
       width: calc(34% - 10px);
@@ -9322,8 +9332,7 @@ footer {
       margin-left: 10px; }
       @media screen and (max-width: 767px) {
         .module-col.two-thirds.margin-left {
-          margin-left: 0;
-          margin-top: 20px; } }
+          margin-left: 0; } }
     .module-col.two-thirds.alone {
       width: 64%;
       width: calc(66% - 10px);
@@ -9344,8 +9353,7 @@ footer {
       @media screen and (max-width: 767px) {
         .module-col.sixty.margin-right {
           margin-left: 0;
-          margin-right: 0;
-          margin-top: 20px; } }
+          margin-right: 0; } }
     .module-col.sixty.margin-left {
       width: 58%;
       width: calc(60% - 10px);
@@ -9353,8 +9361,7 @@ footer {
       @media screen and (max-width: 767px) {
         .module-col.sixty.margin-left {
           margin-left: 0;
-          margin-right: 0;
-          margin-top: 20px; } }
+          margin-right: 0; } }
   .module-col.forty {
     width: 40%; }
     .module-col.forty.alone {
@@ -9371,16 +9378,14 @@ footer {
       margin-right: 10px; }
       @media screen and (max-width: 767px) {
         .module-col.forty.margin-right {
-          margin-right: 0;
-          margin-top: 20px; } }
+          margin-right: 0; } }
     .module-col.forty.margin-left {
       width: 38%;
       width: calc(40% - 10px);
       margin-left: 10px; }
       @media screen and (max-width: 767px) {
         .module-col.forty.margin-left {
-          margin-left: 0;
-          margin-top: 20px; } }
+          margin-left: 0; } }
   .module-col.full {
     width: 100%; }
   @media screen and (max-width: 767px) {

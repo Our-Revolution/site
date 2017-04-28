@@ -575,7 +575,7 @@
       @include until($medium) {
         margin-right: 0;
         margin-left: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
     
@@ -608,7 +608,7 @@
     
       @include until($medium) {
         margin-left: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
     
@@ -641,7 +641,7 @@
       @include until($medium) {
         margin-left: 0;
         margin-right: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
     
@@ -653,7 +653,7 @@
       @include until($medium) {
         margin-left: 0;
         margin-right: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
   }
@@ -679,7 +679,7 @@
       
       @include until($medium) {
         margin-right: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
     
@@ -690,7 +690,7 @@
       
       @include until($medium) {
         margin-left: 0;
-        margin-top: 20px;
+        // margin-top: 20px;
       };
     }
   }
