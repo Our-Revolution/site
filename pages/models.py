@@ -204,7 +204,7 @@ class NewsIndex(Page):
         # context['news_posts'] = self.get_children().live().order_by('-id')
         
         all_posts = self.get_children().live().order_by('-id')
-        paginator = Paginator(all_posts, 6) # Show 5 resources per page
+        paginator = Paginator(all_posts, 5) # Show 5 resources per page
         
         page = request.GET.get('page')
         try:

@@ -6,83 +6,99 @@
 
 {% block content %}
 
-    <div class="container-fluid news">
-        <div class="row">
-          {% if not resources.has_previous %}
-            {% with resources|first as post %}
-              <div class="blue-bg white-text">
-                <div class="container">
-                    <div class="row">
-                      <div class="news__item--first">
-                        <a href="{% pageurl post %}" class="full-link clearfix"> 
-                          <div class="col-md-8">
-                            <h5 class="mb0 ls2 uppercase fs12">Latest</h5>
-                            <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
-                            <p class="mt0">
-                              {% timezone "America/New_York" %}
-                                {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
-                              {% endtimezone %}
-                            </p>
-                            <p>{{post.newspost.abstract | striptags}}</p>
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                </a>
-              </div>
-              </div>
-            {% endwith %}
-          {% endif %}
-          
-            
-            <div class="container">
-              <div class="col-md-12">
-                {% for post in resources|slice:"" %}
-                  {% if not forloop.first %}
-                    <div class="news__item clearfix">
-                      <a href="{% pageurl post %}" class="full-link clearfix">
-                        <div class="col-md-8 col-md-offset-2">
-                          <h5 class="mb0 ls2 uppercase">{{post.newspost.get_post_type_display}}</h5>
-                          <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
-                          <p class="mt0">
-                            {% timezone "America/New_York" %}
-                              {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
-                            {% endtimezone %}
-                          </p>
-                          <p>{{post.newspost.abstract | striptags}}</p>
-                        </div>
-                      </a>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-              
+	<div class="container-fluid news">
+	    <div class="row">
+		  {% if resources.number is 1 and not resources.has_previous %}
+  			{% with resources|first as post %}
+  			  <div class="blue-bg white-text">
+    				<div class="container">
+    					<div class="row">
+    					  <div class="news__item--first">
+    						<a href="{% pageurl post %}" class="full-link clearfix"> 
+    						  <div class="col-md-8">
+    							<h5 class="mb0 ls2 uppercase fs12">Latest</h5>
+    							<h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
+    							<p class="mt0">
+    							  {% timezone "America/New_York" %}
+    								{% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
+    							  {% endtimezone %}
+    							</p>
+    							<p>{{post.newspost.abstract | striptags}}</p>
+    						  </div>
+    						</a>
+    					  </div>
+    					</div>
+    				</a>
+    			  </div>
+  			  </div>
+  			{% endwith %}
+		  {% endif %}
+			
+			<div class="container">
+			  <div class="col-md-12">
+				{% for post in resources|slice:"" %}
+          {% if resources.number is 1 %}
+  				  {% if not forloop.first %}
+    					<div class="news__item clearfix">
+    					  <a href="{% pageurl post %}" class="full-link clearfix">
+    						<div class="col-md-8 col-md-offset-2">
+    						  <h5 class="mb0 ls2 uppercase">{{post.newspost.get_post_type_display}}</h5>
+    						  <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
+    						  <p class="mt0">
+    							{% timezone "America/New_York" %}
+    							  {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
+    							{% endtimezone %}
+    						  </p>
+    						  <p>{{post.newspost.abstract | striptags}}</p>
+    						</div>
+    					  </a>
+    					</div>
+  				  {% endif %}
+          {% else %}
+            <div class="news__item clearfix">
+              <a href="{% pageurl post %}" class="full-link clearfix">
               <div class="col-md-8 col-md-offset-2">
-                <nav aria-label="Page navigation">
-                  <ul class="pagination">
-                    {% if resources.has_previous %}
-                      <li>
-                        <a href="?page={{ resources.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span>
-                        </a>
-                      </li>
-                    {% endif %}
-                    {% for page_num in resources.paginator.page_range %}
-                      <li {% if page_num == resources.number %}class="active"{% endif %}><a href="?page={{ page_num }}">{{ page_num }}</a></li>
-                    {% endfor %}
-                    
-                    {% if resources.has_next %}
-                      <li>
-                        <a href="?page={{ resources.next_page_number }}" aria-label="Next">
-                          <span aria-hidden="true">&raquo;</span>
-                        </a>
-                      </li>
-                    {% endif %}
-                  </ul>
-                </nav>
+                <h5 class="mb0 ls2 uppercase">{{post.newspost.get_post_type_display}}</h5>
+                <h2 class="mt0 mb0 news__item__title">{{post.title}}</h2>
+                <p class="mt0">
+                {% timezone "America/New_York" %}
+                  {% if post.first_published_at %}{{post.first_published_at|date:"jS F, Y"}}{% endif %}
+                {% endtimezone %}
+                </p>
+                <p>{{post.newspost.abstract | striptags}}</p>
               </div>
+              </a>
             </div>
-        </div>
-    </div>
+          {% endif %}
+				{% endfor %}
+			  </div>
+			  
+			  <div class="col-md-8 col-md-offset-2">
+				<nav aria-label="Page navigation">
+				  <ul class="pagination">
+					{% if resources.has_previous %}
+					  <li>
+						<a href="?page={{ resources.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span>
+						</a>
+					  </li>
+					{% endif %}
+					{% for page_num in resources.paginator.page_range %}
+					  <li {% if page_num == resources.number %}class="active"{% endif %}><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+					{% endfor %}
+					
+					{% if resources.has_next %}
+					  <li>
+						<a href="?page={{ resources.next_page_number }}" aria-label="Next">
+						  <span aria-hidden="true">&raquo;</span>
+						</a>
+					  </li>
+					{% endif %}
+				  </ul>
+				</nav>
+			  </div>
+			</div>
+		</div>
+	</div>
 
 
 {% endblock %}
