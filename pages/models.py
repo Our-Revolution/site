@@ -65,7 +65,10 @@ class IndexPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(IndexPage, self).get_context(*args, **kwargs)
         try:
-            context['news'] = self.get_children().get(title='News').get_children().live().order_by('-id')[0:3]
+            news = self.get_children().get(title='News').get_children().live()
+            q = news.extra(select={'first_published_at_is_null':'first_published_at IS NULL'})
+            sorted_news = q.order_by('first_published_at_is_null','-first_published_at','-go_live_at')[0:3]
+            context['news'] = sorted_news
         except Page.DoesNotExist:
             pass
         return context
@@ -203,8 +206,12 @@ class NewsIndex(Page):
         context = super(NewsIndex, self).get_context(request)
         # context['news_posts'] = self.get_children().live().order_by('-id')
         
-        all_posts = self.get_children().live().order_by('-id')
-        paginator = Paginator(all_posts, 5) # Show 5 resources per page
+        all_posts = self.get_children().live()
+        
+        q = all_posts.extra(select={'first_published_at_is_null':'first_published_at IS NULL'})
+        sorted_posts = q.order_by('first_published_at_is_null','-first_published_at','-go_live_at')
+        
+        paginator = Paginator(sorted_posts, 5) # Show 5 resources per page
         
         page = request.GET.get('page')
         try:
