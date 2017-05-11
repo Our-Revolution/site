@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags wagtailcore_tags %}
 
 {% load tz %}
 
@@ -23,7 +23,7 @@
 
             <section class="home-section">
                 <div class="col-md-8 col-md-offset-2">
-                    {{ page.body | safe }}
+                    {{ page.body | richtext }}
                 </div>
             </section>
         </div>
