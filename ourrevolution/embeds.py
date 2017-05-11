@@ -63,7 +63,7 @@ def oembed_monkeypatched(url, max_width=None):
     oembed = json.loads(r.read().decode('utf-8'))
 
     # Convert photos into HTML
-    if oembed['type'] == 'photo':
+    if oembed['type'] in ('photo', 'image'):
         html = '<img src="%s" />' % (oembed['url'], )
     else:
         html = oembed.get('html')
