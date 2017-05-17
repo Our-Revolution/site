@@ -6331,6 +6331,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.krasner-bg {
+  background: #218fff url("../img/krasner-wins.jpg");
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .krasner-bg .module__heading, .krasner-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .krasner-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
