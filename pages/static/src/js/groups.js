@@ -33,7 +33,13 @@ module.exports = function() {
       return;
     } else {
       $('.groups-map__intro').addClass('collapsed');
-      map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]], {duration: 1});
+
+      if(place.types.indexOf("street_address") == -1 && place.types.indexOf("premise") == -1){
+        map.flyToBounds([[place.geometry.viewport.getNorthEast().lat(), place.geometry.viewport.getNorthEast().lng()], [place.geometry.viewport.getSouthWest().lat(), place.geometry.viewport.getSouthWest().lng()]], {duration: 1});
+      } else {
+        map.flyTo([place.geometry.location.lat(), place.geometry.location.lng()], 10, {duration:1});
+      }
+
     }
   }
   
