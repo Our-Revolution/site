@@ -11,14 +11,14 @@
     <div class="container">
       <section class="module-container module-container--video clearfix">          
         <div class="module-col margin-right sixty table br3">
-          <div class="module full centered dark-blue-bg krasner-bg white-text br3" id="news-module-home">            
-            <div class="module__content bottom boldest br3">
+          <div class="module full centered dark-blue-bg tpp-bg white-text br3" id="news-module-home">            
+            <div class="module__content boldest br3">
               <div class="br3 pa20 dark-wash mb20">
-                <h1 class="fs4 mt0 mb0">Congratulations Larry Krasner</h1>
-                <p>“Larry Krasner’s win is a victory for the thousands of Philadelphia women and men who are victims of our country's failed criminal justice system." – Our Revolution Board Member Nina Turner</p>
+                <h1 class="mt0 mb0 fs4">Our Revolution on NAFTA Negotiations: We Must Ensure This Isn’t Another Corporate Welfare Deal</h1>
+                <p>“We demand an open negotiation process, so we can see who this trade deal actually benefits. We will remain vigilant to ensure this isn’t another corporate welfare deal that destroys our jobs and further increases wealth inequality." – Our Revolution Board Chair and former CWA President Larry Cohen</p>
               </div>
               
-              <a href="/press/our-revolution-statement-philadelphia-district-attorney-election/" class="btn btn-block btn-primary ls2 uppercase">Read More</a>
+              <a href="/press/our-revolution-nafta-negotiations-we-must-ensure-isnt-another-corporate-welfare-deal/" class="btn btn-block btn-secondary ls2 uppercase">Read More</a>
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@
                 <h1 class="fs4 mt0 mb0">Local Groups</h1>
                 <p>Search for a local Our Revolution group in your area or start your own group today.</p>
                 
-                <a href="/groups" class="btn btn-block btn-primary ls2 uppercase">Find a Group</a>
+                <a href="/groups" class="btn btn-block btn-secondary ls2 uppercase">Find a Group</a>
               </div>
             </div>
           </div>
@@ -105,10 +105,13 @@
                   <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
                   <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
                   <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
-                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
               </div>
             {% endfor %}
+            <div class="col-xs-12 col-p10 mt10">
+              <a href="/press" class="btn btn-primary btn-block uppercase ls2">Read More News <span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
         </section>
       </div>
     </div>
@@ -131,7 +134,7 @@
           </span>
 
           <span class="form-group submit">
-            <button class="btn btn-primary btn-block">Join</button>
+            <button class="btn btn-primary btn-block uppercase ls2">Join</button>
           </span>
         </form>
       </section>
@@ -149,7 +152,7 @@
           <button type="button" class="btn btn-default btn-amount" value="50">$50</button>
           <button type="button" class="btn btn-default btn-amount" value="100">$100</button>
           <input type="text" placeholder="$___" class="input-amount">
-          <button class="btn btn-continue btn-secondary" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
+          <button class="btn btn-continue btn-secondary uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
           <input type="hidden" name="amount" id="amount">
           <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
         </form>
