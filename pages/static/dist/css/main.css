@@ -6205,6 +6205,30 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.quist-red-blue-bg {
+  background: #004387 url("../img/quist-red-blue.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .quist-red-blue-bg .module__heading, .quist-red-blue-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .quist-red-blue-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
+.pellegrino-bg {
+  background: #218fff url("../img/pellegrino.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .pellegrino-bg .module__heading, .pellegrino-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .pellegrino-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .five-endorsements-bg {
   background: #004387 url("../img/five-endorsements.jpg") no-repeat;
   background-position: center;
