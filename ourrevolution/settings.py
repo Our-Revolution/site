@@ -95,7 +95,7 @@ INSTALLED_APPS = [
     'pages',
     'social_redirects',
     'local_groups',
-    'group_endorsements'
+    'nominations'
 ]
 
 PHONENUMBER_DB_FORMAT = "E164"

@@ -8,7 +8,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Nomination(models.Model):
     group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
-    group_id = models.CharField(max_length=4,null=True, blank=False)
+    group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")
     group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process")   
     
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
