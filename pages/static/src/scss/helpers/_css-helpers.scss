@@ -864,3 +864,35 @@ a.white-text {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
 }
+
+.perriello-bg {
+  background: $blue url('../img/perriello-bg.jpg');
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+  
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+.or-ma-bg {
+  background: $blue url('../img/or-ma.jpg') center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+  
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
