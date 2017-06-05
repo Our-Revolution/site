@@ -3,21 +3,14 @@ from __future__ import unicode_literals
 from django.db import models
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
-
-# Create your models here.
-
+from local_groups.models import Group
+    
 class Nomination(models.Model):
-    group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
-    group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")
-    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process")   
-    
-    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
-    rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
-    rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
-    rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
-    
-    candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
-    candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
+    """
+    A nomination is filled out by the group with basic information about the group's noination process and reasons why a candidite or initiative should be endorsed.
+    """    
+
+    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process") 
     
     candidate_progressive_champion = models.TextField(max_length=500, blank=False, null=True, verbose_name = "How is the candidate a progressive champion?")
     candidate_community = models.TextField(max_length=500, blank=False, null=True, verbose_name = "What has the candidate done for the community?")
@@ -31,6 +24,10 @@ class Nomination(models.Model):
     candidiate_importance_of_endorsement = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Why is an our Revolution national endorsement important in this race?")
 
 class Questionnaire(models.Model):
+    """
+    A questionnaire is filled out by the candidate with basic information and in-depth policy positions.
+    """    
+    
     # Candidate Information and Social Media
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
@@ -137,3 +134,35 @@ class Questionnaire(models.Model):
     #Local Issues
     question_local_issues = models.CharField(max_length=1,blank=False, null=True, choices=QUESTIONNAIRE_CHOICES, verbose_name="Briefly list important local issues included in your platform.")
     
+
+class Application(models.Model):
+    """
+    An application is a single submission for an endorsement. Each application consists of a nomination and a questionnaire, and has a many-to-one relationship witha  group
+    """
+    
+    create_dt = models.DateTimeField(auto_now_add=True)
+    nomination = models.OneToOneField(
+        Nomination,
+        on_delete=models.SET_NULL,
+        primary_key=False,
+        null=True,
+        blank=False
+    )
+    questionnaire = models.OneToOneField(
+        Questionnaire,
+        on_delete=models.SET_NULL,
+        primary_key=False,
+        null=True,
+        blank=False
+    )
+
+    group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
+    group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")  
+    
+    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
+    rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
+    rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
+    rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
+    
+    candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
+    candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
