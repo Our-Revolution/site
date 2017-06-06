@@ -1,14 +1,32 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models.signals import post_save
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
     
+#TODO: automate endorsement -> approval -> candidates page 
+    
 class Nomination(models.Model):
     """
-    A nomination is filled out by the group with basic information about the group's noination process and reasons why a candidite or initiative should be endorsed.
+    A nomination is filled out by the group with basic information about the group's nomination process and reasons why a candidate or initiative should be endorsed.
     """    
+    
+    #TODO: foreign key to group
+    group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
+    group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")  
+    
+    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
+    rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
+    rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
+    rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
+    
+    #TODO: possibly change to foreign key
+    candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
+    candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
+    candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
+    candidate_state = USStateField(max_length=2, null=True, blank=False)
 
     group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process") 
     
@@ -22,12 +40,16 @@ class Nomination(models.Model):
     candidate_group_organizing = models.BooleanField(default=False, blank=False, verbose_name = "Are people in the nominating Our Revolution group willing to organize for the candidate?")
     candidate_group_organizing_actions = models.TextField(max_length=500, blank=False, null=True, verbose_name = "What actions will the group take and how many people have agreed to volunteer/work?")
     candidiate_importance_of_endorsement = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Why is an our Revolution national endorsement important in this race?")
+    
+    def __unicode__(self):
+        return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
 
 class Questionnaire(models.Model):
     """
-    A questionnaire is filled out by the candidate with basic information and in-depth policy positions.
+    A platform questionnaire is filled out by the candidate with basic information and in-depth policy positions.
     """    
     
+    #TODO: possibly change to foreign key
     # Candidate Information and Social Media
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
@@ -134,28 +156,35 @@ class Questionnaire(models.Model):
     #Local Issues
     question_local_issues = models.CharField(max_length=1,blank=False, null=True, choices=QUESTIONNAIRE_CHOICES, verbose_name="Briefly list important local issues included in your platform.")
     
+    def __unicode__(self):
+        return str(self.candidate_first_name + ' ' + self.candidate_last_name)
 
 class Application(models.Model):
     """
-    An application is a single submission for an endorsement. Each application consists of a nomination and a questionnaire, and has a many-to-one relationship witha  group
+    An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
     """
     
     create_dt = models.DateTimeField(auto_now_add=True)
+    
+    #TODO: move to group nomination form
     nomination = models.OneToOneField(
         Nomination,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         primary_key=False,
         null=True,
-        blank=False
+        blank=True
     )
+    
+    #TODO: change to foreign key
     questionnaire = models.OneToOneField(
         Questionnaire,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         primary_key=False,
         null=True,
-        blank=False
+        blank=True
     )
-
+    
+    #TODO: change to foreign key
     group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
     group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")  
     
@@ -164,5 +193,21 @@ class Application(models.Model):
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
     
+    #TODO: possibly change to foreign key
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
+    candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
+    candidate_state = USStateField(max_length=2, null=True, blank=False)
+    
+    #TODO: Flesh out (get with E and G to figure out statuses)
+    STATUSES = (
+       ('incomplete', 'Incomplete'),
+       ('submitted', 'Submitted'),
+       ('approved', 'Approved'),
+       ('removed', 'Denied')
+   ) 
+    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
+    
+    def __unicode__(self):
+        return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
+    
