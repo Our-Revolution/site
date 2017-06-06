@@ -6370,6 +6370,28 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.perriello-bg {
+  background: #218fff url("../img/perriello-bg.jpg");
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .perriello-bg .module__heading, .perriello-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .perriello-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
+.or-ma-bg {
+  background: #218fff url("../img/or-ma.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .or-ma-bg .module__heading, .or-ma-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .or-ma-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
