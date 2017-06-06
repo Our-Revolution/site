@@ -13,7 +13,7 @@ class Nomination(models.Model):
     A nomination is filled out by the group with basic information about the group's nomination process and reasons why a candidate or initiative should be endorsed.
     """    
     
-    #TODO: foreign key to group
+    #TODO: remove group info from here because it's attached to application which this is attached to
     group_name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
     group_id = models.CharField(max_length=4,null=True, blank=False, verbose_name="Group ID")  
     
@@ -22,7 +22,7 @@ class Nomination(models.Model):
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
     
-    #TODO: possibly change to foreign key
+    #TODO: replicate whatever we do in Application
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
@@ -49,7 +49,9 @@ class Questionnaire(models.Model):
     A platform questionnaire is filled out by the candidate with basic information and in-depth policy positions.
     """    
     
-    #TODO: possibly change to foreign key
+    #TODO: replicate whatever we do in Application
+    #TODO: make sure we're getting all office/district/location info we need
+     
     # Candidate Information and Social Media
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
@@ -63,6 +65,9 @@ class Questionnaire(models.Model):
     candidate_instagram_url = models.URLField(null=True, blank=True, verbose_name="Candidate Instagram URL", max_length=255)
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
     
+    # TODO: donation links 
+    
+    # TODO: Make questions their own model
     # Multiple Choices
     QUESTIONNAIRE_CHOICES = (
         ('a', 'Agree'),
@@ -166,7 +171,6 @@ class Application(models.Model):
     
     create_dt = models.DateTimeField(auto_now_add=True)
     
-    #TODO: move to group nomination form
     nomination = models.OneToOneField(
         Nomination,
         on_delete=models.CASCADE,
@@ -193,7 +197,7 @@ class Application(models.Model):
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
     
-    #TODO: possibly change to foreign key
+    #TODO: change to foreign key and create new object for each new candidate, implement autocomplete to  minimize duplicate candidates
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
