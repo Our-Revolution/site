@@ -14,7 +14,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64, null=True, blank=False, verbose_name="Group Name")
     slug = models.SlugField(null=True, blank=False, unique=True, max_length=100)
     signup_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    group_id = models.CharField(max_length=4,null=True, blank=False)
+    group_id = models.CharField(max_length=4,null=True, blank=False, unique=True)
     
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
     rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
