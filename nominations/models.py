@@ -43,7 +43,6 @@ class Questionnaire(models.Model):
     A platform questionnaire is filled out by the candidate with basic information and in-depth policy positions.
     """    
     
-    #TODO: replicate whatever we do in Application
     #TODO: make sure we're getting all office/district/location info we need
      
     # Candidate Information and Social Media
@@ -53,13 +52,14 @@ class Questionnaire(models.Model):
     candidate_phone = PhoneNumberField(null=True, blank=True, verbose_name="Candidate Phone Number")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
     candidate_district = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate District")
-    candidate_state = USStateField(max_length=2, null=True, blank=False)
+    candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
     candidate_website_url = models.URLField(null=True, blank=True, verbose_name="Candidate Website URL", max_length=255)
     candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
     candidate_facebook_url = models.URLField(null=True, blank=True, verbose_name="Candidate Facebook URL", max_length=255)
     candidate_twitter_url = models.URLField(null=True, blank=True, verbose_name="Candidate Twitter URL", max_length=255)
     candidate_instagram_url = models.URLField(null=True, blank=True, verbose_name="Candidate Instagram URL", max_length=255)
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
+    candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
     
     def __unicode__(self):
         return str(self.candidate_first_name + ' ' + self.candidate_last_name)

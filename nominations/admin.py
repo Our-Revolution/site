@@ -6,7 +6,7 @@ from local_groups.models import Group
 
 class NominationResponseInline(admin.StackedInline):
     model = NominationResponse
-    fields = ['response']
+    fields = ['question','response']
 
 
 @admin.register(Nomination)
@@ -31,7 +31,7 @@ class NominationQuestionAdmin(admin.ModelAdmin):
 
 class ResponseInline(admin.StackedInline):
     model = Response
-    fields = ['response', 'position']
+    fields = ['question','response', 'position']
 
 
 @admin.register(Questionnaire)
