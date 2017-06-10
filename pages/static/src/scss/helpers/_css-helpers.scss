@@ -896,3 +896,19 @@ a.white-text {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
 }
+
+.ppl-bg {
+  background: url('../img/ppl-bg.jpg') center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+  
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}

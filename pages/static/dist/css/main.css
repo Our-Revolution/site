@@ -6392,6 +6392,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.ppl-bg {
+  background: url("../img/ppl-bg.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .ppl-bg .module__heading, .ppl-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .ppl-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
@@ -8957,6 +8968,29 @@ footer {
     @media screen and (max-width: 991px) {
       .module-container--video {
         height: 600px; } }
+  .module-container--ppl {
+    display: block;
+    height: 600px; }
+    @media screen and (max-width: 991px) {
+      .module-container--ppl {
+        height: auto; }
+        .module-container--ppl .module-container {
+          height: auto;
+          -webkit-flex-flow: row wrap;
+          -ms-flex-flow: row wrap;
+          flex-flow: row wrap; }
+          .module-container--ppl .module-container .module--centered {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 100%;
+            -ms-flex: 0 0 100%;
+            flex: 0 0 100%; }
+        .module-container--ppl .module-col {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          width: 100% !important;
+          -webkit-flex-flow: row wrap;
+          -ms-flex-flow: row wrap;
+          flex-flow: row wrap; } }
 
 .module {
   height: auto;
@@ -10213,3 +10247,19 @@ div.recurrence-widget {
 
 .groups-map .leaflet-popup-content-wrapper {
   border-radius: 3px; }
+
+.schedule .schedule__item {
+  padding-top: 10px;
+  border-bottom: 1px rgba(255, 255, 255, 0.8); }
+
+.schedule .schedule__title {
+  margin-bottom: 0; }
+
+.schedule .schedule__time {
+  margin-top: 15px;
+  font-size: 12px; }
+
+.schedule .schedule__speakers {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 12px; }
