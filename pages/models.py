@@ -625,3 +625,12 @@ class PeoplesSummitStreamPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+class PeoplesSummitIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    content_panels = Page.content_panels
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
