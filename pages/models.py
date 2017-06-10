@@ -614,12 +614,13 @@ class PeoplesSummitStreamPage(Page):
     livestream_title = models.TextField()
     livestream_time = models.TextField()
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-
+    is_over = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
             FieldPanel('stream_id'),
             FieldPanel('livestream_title'),
             FieldPanel('livestream_time'),
+            FieldPanel('is_over'),
         ]
 
     promote_panels = Page.promote_panels + [
