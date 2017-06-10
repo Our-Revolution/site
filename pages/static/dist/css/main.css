@@ -6393,7 +6393,7 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     text-shadow: 0 0 5px black; }
 
 .ppl-bg {
-  background: url("../img/ppl-bg.jpg") center center;
+  background: #218fff url("../img/ppl-bg.jpg") center center;
   background-size: cover;
   color: white;
   font-weight: bolder; }
