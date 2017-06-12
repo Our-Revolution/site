@@ -18,6 +18,33 @@
       height: 600px;
     };
   }
+  
+  &--ppl {
+    display: block;
+    height: 600px;
+    
+    @include until($large) {
+      height: auto;
+      
+      .module-container {
+        height: auto;
+        flex-flow: row wrap;
+
+        .module--centered {
+          flex: 0 0 100%;
+        }
+      }
+      
+      .module-col {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          width: 100%!important;
+          -webkit-flex-flow: row wrap;
+          -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+      }
+    }
+  }
 }
 
 .module {

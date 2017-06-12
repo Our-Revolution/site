@@ -608,3 +608,32 @@ class GroupPage(RoutablePageMixin, Page):
             'page': self,
             'group':group
         })
+
+class PeoplesSummitStreamPage(Page):
+    stream_id = models.CharField(max_length=30)
+    facebook_stream_url = models.CharField(max_length=250, null=True, blank=True)
+    livestream_title = models.TextField()
+    livestream_time = models.TextField()
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    is_over = models.BooleanField(default=False)
+
+    content_panels = Page.content_panels + [
+            FieldPanel('stream_id'),
+            FieldPanel('facebook_stream_url'),
+            FieldPanel('livestream_title'),
+            FieldPanel('livestream_time'),
+            FieldPanel('is_over'),
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
+class PeoplesSummitIndexPage(Page):
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    content_panels = Page.content_panels
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]

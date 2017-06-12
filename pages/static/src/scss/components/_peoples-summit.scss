@@ -1,0 +1,26 @@
+.schedule {
+  // padding-bottom: 0;
+  
+  .schedule__item {
+    padding-top: 10px;
+    // height: 100px;
+    // width: 100%;
+    border-bottom: 1px rgba(255,255,255,0.8);
+    // padding-bottom: 10px;
+  }
+  
+  .schedule__title {
+    margin-bottom: 0;
+  }
+  
+  .schedule__time {
+    margin-top: 15px;
+    font-size: 12px;
+  }
+  
+  .schedule__speakers {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+  }
+}
