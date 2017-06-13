@@ -1,17 +1,48 @@
 {% extends "pages/base_page.html" %}
 
+{% load bootstrap3 %}
+
 {% block page_title %}Nominate a Candidate or Ballot Initiative{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
-  <div class="container">
-    <h1>Start a new nomination.</h1>
-    <p>Our Revolution endorsements are made from the recommendations of our hundreds of official local groups across the world. Official local groups are groups that have gone through group onboarding, have signed the Memorandum of Understanding, and have received a Group ID.</p>
+  <div class="row blue-bg white-text pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Start a new nomination.</h1>
+        <p>Our Revolution endorsements are made from the recommendations of our hundreds of official local groups across the world. Official local groups are groups that have gone through group onboarding, have signed the Memorandum of Understanding, and have received a Group ID.</p>
 
-    <p>To start a new endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</p>
+        <p>To start a new endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</p>
 
-    <p>Don’t have a Group ID or need help becoming an official Our Revolution group?</p>
+        <p>Don’t have a Group ID or need help becoming an official Our Revolution group? <strong><a href="#">Click here.</a></strong></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <form action="" method="post">
+  				{% csrf_token %}
+
+  				<div class="row">
+  					<div class="col-sm-6">
+  						{% bootstrap_field form.rep_email %}
+  					</div>
+            <div class="col-sm-6">
+  					</div>
+  					<div class="col-xs-12">
+  					</div>
+  				</div>
+
+  				{% buttons %}
+  					{% bootstrap_button "Start a Nomination" button_type="submit" button_class="btn-primary btn-block uppercase ls2 mt20" %}
+  				{% endbuttons %}
+
+  			</form>
+      </div>
+    </div>
   </div>
 </div>
 
