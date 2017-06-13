@@ -137,5 +137,5 @@ class Application(models.Model):
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
     
     def __unicode__(self):
-        return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
+        return str(self.group.name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
     
