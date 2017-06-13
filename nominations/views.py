@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
-from django.views.generic import FormView
+from django.views.generic import CreateView
 from forms import NewApplicationForm
 from models import Nomination
 from django.contrib import messages
@@ -17,26 +17,26 @@ class NominationsIndexView(TemplateView):
         return context
         
         
-class NewApplicationView(FormView):
+class NewApplicationView(CreateView):
     form_class = NewApplicationForm
     template_name = "new.html"
     success_url = '/groups/nominations/started'
 
-    def create_application(request):
-        if request.method == 'POST':
-            form = NewApplicationForm(request.POST)
+    # def create_application(request):
+    #     if request.method == 'POST':
+    #         form = NewApplicationForm(request.POST)
 
-            if form.is_valid():
-                #  TODO: create a new application
-                messages.success(self.request, "You've started a new nomination - please verify your email to continue.")
+    #         if form.is_valid():
+    #             #  TODO: create a new application
+    #             messages.success(self.request, "You've started a new nomination - please verify your email to continue.")
                 
-                return super(NewApplicationView, self).form_valid(form)
+    #             return super(NewApplicationView, self).form_valid(form)
 
-        else:
-            form = NewApplicationForm()
+    #     else:
+    #         form = NewApplicationForm()
 
-        return render(request, template_name, {'form': form})
+    #     return render(request, template_name, {'form': form})
 
-    def form_valid(self, form):
-        # TODO: validate group existence from ID
-        pass
+    # def form_valid(self, form):
+    #     # TODO: validate group existence from ID
+    #     pass
