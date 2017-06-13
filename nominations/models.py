@@ -15,6 +15,9 @@ class Nomination(models.Model):
     #     if self.group_name 
     #     return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
 
+    def __unicode__(self):
+        return self.group.name
+
     def save(self, *args, **kwargs):
         super(Nomination, self).save(*args, **kwargs)
         if self.nominationresponse_set.count() == 0:
@@ -138,4 +141,9 @@ class Application(models.Model):
     
     def __unicode__(self):
         return str(self.group.name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
-    
+
+    def save(self, *args, **kwargs):
+        if not self.nomination:
+            self.nomination = Nomination.objects.create()
+        super(Application, self).save(*args, **kwargs)
+
