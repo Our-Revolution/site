@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'address',
     
     'bootstrap3',
+    'crispy_forms',
 
     # S3
     'storages',

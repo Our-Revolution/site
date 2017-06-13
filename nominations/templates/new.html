@@ -1,6 +1,8 @@
 {% extends "pages/base_page.html" %}
 
 {% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
 
 {% block page_title %}Nominate a Candidate or Ballot Initiative{% endblock %}
 
@@ -20,26 +22,12 @@
     </div>
   </div>
   
-  <div class="row">
+  <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
-        <form action="" method="post">
+        <form>
   				{% csrf_token %}
-
-  				<div class="row">
-  					<div class="col-sm-6">
-  						{% bootstrap_field form.rep_email %}
-  					</div>
-            <div class="col-sm-6">
-  					</div>
-  					<div class="col-xs-12">
-  					</div>
-  				</div>
-
-  				{% buttons %}
-  					{% bootstrap_button "Start a Nomination" button_type="submit" button_class="btn-primary btn-block uppercase ls2 mt20" %}
-  				{% endbuttons %}
-
+          {% crispy form %}
   			</form>
       </div>
     </div>

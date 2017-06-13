@@ -16,6 +16,7 @@ dj-database-url==0.4.1
 django-anymail==0.6.1
 django-bootstrap3==8.2.1
 django-countries==4.1
+django-crispy-forms==1.6.1
 django-debug-toolbar==1.6
 django-dotenv==1.4.1
 django-gulp==2.5.0
