@@ -1,0 +1,46 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Our Revolution - Nominate a Candidate or Ballot Initiative{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pb2">
+    {% include 'partials/status_bar.html' %}
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Nominate a Candidate</h1>
+        <p>To submit your group’s candidate for nomination, complete the following steps. Don’t worry if you can’t do it all in one sitting - we’ll save your progress after each step.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2 clearfix">
+        <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h2 class="mb0 mt0">Application Status</h2></div>
+
+        <!-- List group -->
+        <ul class="list-group">
+          <li class="list-group-item"><span class="glyphicon glyphicon-check"></span> 1. Start an Application</li>
+          <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-unchecked"></span> 2. Complete the group nomination form</a></li>
+          <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-unchecked"></span> 3. Have your candidate fill out the platform questionaire</a></li>
+          <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-unchecked"></span> 4. Submit your nomination</a></li>
+          <li class="list-group-item"><span class="glyphicon glyphicon-unchecked"></span> 5. Receive a response from Our Revolution National</li>
+        </ul>
+      </div>
+      
+      <a href="#" class="btn btn-primary btn-block uppercase ls2">Next Step</a>
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Our Revolution - Nominate a Candidate or Ballot Initiative{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pb2">
+    {% include 'partials/status_bar.html' with active='questionnaire' %}
+
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Platform Questionnaire</h1>
+        <p>The platform questionnaire should be filled out by the candidate for the group’s consideration. Use the form below to send the questionnaire to the candidate and track its progress.</p>
+
+        <p>Alternatively, if you’re having trouble getting in contact with the candidate, you may fill out this portion yourself.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2 clearfix">
+        <!-- Placeholder -->
+        <div id="div_id_candidate_email" class="form-group col-md-12">
+          <label for="id_candidate_email" class="control-label requiredField">Candidate's Email<span class="asteriskField">*</span></label>
+          <div class="controls ">
+            <input class="textinput textInput form-control" id="id_candidate_email" name="candidate_email" type="text" required="">
+          </div>
+        </div>
+        
+        <div class="col-md-12 clearfix mb20">
+          <button class="btn btn-primary btn-block uppercase ls2">Send to Candidate</button>
+        </div>
+        
+        <h2 class="text-center mb20 mt20">- OR -</h2>
+        
+        <div class="col-md-12 text-center">
+          <button class="btn btn-secondary btn-block uppercase ls2">Fill Out Questionnaire</button>
+          <p class="mt20"><strong>Note:</strong> We recommend having the candidate fill out this form because it  helps us get a clearer picture of the candidate’s issues.</p>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

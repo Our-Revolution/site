@@ -1,0 +1,30 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>You've started your application.</h1>
+        <p>Before we go further, we’ll need to verify your email so you can come back to work on this application later.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <p>Please check <strong>you@example.com</strong> for a verification email and click the link you find inside. After we’ve verified your email, you’ll be free to complete your endorsement request at your own pace.</p>
+
+        <p>If you don’t receive an email and have verified it has not gone to spam, please email <a href="mailto:info@ourrevolution">info@ourrevolution</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

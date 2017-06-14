@@ -2,14 +2,15 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
-from .models import Nomination, Application, NominationResponse
+from .models import Nomination, Application, NominationResponse, Questionnaire
 import os, requests
 
 
 class ApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
     group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
-                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput)
+                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
+                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
 
 
     #crispy forms 
@@ -67,6 +68,9 @@ class NominationForm(forms.ModelForm):
         super(NominationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.add_input(Submit('submit','Submit',css_class='btn btn-primary btn-block uppercase ls2'))
 
     class Meta:
         model = Nomination
@@ -74,3 +78,14 @@ class NominationForm(forms.ModelForm):
 
 
 NominationResponseFormset = forms.inlineformset_factory(Nomination, NominationResponse, exclude=[], extra=0, can_delete=False)
+
+class QuestionnaireForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(NominationForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+        
+    class Meta:
+        model = Questionnaire
+        exclude = []

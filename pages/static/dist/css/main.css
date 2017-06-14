@@ -7008,6 +7008,16 @@ h1, h2, h3, h4 {
 .back-bar {
   background: rgba(0, 0, 0, 0.1);
   padding: 15px; }
+  .back-bar .breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    color: white; }
+    .back-bar .breadcrumb li:before {
+      color: white; }
+    .back-bar .breadcrumb .active {
+      font-weight: 900; }
 
 .social-bar {
   padding: 10px;

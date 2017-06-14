@@ -293,6 +293,22 @@ h1, h2, h3, h4 {
 .back-bar {
   background: rgba(0,0,0,0.1);
   padding: 15px;
+  
+  .breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    color: white;
+    
+    li:before {
+      color: white;
+    }
+    
+    .active {
+      font-weight: 900;
+    }
+  }
 }
 
 .social-bar {

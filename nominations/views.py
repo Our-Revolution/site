@@ -18,10 +18,10 @@ class NominationsIndexView(TemplateView):
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
-    success_url = '/groups/nominations/started'
+    success_url = '/groups/nominations/nomination'
 
     def form_valid(self, form):
-
+        
         # calls save() and redirects, but as long as we don't return super,
         # the redirect gets short circuited, basically.
         super(CreateApplicationView, self).form_valid(form)

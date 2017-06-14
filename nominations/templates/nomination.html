@@ -4,38 +4,36 @@
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
-{% block page_title %}Nominate a Candidate or Ballot Initiative{% endblock %}
+{% block page_title %}Our Revolution - Nominate a Candidate or Ballot Initiative{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row blue-bg white-text pt2 pb2">
+  <div class="row blue-bg white-text pb2">
+    {% include 'partials/status_bar.html' with active='nomination' %}
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Nomination Form</h1>
+        <p>The nomination form should be filled out by your group detailing why you are nominating this candidate, what makes this candidate a progressive champion, and why a national endorsement is necessary.
+
+        <p>* = required field</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
-      <h1>Bernie Would Have Won</h1>
-        <p>Lorem ipsum dolor</p>
+        {% crispy form %}
+
+        {{ nomination_response_formset.management_form }}
+        {% for nomination_response_form in nomination_response_formset %}
+          <h4>{{ nomination_response_form.instance.question.text }}</h4>
+          {{ nomination_response_form.response }}
+        {% endfor %}
       </div>
     </div>
   </div>
-
-    <div class="row pt2 pb2">
-      <div class="container">
-        <div class="col-md-8 col-md-offset-2">
-          <form action="" method="post">
-              {% crispy form %}
-
-              {{ nomination_response_formset.management_form }}
-              {% for nomination_response_form in nomination_response_formset %}
-                <h4>{{ nomination_response_form.instance.question.text }}</h4>
-                {{ nomination_response_form.response }}
-              {% endfor %}
-
-              <button type="submit">Sup</button>
-
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 
 {% endblock %}
