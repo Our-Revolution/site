@@ -18,7 +18,7 @@ class NominationsIndexView(TemplateView):
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
-    success_url = '/groups/nominations/nomination'
+    success_url = '/groups/nominations/verify'
 
     def form_valid(self, form):
         
