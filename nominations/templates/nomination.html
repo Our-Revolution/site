@@ -26,8 +26,15 @@
 
               {{ nomination_response_formset.management_form }}
               {% for nomination_response_form in nomination_response_formset %}
+                {% for hidden in form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                {{ nomination_response_form.id }}
                 <h4>{{ nomination_response_form.instance.question.text }}</h4>
                 {{ nomination_response_form.response }}
+                {% if nomination_response_form.response.errors %}
+                    {{ nomination_response_form.response.errors }}
+                {% endif %}
               {% endfor %}
 
               <button type="submit">Sup</button>

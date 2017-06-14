@@ -49,7 +49,7 @@ class EditNominationView(UpdateView):
         form_valid = super(EditNominationView, self).form_valid(form)
         
         # save responses
-        formset = NominationResponseFormset(instance=self.object)
+        formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         if formset.is_valid():
             formset.save()
         else:
@@ -61,5 +61,5 @@ class EditNominationView(UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(EditNominationView, self).get_context_data(*args, **kwargs)
-        context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST, instance=self.object)
+        context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         return context_data
