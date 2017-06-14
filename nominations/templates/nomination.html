@@ -1,0 +1,41 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Nominate a Candidate or Ballot Initiative{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+      <h1>Bernie Would Have Won</h1>
+        <p>Lorem ipsum dolor</p>
+      </div>
+    </div>
+  </div>
+
+    <div class="row pt2 pb2">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <form action="" method="post">
+              {% crispy form %}
+
+              {{ nomination_response_formset.management_form }}
+              {% for nomination_response_form in nomination_response_formset %}
+                <h4>{{ nomination_response_form.instance.question.text }}</h4>
+                {{ nomination_response_form.response }}
+              {% endfor %}
+
+              <button type="submit">Sup</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

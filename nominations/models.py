@@ -16,7 +16,7 @@ class Nomination(models.Model):
     #     return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
 
     def __unicode__(self):
-        return self.group.name
+        return "%s: %s %s" % (self.application.group.name, self.application.candidate_first_name, self.application.candidate_last_name)
 
     def save(self, *args, **kwargs):
         super(Nomination, self).save(*args, **kwargs)
