@@ -35,12 +35,12 @@ class CreateApplicationView(CreateView):
 class EditNominationView(UpdateView):
     form_class = NominationForm
     template_name = "nomination.html"
-    success_url = "/groups/nominations/started"     # but, not really.
+    success_url = "/groups/nominations/questionnaire"     # but, not really.
 
     def get_object(self):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
-            
+
         try:
             return Application.objects.get(pk=app_id,user_id=user_id).nomination
         except (Application.DoesNotExist, KeyError):
@@ -49,6 +49,7 @@ class EditNominationView(UpdateView):
             return redirect("/groups/nominations/dashboard")
 
     def form_valid(self, form):
+        form.instance.status = 'complete'
         form_valid = super(EditNominationView, self).form_valid(form)
         
         # save responses

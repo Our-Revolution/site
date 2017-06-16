@@ -22,8 +22,7 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2 clearfix">
-        <h4>{{application}}</h4>
-        
+        <h4>{{application}}</h4>        
         <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading"><h2 class="mb0 mt0">Application Status</h2></div>
@@ -31,14 +30,14 @@
         <!-- List group -->
         <ul class="list-group">
           <li class="list-group-item"><span class="glyphicon glyphicon-check"></span> 1. Start an Application</li>
-          <li class="list-group-item"><a href="/groups/nominations/nomination"><span class="glyphicon glyphicon-unchecked"></span> 2. Complete the group nomination form</a></li>
-          <li class="list-group-item"><a href="/groups/nominations/questionnaire"><span class="glyphicon glyphicon-unchecked"></span> 3. Have your candidate fill out the platform questionaire</a></li>
-          <li class="list-group-item"><a href="/groups/nominations/submit"><span class="glyphicon glyphicon-unchecked"></span> 4. Submit your nomination</a></li>
+          <li class="list-group-item"><a href="/groups/nominations/nomination?id={{application.id}}"><span class="glyphicon {% if application.status == 'complete' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 2. Complete the group nomination form</a></li>
+          <li class="list-group-item"><a href="/groups/nominations/questionnaire"><span class="glyphicon {{application.questionnaire|yesno:'glyphicon-check,glyphicon-unchecked'}}"></span> 3. Have your candidate fill out the platform questionaire</a></li>
+          <li class="list-group-item"><a href="/groups/nominations/submit"><span class="glyphicon {% if application.status == 'submitted' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 4. Submit your nomination</a></li>
           <li class="list-group-item"><span class="glyphicon glyphicon-unchecked"></span> 5. Receive a response from Our Revolution National</li>
         </ul>
       </div>
       
-      <a href="/groups/nominations/nomination" class="btn btn-primary btn-block uppercase ls2">Next Step</a>
+      <a href="/groups/nominations/nomination?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Next Step</a>
       
       </div>
     </div>

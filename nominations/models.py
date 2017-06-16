@@ -10,10 +10,13 @@ from local_groups.models import Group
     
 class Nomination(models.Model):
     group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process") 
-    
-    # def __unicode__(self):
-    #     if self.group_name 
-    #     return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
+
+    STATUSES = (
+       ('incomplete', 'Incomplete'),
+       ('complete', 'Complete'),
+   ) 
+    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
+
 
     def __unicode__(self):
         return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
