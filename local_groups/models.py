@@ -49,9 +49,9 @@ class Group(models.Model):
         ('other', 'Other')
     )
     types_of_organizing = MultiSelectField(null=True, blank=True, choices=TYPES_OF_ORGANIZING_CHOICES, verbose_name="Types of Organizing")
-    other_types_of_organizing = models.TextField(null=True, blank=True, verbose_name="Other Types of Organizing", max_length=250)
+    other_types_of_organizing = models.TextField(null=True, blank=True, verbose_name="Other Types of Organizing", max_length=500)
     
-    description = models.TextField(null=True, blank=False, max_length=250, verbose_name="Description (250 characters or less)")
+    description = models.TextField(null=True, blank=False, max_length=1000, verbose_name="Description (1000 characters or less)")
     issues = models.ManyToManyField(Issue, blank=True)
     other_issues = models.TextField(null=True, blank=True, max_length=250, verbose_name="Other Issues")
     
