@@ -64,8 +64,11 @@ class EditNominationView(UpdateView):
 
 
     def get_context_data(self, *args, **kwargs):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
         context_data = super(EditNominationView, self).get_context_data(*args, **kwargs)
         context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
         return context_data
     
 class DashboardView(TemplateView):
