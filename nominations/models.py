@@ -9,19 +9,20 @@ from local_groups.models import Group
 #TODO: automate endorsement -> approval -> candidates page 
     
 class Nomination(models.Model):
-    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Group Nomination Process") 
+    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Briefly describe your group's nomination process") 
 
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('complete', 'Complete'),
    ) 
-    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
+    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
 
 
     def __unicode__(self):
         return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
 
     def save(self, *args, **kwargs):
+        # self.cleaned_data['status'] = 'complete'
         super(Nomination, self).save(*args, **kwargs)
         if self.nominationresponse_set.count() == 0:
             for q in NominationQuestion.objects.all():
@@ -48,6 +49,12 @@ class Questionnaire(models.Model):
     """
     A platform questionnaire is filled out by the candidate with basic information and in-depth policy positions.
     """    
+    
+    STATUSES = (
+       ('incomplete', 'Incomplete'),
+       ('complete', 'Complete'),
+   ) 
+    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
     
     #TODO: make sure we're getting all office/district/location info we need
      
@@ -150,4 +157,7 @@ class Application(models.Model):
     def save(self, *args, **kwargs):
         if not self.nomination:
             self.nomination = Nomination.objects.create()
+            
+        if not self.questionnaire:
+            self.questionnaire = Questionnaire.objects.create()
         super(Application, self).save(*args, **kwargs)

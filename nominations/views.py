@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper
 from .models import Application, Nomination
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json
@@ -35,7 +35,6 @@ class CreateApplicationView(CreateView):
 class EditNominationView(UpdateView):
     form_class = NominationForm
     template_name = "nomination.html"
-    success_url = "/groups/nominations/questionnaire"     # but, not really.
 
     def get_object(self):
         app_id = self.request.GET.get('id')
@@ -47,6 +46,9 @@ class EditNominationView(UpdateView):
             # TODO: Fix the error thrown when no nomination
             messages.error(self.request, "We could not find your nomination application. Please try again.")
             return redirect("/groups/nominations/dashboard")
+
+    def get_success_url(self):
+        return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
         form.instance.status = 'complete'
@@ -67,10 +69,56 @@ class EditNominationView(UpdateView):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
         context_data = super(EditNominationView, self).get_context_data(*args, **kwargs)
-        context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data['formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data['helper'] = NominationResponseFormsetHelper()
         context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
         return context_data
-    
+
+class EditQuestionnaireView(UpdateView):
+    form_class = QuestionnaireForm
+    template_name = "questionnaire.html"
+    success_url = "/groups/nominations/submit"
+
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
+
+        try:
+            return Application.objects.get(pk=app_id,user_id=user_id).questionnaire
+        except (Application.DoesNotExist, KeyError):
+            # TODO: Fix the error thrown when no nomination
+            messages.error(self.request, "We could not find your questionnaire. Please try again.")
+            return redirect("/groups/nominations/dashboard")
+
+    def form_invalid(self, form):
+        response = super(EditQuestionnaireView, self).form_invalid(form)
+        print form.errors
+        return response
+
+    def form_valid(self, form):
+        # form.instance.status = 'complete'
+        form_valid = super(EditQuestionnaireView, self).form_valid(form)
+        
+        # save responses
+        formset = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        if formset.is_valid():
+            formset.save()
+        else:
+            print formset.errors
+            return self.form_invalid(form)
+
+        return form_valid
+
+
+    def get_context_data(self, *args, **kwargs):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
+        context_data = super(EditQuestionnaireView, self).get_context_data(*args, **kwargs)
+        context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data['helper'] = QuestionnaireResponseFormsetHelper()
+        context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
+        return context_data
+
 class DashboardView(TemplateView):
     template_name = 'dashboard.html'
     
@@ -118,7 +166,21 @@ def login(request):
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
-        
+
+class QuestionnaireIndexView(DetailView):
+    template_name = 'questionnaire_index.html'
+    
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']  
+        # TODO: redirect/better error message instead of 404ing
+        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
+                            
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(QuestionnaireIndexView, self).get_context_data(*args, **kwargs)
+        context_data['application'] = self.app
+        return context_data
+    
 def handle_auth0_callback(request):
     code = request.GET.get('code')
     get_token = GetToken('ourrevolution.auth0.com')

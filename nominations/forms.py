@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
-from .models import Nomination, Application, NominationResponse, Questionnaire
+from .models import Nomination, Application, NominationResponse, Questionnaire, Response
 import os, requests
 
 
@@ -65,7 +65,6 @@ class ApplicationForm(forms.ModelForm):
 
 
 class NominationForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super(NominationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -76,21 +75,53 @@ class NominationForm(forms.ModelForm):
 
     class Meta:
         model = Nomination
-        exclude = []
+        exclude = ['status']
 
+class NominationResponseFormsetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(NominationResponseFormsetHelper, self).__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_tag = False
+        self.form_method = 'post'
+        self.form_action = ''
+        self.render_required_fields = True
+        self.form_show_labels = False
+        self.layout = Layout (
+            Field('question',type='hidden'),
+            Field('response')
+        )
 
 NominationResponseFormset = forms.inlineformset_factory(Nomination, NominationResponse, exclude=[], extra=0, can_delete=False)
 
 class QuestionnaireForm(forms.ModelForm):
-    
     def __init__(self, *args, **kwargs):
-        super(NominationForm, self).__init__(*args, **kwargs)
+        super(QuestionnaireForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_tag = False
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.add_input(Submit('submit','Submit',css_class='btn btn-primary btn-block uppercase ls2'))
         
     class Meta:
         model = Questionnaire
-        exclude = []
+        exclude = ['status']
+
+class QuestionnaireResponseFormsetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(QuestionnaireResponseFormsetHelper, self).__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_tag = False
+        self.form_method = 'post'
+        self.form_action = ''
+        self.render_required_fields = True
+        
+        # self.form_show_labels = False
+        self.layout = Layout (
+            Field('question',type='hidden'),
+            Field('response')
+        )
+
+QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Response, exclude=[], extra=0, can_delete=False)
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
