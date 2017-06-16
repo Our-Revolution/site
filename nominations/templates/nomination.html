@@ -2,7 +2,8 @@
 
 {% load bootstrap3 %}
 {% load crispy_forms_tags %}
-{% crispy form form.helper %}
+{% crispy nomination_response_formset helper %}
+
 
 {% block page_title %}Our Revolution - Nominate a Candidate or Ballot Initiative{% endblock %}
 
@@ -16,21 +17,34 @@
         <h1>Nomination Form</h1>
         <p>The nomination form should be filled out by your group detailing why you are nominating this candidate, what makes this candidate a progressive champion, and why a national endorsement is necessary.
 
-        <p>* = required field</p>
+        <p>* = required field</p>        
       </div>
     </div>
   </div>
   
-  <div class="row pt2 pb2">
-    <div class="container">
-      <div class="col-md-8 col-md-offset-2">
-        {% crispy form %}
 
-        {{ nomination_response_formset.management_form }}
-        {% for nomination_response_form in nomination_response_formset %}
-          <h4>{{ nomination_response_form.instance.question.text }}</h4>
-          {{ nomination_response_form.response }}
-        {% endfor %}
+    <div class="row pt2 pb2">
+      <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+          <!-- {% crispy nomination_response_formset %}
+          <button type="submit" value="Submit" class="btn btn-block btn-primary uppercase ls2">Submit</button> -->
+          <form action="" method="post">
+              {% csrf_token %}
+              {{ nomination_response_formset.management_form }}
+              {% for nomination_response_form in nomination_response_formset %}
+                {% for hidden in form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                {{ nomination_response_form.id }}
+                <label class="mt20">{{ nomination_response_form.instance.question.text }}</label>
+                {{ nomination_response_form.response }}
+                {% if nomination_response_form.response.errors %}
+                    {{ nomination_response_form.response.errors }}
+                {% endif %}
+              {% endfor %}
+              <button type="submit" value="Submit" class="btn btn-block btn-primary uppercase ls2 mt20">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

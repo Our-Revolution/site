@@ -10,51 +10,22 @@
   <div class="row blue-bg white-text pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
-        <h1>You've started your application.</h1>
-        <p>Before we go further, we’ll need to verify your email so you can come back to work on this application later.</p>
+        <h1>Verify your email address.</h1>
       </div>
     </div>
   </div>
   
-  <div class="row pt2 pb2">
+  <div class="row pt4 pb4">
     <div class="container">
-      <div class="col-md-8 col-md-offset-2">
-        <p>Please check your email for a verification email and click the link you find inside. After we’ve verified your email, you’ll be free to complete your endorsement request at your own pace.</p>
+      <div class="col-md-8 col-md-offset-2 text-center">                
+        <p class="fs18">We've sent a verification link to the email address you logged in with. After you've clicked it, you’ll be free to submit new endorsement applications and manage any existing applications.</p>
 
-        <p>If you don’t receive an email and have verified it has not gone to spam, please email <a href="mailto:info@ourrevolution">info@ourrevolution</a>.</p>
-        
-        <a href="#" onclick="javascript:sendEmail()">Send Email</a>
+        <p class="fs18">If you don’t receive an email and have verified it has not gone to spam, please email <a href="mailto:info@ourrevolution">info@ourrevolution</a>.</p>
       </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.auth0.com/js/auth0/8.7/auth0.min.js"></script>
-<script type="text/javascript">
-  var webAuth = new auth0.WebAuth({
-    domain:       'ourrevolution.auth0.com',
-    clientID:     'vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92',
-    redirectUri: 'http://localhost:8000/groups/nominations/verify'
-  });
-  
-  function sendEmail(){
-  var email = 'chris@ourrevolution.com';
-
-  webAuth.passwordlessStart({
-    connection: 'email',
-    send: 'link',
-    email: email
-  }, function (err,res) {
-    if (err) {
-      // Handle error
-      console.log('oh noes');
-      console.log(err);
-    }
-    // // Hide the input and show a "Check your email for your login link!" screen
-    // $('.enter-email').hide();
-    // $('.check-email').show();
-  });
-}
-</script>
 
 {% endblock %}

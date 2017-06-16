@@ -16,7 +16,7 @@ class Nomination(models.Model):
     #     return str(self.group_name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
 
     def __unicode__(self):
-        return "%s: %s %s" % (self.application.group.name, self.application.candidate_first_name, self.application.candidate_last_name)
+        return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
 
     def save(self, *args, **kwargs):
         super(Nomination, self).save(*args, **kwargs)
@@ -65,7 +65,7 @@ class Questionnaire(models.Model):
     candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
     
     def __unicode__(self):
-        return str(self.candidate_first_name + ' ' + self.candidate_last_name)
+        return str(self.candidate_first_name + ' ' + self.candidate_last_name + ' - ' + str(self.application_set.first().group) + ' Questionnaire')
 
     def save(self, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)
@@ -104,6 +104,7 @@ class Application(models.Model):
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
     """
     
+    user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     
     nomination = models.OneToOneField(
@@ -111,7 +112,8 @@ class Application(models.Model):
         on_delete=models.CASCADE,
         primary_key=False,
         null=True,
-        blank=True
+        blank=True,
+        related_name='application'
     )
     
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.SET_NULL, null=True, blank=True)
@@ -140,10 +142,9 @@ class Application(models.Model):
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
     
     def __unicode__(self):
-        return str(self.group.name + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name)
+        return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
     def save(self, *args, **kwargs):
         if not self.nomination:
             self.nomination = Nomination.objects.create()
         super(Application, self).save(*args, **kwargs)
-

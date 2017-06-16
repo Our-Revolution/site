@@ -1,0 +1,30 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pb2">
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Nominations</h1>
+        <!-- <p>Before we go further, we’ll need to verify your email so you can come back to work on this application later.</p> -->
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        {% crispy form %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

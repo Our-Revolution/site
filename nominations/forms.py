@@ -20,6 +20,7 @@ class ApplicationForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_class = 'row'
+        self.helper.form_id = 'application_form'
         
         self.helper.layout = Layout(
             Div(
@@ -49,7 +50,8 @@ class ApplicationForm(forms.ModelForm):
                 Submit(
                     'submit',
                     'Start a Nomination',
-                    css_class='btn btn-primary btn-block uppercase ls2'
+                    css_class='btn btn-primary btn-block uppercase ls2',
+                    css_id='application_submit'
                 ),
                 css_class='col-md-12'
             )
@@ -89,3 +91,26 @@ class QuestionnaireForm(forms.ModelForm):
     class Meta:
         model = Questionnaire
         exclude = []
+
+class LoginForm(forms.Form):
+    email = forms.EmailField()
+    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
+                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.layout = Layout(
+            Field('email', wrapper_class='col-md-8'),
+            Field('group', wrapper_class='col-md-4'),
+            Div(
+                Submit('submit','Login',css_class='btn btn-block btn-primary uppercase ls2'),
+                css_class='col-md-12'
+            )
+        )
+        
+        

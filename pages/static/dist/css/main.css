@@ -6406,6 +6406,15 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.verify-icon {
+  color: white;
+  background: #218fff;
+  padding: 4rem;
+  font-size: 10rem;
+  border-radius: 100%;
+  margin: 4rem auto;
+  text-align: center; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
@@ -7005,18 +7014,23 @@ h1, h2, h3, h4 {
   .page-heading--small {
     padding-top: 100px; }
 
-.back-bar {
+.back-bar, .back-bar--small {
   background: rgba(0, 0, 0, 0.1);
   padding: 15px; }
-  .back-bar .breadcrumb {
+  .back-bar--small {
+    padding: 10px; }
+  .back-bar .btn, .back-bar--small .btn {
+    height: 30px;
+    padding: 5px 10px; }
+  .back-bar .breadcrumb, .back-bar--small .breadcrumb {
     background-color: transparent;
     padding: 0;
     margin-bottom: 0;
     border-radius: 0;
     color: white; }
-    .back-bar .breadcrumb li:before {
+    .back-bar .breadcrumb li:before, .back-bar--small .breadcrumb li:before {
       color: white; }
-    .back-bar .breadcrumb .active {
+    .back-bar .breadcrumb .active, .back-bar--small .breadcrumb .active {
       font-weight: 900; }
 
 .social-bar {

@@ -1,11 +1,15 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView, UpdateView, TemplateView
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
+from django.http import HttpResponseRedirect
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm
 from .models import Application, Nomination
-
-
-
+from auth0.v3.authentication import GetToken, Users, Passwordless
+import json
+from urlparse import urlparse
+from django.utils.decorators import method_decorator
+from .decorators import is_authenticated
+    
 class NominationsIndexView(TemplateView):
     
     template_name = "index.html"
@@ -18,20 +22,15 @@ class NominationsIndexView(TemplateView):
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
-    success_url = '/groups/nominations/verify'
+    success_url = '/groups/nominations/application'
 
     def form_valid(self, form):
         
-        # calls save() and redirects, but as long as we don't return super,
-        # the redirect gets short circuited, basically.
+        # TODO: save user_id to model and then save model
+        form.instance.user_id = self.request.session['profile']['user_id']
         super(CreateApplicationView, self).form_valid(form)
 
-        # if we're emailing them some link, instead of just directing them straight there
-        # this is probably where that logic goes.
-        self.request.session['application_id'] = self.object.pk
-
-        return redirect(self.success_url)
-
+        return redirect(self.success_url + '?id=' + str(self.object.pk))
 
 class EditNominationView(UpdateView):
     form_class = NominationForm
@@ -39,17 +38,21 @@ class EditNominationView(UpdateView):
     success_url = "/groups/nominations/started"     # but, not really.
 
     def get_object(self):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
+            
         try:
-            return Application.objects.get(pk=self.request.session['application_id']).nomination
+            return Application.objects.get(pk=app_id,user_id=user_id).nomination
         except (Application.DoesNotExist, KeyError):
+            # TODO: Fix the error thrown when no nomination
             messages.error(self.request, "We could not find your nomination application. Please try again.")
-            return redirect("/groups/nominations")
+            return redirect("/groups/nominations/dashboard")
 
     def form_valid(self, form):
         form_valid = super(EditNominationView, self).form_valid(form)
         
         # save responses
-        formset = NominationResponseFormset(instance=self.object)
+        formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         if formset.is_valid():
             formset.save()
         else:
@@ -61,5 +64,69 @@ class EditNominationView(UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(EditNominationView, self).get_context_data(*args, **kwargs)
-        context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST, instance=self.object)
+        context_data['nomination_response_formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         return context_data
+    
+class DashboardView(TemplateView):
+    template_name = 'dashboard.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        user = self.request.session['profile']
+        
+        context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
+        context_data['user'] = user
+        context_data['applications'] = Application.objects.all().filter(user_id=user['user_id'])
+        return context_data
+        
+class ApplicationView(DetailView):
+    template_name = 'application_status.html'
+    
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']  
+        # TODO: redirect/better error message instead of 404ing
+        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
+                            
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(ApplicationView, self).get_context_data(*args, **kwargs)
+        context_data['application'] = self.app
+        return context_data
+    
+def login(request):
+    # if user is already logged in
+    if 'profile' in request.session:
+        print request.session['profile']
+        return redirect('/groups/nominations/dashboard')
+        
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        
+        if form.is_valid():
+            # initiatie Auth0 passwordless
+            passwordless = Passwordless('ourrevolution.auth0.com')
+            
+            email = form.cleaned_data['email']
+            passwordless.email('vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92',email,auth_params={'response_type':'code'})
+            
+            return HttpResponseRedirect('/groups/nominations/verify')
+
+    else:
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
+        
+def handle_auth0_callback(request):
+    code = request.GET.get('code')
+    get_token = GetToken('ourrevolution.auth0.com')
+    auth0_users = Users('ourrevolution.auth0.com')
+    token = get_token.authorization_code('vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92',
+                                         'SMdVtf5M7MKi140SlyoIXyofBWuvNv1gkq8LJVgqWMStCKzjT2C2z5yT8mEotU1L', code, 'http://localhost:8000/groups/nominations/dashboard')
+    user_info = auth0_users.userinfo(token['access_token'])
+    request.session['profile'] = json.loads(user_info)
+    return redirect('/groups/nominations/dashboard')
+    
+def logout(request):
+    print 'logout'
+    request.session.clear()
+    base_url = 'http://localhost:8000/groups/nominations'
+    return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % ('ourrevolution.auth0.com', base_url, 'vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92'))
