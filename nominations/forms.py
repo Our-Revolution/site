@@ -11,7 +11,7 @@ class ApplicationForm(forms.ModelForm):
     group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
-
+    agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
 
     #crispy forms 
     def __init__(self, *args, **kwargs):
@@ -24,7 +24,7 @@ class ApplicationForm(forms.ModelForm):
         
         self.helper.layout = Layout(
             Div(
-                HTML('<div class="col-md-12"><h2>Your Group Information</h2></div>'),
+                HTML('<h3>Your Group Information</h3>'),
                 Div(
                     Field('group_name',wrapper_class='col-md-8'),
                     Field('group',wrapper_class='col-md-4'),
@@ -32,26 +32,29 @@ class ApplicationForm(forms.ModelForm):
                     Field('rep_last_name',wrapper_class='col-md-6'),
                     Field('rep_phone',wrapper_class='col-md-6'),
                     Field('rep_email',wrapper_class='col-md-6'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
                 ),
-                css_class="mb20 clearfix",
+                css_class="col-md-12",
             ),
             Div(
-                HTML('<div class="col-md-12"><h2>Candidate Information</h2></div>'),
+                HTML('<h3>Candidate Information</h3>'),
                 Div(
                     Field('candidate_first_name',wrapper_class='col-md-6'),
                     Field('candidate_last_name',wrapper_class='col-md-6'),
                     Field('candidate_office',wrapper_class='col-md-6'),
                     Field('candidate_district',wrapper_class='col-md-6'),
                     Field('candidate_state',wrapper_class='col-md-6'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
                 ),
-                css_class='mb_20 clearfix'
+                css_class='col-md-12'
             ),
             Div(
+                Field('agree',id='agree_field'),
                 Submit(
                     'submit',
                     'Start a Nomination',
-                    css_class='btn btn-primary btn-block uppercase ls2',
-                    css_id='application_submit'
+                    css_class='btn btn-primary btn-block uppercase ls2 disabled',
+                    css_id='submit_button'
                 ),
                 css_class='col-md-12'
             )
@@ -71,7 +74,9 @@ class NominationForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.form_method = 'post'
         self.helper.form_action = ''
-        self.helper.add_input(Submit('submit','Submit',css_class='btn btn-primary btn-block uppercase ls2'))
+        self.helper.layout = Layout(
+            Field('group_nomination_process', wrapper_class='fs16 mb0'),
+        )
 
     class Meta:
         model = Nomination
@@ -88,7 +93,7 @@ class NominationResponseFormsetHelper(FormHelper):
         self.form_show_labels = False
         self.layout = Layout (
             Field('question',type='hidden'),
-            Field('response')
+            Field('response',wrapper_class='mb0')
         )
 
 NominationResponseFormset = forms.inlineformset_factory(Nomination, NominationResponse, exclude=[], extra=0, can_delete=False)
@@ -100,7 +105,22 @@ class QuestionnaireForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.form_method = 'post'
         self.helper.form_action = ''
-        self.helper.add_input(Submit('submit','Submit',css_class='btn btn-primary btn-block uppercase ls2'))
+        self.helper.layout = Layout(
+            Div(
+                HTML('<h3>Candidate Information</h3>'),
+                Div(
+                    Field('candidate_first_name',wrapper_class='col-md-6'),
+                    Field('candidate_last_name',wrapper_class='col-md-6'),
+                    Field('candidate_email',wrapper_class='col-md-6'),
+                    Field('candidate_phone',wrapper_class='col-md-6'),
+                    Field('candidate_office',wrapper_class='col-md-6'),
+                    Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_state',wrapper_class='col-md-6'),
+                    css_class='pt20 br3 f5f5f5-bg mb20 clearfix'
+                ),
+                css_class='col-md-12'
+            )
+        )
         
     class Meta:
         model = Questionnaire
@@ -118,7 +138,8 @@ class QuestionnaireResponseFormsetHelper(FormHelper):
         # self.form_show_labels = False
         self.layout = Layout (
             Field('question',type='hidden'),
-            Field('response')
+            Field('response'),
+            Field('position',wrapper_class='mb0')
         )
 
 QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Response, exclude=[], extra=0, can_delete=False)
@@ -144,4 +165,16 @@ class LoginForm(forms.Form):
             )
         )
         
-        
+class SubmitForm(forms.Form):
+    agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(SubmitForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_id = 'submit_form'
+        self.helper.layout = Layout(
+            Field('agree',id='agree_field'),
+            Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
+        )

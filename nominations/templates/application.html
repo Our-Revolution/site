@@ -11,13 +11,13 @@
 <div class="container-fluid">
   <div class="row blue-bg white-text pt2 pb2">
     <div class="container">
-      <div class="col-md-8 col-md-offset-2">
-        <h1>Start a new nomination.</h1>
+      <div class="col-md-8 col-md-offset-2 fs18">
+        <h1 class="mb0">Start a new nomination.</h1>
         <p>Our Revolution endorsements are made from the recommendations of our hundreds of official local groups across the world. Official local groups are groups that have gone through group onboarding, have signed the Memorandum of Understanding, and have received a Group ID.</p>
 
         <p>To start a new endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</p>
 
-        <p>Don’t have a Group ID or need help becoming an official Our Revolution group? <strong><a href="#">Click here.</a></strong></p>
+        <!-- <p>Don’t have a Group ID or need help becoming an official Our Revolution group? <strong><a href="#">Click here.</a></strong></p> -->
       </div>
     </div>
   </div>
@@ -30,5 +30,19 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    
+    $('#agree_field').change(function(){
+      if(this.checked) {
+        $('#submit_button').removeClass('disabled')
+      } else {
+        $('#submit_button').addClass('disabled')
+      }
+    });
+    
+  });
+</script>
 
 {% endblock %}

@@ -12,8 +12,8 @@
   <div class="row blue-bg white-text pb2">
     {% include 'partials/status_bar.html' with active='nomination' %}
     <div class="container pt2">
-      <div class="col-md-8 col-md-offset-2">
-        <h1>Nomination Form</h1>
+      <div class="col-md-8 col-md-offset-2 fs18">
+        <h1 class="mb0">Nomination Form</h1>
         <p>The nomination form should be filled out by your group detailing why you are nominating this candidate, what makes this candidate a progressive champion, and why a national endorsement is necessary.
 
         <p>* = required field</p>        
@@ -31,12 +31,16 @@
               {% for hidden in form.hidden_fields %}
                 {{ hidden }}
               {% endfor %}
-              <div class="form-group">
-                <label class="control-label" required>{{form.instance.question.text}}*</label>
+              <div class="form-group pa20 br3 f5f5f5-bg mb20 pb0">
+                <label class="control-label fs16" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
                 {% crispy form helper %}
               </div>
             {% endfor %}
-            {% crispy form %}
+            <div class="pa20 br3 f5f5f5-bg mb20 pb ">
+              {% crispy form %}
+            </div>
+            
+            <button type='submit' value='submit' class="btn btn-block btn-primary uppercase ls2">Save</button>
           </form>
         </div>
       </div>

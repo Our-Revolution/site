@@ -14,29 +14,36 @@
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1>Candidate Questionnaire</h1>
-        <p></p>
+        <p>The candidate questionnaire should be filled out by the candidate for the group’s consideration, but if you're having trouble getting in touch your group may fill it out.</p>
+        
+        <p>To complete the questionnaire, provide some basic information and asnwer the following 24 questions on the candidate's platform.</p>
 
         <p>* = required field</p>        
       </div>
     </div>
   </div>
-  
 
-    <div class="row pt2 pb2">
-      <div class="container">
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="row">
         <div class="col-md-8 col-md-offset-2">
-          <form action="" method="POST">
+          <form action="" method="POST" class="row">
             {{ formset.management_form|crispy }}
-            {% for form in formset %}
-              {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-              {% endfor %}
-              <div class="form-group">
-                <label class="control-label" required>{{form.instance.question.text}}*</label>
-                {% crispy form helper %}
-              </div>
-            {% endfor %}
             {% crispy form %}
+            
+            <div class="col-md-12">
+              <h3>Platform Questionnaire</h3>
+              {% for form in formset %}
+                {% for hidden in form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                <div class="form-group pa20 br3 f5f5f5-bg">
+                  <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
+                  {% crispy form helper %}
+                </div>
+              {% endfor %}
+              <button type='submit' value='Submit' class='btn btn-block btn-primary uppercase ls2'>Save</button>
+            </div>
           </form>
         </div>
       </div>

@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
+from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm
 from .models import Application, Nomination
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json
@@ -90,13 +90,11 @@ class EditQuestionnaireView(UpdateView):
             messages.error(self.request, "We could not find your questionnaire. Please try again.")
             return redirect("/groups/nominations/dashboard")
 
-    def form_invalid(self, form):
-        response = super(EditQuestionnaireView, self).form_invalid(form)
-        print form.errors
-        return response
+    def get_success_url(self):
+        return "/groups/nominations/submit?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
-        # form.instance.status = 'complete'
+        form.instance.status = 'complete'
         form_valid = super(EditQuestionnaireView, self).form_valid(form)
         
         # save responses
@@ -144,6 +142,43 @@ class ApplicationView(DetailView):
         context_data['application'] = self.app
         return context_data
     
+class QuestionnaireIndexView(DetailView):
+    template_name = 'questionnaire_index.html'
+    
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']  
+        # TODO: redirect/better error message instead of 404ing
+        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
+                            
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(QuestionnaireIndexView, self).get_context_data(*args, **kwargs)
+        context_data['application'] = self.app
+        return context_data
+        
+class SubmitView(FormView):
+    template_name = 'submit.html'
+    form_class = SubmitForm
+    success_url = '/groups/nominations/success'
+    
+    def form_valid(self, form):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
+        application = Application.objects.all().filter(user_id=user_id,pk=app_id).first()
+        
+        application.status = 'submitted'
+        application.save()
+        
+        return super(SubmitView, self).form_valid(form)
+        
+    def get_context_data(self, *args, **kwargs):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id'] 
+        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id) 
+        context_data = super(SubmitView, self).get_context_data(*args, **kwargs)
+        context_data['application'] = self.app
+        return context_data
+    
 def login(request):
     # if user is already logged in
     if 'profile' in request.session:
@@ -166,20 +201,6 @@ def login(request):
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
-
-class QuestionnaireIndexView(DetailView):
-    template_name = 'questionnaire_index.html'
-    
-    def get_object(self):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']  
-        # TODO: redirect/better error message instead of 404ing
-        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
-                            
-    def get_context_data(self, *args, **kwargs):
-        context_data = super(QuestionnaireIndexView, self).get_context_data(*args, **kwargs)
-        context_data['application'] = self.app
-        return context_data
     
 def handle_auth0_callback(request):
     code = request.GET.get('code')
