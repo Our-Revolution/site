@@ -7,6 +7,7 @@ from .decorators import is_authenticated
 urlpatterns = [
     url(r'^groups/nominations/', include([
         url(r'^submit/$', is_authenticated(SubmitView.as_view())),
+        url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
         url(r'^dashboard/$', is_authenticated(DashboardView.as_view())),
         url(r'^login/$', login),
         url(r'^logout/$', is_authenticated(logout)),

@@ -1,0 +1,29 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>You've submitted your nomination!</h1>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt4 pb4">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2 text-center">                
+        <p class="fs18">You've just completed your nomination application. Our Revolution staff will review it and get back to you soon.</p>
+        
+        <a href="/groups/nominations/dashboard" class="btn btn-block btn-primary ls2 uppercase mt20">Back to the Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -39,7 +39,7 @@ class NominationQuestion(models.Model):
 class NominationResponse(models.Model):
     nomination = models.ForeignKey(Nomination)
     question = models.ForeignKey(NominationQuestion)
-    response = models.TextField()
+    response = models.TextField(max_length=1000)
 
     def __unicode__(self):
         return unicode(self.question)
@@ -102,7 +102,7 @@ class Response(models.Model):
     questionnaire = models.ForeignKey(Questionnaire)
     question = models.ForeignKey(Question)
     response = models.CharField(max_length=1, blank=False, null=False, choices=QUESTIONNAIRE_CHOICES)
-    position = models.TextField(max_length=500, blank=False, null=True,verbose_name="Candidate's position on this issue:")
+    position = models.TextField(max_length=1000, blank=False, null=True,verbose_name="Candidate's position on this issue:")
 
     def __unicode__(self):
         return unicode(self.question)

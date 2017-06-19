@@ -2,38 +2,54 @@
 
 {% load bootstrap3 %}
 
-{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+{% block page_title %}Our Revolution - Nominations Dashboard{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pb2">
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
+      </div>
+    </div>
+    
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1>Nominations</h1>
-        <!-- <p>Before we go further, we’ll need to verify your email so you can come back to work on this application later.</p> -->
+        <h1>My Nominations</h1>
       </div>
     </div>
   </div>
   
   <div class="row pt2 pb2">
     <div class="container">
-      <div class="col-md-8 col-md-offset-2">
-        <h2>Welcome back {{user.email}}</h2>
-        
+      <div class="col-md-8 col-md-offset-2">        
         <a href="/groups/nominations/new" class="btn btn-block btn-primary uppercase ls2">Start a new application</a>
         
         {% if applications %}
-          <h4>My Applications</h4>
-        
-          {% for app in applications %}
-            <p>
-            <a href="/groups/nominations/application?id={{app.id}}">
-              {{ app }}
-              {{ app.status|capfirst }}
-            </a>
-          </p>
-          {% endfor %}
+          <h4 class="mt20">My Applications</h4>
+          
+          <div class="panel panel-default mt20">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Application</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for app in applications %}
+                  <tr>
+                    <td>{{app}}</td>
+                    <td>{{app.status|capfirst}}</td>
+                    <td><a href="/groups/nominations/application?id={{app.id}}" class="pull-right btn btn-secondary uppercase ls2">{% if app.status == 'submitted' %}View{% else %}Edit{% endif %}</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         {% endif %}
         
       </div>

@@ -27,28 +27,50 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
-          <form action="" method="POST" class="row">
-            {{ formset.management_form|crispy }}
-            {% crispy form %}
-            
-            <div class="col-md-12">
-              <h3>Platform Questionnaire</h3>
-              {% for form in formset %}
-                {% for hidden in form.hidden_fields %}
-                  {{ hidden }}
+          {% if not application.status == 'submitted' %}
+            <form action="" method="POST" class="row">
+              {{ formset.management_form|crispy }}
+              {% crispy form %}
+              
+              <div class="col-md-12">
+                <h3>Candidate Questionnaire</h3>
+                {% for form in formset %}
+                  {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                  <div class="form-group pa20 br3 f5f5f5-bg">
+                    <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
+                    {% crispy form helper %}
+                  </div>
                 {% endfor %}
-                <div class="form-group pa20 br3 f5f5f5-bg">
-                  <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
-                  {% crispy form helper %}
-                </div>
-              {% endfor %}
-              <button type='submit' value='Submit' class='btn btn-block btn-primary uppercase ls2'>Save</button>
+                <button type='submit' value='Submit' class='btn btn-block btn-primary uppercase ls2'>Save</button>
+              </div>
+            </form>
+          {% else %}  
+          {% for form in formset %}
+            <div class="form-group pa20 br3 f5f5f5-bg">
+              <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
+              {% if form.instance.question.include_multi_choice %}
+                <p class="pa20 br3 white-bg mt0">{{form.instance.get_response_display}}</p>
+              {% endif %}
+              <p class="pa20 br3 white-bg mt0 mb0">{{form.instance.position}}</p>
             </div>
-          </form>
+          {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+// TODO: implement this on server side in a non janky way
+// we don't want the response field on question 23 but it's required
+
+$(document).ready(function(){
+  $('#id_questions-23-response').val("a")
+  $('#div_id_questions-23-response').hide()
+});
+</script>
 
 {% endblock %}
