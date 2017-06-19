@@ -131,15 +131,15 @@ def restart_gunicorn():
 
 @elb_managed
 def config_set(**kwargs):
-    # if not kwargs:
-    #     print "kwargs empty! Pass in a variable you want to set"
-    #     print "e.g.: fab production config_set:DOUBLE_SECRET_PASSWORD=\"yolo\""
-    #     exit(1)
+    if not kwargs:
+        print "kwargs empty! Pass in a variable you want to set"
+        print "e.g.: fab production config_set:DOUBLE_SECRET_PASSWORD=\"yolo\""
+        exit(1)
 
-    # # this is going to get untenable... use with discretion!
-    # with cd('/home/ubuntu/.virtualenvs/ourrevolution/bin'):
-    #     for key, value in kwargs.iteritems():
-    #         run('echo "\nexport %s=%s" >> activate' % (key, value))
+    # this is going to get untenable... use with discretion!
+    with cd('/home/ubuntu/.virtualenvs/ourrevolution/bin'):
+        for key, value in kwargs.iteritems():
+            run('echo "\nexport %s=%s" >> activate' % (key, value))
 
     with cd('/home/ubuntu/ourrevolution'):
         with prefix('source $(which virtualenvwrapper.sh)'):

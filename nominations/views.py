@@ -5,11 +5,11 @@ from django.http import HttpResponseRedirect
 from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm
 from .models import Application, Nomination
 from auth0.v3.authentication import GetToken, Users, Passwordless
-import json
+import json, os
 from urlparse import urlparse
 from django.utils.decorators import method_decorator
 from .decorators import is_authenticated
-    
+
 class NominationsIndexView(TemplateView):
     
     template_name = "index.html"
@@ -203,17 +203,25 @@ def login(request):
     return render(request, 'login.html', {'form': form})
     
 def handle_auth0_callback(request):
+    auth0_domain = os.environ['AUTH0_DOMAIN']
+    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
+    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
+    auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
+    
     code = request.GET.get('code')
-    get_token = GetToken('ourrevolution.auth0.com')
-    auth0_users = Users('ourrevolution.auth0.com')
-    token = get_token.authorization_code('vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92',
-                                         'SMdVtf5M7MKi140SlyoIXyofBWuvNv1gkq8LJVgqWMStCKzjT2C2z5yT8mEotU1L', code, 'http://localhost:8000/groups/nominations/dashboard')
+    get_token = GetToken(auth0_domain)
+    auth0_users = Users(auth0_domain)
+    token = get_token.authorization_code(auth0_client_id,
+                                         auth0_client_secret, code, auth0_callback_url)
     user_info = auth0_users.userinfo(token['access_token'])
     request.session['profile'] = json.loads(user_info)
     return redirect('/groups/nominations/dashboard')
     
 def logout(request):
-    print 'logout'
+    auth0_domain = os.environ['AUTH0_DOMAIN']
+    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
+    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
+    
     request.session.clear()
-    base_url = 'http://localhost:8000/groups/nominations'
-    return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % ('ourrevolution.auth0.com', base_url, 'vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92'))
+    base_url = 'https://ourrevolution.com/groups/nominations'
+    return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))
