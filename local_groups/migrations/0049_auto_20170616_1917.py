@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('local_groups', '0048_group_state_organizing_committee'),
+        ('local_groups', '0049_auto_20170606_2331'),
     ]
 
     operations = [
