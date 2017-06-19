@@ -180,6 +180,11 @@ class SubmitView(FormView):
         return context_data
     
 def login(request):
+    auth0_domain = os.environ['AUTH0_DOMAIN']
+    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
+    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
+    auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
+    
     # if user is already logged in
     if 'profile' in request.session:
         print request.session['profile']
@@ -190,10 +195,10 @@ def login(request):
         
         if form.is_valid():
             # initiatie Auth0 passwordless
-            passwordless = Passwordless('ourrevolution.auth0.com')
+            passwordless = Passwordless(auth0_domain)
             
             email = form.cleaned_data['email']
-            passwordless.email('vYt7HQ0K65GRNLr4HLcZRvjacHl7gn92',email,auth_params={'response_type':'code'})
+            passwordless.email(auth0_client_id,email,auth_params={'response_type':'code'})
             
             return HttpResponseRedirect('/groups/nominations/verify')
 
