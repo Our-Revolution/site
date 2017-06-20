@@ -65,6 +65,7 @@ class Questionnaire(models.Model):
     candidate_phone = PhoneNumberField(null=True, blank=True, verbose_name="Candidate Phone Number")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
     candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
+    candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
     candidate_website_url = models.URLField(null=True, blank=True, verbose_name="Candidate Website URL", max_length=255)
     candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
@@ -75,7 +76,10 @@ class Questionnaire(models.Model):
     candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
     
     def __unicode__(self):
-        return str(self.candidate_first_name + ' ' + self.candidate_last_name + ' - ' + str(self.application_set.first().group) + ' Questionnaire')
+        if self.candidate_first_name and self.candidate_last_name and self.application_set.first().group:
+            return self.candidate_first_name + ' ' + self.candidate_last_name + ' - ' + str(self.application_set.first().group) + ' Questionnaire'
+        else:
+            return 'Questionnaire ' + str(self.pk)
 
     def save(self, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)
