@@ -43,6 +43,7 @@ class ApplicationForm(forms.ModelForm):
                     Field('candidate_last_name',wrapper_class='col-md-6'),
                     Field('candidate_office',wrapper_class='col-md-6'),
                     Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_city',wrapper_class='col-md-6'),
                     Field('candidate_state',wrapper_class='col-md-6'),
                     css_class='br3 pt20 f5f5f5-bg clearfix mb20'
                 ),
@@ -64,7 +65,7 @@ class ApplicationForm(forms.ModelForm):
         model = Application
         fields = ['group','rep_email','rep_first_name','rep_last_name','rep_phone',
                     'candidate_first_name','candidate_last_name','candidate_office',
-                    'candidate_district','candidate_state']
+                    'candidate_district','candidate_city','candidate_state']
 
 
 class NominationForm(forms.ModelForm):
@@ -115,6 +116,7 @@ class QuestionnaireForm(forms.ModelForm):
                     Field('candidate_phone',wrapper_class='col-md-6'),
                     Field('candidate_office',wrapper_class='col-md-6'),
                     Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_city',wrapper_class='col-md-6'),
                     Field('candidate_state',wrapper_class='col-md-6'),
                     css_class='pt20 br3 f5f5f5-bg mb20 clearfix'
                 ),
@@ -156,11 +158,13 @@ class LoginForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_class = 'row'
+        self.fields['group'].label = 'Group ID (ex. 5555)'
+        self.fields['email'].label = 'Group Representative Email'
         self.helper.layout = Layout(
             Field('email', wrapper_class='col-md-8'),
-            Field('group', wrapper_class='col-md-4'),
+            Field('group', wrapper_class='col-md-4',label='sffs'),
             Div(
-                Submit('submit','Login',css_class='btn btn-block btn-primary uppercase ls2'),
+                Submit('submit','Get Started',css_class='btn btn-block btn-primary uppercase ls2'),
                 css_class='col-md-12'
             )
         )
@@ -177,4 +181,18 @@ class SubmitForm(forms.Form):
         self.helper.layout = Layout(
             Field('agree',id='agree_field'),
             Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
+        )
+        
+class CandidateEmailForm(forms.Form):
+    candidate_email = forms.EmailField()
+    
+    def __init__(self, *args, **kwargs):
+        super(CandidateEmailForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'col-md-12 clearfix mb20'
+        self.helper.layout = Layout(
+            Field('candidate_email'),
+            Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
         )

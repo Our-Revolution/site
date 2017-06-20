@@ -9,15 +9,22 @@
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row blue-bg white-text pt2 pb2">
-    <div class="container">
-      <div class="col-md-8 col-md-offset-2 fs18">
-        <h1 class="mb0">Start a new nomination.</h1>
-        <p>Our Revolution endorsements are made from the recommendations of our hundreds of official local groups across the world. Official local groups are groups that have gone through group onboarding, have signed the Memorandum of Understanding, and have received a Group ID.</p>
+  <div class="row blue-bg white-text pb2">
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <span class="pull-left"><a href="/groups/nominations/dashboard">&lsaquo; Dashboard</a></span>
+        <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
+      </div>
+    </div>
+    
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1 class="mb0 mt0">Start a new application</h1>
+        <p class="fs18">All Our Revolution endorsements are based on the input from those that live in the community. An Our Revolution endorsement begins with a recommendation from one out of hundreds of official Our Revolution local groups.</p>
+        
+        <p class="fs18">Official local groups have gone through our group onboarding process, signed our Memorandum of Understanding, and received a Group ID. To find or form a local group in your area, please <a href="/groups"><strong>visit our map</strong></a>.</p>
 
-        <p>To start a new endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</p>
-
-        <!-- <p>Don’t have a Group ID or need help becoming an official Our Revolution group? <strong><a href="#">Click here.</a></strong></p> -->
+        <p class="fs18"><strong>To start a new endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</strong></p>
       </div>
     </div>
   </div>

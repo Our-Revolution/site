@@ -2,7 +2,7 @@
 
 {% load bootstrap3 %}
 
-{% block page_title %}Our Revolution - Nominations Dashboard{% endblock %}
+{% block page_title %}Our Revolution Nominations - Dashboard{% endblock %}
 
 {% block content %}
 
@@ -16,7 +16,8 @@
     
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1>My Nominations</h1>
+        <span class="article-type">Dashboard</span>
+        <h1 class="mb0 mt0">Manage your nominations</h1>
       </div>
     </div>
   </div>
@@ -50,6 +51,10 @@
               </tbody>
             </table>
           </div>
+        {% else %}
+          <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">You haven't started any nomination applications yet. When your group is ready, you can start a new endorsement application by clicking the button above.</p>
+          
+          <p class="mt20 text-center"><strong>Questions?</strong> Let us know at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a></p>
         {% endif %}
         
       </div>

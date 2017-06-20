@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm
 from .models import Application, Nomination
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
@@ -10,8 +10,13 @@ from urlparse import urlparse
 from django.utils.decorators import method_decorator
 from .decorators import is_authenticated
 
+auth0_domain = os.environ['AUTH0_DOMAIN']
+auth0_client_id = os.environ['AUTH0_CLIENT_ID']
+auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
+auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
+auth0_candidate_callback_url = os.environ['AUTH0_CANDIDATE_CALLBACK_URL']
+
 class NominationsIndexView(TemplateView):
-    
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
@@ -25,12 +30,16 @@ class CreateApplicationView(CreateView):
     success_url = '/groups/nominations/application'
 
     def form_valid(self, form):
-        
-        # TODO: save user_id to model and then save model
         form.instance.user_id = self.request.session['profile']['user_id']
         super(CreateApplicationView, self).form_valid(form)
 
         return redirect(self.success_url + '?id=' + str(self.object.pk))
+        
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(CreateApplicationView, self).get_context_data(*args, **kwargs)
+        context_data['user'] = self.request.session['profile']
+        return context_data
+        
 
 class EditNominationView(UpdateView):
     form_class = NominationForm
@@ -72,6 +81,7 @@ class EditNominationView(UpdateView):
         context_data['formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         context_data['helper'] = NominationResponseFormsetHelper()
         context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
+        context_data['user'] = self.request.session['profile']
         return context_data
 
 class EditQuestionnaireView(UpdateView):
@@ -115,6 +125,7 @@ class EditQuestionnaireView(UpdateView):
         context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
         context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
+        context_data['user'] = self.request.session['profile']
         return context_data
 
 class DashboardView(TemplateView):
@@ -140,10 +151,30 @@ class ApplicationView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context_data = super(ApplicationView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
+        context_data['user'] = self.request.session['profile']
         return context_data
     
-class QuestionnaireIndexView(DetailView):
+class QuestionnaireIndexView(FormView):
+    form_class = CandidateEmailForm
     template_name = 'questionnaire_index.html'
+
+    def get_success_url(self):
+        return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
+        
+    def form_valid(self, form):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id']
+        application = Application.objects.all().filter(user_id=user_id,pk=app_id).first()
+        
+        # send email to candidate
+        # initiatie Auth0 passwordless
+        passwordless = Passwordless(auth0_domain)
+        
+        email = form.cleaned_data['candidate_email']
+        passwordless.email(auth0_client_id,email,auth_params={'response_type':'code','redirect_uri':auth0_candidate_callback_url + '?id=' + app_id})
+        
+        # TODO: mark qeustionnaire as sent
+        return super(QuestionnaireIndexView, self).form_valid(form)
     
     def get_object(self):
         app_id = self.request.GET.get('id')
@@ -152,8 +183,12 @@ class QuestionnaireIndexView(DetailView):
         self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
                             
     def get_context_data(self, *args, **kwargs):
+        app_id = self.request.GET.get('id')
+        user_id = self.request.session['profile']['user_id'] 
+        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id) 
         context_data = super(QuestionnaireIndexView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
+        context_data['user'] = self.request.session['profile']
         return context_data
         
 class SubmitView(FormView):
@@ -177,14 +212,10 @@ class SubmitView(FormView):
         self.app = get_object_or_404(Application, pk=app_id,user_id=user_id) 
         context_data = super(SubmitView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
+        context_data['user'] = self.request.session['profile']
         return context_data
     
-def login(request):
-    auth0_domain = os.environ['AUTH0_DOMAIN']
-    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
-    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
-    auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
-    
+def login(request):    
     # if user is already logged in
     if 'profile' in request.session:
         print request.session['profile']
@@ -207,12 +238,7 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
     
-def handle_auth0_callback(request):
-    auth0_domain = os.environ['AUTH0_DOMAIN']
-    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
-    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
-    auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
-    
+def handle_auth0_callback(request):    
     code = request.GET.get('code')
     get_token = GetToken(auth0_domain)
     auth0_users = Users(auth0_domain)
@@ -222,11 +248,7 @@ def handle_auth0_callback(request):
     request.session['profile'] = json.loads(user_info)
     return redirect('/groups/nominations/dashboard')
     
-def logout(request):
-    auth0_domain = os.environ['AUTH0_DOMAIN']
-    auth0_client_id = os.environ['AUTH0_CLIENT_ID']
-    auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
-    
+def logout(request):    
     request.session.clear()
     base_url = 'https://ourrevolution.com/groups/nominations'
     return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))

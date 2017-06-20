@@ -144,6 +144,7 @@ class Application(models.Model):
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
     candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
+    candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False)
         
     #TODO: Flesh out (get with E and G to figure out statuses)

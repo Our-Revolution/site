@@ -1,13 +1,14 @@
 <div class="back-bar">
   <div class="container">
-    <ol class="breadcrumb">
-      <li><a href="/groups/nominations/dashboard">Dashboard</a></li>
-      <li><a href="/groups/nominations/application?id={{application.id}}">Application Status</a></li>
-      <li><a href="/groups/nominations/nomination?id={{application.id}}">Nomination Form</a></li>
-      <li><a href="/groups/nominations/questionnaire?id={{application.id}}">Candidate Questionnaire</a></li>
+    <ol class="breadcrumb pull-left">
+      <li {% if "dashboard" in request.path %}class='active'{% endif %}><a href="/groups/nominations/dashboard">Dashboard</a></li>
+      <li {% if "/groups/nominations/application" in request.path %}class='active'{% endif %}><a href="/groups/nominations/application?id={{application.id}}">Application Status</a></li>
+      <li {% if "/groups/nominations/nomination" in request.path %}class='active'{% endif %}><a href="/groups/nominations/nomination?id={{application.id}}">Nomination Form</a></li>
+      <li {% if "/groups/nominations/questionnaire" in request.path %}class='active'{% endif %}><a href="/groups/nominations/questionnaire?id={{application.id}}">Candidate Questionnaire</a></li>
       {% if not application.status == 'submitted' %}
-        <li><a href="/groups/nominations/submit?id={{application.id}}">Submit</a></li>
+        <li {% if "/groups/nominations/submit" in request.path %}class='active'{% endif %}><a href="/groups/nominations/submit?id={{application.id}}">Submit</a></li>
       {% endif %}
     </ol>
+    <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
   </div>
 </div>

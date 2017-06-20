@@ -19,15 +19,15 @@ class NominationAdmin(admin.ModelAdmin):
     # search_fields = ['group_name','group_id','candidate_first_name','candidate_last_name']
 
 
-# @admin.register(Question)
-# class QuestionAdmin(admin.ModelAdmin):
-#     list_display = ('text', 'include_multi_choice')
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('text', 'include_multi_choice')
 
 
-# @admin.register(NominationQuestion)
-# class NominationQuestionAdmin(admin.ModelAdmin):
-#     list_display = ('text',)
-#     inlines = [NominationResponseInline,]
+@admin.register(NominationQuestion)
+class NominationQuestionAdmin(admin.ModelAdmin):
+    list_display = ('text',)
+    inlines = [NominationResponseInline,]
 
 
 class ResponseInline(admin.StackedInline):

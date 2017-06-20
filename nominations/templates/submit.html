@@ -14,7 +14,7 @@
     {% include 'partials/status_bar.html' with active='submit' %}
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1>Submit your nomination request.</h1>
+        <h1>Submit your nomination request</h1>
       </div>
     </div>
   </div>
@@ -22,8 +22,12 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2 fs18">
-        {% if not application.status == 'submitted' %}            
-          <p>As an official Our Revolution Group, you are in the unique position of nominating candidates for a National Our Revolution endorsement.  Throughout your process, the core Our Revolution values of democracy and inclusivity are fully embraced.</p>
+        {% if not application.status == 'submitted' %}
+          {% if application.questionnaire.status != 'complete' or application.nomination.status != 'complete' %}
+            <div class="alert alert-danger br3"><p>Please complete your nomination form and candidate questionnaire before submitting your application.</p></div>
+          {% endif %}
+                    
+          <p>As an official Our Revolution Group, you are in the unique position of nominating candidates for a National Our Revolution endorsement. Throughout your process, the core Our Revolution values of democracy and inclusivity are fully embraced.</p>
    
           <p><strong>By submitting this nomination, your Our Revolution Group guarantees that:</strong></p>
           
@@ -34,8 +38,12 @@
               <li>There is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.</li>
             </ol> 
           </div>
-
-          {% crispy form %}
+          
+          {% if application.questionnaire.status == 'complete' and application.nomination.status == 'complete' %}
+            {% crispy form %}
+          {% else %}
+            <button class="btn btn-primary btn-block disabled uppercase ls2">Submit</button>
+          {% endif %}
         {% else %}  
           <p>You've already submitted this application - we'll review it and be in touch.</p>
           <a href="/groups/nominations/dashboard" class="btn btn-primary btn-block uppercase ls2">Back to the Dashboard</a>
