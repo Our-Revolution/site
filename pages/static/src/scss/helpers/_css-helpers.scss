@@ -513,6 +513,24 @@ a.white-text {
   }
 }
 
+.healthcare-bg {
+  background: $blue url('../img/healthcare-bg.png');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px;
+
+  .module__heading {
+    // text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .oscar-free {
   background: $blue url('../img/oscar-free.jpg');
   background-size: cover;

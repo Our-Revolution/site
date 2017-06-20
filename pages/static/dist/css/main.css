@@ -6134,6 +6134,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.healthcare-bg {
+  background: #218fff url("../img/healthcare-bg.png");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  font-weight: bolder;
+  min-height: 300px; }
+  .healthcare-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .oscar-free {
   background: #218fff url("../img/oscar-free.jpg");
   background-size: cover;
