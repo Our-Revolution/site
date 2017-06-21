@@ -108,7 +108,7 @@ class QuestionnaireForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.layout = Layout(
             Div(
-                HTML('<h3>Candidate Information</h3>'),
+                HTML('<h3>Basic Candidate Information</h3>'),
                 Div(
                     Field('candidate_first_name',wrapper_class='col-md-6'),
                     Field('candidate_last_name',wrapper_class='col-md-6'),
@@ -118,6 +118,20 @@ class QuestionnaireForm(forms.ModelForm):
                     Field('candidate_district',wrapper_class='col-md-6'),
                     Field('candidate_city',wrapper_class='col-md-6'),
                     Field('candidate_state',wrapper_class='col-md-6'),
+                    css_class='pt20 br3 f5f5f5-bg mb20 clearfix',
+                ),
+                css_class='col-md-12'
+            ),
+            Div(
+                HTML('<h3 class="mb0">Candidate Web & Social Information</h3><p>Please enter URLs in the format <a href="#">https://example.com</a>.</p>'),
+                Div(
+                    Field('candidate_website_url',wrapper_class='col-md-6'),
+                    Field('candidate_volunteer_url',wrapper_class='col-md-6'),
+                    Field('candidate_donate_url',wrapper_class='col-md-6'),
+                    Field('candidate_facebook_url',wrapper_class='col-md-6'),
+                    Field('candidate_twitter_url',wrapper_class='col-md-6'),
+                    Field('candidate_instagram_url',wrapper_class='col-md-6'),
+                    Field('candidate_youtube_url',wrapper_class='col-md-6'),
                     css_class='pt20 br3 f5f5f5-bg mb20 clearfix'
                 ),
                 css_class='col-md-12'
