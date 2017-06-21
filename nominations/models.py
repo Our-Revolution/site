@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
-import random, string
     
 #TODO: automate endorsement -> approval -> candidates page 
     
@@ -117,7 +116,6 @@ class Application(models.Model):
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
     """
     
-    slug = models.SlugField(unique=True, editable=False, blank=True)
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     
@@ -165,14 +163,4 @@ class Application(models.Model):
             
         if not self.questionnaire:
             self.questionnaire = Questionnaire.objects.create()
-            
-        while not self.slug:
-            ret = []
-            ret.extend(random.sample(string.digits, 4))
-
-            newslug = ''.join(ret)
-                        
-            if Application.objects.filter(pk=newslug).count() is 0:
-                self.slug = newslug
-        
         super(Application, self).save(*args, **kwargs)
