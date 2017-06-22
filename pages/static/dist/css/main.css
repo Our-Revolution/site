@@ -10041,6 +10041,9 @@ div.recurrence-widget {
       color: #218fff;
       text-decoration: none; }
 
+.news-post img {
+  border-radius: 3px; }
+
 .action-bg {
   background: #218fff url("../img/action-bg.jpg") bottom no-repeat;
   background-size: cover; }
