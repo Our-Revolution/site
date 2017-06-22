@@ -240,12 +240,17 @@ def login(request):
     
 def handle_auth0_callback(request):    
     code = request.GET.get('code')
-    get_token = GetToken(auth0_domain)
-    auth0_users = Users(auth0_domain)
-    token = get_token.authorization_code(auth0_client_id,
-                                         auth0_client_secret, code, auth0_callback_url)
-    user_info = auth0_users.userinfo(token['access_token'])
-    request.session['profile'] = json.loads(user_info)
+    
+    if code:
+        get_token = GetToken(auth0_domain)
+        auth0_users = Users(auth0_domain)
+        token = get_token.authorization_code(auth0_client_id,
+                                             auth0_client_secret, code, auth0_callback_url)
+        user_info = auth0_users.userinfo(token['access_token'])
+        request.session['profile'] = json.loads(user_info)
+        return redirect('/groups/nominations/dashboard')
+        
+    messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
     return redirect('/groups/nominations/dashboard')
     
 def logout(request):    
