@@ -54,7 +54,7 @@ class EditNominationView(UpdateView):
         except (Application.DoesNotExist, KeyError):
             # TODO: Fix the error thrown when no nomination
             messages.error(self.request, "We could not find your nomination application. Please try again.")
-            return redirect("/groups/nominations/dashboard")
+            return redirect("/groups/nominations/dashboard?c=1")
 
     def get_success_url(self):
         return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
@@ -98,7 +98,7 @@ class EditQuestionnaireView(UpdateView):
         except (Application.DoesNotExist, KeyError):
             # TODO: Fix the error thrown when no nomination
             messages.error(self.request, "We could not find your questionnaire. Please try again.")
-            return redirect("/groups/nominations/dashboard")
+            return redirect("/groups/nominations/dashboard?c=1")
 
     def get_success_url(self):
         return "/groups/nominations/submit?id=" + self.request.GET.get('id')
@@ -219,7 +219,7 @@ def login(request):
     # if user is already logged in
     if 'profile' in request.session:
         print request.session['profile']
-        return redirect('/groups/nominations/dashboard')
+        return redirect('/groups/nominations/dashboard?c=1')
         
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -248,10 +248,10 @@ def handle_auth0_callback(request):
                                              auth0_client_secret, code, auth0_callback_url)
         user_info = auth0_users.userinfo(token['access_token'])
         request.session['profile'] = json.loads(user_info)
-        return redirect('/groups/nominations/dashboard')
+        return redirect('/groups/nominations/dashboard?c=1')
         
     messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
-    return redirect('/groups/nominations/dashboard')
+    return redirect('/groups/nominations/dashboard?c=1')
     
 def logout(request):    
     request.session.clear()
