@@ -1,5 +1,5 @@
 from django.conf.urls import include, url
-from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, SubmitView
+from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, SubmitView, handle_candidate_callback
 from django.views.generic import TemplateView
 from .decorators import is_authenticated
 
@@ -12,6 +12,7 @@ urlpatterns = [
         url(r'^login/$', login),
         url(r'^logout/$', is_authenticated(logout)),
         url(r'^callback/$', handle_auth0_callback),
+        url(r'^candidate-callback/$', handle_candidate_callback),
         url(r'^verify/$', TemplateView.as_view(template_name='verify.html')),
         url(r'^application/$', is_authenticated(ApplicationView.as_view())),
         url(r'^questionnaire/$', is_authenticated(QuestionnaireIndexView.as_view())),

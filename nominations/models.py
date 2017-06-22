@@ -145,6 +145,8 @@ class Application(models.Model):
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False)
         
+    authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)  
+        
     #TODO: Flesh out (get with E and G to figure out statuses)
     STATUSES = (
        ('incomplete', 'Incomplete'),

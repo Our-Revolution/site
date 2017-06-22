@@ -15,9 +15,9 @@
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Candidate Questionnaire</h1>
-        <!-- <p class="fs18">The candidate questionnaire should be filled out by the candidate for the group’s consideration. Use the form below to send the questionnaire to the candidate and track its progress.</p>
+        <p class="fs18">The candidate questionnaire should be filled out by the candidate for the group’s consideration. Use the form below to send the questionnaire to the candidate and track its progress.</p>
 
-        <p class="fs18">Alternatively, if you’re having trouble getting in contact with the candidate, you may fill out this portion yourself.</p> -->
+        <p class="fs18">Alternatively, if you’re having trouble getting in contact with the candidate, you may fill out this portion yourself.</p>
       </div>
     </div>
   </div>
@@ -27,11 +27,13 @@
       <div class="row">
         <div class="col-md-8 col-md-offset-2 clearfix">
           {% if not application.status == 'submitted' %}            
-            <!-- <h2 class="text-center mb20 mt20">- OR -</h2> -->
+            {% crispy form %}
+          
+            <h2 class="text-center mb20 mt20">- OR -</h2>
             
             <div class="col-md-12 text-center">
               <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">Fill Out Questionnaire</a>
-              <!-- <p class="mt20"><strong>Note:</strong> We recommend having the candidate fill out this form because it  helps us get a clearer picture of the candidate’s issues.</p> -->
+              <p class="mt20"><strong>Note:</strong> We recommend having the candidate fill out this form because it  helps us get a clearer picture of the candidate’s issues.</p>
             </div>
           {% else %}  
             <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">View Questionnaire</a>

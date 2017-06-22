@@ -91,14 +91,23 @@ class EditQuestionnaireView(UpdateView):
 
     def get_object(self):
         app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
+        user = self.request.session['profile']
+        user_id = user['user_id']
+        email = user['email']
+        
+        print 1
 
-        try:
-            return Application.objects.get(pk=app_id,user_id=user_id).questionnaire
-        except (Application.DoesNotExist, KeyError):
-            # TODO: Fix the error thrown when no nomination
-            messages.error(self.request, "We could not find your questionnaire. Please try again.")
-            return redirect("/groups/nominations/dashboard?c=1")
+        if Application.objects.all().filter(authorized_email=email).first():
+            print 2
+            print 'yo!'
+            return Application.objects.all().filter(authorized_email=email).first().questionnaire
+        else:
+            try:
+                return Application.objects.get(pk=app_id,user_id=user_id).questionnaire
+            except (Application.DoesNotExist, KeyError):
+                # TODO: Fix the error thrown when no nomination
+                messages.error(self.request, "We could not find your questionnaire. Please try again.")
+                return redirect("/groups/nominations/dashboard?c=1")
 
     def get_success_url(self):
         return "/groups/nominations/submit?id=" + self.request.GET.get('id')
@@ -124,7 +133,7 @@ class EditQuestionnaireView(UpdateView):
         context_data = super(EditQuestionnaireView, self).get_context_data(*args, **kwargs)
         context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
+        context_data['application'] = self.object
         context_data['user'] = self.request.session['profile']
         return context_data
 
@@ -159,7 +168,7 @@ class QuestionnaireIndexView(FormView):
     template_name = 'questionnaire_index.html'
 
     def get_success_url(self):
-        return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
+        return "/groups/nominations/success"
         
     def form_valid(self, form):
         app_id = self.request.GET.get('id')
@@ -172,6 +181,17 @@ class QuestionnaireIndexView(FormView):
         
         email = form.cleaned_data['candidate_email']
         passwordless.email(auth0_client_id,email,auth_params={'response_type':'code','redirect_uri':auth0_candidate_callback_url + '?id=' + app_id})
+        
+        # TODO: mark candidate email as authorized user in application db
+        application.authorized_email = email
+        application.save()
+        # have candidate login screen
+        # candidate is authorized on callback so can see questionnaire
+        # but if they lose login link they can visit login page to request another
+        # enter email, check for applications with that email in authorized_emails
+        # resend verification
+        # click link, be directed to questionnaire
+        # check for application questionnare where auhtorized email = logged in email
         
         # TODO: mark qeustionnaire as sent
         return super(QuestionnaireIndexView, self).form_valid(form)
@@ -195,6 +215,8 @@ class SubmitView(FormView):
     template_name = 'submit.html'
     form_class = SubmitForm
     success_url = '/groups/nominations/success'
+    
+    # TODO: add conditional for candidate submission
     
     def form_valid(self, form):
         app_id = self.request.GET.get('id')
@@ -252,6 +274,27 @@ def handle_auth0_callback(request):
         
     messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
     return redirect('/groups/nominations/dashboard?c=1')
+    
+def handle_candidate_callback(request):    
+    code = request.GET.get('code')
+    
+    if code:
+        get_token = GetToken(auth0_domain)
+        auth0_users = Users(auth0_domain)
+        token = get_token.authorization_code(auth0_client_id,
+                                             auth0_client_secret, code, auth0_callback_url)
+        user_info = auth0_users.userinfo(token['access_token'])
+        user = json.loads(user_info)
+        request.session['profile'] = user
+        
+        # find application where this email is authorized to access
+        application = Application.objects.all().filter(authorized_email=user['email']).first()
+        
+        return redirect('/groups/nominations/questionnaire/edit?id=' + str(application.pk))
+        
+    messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
+    return redirect('/groups/nominations/dashboard?c=1')
+    
     
 def logout(request):    
     request.session.clear()
