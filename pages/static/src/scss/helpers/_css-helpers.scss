@@ -34,6 +34,14 @@
   margin-bottom: 20px;
 }
 
+.mr20 {
+  margin-right: 20px;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
 .pa0 {
   padding: 0;
 }
@@ -947,6 +955,22 @@ a.white-text {
   }
 }
 
+.nina-bg {
+  background: $blue url('../img/nina-bg.png') center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+  
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .verify-icon {
   color: white;
   background: #218fff;
@@ -955,4 +979,10 @@ a.white-text {
   border-radius: 100%;
   margin: 4rem auto;
   text-align: center;
+}
+
+.vertical-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
