@@ -9,6 +9,10 @@ import json, os
 from urlparse import urlparse
 from django.utils.decorators import method_decorator
 from .decorators import is_authenticated
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+
 
 auth0_domain = os.environ['AUTH0_DOMAIN']
 auth0_client_id = os.environ['AUTH0_CLIENT_ID']
@@ -168,23 +172,40 @@ class QuestionnaireIndexView(FormView):
     template_name = 'questionnaire_index.html'
 
     def get_success_url(self):
-        return "/groups/nominations/success"
+        return "/groups/nominations/email-success"
         
     def form_valid(self, form):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
         application = Application.objects.all().filter(user_id=user_id,pk=app_id).first()
         
-        # send email to candidate
-        # initiatie Auth0 passwordless
-        passwordless = Passwordless(auth0_domain)
+        candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
+        candidate_email = form.cleaned_data['candidate_email']
+        group = application.group
+        rep_email = application.rep_email
         
-        email = form.cleaned_data['candidate_email']
-        passwordless.email(auth0_client_id,email,auth_params={'response_type':'code','redirect_uri':auth0_candidate_callback_url + '?id=' + app_id})
-        
-        # TODO: mark candidate email as authorized user in application db
-        application.authorized_email = email
+        application.authorized_email = candidate_email
+        application.questionnaire.status = 'sent'
         application.save()
+        application.questionnaire.save()
+        
+        plaintext = get_template('email/candidate_email.txt')
+        htmly     = get_template('email/candidate_email.html')
+        
+        d = Context({'group': group,'candidate_name':candidate_name,'group_rep_email':rep_email})
+        
+        subject="You're being nominated for endorsement by an official Our Revolution group!"
+        from_email='Our Revolution <info@ourrevolution.com>'
+        to_email=["%s <%s>" % (candidate_name,candidate_email)]
+                                        
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        
+        print 'sent'
+        
         # have candidate login screen
         # candidate is authorized on callback so can see questionnaire
         # but if they lose login link they can visit login page to request another
@@ -282,7 +303,7 @@ def handle_candidate_callback(request):
         get_token = GetToken(auth0_domain)
         auth0_users = Users(auth0_domain)
         token = get_token.authorization_code(auth0_client_id,
-                                             auth0_client_secret, code, auth0_callback_url)
+                                             auth0_client_secret, code, auth0_candidate_callback_url)
         user_info = auth0_users.userinfo(token['access_token'])
         user = json.loads(user_info)
         request.session['profile'] = user

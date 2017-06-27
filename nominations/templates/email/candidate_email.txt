@@ -1,0 +1,14 @@
+Hi {{candidate_name}},
+
+You’ve been nominated by {{group}} for an endorsement from Our Revolution!
+
+In order for us to consider your candidacy for a national endorsement, you must fill out and submit a candidate questionnaire.
+
+Once you have filled out and submitted a candidate questionnaire, {{group}} can submit your nomination and Our Revolution National will review your candidacy for endorsement.
+
+Fill out our platform questionnaire. (https://ourrevolution.com/groups/nominations/candidate-login)
+
+Questions? You can contact {{group}} at {{group_rep_email}} (mailto:{{group_rep_email}}) .
+
+Thanks,
+Our Revolution

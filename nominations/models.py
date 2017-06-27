@@ -53,6 +53,7 @@ class Questionnaire(models.Model):
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('complete', 'Complete'),
+       ('sent', 'Sent'),
    ) 
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
     

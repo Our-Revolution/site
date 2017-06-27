@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row blue-bg nina white-text pb4">
+  <div class="row blue-bg nina-bg white-text pb4">
     <div class="back-bar--small">
       <div class="container">
         <a href="/groups/nominations/login" class="btn btn-primary uppercase ls2 pull-right">Login</a>
@@ -43,7 +43,7 @@
     </div>
     
     <div class="col-md-6">
-      <div class="pa20 f5f5f5-bg ml20 br3 mt20 mb20 fs18">
+      <div class="pa20 f5f5f5-bg br3 mt20 mb20 fs18">
         <ol>
           <li>Complete a nomination form for your candidate</li>
           <li>Have your candidate fill out our candidate questionnaire</li>
@@ -60,14 +60,14 @@
   <div class="row f5f5f5-bg pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
-        <h2>Our Revolution will provide leaders inspired by the political revolution with the following resources:</h2>
+        <h2>Our Revolution will provide leaders inspired by the political revolution with the following resources on a race-by-race basis.</h2>
         
-        <ul>
-          <li>Grassroots Fundraising</li>
-          <li>GOTV Texting</li>
-          <li>Phonebanking</li>
-          <li>Grassroots Support</li>
-          <li>Promotion through web and social</li>
+        <ul class="fs18 col-md-10 col-md-offset-1 lst0 mt20">
+          <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-usd mr20"></i>Grassroots Fundraising</li>
+          <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-phone mr20 "></i>GOTV Texting</li>
+          <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-earphone mr20"></i>Phonebanking</li>
+          <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-bullhorn mr20"></i>Grassroots Support</li>
+          <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-comment mr20"></i>Promotion Through Web and Social</li>
         </ul>
       </div>
     </div>
@@ -76,13 +76,13 @@
   <div class="container pb2 pt2">
     <div class="col-md-8 col-md-offset-2">
       <h2>To be considered for an endorsement, candidates must meet the following criteria:</h2>
-      <ul>
-        <li>Receive a nomination from an Our Revolution group, including its Members (please visit our local organizing tool to locate an Our Revolution group near you).</li>
-        <li>If there is no local group in your race location, email your complete Candidate Questionnaire to Political@ourrevolution.com. Members of Our Revolution in the area will be surveyed to assess the level of local support for the race.</li>
-        <li>Be willing to run a grassroots powered campaign</li>
-        <li>Agree with the Our Revolution platform</li>
-        <li>Run a positive campaign</li>
-        <li>Reject money from corporate interests</li>
+      <ul class="fs18 mt20 mb20">
+        <li>Receive a nomination from an Our Revolution group, including its members. Please visit our <a href="/groups">local groups map</a> to locate an Our Revolution group near you.</li>
+        <li>If there is no local group in your race location, email your complete candidate questionnaire to <a href="mailto:political@ourrevolution.com">political@ourrevolution.com</a>. Members of Our Revolution in the area will be surveyed to assess the level of local support for the race.</li>
+        <li>Be willing to run a grassroots powered campaign.</li>
+        <li>Agree with the Our Revolution <a href="/issues">platform</a>.</li>
+        <li>Run a positive campaign.</li>
+        <li>Reject money from corporate interests.</li>
       </ul>
       
       <p><strong>Note:</strong> Nominations submitted less than 30 days before the election are unlikely to be considered.</p>
@@ -93,7 +93,7 @@
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
         <h2>Nominate a Candidate Today</h2>
-        <div class="pa20 white-bg ml20 br3 mb20 fs18">
+        <div class="pa20 white-bg br3 mb20 fs18">
           <ol>
             <li>Complete a nomination form for your candidate</li>
             <li>Have your candidate fill out our candidate questionnaire</li>
@@ -107,7 +107,8 @@
       </div>
     </div>
   </div>
-  
 </div>
+
+<script>smoothScroll.init()</script>
 
 {% endblock %}

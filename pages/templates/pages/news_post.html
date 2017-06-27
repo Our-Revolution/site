@@ -8,7 +8,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="container">
+        <div class="container news-post">
             {% image page.header_photo width-1200 as header_photo %}
             <div class="page-heading--press" {% if header_photo %}style="background: url({{ header_photo.url }}) center center; background-size: cover;"{% endif %}>
             <span class="article-type">{{ page.get_post_type_display }}</span>
@@ -28,7 +28,6 @@
             </section>
         </div>
     </div>
-
 </div>
 
 
