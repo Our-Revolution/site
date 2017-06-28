@@ -1,12 +1,23 @@
+** Our Revolution
+------------------------------------------------------------
+
 Hi {{candidate_name}},
 
 You’ve been nominated by {{group}} for an endorsement from Our Revolution!
 
-In order for us to consider your candidacy for a national endorsement, you must fill out and submit a candidate questionnaire.
+Congratulations on receiving an endorsement nomination from a local Our Revolution group! In order for us to consider your candidacy for a national endorsement, you must fill out and submit a candidate questionnaire. The office you are seeking may not have jurisdiction over some of these issues. However, the following questions are aimed to assess how aligned you are with our national platform and will be taken as your official stance.
+
+Please keep in mind that the following factors will be considered key for our decision to move forward with a national endorsement:
+
+1. Values: How aligned is the candidate with Our Revolution’s values?
+
+2. Viability: Historical voting data, including voter turnout and previous election party breakdown, is a good indicator of how an election may turn out. This information will give an indication of how much effort a candidate will need to exert and invest in order to win.
+
+3. Fundraising and Origin of Candidate’s Campaign Contributions: Does the candidate have the ability to raise money to make him/her competitive without having to compromise their values?
 
 Once you have filled out and submitted a candidate questionnaire, {{group}} can submit your nomination and Our Revolution National will review your candidacy for endorsement.
 
-Fill out our platform questionnaire. (https://ourrevolution.com/groups/nominations/candidate-login)
+Fill out our platform questionnaire. (https://ourrevolution.com/groups/nominations/candidate/login)
 
 Questions? You can contact {{group}} at {{group_rep_email}} (mailto:{{group_rep_email}}) .
 

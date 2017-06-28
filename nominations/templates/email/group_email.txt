@@ -1,0 +1,15 @@
+** Our Revolution
+------------------------------------------------------------
+
+Hi {{rep_name}},
+
+{{candidate_name}} has completed the candidate questionnaire!
+
+Log into the group nominations dashboard to review and submit your application for endorsement.
+
+Submit My Nomination (https://ourrevolution.com/groups/nominations/dashboard?c=1)
+
+Submit My Nomination (https://ourrevolution.com/groups/nominations/dashboard?c=1)
+
+Thanks,
+Our Revolution

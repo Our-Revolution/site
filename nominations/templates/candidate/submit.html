@@ -1,0 +1,59 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pb2">
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <span class="pull-left"><a href="/groups/nominations/candidate/dashboard">&lsaquo; Back</a></span>
+      </div>
+    </div>
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Submit your candidate questionnaire</h1>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2 fs18">
+        {% if application.questionnaire.status == 'complete' %}
+          <p>You've already submitted this application - we'll review it and be in touch.</p>
+          <a href="/groups/nominations?id={{applicaiton.id}}" class="btn btn-primary btn-block uppercase ls2">Back to the Dashboard</a>
+        {% elif not application.questionnaire.status == 'sent'  %}
+          <div class="alert alert-danger br3"><p>Please complete your candidate questionnaire before submitting.</p></div>
+        {% else %}
+        <div class="pa20 br3 f5f5f5-bg mb20">
+          <p class="mb0">I agree that I have truthfully answered the questions on the candidate questionnaire and that my answers accurately reflect the positions of my campaign. I understand that I cannot go back and edit these answers after I have submitted this questionnaire.</p>
+        </div>
+          {% crispy form %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    
+    $('#agree_field').change(function(){
+      if(this.checked) {
+        $('#submit_button').removeClass('disabled')
+      } else {
+        $('#submit_button').addClass('disabled')
+      }
+    });
+    
+  });
+</script>
+
+{% endblock %}
