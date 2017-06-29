@@ -80,7 +80,7 @@
     }
     
     &:nth-child(6) {
-      background: $red url('../img/phonebank.jpg');
+      background: $red url('../img/phonebank.jpg?c=1');
       background-size: cover;
       
       .campaigns__info {

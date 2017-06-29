@@ -10123,7 +10123,7 @@ div.recurrence-widget {
     .campaigns__card:nth-child(5) .campaigns__info {
       background: #bd5f79; }
   .campaigns__card:nth-child(6) {
-    background: #d74e5b url("../img/phonebank.jpg");
+    background: #d74e5b url("../img/phonebank.jpg?c=1");
     background-size: cover; }
     .campaigns__card:nth-child(6) .campaigns__info {
       background: #d74e5b; }
