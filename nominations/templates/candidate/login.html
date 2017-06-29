@@ -4,21 +4,15 @@
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
-{% block page_title %}Our Revolution Nominations - Login{% endblock %}
+{% block page_title %}Our Revolution Nominations - Candidate Login{% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pb2">
-    <div class="back-bar clearfix">
-      <div class="container clearfix">
-        <span class="pull-left"><a href="/groups/nominations">&lsaquo; Back</a></span>
-      </div>
-    </div>
-    
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Group Representative Login</span>
+        <span class="article-type">Candidate Questionnaire Login</span>
         <h1 class="mt0 mb0">Our Revolution Nominations</h1>
       </div>
     </div>
@@ -30,15 +24,15 @@
         {% bootstrap_messages %}
         <p class="fs18">All Our Revolution endorsements are based on the input from those that live in the community. An Our Revolution endorsement begins with a recommendation from one out of the hundreds of official Our Revolution local groups.</p>
         
-        <p class="fs18">Official local groups have gone through our group onboarding process, signed our Memorandum of Understanding, and received a Group ID. To find or form a local group in your area, please <a href="/groups">visit our map</a>.</p>
-
-        <p class="fs18"><strong>To start a new endorsement application or manage your existing applications, enter your Group ID and associated email address and we'll send you a verification link.</strong></p>
+        <p class="fs18">In order for a group to submit a nomination, the nominated candidate must fill out Our Revolution's candidate questionnaire.</p>
+      
+        <p class="fs18"><strong>To login and complete your candidate questionnaire, please enter the email at which you received your nomination notification.</strong></p>
         
         <div class="mt20 pa20 br3 f5f5f5-bg">
           {% crispy form %}
         </div>
         
-        <p class="mt20"><strong>Having trouble?</strong> Contact us at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>.</p>
+        <p class="mt20 text-center"><strong>Having trouble?</strong> Contact us at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>.</p>
       </div>
     </div>
   </div>

@@ -15,9 +15,9 @@
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Candidate Questionnaire</h1>
-        <!-- <p class="fs18">The candidate questionnaire should be filled out by the candidate for the group’s consideration. Use the form below to send the questionnaire to the candidate and track its progress.</p>
+        <p class="fs18">The candidate questionnaire should be filled out by the candidate for the group’s consideration. Use the form below to send the questionnaire to the candidate and track its progress.</p>
 
-        <p class="fs18">Alternatively, if you’re having trouble getting in contact with the candidate, you may fill out this portion yourself.</p> -->
+        <p class="fs18">Alternatively, if you’re having trouble getting in contact with the candidate, you may fill out this portion yourself.</p>
       </div>
     </div>
   </div>
@@ -26,13 +26,23 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2 clearfix">
-          {% if not application.status == 'submitted' %}            
-            <!-- <h2 class="text-center mb20 mt20">- OR -</h2> -->
+          {% if not application.status == 'submitted' %}
+            {% if not application.questionnaire.status == 'sent' %}
+              {% crispy form %}
             
-            <div class="col-md-12 text-center">
-              <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">Fill Out Questionnaire</a>
-              <!-- <p class="mt20"><strong>Note:</strong> We recommend having the candidate fill out this form because it  helps us get a clearer picture of the candidate’s issues.</p> -->
-            </div>
+              <h2 class="text-center mb20 mt20">- OR -</h2>
+              
+              <div class="col-md-12 text-center">
+                <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">Fill Out Questionnaire</a>
+                <p class="mt20"><strong>Note:</strong> We strongly recommend having the candidate fill out this form because their level of alignment with our national platform is an important factor in our endorsement decision.</p>
+              </div>
+            {% else %}
+              <div class="col-md-12 text-center fs18 pa20 br3 f5f5f5-bg mb20">
+                <p>You've sent the candidate questionnaire to <strong>{{application.authorized_email}}</strong> - we'll notify you at <strong>{{application.rep_email}}</strong> when the candidate has completed it.</p>
+              </div>
+              
+              <p class="mt20 text-center"><strong>Having trouble?</strong> Contact us at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>.</p>
+            {% endif %}
           {% else %}  
             <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">View Questionnaire</a>
           {% endif %}

@@ -176,7 +176,7 @@ class LoginForm(forms.Form):
         self.fields['email'].label = 'Group Representative Email'
         self.helper.layout = Layout(
             Field('email', wrapper_class='col-md-8'),
-            Field('group', wrapper_class='col-md-4',label='sffs'),
+            Field('group', wrapper_class='col-md-4'),
             Div(
                 Submit('submit','Get Started',css_class='btn btn-block btn-primary uppercase ls2'),
                 css_class='col-md-12'
@@ -206,7 +206,39 @@ class CandidateEmailForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_class = 'col-md-12 clearfix mb20'
+        self.fields['candidate_email'].label = 'Candidate Email'
         self.helper.layout = Layout(
             Field('candidate_email'),
             Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
+        )
+
+class CandidateLoginForm(forms.Form):
+    email = forms.EmailField()
+
+    def __init__(self, *args, **kwargs):
+        super(CandidateLoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.layout = Layout(
+            Field('email', wrapper_class='col-md-12'),
+            Div(
+                Submit('submit','Get Started',css_class='btn btn-block btn-primary uppercase ls2'),
+                css_class='col-md-12'
+            )
+        )
+
+class CandidateSubmitForm(forms.Form):
+    agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(CandidateSubmitForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_id = 'submit_form'
+        self.helper.layout = Layout(
+            Field('agree',id='agree_field'),
+            Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
