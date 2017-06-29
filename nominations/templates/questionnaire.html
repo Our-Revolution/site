@@ -13,7 +13,7 @@
     {% include 'partials/status_bar.html' with active='nomination' %}
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1 class="mb0 mt0">Candidate Questionnaire</h1>
+        <h1 class="mb0 mt0">Candidate Questionnaire</h1>    
         <p class="fs18">The candidate questionnaire should be filled out by the candidate for the group’s consideration, but if you're having trouble getting in touch your group may fill it out on behalf of the candidate.</p>
         
         <p class="fs18">To complete the candidate questionnaire, provide some basic information about the candidate and answer the following 24 questions on the candidate's platform.</p>
@@ -27,8 +27,26 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
-          <div class="alert alert-danger br3"><strong>Note:</strong> We strongly recommend having the candidate fill out this form because their level of alignment with our national platform is an important factor in our endorsement decision. You can send this form to the candidate <a href="/groups/nominations/questionnaire/?id={{application.id}}">here</a>.</div>
-          {% if not application.status == 'submitted' and not application.questionnaire.status == 'complete' %}
+          {% if not questionnaire.status == 'complete' %}
+            <div class="alert alert-danger br3"><strong>Note:</strong> We strongly recommend having the candidate fill out this form because their level of alignment with our national platform is an important factor in our endorsement decision. You can send this form to the candidate <a href="/groups/nominations/questionnaire/?id={{application.id}}">here</a>.</div>
+          {% endif %}
+          {% if application.status == 'submitted' or questionnaire.status == 'complete' %}
+            {% for form in formset %}
+              <div class="form-group pa20 br3 f5f5f5-bg">
+                <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
+                {% if form.instance.question.include_multi_choice %}
+                  <p class="pa20 br3 white-bg mt0">{{form.instance.get_response_display}}</p>
+                {% endif %}
+                <p class="pa20 br3 white-bg mt0 mb0">{{form.instance.position}}</p>
+              </div>
+            {% endfor %}
+          {% elif questionnaire.status == 'sent' %}
+            <div class="col-md-12 text-center fs18 pa20 br3 f5f5f5-bg mb20">
+              <p>You've sent the candidate questionnaire to <strong>{{application.authorized_email}}</strong> - we'll notify you at <strong>{{application.rep_email}}</strong> when the candidate has completed it.</p>
+            </div>
+            
+            <p class="mt20 text-center"><strong>Having trouble?</strong> Contact us at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>.</p>
+          {% else %} 
             <form action="" method="POST" class="row">
               {{ formset.management_form|crispy }}
               {% crispy form %}
@@ -47,16 +65,6 @@
                 <button type='submit' value='Submit' class='btn btn-block btn-primary uppercase ls2'>Save</button>
               </div>
             </form>
-          {% else %}  
-            {% for form in formset %}
-              <div class="form-group pa20 br3 f5f5f5-bg">
-                <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
-                {% if form.instance.question.include_multi_choice %}
-                  <p class="pa20 br3 white-bg mt0">{{form.instance.get_response_display}}</p>
-                {% endif %}
-                <p class="pa20 br3 white-bg mt0 mb0">{{form.instance.position}}</p>
-              </div>
-            {% endfor %}
           {% endif %}
         </div>
       </div>

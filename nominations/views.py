@@ -127,10 +127,14 @@ class EditQuestionnaireView(UpdateView):
     def get_context_data(self, *args, **kwargs):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
+        
+        application = Application.objects.get(pk=app_id,user_id=user_id)
+        
         context_data = super(EditQuestionnaireView, self).get_context_data(*args, **kwargs)
         context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['application'] = self.object
+        context_data['application'] = application
+        context_data['questionnaire'] = self.object
         context_data['user'] = self.request.session['profile']
         return context_data
 
