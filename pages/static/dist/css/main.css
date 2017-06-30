@@ -6459,6 +6459,23 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   -ms-transform: translateY(-50%);
   transform: translateY(-50%); }
 
+.responsive-object {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  padding-bottom: 56.25%; }
+  .responsive-object iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    border: 0; }
+
 /*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Change the default font family in all browsers (opinionated).
@@ -10074,7 +10091,16 @@ div.recurrence-widget {
   height: 0;
   padding: 0;
   overflow: hidden;
-  border-radius: 3px; }
+  border-radius: 3px;
+  padding-bottom: 56.25%; }
+  .news-post .responsive-object iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    border: 0; }
 
 .action-bg {
   background: #218fff url("../img/action-bg.jpg") bottom no-repeat;
