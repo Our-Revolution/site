@@ -10068,6 +10068,14 @@ div.recurrence-widget {
 .news-post img {
   border-radius: 3px; }
 
+.news-post .responsive-object {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 3px; }
+
 .action-bg {
   background: #218fff url("../img/action-bg.jpg") bottom no-repeat;
   background-size: cover; }
