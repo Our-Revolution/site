@@ -955,6 +955,22 @@ a.white-text {
   }
 }
 
+.stop-trumpcare-bg {
+  background: #fff952 url('../img/stop-trumpcare-bg.jpg') center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+  
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .nina-bg {
   background: $blue url('../img/nina-bg.png') center center;
   background-size: cover;

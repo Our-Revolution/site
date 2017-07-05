@@ -6432,6 +6432,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.stop-trumpcare-bg {
+  background: #fff952 url("../img/stop-trumpcare-bg.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .stop-trumpcare-bg .module__heading, .stop-trumpcare-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .stop-trumpcare-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .nina-bg {
   background: #218fff url("../img/nina-bg.png") center center;
   background-size: cover;
