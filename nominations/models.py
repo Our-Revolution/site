@@ -18,8 +18,9 @@ class Nomination(models.Model):
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
 
 
-    # def __unicode__(self):
-    #     return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
+    def __unicode__(self):
+        if self.application:
+            return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
 
     def save(self, *args, **kwargs):
         # self.cleaned_data['status'] = 'complete'
