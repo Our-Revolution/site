@@ -5,6 +5,8 @@ from local_groups.models import Group
 from .models import Nomination, Application, NominationResponse, Questionnaire, Response
 import os, requests
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class ApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
@@ -112,12 +114,17 @@ class QuestionnaireForm(forms.ModelForm):
                 Div(
                     Field('candidate_first_name',wrapper_class='col-md-6'),
                     Field('candidate_last_name',wrapper_class='col-md-6'),
+                    Field('candidate_bio',wrapper_class='col-md-12'),
                     Field('candidate_email',wrapper_class='col-md-6'),
                     Field('candidate_phone',wrapper_class='col-md-6'),
                     Field('candidate_office',wrapper_class='col-md-6'),
                     Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_party',wrapper_class='col-md-6'),
+                    Field('candidate_held_office',wrapper_class='col-md-6'),
                     Field('candidate_city',wrapper_class='col-md-6'),
                     Field('candidate_state',wrapper_class='col-md-6'),
+                    Field('general_election_date',wrapper_class='col-md-6'),
+                    Field('primary_election_date',wrapper_class='col-md-6'),
                     css_class='pt20 br3 f5f5f5-bg mb20 clearfix',
                 ),
                 css_class='col-md-12'
@@ -141,6 +148,10 @@ class QuestionnaireForm(forms.ModelForm):
     class Meta:
         model = Questionnaire
         exclude = ['status']
+        widgets = {
+            'general_election_date': DateInput(),
+            'primary_election_date': DateInput()
+        }
 
 class QuestionnaireResponseFormsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):

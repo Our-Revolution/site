@@ -9,7 +9,7 @@ from local_groups.models import Group
 #TODO: automate endorsement -> approval -> candidates page 
     
 class Nomination(models.Model):
-    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Briefly describe your group's nomination process") 
+    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Briefly describe your group's nomination process")
 
     STATUSES = (
        ('incomplete', 'Incomplete'),
@@ -64,12 +64,17 @@ class Questionnaire(models.Model):
     # Candidate Information and Social Media
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
+    candidate_bio = models.TextField(max_length=1000, blank=False, null=False, verbose_name = "Candidate Bio")
     candidate_email = models.EmailField(null=True, blank=False, verbose_name="Candidate Email", max_length=255)
     candidate_phone = PhoneNumberField(null=True, blank=True, verbose_name="Candidate Phone Number")
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
     candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
+    candidate_party = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Party Affiliation")
+    candidate_held_office = models.NullBooleanField(default=True,null=True, blank=False, verbose_name="Has the candidate ever held public office?")
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
+    general_election_date = models.DateField(verbose_name = 'General Election Date', null = True, blank = True)
+    primary_election_date = models.DateField(verbose_name = 'Primary Election Date', null = True, blank = True)
     candidate_website_url = models.URLField(null=True, blank=True, verbose_name="Candidate Website URL", max_length=255)
     candidate_volunteer_url = models.URLField(null=True, blank=True, verbose_name="Candidate Volunteer URL", max_length=255)
     candidate_donate_url = models.URLField(null=True, blank=True, verbose_name="Candidate Donate URL", max_length=255)
