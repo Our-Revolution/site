@@ -6454,6 +6454,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.or-oh-bg {
+  background: #218fff url("../img/or-oh-bg.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .or-oh-bg .module__heading, .or-oh-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .or-oh-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .verify-icon {
   color: white;
   background: #218fff;
