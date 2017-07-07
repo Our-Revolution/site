@@ -23,7 +23,7 @@ class Nomination(models.Model):
             app = self.application
             return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + ' Nomination'
         except:
-            pass
+            return 'Nomination ' + str(self.pk)    
 
     def save(self, *args, **kwargs):
         # self.cleaned_data['status'] = 'complete'
