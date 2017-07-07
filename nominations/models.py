@@ -167,6 +167,19 @@ class Application(models.Model):
    ) 
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
     
+    # Volunteer Data Entry
+    vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
+    vol_other_progressives = models.TextField(null=True, blank=True, max_length=500, verbose_name='Other progressives running:')
+    vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
+    vol_endorsements = models.TextField(null=True, blank=True, max_length=500, verbose_name='Endorsements:')
+    vol_advantage = models.CharField(null=True, blank=True, max_length=50, verbose_name='Previous Election D% or R% Advantage:')
+    vol_turnout = models.CharField(null=True, blank=True, max_length=10, verbose_name='Previous Election Year Turnout:')
+    vol_win_number = models.IntegerField(null=True, blank=True, verbose_name='Win Number:')
+    vol_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much money fundraised?')
+    vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
+    vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
+    vol_notes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Notes:')
+    
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
