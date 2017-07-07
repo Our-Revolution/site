@@ -19,8 +19,11 @@ class Nomination(models.Model):
 
 
     def __unicode__(self):
-        if self.application:
+        try:
+            app = self.application
             return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + ' Nomination'
+        except:
+            pass
 
     def save(self, *args, **kwargs):
         # self.cleaned_data['status'] = 'complete'
