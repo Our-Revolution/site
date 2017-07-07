@@ -20,7 +20,7 @@ class Nomination(models.Model):
 
     def __unicode__(self):
         if self.application:
-            return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + str(self.application.group) + ' Nomination'
+            return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + ' Nomination'
 
     def save(self, *args, **kwargs):
         # self.cleaned_data['status'] = 'complete'
