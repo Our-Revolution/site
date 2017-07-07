@@ -75,8 +75,8 @@ class Questionnaire(models.Model):
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
     
     def __unicode__(self):
-        if self.candidate_first_name and self.candidate_last_name and self.application_set.first().group:
-            return self.candidate_first_name + ' ' + self.candidate_last_name + ' - ' + str(self.application_set.first().group) + ' Questionnaire'
+        if self.candidate_first_name and self.candidate_last_name:
+            return self.candidate_first_name + ' ' + self.candidate_last_name + ' - ' + ' Questionnaire'
         else:
             return 'Questionnaire ' + str(self.pk)
 
