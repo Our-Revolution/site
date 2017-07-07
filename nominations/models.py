@@ -168,6 +168,7 @@ class Application(models.Model):
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
     
     # Volunteer Data Entry
+    vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
     vol_other_progressives = models.TextField(null=True, blank=True, max_length=500, verbose_name='Other progressives running:')
     vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
