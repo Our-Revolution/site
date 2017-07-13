@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import *
 from local_groups.models import Group
+from local_groups.actions import export_as_csv_action
 import pprint
 
 
@@ -47,8 +48,20 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ['group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','status'] 
     # ['id','candidate_last_name','candidate_first_name','group_name','group_id','candidate_office','candidate_state']
     # list_display_links = list_display
+    
+    actions = [export_as_csv_action("CSV Export")]
     list_filter = ['candidate_state','group']
     search_fields = ['group','candidate_first_name','candidate_last_name']
+    
+    def get_actions(self, request):
+        #Disable delete
+        actions = super(ApplicationAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
+
+    def has_delete_permission(self, request, obj=None):
+        #Disable delete
+        return False
     
 from django.contrib.sessions.models import Session
 class SessionAdmin(admin.ModelAdmin):

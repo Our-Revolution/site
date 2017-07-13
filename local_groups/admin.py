@@ -14,5 +14,12 @@ class GroupAdmin(admin.ModelAdmin):
     form = GisForm
     actions = [export_as_csv_action("CSV Export")]
     
+    def get_actions(self, request):
+        #Disable delete
+        actions = super(GroupAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
+
     def has_delete_permission(self, request, obj=None):
+        #Disable delete
         return False
