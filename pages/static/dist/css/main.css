@@ -6465,6 +6465,28 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.phonebank-bg {
+  background: #218fff url("../img/phonebank.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .phonebank-bg .module__heading, .phonebank-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .phonebank-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
+.ben-jealous-bg {
+  background: #218fff url("../img/ben-jealous-bg.jpg") center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .ben-jealous-bg .module__heading, .ben-jealous-bg .module__heading--small {
+    text-shadow: 0 0 5px black; }
+  .ben-jealous-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .sit-in-bg {
   background: #218fff url("../img/sit-in-bg.jpg") center center;
   background-size: cover;
