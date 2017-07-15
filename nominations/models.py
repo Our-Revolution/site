@@ -73,7 +73,7 @@ class Questionnaire(models.Model):
     candidate_held_office = models.NullBooleanField(default=True,null=True, blank=False, verbose_name="Has the candidate ever held public office?")
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
-    general_election_date = models.DateField(verbose_name = 'General Election Date', null = False, blank = False)
+    general_election_date = models.DateField(verbose_name = 'General Election Date', null = True, blank = False)
     primary_election_date = models.DateField(verbose_name = 'Primary Election Date', null = True, blank = True)
     candidate_website_url = models.URLField(null=True, blank=True, verbose_name="Candidate Website URL", max_length=255)
     candidate_volunteer_url = models.URLField(null=True, blank=True, verbose_name="Candidate Volunteer URL", max_length=255)
