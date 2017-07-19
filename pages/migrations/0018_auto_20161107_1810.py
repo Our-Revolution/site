@@ -14,59 +14,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='basepage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='candidateendorsementindexpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='candidateendorsementpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='indexpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='initiativeendorsementindexpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='initiativeendorsementpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='issueindexpage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='issuepage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='newsindex',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='newspost',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
-        migrations.AddField(
-            model_name='templatepage',
-            name='social_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
-        ),
+        # migrations.AddField(
+        #     model_name='templatepage',
+        #     name='social_image',
+        #     field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image'),
+        # ),
     ]

@@ -15,7 +15,7 @@ def populate_candidate_images(apps, schema_editor):
 
 
     for candidate in Candidate.objects.all():
-        req = requests.get('https://ourrevolution.com/img/candidates/profile/%s.jpg' % candidate.slug)
+        req = requests.get('https://our-revolution-dot-com.s3.amazonaws.com/%s.jpg' % candidate.slug)
         photo = ImageFile(BytesIO(req.content))
         candidate.photo.save(candidate.slug + '.jpg', photo, save=True)
         # candidate.save()
@@ -26,7 +26,7 @@ def populate_candidate_images(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('endorsements', '0006_populate_issues'),
+        ('endorsements', '0008_auto_20170118_1803'),
     ]
 
     operations = [

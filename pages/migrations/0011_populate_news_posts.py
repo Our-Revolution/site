@@ -10,55 +10,55 @@ import requests
 
 def populate_news_pages(apps, schema_editor):
 
-    from pages.models import NewsIndex, NewsPost
-
-    pages_to_create = [
-        "our-revolution-announces-formation-of-board", 
-        "our-revolution-announces-second-round-of-endorsements", 
-        "founding-statement-of-our-revolution-board", 
-        "our-revolution-on-ma-primary-wins", 
-        "our-revolution-announces-next-round-of-endorsements", 
-        "our-revolution-statement-on-ri-and-ny", 
-        "our-revolution-announces-latest-round-of-endorsements", 
-        "our-revolution-statement-on-shootings", 
-        "josh-fox-and-our-revolution-team-up", 
-        "our-revolution-announces-more-endorsements", 
-        "our-revolution-announces-final-round-of-endorsements", 
-        "our-revolution-statement-on-shailene-woodley-arrest", 
-        "our-revolution-substantive-discussion", 
-        "our-revolution-reacts-final-presidential-debate", 
-    ]
-
-    index = NewsIndex.objects.first()
-
-    post_type_by_title = dict(zip([choice[1] for choice in NewsPost.POST_TYPE_CHOICES], [choice[0] for choice in NewsPost.POST_TYPE_CHOICES]))
-
-    for page in pages_to_create:
-
-        req = requests.get("https://ourrevolution.com/press/%s" % page)
-        soup = BeautifulSoup(req.text, "html5lib")
-
-        data = {
-            'title': soup.select('h1')[0].text,
-            'slug': page,
-            'post_type': post_type_by_title[soup.select('.article-type')[0].text.strip()],
-            'go_live_at': datetime.datetime.strptime(soup.select('.article-date')[0].text, "%B %d, %Y"),
-            'body': unicode(soup.select('.home-section div')[0]),
-            'header_photo_byline': ''
-        }
-
-        paragraph = 0
-        if soup.select('.home-section div p')[paragraph].text.startswith('WASHINGTON'):
-            paragraph += 1
-
-        data['abstract'] = soup.select('.home-section div p')[paragraph].text
-
-        print "saving %s / %s" % (data['title'], req.url)
-
-        post = NewsPost(**data)
-
-        index.add_child(instance=post)
-
+    # from pages.models import NewsIndex, NewsPost
+    #
+    # pages_to_create = [
+    #     "our-revolution-announces-formation-of-board",
+    #     "our-revolution-announces-second-round-of-endorsements",
+    #     "founding-statement-of-our-revolution-board",
+    #     "our-revolution-on-ma-primary-wins",
+    #     "our-revolution-announces-next-round-of-endorsements",
+    #     "our-revolution-statement-on-ri-and-ny",
+    #     "our-revolution-announces-latest-round-of-endorsements",
+    #     "our-revolution-statement-on-shootings",
+    #     "josh-fox-and-our-revolution-team-up",
+    #     "our-revolution-announces-more-endorsements",
+    #     "our-revolution-announces-final-round-of-endorsements",
+    #     "our-revolution-statement-on-shailene-woodley-arrest",
+    #     "our-revolution-substantive-discussion",
+    #     "our-revolution-reacts-final-presidential-debate",
+    # ]
+    #
+    # index = NewsIndex.objects.first()
+    #
+    # post_type_by_title = dict(zip([choice[1] for choice in NewsPost.POST_TYPE_CHOICES], [choice[0] for choice in NewsPost.POST_TYPE_CHOICES]))
+    #
+    # for page in pages_to_create:
+    #
+    #     req = requests.get("https://ourrevolution.com/press/%s" % page)
+    #     soup = BeautifulSoup(req.text, "html5lib")
+    #
+    #     data = {
+    #         'title': soup.select('h1')[0].text,
+    #         'slug': page,
+    #         'post_type': post_type_by_title[soup.select('.article-type')[0].text.strip()],
+    #         'go_live_at': datetime.datetime.strptime(soup.select('.article-date')[0].text, "%B %d, %Y"),
+    #         'body': unicode(soup.select('.home-section div')[0]),
+    #         'header_photo_byline': ''
+    #     }
+    #
+    #     paragraph = 0
+    #     if soup.select('.home-section div p')[paragraph].text.startswith('WASHINGTON'):
+    #         paragraph += 1
+    #
+    #     data['abstract'] = soup.select('.home-section div p')[paragraph].text
+    #
+    #     print "saving %s / %s" % (data['title'], req.url)
+    #
+    #     post = NewsPost(**data)
+    #
+    #     index.add_child(instance=post)
+    pass
 
 
 def truncate_news_pages(apps, schema_editor):

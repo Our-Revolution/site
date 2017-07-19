@@ -18,7 +18,7 @@ def create_election(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('endorsements', '0007_auto_20161025_0022'),
+        ('endorsements', '0006_populate_issues'),
     ]
 
     operations = [
