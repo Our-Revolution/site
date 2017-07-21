@@ -10,7 +10,7 @@ body {
   margin-bottom: 400px;
   -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-  
+
   &.no-padding {
     padding-top: 0;
   }
@@ -46,14 +46,19 @@ h1, h2, h3, h4 {
   color: white;
   text-align: center;
   font-weight: bolder;
-  
+
+  &--orange {
+    @extend .notification-banner;
+    background-color: #F15A34;
+  }
+
   &--splash {
     padding: 10px 0;
     @extend .notification-banner;
     z-index: 9;
     position: relative;
     background: transparent;
-    
+
     .container {
       padding-left: 10px;
       padding-right: 7px;
@@ -276,15 +281,15 @@ h1, h2, h3, h4 {
   p {
     max-width: 600px;
   }
-  
+
   &--full {
     @extend .page-heading;
-    
+
     border-radius: 0;
     margin-top: 0;
     margin-bottom: 0;
   }
-  
+
   &--small {
     padding-top: 100px;
   }
@@ -293,29 +298,29 @@ h1, h2, h3, h4 {
 .back-bar {
   background: rgba(0,0,0,0.1);
   padding: 15px;
-  
+
   &--small {
     @extend .back-bar;
-    
+
     padding: 10px;
   }
-  
+
   .btn {
     height: 30px;
     padding: 5px 10px;
   }
-  
+
   .breadcrumb {
     background-color: transparent;
     padding: 0;
     margin-bottom: 0;
     border-radius: 0;
     color: white;
-    
+
     li:before {
       color: white;
     }
-    
+
     .active {
       font-weight: 900;
     }
@@ -325,10 +330,10 @@ h1, h2, h3, h4 {
 .social-bar {
   padding: 10px;
   background: rgba(0,0,0,0.1);
-  
+
   .social-icon {
     margin: 2px 5px;
-    
+
     height: 15px;
     width: 15px;
   }
@@ -518,11 +523,11 @@ h1, h2, h3, h4 {
       margin-top: 0;
     }
   }
-  
+
   &.float {
     .form-group {
       float: left;
-      
+
       &.email {
         width: 62% !important;
       }
@@ -737,7 +742,7 @@ h1, h2, h3, h4 {
       display: block;
     }
   }
-  
+
   &.membership {
     .bylaws, .board, .disclosure {
       display: none;
@@ -747,7 +752,7 @@ h1, h2, h3, h4 {
       display: block;
     }
   }
-  
+
   &.disclosure {
     .bylaws, .board, .membership {
       display: none;
@@ -1394,14 +1399,14 @@ footer {
   .block {
     display: table;
     height: 115px;
-    
+
     a {
       display: table-cell;
       vertical-align: middle;
     }
   }
-  
-  
+
+
 }
 
 
