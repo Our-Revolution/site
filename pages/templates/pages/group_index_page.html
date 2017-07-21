@@ -9,7 +9,7 @@
 
 <!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-<!-- 
+<!--
 <div class="container-fluid">
   <section class="row blue-bg pb6 white-text">
     <div class="light-wash">
@@ -25,7 +25,7 @@
           </nav>
       </div>
     </div>
-    
+
     <div class="container pt6">
       <div class="row">
         <div class="col-md-7">
@@ -52,20 +52,20 @@
       </div>
 
       <div class="groups-map-info__status text-left">
-        <div class="component pa20 hidden-xs">          
+        <div class="component pa20 hidden-xs">
           <div class="groups-map__add">
             <h4 class="mb20 mt0">No group in your area?</h4>
             <a href="https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit" class="btn btn-block btn-primary uppercase ls2" target="_blank" onclick="trackOutboundLink('https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit', true)">Start a group</a>
             <a href="/groups/new" class="btn btn-block btn-secondary uppercase ls2">Add your group</a>
-            
+
             <p class="mt20"><small>We're currently experiencing a high number of group applications, which may lead to delays in adding your group to the map.</small></p>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="groups-map__map light-wash" id="map-container"></div>
-  </div>  
+  </div>
 </div>
 
 <script>
@@ -73,16 +73,16 @@
     inputDiv = document.getElementById('autocomplete-input');
   Groups.init(mapDiv);
   Groups.monitorAPI(inputDiv);
-  
+
   var data = {{groups|safe}}
-  
-  for(i=0; i<data.features.length; i++) {    
+
+  for(i=0; i<data.features.length; i++) {
     if(data.features[i].properties.status == 'approved'){
-      
+      console.log(data.feature[i]);
       Groups.addGroup(data.features[i]);
     }
   }
-  
+
   $('#autocomplete-input').on('keyup', function(e) {
     if(e.target.value.length > 0) {
       $('.groups-map-info__search').addClass('active');
@@ -90,7 +90,7 @@
       $('.groups-map-info__search').removeClass('active');
     }
   });
-  
+
   $('.groups-map__heading .glyphicon').on('click touchstart', function(e) {
     $('.groups-map__intro').toggleClass('collapsed');
   })
