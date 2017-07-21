@@ -81,7 +81,7 @@ module.exports = function() {
   }
 
   function addGroup(group) {
-    if (group.geometry) {
+    if (group.geometry!=null) {
       var coords = group.geometry.coordinates;
       var marker = L.marker(coords.reverse());
 
