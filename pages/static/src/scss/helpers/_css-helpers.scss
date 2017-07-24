@@ -3,7 +3,7 @@
 }
 
 .ma0 {
-  margin: 0 0 0 0; 
+  margin: 0 0 0 0;
 }
 
 .mb0 {
@@ -125,28 +125,28 @@
   background-image: url('../img/states/texas/texas-bg.svg');
   background-repeat: no-repeat;
   background-size: auto 130%;
-  background-position: center; 
+  background-position: center;
 }
 
 .texas-flag-bg {
   background-image: url('../img/states/texas/texas-flag.svg');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center; 
+  background-position: center;
 }
 
 .crowd-bg {
   background-image: url('../img/bg_4.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center; 
+  background-position: center;
 }
-// 
+//
 // .lopez-bg {
 //   background-image: url('../img/lopez-bg.jpg');
 //   background-repeat: no-repeat;
 //   background-size: cover;
-//   background-position: center; 
+//   background-position: center;
 // }
 
 .fafafa-bg {
@@ -167,7 +167,7 @@
 
 .white-text {
   color: white;
-  
+
   a {
     color: white;
   }
@@ -175,7 +175,7 @@
 
 a.white-text {
   // border-bottom: 1px solid white;
-  
+
   &:hover, &:focus, &:visited, &:active {
     color: white;
     text-decoration: none;
@@ -237,7 +237,7 @@ a.white-text {
 
 .fs3 {
   font-size: 3em;
-  
+
   @include until($medium) {
     font-size: 2em;
   };
@@ -245,14 +245,14 @@ a.white-text {
 
 .fs14 {
   font-size: 14px;
-  
+
   p {
     font-size: 14px;
   }
-  
+
   &--important {
     font-size: 14px !important;
-    
+
     p {
       font-size: 14px !important;
     }
@@ -261,14 +261,14 @@ a.white-text {
 
 .fs16 {
   font-size: 16px;
-  
+
   p {
     font-size: 16px;
   }
-  
+
   &--important {
     font-size: 16px !important;
-    
+
     p {
       font-size: 16px !important;
     }
@@ -277,7 +277,7 @@ a.white-text {
 
 .fs18 {
   font-size: 18px;
-  
+
   p {
     font-size: 18px;
   }
@@ -293,11 +293,11 @@ a.white-text {
 
 .list-3-col {
   column-count: 3;
-  
+
   @include until($medium) {
     column-count: 2;
   };
-  
+
   @include until($small) {
     column-count: 1;
   };
@@ -312,11 +312,11 @@ a.white-text {
 }
 
 .attribution {
-  
+
   &--tr {
     text-shadow: 0 0 3px rgba(0,0,0,1);
     @extend .attribution;
-    
+
     position: absolute;
     top: 20px;
     right: 20px;
@@ -339,7 +339,7 @@ a.white-text {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   &--bottom {
     @extend .tpp-bg;
     background-position: bottom;
@@ -852,7 +852,7 @@ a.white-text {
   // .module__heading {
   //   text-shadow: 0 0 5px rgba(0,0,0,1);
   // }
-  // 
+  //
   // .article-type {
   //   font-weight: bolder;
   //   text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -868,7 +868,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -884,7 +884,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -900,7 +900,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -916,7 +916,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -932,7 +932,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -948,7 +948,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -964,7 +964,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -980,7 +980,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -996,7 +996,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -1012,7 +1012,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -1028,7 +1028,7 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -1044,7 +1044,23 @@ a.white-text {
   .module__heading {
     text-shadow: 0 0 5px rgba(0,0,0,1);
   }
-  
+
+  .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+.summer-for-progress-bg {
+  background: #f55933 url('../img/summer-for-progress-bg.jpg') center center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -1075,7 +1091,7 @@ a.white-text {
   overflow: hidden;
   border-radius: 3px;
   padding-bottom: 56.25%;
-  
+
   iframe {
     position: absolute;
     top: 0;
