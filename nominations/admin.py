@@ -45,7 +45,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = []
-    list_display = ['group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status']
+    list_display = ['group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt']
 
     actions = [export_as_csv_action("CSV Export")]
     list_filter = ['candidate_state','group']

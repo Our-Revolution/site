@@ -6,6 +6,8 @@ from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
 
+import datetime
+
 #TODO: automate endorsement -> approval -> candidates page
 
 class Nomination(models.Model):
@@ -129,6 +131,7 @@ class Application(models.Model):
 
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
+    submitted_dt = models.DateTimeField(null=True, blank=True, verbose_name = 'Submitted at')
 
     nomination = models.OneToOneField(
         Nomination,
@@ -190,4 +193,8 @@ class Application(models.Model):
 
         if not self.questionnaire:
             self.questionnaire = Questionnaire.objects.create()
+
+        if self.status == 'submitted' and self.submitted_dt is None:
+            self.submitted_dt = datetime.datetime.now()
+
         super(Application, self).save(*args, **kwargs)
