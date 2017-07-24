@@ -19,32 +19,30 @@ REDIRECTS = {
 
 
 def populate_redirects(apps, schema_editor):
-    # from wagtail.wagtailcore.models import Page, Site
-    # from wagtail.wagtailredirects.models import Redirect
-    #
-    #
-    # for source, target in REDIRECTS.iteritems():
-    #     print "Trying %s / %s ..." % (source, target)
-    #     data = {
-    #         'old_path': source,
-    #         'site': Site.objects.get(is_default_site=True),
-    #         'is_permanent': True,
-    #     }
-    #
-    #     if '/' in target:
-    #         data['redirect_link'] = target
-    #     else:
-    #         data['redirect_page'] = Page.objects.get(slug=target)
-    #
-    #
-    #     Redirect.objects.create(**data)
-    pass
+    from wagtail.wagtailcore.models import Page, Site
+    from wagtail.wagtailredirects.models import Redirect
+
+
+    for source, target in REDIRECTS.iteritems():
+        print "Trying %s / %s ..." % (source, target)
+        data = {
+            'old_path': source,
+            'site': Site.objects.get(is_default_site=True),
+            'is_permanent': True,
+        }
+
+        if '/' in target:
+            data['redirect_link'] = target
+        else: 
+            data['redirect_page'] = Page.objects.get(slug=target)
+
+
+        Redirect.objects.create(**data)
 
 
 def remove_redirects(apps, schema_editor):
-    # from wagtail.wagtailredirects.models import Redirect
-    # Redirect.objects.all().delete()
-    pass
+    from wagtail.wagtailredirects.models import Redirect
+    Redirect.objects.all().delete()
 
 
 class Migration(migrations.Migration):

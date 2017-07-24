@@ -97,7 +97,7 @@ def clear_site(apps, schema_editor):
     DjangoSite.objects.get(name='Our Revolution').delete()
 
     Site.objects.all().delete()
-
+    
     try:
         Page.objects.get(path='00010001').delete()
     except Page.DoesNotExist:
@@ -124,7 +124,7 @@ def clear_site(apps, schema_editor):
             )
 
     from wagtail.wagtailcore.models import Site as WagtailSite
-
+    
     # revert
     WagtailSite.objects.get_or_create(
         hostname='localhost',
@@ -142,7 +142,6 @@ class Migration(migrations.Migration):
         ('wagtailforms', '0003_capitalizeverbose'),
         ('wagtailredirects', '0005_capitalizeverbose'),
         ('pages', '0005_initiativeendorsementindexpage_initiativeendorsementpage_issueindexpage_issuepage'),
-        ('pages','0042_social_images'),
     ]
 
     operations = [

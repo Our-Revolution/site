@@ -26,7 +26,7 @@ def populate_candidate_images(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('endorsements', '0008_auto_20170118_1803'),
+        ('endorsements', '0006_populate_issues'),
     ]
 
     operations = [

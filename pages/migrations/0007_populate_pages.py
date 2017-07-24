@@ -19,7 +19,7 @@ def populate_candidate_pages(apps, schema_edtior):
     candidate_root_page = CandidateEndorsementIndexPage.objects.get(title='Our Candidates')
 
     for candidate in Candidate.objects.all():
-        req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/candidates/%s/" % candidate.slug)
+        req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/candidates/%s" % candidate.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
             signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()

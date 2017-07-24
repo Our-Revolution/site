@@ -6,24 +6,22 @@ from django.db import migrations
 
 
 def populate_news_index(apps, schema_editor):
-    # from pages.models import IndexPage, NewsIndex
-    #
-    # # Home Page
-    # home_page = IndexPage.objects.get(title='Our Revolution')
-    #
-    #
-    # # Our Candidates
-    # news_index = NewsIndex(title='News', slug='press')
-    # home_page.add_child(instance=news_index)
-    pass
+    from pages.models import IndexPage, NewsIndex
+
+    # Home Page
+    home_page = IndexPage.objects.get(title='Our Revolution')
+
+
+    # Our Candidates
+    news_index = NewsIndex(title='News', slug='press')
+    home_page.add_child(instance=news_index)
 
 
 def remove_news_index(apps, schema_editor):
-    # from wagtail.wagtailcore.models import Page
-    #
-    # news_index = Page.objects.get(title='News')
-    # news_index.delete()
-    pass
+    from wagtail.wagtailcore.models import Page
+
+    news_index = Page.objects.get(title='News')
+    news_index.delete()
 
 
 class Migration(migrations.Migration):
