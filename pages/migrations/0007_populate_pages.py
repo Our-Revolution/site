@@ -19,7 +19,7 @@ def populate_candidate_pages(apps, schema_edtior):
     candidate_root_page = CandidateEndorsementIndexPage.objects.get(title='Our Candidates')
 
     for candidate in Candidate.objects.all():
-        req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/candidates/%s/" % candidate.slug)
+        req = requests.get("http://ourrevolution.com/candidates/%s" % candidate.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
             signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
@@ -37,7 +37,7 @@ def populate_candidate_pages(apps, schema_edtior):
             })
 
         candidate_root_page.add_child(instance=page)
-
+        
 
 
 def truncate_candidate_pages(apps, schema_edtior):
@@ -52,7 +52,7 @@ def populate_initiative_pages(apps, schema_edtior):
     initiative_root_page = InitiativeEndorsementIndexPage.objects.get(title='Our Initiatives')
 
     for initiative in Initiative.objects.all():
-        req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/ballot-initiatives/%s" % initiative.slug)
+        req = requests.get("http://ourrevolution.com/ballot-initiatives/%s" % initiative.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
             signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
@@ -86,7 +86,7 @@ def populate_issue_pages(apps, schema_edtior):
     issue_root_page = IssueIndexPage.objects.get(title='Our Issues')
 
     for issue in Issue.objects.all():
-        req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/issues/%s" % issue.slug)
+        req = requests.get("http://ourrevolution.com/issues/%s" % issue.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('.issues__content')[0]
             signup_tagline = html_content.select('.sign-up-form h3')[0].text.strip()
