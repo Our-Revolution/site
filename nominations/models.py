@@ -5,16 +5,16 @@ from django.db.models.signals import post_save
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
-    
-#TODO: automate endorsement -> approval -> candidates page 
-    
+
+#TODO: automate endorsement -> approval -> candidates page
+
 class Nomination(models.Model):
     group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Briefly describe your group's nomination process")
 
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('complete', 'Complete'),
-   ) 
+   )
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
 
 
@@ -23,7 +23,7 @@ class Nomination(models.Model):
             app = self.application
             return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + ' Nomination'
         except:
-            return 'Nomination ' + str(self.pk)    
+            return 'Nomination ' + str(self.pk)
 
     def save(self, *args, **kwargs):
         # self.cleaned_data['status'] = 'complete'
@@ -52,15 +52,15 @@ class NominationResponse(models.Model):
 class Questionnaire(models.Model):
     """
     A platform questionnaire is filled out by the candidate with basic information and in-depth policy positions.
-    """    
-    
+    """
+
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('complete', 'Complete'),
        ('sent', 'Sent to Candidate'),
-   ) 
+   )
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
-    
+
     # Candidate Information and Social Media
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
@@ -82,7 +82,7 @@ class Questionnaire(models.Model):
     candidate_twitter_url = models.URLField(null=True, blank=True, verbose_name="Candidate Twitter URL", max_length=255)
     candidate_instagram_url = models.URLField(null=True, blank=True, verbose_name="Candidate Instagram URL", max_length=255)
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
-    
+
     def __unicode__(self):
         try:
             app = self.application_set.first()
@@ -107,10 +107,10 @@ class Question(models.Model):
 
 class Response(models.Model):
     QUESTIONNAIRE_CHOICES = (
-        ('a', 'Agree'),
-        ('b', 'Disagree'),
-        ('c', 'Mostly agree'),
-        ('d', 'Mostly disagree'),
+        ('a', 'Strongly Agree'),
+        ('b', 'Strongly Disagree'),
+        ('c', 'Somewhat Agree'),
+        ('d', 'Somewhat Disagree'),
     )
     questionnaire = models.ForeignKey(Questionnaire)
     question = models.ForeignKey(Question)
@@ -126,10 +126,10 @@ class Application(models.Model):
     """
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
     """
-    
+
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
-    
+
     nomination = models.OneToOneField(
         Nomination,
         on_delete=models.CASCADE,
@@ -138,16 +138,16 @@ class Application(models.Model):
         blank=True,
         related_name='application'
     )
-    
+
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.SET_NULL, null=True, blank=True)
-    
+
     group = models.ForeignKey(Group, to_field="group_id")
-    
+
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
     rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
-    
+
     #TODO: change to foreign key and create new object for each new candidate, implement autocomplete to  minimize duplicate candidates
     candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
     candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
@@ -155,18 +155,18 @@ class Application(models.Model):
     candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False)
-        
-    authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)  
-        
+
+    authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)
+
     #TODO: Flesh out (get with E and G to figure out statuses)
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('submitted', 'Submitted'),
        ('approved', 'Approved'),
        ('removed', 'Denied')
-   ) 
+   )
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
-    
+
     # Volunteer Data Entry
     vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
@@ -180,14 +180,14 @@ class Application(models.Model):
     vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
     vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
     vol_notes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Notes:')
-    
+
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
     def save(self, *args, **kwargs):
         if not self.nomination:
             self.nomination = Nomination.objects.create()
-            
+
         if not self.questionnaire:
             self.questionnaire = Questionnaire.objects.create()
         super(Application, self).save(*args, **kwargs)
