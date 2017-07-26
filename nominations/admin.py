@@ -6,13 +6,44 @@ from local_groups.actions import export_as_csv_action
 import pprint
 
 
-class NominationResponseInline(admin.StackedInline):
+class ReadOnlyAdmin(admin.ModelAdmin):
+    readonly_fields = []
+
+    def get_readonly_fields(self, request, obj=None):
+        return list(self.readonly_fields) + \
+               [field.name for field in obj._meta.fields] + \
+               [field.name for field in obj._meta.many_to_many]
+
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class ReadOnlyStackedInline(admin.StackedInline):
+    extra = 0
+    can_delete = False
+    editable_fields = []
+    readonly_fields = []
+    exclude = []
+
+    def get_readonly_fields(self, request, obj=None):
+        return list(self.readonly_fields) + \
+               [field.name for field in self.model._meta.fields
+                if field.name not in self.editable_fields and
+                   field.name not in self.exclude]
+
+    def has_add_permission(self, request):
+        return False
+
+class NominationResponseInline(ReadOnlyStackedInline):
     model = NominationResponse
     fields = ['question','response']
 
 
 @admin.register(Nomination)
-class NominationAdmin(admin.ModelAdmin):
+class NominationAdmin(ReadOnlyAdmin):
     inlines = [NominationResponseInline,]
     # list_display = ['id','candidate_last_name','candidate_first_name','group_name','group_id','candidate_office','candidate_state']
     # list_display_links = list_display
@@ -31,13 +62,13 @@ class NominationQuestionAdmin(admin.ModelAdmin):
     inlines = [NominationResponseInline,]
 
 
-class ResponseInline(admin.StackedInline):
+class ResponseInline(ReadOnlyStackedInline):
     model = Response
     fields = ['question','response', 'position']
 
 
 @admin.register(Questionnaire)
-class QuestionnaireAdmin(admin.ModelAdmin):
+class QuestionnaireAdmin(ReadOnlyAdmin):
     inlines = [ResponseInline,]
     # list_display = ['candidate_first_name','candidate_last_name','candidate_office','candidate_state']
 
