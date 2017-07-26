@@ -76,11 +76,11 @@ class QuestionnaireAdmin(ReadOnlyAdmin):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = []
-    list_display = ['group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt']
+    list_display = ['get_group_id','group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt']
 
     actions = [export_as_csv_action("CSV Export")]
-    list_filter = ['candidate_state','group']
-    search_fields = ['group','candidate_first_name','candidate_last_name']
+    list_filter = ['status','candidate_state','group']
+    search_fields = ['group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state']
 
     def get_general_election(self, obj):
         return obj.questionnaire.general_election_date
@@ -93,6 +93,12 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     get_primary_election.short_description = 'Primary'
     get_primary_election.admin_order_field = 'questionnaire__primary_election_date'
+
+    def get_group_id(self, obj):
+        return obj.group.group_id
+
+    get_group_id.short_description = 'Group ID'
+    get_group_id.admin_order_field = 'group__group_id'
 
 
     def get_actions(self, request):
