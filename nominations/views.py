@@ -26,7 +26,16 @@ class NominationsIndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(NominationsIndexView, self).get_context_data(**kwargs)
         return context
+
+class ApplicationTypeView(TemplateView):
+    template_name = 'application_type.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        user = self.request.session['profile']
         
+        context_data = super(ApplicationTypeView, self).get_context_data(*args, **kwargs)
+        context_data['user'] = user
+        return context_data        
         
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
@@ -432,3 +441,20 @@ class CandidateSubmitView(FormView):
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
         return context_data
+        
+# Ballot initiatives
+# class CreateInitiativeView(CreateView):
+#     form_class = InitiativeForm
+#     template_name = "initiative_application.html"
+#     success_url = '/groups/nominations/initiatives/success'
+# 
+#     def form_valid(self, form):
+#         form.instance.user_id = self.request.session['profile']['user_id']
+#         super(CreateInitiativeView, self).form_valid(form)
+# 
+#         return redirect(self.success_url + '?id=' + str(self.object.pk))
+#         
+#     def get_context_data(self, *args, **kwargs):
+#         context_data = super(CreateApplicationView, self).get_context_data(*args, **kwargs)
+#         context_data['user'] = self.request.session['profile']
+#         return context_data
