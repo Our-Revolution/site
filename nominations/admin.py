@@ -49,17 +49,35 @@ class NominationAdmin(ReadOnlyAdmin):
     # list_display_links = list_display
     # list_filter = ['group_name','candidate_state']
     # search_fields = ['group_name','group_id','candidate_first_name','candidate_last_name']
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('text', 'include_multi_choice')
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(NominationQuestion)
 class NominationQuestionAdmin(admin.ModelAdmin):
     list_display = ('text',)
     inlines = [NominationResponseInline,]
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 class ResponseInline(ReadOnlyStackedInline):
@@ -71,16 +89,30 @@ class ResponseInline(ReadOnlyStackedInline):
 class QuestionnaireAdmin(ReadOnlyAdmin):
     inlines = [ResponseInline,]
     # list_display = ['candidate_first_name','candidate_last_name','candidate_office','candidate_state']
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    exclude = []
-    list_display = ['get_group_id','group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt']
+    exclude = ('user_id',)
+    
+    list_display = ('get_group_id','group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt',)
+
+    # needed for ordering as readonly_fields are automatically listed at the end
+    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','nomination','questionnaire','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email','vol_incumbent','vol_dem_challenger','vol_other_progressives','vol_polling','vol_endorsements','vol_advantage','vol_turnout','vol_win_number','vol_fundraising','vol_opponent_fundraising','vol_crimes','vol_notes','status',)
+
+    readonly_fields = ('submitted_dt','rep_email','group','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email')
 
     actions = [export_as_csv_action("CSV Export")]
-    list_filter = ['status','candidate_state','group']
-    search_fields = ['group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state']
+    
+    list_filter = ('status','candidate_state',)
+    
+    search_fields = ('group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state')
 
     def get_general_election(self, obj):
         return obj.questionnaire.general_election_date
@@ -110,6 +142,22 @@ class ApplicationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         #Disable delete
         return False
+
+@admin.register(InitiativeApplication)
+class InitiativeApplicationAdmin(admin.ModelAdmin):
+    exclude = ()
+    
+    readonly_fields = ('user_id','submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info')
+    
+    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','locality','city','county','state','description','question','vote','additional_info','status')
+    
+    list_display = ('name','group','election_date','submitted_dt','status')
+    
+    list_filter = ('status','state')
+    
+    search_fields = ('group__name','group__group_id','name',)
+    
+    actions = [export_as_csv_action("CSV Export")]
 
 from django.contrib.sessions.models import Session
 class SessionAdmin(admin.ModelAdmin):

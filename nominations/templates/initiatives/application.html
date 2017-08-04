@@ -19,8 +19,9 @@
     
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1 class="mb0 mt0">Start a new application</h1>
-        <p class="fs18"><strong>To start a new candidate endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</strong></p>
+        <h1 class="mb0 mt0">Submit a new ballot initiative application</h1>
+
+        <p class="fs18"><strong>To submit a new endorsement application for a ballot initiative, you’ll need your Group ID, some basic information about your group, contact information for one group representative, and information about the ballot initiative in question.</strong></p>
       </div>
     </div>
   </div>
@@ -35,8 +36,27 @@
 </div>
 
 <script>
+  function setLocality(locality) {
+    if (locality == 'city') {
+      $('.city_field').show();
+      $('.county_field').hide();
+    } else if (locality == 'county') {
+      $('.city_field').hide();
+      $('.county_field').show();
+    } else {
+      $('.city_field').show();
+      $('.county_field').show();
+    }
+  }
+
   $(document).ready(function(){
     
+    // set locality fields
+    var locality = $('#locality_field').val();
+    
+    setLocality(locality);
+    
+    // watch agree field to enable form
     $('#agree_field').change(function(){
       if(this.checked) {
         $('#submit_button').removeClass('disabled')
@@ -44,6 +64,11 @@
         $('#submit_button').addClass('disabled')
       }
     });
+    
+    // change locality selections based on locality
+    $('#locality_field').on('change', function() {
+      setLocality($(this).val());
+    })
     
   });
 </script>
