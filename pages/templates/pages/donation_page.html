@@ -27,14 +27,39 @@
   			<div class="col-md-12">
           <h2>Contributions</h2>
           <hr/>
+					<div class="btn-group mb20" id="q_selector">
+						<button id="2016" class="btn btn-default">2016</a>
+						<button id="q1_2017" class="btn btn-default">Q1 2017</a>
+					</div>
   				<ul class="lst0 pa0 list-3-col clearfix">
-  					{% for donor in donations %}
-    				  <li>{{ donor.first_name }} {{ donor.last_name }}</li>
-  					{% endfor %}
+						<div id="2016_list" class="donor-list">
+	  					{% for donor in donations %}
+	    				  {% if donor.first_name_2016 is not None %}<li>{{ donor.first_name_2016 }} {{ donor.last_name_2016 }}</li>{% endif %}
+	  					{% endfor %}
+						</div>
+						
+						<div id="q1_2017_list" class='donor-list'>
+							{% for donor in donations %}
+	    				  {% if donor.first_name_q1_2017 is not None %}<li>{{ donor.first_name_q1_2017 }} {{ donor.last_name_q1_2017 }}</li>{% endif %}
+	  					{% endfor %}
+						</div>
   				</ul>
         </div>
       </div>
     </div>
   </div>
+	
+	<script>
+		$(document).ready(function (){
+			$('#q1_2017_list').hide();
+			
+			$('#q_selector').on('click touchstart', function(e) {
+				$('#q_selector .btn').removeClass('active');
+				$(e.target).addClass('active');
+				$('.donor-list').hide();
+				$('#' + $(e.target).attr('id') + '_list').show();
+			})
+		});
+	</script>
 
 {% endblock %}
