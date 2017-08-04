@@ -22,7 +22,7 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2 fs18">
-        {% if not application.status == 'submitted' %}
+        {% if application.status == 'incomplete' %}
           {% if application.questionnaire.status != 'complete' or application.nomination.status != 'complete' %}
             <div class="alert alert-danger br3"><p>Please complete your nomination form and candidate questionnaire before submitting your application.</p></div>
           {% endif %}

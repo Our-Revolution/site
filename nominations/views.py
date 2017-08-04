@@ -320,6 +320,23 @@ def candidate_login(request):
         form = CandidateLoginForm()
 
     return render(request, 'candidate/login.html', {'form': form})
+    
+def reset_questionnaire(request):
+    app_id = request.GET.get('id')
+    user = request.session['profile']
+    user_id = user['user_id']
+    
+    try:
+        questionnaire = Application.objects.all().filter(user_id=user_id,pk=app_id).first().questionnaire
+    except (Application.DoesNotExist, KeyError):
+        # TODO: Fix the error thrown when no nomination
+        messages.error(self.request, "We could not find your questionnaire. Please try again.")
+        return redirect("/groups/nominations/dashboard?c=1")
+
+    questionnaire.status = 'incomplete'
+    questionnaire.save()
+    
+    return redirect('/groups/nominations/questionnaire/edit?id=' + app_id)
 
 def handle_candidate_callback(request):    
     code = request.GET.get('code')

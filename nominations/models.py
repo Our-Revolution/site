@@ -110,9 +110,9 @@ class Question(models.Model):
 class Response(models.Model):
     QUESTIONNAIRE_CHOICES = (
         ('a', 'Strongly Agree'),
-        ('b', 'Strongly Disagree'),
         ('c', 'Somewhat Agree'),
         ('d', 'Somewhat Disagree'),
+        ('b', 'Strongly Disagree'),
     )
     questionnaire = models.ForeignKey(Questionnaire)
     question = models.ForeignKey(Question)
@@ -161,14 +161,15 @@ class Application(models.Model):
 
     authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)
 
-    #TODO: Flesh out (get with E and G to figure out statuses)
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('submitted', 'Submitted'),
-       ('approved', 'Approved'),
-       ('removed', 'Denied')
+       ('needs-research','Needs Research'),
+       ('needs-staff-review', 'Needs Staff Review'),
+       ('approved', 'Endorsed'),
+       ('removed', 'Not Endorsed')
    )
-    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete')
+    status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
 
     # Volunteer Data Entry
     vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
