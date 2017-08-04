@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm
-from .models import Application, Nomination
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
+from .models import Application, Nomination, InitiativeApplication
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
 from urlparse import urlparse
@@ -156,6 +156,7 @@ class DashboardView(TemplateView):
         context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         context_data['applications'] = Application.objects.all().filter(user_id=user['user_id'])
+        context_data['initiative_applications'] = InitiativeApplication.objects.all().filter(user_id=user['user_id'])
         return context_data
         
 class ApplicationView(DetailView):
@@ -443,18 +444,21 @@ class CandidateSubmitView(FormView):
         return context_data
         
 # Ballot initiatives
-# class CreateInitiativeView(CreateView):
-#     form_class = InitiativeForm
-#     template_name = "initiative_application.html"
-#     success_url = '/groups/nominations/initiatives/success'
-# 
-#     def form_valid(self, form):
-#         form.instance.user_id = self.request.session['profile']['user_id']
-#         super(CreateInitiativeView, self).form_valid(form)
-# 
-#         return redirect(self.success_url + '?id=' + str(self.object.pk))
-#         
-#     def get_context_data(self, *args, **kwargs):
-#         context_data = super(CreateApplicationView, self).get_context_data(*args, **kwargs)
-#         context_data['user'] = self.request.session['profile']
-#         return context_data
+class CreateInitiativeView(CreateView):
+    form_class = InitiativeApplicationForm
+    template_name = "initiatives/application.html"
+    success_url = '/groups/nominations/initiatives/success'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.session['profile']['user_id']
+        
+        form.instance.status = 'submitted'
+        
+        super(CreateInitiativeView, self).form_valid(form)
+
+        return redirect(self.success_url + '?id=' + str(self.object.pk))
+        
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(CreateInitiativeView, self).get_context_data(*args, **kwargs)
+        context_data['user'] = self.request.session['profile']
+        return context_data

@@ -49,17 +49,35 @@ class NominationAdmin(ReadOnlyAdmin):
     # list_display_links = list_display
     # list_filter = ['group_name','candidate_state']
     # search_fields = ['group_name','group_id','candidate_first_name','candidate_last_name']
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('text', 'include_multi_choice')
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(NominationQuestion)
 class NominationQuestionAdmin(admin.ModelAdmin):
     list_display = ('text',)
     inlines = [NominationResponseInline,]
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 class ResponseInline(ReadOnlyStackedInline):
@@ -71,6 +89,12 @@ class ResponseInline(ReadOnlyStackedInline):
 class QuestionnaireAdmin(ReadOnlyAdmin):
     inlines = [ResponseInline,]
     # list_display = ['candidate_first_name','candidate_last_name','candidate_office','candidate_state']
+    
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 @admin.register(Application)
@@ -118,6 +142,22 @@ class ApplicationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         #Disable delete
         return False
+
+@admin.register(InitiativeApplication)
+class InitiativeApplicationAdmin(admin.ModelAdmin):
+    exclude = ()
+    
+    readonly_fields = ('user_id','submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info')
+    
+    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info','status')
+    
+    list_display = ('name','group','election_date','submitted_dt','status')
+    
+    list_filter = ('status','state')
+    
+    search_fields = ('group__name','group__group_id','name',)
+    
+    actions = [export_as_csv_action("CSV Export")]
 
 from django.contrib.sessions.models import Session
 class SessionAdmin(admin.ModelAdmin):
