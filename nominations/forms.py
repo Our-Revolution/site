@@ -259,7 +259,15 @@ class InitiativeApplicationForm(forms.ModelForm):
     group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
-    agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiatie, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
+    agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
+    
+    LOCALITIES = (
+       ('city', 'Citywide'),
+       ('county', 'Countywide'),
+       ('state', 'Statewide'),
+    )
+    
+    locality = forms.ChoiceField(label='Is this initiative:',choices=LOCALITIES, initial='state')
 
     #crispy forms 
     def __init__(self, *args, **kwargs):
@@ -292,9 +300,10 @@ class InitiativeApplicationForm(forms.ModelForm):
                     Field('website_url',wrapper_class='col-md-6'),
                     Field('volunteer_url',wrapper_class='col-md-6'),
                     Field('donate_url',wrapper_class='col-md-6'),
-                    Field('city',wrapper_class='col-md-6'),
-                    Field('county',wrapper_class='col-md-6'),
-                    Field('state',wrapper_class='col-md-6'),
+                    Field('locality',wrapper_class='col-md-12',id='locality_field'),
+                    Field('city',wrapper_class='col-md-6 city_field'),
+                    Field('county',wrapper_class='col-md-6 county_field'),
+                    Field('state',wrapper_class='col-md-6 state_field'),
                     Field('description',wrapper_class='col-md-12'),
                     Field('question',wrapper_class='col-md-12'),
                     Field('vote',wrapper_class='col-md-6'),

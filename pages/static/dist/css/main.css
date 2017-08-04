@@ -7482,7 +7482,8 @@ h1, h2, h3, h4 {
       color: white;
       text-align: none;
       padding: 20px;
-      display: block; }
+      display: block;
+      width: 100%; }
       .action-list__action .action__link:hover, .action-list__action .action__link:focus {
         color: white;
         text-decoration: none; }

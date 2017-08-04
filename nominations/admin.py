@@ -149,7 +149,7 @@ class InitiativeApplicationAdmin(admin.ModelAdmin):
     
     readonly_fields = ('user_id','submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info')
     
-    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info','status')
+    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','locality','city','county','state','description','question','vote','additional_info','status')
     
     list_display = ('name','group','election_date','submitted_dt','status')
     

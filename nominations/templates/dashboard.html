@@ -70,7 +70,7 @@
                   {% for app in initiative_applications %}
                     <tr>
                       <td>{{app}}</td>
-                      <td>{{app.status|capfirst}}</td>
+                      <td>{% if app.status == 'incomplete' %}Incomplete{% else %}Submitted{% endif %}</td>
                     </tr>
                   {% endfor %}
                 </tbody>

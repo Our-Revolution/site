@@ -168,7 +168,7 @@ class Application(models.Model):
        ('needs-staff-review', 'Needs Staff Review'),
        ('approved', 'Endorsed'),
        ('removed', 'Not Endorsed')
-   )
+    )
     status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
 
     # Volunteer Data Entry
@@ -228,10 +228,23 @@ class InitiativeApplication(models.Model):
     vote = models.NullBooleanField(null=True, blank=True, verbose_name='How to vote:')
     additional_info = models.TextField(max_length=500, blank=True, null=True, verbose_name = "Any additional information you want to share?")
     
+    LOCALITIES = (
+       ('city', 'Citywide'),
+       ('county', 'Countywide'),
+       ('state', 'Statewide'),
+    )
+    
+    locality = models.CharField(max_length=16, choices=LOCALITIES, default='state', verbose_name='Is this initiative:')
+    
     STATUSES = (
+       ('incomplete', 'Incomplete'),
        ('submitted', 'Submitted'),
-   )
-    status = models.CharField(max_length=16, choices=STATUSES, default='submitted')
+       ('needs-research','Needs Research'),
+       ('needs-staff-review', 'Needs Staff Review'),
+       ('approved', 'Endorsed'),
+       ('removed', 'Not Endorsed')
+    )
+    status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
     
     def __unicode__(self):
         return str(self.group) + ' - ' + self.name
@@ -243,4 +256,4 @@ class InitiativeApplication(models.Model):
         super(InitiativeApplication, self).save(*args, **kwargs)
     
     class Meta:
-        verbose_name = 'Ballot Initiative Applications'
+        verbose_name = 'Ballot Initiative Application'

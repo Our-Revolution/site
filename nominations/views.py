@@ -468,7 +468,7 @@ class CreateInitiativeView(CreateView):
 
     def form_valid(self, form):
         form.instance.user_id = self.request.session['profile']['user_id']
-        
+        form.instance.locality = form.cleaned_data['locality']
         form.instance.status = 'submitted'
         
         super(CreateInitiativeView, self).form_valid(form)
