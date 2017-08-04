@@ -10,7 +10,7 @@ class DateInput(forms.DateInput):
 
 class ApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
-    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
@@ -173,7 +173,7 @@ QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Respon
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
-    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
 
@@ -183,7 +183,7 @@ class LoginForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_class = 'row'
-        self.fields['group'].label = 'Group ID (ex. 5555)'
+        self.fields['group'].label = '4 Digit Group ID (ex. 0413)'
         self.fields['email'].label = 'Group Representative Email'
         self.helper.layout = Layout(
             Field('email', wrapper_class='col-md-8'),
@@ -256,7 +256,7 @@ class CandidateSubmitForm(forms.Form):
         
 class InitiativeApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
-    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiatie, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
