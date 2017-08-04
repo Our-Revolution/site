@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
-from .models import Nomination, Application, NominationResponse, Questionnaire, Response
+from .models import Nomination, Application, NominationResponse, Questionnaire, Response, InitiativeApplication
 import os, requests
 
 class DateInput(forms.DateInput):
@@ -10,7 +10,7 @@ class DateInput(forms.DateInput):
 
 class ApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
-    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
@@ -173,7 +173,7 @@ QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Respon
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
-    group = forms.ModelChoiceField(label="Group ID", to_field_name="group_id", \
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
 
@@ -183,7 +183,7 @@ class LoginForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
         self.helper.form_class = 'row'
-        self.fields['group'].label = 'Group ID (ex. 5555)'
+        self.fields['group'].label = '4 Digit Group ID (ex. 0413)'
         self.fields['email'].label = 'Group Representative Email'
         self.helper.layout = Layout(
             Field('email', wrapper_class='col-md-8'),
@@ -253,3 +253,81 @@ class CandidateSubmitForm(forms.Form):
             Field('agree',id='agree_field'),
             Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
+        
+class InitiativeApplicationForm(forms.ModelForm):
+    group_name = forms.CharField(label="Group Name")
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
+                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
+                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
+    agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
+    
+    LOCALITIES = (
+       ('city', 'Citywide'),
+       ('county', 'Countywide'),
+       ('state', 'Statewide'),
+    )
+    
+    locality = forms.ChoiceField(label='Is this initiative:',choices=LOCALITIES, initial='state')
+
+    #crispy forms 
+    def __init__(self, *args, **kwargs):
+        super(InitiativeApplicationForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.form_id = 'application_form'
+        
+        self.helper.layout = Layout(
+            Div(
+                HTML('<h3>Your Group Information</h3>'),
+                Div(
+                    Field('group_name',wrapper_class='col-md-8'),
+                    Field('group',wrapper_class='col-md-4'),
+                    Field('rep_first_name',wrapper_class='col-md-6'),
+                    Field('rep_last_name',wrapper_class='col-md-6'),
+                    Field('rep_phone',wrapper_class='col-md-6'),
+                    Field('rep_email',wrapper_class='col-md-6'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+            Div(
+                HTML('<h3>Initiative Information</h3>'),
+                Div(
+                    Field('name',wrapper_class='col-md-12'),
+                    Field('election_date',wrapper_class='col-md-6'),
+                    Field('website_url',wrapper_class='col-md-6'),
+                    Field('volunteer_url',wrapper_class='col-md-6'),
+                    Field('donate_url',wrapper_class='col-md-6'),
+                    Field('locality',wrapper_class='col-md-12',id='locality_field'),
+                    Field('city',wrapper_class='col-md-6 city_field'),
+                    Field('county',wrapper_class='col-md-6 county_field'),
+                    Field('state',wrapper_class='col-md-6 state_field'),
+                    Field('description',wrapper_class='col-md-12'),
+                    Field('question',wrapper_class='col-md-12'),
+                    Field('vote',wrapper_class='col-md-6'),
+                    Field('additional_info',wrapper_class='col-md-12'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class='col-md-12'
+            ),
+            Div(
+                Field('agree',id='agree_field'),
+                Submit(
+                    'submit',
+                    'Submit Nomination',
+                    css_class='btn btn-primary btn-block uppercase ls2 disabled',
+                    css_id='submit_button'
+                ),
+                css_class='col-md-12'
+            )
+        )
+            
+    class Meta:
+        model = InitiativeApplication
+        fields = ['group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info']
+        
+        widgets = {
+            'election_date': DateInput(),
+        }

@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm
-from .models import Application, Nomination
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
+from .models import Application, Nomination, InitiativeApplication
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
 from urlparse import urlparse
@@ -26,7 +26,16 @@ class NominationsIndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(NominationsIndexView, self).get_context_data(**kwargs)
         return context
+
+class ApplicationTypeView(TemplateView):
+    template_name = 'application_type.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        user = self.request.session['profile']
         
+        context_data = super(ApplicationTypeView, self).get_context_data(*args, **kwargs)
+        context_data['user'] = user
+        return context_data        
         
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
@@ -147,6 +156,7 @@ class DashboardView(TemplateView):
         context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         context_data['applications'] = Application.objects.all().filter(user_id=user['user_id'])
+        context_data['initiative_applications'] = InitiativeApplication.objects.all().filter(user_id=user['user_id'])
         return context_data
         
 class ApplicationView(DetailView):
@@ -310,6 +320,23 @@ def candidate_login(request):
         form = CandidateLoginForm()
 
     return render(request, 'candidate/login.html', {'form': form})
+    
+def reset_questionnaire(request):
+    app_id = request.GET.get('id')
+    user = request.session['profile']
+    user_id = user['user_id']
+    
+    try:
+        questionnaire = Application.objects.all().filter(user_id=user_id,pk=app_id).first().questionnaire
+    except (Application.DoesNotExist, KeyError):
+        # TODO: Fix the error thrown when no nomination
+        messages.error(self.request, "We could not find your questionnaire. Please try again.")
+        return redirect("/groups/nominations/dashboard?c=1")
+
+    questionnaire.status = 'incomplete'
+    questionnaire.save()
+    
+    return redirect('/groups/nominations/questionnaire/edit?id=' + app_id)
 
 def handle_candidate_callback(request):    
     code = request.GET.get('code')
@@ -430,5 +457,25 @@ class CandidateSubmitView(FormView):
         self.app = get_object_or_404(Application, pk=app_id,authorized_email=email) 
         context_data = super(CandidateSubmitView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
+        context_data['user'] = self.request.session['profile']
+        return context_data
+        
+# Ballot initiatives
+class CreateInitiativeView(CreateView):
+    form_class = InitiativeApplicationForm
+    template_name = "initiatives/application.html"
+    success_url = '/groups/nominations/initiatives/success'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.session['profile']['user_id']
+        form.instance.locality = form.cleaned_data['locality']
+        form.instance.status = 'submitted'
+        
+        super(CreateInitiativeView, self).form_valid(form)
+
+        return redirect(self.success_url + '?id=' + str(self.object.pk))
+        
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(CreateInitiativeView, self).get_context_data(*args, **kwargs)
         context_data['user'] = self.request.session['profile']
         return context_data
