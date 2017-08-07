@@ -301,7 +301,6 @@ def logout(request):
 def candidate_login(request):    
     # if user is already logged in
     if 'profile' in request.session:
-        print request.session['profile']
         return redirect('/groups/nominations/candidate/dashboard?c=1')
         
     if request.method == 'POST':

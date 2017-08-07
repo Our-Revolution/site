@@ -1,7 +1,8 @@
 from django.conf.urls import include, url
 from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
 from django.views.generic import TemplateView
-from .decorators import is_authenticated
+from .decorators import is_authenticated, is_authenticated_candidate
+from django.contrib.auth import views as auth_views
 
 # placeholder urls to code templates
 urlpatterns = [
@@ -27,13 +28,16 @@ urlpatterns = [
         url(r'^login/$', candidate_login),
         url(r'^verify/$', TemplateView.as_view(template_name='candidate/verify.html')),
         url(r'^callback/$', handle_candidate_callback),
-        url(r'^questionnaire/$', is_authenticated(CandidateQuestionnaireView.as_view())),
-        url(r'^dashboard/$', is_authenticated(CandidateDashboardView.as_view())),
-        url(r'^submit/$', is_authenticated(CandidateSubmitView.as_view())),
-        url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='candidate/success.html'))),
+        url(r'^questionnaire/$', is_authenticated_candidate(CandidateQuestionnaireView.as_view())),
+        url(r'^dashboard/$', is_authenticated_candidate(CandidateDashboardView.as_view())),
+        url(r'^submit/$', is_authenticated_candidate(CandidateSubmitView.as_view())),
+        url(r'^success/$', is_authenticated_candidate(TemplateView.as_view(template_name='candidate/success.html'))),
     ])),
     url(r'^groups/nominations/initiatives/', include([
         url(r'^new/$', is_authenticated(CreateInitiativeView.as_view())),
         url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
     ])),
+    # url(r'^admin/application_export/$', ApplicationExportView.as_view(),
+    #     (r'^admin/', include(admin.site.urls)),
+    # ),
 ]
