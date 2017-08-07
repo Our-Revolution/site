@@ -73,7 +73,7 @@ class Group(models.Model):
        ('approved', 'Approved'),
        ('removed', 'Removed') # can flesh out later
    ) 
-    status = models.CharField(max_length=16, choices=STATUSES, default='submitted')
+    status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
     # i_p__address = models.CharField(max_length=16, null=True, blank=True)
