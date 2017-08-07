@@ -68,6 +68,8 @@ class Group(models.Model):
     STATUSES = (
        ('submitted', 'Submitted'),
        ('signed-mou', 'Signed MOU'),
+       ('signed-mou-new', 'Signed New MOU'),
+       ('inactive-unsigned', 'Inactive Unsigned'),
        ('approved', 'Approved'),
        ('removed', 'Removed') # can flesh out later
    ) 
