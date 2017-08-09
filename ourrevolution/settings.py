@@ -32,7 +32,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
 ALLOWED_HOSTS = '*'
 
-ADMINS = [('Jon Culver', 'jon@ourrevolution.com'), ('Chris Mabry', 'chris@ourrevolution.com')]
+ADMINS = [('Chris Mabry', 'chris@ourrevolution.com')]
 
 MANAGERS = ADMINS
 
@@ -267,3 +267,41 @@ if not DEBUG:
         })
 
     ))
+    
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+        'stream_to_console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'django-debug.log',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'stream_to_console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'nominations': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    },
+}

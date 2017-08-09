@@ -13,6 +13,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 auth0_domain = os.environ['AUTH0_DOMAIN']
 auth0_client_id = os.environ['AUTH0_CLIENT_ID']
@@ -363,9 +367,19 @@ class CandidateDashboardView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         user = self.request.session['profile']
         
+        logging.debug('user:')
+        logging.debug(user)
+        
+        logging.debug('user email:')
+        logging.debug(user['email'])
+        
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         context_data['applications'] = Application.objects.all().filter(authorized_email=user['email'])
+        
+        logging.debug('applications:')
+        logging.debug(context_data['applications'])
+        
         return context_data
         
 class CandidateQuestionnaireView(UpdateView):
