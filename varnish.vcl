@@ -26,8 +26,8 @@ sub vcl_recv {
 }
 
 sub vcl_recv {
-    # surely a better way to write this but I'm in a rush
-    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/groups/nominations/" && req.url !~ "^/join-us-on-slack"){
+    
+    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/groups/new/" && req.url !~ "^/join-us-on-slack" && req.url !~ "^/groups/nominations/"){
         unset req.http.Cookie;
         unset req.http.Cache-Control;
     }
@@ -36,7 +36,7 @@ sub vcl_recv {
 sub vcl_backend_response {
     if (bereq.uncacheable) {
         return (deliver);
-    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/nominations/" && bereq.url !~ "^/join-us-on-slack") {
+    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/groups/new/" && bereq.url !~ "^/join-us-on-slack" && bereq.url !~ "^/groups/nominations/") {
         unset beresp.http.Set-Cookie;
         unset beresp.http.Cache-control;
         set beresp.ttl = 4h;
