@@ -84,6 +84,8 @@ class Questionnaire(models.Model):
     candidate_twitter_url = models.URLField(null=True, blank=True, verbose_name="Candidate Twitter URL", max_length=255)
     candidate_instagram_url = models.URLField(null=True, blank=True, verbose_name="Candidate Instagram URL", max_length=255)
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
+    
+    completed_by_candidate = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
         try:

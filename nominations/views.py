@@ -426,6 +426,7 @@ class CandidateSubmitView(FormView):
         application = Application.objects.all().filter(authorized_email=email,pk=app_id).first()
         
         application.questionnaire.status = 'complete'
+        application.questionnaire.completed_by_candidate = True
         application.questionnaire.save()
         
         rep_email = application.rep_email
