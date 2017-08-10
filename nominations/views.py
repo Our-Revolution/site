@@ -354,7 +354,7 @@ def handle_candidate_callback(request):
         request.session['profile'] = user
         
         # find application where this email is authorized to access
-        application = Application.objects.all().filter(authorized_email=user['email']).first()
+        application = Application.objects.all().filter(authorized_email__iexact=user['email']).first()
         
         return redirect('/groups/nominations/candidate/dashboard?c=1')
         
@@ -377,7 +377,7 @@ class CandidateDashboardView(TemplateView):
         
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
-        context_data['applications'] = Application.objects.all().filter(authorized_email=user['email'])
+        context_data['applications'] = Application.objects.all().filter(authorized_email__iexact=user['email'])
         
         logger.debug('applications:')
         logger.debug(context_data['applications'])
@@ -396,7 +396,7 @@ class CandidateQuestionnaireView(UpdateView):
         email = user['email']
         
         try:
-            return Application.objects.all().filter(authorized_email=email,pk=app_id).first().questionnaire
+            return Application.objects.all().filter(authorized_email__iexact=email,pk=app_id).first().questionnaire
         except (Application.DoesNotExist, KeyError):
             # TODO: Fix the error thrown when no nomination
             messages.error(self.request, "We could not find your questionnaire. Please try again.")
@@ -470,7 +470,7 @@ class CandidateSubmitView(FormView):
     def get_context_data(self, *args, **kwargs):
         app_id = self.request.GET.get('id')
         email = self.request.session['profile']['email']
-        self.app = get_object_or_404(Application, pk=app_id,authorized_email=email) 
+        self.app = get_object_or_404(Application, pk=app_id,authorized_email__iexact=email) 
         context_data = super(CandidateSubmitView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
