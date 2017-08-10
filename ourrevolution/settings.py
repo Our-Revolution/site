@@ -286,22 +286,24 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'django-debug.log',
         },
+        'SysLog': {
+    		'level': 'DEBUG',
+    		'class': 'logging.handlers.SysLogHandler',
+    		'formatter': 'simple',
+    		'address': ('logs6.papertrailapp.com', 17716)
+    	},
+    },
+    'formatters': {
+    	'simple': {
+    		'format': '%(asctime)s Papertrail Our Revolution: %(message)s',
+            'datefmt': '%Y-%m-%dT%H:%M:%S',
+    	},
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins', 'stream_to_console'],
+            'handlers': ['mail_admins', 'stream_to_console','SysLog'],
             'level': 'ERROR',
             'propagate': True,
-        },
-        'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'nominations': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': False
         },
     },
 }
