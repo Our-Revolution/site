@@ -277,9 +277,9 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True,
         },
-        'stream_to_console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler'
+        'console': {
+            'level': 'NOTSET',
+            'class': 'logging.StreamHandler',
         },
         'file': {
             'level': 'DEBUG',
@@ -287,7 +287,7 @@ LOGGING = {
             'filename': 'django-debug.log',
         },
         'SysLog': {
-    		'level': 'ERROR',
+    		'level': 'NOTSET',
     		'class': 'logging.handlers.SysLogHandler',
     		'formatter': 'simple',
     		'address': ('logs6.papertrailapp.com', 17716)
@@ -295,15 +295,24 @@ LOGGING = {
     },
     'formatters': {
     	'simple': {
-    		'format': '%(asctime)s Papertrail Our Revolution: %(message)s',
+    		'format': '%(asctime)s ourrevolution.com: %(message)s',
             'datefmt': '%Y-%m-%dT%H:%M:%S',
     	},
     },
     'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'NOTSET',
+        },
         'django.request': {
-            'handlers': ['mail_admins', 'stream_to_console','SysLog'],
+            'handlers': ['mail_admins', 'console','SysLog'],
             'level': 'ERROR',
             'propagate': True,
         },
+        'nominations': {
+            'handlers': ['console','SysLog'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     },
 }
