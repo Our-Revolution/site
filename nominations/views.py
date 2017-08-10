@@ -470,7 +470,7 @@ class CandidateSubmitView(FormView):
     def get_context_data(self, *args, **kwargs):
         app_id = self.request.GET.get('id')
         email = self.request.session['profile']['email']
-        self.app = get_object_or_404(Application, pk=app_id,authorized_email__iexact=email) 
+        self.app = get_object_or_404(Application, pk=app_id,authorized_email=email) 
         context_data = super(CandidateSubmitView, self).get_context_data(*args, **kwargs)
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
