@@ -367,6 +367,8 @@ class CandidateDashboardView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         user = self.request.session['profile']
                 
+
+        logger.debug('Candidate Dashboard:')
         logger.debug('user:')
         logger.debug(user)
         
