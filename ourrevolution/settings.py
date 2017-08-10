@@ -287,7 +287,7 @@ LOGGING = {
             'filename': 'django-debug.log',
         },
         'SysLog': {
-    		'level': 'DEBUG',
+    		'level': 'ERROR',
     		'class': 'logging.handlers.SysLogHandler',
     		'formatter': 'simple',
     		'address': ('logs6.papertrailapp.com', 17716)
