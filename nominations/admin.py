@@ -104,7 +104,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('get_group_id','group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt',)
 
     # needed for ordering as readonly_fields are automatically listed at the end
-    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','nomination','questionnaire','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email','vol_incumbent','vol_dem_challenger','vol_other_progressives','vol_polling','vol_endorsements','vol_advantage','vol_turnout','vol_win_number','vol_fundraising','vol_opponent_fundraising','vol_crimes','vol_notes','status',)
+    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','nomination','questionnaire','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email','vol_type_of_race','vol_primary_challengers','vol_general_challengers','vol_has_incumbent','vol_incumbent','vol_other_progressives','vol_polling','vol_endorsements','vol_advantage','vol_turnout','vol_win_number','vol_fundraising','vol_opponent_fundraising','vol_crimes','vol_notes','status',)
 
     readonly_fields = ('submitted_dt','rep_email','group','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email')
 

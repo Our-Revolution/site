@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm, QuestionnaireExportForm, ApplicationExportForm
 from .models import Application, Nomination, InitiativeApplication
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
@@ -12,6 +12,8 @@ from .decorators import is_authenticated
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
+
+from easy_pdf.views import PDFTemplateView
 
 import logging
 
@@ -495,3 +497,45 @@ class CreateInitiativeView(CreateView):
         context_data = super(CreateInitiativeView, self).get_context_data(*args, **kwargs)
         context_data['user'] = self.request.session['profile']
         return context_data
+
+class ApplicationExportView(UpdateView):
+    template_name = "admin/application_export.html"
+    form_class = QuestionnaireExportForm
+
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+
+        try:
+            return Application.objects.get(pk=app_id).questionnaire
+        except (Application.DoesNotExist, KeyError):
+            # TODO: Fix the error thrown when no nomination
+            messages.error(self.request, "We could not find that application. Please try again.")
+            return redirect("/admin/")
+
+    def get_success_url(self):
+        return "/admin/"
+
+    def form_valid(self, form):
+        return export_application_pdf(self.request, {data: form.cleaned_data})
+        # super(ApplicationExportView, self).form_valid(form)
+        
+        # save responses
+        # formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        # if formset.is_valid():
+        #     formset.save()
+        # else:
+        #     print formset.errors
+        #     return self.form_invalid(form)
+
+        return form_valid
+        
+    def get_context_data(self, **kwargs):
+        app_id = self.request.GET.get('id')
+        context = super(ApplicationExportView, self).get_context_data(**kwargs)
+        application = Application.objects.get(pk=app_id)
+        context['application_form'] = ApplicationExportForm
+        return context
+        
+def export_application_pdf(request):
+    print request.data
+    pass

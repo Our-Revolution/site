@@ -331,3 +331,117 @@ class InitiativeApplicationForm(forms.ModelForm):
         widgets = {
             'election_date': DateInput(),
         }
+        
+class QuestionnaireExportForm(forms.ModelForm): 
+    group_name = forms.ModelChoiceField(label="Group Name", to_field_name="name", \
+                        queryset=Group.objects.filter(status='approved'), widget=forms.TextInput)
+    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
+                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
+                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})  
+                           
+    recommendation_author = forms.CharField(label="Recommendation Written By:",initial="Giulianna Di Lauro")
+    RECOMMENDATIONS = (
+       ('endorse', 'Endorse'),
+       ('no-endorse', 'Do Not Endorse'),
+    )
+    
+    staff_recommendation = forms.ChoiceField(label='Staff Recommendation:',choices=RECOMMENDATIONS, initial='endorse')
+    
+    candidate_held_office = forms.BooleanField(label="Has the candidate ever held public office?", initial=False)     
+
+    #crispy forms 
+    def __init__(self, *args, **kwargs):
+        super(QuestionnaireExportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.form_id = 'questionnaire_form'
+        
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    Field('recommendation_author',wrapper_class='col-md-7'),
+                    Field('staff_recommendation',wrapper_class='col-md-5'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+            Div(
+                HTML('<h3>Group Information</h3>'),
+                Div(
+                    Field('group_name',wrapper_class='col-md-8'),
+                    Field('group',wrapper_class='col-md-4'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+            Div(
+                HTML('<h3>Candidate Information</h3>'),
+                Div(
+                    Field('candidate_first_name',wrapper_class='col-md-6'),
+                    Field('candidate_last_name',wrapper_class='col-md-6'),
+                    Field('candidate_bio',wrapper_class='col-md-12'),
+                    Field('candidate_office',wrapper_class='col-md-6'),
+                    Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_city',wrapper_class='col-md-6'),
+                    Field('candidate_state',wrapper_class='col-md-6'),
+                    Field('candidate_party',wrapper_class='col-md-6'),
+                    Field('candidate_held_office',wrapper_class='col-md-12'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class='col-md-12'
+            ),
+            Div(
+                HTML('<h3>Election Information</h3>'),
+                Div(
+                    Field('primary_election_date',wrapper_class='col-md-6'),
+                    Field('general_election_date',wrapper_class='col-md-6'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class='col-md-12'
+            ),
+        )
+            
+    class Meta:
+        model = Questionnaire
+        exclude = ()
+        
+class ApplicationExportForm(forms.ModelForm):
+    #crispy forms 
+    def __init__(self, *args, **kwargs):
+        super(ApplicationExportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.form_id = 'application_form'
+        
+        self.helper.layout = Layout(
+            Div(
+                HTML('<h3>State of the Race</h3>'),
+                Div(
+                    Field('vol_type_of_race',wrapper_class='col-md-6'),
+                    Field('vol_primary_challengers',wrapper_class='col-md-12'),
+                    Field('vol_general_challengers',wrapper_class='col-md-12'),
+                    Field('vol_has_incumbent',wrapper_class='col-md-6'),
+                    Field('vol_incumbent',wrapper_class='col-md-6'),
+                    Field('vol_other_progressives',wrapper_class='col-md-12'),
+                    Field('vol_polling',wrapper_class='col-md-12'),
+                    Field('vol_endorsements',wrapper_class='col-md-12'),
+                    Field('vol_advantage',wrapper_class='col-md-6'),
+                    Field('vol_turnout',wrapper_class='col-md-6'),
+                    Field('vol_win_number',wrapper_class='col-md-6'),
+                    Field('vol_fundraising',wrapper_class='col-md-6'),
+                    Field('vol_opponent_fundraising',wrapper_class='col-md-6'),
+                    Field('vol_crimes',wrapper_class='col-md-12'),
+                    Field('vol_notes',wrapper_class='col-md-12'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+        )
+            
+    class Meta:
+        model = Application
+        exclude = ()

@@ -1,0 +1,31 @@
+{% extends "pages/base_page.html" %}
+
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block page_title %}Our Revolution - Application Export{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row blue-bg white-text pb2">
+    <div class="container pt2">
+      <div class="col-md-8 col-md-offset-2">
+        <h1 class="mb0 mt0">Export Application PDF</h1>
+        <p class="fs18">To generate a one-pager PDF of this application, verify the following information below is correct, and then click generate PDF at the bottom of this page.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row pt2 pb2">
+    <div class="container">
+      <div class="col-md-8 col-md-offset-2 clearfix">
+        {% crispy form %}
+        {% crispy application_form %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

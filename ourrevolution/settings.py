@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     
     'bootstrap3',
     'crispy_forms',
+    'easy_pdf',
 
     # S3
     'storages',
