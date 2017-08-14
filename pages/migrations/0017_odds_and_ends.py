@@ -52,7 +52,7 @@ def populate_pages(apps, schema_editor):
 
     
 
-    our_revolution = Page.objects.get(title='Our Revolution')
+    our_revolution = Page.objects.get(url_path='/')
 
     for slug, page_data in PAGES.iteritems():
 

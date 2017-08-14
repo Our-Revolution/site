@@ -38,11 +38,13 @@ def populate_news_pages(apps, schema_editor):
         req = requests.get("https://ourrevolution.com/press/%s" % page)
         soup = BeautifulSoup(req.text, "html5lib")
 
+        go_live_at = '2016-08-08'
+
         data = {
             'title': soup.select('h1')[0].text,
             'slug': page,
             'post_type': post_type_by_title[soup.select('.article-type')[0].text.strip()],
-            'go_live_at': datetime.datetime.strptime(soup.select('.article-date')[0].text, "%B %d, %Y"),
+            'go_live_at': go_live_at,
             'body': unicode(soup.select('.home-section div')[0]),
             'header_photo_byline': ''
         }

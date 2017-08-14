@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
             name='NewsIndex',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
+                ('social_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
             ],
             options={
                 'abstract': False,
@@ -35,6 +36,7 @@ class Migration(migrations.Migration):
                 ('abstract', wagtail.wagtailcore.fields.RichTextField()),
                 ('body', wagtail.wagtailcore.fields.RichTextField()),
                 ('header_photo', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
+                ('social_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.Image')),
             ],
             options={
                 'abstract': False,

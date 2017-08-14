@@ -21,8 +21,16 @@ def populate_candidate_pages(apps, schema_edtior):
     for candidate in Candidate.objects.all():
         req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/candidates/%s" % candidate.slug)
         try:
-            html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
+            html_content = BeautifulSoup(req.text, "html5lib").select('div.candidate-bio')[0].contents[0].strip()
+
             signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
+        except BaseException, e:
+            print "Failed on %s: %s" % (req.url, e.message)
+            continue
+            
+        try:
+            html_content = BeautifulSoup(req.text, "html5lib").select('div.candidate-bio p')[0].contents[0].strip()
+        
         except BaseException, e:
             print "Failed on %s: %s" % (req.url, e.message)
             continue
@@ -55,6 +63,13 @@ def populate_initiative_pages(apps, schema_edtior):
         req = requests.get("http://ourrevcms-17735885.us-west-2.elb.amazonaws.com/ballot-initiatives/%s" % initiative.slug)
         try:
             html_content = BeautifulSoup(req.text, "html5lib").select('p.candidate-bio')[0].contents[0].strip()
+            signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
+        except BaseException, e:
+            print "Failed on %s: %s" % (req.url, e.message)
+            continue
+            
+        try:
+            html_content = BeautifulSoup(req.text, "html5lib").select('div.candidate-content div.col-md-6.col-md-offset-3.pt4.pb4')[0].contents[0].strip()
             signup_tagline = BeautifulSoup(req.text, "html5lib").select('h3')[0].text.strip()
         except BaseException, e:
             print "Failed on %s: %s" % (req.url, e.message)
