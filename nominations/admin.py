@@ -1,4 +1,5 @@
 from django.contrib import admin
+from reversion.admin import VersionAdmin
 
 from .models import *
 from local_groups.models import Group
@@ -41,6 +42,10 @@ class NominationResponseInline(ReadOnlyStackedInline):
     model = NominationResponse
     fields = ['question','response']
 
+
+@admin.register(Response)
+class ResponseAdmin(VersionAdmin):
+    exclude = ()
 
 @admin.register(Nomination)
 class NominationAdmin(ReadOnlyAdmin):
@@ -86,7 +91,7 @@ class ResponseInline(ReadOnlyStackedInline):
 
 
 @admin.register(Questionnaire)
-class QuestionnaireAdmin(ReadOnlyAdmin):
+class QuestionnaireAdmin(VersionAdmin):
     inlines = [ResponseInline,]
     # list_display = ['candidate_first_name','candidate_last_name','candidate_office','candidate_state']
     

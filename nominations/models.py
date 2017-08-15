@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
+import reversion
 
 import datetime
 
@@ -125,7 +126,7 @@ class Response(models.Model):
         return unicode(self.question)
 
 
-
+@reversion.register()
 class Application(models.Model):
     """
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.

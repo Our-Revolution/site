@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'django_countries',
     'recurrence',
     'address',
+    'reversion',
     
     'bootstrap3',
     'crispy_forms',
