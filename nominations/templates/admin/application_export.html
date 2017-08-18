@@ -21,11 +21,77 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2 clearfix">
-        {% crispy form %}
-        {% crispy application_form %}
+        <form method="POST" class="row">
+          <div class="col-md-12">
+            <h3>Group Information</h3>
+            <div class="br3 pt20 f5f5f5-bg clearfix mb20">
+              <div class="form-group col-md-8">
+                <label class="control-label">Group Name*</label>
+                <div class="controls">
+                  <input class="form-control" type="text" value="{{application.group}}" name="group_name" required></input>
+                </div>
+              </div>
+              
+              <div class="form-group col-md-4">
+                <label class="control-label">Group ID*</label>
+                <div class="controls">
+                  <input class="form-control" type="text" value="{{application.group.group_id}}" name="group_name" maxlength="4" required></input>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {% crispy form %}
+          {% crispy application_form %}
+          
+          <div class="col-md-12">
+            {{ questionnaire_formset.management_form|crispy }}
+            {% for form in questionnaire_formset %}
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+            {% if forloop.counter is 24 %}
+                <div class="form-group pa20 br3 f5f5f5-bg">
+                  <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>Briefly list important local issues included in your platform.</label>
+                  {% crispy form questionnaire_helper %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          <div class="col-md-12">
+            {{ nomination_formset.management_form|crispy }}
+            {% for form in nomination_formset %}
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+              {% if forloop.counter is 2 or forloop.counter is 3 or forloop.counter is 6 %}
+                <div class="form-group pa20 br3 f5f5f5-bg">
+                  <label class="control-label pa20 br3 white-bg mb20 fs16 block" required> {{form.instance.question.text}}</label>
+                  {% crispy form nomination_helper %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          
+          <div class="col-md-12">
+            <input class="btn btn-primary btn-block ls2 uppercase" type="submit" name="submit" value="Generate PDF">
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+// TODO: implement this on server side in a non janky way
+// we don't want the response field on question 23 but it's required
+
+$(document).ready(function(){
+  $('#id_questionnaire-23-response').val("a")
+  $('#div_id_questionnaire-23-response').hide()
+  $('#div_id_questionnaire-23-position label').hide()
+});
+</script>
 
 {% endblock %}

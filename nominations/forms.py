@@ -332,22 +332,15 @@ class InitiativeApplicationForm(forms.ModelForm):
             'election_date': DateInput(),
         }
         
-class QuestionnaireExportForm(forms.ModelForm): 
-    group_name = forms.ModelChoiceField(label="Group Name", to_field_name="name", \
-                        queryset=Group.objects.filter(status='approved'), widget=forms.TextInput)
-    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
-                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
-                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})  
-                           
+class QuestionnaireExportForm(forms.ModelForm):                            
     recommendation_author = forms.CharField(label="Recommendation Written By:",initial="Giulianna Di Lauro")
     RECOMMENDATIONS = (
        ('endorse', 'Endorse'),
        ('no-endorse', 'Do Not Endorse'),
     )
     
-    staff_recommendation = forms.ChoiceField(label='Staff Recommendation:',choices=RECOMMENDATIONS, initial='endorse')
-    
-    candidate_held_office = forms.BooleanField(label="Has the candidate ever held public office?", initial=False)     
+    staff_recommendation = forms.ChoiceField(label='Staff Recommendation:',choices=RECOMMENDATIONS, initial='endorse')    
+    candidate_held_office = forms.BooleanField(label="Has the candidate ever held public office?", initial=False, required=False)     
 
     #crispy forms 
     def __init__(self, *args, **kwargs):
@@ -357,21 +350,14 @@ class QuestionnaireExportForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.form_class = 'row'
         self.helper.form_id = 'questionnaire_form'
+        self.helper.form_tag = False
+        self.fields['candidate_email'].required = False
         
         self.helper.layout = Layout(
             Div(
                 Div(
                     Field('recommendation_author',wrapper_class='col-md-7'),
                     Field('staff_recommendation',wrapper_class='col-md-5'),
-                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
-                ),
-                css_class="col-md-12",
-            ),
-            Div(
-                HTML('<h3>Group Information</h3>'),
-                Div(
-                    Field('group_name',wrapper_class='col-md-8'),
-                    Field('group',wrapper_class='col-md-4'),
                     css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
                 ),
                 css_class="col-md-12",
@@ -406,8 +392,11 @@ class QuestionnaireExportForm(forms.ModelForm):
     class Meta:
         model = Questionnaire
         exclude = ()
-        
-class ApplicationExportForm(forms.ModelForm):
+
+GroupFormset = forms.inlineformset_factory(Group, Application, exclude=[], extra=0, can_delete=False)
+
+#could have/should have probably done this with formsets 
+class ApplicationExportForm(forms.ModelForm):    
     #crispy forms 
     def __init__(self, *args, **kwargs):
         super(ApplicationExportForm, self).__init__(*args, **kwargs)
@@ -416,6 +405,7 @@ class ApplicationExportForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.form_class = 'row'
         self.helper.form_id = 'application_form'
+        self.helper.form_tag = False
         
         self.helper.layout = Layout(
             Div(

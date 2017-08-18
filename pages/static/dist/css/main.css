@@ -5978,17 +5978,14 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 
 .list-3-col {
   -webkit-column-count: 3;
-  -moz-column-count: 3;
   column-count: 3; }
   @media screen and (max-width: 767px) {
     .list-3-col {
       -webkit-column-count: 2;
-      -moz-column-count: 2;
       column-count: 2; } }
   @media screen and (max-width: 479px) {
     .list-3-col {
       -webkit-column-count: 1;
-      -moz-column-count: 1;
       column-count: 1; } }
 
 .ha {
@@ -7355,6 +7352,8 @@ h1, h2, h3, h4 {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
     -webkit-flex-flow: row wrap;
     -ms-flex-flow: row wrap;
     flex-flow: row wrap; }
@@ -9133,6 +9132,8 @@ footer {
         height: auto; }
         .module-container--ppl .module-container {
           height: auto;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
           -webkit-flex-flow: row wrap;
           -ms-flex-flow: row wrap;
           flex-flow: row wrap; }
@@ -9147,6 +9148,8 @@ footer {
           width: 100% !important;
           -webkit-flex-flow: row wrap;
           -ms-flex-flow: row wrap;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
           flex-flow: row wrap; } }
 
 .module {
@@ -9654,6 +9657,8 @@ footer {
   @media screen and (max-width: 767px) {
     .module-col {
       width: 100% !important;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
       -webkit-flex-flow: row wrap;
       -ms-flex-flow: row wrap;
       flex-flow: row wrap; } }
@@ -9766,6 +9771,8 @@ footer {
 @media (max-width: 767px) {
   .module-container {
     height: auto;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
     -webkit-flex-flow: row wrap;
     -ms-flex-flow: row wrap;
     flex-flow: row wrap; }
@@ -10332,8 +10339,6 @@ div.recurrence-widget {
       height: 40px;
       padding-right: 25px; }
       .groups-map-info__search input::-webkit-input-placeholder {
-        color: #777; }
-      .groups-map-info__search input::-moz-placeholder {
         color: #777; }
       .groups-map-info__search input:-ms-input-placeholder {
         color: #777; }

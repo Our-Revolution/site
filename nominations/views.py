@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm, QuestionnaireExportForm, ApplicationExportForm
+from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm, QuestionnaireExportForm, ApplicationExportForm, GroupFormset
 from .models import Application, Nomination, InitiativeApplication
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
@@ -515,27 +515,52 @@ class ApplicationExportView(UpdateView):
     def get_success_url(self):
         return "/admin/"
 
+    def form_invalid(self, form):
+        print form.errors
+        super(ApplicationExportView, self).form_valid(form)
+        
     def form_valid(self, form):
-        return export_application_pdf(self.request, {data: form.cleaned_data})
-        # super(ApplicationExportView, self).form_valid(form)
+        form_valid = super(ApplicationExportView, self).form_valid(form)
+        
+        # this is so jank but we'll rewrite when it doesn't work. this view should have been based on application, not on questionnaire, and everything else referenced to that
+        application = self.object.application_set.first()
+        group = application.group
+        nomination = application.nomination
         
         # save responses
-        # formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
-        # if formset.is_valid():
-        #     formset.save()
-        # else:
-        #     print formset.errors
-        #     return self.form_invalid(form)
-
-        return form_valid
+        questionnaire_formset = QuestionnaireResponseFormset(instance=self.object, prefix="questionnaire")
+        nomination_formset = NominationResponseFormset(instance=nomination, prefix="nomination")
+        group_formset = GroupFormset(instance=group, prefix="group")
         
-    def get_context_data(self, **kwargs):
+        if questionnaire_formset.is_valid() and nomination_formset.is_valid() and group_formset.is_valid():
+            print 'valid!'
+        else:
+            print 'invalid!'
+            print questionnaire_formset.errors
+            print nomination_formset.errors
+            print group_formset.errors
+            return self.form_invalid(form)
+        
+        return export_application_pdf(self.request, {data: form.cleaned_data})
+        
+    def get_context_data(self, **kwargs):    
         app_id = self.request.GET.get('id')
         context = super(ApplicationExportView, self).get_context_data(**kwargs)
         application = Application.objects.get(pk=app_id)
+        group = application.group
+        nomination = application.nomination
+        
+        context['application'] = application
+        context['questionnaire_formset'] = QuestionnaireResponseFormset(instance=self.object, prefix="questionnaire")
+        context['questionnaire_helper'] = QuestionnaireResponseFormsetHelper()
+        context['nomination_formset'] = NominationResponseFormset(instance=nomination, prefix="nomination")
+        context['nomination_helper'] = NominationResponseFormsetHelper()
+        context['group_formset'] = GroupFormset(instance=group, prefix="group")
         context['application_form'] = ApplicationExportForm
         return context
         
 def export_application_pdf(request):
+    print 11
     print request.data
+    print 22
     pass
