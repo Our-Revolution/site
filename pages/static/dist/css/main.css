@@ -6506,6 +6506,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.birthday-bg {
+  background: white url("../img/year-one/birthday-background.jpg") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .birthday-bg .module__heading, .birthday-bg .module__heading--small {
+    text-shadow: none; }
+  .birthday-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .verify-icon {
   color: white;
   background: #218fff;
@@ -6937,12 +6948,16 @@ h1, h2, h3, h4 {
 .alert {
   border-radius: 0; }
 
-.notification-banner, .notification-banner--orange, .notification-banner--splash {
+.notification-banner, .notification-banner--birthday, .notification-banner--orange, .notification-banner--splash {
   padding: 10px;
   background-color: #d74e5b;
   color: white;
   text-align: center;
   font-weight: bolder; }
+  .notification-banner--birthday {
+    background: #218fff url("../img/year-one/birthday-background.png") center;
+    color: white;
+    padding: 20px 10; }
   .notification-banner--orange {
     background-color: #F15A34; }
   .notification-banner--splash {
@@ -6953,7 +6968,7 @@ h1, h2, h3, h4 {
     .notification-banner--splash .container {
       padding-left: 10px;
       padding-right: 7px; }
-  .notification-banner--link .notification-banner:hover, .notification-banner--link .notification-banner--orange:hover, .notification-banner--link .notification-banner--splash:hover {
+  .notification-banner--link .notification-banner:hover, .notification-banner--link .notification-banner--birthday:hover, .notification-banner--link .notification-banner--orange:hover, .notification-banner--link .notification-banner--splash:hover {
     background: #c52d3b; }
   .notification-banner__link {
     font-weight: bolder;
@@ -6962,7 +6977,7 @@ h1, h2, h3, h4 {
       height: 30px;
       padding: 4px 5px; }
   @media screen and (max-width: 767px) {
-    .notification-banner .container, .notification-banner--orange .container, .notification-banner--splash .container {
+    .notification-banner .container, .notification-banner--birthday .container, .notification-banner--orange .container, .notification-banner--splash .container {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;

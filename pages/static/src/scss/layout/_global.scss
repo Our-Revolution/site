@@ -46,6 +46,16 @@ h1, h2, h3, h4 {
   color: white;
   text-align: center;
   font-weight: bolder;
+  
+  &--birthday {
+    @extend .notification-banner;
+    
+    background: $blue url('../img/year-one/birthday-background.png') center;
+    color: white;
+    padding: 20px 10;
+    
+    
+  }
 
   &--orange {
     @extend .notification-banner;
@@ -64,7 +74,7 @@ h1, h2, h3, h4 {
       padding-right: 7px;
     }
   }
-
+  
   &--link {
     .notification-banner:hover {
       background: darken($red, 10);
