@@ -10494,6 +10494,10 @@ div.recurrence-widget {
     .birthday .stats .stat {
       height: 200px; } }
 
+.birthday .stats .xl2 {
+  font-size: 8rem;
+  font-weight: bolder; }
+
 .birthday .stats .no-bottom-border .col-sm-6, .birthday .stats .no-bottom-border .col-sm-3 {
   border-bottom: none; }
 
