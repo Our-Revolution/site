@@ -10465,6 +10465,13 @@ div.recurrence-widget {
   .birthday .container--lg {
     width: 1370px; } }
 
+.birthday .notification-banner__content {
+  text-align: center !important;
+  -webkit-box-flex: 0;
+  -webkit-flex: none;
+  -ms-flex: none;
+  flex: none; }
+
 .birthday h1 {
   font-size: 36px;
   margin-top: 0; }

@@ -5,6 +5,11 @@
     }
   }
   
+  .notification-banner__content {
+    text-align: center !important;
+    flex: none;
+  }
+  
   h1 {
     font-size: 36px;
     margin-top: 0;
