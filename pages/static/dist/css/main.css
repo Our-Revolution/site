@@ -10450,7 +10450,12 @@ div.recurrence-widget {
   .birthday .container--lg {
     width: 1370px; } }
 
+.birthday h1 {
+  font-size: 36px;
+  margin-top: 0; }
+
 .birthday .confetti {
+  background: url("../img/year-one/confetti.svg") repeat-x;
   background-size: 1920px auto;
   background-position: top center; }
 
@@ -10463,6 +10468,14 @@ div.recurrence-widget {
 .birthday .intro {
   color: #218fff;
   padding-bottom: 10rem; }
+
+.birthday .map-key__color {
+  height: 25px;
+  width: 25px;
+  border-radius: 3px;
+  background: #218fff;
+  display: inline-block;
+  margin-right: 10px; }
 
 .birthday .transform-map {
   width: 100%;
@@ -10545,7 +10558,7 @@ div.recurrence-widget {
       background: #f5f5f5 url("../img/year-one/help-desk.jpg") center/cover; }
     .mosaic-element.map {
       background: #f5f5f5 url("../img/year-one/group-map.png") center/cover;
-      height: 300px; }
+      height: 350px; }
     .mosaic-element.or-ma {
       background: #f5f5f5 url("../img/year-one/or-ma.jpg") center/cover; }
     .mosaic-element.or-oh {
@@ -10556,7 +10569,7 @@ div.recurrence-widget {
       background: #f5f5f5 url("../img/year-one/or-ga.png") center/cover; }
     .mosaic-element.summer-for-progress {
       background: #f5f5f5 url("../img/year-one/summer-for-progress.jpg") center/cover;
-      height: 300px; }
+      height: 350px; }
     .mosaic-element.ahca {
       background: #f5f5f5 url("../img/year-one/ahca.jpg") center/cover; }
     .mosaic-element.mni-wiconi {

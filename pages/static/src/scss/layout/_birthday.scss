@@ -5,8 +5,18 @@
     }
   }
   
+  h1 {
+    font-size: 36px;
+    margin-top: 0;
+    // margin-bottom: 0;
+  }
+  
+  p {
+    // font-size: 18px;
+  }
+  
   .confetti {
-    // background: url('../img/year-one/confetti.svg') repeat;
+    background: url('../img/year-one/confetti.svg') repeat-x;
     background-size: 1920px auto;
     background-position: top center;
   }
@@ -23,6 +33,15 @@
   .intro {
     color: $blue;
     padding-bottom: 10rem;
+  }
+  
+  .map-key__color {
+    height: 25px;
+    width: 25px;
+    border-radius: 3px;
+    background: $blue;
+    display: inline-block;
+    margin-right: 10px;
   }
   
   .transform-map {
@@ -152,7 +171,7 @@
     
     &.map {
       background: #f5f5f5 url('../img/year-one/group-map.png') center/cover;
-      height: 300px;
+      height: 350px;
     }
     
     &.or-ma {
@@ -173,7 +192,7 @@
     
     &.summer-for-progress {
       background: #f5f5f5 url('../img/year-one/summer-for-progress.jpg') center/cover;
-      height: 300px;
+      height: 350px;
     }
     
     &.ahca {
