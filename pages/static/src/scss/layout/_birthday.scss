@@ -1,0 +1,322 @@
+.birthday {
+  .container--lg {
+    @media (min-width: 1400px) {
+      width: 1370px;
+    }
+  }
+  
+  .confetti {
+    // background: url('../img/year-one/confetti.svg') repeat;
+    background-size: 1920px auto;
+    background-position: top center;
+  }
+  
+  .navbar {
+    margin: 2% auto;
+    background: none;
+    
+    .navbar__logo {
+      margin: auto; 
+    }
+  }
+  
+  .intro {
+    color: $blue;
+    padding-bottom: 10rem;
+  }
+  
+  .transform-map {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    background: url('../img/year-one/map.svg') center no-repeat;
+    height: 500px;
+  }
+  
+  .fade-bg {
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+  }
+  
+  .stats {
+    .stat {
+      height: 250px;
+      
+      @include until($medium) {
+        height: 200px;
+      };
+    }
+    
+    .no-bottom-border {
+      .col-sm-6, .col-sm-3 {
+        border-bottom: none;
+      }
+    }
+    
+    .col-sm-6, .col-sm-3 {
+      border: 1px solid rgba(255,255,255,0.5); 
+      border-width: 0px 1px 1px 0;
+      
+      &:nth-child(3) {
+        border-width: 0 0 1px 0;
+      }
+      
+      &:last-child {
+        border-right: none;
+      }
+    }
+    
+    .xl {
+      font-size: 10rem;
+      font-weight: bolder;
+    }
+    
+    .lg {
+      font-size: 4rem;
+      font-weight: bolder;
+    }
+    
+    h2 {
+      font-size: 18px;
+      font-weight: normal;
+      
+      @include until($small) {
+        font-size: 16px;
+        
+        .lg {
+          font-size: 3rem;
+        }
+      };
+    }
+  }
+}
+
+.mosaic {
+  margin-bottom: 2%;
+  height: 200px;
+  
+  &--200 {
+    @extend .mosaic;
+    height: 200px;
+    
+    @include until($large) {
+      height: 100px;
+    }
+  }
+  
+  &--auto {
+    @extend .mosaic;
+    height: auto;
+  }
+  
+  // clearfix
+  &:after, &:before {
+    content: " ";
+    display: table;
+  }
+  
+  &:after {
+    clear: both;
+  }
+  
+  &-element {
+    height: 100%;
+    border-radius: 3px;
+    background-color: #f5f5f5;
+    float: left;
+    overflow: hidden;
+    position: relative;
+        
+    &.sam {
+      background: #f5f5f5 url('../img/year-one/sam.jpg') center/cover;
+    }
+    
+    &.dapl-dc {
+      background: #f5f5f5 url('../img/year-one/dapl-dc.png') bottom center/cover;
+    }
+    
+    &.bernie-boston {
+      background: #f5f5f5 url('../img/year-one/bernie-boston.jpg') center/cover;
+    }
+    
+    &.boston-crowd {
+      background: #f5f5f5 url('../img/year-one/boston-crowd.jpg') center/cover;
+    }
+    
+    &.staff {
+      background: #f5f5f5 url('../img/year-one/staff.jpg') center/cover;
+    }
+    
+    &.help-desk {
+      background: #f5f5f5 url('../img/year-one/help-desk.jpg') center/cover;
+    }
+    
+    &.map {
+      background: #f5f5f5 url('../img/year-one/group-map.png') center/cover;
+      height: 300px;
+    }
+    
+    &.or-ma {
+      background: #f5f5f5 url('../img/year-one/or-ma.jpg') center/cover;
+    }
+    
+    &.or-oh {
+      background: #f5f5f5 url('../img/year-one/or-oh.jpg') center/cover;
+    }
+    
+    &.or-il {
+      background: #f5f5f5 url('../img/year-one/or-il.png') center/cover;
+    }
+    
+    &.or-ga {
+      background: #f5f5f5 url('../img/year-one/or-ga.png') center/cover;
+    }
+    
+    &.summer-for-progress {
+      background: #f5f5f5 url('../img/year-one/summer-for-progress.jpg') center/cover;
+      height: 300px;
+    }
+    
+    &.ahca {
+      background: #f5f5f5 url('../img/year-one/ahca.jpg') center/cover;
+    }
+    
+    &.mni-wiconi {
+      background: #f5f5f5 url('../img/year-one/mni-wiconi.jpg') center/cover;
+    }
+    
+    &.tpp {
+      background: #f5f5f5 url('../img/year-one/tpp.png') center/cover;
+    }
+    
+    &.oscar {
+      background: #f5f5f5 url('../img/year-one/oscar.jpg') center/cover;
+    }
+    
+    &.woodfin {
+      background: #f5f5f5 url('../img/year-one/woodfin.jpg') center/cover;
+    }
+    
+    &.khalid {
+      background: #f5f5f5 url('../img/year-one/khalid.jpg') center/cover;
+    }
+    
+    &.pellegrino {
+      background: #f5f5f5 url('../img/year-one/pellegrino.jpg') center/cover;
+    }
+    
+    &.carmen {
+      background: #f5f5f5 url('../img/year-one/carmen.jpg') center/cover;
+    }
+    
+    &.lumumba {
+      background: #f5f5f5 url('../img/year-one/lumumba.jpg') center/cover;
+    }
+    
+    &.valdez {
+      background: #f5f5f5 url('../img/year-one/valdez.jpg') center/cover;
+    }
+    
+    &.julie {
+      background: #f5f5f5 url('../img/year-one/julie.jpg') center/cover;
+    }
+    
+    &.connolly {
+      background: #f5f5f5 url('../img/year-one/connolly.jpg') center/cover;
+    }
+    
+    &.kc-15 {
+      background: white url('../img/year-one/kc-15.jpg') center/cover;
+    }
+    
+    &.howard {
+      background: white url('../img/year-one/howard.jpg') center/100% auto no-repeat;
+    }
+    
+    &.avr {
+      background: white url('../img/year-one/avr.jpg') center/auto 100% no-repeat;
+    }
+    
+    &.rcv {
+      background: white url('../img/year-one/rcv.jpg') center/auto 100% no-repeat;
+    }
+    
+    .caption {
+      color: white;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      font-weight: bolder;
+    }
+    
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+    
+    &--one {
+      width: 23%;
+      margin-right: 2%;
+      
+      &:last-child {
+        width: 25%;
+        margin-right: 0;
+      }
+      
+      &.responsive {
+        @include until($large) {
+          width: 49%;
+          margin-bottom: 20px;
+          height: 150px;
+          
+          &:nth-child(2n) {
+            margin-right: 0;
+          }
+          
+          .caption {
+            background: rgba(0,0,0,0.2);
+            text-shadow: 0 0 5px rgba(0,0,0,1);
+          }
+        }
+      }
+    }
+    
+    &--two {
+      width:48%;
+      margin-right: 2%;
+      
+      &:last-child {
+        width: 50%;
+        margin-right: 0;
+      }
+      
+      &.responsive {
+        @include until($large) {
+          width: 100%;
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    }
+    
+    &--no-bg {
+      background: none;
+    }
+    
+    &:last-child {
+      margin-right: 0;
+      
+      &--one {
+        width: 25%;
+      }
+      
+      &--two {
+        width: 50%;
+      }
+    }
+  }
+}
