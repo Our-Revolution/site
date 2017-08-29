@@ -80,7 +80,7 @@ class Group(models.Model):
        ('1.1', 'Current'),
    ) 
     
-    signed_mou_version = models.CharField(max_length=64, choices=VERSIONS, default='none', verbose_name='MOU Version')
+    signed_mou_version = models.CharField(max_length=64, choices=VERSIONS, default='none', verbose_name='MOU Version', null=True, blank=True)
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
     # i_p__address = models.CharField(max_length=16, null=True, blank=True)
