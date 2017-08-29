@@ -6,8 +6,8 @@ from .actions import export_as_csv_action
 # Register your models here.
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['name', 'state','city','postal_code','status','signup_date','group_id','signed_mou_version']
-    list_filter = ['status','signed_mou_version','state']
+    list_display = ['name', 'state','city','postal_code','status','signup_date','group_id','organizer','signed_mou_version']
+    list_filter = ['status','signed_mou_version','organizer','state']
     search_fields = ['name', 'state','city','group_id']
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)

@@ -71,7 +71,7 @@ class Group(models.Model):
        ('inactive', 'Inactive'),
        ('approved', 'Approved'),
        ('removed', 'Removed') # can flesh out later
-   ) 
+    ) 
     status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
     
     VERSIONS = (
@@ -81,6 +81,17 @@ class Group(models.Model):
    ) 
     
     signed_mou_version = models.CharField(max_length=64, choices=VERSIONS, default='none', verbose_name='MOU Version', null=True, blank=True)
+    
+    ORGANIZERS = (
+       ('juliana', 'Juliana'),
+       ('basi', 'Basi'),
+       ('kyle', 'Kyle'),
+    )
+    
+    organizer = models.CharField(max_length=64, choices=ORGANIZERS, default=None, verbose_name='Organizer', null=True, blank=True)
+    
+    mou_url = models.TextField(null=True, blank=True, verbose_name="MOU URL", max_length=250)
+    
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
     # i_p__address = models.CharField(max_length=16, null=True, blank=True)
