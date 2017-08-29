@@ -90,7 +90,7 @@ class Group(models.Model):
     
     organizer = models.CharField(max_length=64, choices=ORGANIZERS, default=None, verbose_name='Organizer', null=True, blank=True)
     
-    mou_url = models.TextField(null=True, blank=True, verbose_name="MOU URL", max_length=250)
+    mou_url = models.URLField(null=True, blank=True, verbose_name="MOU URL", max_length=255)
     
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
