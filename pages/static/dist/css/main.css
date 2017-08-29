@@ -6517,6 +6517,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.cupcake-bg {
+  background: white url("../img/year-one/birthday-background.png") center repeat; }
+
 .verify-icon {
   color: white;
   background: #218fff;

@@ -68,12 +68,19 @@ class Group(models.Model):
     STATUSES = (
        ('submitted', 'Submitted'),
        ('signed-mou', 'Signed MOU'),
-       ('signed-mou-new', 'Signed New MOU'),
-       ('inactive-unsigned', 'Inactive Unsigned'),
+       ('inactive', 'Inactive'),
        ('approved', 'Approved'),
        ('removed', 'Removed') # can flesh out later
    ) 
     status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
+    
+    VERSIONS = (
+       ('none', 'N/A'),
+       ('1.0', 'Old'),
+       ('1.1', 'Current'),
+   ) 
+    
+    signed_mou_version = models.CharField(max_length=64, choices=VERSIONS, default='none', verbose_name='MOU Version')
     # source = models.CharField(max_length=17, null=True, blank=True)
     # subsource = models.FloatField(null=True, blank=True)
     # i_p__address = models.CharField(max_length=16, null=True, blank=True)

@@ -7,3 +7,4 @@ bower_components
 .static/
 node_modules
 django-debug.log
+*.sql
