@@ -12,7 +12,7 @@ class GroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)
     form = GisForm
-    actions = [export_as_csv_action("CSV Export")]
+    actions = [export_as_csv_action("CSV Export"),geocode_groups]
     
     def get_actions(self, request):
         #Disable delete
