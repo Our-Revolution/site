@@ -28,3 +28,23 @@ def export_as_csv_action(description="Export selected objects as CSV file",
         return response
     export_as_csv.short_description = description
     return export_as_csv
+
+def geocode_groups(modelamin, request, queryset):
+    import googlemaps
+    from local_groups.models import Group
+    from django.contrib.gis.geos import Point
+
+    geolocator = googlemaps.Client(key="AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg")
+
+    groups = queryset
+
+    for group in groups:
+
+        try:
+            geocoded_address = geolocator.geocode("%s, %s, %s" % (group.city, group.state, group.postal_code))
+            location = geocoded_address[0]['geometry']['location']
+            group.point = Point(location['lng'], location['lat'], srid=4326)
+
+            group.save()
+        except:
+            pass
