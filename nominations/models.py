@@ -171,7 +171,7 @@ class Application(models.Model):
        ('approved', 'Endorsed'),
        ('removed', 'Not Endorsed'),
        ('expired', 'Expired'),
-       ('no-action', 'No Action Needed Now'),
+       ('hold', 'Hold'),
     )
     status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
 
