@@ -169,7 +169,9 @@ class Application(models.Model):
        ('needs-research','Needs Research'),
        ('needs-staff-review', 'Needs Staff Review'),
        ('approved', 'Endorsed'),
-       ('removed', 'Not Endorsed')
+       ('removed', 'Not Endorsed'),
+       ('expired', 'Expired'),
+       ('no-action', 'No Action Needed Now'),
     )
     status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
 
