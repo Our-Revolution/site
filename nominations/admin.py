@@ -132,11 +132,25 @@ class ApplicationAdmin(admin.ModelAdmin):
     get_group_id.short_description = 'Group ID'
     get_group_id.admin_order_field = 'group__group_id'
 
+    def get_form(self, request, obj=None, **kwargs):
+        volunteer_fields = ('submitted_dt','group','candidate_first_name','candidate_last_name','candidate_office','candidate_district','candidate_city','candidate_state','vol_incumbent','vol_dem_challenger','vol_other_progressives','vol_polling','vol_endorsements','vol_advantage','vol_turnout','vol_win_number','vol_fundraising','vol_opponent_fundraising','vol_crimes','vol_notes','status',)
+        
+        is_vol = request.user.groups.filter(name="Elections Research Volunteers").exists()
+        
+        if is_vol:                                            
+           self.fields = volunteer_fields
+
+        return super(ApplicationAdmin, self).get_form(request, obj, **kwargs)
 
     def get_actions(self, request):
+        is_vol = request.user.groups.filter(name="Elections Research Volunteers").exists()
+        
         #Disable delete
         actions = super(ApplicationAdmin, self).get_actions(request)
         del actions['delete_selected']
+        
+        if is_vol:
+            del actions['export_as_csv']
         return actions
 
     def has_delete_permission(self, request, obj=None):
