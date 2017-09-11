@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-1. [Python > 2.7](https://www.python.org/downloads/) and [Pip](https://pip.pypa.io/en/stable/installing/)
+1. [Python 2.7](https://www.python.org/downloads/) and [Pip](https://pip.pypa.io/en/stable/installing/)
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
 3. [Node + NPM](https://nodejs.org/en/download/) for building front-end. 
 
