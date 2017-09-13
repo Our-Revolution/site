@@ -29,8 +29,7 @@
           <hr/>
 					<div class="btn-group mb20" id="q_selector">
 						<button id="2016" class="btn btn-default">2016</a>
-							<button id="q1_2017" class="btn btn-default">Q1 2017</a>
-								<button id="q2_2017" class="btn btn-default">Q2 2017</a>
+						<button id="q1_2017" class="btn btn-default">Q1 2017</a>
 					</div>
   				<ul class="lst0 pa0 list-3-col clearfix">
 						<div id="2016_list" class="donor-list">
@@ -44,12 +43,6 @@
 	    				  {% if donor.first_name_q1_2017 is not None %}<li>{{ donor.first_name_q1_2017 }} {{ donor.last_name_q1_2017 }}</li>{% endif %}
 	  					{% endfor %}
 						</div>
-						
-						<div id="q2_2017_list" class='donor-list'>
-							{% for donor in donations %}
-	    				  {% if donor.first_name_q2_2017 is not None %}<li>{{ donor.first_name_q2_2017 }} {{ donor.last_name_q2_2017 }}</li>{% endif %}
-	  					{% endfor %}
-						</div>
   				</ul>
         </div>
       </div>
@@ -59,7 +52,6 @@
 	<script>
 		$(document).ready(function (){
 			$('#q1_2017_list').hide();
-			$('#q2_2017_list').hide();
 			
 			$('#q_selector').on('click touchstart', function(e) {
 				$('#q_selector .btn').removeClass('active');
