@@ -6517,6 +6517,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.mfa-bg {
+  background: white url("../img/mfa-bg.jpg") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .mfa-bg .module__heading, .mfa-bg .module__heading--small {
+    text-shadow: none; }
+  .mfa-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
 
