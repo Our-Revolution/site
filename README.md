@@ -17,18 +17,21 @@ Because 'site' is not a descriptive project name ...
 
 4. Run `./setup-osx` (it will take a minute; it's making a number of installs HTTP requests)
 
-* If db connection throws authentication error, try updating `.env` db url 
-config to be `postgres:///ourrevolution` [without host and port](https://www.peterbe.com/plog/connecting-with-psycopg2-without-a-username-and-password).
-* If SECRET_KEY is not generated correctly try replacing line in script with 
-something like this instead: `echo "SECRET_KEY=lebowski" >> .env`
-* If other keys are missing too try adding this to script:
+If db connection throws authentication error, try updating `.env` db url config 
+to be `postgres:///ourrevolution` [without host and port](https://www.peterbe.com/plog/connecting-with-psycopg2-without-a-username-and-password).
+
+If `.env` keys are not generated correctly try updating script with something 
+like this:
 ```
+echo "SECRET_KEY=lebowski" >> .env
 echo "AUTH0_DOMAIN=lebowski" >> .env
 echo "AUTH0_CLIENT_ID=lebowski" >> .env
 echo "AUTH0_CLIENT_SECRET=lebowski" >> .env
 echo "AUTH0_CALLBACK_URL=lebowski" >> .env
 echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
 ```
+
+There is a known migration bug as of 2017-09-18.
 
 5. It should prompt you to create a super user account. Enter your username, email and password.
 
@@ -42,6 +45,11 @@ echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
 
 1. `workon ourrevolution` or `source ~/.virtualenvs/ourrevolution/bin/activate`
 2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
+
+If pages don't load correctly you may need to update the `django_site` table:
+```
+INSERT INTO django_site (domain, name) VALUES ('localhost:8000', 'Our Rev Dev');
+```
 
 ## GULP and the Front End
 We use [gulp](http://gulpjs.com/) to automate building and minifying of production files.
