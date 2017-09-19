@@ -558,6 +558,7 @@ class GroupPage(RoutablePageMixin, Page):
             'groups':groups_data
         })
         
+        
     @route(r'^new/$')
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
@@ -568,10 +569,10 @@ class GroupPage(RoutablePageMixin, Page):
             # check whether it's valid:
             
             if form.is_valid():
-                group_id = randint(1000,9999)
-                                
                 group = form.save(commit=False)
-                group.group_id = group_id
+
+                # Get new group id
+                group.group_id = str(self.get_new_group_id())
                 
                 slug = slugify(group.name)
                 
@@ -586,7 +587,7 @@ class GroupPage(RoutablePageMixin, Page):
                 plaintext = get_template('pages/email/add_group_success.txt')
                 htmly     = get_template('pages/email/add_group_success.html')
                 
-                d = Context({'group_id': group_id})
+                d = Context({'group_id': group.group_id})
                 
                 subject="Let's get your group on the map!"
                 from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
@@ -608,6 +609,20 @@ class GroupPage(RoutablePageMixin, Page):
                 messages.error(request, 'Please correct the errors marked in the form below.')
 
         return render(request, 'pages/add_group.html', {'form': form})
+        
+    '''
+    Get new group id that is random and unique
+    '''
+    def get_new_group_id(self):
+        '''
+        Real group id should be between 1000 and 9998.        
+        TODO: more scalable solution that doesn't use random guess approach and 
+        can also support more than 8999 groups
+        '''
+        group_id = None
+        while (group_id is None or Group.objects.filter(group_id=str(group_id)).exists()):
+            group_id = randint(1000,9998)                    
+        return group_id
         
     @route(r'^success/$')
     def group_success_view(self, request):
