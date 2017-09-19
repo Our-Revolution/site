@@ -557,8 +557,7 @@ class GroupPage(RoutablePageMixin, Page):
             'page': self,
             'groups':groups_data
         })
-        
-       
+               
     @route(r'^new/$')
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
