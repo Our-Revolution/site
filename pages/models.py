@@ -610,13 +610,13 @@ class GroupPage(RoutablePageMixin, Page):
         return render(request, 'pages/add_group.html', {'form': form})
         
     '''
-    Get new group id that is random and unique
+    Get new group id that is random and not in use
     '''
     def get_new_group_id(self):
         '''
-        Real group id should be between 1000 and 9998.        
+        Find random integer between 1000 and 9998 and not in use by another group        
         TODO: more scalable solution that doesn't use random guess approach and 
-        can also support more than 8999 groups
+        supports more than 8999 groups
         '''
         group_id = None
         while (group_id is None or Group.objects.filter(group_id=str(group_id)).exists()):
