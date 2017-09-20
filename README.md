@@ -10,18 +10,46 @@
 Because 'site' is not a descriptive project name ...
 
 1. `cd` into your typical project directory; `~/sites/` or `~/code` or `~/projects` or what have you.
+
 2. Clone this repo — `git clone git@github.com:Our-Revolution/site.git our-revolution`
+
 3. `cd our-revolution`
+
 4. Run `./setup-osx` (it will take a minute; it's making a number of installs HTTP requests)
+
+If db connection throws authentication error, try updating `.env` db url config 
+to be `postgres:///ourrevolution` [without host and port](https://www.peterbe.com/plog/connecting-with-psycopg2-without-a-username-and-password).
+
+If `.env` keys are not generated correctly try updating script with something 
+like this:
+```
+echo "SECRET_KEY=lebowski" >> .env
+echo "AUTH0_DOMAIN=lebowski" >> .env
+echo "AUTH0_CLIENT_ID=lebowski" >> .env
+echo "AUTH0_CLIENT_SECRET=lebowski" >> .env
+echo "AUTH0_CALLBACK_URL=lebowski" >> .env
+echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
+```
+
+There is a known migration bug as of 2017-09-18.
+
 5. It should prompt you to create a super user account. Enter your username, email and password.
+
 6. `npm install` for build tools
+
 7. ???
+
 8. Profit!
 
 ## Usage
 
 1. `workon ourrevolution` or `source ~/.virtualenvs/ourrevolution/bin/activate`
 2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
+
+If pages don't load correctly you may need to update the `django_site` table:
+```
+INSERT INTO django_site (domain, name) VALUES ('localhost:8000', 'Our Rev Dev');
+```
 
 ## GULP and the Front End
 We use [gulp](http://gulpjs.com/) to automate building and minifying of production files.
