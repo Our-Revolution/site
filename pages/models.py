@@ -527,7 +527,7 @@ class DonationPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(DonationPage, self).get_context(*args, **kwargs)
 
-        reader = csv.DictReader(self.csv_file, fieldnames=['first_name_2016','last_name_2016','first_name_q1_2017','last_name_q1_2017','first_name_q2_2017','last_name_q2_2017'])
+        reader = csv.DictReader(self.csv_file, fieldnames=['first_name_2016','last_name_2016','first_name_q1_2017','last_name_q1_2017'])
         reader.next()
         context['donations'] = list(reader)
 
