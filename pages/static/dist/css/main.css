@@ -6528,6 +6528,17 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.pr-bg {
+  background: white url("../img/pr-bg.jpg") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .pr-bg .module__heading, .pr-bg .module__heading--small {
+    text-shadow: none; }
+  .pr-bg .article-type {
+    font-weight: bolder;
+    text-shadow: 0 0 5px black; }
+
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
 
