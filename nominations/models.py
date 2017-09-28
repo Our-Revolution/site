@@ -187,7 +187,7 @@ class Application(models.Model):
     vol_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much money fundraised?')
     vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
     vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
-    vol_notes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Notes:')
+    vol_notes = models.TextField(null=True, blank=True, max_length=1000, verbose_name='Notes:', help_text = 'Max length 1000 characters.')
 
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
