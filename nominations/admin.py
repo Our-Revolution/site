@@ -87,8 +87,7 @@ class ResponseInline(ReadOnlyStackedInline):
 
 @admin.register(Questionnaire)
 class QuestionnaireAdmin(ReadOnlyAdmin):
-    inlines = [ResponseInline,]
-    # list_display = ['candidate_first_name','candidate_last_name','candidate_office','candidate_state']
+    inlines = [ResponseInline]
 
     def get_model_perms(self, request):
         """
@@ -101,12 +100,94 @@ class QuestionnaireAdmin(ReadOnlyAdmin):
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
 
-    list_display = ('get_group_id','group','candidate_last_name','candidate_first_name','candidate_office','candidate_state','get_general_election','get_primary_election','status','submitted_dt',)
+    list_display = (
+        'get_group_id',
+        'group',
+        'candidate_last_name',
+        'candidate_first_name',
+        'candidate_office',
+        'candidate_state',
+        'get_general_election',
+        'get_primary_election',
+        'status',
+        'submitted_dt'
+    )
 
     list_display_links = list_display
 
-    # needed for ordering as readonly_fields are automatically listed at the end
-    fields = ('submitted_dt','group','rep_email','rep_first_name','rep_last_name','rep_phone','candidate_first_name','candidate_last_name','nomination','questionnaire','candidate_office','candidate_district','candidate_city','candidate_state','authorized_email','vol_incumbent','vol_dem_challenger','vol_other_progressives','vol_polling','vol_endorsements','vol_advantage','vol_turnout','vol_win_number','vol_fundraising','vol_opponent_fundraising','vol_crimes','vol_notes','status',)
+    actions = [export_as_csv_action("CSV Export")]
+
+    list_filter = ('status', 'candidate_state')
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'submitted_dt',
+                'status',
+                'authorized_email',
+            )
+        }),
+        ('Group Info', {
+            'fields': (
+                'group',
+                'rep_email',
+                'rep_first_name',
+                'rep_last_name',
+                'rep_phone',
+                'nomination',
+            ),
+        }),
+        ('Candidate Info', {
+            'fields': (
+                'candidate_first_name',
+                'candidate_last_name',
+                'candidate_office',
+                'candidate_district',
+                'candidate_city',
+                'candidate_state',
+                'get_general_election',
+                'get_primary_election',
+                'questionnaire',
+            ),
+        }),
+        ('Volunteer Research', {
+            'fields': (
+                'vol_incumbent',
+                'vol_dem_challenger',
+                'vol_other_progressives',
+                'vol_polling',
+                'vol_endorsements',
+                'vol_advantage',
+                'vol_turnout',
+                'vol_win_number',
+                'vol_fundraising',
+                'vol_opponent_fundraising',
+                'vol_crimes',
+                'vol_notes',
+            ),
+        }),
+        ('Staff', {
+            'fields': (
+                'staff',
+                'classification_level',
+                'staff_bio',
+                'state_of_the_race',
+                'local_group_info',
+                'staff_notes',
+                'vet_status',
+                'vet',
+                'local_support'
+            ),
+        })
+    )
+
+    search_fields = (
+        'group__name',
+        'group__group_id',
+        'candidate_first_name'
+        'candidate_last_name',
+        'candidate_state'
+    )
 
     readonly_fields = (
         'submitted_dt',
@@ -125,12 +206,6 @@ class ApplicationAdmin(admin.ModelAdmin):
         'get_primary_election',
         'authorized_email'
     )
-
-    actions = [export_as_csv_action("CSV Export")]
-
-    list_filter = ('status','candidate_state',)
-
-    search_fields = ('group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state')
 
     def get_general_election(self, obj):
         return obj.questionnaire.general_election_date
@@ -166,8 +241,6 @@ class ApplicationAdmin(admin.ModelAdmin):
             'candidate_district',
             'candidate_city',
             'candidate_state',
-            'get_general_election',
-            'get_primary_election',
             'authorized_email',
             'vol_incumbent',
             'vol_dem_challenger',
@@ -181,7 +254,16 @@ class ApplicationAdmin(admin.ModelAdmin):
             'vol_opponent_fundraising',
             'vol_crimes',
             'vol_notes',
-            'status'
+            'status',
+            'classification_level',
+            'staff',
+            'staff_bio',
+            'state_of_the_race',
+            'local_group_info',
+            'staff_notes',
+            'vet_status',
+            'vet',
+            'local_support'
         )
 
         volunteer_fields = (
@@ -210,7 +292,9 @@ class ApplicationAdmin(admin.ModelAdmin):
             'status'
         )
 
-        is_vol = request.user.groups.filter(name="Elections Research Volunteers").exists()
+        is_vol = request.user.groups.filter(
+            name="Elections Research Volunteers"
+        ).exists()
 
         if is_vol:
             self.fields = volunteer_fields
@@ -220,9 +304,11 @@ class ApplicationAdmin(admin.ModelAdmin):
         return super(ApplicationAdmin, self).get_form(request, obj, **kwargs)
 
     def get_actions(self, request):
-        is_vol = request.user.groups.filter(name="Elections Research Volunteers").exists()
+        is_vol = request.user.groups.filter(
+            name="Elections Research Volunteers"
+        ).exists()
 
-        #Disable delete
+        # Disable delete
         actions = super(ApplicationAdmin, self).get_actions(request)
         del actions['delete_selected']
 

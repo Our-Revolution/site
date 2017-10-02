@@ -20,6 +20,7 @@ django-countries==4.1
 django-crispy-forms==1.6.1
 django-debug-toolbar==1.6
 django-dotenv==1.4.1
+django-easy-pdf==0.1.1
 django-gulp==2.5.0
 django-localflavor==1.4.1
 django-modelcluster==2.0
@@ -66,3 +67,4 @@ wcwidth==0.1.7
 webencodings==0.5
 whitenoise==3.2.2
 wsgiref==0.1.2
+xhtml2pdf==0.2b1
