@@ -84,7 +84,7 @@ class Questionnaire(models.Model):
     candidate_twitter_url = models.URLField(null=True, blank=True, verbose_name="Candidate Twitter URL", max_length=255)
     candidate_instagram_url = models.URLField(null=True, blank=True, verbose_name="Candidate Instagram URL", max_length=255)
     candidate_youtube_url = models.URLField(null=True, blank=True, verbose_name="Candidate YouTube URL", max_length=255)
-    
+
     completed_by_candidate = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
@@ -203,22 +203,22 @@ class Application(models.Model):
             self.submitted_dt = datetime.datetime.now()
 
         super(Application, self).save(*args, **kwargs)
-        
+
     class Meta:
         verbose_name = 'Candidate Application'
-        
+
 class InitiativeApplication(models.Model):
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(null=True, blank=True, verbose_name = 'Submitted at')
-    
+
     group = models.ForeignKey(Group, to_field="group_id")
 
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
     rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
-    
+
     name = models.CharField(max_length=254,null=True,blank=False, verbose_name =" Initiative Name")
     election_date = models.DateField(verbose_name = 'Election Date', null = True, blank = False)
     website_url = models.URLField(null=True, blank=False, verbose_name="Initiative Website URL", max_length=255)
@@ -231,15 +231,15 @@ class InitiativeApplication(models.Model):
     question = models.TextField(max_length=500, blank=True, null=True, verbose_name = "How will the question appear on the ballot?")
     vote = models.NullBooleanField(null=True, blank=True, verbose_name='How to vote:')
     additional_info = models.TextField(max_length=500, blank=True, null=True, verbose_name = "Any additional information you want to share?")
-    
+
     LOCALITIES = (
        ('city', 'Citywide'),
        ('county', 'Countywide'),
        ('state', 'Statewide'),
     )
-    
+
     locality = models.CharField(max_length=16, choices=LOCALITIES, default='state', verbose_name='Is this initiative:')
-    
+
     STATUSES = (
        ('incomplete', 'Incomplete'),
        ('submitted', 'Submitted'),
@@ -249,7 +249,7 @@ class InitiativeApplication(models.Model):
        ('removed', 'Not Endorsed')
     )
     status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
-    
+
     def __unicode__(self):
         return str(self.group) + ' - ' + self.name
 
@@ -258,6 +258,6 @@ class InitiativeApplication(models.Model):
             self.submitted_dt = datetime.datetime.now()
 
         super(InitiativeApplication, self).save(*args, **kwargs)
-    
+
     class Meta:
         verbose_name = 'Ballot Initiative Application'

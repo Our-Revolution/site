@@ -1,0 +1,28 @@
+{% extends "easy_pdf/base.html" %}
+
+{% load static %}
+
+{% block extra_style %}
+    <style type="text/css">
+        body {
+            font-family: "Helvetica", "sans-serif";
+            color: #333333;
+        }
+    </style>
+{% endblock %}
+
+{% block page_title %}Our Revolution - Application Export{% endblock %}
+
+{% block content %}
+
+<img src="https://ourrevolution.com/static/dist/img/summer-for-progress-bg.jpg" />
+
+<p>Office: {{application.questionnaire.candidate_office}}, {{application.questionnaire.candidate_city}}, {{application.questionnaire.candidate_district}} {{application.questionnaire.candidate_state}}</p>
+
+<p>Name: {{application.questionnaire.candidate_first_name}}
+{{application.questionnaire.candidate_last_name}}</p>
+
+<p>Primary Election: {{application.questionnaire.primary_election_date}}</p>
+<p>General Electin: {{application.questionnaire.general_election_date}}</p>
+
+{% endblock %}

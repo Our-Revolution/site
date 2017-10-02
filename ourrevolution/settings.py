@@ -77,16 +77,17 @@ INSTALLED_APPS = [
     #
     'wagtail.contrib.wagtailfrontendcache',
     'wagtail.contrib.wagtailroutablepage',
-    
+
     # Group Goodies
     'phonenumber_field',
     'multiselectfield',
     'django_countries',
     'recurrence',
     'address',
-    
+
     'bootstrap3',
     'crispy_forms',
+    'easy_pdf',
 
     # S3
     'storages',
@@ -130,7 +131,7 @@ MIDDLEWARE = [
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
 
     # OR
-    'social_redirects.middleware.RedirectFallbackMiddleware'    
+    'social_redirects.middleware.RedirectFallbackMiddleware'
 
 ]
 
@@ -267,7 +268,7 @@ if not DEBUG:
         })
 
     ))
-    
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

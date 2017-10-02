@@ -15,7 +15,7 @@ class ApplicationForm(forms.ModelForm):
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
 
-    #crispy forms 
+    #crispy forms
     def __init__(self, *args, **kwargs):
         super(ApplicationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -23,7 +23,7 @@ class ApplicationForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.form_class = 'row'
         self.helper.form_id = 'application_form'
-        
+
         self.helper.layout = Layout(
             Div(
                 HTML('<h3>Your Group Information</h3>'),
@@ -62,7 +62,7 @@ class ApplicationForm(forms.ModelForm):
                 css_class='col-md-12'
             )
         )
-            
+
     class Meta:
         model = Application
         fields = ['group','rep_email','rep_first_name','rep_last_name','rep_phone',
@@ -144,7 +144,7 @@ class QuestionnaireForm(forms.ModelForm):
                 css_class='col-md-12'
             )
         )
-        
+
     class Meta:
         model = Questionnaire
         exclude = ['status']
@@ -161,7 +161,7 @@ class QuestionnaireResponseFormsetHelper(FormHelper):
         self.form_method = 'post'
         self.form_action = ''
         self.render_required_fields = True
-        
+
         # self.form_show_labels = False
         self.layout = Layout (
             Field('question',type='hidden'),
@@ -193,7 +193,7 @@ class LoginForm(forms.Form):
                 css_class='col-md-12'
             )
         )
-        
+
 class SubmitForm(forms.Form):
     agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
 
@@ -207,10 +207,10 @@ class SubmitForm(forms.Form):
             Field('agree',id='agree_field'),
             Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
-        
+
 class CandidateEmailForm(forms.Form):
     candidate_email = forms.EmailField()
-    
+
     def __init__(self, *args, **kwargs):
         super(CandidateEmailForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -253,23 +253,23 @@ class CandidateSubmitForm(forms.Form):
             Field('agree',id='agree_field'),
             Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
-        
+
 class InitiativeApplicationForm(forms.ModelForm):
     group_name = forms.CharField(label="Group Name")
     group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
                         queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
                         error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
-    
+
     LOCALITIES = (
        ('city', 'Citywide'),
        ('county', 'Countywide'),
        ('state', 'Statewide'),
     )
-    
+
     locality = forms.ChoiceField(label='Is this initiative:',choices=LOCALITIES, initial='state')
 
-    #crispy forms 
+    #crispy forms
     def __init__(self, *args, **kwargs):
         super(InitiativeApplicationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -277,7 +277,7 @@ class InitiativeApplicationForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.form_class = 'row'
         self.helper.form_id = 'application_form'
-        
+
         self.helper.layout = Layout(
             Div(
                 HTML('<h3>Your Group Information</h3>'),
@@ -323,11 +323,111 @@ class InitiativeApplicationForm(forms.ModelForm):
                 css_class='col-md-12'
             )
         )
-            
+
     class Meta:
         model = InitiativeApplication
         fields = ['group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info']
-        
+
         widgets = {
             'election_date': DateInput(),
         }
+
+class QuestionnaireExportForm(forms.ModelForm):
+    recommendation_author = forms.CharField(label="Recommendation Written By:",initial="Erika Andiola")
+    RECOMMENDATIONS = (
+       ('endorse', 'Endorse'),
+       ('no-endorse', 'Do Not Endorse'),
+    )
+
+    staff_recommendation = forms.ChoiceField(label='Staff Recommendation:',choices=RECOMMENDATIONS, initial='endorse')
+    candidate_held_office = forms.BooleanField(label="Has the candidate ever held public office?", initial=False, required=False)
+
+    #crispy forms
+    def __init__(self, *args, **kwargs):
+        super(QuestionnaireExportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.form_id = 'questionnaire_form'
+        self.helper.form_tag = False
+        self.fields['candidate_email'].required = False
+
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    Field('recommendation_author',wrapper_class='col-md-7'),
+                    Field('staff_recommendation',wrapper_class='col-md-5'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+            Div(
+                HTML('<h3>Candidate Information</h3>'),
+                Div(
+                    Field('candidate_first_name',wrapper_class='col-md-6'),
+                    Field('candidate_last_name',wrapper_class='col-md-6'),
+                    Field('candidate_bio',wrapper_class='col-md-12'),
+                    Field('candidate_office',wrapper_class='col-md-6'),
+                    Field('candidate_district',wrapper_class='col-md-6'),
+                    Field('candidate_city',wrapper_class='col-md-6'),
+                    Field('candidate_state',wrapper_class='col-md-6'),
+                    Field('candidate_party',wrapper_class='col-md-6'),
+                    Field('candidate_held_office',wrapper_class='col-md-12'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class='col-md-12'
+            ),
+            Div(
+                HTML('<h3>Election Information</h3>'),
+                Div(
+                    Field('primary_election_date',wrapper_class='col-md-6'),
+                    Field('general_election_date',wrapper_class='col-md-6'),
+                    css_class='br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class='col-md-12'
+            ),
+        )
+
+    class Meta:
+        model = Questionnaire
+        exclude = ()
+
+GroupFormset = forms.inlineformset_factory(Group, Application, exclude=[], extra=0, can_delete=False)
+
+#could have/should have probably done this with formsets
+class ApplicationExportForm(forms.ModelForm):
+    #crispy forms
+    def __init__(self, *args, **kwargs):
+        super(ApplicationExportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+        self.helper.form_class = 'row'
+        self.helper.form_id = 'application_form'
+        self.helper.form_tag = False
+
+        self.helper.layout = Layout(
+            Div(
+                HTML('<h3>State of the Race</h3>'),
+                Div(
+                    Field('vol_incumbent',wrapper_class='col-md-6'),
+                    Field('vol_other_progressives',wrapper_class='col-md-12'),
+                    Field('vol_polling',wrapper_class='col-md-12'),
+                    Field('vol_endorsements',wrapper_class='col-md-12'),
+                    Field('vol_advantage',wrapper_class='col-md-6'),
+                    Field('vol_turnout',wrapper_class='col-md-6'),
+                    Field('vol_win_number',wrapper_class='col-md-6'),
+                    Field('vol_fundraising',wrapper_class='col-md-6'),
+                    Field('vol_opponent_fundraising',wrapper_class='col-md-6'),
+                    Field('vol_crimes',wrapper_class='col-md-12'),
+                    Field('vol_notes',wrapper_class='col-md-12'),
+                    css_class = 'br3 pt20 f5f5f5-bg clearfix mb20'
+                ),
+                css_class="col-md-12",
+            ),
+        )
+
+    class Meta:
+        model = Application
+        exclude = ()
