@@ -119,68 +119,6 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     list_filter = ('status', 'candidate_state')
 
-    fieldsets = (
-        (None, {
-            'fields': (
-                'submitted_dt',
-                'status',
-                'authorized_email',
-            )
-        }),
-        ('Group Info', {
-            'fields': (
-                'group',
-                'rep_email',
-                'rep_first_name',
-                'rep_last_name',
-                'rep_phone',
-                'nomination',
-            ),
-        }),
-        ('Candidate Info', {
-            'fields': (
-                'candidate_first_name',
-                'candidate_last_name',
-                'candidate_office',
-                'candidate_district',
-                'candidate_city',
-                'candidate_state',
-                'get_general_election',
-                'get_primary_election',
-                'questionnaire',
-            ),
-        }),
-        ('Volunteer Research', {
-            'fields': (
-                'vol_incumbent',
-                'vol_dem_challenger',
-                'vol_other_progressives',
-                'vol_polling',
-                'vol_endorsements',
-                'vol_advantage',
-                'vol_turnout',
-                'vol_win_number',
-                'vol_fundraising',
-                'vol_opponent_fundraising',
-                'vol_crimes',
-                'vol_notes',
-            ),
-        }),
-        ('Staff', {
-            'fields': (
-                'staff',
-                'classification_level',
-                'staff_bio',
-                'state_of_the_race',
-                'local_group_info',
-                'staff_notes',
-                'vet_status',
-                'vet',
-                'local_support'
-            ),
-        })
-    )
-
     search_fields = (
         'group__name',
         'group__group_id',
@@ -224,6 +162,122 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     get_group_id.short_description = 'Group ID'
     get_group_id.admin_order_field = 'group__group_id'
+
+    def get_fieldsets(self, request, obj=None, **kwargs):
+        fieldsets = (
+            (None, {
+                'fields': (
+                    'submitted_dt',
+                    'status',
+                    'authorized_email',
+                )
+            }),
+            ('Group Info', {
+                'fields': (
+                    'group',
+                    'rep_email',
+                    'rep_first_name',
+                    'rep_last_name',
+                    'rep_phone',
+                    'nomination',
+                ),
+            }),
+            ('Candidate Info', {
+                'fields': (
+                    'candidate_first_name',
+                    'candidate_last_name',
+                    'candidate_office',
+                    'candidate_district',
+                    'candidate_city',
+                    'candidate_state',
+                    'get_general_election',
+                    'get_primary_election',
+                    'questionnaire',
+                ),
+            }),
+            ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'vol_dem_challenger',
+                    'vol_other_progressives',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            }),
+            ('Staff', {
+                'fields': (
+                    'staff',
+                    'classification_level',
+                    'staff_bio',
+                    'state_of_the_race',
+                    'local_group_info',
+                    'staff_notes',
+                    'vet_status',
+                    'vet',
+                    'local_support'
+                ),
+            })
+        )
+
+        volunteer_fieldsets = (
+            (None, {
+                'fields': (
+                    'submitted_dt',
+                    'status',
+                )
+            }),
+            ('Group Info', {
+                'fields': (
+                    'group',
+                ),
+            }),
+            ('Candidate Info', {
+                'fields': (
+                    'candidate_first_name',
+                    'candidate_last_name',
+                    'candidate_office',
+                    'candidate_district',
+                    'candidate_city',
+                    'candidate_state',
+                    'get_general_election',
+                    'get_primary_election',
+                ),
+            }),
+            ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'vol_dem_challenger',
+                    'vol_other_progressives',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            }),
+        )
+
+        is_vol = request.user.groups.filter(
+            name="Elections Research Volunteers"
+        ).exists()
+
+        if is_vol:
+            self.fieldsets = volunteer_fieldsets
+        else:
+            self.fieldsets = fieldsets
+
+        return super(ApplicationAdmin, self).get_fieldsets(request, obj, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         fields = (
