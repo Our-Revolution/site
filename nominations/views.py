@@ -503,7 +503,6 @@ class CreateInitiativeView(CreateView):
 class ApplicationPDFView(PDFTemplateView):
 
     template_name = 'admin/application_pdf.html'
-    download_filename = 'hello.pdf'
 
     def get_context_data(self, **kwargs):
         app_id = self.request.GET.get('id')
