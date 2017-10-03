@@ -1,0 +1,20 @@
+// Admin styles
+
+#result_list {
+  $padding: 2px;
+
+  th, td {
+    font-size: 12px;
+    padding: $padding;
+  }
+
+  thead th {
+    font-size: 11px;
+
+    .text {
+      a, span {
+        padding: $padding;
+      }
+    }
+  }
+}
