@@ -4,5 +4,9 @@
 
 #result_list thead th {
   font-size: 11px; }
+  #result_list thead th.sorted .sortoptions {
+    padding: 2px 2px 0; }
+  #result_list thead th.sorted .text {
+    padding-right: 40px; }
   #result_list thead th .text a, #result_list thead th .text span {
     padding: 2px; }
