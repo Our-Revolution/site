@@ -183,7 +183,7 @@ class Application(models.Model):
         blank=True,
         max_length=500,
         verbose_name='Other candidates running:',
-        help_text = 'Please indicate party affiliation and other progressives.'
+        help_text = 'Please indicate party affiliation and other progressives. Max length 500 characters.'
     )
     vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
     vol_endorsements = models.TextField(null=True, blank=True, max_length=500, verbose_name='Endorsements:')
