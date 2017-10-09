@@ -1,3 +1,4 @@
+import operator
 import unicodecsv
 from django.http import HttpResponse
 
@@ -10,7 +11,7 @@ def export_as_csv_action(description="Export selected objects as CSV file",
     """
     def export_as_csv(modeladmin, request, queryset):
         opts = modeladmin.model._meta
-        
+
         if not fields:
             field_names = [field.name for field in opts.fields]
         else:
@@ -23,7 +24,7 @@ def export_as_csv_action(description="Export selected objects as CSV file",
         if header:
             writer.writerow(field_names)
         for obj in queryset:
-            row = [getattr(obj, field)() if callable(getattr(obj, field)) else getattr(obj, field) for field in field_names]
+            row = [operator.attrgetter(field)(obj) if callable(operator.attrgetter(field)(obj)) else operator.attrgetter(field)(obj) for field in field_names]
             writer.writerow(row)
         return response
     export_as_csv.short_description = description
