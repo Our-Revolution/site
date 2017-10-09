@@ -24,6 +24,7 @@ def export_as_csv_action(description="Export selected objects as CSV file",
         if header:
             writer.writerow(field_names)
         for obj in queryset:
+            # use operator.attrgetter to support nested attributes
             row = [operator.attrgetter(field)(obj) if callable(operator.attrgetter(field)(obj)) else operator.attrgetter(field)(obj) for field in field_names]
             writer.writerow(row)
         return response

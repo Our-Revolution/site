@@ -126,6 +126,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         'authorized_email'
     )
 
+    # list fields for csv export
     export_fields = (
         'id',
         'user_id',
@@ -162,6 +163,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         'vol_notes',
     )
 
+    # set actions to include csv export with field list
     actions = [export_as_csv_action("CSV Export", export_fields)]
 
     list_filter = ('status','candidate_state',)
