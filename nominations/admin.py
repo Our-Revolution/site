@@ -145,6 +145,50 @@ class ApplicationAdmin(admin.ModelAdmin):
         'authorized_email'
     )
 
+    # list fields for csv export
+    export_fields = (
+        'id',
+        'user_id',
+        'create_dt',
+        'submitted_dt',
+        'nomination',
+        'questionnaire',
+        'group',
+        'rep_email',
+        'rep_first_name',
+        'rep_last_name',
+        'rep_phone',
+        'candidate_first_name',
+        'candidate_last_name',
+        'candidate_office',
+        'candidate_district',
+        'candidate_city',
+        'candidate_state',
+        'questionnaire.general_election_date',
+        'questionnaire.primary_election_date',
+        'authorized_email',
+        'status',
+        'vol_incumbent',
+        'vol_dem_challenger',
+        'vol_other_progressives',
+        'vol_polling',
+        'vol_endorsements',
+        'vol_advantage',
+        'vol_turnout',
+        'vol_win_number',
+        'vol_fundraising',
+        'vol_opponent_fundraising',
+        'vol_crimes',
+        'vol_notes',
+    )
+
+    # set actions to include csv export with field list
+    actions = [export_as_csv_action("CSV Export", export_fields)]
+
+    list_filter = ('status','candidate_state',)
+
+    search_fields = ('group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state')
+
     def get_general_election(self, obj):
         return obj.questionnaire.general_election_date
 
