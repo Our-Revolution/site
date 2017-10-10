@@ -101,6 +101,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
 
     list_display = (
+        'submitted_dt',
         'get_group_id',
         'group',
         'candidate_last_name',
@@ -109,8 +110,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         'candidate_state',
         'get_general_election',
         'get_primary_election',
-        'status',
-        'submitted_dt'
+        'status'
     )
 
     list_display_links = list_display

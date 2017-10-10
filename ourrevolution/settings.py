@@ -38,8 +38,19 @@ MANAGERS = ADMINS
 
 
 # Application definition
-
+'''
+When several applications provide different versions of the same resource
+(template, static file, management command, translation), the application listed
+first in INSTALLED_APPS has precedence.
+'''
 INSTALLED_APPS = [
+
+    # OR
+    'endorsements',
+    'pages',
+    'social_redirects',
+    'local_groups',
+    'nominations',
 
     #Django gulp
     'django_gulp',
@@ -90,14 +101,7 @@ INSTALLED_APPS = [
     'easy_pdf',
 
     # S3
-    'storages',
-
-    # OR.
-    'endorsements',
-    'pages',
-    'social_redirects',
-    'local_groups',
-    'nominations'
+    'storages'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
