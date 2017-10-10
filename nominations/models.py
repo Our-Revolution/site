@@ -191,7 +191,8 @@ class Application(models.Model):
     # Volunteer Data Entry
     vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
-<<<<<<< HEAD
+    # TODO: rename to vol_other_candidates and remove old field from code and db
+    # after a/b deploy issues are resolved
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
@@ -199,9 +200,6 @@ class Application(models.Model):
         verbose_name='Other candidates running:',
         help_text = 'Please indicate party affiliation and other progressives. Max length 500 characters.'
     )
-=======
-    vol_other_progressives = models.TextField(null=True, blank=True, max_length=500, verbose_name='Other progressives running:')
->>>>>>> master
     vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
     vol_endorsements = models.TextField(null=True, blank=True, max_length=500, verbose_name='Endorsements:')
     vol_advantage = models.CharField(null=True, blank=True, max_length=50, verbose_name='Previous Election D% or R% Advantage:')
