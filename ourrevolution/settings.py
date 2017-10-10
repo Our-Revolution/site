@@ -95,9 +95,10 @@ INSTALLED_APPS = [
     'django_countries',
     'recurrence',
     'address',
-
     'bootstrap3',
     'crispy_forms',
+    'ckeditor',
+    'easy_pdf',
 
     # S3
     'storages'
