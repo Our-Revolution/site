@@ -58,7 +58,10 @@ function bundle() {
 
 /* Compile SASS */
 gulp.task('sass', function() {
-  return gulp.src('pages/static/src/scss/main.scss')
+  return gulp.src([
+    'pages/static/src/scss/main.scss',
+    'pages/static/src/scss/admin.scss'
+  ])
   .pipe(sass().on('error', sass.logError))
   .pipe(sourcemaps.write())
   .pipe(autoprefixer({

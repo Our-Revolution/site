@@ -5,20 +5,32 @@ from django.db.models.signals import post_save
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
+from ckeditor.fields import RichTextField
 
 import datetime
 
-#TODO: automate endorsement -> approval -> candidates page
+# TODO: automate endorsement -> approval -> candidates page
+
 
 class Nomination(models.Model):
-    group_nomination_process = models.TextField(max_length=500, blank=False, null=True, verbose_name = "Briefly describe your group's nomination process")
+    group_nomination_process = models.TextField(
+        max_length=500,
+        blank=False,
+        null=True,
+        verbose_name="Briefly describe your group's nomination process"
+    )
 
     STATUSES = (
-       ('incomplete', 'Incomplete'),
-       ('complete', 'Complete'),
-   )
-    status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
+        ('incomplete', 'Incomplete'),
+        ('complete', 'Complete'),
+    )
 
+    status = models.CharField(
+        max_length=16,
+        choices=STATUSES,
+        default='incomplete',
+        blank=True
+    )
 
     def __unicode__(self):
         try:
@@ -141,7 +153,8 @@ class Application(models.Model):
         primary_key=False,
         null=True,
         blank=True,
-        related_name='application'
+        related_name='application',
+        verbose_name='Group Nomination Form:',
     )
 
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.SET_NULL, null=True, blank=True)
@@ -178,6 +191,7 @@ class Application(models.Model):
     # Volunteer Data Entry
     vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
+<<<<<<< HEAD
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
@@ -185,6 +199,9 @@ class Application(models.Model):
         verbose_name='Other candidates running:',
         help_text = 'Please indicate party affiliation and other progressives. Max length 500 characters.'
     )
+=======
+    vol_other_progressives = models.TextField(null=True, blank=True, max_length=500, verbose_name='Other progressives running:')
+>>>>>>> master
     vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
     vol_endorsements = models.TextField(null=True, blank=True, max_length=500, verbose_name='Endorsements:')
     vol_advantage = models.CharField(null=True, blank=True, max_length=50, verbose_name='Previous Election D% or R% Advantage:')
@@ -194,6 +211,92 @@ class Application(models.Model):
     vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
     vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
     vol_notes = models.TextField(null=True, blank=True, max_length=1000, verbose_name='Notes:', help_text = 'Max length 1000 characters.')
+
+    # Staff only research fields
+    CLASSIFICATIONS = (
+        ('1', 'I'),
+        ('2', 'II'),
+        ('3', 'III'),
+    )
+
+    STAFF = (
+        ('1', 'Erika Andiola'),
+    )
+
+    VET_STATUSES = (
+        ('0', 'Pending'),
+        ('1', 'Passed'),
+        ('2', 'Failed'),
+    )
+
+    RECOMMENDATIONS = (
+        ('1', 'Endorse'),
+        ('2', 'Do Not Endorse')
+    )
+
+    classification_level = models.CharField(
+        max_length=64,
+        choices=CLASSIFICATIONS,
+        default='1'
+    )
+
+    staff = models.CharField(
+        max_length=64,
+        choices=STAFF,
+        default='1'
+    )
+
+    recommendation = models.CharField(
+        max_length=64,
+        choices=RECOMMENDATIONS,
+        default='1'
+    )
+
+    staff_bio = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='Candidate Bio:',
+        help_text='This will prepopulate from the candidate questionnaire if left blank.'
+    )
+
+    state_of_the_race = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='State of the Race:',
+    )
+
+    local_group_info = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='OR Local Group Info:',
+        help_text='This will prepopulate from the local group\'s endorsement process if left blank.'
+    )
+
+    staff_notes = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='Notes or Flags:',
+        help_text='This will prepopulate from volunteer notes if left blank.'
+    )
+
+    vet_status = models.CharField(
+        max_length=64,
+        choices=VET_STATUSES,
+        default='0'
+    )
+
+    vet = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='Vet Details:',
+    )
+
+    local_support = RichTextField(
+        null=True,
+        blank=True,
+        verbose_name='Local Support:',
+        help_text='This will prepopulate from the local group\'s support question if left blank.'
+    )
 
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
@@ -207,6 +310,27 @@ class Application(models.Model):
 
         if self.status == 'submitted' and self.submitted_dt is None:
             self.submitted_dt = datetime.datetime.now()
+
+        # pre-populate staff write-up fields from already present info
+        if self.questionnaire:
+            if self.questionnaire.candidate_bio and not self.staff_bio:
+                self.staff_bio = self.questionnaire.candidate_bio
+
+        if self.nomination:
+            if self.nomination.group_nomination_process and not self.local_group_info:
+                self.local_group_info = self.nomination.group_nomination_process
+
+            # question ID 8 is "What actions will the group take
+            # and how many people have agreed to volunteer/support?
+            question = self.nomination.nominationresponse_set.filter(
+                question_id=8
+            ).first()
+
+            if question and not self.local_support:
+                self.local_support = str(question.response)
+
+        if self.vol_notes and not self.staff_notes:
+            self.staff_notes = self.vol_notes
 
         super(Application, self).save(*args, **kwargs)
 

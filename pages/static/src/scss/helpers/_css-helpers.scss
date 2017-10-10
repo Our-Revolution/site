@@ -511,10 +511,6 @@ a.white-text {
   font-weight: bolder;
   min-height: 300px;
 
-  .module__heading {
-    // text-shadow: 0 0 5px rgba(0,0,0,1);
-  }
-
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -529,10 +525,6 @@ a.white-text {
   font-weight: bolder;
   min-height: 300px;
 
-  .module__heading {
-    // text-shadow: 0 0 5px rgba(0,0,0,1);
-  }
-
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
@@ -546,10 +538,6 @@ a.white-text {
   color: white;
   font-weight: bolder;
   min-height: 300px;
-
-  .module__heading {
-    // text-shadow: 0 0 5px rgba(0,0,0,1);
-  }
 
   .article-type {
     font-weight: bolder;
@@ -1112,6 +1100,22 @@ a.white-text {
   .article-type {
     font-weight: bolder;
     text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
+.college-for-all-bg {
+  background: #fcf4d9 url('../img/college-for-all-countdown-web-background.jpg') center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: none;
+  }
+
+  .article-type {
+    font-weight: bolder;
+    // text-shadow: 0 0 5px rgba(0,0,0,1);
   }
 }
 

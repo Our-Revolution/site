@@ -6539,6 +6539,16 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
     font-weight: bolder;
     text-shadow: 0 0 5px black; }
 
+.college-for-all-bg {
+  background: #fcf4d9 url("../img/college-for-all-countdown-web-background.jpg") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .college-for-all-bg .module__heading, .college-for-all-bg .module__heading--small {
+    text-shadow: none; }
+  .college-for-all-bg .article-type {
+    font-weight: bolder; }
+
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
 

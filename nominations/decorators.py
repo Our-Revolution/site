@@ -18,7 +18,7 @@ class is_authenticated(object):
             response = redirect('/groups/nominations/login')
 
         return response
-        
+
 class is_authenticated_candidate(object):
 
     def __init__(self, view_func):
