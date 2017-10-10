@@ -16,6 +16,7 @@ dj-database-url==0.4.1
 -e git://github.com/Our-Revolution/django-address.git@37009b2d11ec084b9e50d4d703ffe18ed17b99c1#egg=django_address
 django-anymail==0.6.1
 django-bootstrap3==8.2.1
+django-ckeditor==5.3.0
 django-countries==4.1
 django-crispy-forms==1.6.1
 django-debug-toolbar==1.6
