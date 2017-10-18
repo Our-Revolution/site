@@ -1,6 +1,12 @@
 <div class="{% if not page.issuepage %}candidate-sign-up{% endif %} sign-up-form clearfix">
     {% if not page.issuepage %}<div class="col-md-6 col-md-offset-3">{% endif %}
-        <h3>{{ tagline }}</h3>
+        <h3>
+            {% if page.candidateendorsementpage %}
+                Join the fight to get {{ page.candidate.name }} elected.
+            {% else %}
+                {{ tagline }}
+            {% endif %}
+        </h3>
         <form action="https://go.ourrevolution.com/page/s/candidates-signup?source=ourrevolution.com{{ request.path }}" method="POST">
             <span class="form-group email">
                 <label for="email">Email Address</label>
