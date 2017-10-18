@@ -7,7 +7,7 @@ from django.template import Context
 from django.contrib import messages
 from django.db.models import Case, IntegerField, Value, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404, HttpResponseRedirect  
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -91,8 +91,7 @@ class CandidateEndorsementPage(Page):
 
     content_panels = Page.content_panels + [
             FieldPanel('body', classname="full"),
-            FieldPanel('candidate'),
-            FieldPanel('signup_tagline')
+            FieldPanel('candidate')
         ]
 
     promote_panels = Page.promote_panels + [
@@ -103,7 +102,7 @@ class CandidateEndorsementPage(Page):
 class CandidateEndorsementIndexPage(Page):
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.CandidateEndorsementPage']
-    
+
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['candidates'] = self.get_children().live().filter(candidateendorsementpage__candidate__election__is_active=True).select_related('candidateendorsementpage', 'candidateendorsementpage__candidate').order_by('candidateendorsementpage__candidate__state', 'candidateendorsementpage__candidate__district')
@@ -145,7 +144,7 @@ class InitiativeEndorsementPage(Page):
 class InitiativeEndorsementIndexPage(Page):
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.InitiativeEndorsementPage']
-    
+
     def get_context(self, *args, **kwargs):
         context = super(InitiativeEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['initiatives'] = self.get_children().live().select_related('initiativeendorsementpage', 'initiativeendorsementpage__initiative').order_by('-initiativeendorsementpage__initiative__featured', 'initiativeendorsementpage__initiative__state')
@@ -180,7 +179,7 @@ class IssuePage(Page):
 class IssueIndexPage(Page):
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.IssuePage']
-    
+
     def serve(self, request):
         # trickeryyyy...
         return IssuePage.objects.get(title='Income Inequality').serve(request)
@@ -205,14 +204,14 @@ class NewsIndex(Page):
     def get_context(self, request):
         context = super(NewsIndex, self).get_context(request)
         # context['news_posts'] = self.get_children().live().order_by('-id')
-        
+
         all_posts = self.get_children().live()
-        
+
         q = all_posts.extra(select={'first_published_at_is_null':'first_published_at IS NULL'})
         sorted_posts = q.order_by('first_published_at_is_null','-first_published_at','-go_live_at')
-        
+
         paginator = Paginator(sorted_posts, 5) # Show 5 resources per page
-        
+
         page = request.GET.get('page')
         try:
             resources = paginator.page(page)
@@ -222,9 +221,9 @@ class NewsIndex(Page):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             resources = paginator.page(paginator.num_pages)
-        
+
         context['resources'] = resources
-        
+
         return context
 
 
@@ -437,7 +436,7 @@ class TypeformPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
-        
+
 class YoutubePage(Page):
     abstract = RichTextField()
     body = StreamField([
@@ -459,7 +458,7 @@ class YoutubePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
-        
+
 class StateSplashPage(Page):
     abstract = RichTextField()
     body = RichTextField(null=True, blank=True)
@@ -474,7 +473,7 @@ class StateSplashPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
-        
+
 class ContentPage(Page):
     abstract = RichTextField()
     body = StreamField([
@@ -493,7 +492,7 @@ class ContentPage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
-        
+
 class FullContentPage(Page):
     abstract = RichTextField()
     body = StreamField([
@@ -532,27 +531,27 @@ class DonationPage(Page):
         context['donations'] = list(reader)
 
         return context
-        
+
 ## LOCAL GROUPS
 
-class GroupPage(RoutablePageMixin, Page):    
+class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
         groups = Group.objects.all().order_by('state_organizing_committee')
-        
+
         geojson_data = serializers.serialize("geojson",groups)
-        
+
         data = json.loads(geojson_data)
-        
+
         for d in data['features']:
             del d['properties']['rep_postal_code']
             del d['properties']['last_meeting']
             del d['properties']['constituency']
             del d['properties']['pk']
             d['properties']['signup_date'] = str(d['properties']['signup_date'])
-        
+
         groups_data = json.dumps(data)
-        
+
         return render(request, 'pages/group_index_page.html', {
             'page': self,
             'groups':groups_data
@@ -562,38 +561,38 @@ class GroupPage(RoutablePageMixin, Page):
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
         form = GroupForm(request.POST or None)
-        
+
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:
             # check whether it's valid:
-            
+
             if form.is_valid():
                 group = form.save(commit=False)
 
                 # Get new group id
                 group.group_id = str(self.get_new_group_id())
-                
+
                 slug = slugify(group.name)
-                
+
                 # TODO: unique slugs that aren't ugly
                 if not Group.objects.exclude(pk=group.pk).filter(slug=slug).exists():
                     group.slug = slug
-                
+
                 group.save()
                 form.save_m2m()
                 # process the data in form.cleaned_data as required
 
                 plaintext = get_template('pages/email/add_group_success.txt')
                 htmly     = get_template('pages/email/add_group_success.html')
-                
+
                 d = Context({'group_id': group.group_id})
-                
+
                 subject="Let's get your group on the map!"
                 from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
                 to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
                                                 form.cleaned_data['rep_last_name'],
                                                 form.cleaned_data['rep_email'])]
-                                                
+
                 text_content = plaintext.render(d)
                 html_content = htmly.render(d)
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
@@ -608,35 +607,35 @@ class GroupPage(RoutablePageMixin, Page):
                 messages.error(request, 'Please correct the errors marked in the form below.')
 
         return render(request, 'pages/add_group.html', {'form': form})
-        
+
     '''
     Get new group id that is random and not in use
     '''
     def get_new_group_id(self):
         '''
-        Find random integer between 1000 and 9998 and not in use by another group        
-        TODO: more scalable solution that doesn't use random guess approach and 
+        Find random integer between 1000 and 9998 and not in use by another group
+        TODO: more scalable solution that doesn't use random guess approach and
         supports more than 8999 groups
         '''
         group_id = None
         while (group_id is None or Group.objects.filter(group_id=str(group_id)).exists()):
-            group_id = randint(1000,9998)                    
+            group_id = randint(1000,9998)
         return group_id
-        
+
     @route(r'^success/$')
     def group_success_view(self, request):
         return render(request, 'pages/group_success_page.html', {
             'page': self
         })
 
-        
+
     @route(r'^(.+)/$')
     def group_view(self, request, group_slug):
         group = get_object_or_404(Group, slug=group_slug)
-        
+
         if group.status != 'approved':
             raise Http404
-        
+
         return render(request, 'pages/group_page.html', {
             'page': self,
             'group':group
