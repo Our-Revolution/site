@@ -325,7 +325,7 @@ class Application(models.Model):
             ).first()
 
             if question and not self.local_support:
-                self.local_support = str(question.response)
+                self.local_support = question.response.encode('utf-8')
 
         if self.vol_notes and not self.staff_notes:
             self.staff_notes = self.vol_notes
