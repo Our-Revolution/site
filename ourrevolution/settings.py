@@ -32,7 +32,10 @@ DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
 ALLOWED_HOSTS = '*'
 
-ADMINS = [('Chris Mabry', 'chris@ourrevolution.com')]
+ADMINS = [
+    ('Chris Mabry', 'chris@ourrevolution.com'), 
+    ('Eric Broder', 'eric@ourrevolution.com')
+]
 
 MANAGERS = ADMINS
 
