@@ -26,6 +26,24 @@ import csv, json
 
 from .forms import GroupForm
 
+class AboutPage(Page):
+    board_description = RichTextField()
+    board_list = RichTextField()
+    staff_description = RichTextField()
+    staff_list = RichTextField()
+    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    content_panels = Page.content_panels + [
+            FieldPanel('board_description'),
+            FieldPanel('board_list'),
+            FieldPanel('staff_description'),
+            FieldPanel('staff_list'),
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 class BasePage(Page):
     body = RichTextField(null=True, blank=True)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -37,7 +55,6 @@ class BasePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
-
 
 class TemplatePage(Page):
     template = models.CharField(max_length=128)
