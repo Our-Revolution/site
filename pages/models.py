@@ -29,6 +29,7 @@ from .forms import GroupForm
 class AboutPage(Page):
     board_description = RichTextField()
     board_list = RichTextField()
+    donors_description = RichTextField()
     staff_description = RichTextField()
     staff_list = RichTextField()
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -38,6 +39,7 @@ class AboutPage(Page):
             FieldPanel('board_list'),
             FieldPanel('staff_description'),
             FieldPanel('staff_list'),
+            FieldPanel('donors_description')
         ]
 
     promote_panels = Page.promote_panels + [
