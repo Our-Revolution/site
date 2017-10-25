@@ -8773,6 +8773,11 @@ footer {
   border: none;
   outline: none; }
 
+ul.list-plain,
+.list-plain ul {
+  list-style-type: none;
+  padding: 0px; }
+
 .navbar {
   border-radius: 0;
   width: 100%;

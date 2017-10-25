@@ -1,0 +1,9 @@
+// List styles
+
+ul {
+  &.list-plain,
+  .list-plain & {
+    list-style-type: none;
+    padding: 0px;
+  }
+}
