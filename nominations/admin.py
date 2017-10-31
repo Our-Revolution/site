@@ -86,8 +86,32 @@ class ResponseInline(ReadOnlyStackedInline):
 
 
 @admin.register(Questionnaire)
-class QuestionnaireAdmin(ReadOnlyAdmin):
-    inlines = [ResponseInline]
+class QuestionnaireAdmin(admin.ModelAdmin):
+    fields = (
+        'id',
+        'status',
+        'candidate_first_name',
+        'candidate_last_name',
+        'candidate_bio',
+        'candidate_email',
+        'candidate_phone',
+        'candidate_office',
+        'candidate_district',
+        'candidate_party',
+        'candidate_held_office',
+        'candidate_city',
+        'candidate_state',
+        'general_election_date',
+        'primary_election_date',
+        'candidate_website_url',
+        'candidate_volunteer_url',
+        'candidate_donate_url',
+        'candidate_facebook_url',
+        'candidate_twitter_url',
+        'candidate_instagram_url',
+        'candidate_youtube_url',
+        'completed_by_candidate',
+    )
 
     def get_model_perms(self, request):
         """
@@ -95,6 +119,33 @@ class QuestionnaireAdmin(ReadOnlyAdmin):
         """
         return {}
 
+    inlines = [ResponseInline]
+
+    # all except general_election_date
+    readonly_fields = (
+        'id',
+        'status',
+        'candidate_first_name',
+        'candidate_last_name',
+        'candidate_bio',
+        'candidate_email',
+        'candidate_phone',
+        'candidate_office',
+        'candidate_district',
+        'candidate_party',
+        'candidate_held_office',
+        'candidate_city',
+        'candidate_state',
+        'primary_election_date',
+        'candidate_website_url',
+        'candidate_volunteer_url',
+        'candidate_donate_url',
+        'candidate_facebook_url',
+        'candidate_twitter_url',
+        'candidate_instagram_url',
+        'candidate_youtube_url',
+        'completed_by_candidate',
+    )
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
