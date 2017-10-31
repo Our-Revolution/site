@@ -10,7 +10,7 @@
     {% if state %}
         <meta property="og:image" content="{{ MEDIA_URL }}state-share/{{ state }}_race_updates.png" />
     {% elif page.social_image %}
-        {% image page.social_image original as social_image_url %}            
+        {% image page.social_image original as social_image_url %}
         <meta property="og:image" content="{{ social_image_url.url }}" />
     {% else %}
         <meta property="og:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
@@ -25,7 +25,7 @@
     {% if state %}
         <meta name="twitter:image" content="{{ MEDIA_URL }}state-share/{{ state }}_race_updates.png" />
     {% elif page.social_image %}
-        {% image page.social_image original as social_image_url %}            
+        {% image page.social_image original as social_image_url %}
         <meta name="twitter:image" content="{{ social_image_url.url }}" />
     {% else %}
         <meta name="twitter:image" content="https://ourrevolution.com/static/dist/img/fb.png" />
@@ -38,7 +38,7 @@
 
 
         <div class="container-fluid election-tracker">
-          
+
             <div class="row">
               <div class="page-heading--full clearfix">
                 <div class="container heading-container">
@@ -47,17 +47,17 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="row">
               <div class="results-selector">
                 <div class="container text-center">
                     <a href="#" class="uppercase active" data-show="candidates">Candidates</a>
-                  
+
                     <a href="#" class="uppercase" data-show="initiatives">Initiatives</a>
                 </div>
               </div>
             </div>
-          
+
             <div class="row">
                 <div class="container">
                     <div class="page-sub-nav filter clearfix">
@@ -75,7 +75,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                     <!-- completely arbitrary; maybe this should be an admin setting, even -->
                     <div id="candidates">
                         <!-- {% if page.body %}
@@ -85,7 +85,7 @@
                         {% if candidate_race_snippets.exists %}
                             <h2>Our Candidates</h2>
                             <hr>
-                        
+
                             <div id="candidates-list">
                               <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
                               <ul class="card-list third list card-list--results">
@@ -102,7 +102,7 @@
                                                         <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                         <span class="card__item bottom">{{ candidate.office }}</span>
                                                     </div>
-                                                    
+
                                                     {% comment %}
                                                       <div class="card__item card__item--share">
                                                         <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
@@ -117,33 +117,33 @@
                                                       </div>
                                                     {% endcomment %}
                                                   </div>
-                                                  
-                                                    <div class="card__results {% if candidate_race.result %} 
+
+                                                    <div class="card__results {% if candidate_race.result %}
                                                       {{ candidate_race.get_result_display }}
-                                                    {% endif %}" {% if candidate_race.result %} 
+                                                    {% endif %}" {% if candidate_race.result %}
                                                     data-won="{{ candidate_race.get_result_display }}"
                                                     {% endif %}>
                                                         <div class="card__results--status clearfix">
                                                           <div class="card__results--reporting pull-left">{% if 'win' in candidate_race.result %}<span class="uppercase ls2 boldest">Win</span> {% elif 'lose' in candidate_race.result %} <span class="uppercase ls2 boldest">Loss</span> {% elif candidate_race.notes %} {{ candidate_race.notes }} {% endif %}</div>
-                                                          
+
                                                           {% if candidate_race.last_updated %}
                                                               <div class="card__results--updated pull-right">Last updated {{ candidate_race.last_updated | timesince }} ago</div>
                                                           {% endif %}
                                                         </div>
-                                                        
+
                                                         <div class="card__results--numbers">
                                                           <div class="card__results--result">
                                                               <div>{{candidate.name}}</div>
                                                               <div class="card__results--percentage">{{ candidate_race.candidate_votes_percentage }}</div>
                                                               <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                           </div>
-                                                          
-                                                          <div class="card__results--seperator">{% if 'win' in candidate_race.result %} 
+
+                                                          <div class="card__results--seperator">{% if 'win' in candidate_race.result %}
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                           {% else %}
                                                             -
                                                           {% endif %}</div>
-                                                          
+
                                                           <div class="card__results--result">
                                                             <div>Opponent</div>
                                                             <div class="card__results--percentage">{{ candidate_race.opponent_votes_percentage }}</div>
@@ -151,7 +151,7 @@
                                                           </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                           {% endwith %}
 
                                       {% endwith %}
@@ -163,13 +163,13 @@
                         {% endif %}
 
                     </div>
-                    
+
                     <div id="initiatives">
 
                       {% if initiative_race_snippets.exists %}
                           <h2>Our Initiatives</h2>
                           <hr>
-                          
+
                           <div id="initiatives-list">
                           <div class="no-result text-center"><h3>No Matching Initiatives Found</h3></div>
                           <ul class="card-list third list card-list--results">
@@ -185,7 +185,7 @@
                                             <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
-                                          
+
                                           <div class="card__item card__item--share">
                                             <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
                                             <a href="https://twitter.com/intent/tweet?text={% spaceless %}
@@ -198,31 +198,31 @@
                                                             {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
                                          </div>
                                         </div>
-                                        
-                                        <div class="card__results {% if initiative_race.result %} 
+
+                                        <div class="card__results {% if initiative_race.result %}
                                           {{ initiative_race.get_result_display }}
                                         {% endif %}">
                                             <div class="card__results--status clearfix">
                                               <div class="card__results--reporting pull-left">{% if initiative_race.notes %} {{ initiative_race.notes }} {% endif %}</div>
-                                              
+
                                               {% if initiative_race.last_updated %}
                                                   <div class="card__results--updated pull-right">Last updated {{ initiative_race.last_updated | timesince }} ago</div>
                                               {% endif %}
                                             </div>
-                                            
+
                                             <div class="card__results--numbers">
                                               <div class="card__results--result">
                                                   <div class="uppercase">{{ initiative.vote | yesno | title }}</div>
                                                   <div class="card__results--percentage">{{ initiative_race.initiative_votes_percentage }}</div>
                                                   <div class="card__results--votes">{{ initiative_race.initiative_votes | intcomma }}</div>
                                               </div>
-                                              
-                                              <div class="card__results--seperator">{% if 'win' in initiative_race.result %} 
+
+                                              <div class="card__results--seperator">{% if 'win' in initiative_race.result %}
                                                 <span class="glyphicon glyphicon-ok"></span>
                                               {% else %}
                                                 -
                                               {% endif %}</div>
-                                              
+
                                               <div class="card__results--result">
                                                 <div class="uppercase">{{ initiative.vote | yesno:"No,Yes" | title }}</div>
                                                 <div class="card__results--percentage">{{ initiative_race.opponent_votes_percentage }}</div>
@@ -244,7 +244,7 @@
 
                         <h2>Our Initiatives</h2>
                         <hr>
-                        
+
                         <div class="text-center" style="margin: 40px 0 60px;">
                           <h3>No Initiative Results To Show Yet</h3>
                           <p>Head over to <a href="/ballot-initiatives/">Our Initiatives</a> to
@@ -252,16 +252,16 @@
                         </div>
 
                       {% endif %}
-                    
+
                     </div>
 
                 </div>
             </div>
         </div>
-        
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.js"></script>
-        
-        <script>      
+
+        <script>
           // function filter(category) {
           //   if (category && category != 'all') {
           //     List.filter(function (item) {
@@ -274,34 +274,34 @@
           //     List.filter();
           //   }
           // }
-          
+
           $(document).ready(function() {
             $('#initiatives').hide();
-            
+
             $('.results-selector a').on('click', function() {
               var show = $(this).attr('data-show');
               var sortingBy = "state";
               var sortingAsc = true;
-              
+
               $(".sort-buttons .btn").each(function(e) {
                 $(this).removeClass("active");
                 $(this).removeClass("asc");
                 $(this).removeClass("desc");
               });
-              
+
               $('.no-result').hide();
-              
+
               $('.results-selector a').removeClass('active');
-              
+
               $('#candidates').hide();
               $('#initiatives').hide();
-              
+
               $(this).addClass('active');
-              
+
               list = new List(show + '-list', options);
-              
+
               $('#' + show).show();
-              
+
               list.on("updated", function(list) {
                 console.log('test');
                 if (list.matchingItems.length > 0) {
@@ -311,12 +311,13 @@
                 }
               })
             })
-            
+
             var sortingBy = "state";
             var sortingAsc = true;
-            
+
             var options = {
                 valueNames: [
+                  'name',
                   'state',
                   { attr: 'sort-by', data: 'wins' }
                 ],
@@ -326,15 +327,15 @@
             };
 
             var list = new List('candidates-list', options);
-            
+
             var self = this;
-            
+
             // sorting
             // Functions
             function fuzzySearch(e) {
               list.fuzzySearch.search(e.value);
             }
-            
+
             function sort(sortBy) {
             if (sortingBy === sortBy) {
               if (sortingAsc) {
@@ -352,7 +353,7 @@
 
             sortingBy = sortBy;
             }
-            
+
             $(".sort-buttons").on("click", function(e) {
               var btn = $(e.target).closest(".btn");
               var sortByData = btn.attr("sort-by");
@@ -386,11 +387,11 @@
                   });
 
             });
-            
-            $('#fuzzy-search').on('keyup', function() {              
+
+            $('#fuzzy-search').on('keyup', function() {
               fuzzySearch(this);
             })
-            // 
+            //
             list.on("updated", function(list) {
               if (list.matchingItems.length > 0) {
                 $('.no-result').hide()
