@@ -87,8 +87,6 @@ class ResponseInline(ReadOnlyStackedInline):
 
 @admin.register(Questionnaire)
 class QuestionnaireAdmin(admin.ModelAdmin):
-    inlines = [ResponseInline]
-
     fields = (
         'id',
         'status',
@@ -115,6 +113,14 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         'completed_by_candidate',
     )
 
+    inlines = [ResponseInline]
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
     # all except general_election_date
     readonly_fields = (
         'id',
@@ -140,13 +146,6 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         'candidate_youtube_url',
         'completed_by_candidate',
     )
-
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
