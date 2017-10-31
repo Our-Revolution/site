@@ -113,13 +113,13 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         'completed_by_candidate',
     )
 
-    inlines = [ResponseInline]
-
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
+    inlines = [ResponseInline]
 
     # all except general_election_date
     readonly_fields = (
