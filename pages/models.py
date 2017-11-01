@@ -19,6 +19,7 @@ from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from local_groups.models import Group
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 
 from random import randint
@@ -57,6 +58,22 @@ class BasePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+@register_snippet
+@python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
+class NotificationBanner(models.Model):
+    content = models.CharField(max_length=128)
+    link_text = models.CharField(max_length=128)
+    link_url = models.URLField()
+
+    panels = [
+        FieldPanel('content'),
+        FieldPanel('link_text'),
+        FieldPanel('link_url'),
+    ]
+
+    def __str__(self):
+        return self.content
 
 class TemplatePage(Page):
     template = models.CharField(max_length=128)

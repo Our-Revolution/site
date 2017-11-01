@@ -1,0 +1,14 @@
+{% for notification in notification_banner %}
+    <div class="notification-banner">
+      <div class="container">
+        <span class="notification-banner__content">
+          {{ notification.content }}
+          <a href="{{ notification.link_url }}"
+          class="btn btn-outline notification-banner__link" target="_blank"
+          onclick="trackOutboundLink('{{ notification.link_url }}',true)">
+            {{ notification.link_text }}
+          </a>
+        </span>
+      </div>
+    </div>
+{% endfor %}
