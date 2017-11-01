@@ -65,11 +65,16 @@ class NotificationBanner(models.Model):
     content = models.CharField(max_length=128)
     link_text = models.CharField(max_length=128)
     link_url = models.URLField()
+    show = models.BooleanField(
+        default=False,
+        help_text='Show notification banner on all pages.'
+    )
 
     panels = [
         FieldPanel('content'),
         FieldPanel('link_text'),
         FieldPanel('link_url'),
+        FieldPanel('show'),
     ]
 
     def __str__(self):

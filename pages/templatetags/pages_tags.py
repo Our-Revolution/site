@@ -3,11 +3,10 @@ from pages.models import *
 
 register = template.Library()
 
-# Notification Banner snippet
-@register.inclusion_tag('pages/tags/notification_banner.html', takes_context=True)
+# Notification Banner snippets that are set to show
+@register.inclusion_tag('pages/tags/notification-banner.html', takes_context=True)
 def notification_banner(context):
-    # TODO: return only one item instead of all objects
     return {
-        'notification_banner': NotificationBanner.objects.all(),
+        'notifications': NotificationBanner.objects.filter(show=True),
         'request': context['request'],
     }
