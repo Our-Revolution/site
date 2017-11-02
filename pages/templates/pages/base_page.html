@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    {% load bootstrap3 static wagtailcore_tags wagtailimages_tags %}
+    {% load bootstrap3 static wagtailcore_tags wagtailimages_tags pages_tags %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>{% block page_title %}Our Revolution - {% firstof page.seo_title page.title "Home" %}{% endblock %}</title>
@@ -62,7 +62,8 @@
     {% bootstrap_javascript jquery=1 %}
     <!-- {% bootstrap_messages %}     -->
 
-    <!-- {% include "partials/notification-banner.html" %} -->
+    {% notification_banner %}
+
     {% include "partials/nav.html" %}
 
     {% block content %}
