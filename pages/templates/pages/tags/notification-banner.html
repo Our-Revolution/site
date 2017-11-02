@@ -1,15 +1,15 @@
-<!-- notification banner -->
 {% if notification_banner %}
-    <div class="notification-banner">
-      <div class="container">
-        <span class="notification-banner__content">
-          {{ notification_banner.content }}
-          <a href="{{ notification_banner.link_url }}"
-          class="btn btn-outline notification-banner__link" target="_blank"
-          onclick="trackOutboundLink('{{ notification_banner.link_url }}',true)">
-            {{ notification_banner.link_text }}
-          </a>
-        </span>
-      </div>
+  <!-- notification banner -->
+  <div class="notification-banner">
+    <div class="container">
+      <span class="notification-banner__content">
+        {{ notification_banner.content }}
+        <a href="{{ notification_banner.link_url }}"
+        class="btn btn-outline notification-banner__link" target="_blank"
+        onclick="trackOutboundLink('{{ notification_banner.link_url }}',true)">
+          {{ notification_banner.link_text }}
+        </a>
+      </span>
     </div>
+  </div>
 {% endif %}
