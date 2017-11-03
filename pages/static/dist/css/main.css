@@ -6363,6 +6363,16 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   background-size: cover;
   color: white; }
 
+.gotv-2017-bg {
+  background: white url("../img/gotv-2017-bg.png") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .gotv-2017-bg .module__heading, .gotv-2017-bg .module__heading--small {
+    text-shadow: none; }
+  .gotv-2017-bg .article-type {
+    font-weight: bolder; }
+
 .groups-bg {
   background: #218fff url("../img/local-groups.jpg");
   background-size: cover;
@@ -6547,16 +6557,6 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   .college-for-all-bg .module__heading, .college-for-all-bg .module__heading--small {
     text-shadow: none; }
   .college-for-all-bg .article-type {
-    font-weight: bolder; }
-
-.gotv-2017-bg {
-  background: white url("../img/gotv-2017-bg.png") center;
-  background-size: cover;
-  color: white;
-  font-weight: bolder; }
-  .gotv-2017-bg .module__heading, .gotv-2017-bg .module__heading--small {
-    text-shadow: none; }
-  .gotv-2017-bg .article-type {
     font-weight: bolder; }
 
 .cupcake-bg {

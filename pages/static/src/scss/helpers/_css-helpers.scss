@@ -847,6 +847,21 @@ a.white-text {
   // }
 }
 
+.gotv-2017-bg {
+  background: white url('../img/gotv-2017-bg.png') center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: none;
+  }
+
+  .article-type {
+    font-weight: bolder;
+  }
+}
+
 .groups-bg {
   background: $blue url('../img/local-groups.jpg');
   background-size: cover;
@@ -1116,21 +1131,6 @@ a.white-text {
   .article-type {
     font-weight: bolder;
     // text-shadow: 0 0 5px rgba(0,0,0,1);
-  }
-}
-
-.gotv-2017-bg {
-  background: white url('../img/gotv-2017-bg.png') center;
-  background-size: cover;
-  color: white;
-  font-weight: bolder;
-
-  .module__heading {
-    text-shadow: none;
-  }
-
-  .article-type {
-    font-weight: bolder;
   }
 }
 
