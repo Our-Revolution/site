@@ -1119,6 +1119,21 @@ a.white-text {
   }
 }
 
+.gotv-2017-bg {
+  background: white url('../img/gotv-2017-bg.png') center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: none;
+  }
+
+  .article-type {
+    font-weight: bolder;
+  }
+}
+
 .cupcake-bg {
   background: white url('../img/year-one/birthday-background.png') center repeat;
 }
