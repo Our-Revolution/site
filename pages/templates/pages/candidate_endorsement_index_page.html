@@ -3,7 +3,7 @@
 {% load static wagtailcore_tags %}
 
 {% block content %}
-  
+
 
   <div class="container-fluid">
     <div class="row">
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="container pt2 pb2">
       <h3>2017 Endorsements</h3>
       <hr>
@@ -35,24 +35,22 @@
                     </div>
                 </div>
             </div>
-      
+
       <div id="candidates-list">
         <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
         <ul class="card-list list">
           {% for candidate_page in candidates %}
               {% with candidate_page.candidateendorsementpage.candidate as candidate %}
-                  {% if candidate.show %}
-                      <li class="card clearfix">
-                          <a href="{% pageurl candidate_page %}">
-                              <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
-                              <div class="card__content">
-                                  <span class="card__item name">{{ candidate.name }}</span>
-                                  <span class="card__item bold smaller state">{{ candidate.state }} {{ candidate.district }}</span>
-                                  <span class="card__item bottom">{% if candidate.primary_date %}<div class="card__item smaller bold">Election: <span class="date hidden">{{ candidate.primary_date|date:"U" }}</span>{{ candidate.primary_date }}</div> {% endif %}{{ candidate.office }}</span>
-                              </div>
-                          </a>
-                      </li>
-                  {% endif %}
+                  <li class="card clearfix">
+                      <a href="{% pageurl candidate_page %}">
+                          <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
+                          <div class="card__content">
+                              <span class="card__item name">{{ candidate.name }}</span>
+                              <span class="card__item bold smaller state">{{ candidate.state }} {{ candidate.district }}</span>
+                              <span class="card__item bottom">{% if candidate.primary_date %}<div class="card__item smaller bold">Election: <span class="date hidden">{{ candidate.primary_date|date:"U" }}</span>{{ candidate.primary_date }}</div> {% endif %}{{ candidate.office }}</span>
+                          </div>
+                      </a>
+                  </li>
               {% endwith %}
           {% endfor %}
         </ul>
@@ -66,15 +64,15 @@
       		<div class="col-md-8 col-md-offset-2">
             <div class="row">
               <div class="col-md-8 col-md-offset-2">
-                <h2 class="mb20">Past Election Results</h2>  
+                <h2 class="mb20">Past Election Results</h2>
                 <a href="/2017-elections-results/" class="btn btn-block btn-primary ls2 uppercase">2017 Results</a>
                 <a href="/election-2016" class="btn btn-block btn-secondary ls2 uppercase">2016 Results</a>
-                
+
                 <hr>
-                
+
                 <h2>Nominate a Candidate</h2>
                 <p class="fs18">Our Revolution is made up of hundreds of local groups all across the world, and all of our endorsements must first originate with a nomination from an official group. <strong>Get started submitting your group’s nomination now.</strong></p>
-          		  
+
                 <a href="/groups/nominations" class="btn btn-secondary btn-block ls2 uppercase mt20">Get Started</a>
                 <p class="mt20"><small>Endorsement requests must be submitted at least 30 days before the candidate's election in order to be eligible for an endorsement.</small></p>
         			</div>
@@ -84,9 +82,9 @@
   		</div>
 	  </div>
 	</div>
-  
+
   <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-  
+
   <script>
   var sortingBy = "state";
   var sortingAsc = true;
@@ -155,7 +153,7 @@
   //   else
   //     window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
   // }
-  
+
   var options = {
       valueNames: [
         'state',
