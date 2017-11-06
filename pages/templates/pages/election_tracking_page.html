@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
@@ -95,28 +95,38 @@
                                           {% with candidate_race.candidate as candidate %}
 
                                               <li class="card clearfix">
-                                                  <div class="card__photo" style="background-image: url({{ candidate.photo.url }})"></div>
-                                                    <div class="card__content">
-                                                      <div class="candidate__info">
-                                                        <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
-                                                        <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
-                                                        <span class="card__item bottom">{{ candidate.office }}</span>
-                                                    </div>
 
-                                                    {% comment %}
-                                                      <div class="card__item card__item--share">
-                                                        <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                                        <a href="https://twitter.com/intent/tweet?text={% spaceless %}
-                                                              {% if candidate_race.candidate_votes == 0 and candidate_race.opponent_votes == 0 %}
-                                                                  Polls for {{ candidate.name }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
-                                                              {% elif candidate_race.candidate_votes > candidate_race.opponent_votes %}
-                                                                  {{ candidate.name }} is leading {{ candidate_race.candidate_votes_percentage | urlencode }} to {{ candidate_race.opponent_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                              {% else %}
-                                                                  {{ candidate.name }} is trailing {{ candidate_race.opponent_votes_percentage | urlencode }} to {{ candidate_race.candidate_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                              {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                                      </div>
-                                                    {% endcomment %}
+                                                {% if candidate_race.candidate_endorsement_page %}
+                                                  <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
+                                                {% endif %}
+
+                                                <div class="card__photo"
+                                                style="background-image: url({{ candidate.photo.url }})">
+                                                </div>
+                                                <div class="card__content">
+                                                  <div class="candidate__info">
+                                                    <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
+                                                    <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
+                                                    <span class="card__item bottom">{{ candidate.office }}</span>
                                                   </div>
+                                                  {% comment %}
+                                                    <div class="card__item card__item--share">
+                                                      <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                                      <a href="https://twitter.com/intent/tweet?text={% spaceless %}
+                                                            {% if candidate_race.candidate_votes == 0 and candidate_race.opponent_votes == 0 %}
+                                                                Polls for {{ candidate.name }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
+                                                            {% elif candidate_race.candidate_votes > candidate_race.opponent_votes %}
+                                                                {{ candidate.name }} is leading {{ candidate_race.candidate_votes_percentage | urlencode }} to {{ candidate_race.opponent_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% else %}
+                                                                {{ candidate.name }} is trailing {{ candidate_race.opponent_votes_percentage | urlencode }} to {{ candidate_race.candidate_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
+                                                            {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                                    </div>
+                                                  {% endcomment %}
+                                                </div>
+
+                                                {% if candidate_race.candidate_endorsement_page %}
+                                                  </a>
+                                                {% endif %}
 
                                                     <div class="card__results {% if candidate_race.result %}
                                                       {{ candidate_race.get_result_display }}
@@ -179,12 +189,22 @@
                                   {% with initiative_race.initiative as initiative %}
 
                                       <li class="card clearfix">
+
                                         <div class="card__content full initiative">
+
+                                          {% if initiative_race.initiative_endorsement_page %}
+                                            <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
+                                          {% endif %}
+
                                           <div>
                                             <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
                                             <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
+
+                                          {% if initiative_race.initiative_endorsement_page %}
+                                            </a>
+                                          {% endif %}
 
                                           <div class="card__item card__item--share">
                                             <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
