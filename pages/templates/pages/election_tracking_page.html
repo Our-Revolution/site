@@ -103,21 +103,13 @@
                                                 <div class="card__photo"
                                                 style="background-image: url({{ candidate.photo.url }})">
                                                 </div>
-                                                </a>
 
                                                 <div class="card__content">
-
-                                                  {% if candidate_race.candidate_endorsement_page %}
-                                                    <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
-                                                  {% endif %}
                                                   <div class="candidate__info">
                                                     <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
                                                     <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                     <span class="card__item bottom">{{ candidate.office }}</span>
                                                   </div>
-                                                  {% if candidate_race.candidate_endorsement_page %}
-                                                    </a>
-                                                  {% endif %}
 
                                                   {% comment %}
                                                     <div class="card__item card__item--share">
@@ -133,6 +125,7 @@
                                                     </div>
                                                   {% endcomment %}
                                                 </div>
+                                              </a>
 
                                                     <div class="card__results {% if candidate_race.result %}
                                                       {{ candidate_race.get_result_display }}
@@ -195,19 +188,18 @@
                                   {% with initiative_race.initiative as initiative %}
 
                                       <li class="card clearfix">
-                                        <div class="card__content full initiative">
 
-                                          {% if initiative_race.initiative_endorsement_page %}
-                                          <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
-                                          {% else %}
-                                          <a href="/ballot-initiatives/{{ initiative.slug }}">
-                                          {% endif %}
+                                        {% if initiative_race.initiative_endorsement_page %}
+                                        <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
+                                        {% else %}
+                                        <a href="/ballot-initiatives/{{ initiative.slug }}">
+                                        {% endif %}
+                                        <div class="card__content full initiative">
                                           <div>
                                             <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
                                             <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
-                                          </a>
 
                                           {% comment %}
                                             <div class="card__item card__item--share">
@@ -220,10 +212,11 @@
                                                               {% else %}
                                                                   {{ initiative.name }} is trailing {{ initiative_race.opponent_votes_percentage | urlencode }} to {{ initiative_race.initiative_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
                                                               {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                           </div>
-                                         {% endcomment %}
+                                            </div>
+                                          {% endcomment %}
 
                                         </div>
+                                        </a>
 
                                         <div class="card__results {% if initiative_race.result %}
                                           {{ initiative_race.get_result_display }}
