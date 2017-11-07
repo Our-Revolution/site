@@ -99,16 +99,27 @@
                                                 {% if candidate_race.candidate_endorsement_page %}
                                                   <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
                                                 {% endif %}
-
                                                 <div class="card__photo"
                                                 style="background-image: url({{ candidate.photo.url }})">
                                                 </div>
+                                                {% if candidate_race.candidate_endorsement_page %}
+                                                  </a>
+                                                {% endif %}
+
                                                 <div class="card__content">
+
+                                                  {% if candidate_race.candidate_endorsement_page %}
+                                                    <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
+                                                  {% endif %}
                                                   <div class="candidate__info">
                                                     <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
                                                     <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
                                                     <span class="card__item bottom">{{ candidate.office }}</span>
                                                   </div>
+                                                  {% if candidate_race.candidate_endorsement_page %}
+                                                    </a>
+                                                  {% endif %}
+
                                                   {% comment %}
                                                     <div class="card__item card__item--share">
                                                       <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
@@ -123,10 +134,6 @@
                                                     </div>
                                                   {% endcomment %}
                                                 </div>
-
-                                                {% if candidate_race.candidate_endorsement_page %}
-                                                  </a>
-                                                {% endif %}
 
                                                     <div class="card__results {% if candidate_race.result %}
                                                       {{ candidate_race.get_result_display }}
