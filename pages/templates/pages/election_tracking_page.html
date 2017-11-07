@@ -196,19 +196,16 @@
                                   {% with initiative_race.initiative as initiative %}
 
                                       <li class="card clearfix">
-
                                         <div class="card__content full initiative">
 
                                           {% if initiative_race.initiative_endorsement_page %}
                                             <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
                                           {% endif %}
-
                                           <div>
                                             <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
                                             <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
-
                                           {% if initiative_race.initiative_endorsement_page %}
                                             </a>
                                           {% endif %}
