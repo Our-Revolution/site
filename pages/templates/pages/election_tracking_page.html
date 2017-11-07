@@ -19,7 +19,7 @@
 
 {% block meta_twitter %}
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="Our Revolution"/>
+    <meta name="twitter:title" content="{% firstof page.seo_title page.title "Our Revolution" %}"/>
     <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta name="twitter:site" content="@OurRevolution"/>
     {% if state %}
