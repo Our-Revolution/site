@@ -17,12 +17,11 @@
               <div class="pa20 br3 dark-wash">
                 <span class="article-type">Election 2017</span>
                 <h1 class="mt0">
-                  Phonebank for progressive candidates today and help get out
-                  the vote.
+                  Browse our candidates and get the latest information on all
+                  2017 election results here.
                 </h1>
-                <a href="http://ourrev.us/call"
-                class="btn btn-block btn-primary ls2 uppercase"
-                onclick="trackOutboundLink('http://ourrev.us/call',true)">
+                <a href="/candidates/"
+                class="btn btn-block btn-primary ls2 uppercase">
                   Get Started
                 </a>
               </div>
@@ -31,8 +30,23 @@
         </div>
 
         <div class="module-col forty margin-left table">
-            <div class="module sixty centered phonebank-bg white-text br3"
-            id="news-module-home">
+
+          <div class="module full centered map-bg white-text br3">
+            <div class="module__content br3">
+              <div class="pa20 br3 dark-wash">
+                <span class="article-type">Local Groups</span>
+                <h3 class="mt0">
+                  Find or create a local group in your area today.
+                </h3>
+                <a href="/groups" class="btn btn-block btn-secondary ls2 uppercase">
+                  Find a Group
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {% comment %}
+            <div class="module sixty centered phonebank-bg white-text br3">
                 <div class="module__content br3">
                   <div class="pa20 br3 dark-wash">
                     <span class="article-type">Text For Our Revolution</span>
@@ -47,17 +61,9 @@
                     </a>
                   </div>
                 </div>
-              </div>
-
-          <div class="module forty margin-top centered map-bg white-text br3">
-            <div class="module__content br3">
-              <div class="pa20 br3 dark-wash">
-                <span class="article-type">Local Groups</span>
-                <h3 class="mt0">Find or create a local group in your area today.</h3>
-                <a href="/groups" class="btn btn-block btn-secondary ls2 uppercase">Find a Group</a>
-              </div>
             </div>
-          </div>
+          {% endcomment %}
+
         </div>
       </section>
     </div>
