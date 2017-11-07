@@ -146,7 +146,16 @@ class CandidateEndorsementIndexPage(Page):
 
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
-        context['candidates'] = self.get_children().live().filter(candidateendorsementpage__candidate__election__is_active=True).select_related('candidateendorsementpage', 'candidateendorsementpage__candidate').order_by('candidateendorsementpage__candidate__state', 'candidateendorsementpage__candidate__district')
+        context['candidates'] = self.get_children().live().filter(
+            candidateendorsementpage__candidate__election__is_active=True,
+            candidateendorsementpage__candidate__show=True
+        ).select_related(
+            'candidateendorsementpage',
+            'candidateendorsementpage__candidate'
+        ).order_by(
+            'candidateendorsementpage__candidate__state',
+            'candidateendorsementpage__candidate__district'
+        )
         return context
 
     promote_panels = Page.promote_panels + [
@@ -188,7 +197,15 @@ class InitiativeEndorsementIndexPage(Page):
 
     def get_context(self, *args, **kwargs):
         context = super(InitiativeEndorsementIndexPage, self).get_context(*args, **kwargs)
-        context['initiatives'] = self.get_children().live().select_related('initiativeendorsementpage', 'initiativeendorsementpage__initiative').order_by('-initiativeendorsementpage__initiative__featured', 'initiativeendorsementpage__initiative__state')
+        context['initiatives'] = self.get_children().live().filter(
+            initiativeendorsementpage__initiative__show=True
+        ).select_related(
+            'initiativeendorsementpage',
+            'initiativeendorsementpage__initiative'
+        ).order_by(
+            '-initiativeendorsementpage__initiative__featured',
+            'initiativeendorsementpage__initiative__state'
+        )
         return context
 
     promote_panels = Page.promote_panels + [

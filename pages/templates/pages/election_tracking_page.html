@@ -206,17 +206,20 @@
                                             </a>
                                           {% endif %}
 
-                                          <div class="card__item card__item--share">
-                                            <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                            <a href="https://twitter.com/intent/tweet?text={% spaceless %}
-                                                            {% if initiative_race.initiative_votes == 0 and initiative_race.opponent_votes == 0 %}
-                                                                Polls for {{ initiative.title }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
-                                                            {% elif initiative_race.initiative_votes > initiative_race.opponent_votes %}
-                                                                {{ initiative.name }} is leading {{ initiative_race.initiative_votes_percentage | urlencode }} to {{ initiative_race.opponent_votes_percentage | urlencode}}. Track this race and other progressive's results nationwide LIVE.
-                                                            {% else %}
-                                                                {{ initiative.name }} is trailing {{ initiative_race.opponent_votes_percentage | urlencode }} to {{ initiative_race.initiative_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                            {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                         </div>
+                                          {% comment %}
+                                            <div class="card__item card__item--share">
+                                              <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
+                                              <a href="https://twitter.com/intent/tweet?text={% spaceless %}
+                                                              {% if initiative_race.initiative_votes == 0 and initiative_race.opponent_votes == 0 %}
+                                                                  Polls for {{ initiative.title }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
+                                                              {% elif initiative_race.initiative_votes > initiative_race.opponent_votes %}
+                                                                  {{ initiative.name }} is leading {{ initiative_race.initiative_votes_percentage | urlencode }} to {{ initiative_race.opponent_votes_percentage | urlencode}}. Track this race and other progressive's results nationwide LIVE.
+                                                              {% else %}
+                                                                  {{ initiative.name }} is trailing {{ initiative_race.opponent_votes_percentage | urlencode }} to {{ initiative_race.initiative_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
+                                                              {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
+                                           </div>
+                                         {% endcomment %}
+
                                         </div>
 
                                         <div class="card__results {% if initiative_race.result %}
