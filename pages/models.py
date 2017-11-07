@@ -11,7 +11,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
@@ -322,6 +322,12 @@ class CandidateRace(models.Model):
             ('lose', 'Lose'),
         )
     candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
+    candidate_endorsement_page = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     result = models.CharField(max_length=5, choices=RESULT_CHOICES, null=True, blank=True)
     candidate_votes = models.IntegerField(default=0)
     opponent_votes = models.IntegerField(default=0)
@@ -351,6 +357,10 @@ class CandidateRace(models.Model):
 
     panels = [
         FieldPanel('candidate'),
+        PageChooserPanel(
+            'candidate_endorsement_page',
+            'pages.CandidateEndorsementPage'
+        ),
         FieldPanel('result'),
         FieldPanel('candidate_votes'),
         FieldPanel('opponent_votes'),
@@ -369,6 +379,12 @@ class InitiativeRace(models.Model):
             ('lose', 'Lose'),
         )
     initiative = models.ForeignKey('endorsements.Initiative', null=True, blank=True, on_delete=models.SET_NULL)
+    initiative_endorsement_page = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     result = models.CharField(max_length=5, choices=RESULT_CHOICES, null=True, blank=True)
     initiative_votes = models.IntegerField(default=0)
     opponent_votes = models.IntegerField(default=0)
@@ -400,6 +416,10 @@ class InitiativeRace(models.Model):
 
     panels = [
         FieldPanel('initiative'),
+        PageChooserPanel(
+            'initiative_endorsement_page',
+            'pages.InitiativeEndorsementPage'
+        ),
         FieldPanel('result'),
         FieldPanel('initiative_votes'),
         FieldPanel('opponent_votes'),
