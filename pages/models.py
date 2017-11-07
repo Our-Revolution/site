@@ -21,7 +21,6 @@ from modelcluster.fields import ParentalKey
 from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
-from endorsements import Election
 
 from random import randint
 import csv, json
@@ -449,7 +448,7 @@ class CandidateRaceSnippet(Orderable, models.Model):
     ]
 
     def __unicode__(self):
-        return unicode(self.canidate_race)
+        return unicode(self.candidate_race)
 
 
 class InitiativeeRaceSnippet(Orderable, models.Model):
@@ -470,6 +469,13 @@ class InitiativeeRaceSnippet(Orderable, models.Model):
 class ElectionTrackingPage(RoutablePageMixin, Page):
     abstract = RichTextField()
     body = RichTextField()
+    election = models.ForeignKey(
+        'endorsements.Election',
+        related_name='+',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     social_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -481,6 +487,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('abstract'),
         FieldPanel('body', classname="full"),
+        FieldPanel('election'),
         InlinePanel('candidate_race_snippets', label="Candidates"),
         InlinePanel('initiative_race_snippets', label="Initiatives"),
     ]
@@ -494,7 +501,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             ElectionTrackingPage, self
         ).get_context(*args, **kwargs)
 
-        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related(
+        candidate_race_snippets = self.candidate_race_snippets.select_related(
             'candidate_race',
             'candidate_race__candidate'
         ).order_by(
@@ -521,7 +528,19 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
                 output_field=IntegerField())
         ).order_by('win_sort_order')
 
-        context['candidate_races'] = self.candidate_race_race
+        candidate_races = CandidateRaceSnippet.objects.filter(
+            candidate_race__show=True
+        )
+
+        for race in candidate_races:
+            print race
+
+        # print '-----'
+        #
+        # for race in candidate_race_snippets:
+        #     print race
+
+        context['candidate_race_snippets'] = (candidate_races.all()).distinct()
 
         if 'state' in kwargs:
             context['state'] = kwargs['state']
