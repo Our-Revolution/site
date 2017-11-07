@@ -21,6 +21,7 @@ from modelcluster.fields import ParentalKey
 from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
+from endorsements import Election
 
 from random import randint
 import csv, json
@@ -332,7 +333,10 @@ class CandidateRace(models.Model):
     candidate_votes = models.IntegerField(default=0)
     opponent_votes = models.IntegerField(default=0)
     other_votes = models.IntegerField(default=0)
-    margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
+    show = models.BooleanField(
+        default=False,
+        help_text='Show the candidate race on the election results pages.'
+    )
     source = models.URLField(null=True, blank=True)
     notes = RichTextField(blank=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -365,7 +369,7 @@ class CandidateRace(models.Model):
         FieldPanel('candidate_votes'),
         FieldPanel('opponent_votes'),
         FieldPanel('other_votes'),
-        FieldPanel('margin_win_loss'),
+        FieldPanel('show'),
         FieldPanel('source'),
         FieldPanel('notes')
     ]
@@ -389,7 +393,10 @@ class InitiativeRace(models.Model):
     initiative_votes = models.IntegerField(default=0)
     opponent_votes = models.IntegerField(default=0)
     other_votes = models.IntegerField(default=0)
-    margin_win_loss = models.CharField(max_length=128, null=True, blank=True)
+    show = models.BooleanField(
+        default=False,
+        help_text='Show the initiative race on the election results pages.'
+    )
     source = models.URLField(null=True, blank=True)
     notes = RichTextField(blank=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -424,7 +431,7 @@ class InitiativeRace(models.Model):
         FieldPanel('initiative_votes'),
         FieldPanel('opponent_votes'),
         FieldPanel('other_votes'),
-        FieldPanel('margin_win_loss'),
+        FieldPanel('show'),
         FieldPanel('source'),
         FieldPanel('notes')
     ]
@@ -445,7 +452,6 @@ class CandidateRaceSnippet(Orderable, models.Model):
         return unicode(self.canidate_race)
 
 
-
 class InitiativeeRaceSnippet(Orderable, models.Model):
     page = ParentalKey('pages.ElectionTrackingPage', related_name='initiative_race_snippets')
     initiative_race = models.ForeignKey('pages.InitiativeRace', related_name='+')
@@ -461,11 +467,16 @@ class InitiativeeRaceSnippet(Orderable, models.Model):
         return unicode(self.initiative_race)
 
 
-
 class ElectionTrackingPage(RoutablePageMixin, Page):
     abstract = RichTextField()
     body = RichTextField()
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('abstract'),
@@ -475,18 +486,46 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     ]
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
     def get_context(self, *args, **kwargs):
+        context = super(
+            ElectionTrackingPage, self
+        ).get_context(*args, **kwargs)
 
-        context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
-        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())).order_by('win_sort_order')
-        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state').annotate(win_sort_order=Case(When(initiative_race__result='win', then=Value(1)), When(initiative_race__result=None, then=Value(2)), When(initiative_race__result='lose', then=Value(3)), output_field=IntegerField())).order_by('win_sort_order')
+        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related(
+            'candidate_race',
+            'candidate_race__candidate'
+        ).order_by(
+            'candidate_race__candidate__state',
+            'candidate_race__candidate__district'
+        ).annotate(
+            win_sort_order=Case(
+                When(candidate_race__result='win', then=Value(1)),
+                When(candidate_race__result=None, then=Value(2)),
+                When(candidate_race__result='lose', then=Value(3)),
+                output_field=IntegerField())
+        ).order_by('win_sort_order')
+
+        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related(
+            'initiative_race',
+            'initiative_race__initiative'
+        ).order_by(
+            'initiative_race__initiative__state'
+        ).annotate(
+            win_sort_order=Case(
+                When(initiative_race__result='win', then=Value(1)),
+                When(initiative_race__result=None, then=Value(2)),
+                When(initiative_race__result='lose', then=Value(3)),
+                output_field=IntegerField())
+        ).order_by('win_sort_order')
+
+        context['candidate_races'] = self.candidate_race_race
+
         if 'state' in kwargs:
             context['state'] = kwargs['state']
         return context
-
 
     @route(r'^$')
     def default_view(self, request, view=None, *args, **kwargs):
@@ -495,7 +534,12 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     @route(r'^(?P<state>[\w\-]+)\/?$')
     def state_view(self, request, state, view=None, *args, **kwargs):
         kwargs['state'] = state
-        return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
+        return super(ElectionTrackingPage, self).serve(
+            request,
+            view,
+            args,
+            kwargs
+        )
 
 
 class TypeformPage(Page):
