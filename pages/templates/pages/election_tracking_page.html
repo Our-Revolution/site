@@ -95,16 +95,15 @@
                                           {% with candidate_race.candidate as candidate %}
 
                                               <li class="card clearfix">
-
                                                 {% if candidate_race.candidate_endorsement_page %}
-                                                  <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
+                                                <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
+                                                {% else %}
+                                                <a href="/candidates/{{ candidate.slug }}">
                                                 {% endif %}
                                                 <div class="card__photo"
                                                 style="background-image: url({{ candidate.photo.url }})">
                                                 </div>
-                                                {% if candidate_race.candidate_endorsement_page %}
-                                                  </a>
-                                                {% endif %}
+                                                </a>
 
                                                 <div class="card__content">
 
