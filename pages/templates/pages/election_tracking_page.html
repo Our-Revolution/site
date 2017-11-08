@@ -154,9 +154,20 @@
                                                           {% endif %}</div>
 
                                                           <div class="card__results--result">
+                                                            {# handle win where candidate has fewer votes than opponent #}
+                                                            {% if 'win' in candidate_race.result and candidate_race.candidate_votes < candidate_race.opponent_votes %}
+                                                            <div>
+                                                              Multiple winners
+                                                            </div>
+                                                            {% else %}
                                                             <div>Opponent</div>
-                                                            <div class="card__results--percentage">{{ candidate_race.opponent_votes_percentage }}</div>
-                                                            <div class="card__results--votes">{{ candidate_race.opponent_votes | intcomma }}</div>
+                                                            <div class="card__results--percentage">
+                                                              {{ candidate_race.opponent_votes_percentage }}
+                                                            </div>
+                                                            <div class="card__results--votes">
+                                                              {{ candidate_race.opponent_votes | intcomma }}
+                                                            </div>
+                                                            {% endif %}
                                                           </div>
                                                         </div>
                                                     </div>
