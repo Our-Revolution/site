@@ -481,8 +481,22 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     def get_context(self, *args, **kwargs):
 
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
-        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').order_by('candidate_race__candidate__state', 'candidate_race__candidate__district').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())).order_by('win_sort_order')
-        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').order_by('initiative_race__initiative__state').annotate(win_sort_order=Case(When(initiative_race__result='win', then=Value(1)), When(initiative_race__result=None, then=Value(2)), When(initiative_race__result='lose', then=Value(3)), output_field=IntegerField())).order_by('win_sort_order')
+        context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())
+        ).order_by(
+            'win_sort_order',
+            '-candidate_race__candidate__primary_date',
+            'candidate_race__candidate__state',
+            'candidate_race__candidate__office',
+            'candidate_race__candidate__district',
+            'candidate_race__candidate__name'
+        )
+        context['initiative_race_snippets'] = self.initiative_race_snippets.select_related('initiative_race', 'initiative_race__initiative').annotate(win_sort_order=Case(When(initiative_race__result='win', then=Value(1)), When(initiative_race__result=None, then=Value(2)), When(initiative_race__result='lose', then=Value(3)), output_field=IntegerField())
+        ).order_by(
+            'win_sort_order',
+            '-initiative_race__last_updated',
+            'initiative_race__initiative__state',
+            'initiative_race__initiative__title',
+        )
         if 'state' in kwargs:
             context['state'] = kwargs['state']
         return context
