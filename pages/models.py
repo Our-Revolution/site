@@ -501,7 +501,9 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             ElectionTrackingPage, self
         ).get_context(*args, **kwargs)
 
-        candidate_race_snippets = self.candidate_race_snippets.select_related(
+        # legacy support for old candidate pages which required manually adding
+        # candidate race snippets to a wagtail page
+        legacy_candidate_race_snippets = self.candidate_race_snippets.select_related(
             'candidate_race',
             'candidate_race__candidate'
         ).order_by(
@@ -528,19 +530,23 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
                 output_field=IntegerField())
         ).order_by('win_sort_order')
 
-        candidate_races = CandidateRaceSnippet.objects.filter(
-            candidate_race__show=True
+        new_candidate_races = CandidateRace.objects.filter(
+            show=True,
+            candidate__election=self.election
         )
 
-        for race in candidate_races:
-            print race
+        # combine legacy source and new source and remove duplicates
+        legacy_candidate_races_list = []
+        new_candidate_races_list = list(new_candidate_races)
 
-        # print '-----'
-        #
-        # for race in candidate_race_snippets:
-        #     print race
+        for snippet in legacy_candidate_race_snippets:
+            legacy_candidate_races_list.append(snippet.candidate_race)
 
-        context['candidate_race_snippets'] = (candidate_races.all()).distinct()
+        candidate_races_list = list(
+            (set(legacy_candidate_races_list) | set(new_candidate_races_list))
+        )
+
+        context['candidate_races'] = candidate_races_list
 
         if 'state' in kwargs:
             context['state'] = kwargs['state']

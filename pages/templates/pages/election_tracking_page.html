@@ -82,16 +82,15 @@
                             {{ page.body | safe }}
                         {% endif %} -->
 
-                        {% if candidate_race_snippets.exists %}
+                        {% if candidate_races %}
                             <h2>Our Candidates</h2>
                             <hr>
 
                             <div id="candidates-list">
                               <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
                               <ul class="card-list third list card-list--results">
-                                  {% for candidate_race_snippet in candidate_race_snippets %}
+                                  {% for candidate_race in candidate_races %}
 
-                                      {% with candidate_race_snippet.candidate_race as candidate_race %}
                                           {% with candidate_race.candidate as candidate %}
 
                                               <li class="card clearfix">
@@ -168,7 +167,6 @@
                                                         </div>
                                                     </div>
 
-                                          {% endwith %}
 
                                       {% endwith %}
 
