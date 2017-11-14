@@ -10,6 +10,7 @@ appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
 beautifulsoup4==4.5.1
 boto==2.43.0
+-e git://github.com/bluestatedigital/bsd-api-python.git@cd4cbc39b46c065c06795ace95093b430e77e66f#egg=bsd-api-python
 configparser==3.5.0
 decorator==4.0.10
 dj-database-url==0.4.1
