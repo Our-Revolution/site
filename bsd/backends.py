@@ -5,6 +5,7 @@ from xml.etree.ElementTree import ElementTree
 from .api import Bsd
 
 
+# TODO: what is best way to do this?
 api = Bsd().api
 
 class BSDAuthenticationBackend:

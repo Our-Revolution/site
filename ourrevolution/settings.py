@@ -33,7 +33,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 ALLOWED_HOSTS = '*'
 
 ADMINS = [
-    # ('Chris Mabry', 'chris@ourrevolution.com'),
+    ('Chris Mabry', 'chris@ourrevolution.com'),
     ('Eric Broder', 'eric@ourrevolution.com')
 ]
 
@@ -168,21 +168,17 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-BSD_API_HOST    = os.environ.get('BSD_API_HOST')
-BSD_API_ID      = os.environ.get('BSD_API_ID')
-BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
-
-DATABASES = {
-    'default': dj_database_url.config(),
-}
+DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
-
-# DATABASE_ROUTERS = ['bsd.routers.BSDRouter']
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'bsd.backends.BSDAuthenticationBackend',
 )
+
+BSD_API_HOST    = os.environ.get('BSD_API_HOST')
+BSD_API_ID      = os.environ.get('BSD_API_ID')
+BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
 
 # BSD login urls
 # TODO: replace temp urls with real urls when pages are ready
