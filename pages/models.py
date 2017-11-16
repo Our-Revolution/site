@@ -141,6 +141,12 @@ class CandidateEndorsementPage(Page):
 
 
 class CandidateEndorsementIndexPage(Page):
+    body = RichTextField(null=True, blank=True)
+    content_heading = models.CharField(max_length=128, blank=True, null=True)
+    content_panels = Page.content_panels + [
+        FieldPanel('content_heading'),
+        FieldPanel('body'),
+    ]
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.CandidateEndorsementPage']
 
