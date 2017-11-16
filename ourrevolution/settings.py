@@ -33,7 +33,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 ALLOWED_HOSTS = '*'
 
 ADMINS = [
-    ('Chris Mabry', 'chris@ourrevolution.com'), 
+    ('Chris Mabry', 'chris@ourrevolution.com'),
     ('Eric Broder', 'eric@ourrevolution.com')
 ]
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'social_redirects',
     'local_groups',
     'nominations',
+    'bsd',
 
     #Django gulp
     'django_gulp',
@@ -170,6 +171,20 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
+AUTHENTICATION_BACKENDS = (
+    'bsd.backends.BSDAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+BSD_API_HOST    = os.environ.get('BSD_API_HOST')
+BSD_API_ID      = os.environ.get('BSD_API_ID')
+BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
+BSD_LOGIN_ENABLED = os.environ.get('env', 'development') != 'production'
+
+# BSD login urls
+# TODO: replace temp urls with real urls when pages are ready
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/login/'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
