@@ -1,26 +1,26 @@
-from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
-from .api import Bsd
+from .api import BSD
 
 
 # TODO: what is best way to do this?
-api = Bsd().api
+api = BSD().api
+
 
 class BSDAuthenticationBackend:
 
     def authenticate(self, username=None, password=None):
 
         # Basic email validation
-        if not '@' in username:
+        if '@' not in username:
             return None
 
         # Check credentials via BSD api
         apiResult = api.account_checkCredentials(username, password)
 
         # Parse and validate response
-        tree = ElementTree().parse( StringIO(apiResult.body) )
+        tree = ElementTree().parse(StringIO(apiResult.body))
         try:
             cons = tree.find('cons')
             # assertions copied from hydra app
