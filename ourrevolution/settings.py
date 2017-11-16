@@ -172,8 +172,8 @@ DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'bsd.backends.BSDAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 BSD_API_HOST    = os.environ.get('BSD_API_HOST')
