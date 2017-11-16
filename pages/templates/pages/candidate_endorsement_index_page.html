@@ -10,7 +10,7 @@
       <div class="page-heading page-heading--full clearfix">
         <div class="container">
           <div class="row">
-            <h1>Our Candidates</h1>
+            <h1>{{ page.title }}</h1>
           </div>
         </div>
       </div>
@@ -20,10 +20,18 @@
   <div class="container pt2 pb2">
     <a href="/2017-elections-results/" class="pull-right mt25 fs16">Results &raquo;</a>
     <h3>
-      2017 Endorsements
+      {% firstof page.content_heading "Endorsements" %}
     </h3>
       <hr>
+
+      {% if page.body %}
+      <div id ="content-page-body">
+        {{ page.body | richtext }}
+      </div>
+      {% endif %}
+
       <div class="page-sub-nav filter clearfix">
+
                 <div class="form-inline pull-left">
                     <!-- <div class="form-group">
                         <label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
