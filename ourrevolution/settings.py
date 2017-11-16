@@ -179,6 +179,7 @@ AUTHENTICATION_BACKENDS = (
 BSD_API_HOST    = os.environ.get('BSD_API_HOST')
 BSD_API_ID      = os.environ.get('BSD_API_ID')
 BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
+BSD_LOGIN_ENABLED = os.environ.get('env', 'development') != 'production'
 
 # BSD login urls
 # TODO: replace temp urls with real urls when pages are ready
