@@ -1,0 +1,12 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+{% if page.secondary_content_show %}
+<div style="background-color: #{% firstof page.secondary_content_background_color 'FFFFFF' %}">
+	{{ page.secondary_content | richtext }}
+</div>
+{% endif %}
+
+{% endblock %}

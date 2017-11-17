@@ -21,11 +21,10 @@ from modelcluster.fields import ParentalKey
 from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
-
 from random import randint
 import csv, json
-
 from .forms import GroupForm
+
 
 class AboutPage(Page):
     board_description = RichTextField()
@@ -47,6 +46,7 @@ class AboutPage(Page):
             ImageChooserPanel('social_image')
         ]
 
+
 class BasePage(Page):
     body = RichTextField(null=True, blank=True)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -58,6 +58,163 @@ class BasePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+class MicrositePage(Page):
+    color_help_text = '6 digit CSS color code.'
+    button_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    button_text = models.CharField(max_length=128, blank=True, null=True)
+    button_text_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    button_url = models.URLField(null=True, blank=True)
+    button_url_new_window = models.BooleanField(
+        default=False,
+        help_text='Open new window for button url.'
+    )
+    custom_footer_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    custom_footer_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    custom_footer_content = RichTextField(null=True, blank=True)
+    custom_footer_show = models.BooleanField(
+        default=False,
+        help_text='Show custom footer.'
+    )
+    custom_footer_text_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    custom_header_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    custom_header_show = models.BooleanField(
+        default=False,
+        help_text='Show custom header with image, button, links etc.'
+    )
+    facebook_url = models.URLField(null=True, blank=True)
+    primary_content = RichTextField()
+    primary_content_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    primary_content_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    primary_content_embed_code = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Raw HTML embed code for signup form, etc.'
+    )
+    primary_content_text_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    secondary_content = RichTextField(null=True, blank=True)
+    secondary_content_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    secondary_content_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    secondary_content_show = models.BooleanField(
+        default=False,
+        help_text='Show secondary content.'
+    )
+    secondary_content_text_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    standard_header_show = models.BooleanField(
+        default=True,
+        help_text='Show standard global header at top of page.'
+    )
+    standard_footer_show = models.BooleanField(
+        default=True,
+        help_text='Show standard global footer at bottom of page.'
+    )
+    twitter_url = models.URLField(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+            FieldPanel('primary_content'),
+            FieldPanel('primary_content_embed_code'),
+            FieldPanel('primary_content_background_color'),
+            FieldPanel('primary_content_text_color'),
+            ImageChooserPanel('primary_content_background_image'),
+            FieldPanel('secondary_content_show'),
+            FieldPanel('secondary_content'),
+            FieldPanel('secondary_content_background_color'),
+            FieldPanel('secondary_content_text_color'),
+            ImageChooserPanel('secondary_content_background_image'),
+            FieldPanel('standard_header_show'),
+            FieldPanel('custom_header_show'),
+            ImageChooserPanel('custom_header_image'),
+            FieldPanel('button_text'),
+            FieldPanel('button_url'),
+            FieldPanel('button_url_new_window'),
+            FieldPanel('button_background_color'),
+            FieldPanel('button_text_color'),
+            FieldPanel('twitter_url'),
+            FieldPanel('facebook_url'),
+            FieldPanel('standard_footer_show'),
+            FieldPanel('custom_footer_show'),
+            FieldPanel('custom_footer_content'),
+            FieldPanel('custom_footer_background_color'),
+            FieldPanel('custom_footer_text_color'),
+            ImageChooserPanel('custom_footer_background_image'),
+        ]
+
+    promote_panels = Page.promote_panels + [
+            ImageChooserPanel('social_image')
+        ]
+
 
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
