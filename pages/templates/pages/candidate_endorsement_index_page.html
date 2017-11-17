@@ -18,7 +18,11 @@
   </div>
 
   <div class="container pt2 pb2">
-    <a href="/2017-elections-results/" class="pull-right mt25 fs16">Results &raquo;</a>
+
+    <div class="pull-right mt10">
+      {% include "partials/endorsements-nav.html" %}
+    </div>
+
     <h3>
       {% firstof page.content_heading "Endorsements" %}
     </h3>
