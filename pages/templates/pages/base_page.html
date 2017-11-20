@@ -62,9 +62,13 @@
     {% bootstrap_javascript jquery=1 %}
     <!-- {% bootstrap_messages %}     -->
 
-    {% notification_banner %}
+    {% block notification_banner %}
+      {% notification_banner %}
+    {% endblock %}
 
-    {% include "partials/nav.html" %}
+    {% block nav %}
+      {% include "partials/nav.html" %}
+    {% endblock %}
 
     {% block content %}
 
@@ -91,10 +95,12 @@
 
 </div>
 
-{% include "partials/footer.html" %}
-{% include "partials/footer-js.html" %}
+{% block footer %}
+  {% include "partials/footer.html" %}
+  {% include "partials/footer-js.html" %}
 
-{% block footer_scripts %}
+  {% block footer_scripts %}
+  {% endblock %}
 {% endblock %}
 
 </body>

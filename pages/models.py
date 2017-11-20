@@ -62,6 +62,16 @@ class BasePage(Page):
 
 class MicrositePage(Page):
     color_help_text = '6 digit CSS color code.'
+    show_accent_border = models.BooleanField(
+        default=False,
+        help_text='Show solid accent border at top of page.'
+    )
+    accent_border_color = button_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
     button_background_color = models.CharField(
         max_length=6,
         blank=True,
@@ -114,6 +124,12 @@ class MicrositePage(Page):
     custom_header_show = models.BooleanField(
         default=False,
         help_text='Show custom header with image, button, links etc.'
+    )
+    custom_header_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
     )
     facebook_url = models.URLField(null=True, blank=True)
     primary_content = RichTextField()
@@ -183,6 +199,9 @@ class MicrositePage(Page):
     twitter_url = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
+            FieldPanel('show_accent_border'),
+            FieldPanel('accent_border_color'),
+            FieldPanel('primary_content_embed_code'),
             FieldPanel('primary_content'),
             FieldPanel('primary_content_embed_code'),
             FieldPanel('primary_content_background_color'),
@@ -196,6 +215,7 @@ class MicrositePage(Page):
             FieldPanel('standard_header_show'),
             FieldPanel('custom_header_show'),
             ImageChooserPanel('custom_header_image'),
+            FieldPanel('custom_header_background_color'),
             FieldPanel('button_text'),
             FieldPanel('button_url'),
             FieldPanel('button_url_new_window'),
