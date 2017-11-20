@@ -6,8 +6,10 @@
   {{ block.super }}
   <style>
     #custom_header {
-      {% if page.primary_content_background_color %}
-        background-color: #{{ page.primary_content_background_color }};
+      {% if page.custom_header_background_color %}
+        background-color: #{{ page.custom_header_background_color }};
+      {% else %}
+        background: transparent;
       {% endif %}
 
       {% if page.show_accent_border %}
@@ -21,6 +23,12 @@
         border-color: #{{page.button_background_color}};
       {% endif %}
 
+      {% if page.button_text_color %}
+        color: #{{page.button_text_color}};
+      {% endif %}
+    }
+
+    .microsite-content a#primary-cta {
       {% if page.button_text_color %}
         color: #{{page.button_text_color}};
       {% endif %}
@@ -97,6 +105,16 @@
         color: #{{ page.custom_footer_text_color }};
       {% endif %}
     }
+
+    .microsite-content .can_button, .microsite-content #can_embed_form input[type="submit"], .microsite-content #can_embed_form .button, .microsite-content #donate_auto_modal input[type="submit"], .microsite-content #donate_auto_modal .button {
+      {% if page.button_background_color %}
+        background-color: #{{page.button_background_color}} !important;
+      {% endif %}
+
+      {% if page.button_text_color %}
+        color: #{{page.button_text_color}} !important;
+      {% endif %}
+    }
   </style>
 {% endblock %}
 
@@ -110,45 +128,47 @@
   {% if page.standard_header_show %}
     {{ block.super }}
   {% endif %}
-
-  {% if page.custom_header_show %}
-    <nav id="custom_header" class="navbar navbar--microsite pa20">
-      <div class="navbar__upper container">
-        {% if page.facebook_url or page.twitter_url %}
-          <div class="navbar__social">
-            {% if page.facebook_url %}
-              <a href="{{ page.facebook_url }}" target="_blank" class="social-icon--facebook" onclick="trackOutboundLink('{{ page.facebook_url }}', true);">Facebook</a>
-            {% endif %}
-
-            {% if page.twitter_url %}
-              <a href="{{ page.twitter_url }}" target="_blank" class="social-icon--twitter" onclick="trackOutboundLink('{{ page.twitter_url }}', true);">Twitter</a>
-            {% endif %}
-          </div>
-        {% endif %}
-
-        {% if page.custom_header_image %}
-          {% image page.custom_header_image max-600x600 as custom_header_image %}
-          <img src="{{ custom_header_image.url }}" alt="{{page.title}}" class="microsite-header-image">
-        {% endif %}
-
-        {% if page.button_url and page.button_text %}
-          <div class="navbar__buttons">
-            <a id="primary-cta"
-              href="{{ page.button_url }}"
-              target="{{ page.button_url_new_window|yesno:'_blank,_self'}}"
-              class="btn btn-primary"
-              onclick="trackOutboundLink('{{ page.button_url }}', {{ page.button_url_new_window|yesno:'true,false'}});">
-              {{ page.button_text }}
-            </a>
-          </div>
-        {% endif %}
-      </div>
-    </nav>
-  {% endif %}
 {% endblock %}
 
 {% block content %}
   <div id="primary_content" class="container-fluid microsite-content">
+    {% if page.custom_header_show %}
+      <div class="row">
+        <nav id="custom_header" class="navbar navbar--microsite pa20">
+          <div class="navbar__upper container">
+            {% if page.facebook_url or page.twitter_url %}
+              <div class="navbar__social">
+                {% if page.facebook_url %}
+                  <a href="{{ page.facebook_url }}" target="_blank" class="social-icon--facebook" onclick="trackOutboundLink('{{ page.facebook_url }}', true);">Facebook</a>
+                {% endif %}
+
+                {% if page.twitter_url %}
+                  <a href="{{ page.twitter_url }}" target="_blank" class="social-icon--twitter" onclick="trackOutboundLink('{{ page.twitter_url }}', true);">Twitter</a>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if page.custom_header_image %}
+              {% image page.custom_header_image max-600x600 as custom_header_image %}
+              <img src="{{ custom_header_image.url }}" alt="{{page.title}}" class="microsite-header-image">
+            {% endif %}
+
+            {% if page.button_url and page.button_text %}
+              <div class="navbar__buttons">
+                <a id="primary-cta"
+                  href="{{ page.button_url }}"
+                  target="{{ page.button_url_new_window|yesno:'_blank,_self'}}"
+                  class="btn btn-primary"
+                  onclick="trackOutboundLink('{{ page.button_url }}', {{ page.button_url_new_window|yesno:'true,false'}});">
+                  {{ page.button_text }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </nav>
+      </div>
+    {% endif %}
+
     <div class="container pt4 pb4">
       <div class="col-md-6 mb20 fs18">
         {{ page.primary_content | richtext }}
