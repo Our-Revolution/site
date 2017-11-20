@@ -9143,6 +9143,34 @@ ul.list-plain,
   .nav-pills > li > a:hover {
     background: gainsboro; }
 
+.navbar--microsite .navbar__upper {
+  height: auto; }
+
+@media screen and (max-width: 479px) {
+  .navbar--microsite .navbar__upper {
+    border-bottom: none;
+    display: block; }
+  .navbar--microsite .microsite-header-image {
+    display: block;
+    margin: 50px auto 0; } }
+
+@media screen and (max-width: 767px) {
+  .navbar--microsite .navbar__upper {
+    border-bottom: none;
+    display: block; }
+  .navbar--microsite .microsite-header-image {
+    display: block;
+    margin: 50px auto 0; }
+  .navbar--microsite .navbar__social {
+    position: relative;
+    left: 10px;
+    top: 12px;
+    right: auto; }
+  .navbar--microsite .navbar__buttons {
+    display: block;
+    right: 10px;
+    top: 10px; } }
+
 .footer {
   position: absolute;
   bottom: 0;

@@ -1,12 +1,177 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block meta %}
+  {{ block.super }}
+  <style>
+    #custom_header {
+      {% if page.primary_content_background_color %}
+        background-color: #{{ page.primary_content_background_color }};
+      {% endif %}
+    }
+
+    #primary-cta {
+      {% if page.button_background_color %}
+        background-color: #{{page.button_background_color}};
+        border-color: #{{page.button_background_color}};
+      {% endif %}
+    }
+
+    /* TODO: Add hover color to model or dynamically generate */
+    #primary-cta:hover {
+      opacity: 0.9;
+      transition: 0.25s;
+    }
+
+    #primary_content {
+      background-size: cover;
+      {% if page.primary_content_background_color %}
+        background-color: #{{ page.primary_content_background_color }};
+      {% endif %}
+
+      {% if page.primary_content_text_color %}
+        color: #{{ page.primary_content_text_color }};
+      {% endif %}
+
+      {% if page.primary_content_background_image %}
+        {% image page.primary_content_background_image original as primary_img %}
+        background-image: url({{ primary_img.url }});
+      {% endif %}
+    }
+
+    #primary_content a {
+      {% if page.primary_content_text_color %}
+        color: #{{ page.primary_content_text_color }};
+      {% endif %}
+    }
+
+    #secondary_content {
+      background-size: cover;
+      {% if page.secondary_content_background_color %}
+        background-color: #{{ page.secondary_content_background_color }};
+      {% endif %}
+
+      {% if page.secondary_content_text_color %}
+        color: #{{ page.secondary_content_text_color }};
+      {% endif %}
+
+      {% if page.secondary_content_background_image %}
+        {% image page.secondary_content_background_image original as secondary_img %}
+        background-image: url({{ secondary_img.url }});
+      {% endif %}
+    }
+
+    #secondary_content a {
+      {% if page.secondary_content_text_color %}
+        color: #{{ page.secondary_content_text_color }};
+      {% endif %}
+    }
+
+    #footer {
+      background-size: cover;
+      {% if page.custom_footer_background_color %}
+        background-color: #{{ page.custom_footer_background_color }};
+      {% endif %}
+
+      {% if page.custom_footer_text_color %}
+        color: #{{ page.custom_footer_text_color }};
+      {% endif %}
+
+      {% if page.custom_footer_background_image %}
+        {% image page.custom_footer_background_image original as secondary_img %}
+        background-image: url({{ secondary_img.url }});
+      {% endif %}
+    }
+
+    #footer a {
+      {% if page.custom_footer_text_color %}
+        color: #{{ page.custom_footer_text_color }};
+      {% endif %}
+    }
+  </style>
+{% endblock %}
+
+{% block notification_banner %}
+<!-- TODO: conditional notification banner on page model -->
+{% endblock %}
+
+{% block nav %}
+  {% if page.standard_header_show %}
+    {{ block.super }}
+  {% endif %}
+
+  {% if page.custom_header_show %}
+    <nav id="custom_header" class="navbar navbar--microsite">
+      <div class="navbar__upper container">
+        {% if page.facebook_url or page.twitter_url %}
+          <div class="navbar__social">
+            {% if page.facebook_url %}
+              <a href="{{ page.facebook_url }}" target="_blank" class="social-icon--facebook" onclick="trackOutboundLink('{{ page.facebook_url }}', true);">Facebook</a>
+            {% endif %}
+
+            {% if page.twitter_url %}
+              <a href="{{ page.twitter_url }}" target="_blank" class="social-icon--twitter" onclick="trackOutboundLink('{{ page.twitter_url }}', true);">Twitter</a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if page.custom_header_image %}
+          {% image page.custom_header_image max-150x100 alt=page.title class="microsite-header-image" %}
+        {% endif %}
+
+        {% if page.button_url and page.button_text %}
+          <div class="navbar__buttons">
+            <a id="primary-cta"
+              href="{{ page.button_url }}"
+              target="{{ page.button_url_new_window|yesno:'_blank,_self'}}"
+              class="btn btn-primary"
+              onclick="trackOutboundLink('{{ page.button_url }}', {{ page.button_url_new_window|yesno:'true,false'}});">
+              {{ page.button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </nav>
+  {% endif %}
+{% endblock %}
 
 {% block content %}
-{% if page.secondary_content_show %}
-<div style="background-color: #{% firstof page.secondary_content_background_color 'FFFFFF' %}">
-	{{ page.secondary_content | richtext }}
-</div>
-{% endif %}
+  <div id="primary_content" class="container-fluid">
+    <div class="container pt4 pb4">
+      <div class="col-md-6 mb20 fs18">
+        {{ page.primary_content | richtext }}
+      </div>
 
+      {% if page.primary_content_embed_code %}
+        <div class="col-md-5 col-md-offset-1 mb20">{{page.primary_content_embed_code | safe }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if page.secondary_content_show %}
+    <div id="secondary_content" class="container-fluid">
+        <div class="container pt4 pb4">
+          <div class="col-md-6 col-md-offset-3">
+          	{{ page.secondary_content | richtext }}
+          </div>
+        </div>
+      </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% if page.custom_footer_show %}
+    <div id="footer" class="container-fluid">
+      <div class="container pt4 pb4">
+        <div class="col-md-6 col-md-offset-3">
+          {{ page.custom_footer_content | richtext }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if page.standard_footer_show %}
+    {{ block.super }}
+  {% endif %}
 {% endblock %}
