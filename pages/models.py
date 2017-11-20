@@ -62,6 +62,16 @@ class BasePage(Page):
 
 class MicrositePage(Page):
     color_help_text = '6 digit CSS color code.'
+    show_accent_border = models.BooleanField(
+        default=False,
+        help_text='Show solid accent border at top of page.'
+    )
+    accent_border_color = button_background_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
     button_background_color = models.CharField(
         max_length=6,
         blank=True,
@@ -183,6 +193,9 @@ class MicrositePage(Page):
     twitter_url = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
+            FieldPanel('show_accent_border'),
+            FieldPanel('accent_border_color'),
+            FieldPanel('primary_content_embed_code'),
             FieldPanel('primary_content'),
             FieldPanel('primary_content_embed_code'),
             FieldPanel('primary_content_background_color'),

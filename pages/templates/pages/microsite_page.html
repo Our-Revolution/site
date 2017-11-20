@@ -9,12 +9,20 @@
       {% if page.primary_content_background_color %}
         background-color: #{{ page.primary_content_background_color }};
       {% endif %}
+
+      {% if page.show_accent_border %}
+        border-top: solid 8px #{{page.accent_border_color}};
+      {% endif %}
     }
 
     #primary-cta {
       {% if page.button_background_color %}
         background-color: #{{page.button_background_color}};
         border-color: #{{page.button_background_color}};
+      {% endif %}
+
+      {% if page.button_text_color %}
+        color: #{{page.button_text_color}};
       {% endif %}
     }
 
@@ -68,7 +76,7 @@
       {% endif %}
     }
 
-    #footer {
+    #footer, .microsite .footer {
       background-size: cover;
       {% if page.custom_footer_background_color %}
         background-color: #{{ page.custom_footer_background_color }};
@@ -84,13 +92,15 @@
       {% endif %}
     }
 
-    #footer a {
+    #footer a, .microsite .footer a {
       {% if page.custom_footer_text_color %}
         color: #{{ page.custom_footer_text_color }};
       {% endif %}
     }
   </style>
 {% endblock %}
+
+<div class="microsite">
 
 {% block notification_banner %}
 <!-- TODO: conditional notification banner on page model -->
@@ -102,7 +112,7 @@
   {% endif %}
 
   {% if page.custom_header_show %}
-    <nav id="custom_header" class="navbar navbar--microsite">
+    <nav id="custom_header" class="navbar navbar--microsite pa20">
       <div class="navbar__upper container">
         {% if page.facebook_url or page.twitter_url %}
           <div class="navbar__social">
@@ -117,7 +127,8 @@
         {% endif %}
 
         {% if page.custom_header_image %}
-          {% image page.custom_header_image max-150x100 alt=page.title class="microsite-header-image" %}
+          {% image page.custom_header_image max-600x600 as custom_header_image %}
+          <img src="{{ custom_header_image.url }}" alt="{{page.title}}" class="microsite-header-image">
         {% endif %}
 
         {% if page.button_url and page.button_text %}
@@ -137,7 +148,7 @@
 {% endblock %}
 
 {% block content %}
-  <div id="primary_content" class="container-fluid">
+  <div id="primary_content" class="container-fluid microsite-content">
     <div class="container pt4 pb4">
       <div class="col-md-6 mb20 fs18">
         {{ page.primary_content | richtext }}
@@ -172,6 +183,8 @@
   {% endif %}
 
   {% if page.standard_footer_show %}
-    {{ block.super }}
+    <div class="microsite">
+      {{ block.super }}
+    </div>
   {% endif %}
 {% endblock %}

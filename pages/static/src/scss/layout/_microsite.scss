@@ -1,0 +1,11 @@
+.microsite-content {
+
+  // Action Network Overrides
+  .can_embed.form #can_embed_form_inner>h2 {
+    display: none !important;
+  }
+
+  #can_embed_form.can_float #form_col1, #can_embed_form.can_float #form_col2 {
+    width: 100% !important;
+  }
+}
