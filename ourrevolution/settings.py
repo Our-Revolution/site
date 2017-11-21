@@ -179,12 +179,14 @@ AUTHENTICATION_BACKENDS = (
 BSD_API_HOST    = os.environ.get('BSD_API_HOST')
 BSD_API_ID      = os.environ.get('BSD_API_ID')
 BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
-BSD_LOGIN_ENABLED = os.environ.get('env', 'development') != 'production'
+BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 
 # BSD login urls
 # TODO: replace temp urls with real urls when pages are ready
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/login/'
+
+SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
