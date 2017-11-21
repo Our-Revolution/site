@@ -11,7 +11,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
@@ -62,10 +62,6 @@ class BasePage(Page):
 
 class MicrositePage(Page):
     color_help_text = '6 digit CSS color code.'
-    show_accent_border = models.BooleanField(
-        default=False,
-        help_text='Show solid accent border at top of page.'
-    )
     accent_border_color = button_background_color = models.CharField(
         max_length=6,
         blank=True,
@@ -89,6 +85,13 @@ class MicrositePage(Page):
     button_url_new_window = models.BooleanField(
         default=False,
         help_text='Open new window for button url.'
+    )
+    custom_favicon = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
     )
     custom_footer_background_color = models.CharField(
         max_length=6,
@@ -181,6 +184,10 @@ class MicrositePage(Page):
         null=True,
         help_text=color_help_text
     )
+    show_accent_border = models.BooleanField(
+        default=False,
+        help_text='Show solid accent border at top of page.'
+    )
     social_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -199,41 +206,65 @@ class MicrositePage(Page):
     twitter_url = models.URLField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
-            FieldPanel('show_accent_border'),
-            FieldPanel('accent_border_color'),
-            FieldPanel('primary_content_embed_code'),
-            FieldPanel('primary_content'),
-            FieldPanel('primary_content_embed_code'),
-            FieldPanel('primary_content_background_color'),
-            FieldPanel('primary_content_text_color'),
-            ImageChooserPanel('primary_content_background_image'),
-            FieldPanel('secondary_content_show'),
-            FieldPanel('secondary_content'),
-            FieldPanel('secondary_content_background_color'),
-            FieldPanel('secondary_content_text_color'),
-            ImageChooserPanel('secondary_content_background_image'),
-            FieldPanel('standard_header_show'),
-            FieldPanel('custom_header_show'),
-            ImageChooserPanel('custom_header_image'),
-            FieldPanel('custom_header_background_color'),
-            FieldPanel('button_text'),
-            FieldPanel('button_url'),
-            FieldPanel('button_url_new_window'),
-            FieldPanel('button_background_color'),
-            FieldPanel('button_text_color'),
-            FieldPanel('twitter_url'),
-            FieldPanel('facebook_url'),
-            FieldPanel('standard_footer_show'),
-            FieldPanel('custom_footer_show'),
-            FieldPanel('custom_footer_content'),
-            FieldPanel('custom_footer_background_color'),
-            FieldPanel('custom_footer_text_color'),
-            ImageChooserPanel('custom_footer_background_image'),
-        ]
+        ImageChooserPanel('custom_favicon'),
+        MultiFieldPanel(
+            [
+                FieldPanel('show_accent_border'),
+                FieldPanel('accent_border_color'),
+                FieldPanel('standard_header_show'),
+                FieldPanel('custom_header_show'),
+                FieldPanel('custom_header_background_color'),
+                FieldPanel('twitter_url'),
+                FieldPanel('facebook_url'),
+                ImageChooserPanel('custom_header_image'),
+                FieldPanel('button_text'),
+                FieldPanel('button_url'),
+                FieldPanel('button_url_new_window'),
+                FieldPanel('button_background_color'),
+                FieldPanel('button_text_color'),
+            ],
+            heading="Header",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('primary_content'),
+                FieldPanel('primary_content_embed_code'),
+                FieldPanel('primary_content_background_color'),
+                FieldPanel('primary_content_text_color'),
+                ImageChooserPanel('primary_content_background_image'),
+            ],
+            heading="Primary Content",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('secondary_content_show'),
+                FieldPanel('secondary_content'),
+                FieldPanel('secondary_content_background_color'),
+                FieldPanel('secondary_content_text_color'),
+                ImageChooserPanel('secondary_content_background_image'),
+            ],
+            heading="Secondary Content",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('standard_footer_show'),
+                FieldPanel('custom_footer_show'),
+                FieldPanel('custom_footer_content'),
+                FieldPanel('custom_footer_background_color'),
+                FieldPanel('custom_footer_text_color'),
+                ImageChooserPanel('custom_footer_background_image'),
+            ],
+            heading="Footer",
+            classname="collapsible"
+        )
+    ]
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
 
 @register_snippet
