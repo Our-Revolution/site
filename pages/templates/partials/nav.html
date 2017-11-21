@@ -30,10 +30,10 @@
         <div class="row">
         <ul class="nav-list uppercase" id="main-nav-list">
           <li><a href="/about" class="{% if "/about" in request.path %}active{% endif %} about" id="about-nav-link">About</a></li>
-          {% with link_text="Local Groups" link_url="/groups/"  %}
+          {% with link_code="groups" link_text="Local Groups" link_url="/groups/"  %}
           <li>
-            <a href="{{ link_url }}" id="action-nav-link"
-            class="{% if link_url in request.path %}active{% endif %} action">
+            <a href="{{ link_url }}" id="{{ link_code }}-nav-link"
+            class="{% if link_url in request.path %}active {% endif %}{{ link_code }}">
             {{ link_text }}
             </a>
           </li>
