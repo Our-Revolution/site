@@ -6,7 +6,7 @@
       <a href="https://facebook.com/PoliticalRevolution" target="_blank" class="social-icon--facebook" onclick="trackOutboundLink('https://facebook.com/PoliticalRevolution?utm_source=main-nav-desktop', true);">Facebook</a>
       <a href="https://twitter.com/ourrevolution" target="_blank" class="social-icon--twitter" onclick="trackOutboundLink('https://twitter.com/ourrevolution?utm_source=main-nav-desktop', true);">Twitter</a>
     </div>
-    
+
     <div class="navbar__mobile">
       <button type="button" class="navbar-toggle" id="main-navbar-toggle">
           <span class="sr-only">Toggle navigation</span>
@@ -30,7 +30,14 @@
         <div class="row">
         <ul class="nav-list uppercase" id="main-nav-list">
           <li><a href="/about" class="{% if "/about" in request.path %}active{% endif %} about" id="about-nav-link">About</a></li>
-          <li><a href="/action" class="{% if "/action" in request.path %}active{% endif %} action" id="action-nav-link">Take Action</a></li>
+          {% with link_text="Local Groups" link_url="/groups/"  %}
+          <li>
+            <a href="{{ link_url }}" id="action-nav-link"
+            class="{% if link_url in request.path %}active{% endif %} action">
+            {{ link_text }}
+            </a>
+          </li>
+          {% endwith %}
           <li><a href="/issues" class="{% if "/issues" in request.path %}active{% endif %} issues" id="issues-nav-link">Issues</a></li>
           <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">Candidates</a></li>
           <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
@@ -45,20 +52,20 @@
 
 <script>
   $(document).ready(function() {
-    
+
     $('#main-nav-list').on('click vclick touchstart', function(e) {
       $(this).find('a').removeClass('active');
       $(e.target).addClass('active');
-      
+
       var str = $(e.target).text();
       $('.page-banner h1').text(str);
       str = str.replace(/\s+/g, '-').toLowerCase();
       $('.page-banner').attr('class','page-banner ' + str);
     })
-    
+
     $('#main-navbar-toggle').on('click', function(e) {
       $('#main-navbar').toggleClass('collapsed');
     })
-    
+
   });
 </script>

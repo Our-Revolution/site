@@ -69,6 +69,18 @@
   </div>
 </div>
 
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3 class="mt40 mb20">
+        In addition to Local Groups, you can also take action on national
+        Our Revolution campaigns.
+      </h3>
+    </div>
+  </div>
+</div>
+{% include "partials/take_action_content.html" %}
+
 <script>
   var mapDiv = document.getElementById('map-container'),
     inputDiv = document.getElementById('autocomplete-input');
@@ -79,7 +91,7 @@
 
   for(i=0; i<data.features.length; i++) {
     if(data.features[i].properties.status == 'approved'){
-      
+
       Groups.addGroup(data.features[i]);
     }
   }
