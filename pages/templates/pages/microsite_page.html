@@ -2,9 +2,21 @@
 
 {% load wagtailcore_tags wagtailimages_tags %}
 
+{% load static %}
+
+{% block page_title %}{% firstof page.seo_title page.title "Our Revolution" %}{% endblock %}
+
 {% block meta %}
   {{ block.super }}
+
   <style>
+    /* Needed to disable the bottom margin we give for the site-wide footer */
+    {% if not page.standard_footer_show %}
+      body {
+        margin: 0 !important;
+      }
+    {% endif %}
+
     #custom_header {
       {% if page.custom_header_background_color %}
         background-color: #{{ page.custom_header_background_color }};
@@ -118,6 +130,15 @@
   </style>
 {% endblock %}
 
+{% block favicon %}
+  {% if page.custom_favicon %}
+    {% image page.custom_favicon original as favicon %}
+    <link rel="icon" type="image/x-icon" href="{{favicon.url}}" />
+  {% else %}
+    <link rel="icon" type="image/x-icon" href="{% static "dist/img/favicon.ico" %}" />
+  {% endif %}
+{% endblock %}
+
 <div class="microsite">
 
 {% block notification_banner %}
@@ -206,5 +227,7 @@
     <div class="microsite">
       {{ block.super }}
     </div>
+  {% else %}
+    {% include "partials/footer-js.html" %}
   {% endif %}
 {% endblock %}
