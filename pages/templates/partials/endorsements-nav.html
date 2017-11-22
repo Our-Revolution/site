@@ -1,0 +1,31 @@
+{% load bootstrap3 %}
+
+<div id="endorsements-nav" class="btn-toolbar" role="toolbar">
+
+  {% with "/candidates/" as link_url %}
+  {% if link_url not in request.path %}
+  <div class="btn-group" role="group">
+    <a href="{{ link_url }}" class="btn btn-secondary">
+      Candidates
+    </a>
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% with "/ballot-initiatives/" as link_url %}
+  {% if link_url not in request.path %}
+  <div class="btn-group" role="group">
+    <a href="{{ link_url }}" class="btn btn-secondary">
+      Initiatives
+    </a>
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="btn-group" role="group">
+    <a href="/2017-elections-results" class="btn btn-secondary">
+      Results
+    </a>
+  </div>
+  
+</div>
