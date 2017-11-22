@@ -19,14 +19,15 @@
 
   <div class="container pt2 pb2">
 
-    <div class="pull-right mt10">
-      {% include "partials/endorsements-nav.html" %}
+    <div class="clearfix">
+      <h3 class="pull-left mb0">
+        {% firstof page.content_heading "Endorsements" %}
+      </h3>
+      <div class="pull-right mt10">
+        {% include "partials/endorsements-nav.html" %}
+      </div>
     </div>
-
-    <h3>
-      {% firstof page.content_heading "Endorsements" %}
-    </h3>
-      <hr>
+    <hr>
 
       {% if page.body %}
       <div id ="content-page-body">
