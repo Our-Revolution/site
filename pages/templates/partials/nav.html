@@ -39,9 +39,25 @@
           </li>
           {% endwith %}
           <li><a href="/issues" class="{% if "/issues" in request.path %}active{% endif %} issues" id="issues-nav-link">Issues</a></li>
-          <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">Candidates</a></li>
+          <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">
+            {% if shop_nav_enabled %} Endorsements {% else %} Candidates {% endif %}
+          </a></li>
+          {% if not shop_nav_enabled %}
           <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
+          {% endif %}
           <li><a href="/press" class="{% if "/press" in request.path %}active{% endif %} press">News</a></li>
+          {% if shop_nav_enabled %}
+          {% comment %} TODO: make nav link tag/template {% endcomment %}
+          {% with link_code="shop" link_text="Shop" link_url="https://shop.ourrevolution.com" %}
+          <li>
+            <a href="{{ link_url }}" class="{{ link_code }}"
+            id="{{ link_code }}-nav-link"
+            onclick="trackOutboundLink('{{ link_url }}', false);">
+            {{ link_text }}
+            </a>
+          </li>
+          {% endwith %}
+          {% endif %}
           <li class="visible-xs-block nav-list__button"><a href="https://go.ourrevolution.com/page/s/membership-signup?source=main-nav-mobile-join" class="btn btn-block btn-secondary" target="_blank" onclick="trackOutboundLink('https://go.ourrevolution.com/page/s/membership-signup?source=main-nav-mobile-join', true);">Join</a></li>
           <li class="visible-xs-block nav-list__button"><a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00" class="btn btn-block btn-donate" target="_blank" onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav-mobile&amount=27.00', true);">Donate</a></li>
         </ul>
