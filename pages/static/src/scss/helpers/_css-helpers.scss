@@ -1138,6 +1138,22 @@ a.white-text {
   }
 }
 
+.web-store-bg {
+  background: $blue url('../img/store-web.png') center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder;
+
+  .module__heading {
+    text-shadow: none;
+  }
+
+  .article-type {
+    font-weight: bolder;
+    // text-shadow: 0 0 5px rgba(0,0,0,1);
+  }
+}
+
 .cupcake-bg {
   background: white url('../img/year-one/birthday-background.png') center repeat;
 }

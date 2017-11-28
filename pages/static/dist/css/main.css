@@ -6562,6 +6562,16 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   .college-for-all-bg .article-type {
     font-weight: bolder; }
 
+.web-store-bg {
+  background: #218fff url("../img/store-web.png") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .web-store-bg .module__heading, .web-store-bg .module__heading--small {
+    text-shadow: none; }
+  .web-store-bg .article-type {
+    font-weight: bolder; }
+
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
 
