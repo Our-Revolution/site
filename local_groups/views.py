@@ -1,8 +1,64 @@
 from django.contrib import messages
-from django.views.generic import FormView
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import FormView, UpdateView
 from .forms import SlackInviteForm
+from .models import Group
 import os
 import requests
+
+
+# View for Admin updates to Group Info
+# TODO: access control, only group admin can edit their own group info
+class GroupUpdateView(UserPassesTestMixin, UpdateView):
+    model = Group
+    # Same fields as Create Form except edit group email instead of rep email
+    fields = [
+        'name',
+        'description',
+        'city',
+        'state',
+        'county',
+        'country',
+        'postal_code',
+        'size',
+        # Edit group email instead of rep email so BSD auth still works
+        'group_contact_email',
+        'rep_first_name',
+        'rep_last_name',
+        'rep_phone',
+        'rep_postal_code',
+        'website_url',
+        'facebook_url',
+        'twitter_url',
+        'instagram_url',
+        'other_social',
+        'types_of_organizing',
+        'other_types_of_organizing',
+        'issues',
+        'other_issues',
+        'constituency',
+        'last_meeting',
+        'recurring_meeting',
+        'meeting_address_line1',
+        'meeting_address_line2',
+        'meeting_city',
+        'meeting_state_province',
+        'meeting_postal_code',
+        'meeting_country',
+    ]
+    template_name_suffix = '_update_form'
+
+    # Redirect to same page on success
+    def get_success_url(self):
+        return "/groups/" + self.object.slug + "/update/"
+
+    # True if user email matches rep email, otherwise false
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated
+            and self.get_object().rep_email == self.request.user.email
+        )
+
 
 class SlackInviteView(FormView):
     form_class = SlackInviteForm

@@ -838,8 +838,9 @@ class DonationPage(Page):
 
         return context
 
-## LOCAL GROUPS
 
+# LOCAL GROUPS
+# TODO: move views/url logic to views and urls files
 class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
