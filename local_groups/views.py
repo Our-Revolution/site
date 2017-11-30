@@ -8,7 +8,6 @@ import requests
 
 
 # View for Admin updates to Group Info
-# TODO: access control, only group admin can edit their own group info
 class GroupUpdateView(UserPassesTestMixin, UpdateView):
     model = Group
     # Same fields as Create Form except edit group email instead of rep email

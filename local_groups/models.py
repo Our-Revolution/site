@@ -16,12 +16,7 @@ class Group(models.Model):
     signup_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     group_id = models.CharField(max_length=4,null=True, blank=False, unique=True)
     # Individual Rep Email should match BSD authentication account
-    rep_email = models.EmailField(
-        null=True,
-        blank=False,
-        verbose_name="Contact Email",
-        max_length=254
-    )
+    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
     # Public group email does not need to match BSD authentication account
     group_contact_email = models.EmailField(
         blank=True,

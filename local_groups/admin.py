@@ -13,7 +13,7 @@ class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ('issues',)
     form = GisForm
     actions = [export_as_csv_action("CSV Export"),geocode_groups]
-
+    
     def get_actions(self, request):
         #Disable delete
         actions = super(GroupAdmin, self).get_actions(request)
