@@ -10,9 +10,7 @@ import requests
 # View for Admin updates to Group Info
 class GroupUpdateView(UserPassesTestMixin, UpdateView):
     model = Group
-    # Same fields as Create Form except edit group email instead of rep email
     fields = [
-        'name',
         'description',
         'city',
         'state',
