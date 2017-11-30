@@ -15,8 +15,16 @@ class Group(models.Model):
     slug = models.SlugField(null=True, blank=False, unique=True, max_length=100)
     signup_date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     group_id = models.CharField(max_length=4,null=True, blank=False, unique=True)
-
+    # Individual Rep Email should match BSD authentication account
     rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
+    # Public group email does not need to match BSD authentication account
+    group_contact_email = models.EmailField(
+        blank=True,
+        help_text="""Optional Group Contact Email to publicly display an email
+        different from Individual Contact Email""",
+        max_length=254,
+        null=True,
+    )
     rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
     rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
     rep_postal_code = models.CharField(max_length=12, null=True, blank=True, verbose_name="Postal Code")

@@ -10,3 +10,4 @@ django-debug.log
 *.sql
 nbproject/
 .vscode/*
+.ropeproject/
