@@ -521,11 +521,11 @@ class NewsIndex(Page):
     '''
     def get_cached_paths(self):
         # Yield the main URL
-        yield '/press/'
+        yield self.url
 
         # Yield one URL per page in paginator to make sure all pages are purged
         for page_number in range(1, self.get_news_paginator().num_pages + 1):
-            yield '/press/?page=' + str(page_number)
+            yield self.url + '?page=' + str(page_number)
 
 
 class NewsPost(Page):
