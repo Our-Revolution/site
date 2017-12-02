@@ -2,18 +2,22 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
+from django.dispatch import receiver
 from django.template.loader import get_template
 from django.template import Context
 from django.contrib import messages
 from django.db.models import Case, IntegerField, Value, When
+from django.db.models.signals import pre_delete
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.signals import page_published
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
@@ -464,40 +468,64 @@ class IssueIndexPage(Page):
 # News / Statements / Press Releases
 
 class NewsIndex(Page):
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
     parent_page_types = ['pages.IndexPage']
     subpage_types = ['pages.NewsPost']
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
-
+        ImageChooserPanel('social_image')
+    ]
 
     def get_context(self, request):
         context = super(NewsIndex, self).get_context(request)
         # context['news_posts'] = self.get_children().live().order_by('-id')
-
-        all_posts = self.get_children().live()
-
-        q = all_posts.extra(select={'first_published_at_is_null':'first_published_at IS NULL'})
-        sorted_posts = q.order_by('first_published_at_is_null','-first_published_at','-go_live_at')
-
-        paginator = Paginator(sorted_posts, 5) # Show 5 resources per page
-
+        paginator = self.get_news_paginator()
         page = request.GET.get('page')
+
         try:
             resources = paginator.page(page)
         except PageNotAnInteger:
             # If page is not an integer, deliver first page.
             resources = paginator.page(1)
         except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
+            # If page is out of range (e.g. 9999), deliver last page of results
             resources = paginator.page(paginator.num_pages)
 
         context['resources'] = resources
 
         return context
 
+    def get_news_paginator(self):
+        all_posts = self.get_children().live()
+        q = all_posts.extra(
+            select={'first_published_at_is_null': 'first_published_at IS NULL'}
+        )
+        sorted_posts = q.order_by(
+            'first_published_at_is_null',
+            '-first_published_at',
+            '-go_live_at'
+        )
+        # Show 5 resources per page
+        count = 5
+        return Paginator(sorted_posts, count)
+
+    '''
+    Include all paged urls in cached paths
+    http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
+    '''
+    def get_cached_paths(self):
+        # Yield the main URL
+        yield '/press/'
+
+        # Yield one URL per page in paginator to make sure all pages are purged
+        for page_number in range(1, self.get_news_paginator().num_pages + 1):
+            yield '/press/?page=' + str(page_number)
 
 
 class NewsPost(Page):
@@ -526,6 +554,32 @@ class NewsPost(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+'''
+Purge news index page and homepage whenever a news post changes
+http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
+'''
+
+
+def news_post_changed(news_post):
+    # Purge NewsIndex page
+    for news_index in NewsIndex.objects.live():
+        purge_page_from_cache(news_index)
+
+    # Purge homepage
+    for index_page in IndexPage.objects.live():
+        purge_page_from_cache(index_page)
+
+
+@receiver(page_published, sender=NewsPost)
+def news_published_handler(instance, **kwargs):
+    news_post_changed(instance)
+
+
+@receiver(pre_delete, sender=NewsPost)
+def news_deleted_handler(instance, **kwargs):
+    news_post_changed(instance)
 
 
 @register_snippet
