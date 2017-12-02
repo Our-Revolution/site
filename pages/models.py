@@ -482,6 +482,18 @@ class NewsIndex(Page):
         ImageChooserPanel('social_image')
     ]
 
+    '''
+    Include all paged urls in cached paths
+    http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
+    '''
+    def get_cached_paths(self):
+        # Yield the main URL
+        yield self.url
+
+        # Yield one URL per page in paginator to make sure all pages are purged
+        for page_number in range(1, self.get_news_paginator().num_pages + 1):
+            yield self.url + '?page=' + str(page_number)
+
     def get_context(self, request):
         context = super(NewsIndex, self).get_context(request)
         # context['news_posts'] = self.get_children().live().order_by('-id')
@@ -514,18 +526,6 @@ class NewsIndex(Page):
         # Show 5 resources per page
         count = 5
         return Paginator(sorted_posts, count)
-
-    '''
-    Include all paged urls in cached paths
-    http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
-    '''
-    def get_cached_paths(self):
-        # Yield the main URL
-        yield self.url
-
-        # Yield one URL per page in paginator to make sure all pages are purged
-        for page_number in range(1, self.get_news_paginator().num_pages + 1):
-            yield self.url + '?page=' + str(page_number)
 
 
 class NewsPost(Page):
