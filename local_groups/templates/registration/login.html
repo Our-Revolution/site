@@ -38,26 +38,24 @@
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
 
-        {% bootstrap_messages %}
-
         <p class="fs18">
           Log in with your Our Revolution account to manage your local
           group.
         </p>
 
-        <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}" method="post">
+        {% bootstrap_messages %}
+        {% bootstrap_form_errors form %}
 
-          {% bootstrap_form form exclude="username,password" %}
+        <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
 
-          <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
+          <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}"
+          method="post" class="form form-uppercase">
 
             {% csrf_token %}
 
-            {% bootstrap_label "Group Leader Email" %}
-            {% bootstrap_field form.username layout="inline" placeholder="you@example.com" %}
+            {% bootstrap_field form.username placeholder="you@example.com" %}
 
-            {% bootstrap_label "Password" %}
-            {% bootstrap_field form.password layout="inline" placeholder="" %}
+            {% bootstrap_field form.password placeholder="" %}
 
             <div class="form-group">
               <p class="help-block fs14">
@@ -71,8 +69,8 @@
             {% bootstrap_button "Log In" button_type="submit" button_class="btn-primary btn-block uppercase" %}
             {% endbuttons %}
 
-          </div>
-        </form>
+          </form>
+        </div>
 
         <p class="fs18">
           Don't have an Our Revolution account?

@@ -1,8 +1,27 @@
 from django import forms
 from .models import Group
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.gis.geos import Point
+from django.utils.translation import gettext_lazy as _
 from endorsements.models import Issue
 import os, requests
+
+
+class GroupLoginForm(AuthenticationForm):
+    username = UsernameField(
+        label=_("Group Leader Email"),
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
+    password = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput,
+    )
+    error_messages = {
+        'invalid_login': _(
+            "The email address or password you entered is invalid."
+        ),
+        'inactive': _("This account is inactive."),
+    }
 
 
 class GisForm(forms.ModelForm):
@@ -31,9 +50,9 @@ class GisForm(forms.ModelForm):
                 latitude = float(data['latitude'])
                 longitude = float(data['longitude'])
                 data['point'] = Point(longitude, latitude)    # Set PointField
-        try:    
-            coordinates = kwargs['instance'].point.tuple    #If PointField exists 
-            initial = kwargs.get('initial', {})    
+        try:
+            coordinates = kwargs['instance'].point.tuple    #If PointField exists
+            initial = kwargs.get('initial', {})
             initial['longitude'] = coordinates[0]    #Set Longitude from coordinates
             initial['latitude'] = coordinates[1]    #Set Latitude from coordinates
             kwargs['initial'] = initial
@@ -49,7 +68,7 @@ class SlackInviteForm(forms.Form):
     state = forms.ChoiceField(label="Invite me to a specific Slack channel", help_text="You can join others once you log in.",initial="C36GU58J0")
 
     def __init__(self, *args, **kwargs):
-        
+
         super(SlackInviteForm, self).__init__(*args, **kwargs)
 
         channel_names = {

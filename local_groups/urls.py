@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
+from .forms import GroupLoginForm
 from .views import GroupDashboardView, GroupUpdateView, SlackInviteView
 
 urlpatterns = [
@@ -15,7 +16,12 @@ if settings.BSD_LOGIN_ENABLED:
                 GroupDashboardView.as_view(),
                 name='groups-dashboard'
             ),
-            url(r'^login/', auth_views.login, name='groups-login'),
+            url(
+                r'^login/',
+                auth_views.login,
+                {'authentication_form': GroupLoginForm},
+                name='groups-login'
+            ),
             url('^', include('django.contrib.auth.urls')),
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(r'^update', GroupUpdateView.as_view()),
