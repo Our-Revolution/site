@@ -7,14 +7,11 @@ from endorsements.models import Issue
 import os, requests
 
 
+# Customize AuthenticationForm as needed
 class GroupLoginForm(AuthenticationForm):
     username = UsernameField(
         label=_("Group Leader Email"),
         widget=forms.TextInput(attrs={'autofocus': True})
-    )
-    password = forms.CharField(
-        strip=False,
-        widget=forms.PasswordInput,
     )
     error_messages = {
         'invalid_login': _(
