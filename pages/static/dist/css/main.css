@@ -9153,6 +9153,9 @@ ul.list-plain,
   .nav-pills > li > a:hover {
     background: gainsboro; }
 
+.nav-toc a.list-group-item {
+  color: #2490ff; }
+
 .navbar--microsite .microsite-header-image {
   width: auto;
   height: 150px; }

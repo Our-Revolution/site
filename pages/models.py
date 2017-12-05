@@ -947,6 +947,27 @@ class GroupPage(RoutablePageMixin, Page):
             'group':group
         })
 
+
+# Groups Portal Resource Page
+class GroupResourcePage(Page):
+    body = RichTextField()
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel('social_image')
+    ]
+
+
 class PeoplesSummitStreamPage(Page):
     stream_id = models.CharField(max_length=30)
     facebook_stream_url = models.CharField(max_length=250, null=True, blank=True)
