@@ -2,7 +2,7 @@
 
 {% load bootstrap3 %}
 
-{% block page_title %}Our Revolution - Login{% endblock %}
+{% block page_title %}Our Revolution - Group Leader Login{% endblock %}
 
 {% block content %}
 
@@ -45,10 +45,11 @@
           group.
         </p>
 
-        {% bootstrap_form form exclude="username,password" %}
+        <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}" method="post">
 
-        <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
-          <form action="{% url 'login' %}{% if next %}?next={{ next }}{% endif %}" method="post">
+          {% bootstrap_form form exclude="username,password" %}
+
+          <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
 
             {% csrf_token %}
 
@@ -70,8 +71,8 @@
             {% bootstrap_button "Log In" button_type="submit" button_class="btn-primary btn-block uppercase" %}
             {% endbuttons %}
 
-          </form>
-        </div>
+          </div>
+        </form>
 
         <p class="fs18">
           Don't have an Our Revolution account?
