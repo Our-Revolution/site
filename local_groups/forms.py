@@ -7,20 +7,6 @@ from endorsements.models import Issue
 import os, requests
 
 
-# Customize AuthenticationForm as needed
-class GroupLoginForm(AuthenticationForm):
-    username = UsernameField(
-        label=_("Group Leader Email"),
-        widget=forms.TextInput(attrs={'autofocus': True})
-    )
-    error_messages = {
-        'invalid_login': _(
-            "The email address or password you entered is invalid."
-        ),
-        'inactive': _("This account is inactive."),
-    }
-
-
 class GisForm(forms.ModelForm):
     issues = forms.ModelMultipleChoiceField(queryset=Issue.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
 
@@ -57,6 +43,19 @@ class GisForm(forms.ModelForm):
             pass
         super(GisForm, self).__init__(*args, **kwargs)
 
+
+# Customize AuthenticationForm as needed
+class GroupLoginForm(AuthenticationForm):
+    username = UsernameField(
+        label=_("Group Leader Email"),
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
+    error_messages = {
+        'invalid_login': _(
+            "The email address or password you entered is invalid."
+        ),
+        'inactive': _("This account is inactive."),
+    }
 
 
 class SlackInviteForm(forms.Form):
