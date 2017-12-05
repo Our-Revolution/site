@@ -1,10 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView, TemplateView, UpdateView
 from .forms import SlackInviteForm
 from .models import Group
 import os
 import requests
+
+
+# TODO: replace with real page
+class GroupDashboardView(TemplateView):
+    template_name = "group_dashboard.html"
 
 
 # View for Admin updates to Group Info
@@ -51,10 +56,16 @@ class GroupUpdateView(UserPassesTestMixin, UpdateView):
 
     # True if user email matches rep email, otherwise false
     def test_func(self):
-        return (
+        can_access = (
             self.request.user.is_authenticated
             and self.get_object().rep_email == self.request.user.email
         )
+        if not can_access:
+            messages.error(
+                self.request,
+                "Please login with the Group Leader account to access this page."
+            )
+        return can_access
 
 
 class SlackInviteView(FormView):

@@ -182,9 +182,8 @@ BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
 BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 
 # BSD login urls
-# TODO: replace temp urls with real urls when pages are ready
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/login/'
+LOGIN_URL = 'groups-login'
+LOGIN_REDIRECT_URL = 'groups-dashboard'
 
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
