@@ -1,42 +1,10 @@
-{% extends "pages/base_page.html" %}
+{% extends "group_portal.html" %}
 
 {% load bootstrap3 wagtailcore_tags %}
 
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row blue-bg white-text pb2">
-    <div class="back-bar clearfix">
-      <div class="container clearfix uppercase">
-
-        <span class="pull-right">
-          {% if request.user.is_authenticated %}
-          {{ request.user.get_username }} |
-          <a href="{% url 'logout' %}?next={{ request.path | urlencode }}">
-            Logout
-          </a>
-          {% else %}
-          <a href="{% url 'groups-login' %}?next={{ request.path | urlencode }}">
-            <strong>Groups Portal</strong>
-          </a>
-          {% endif %}
-        </span>
-      </div>
-    </div>
-
-    <div class="container pb2 pt4">
-      <div class="col-md-8 col-md-offset-2">
-        <h1 class="mt0 mb0">{{ page.title }}</h1>
-
-        {% if page.sub_heading %}
-          <p class="mt10 fs18">
-            {{ page.sub_heading }}
-          </p>
-        {% endif %}
-
-      </div>
-    </div>
-  </div>
 
   <div class="row pt4 pb4">
     <div class="container">
