@@ -1004,7 +1004,11 @@ class GroupPage(RoutablePageMixin, Page):
 
 # Groups Portal Resource Page
 class GroupResourcePage(Page):
-    body = RichTextField()
+    body = RichTextField(
+        help_text='''
+        All H# tags will be automatically converted to a table of contents.
+        '''
+    )
     sub_heading = models.TextField(
         blank=True,
         null=True,
