@@ -19,7 +19,10 @@ if settings.BSD_LOGIN_ENABLED:
             url(
                 r'^login/',
                 auth_views.login,
-                {'authentication_form': GroupLoginForm},
+                {
+                    'authentication_form': GroupLoginForm,
+                    'redirect_authenticated_user': True
+                },
                 name='groups-login'
             ),
             url('^', include('django.contrib.auth.urls')),

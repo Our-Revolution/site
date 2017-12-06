@@ -184,6 +184,7 @@ BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 # BSD login urls
 LOGIN_URL = 'groups-login'
 LOGIN_REDIRECT_URL = 'groups-dashboard'
+LOGOUT_REDIRECT_URL = 'groups-login'
 
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
