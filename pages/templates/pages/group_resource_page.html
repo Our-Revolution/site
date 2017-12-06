@@ -2,8 +2,6 @@
 
 {% load bootstrap3 wagtailcore_tags %}
 
-{% block page_title %}Our Revolution - Group Leader Login{% endblock %}
-
 {% block content %}
 
 <div class="container-fluid">
@@ -26,10 +24,16 @@
       </div>
     </div>
 
-    <div class="container pt2">
+    <div class="container pb2 pt4">
       <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Groups Dashboard</span>
-        <h1 class="mt0 mb0">Group Leader Login</h1>
+        <h1 class="mt0 mb0">{{ page.title }}</h1>
+
+        {% if page.sub_heading %}
+          <p class="mt10 fs18">
+            {{ page.sub_heading }}
+          </p>
+        {% endif %}
+
       </div>
     </div>
   </div>
@@ -37,7 +41,7 @@
   <div class="row pt4 pb4">
     <div class="container">
 
-      <div class="col-md-4" id="content-body-toc">
+      <div class="col-md-4 hidden" id="content-body-toc">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">Contents</h3>
@@ -47,7 +51,7 @@
         </div>
       </div>
 
-      <div class="col-md-8" id="content-body">
+      <div class="col-md-8 col-md-offset-2" id="content-body">
         {{ page.body | richtext }}
       </div>
 
@@ -63,14 +67,17 @@
 
     // Get layout elements
     var $contentBody = $("#content-body");
-    var $contentToc = $("#content-body-toc");
-    var $navToc = $(".nav-toc", $contentToc);
 
     // Get all headings from content body
     var $headings = $("h1, h2, h3, h4, h5, h6", $contentBody);
 
-    // For each heading set the id attribute and add link to nav
     if ($headings.length) {
+
+      // Get layout elements
+      var $contentToc = $("#content-body-toc");
+      var $navToc = $(".nav-toc", $contentToc);
+
+      // For each heading set the id attribute and add link to nav
       $headings.each(function(index) {
         var slug = "table-of-contents-" + (index + 1);
         $(this).attr("id", slug);
@@ -79,10 +86,9 @@
         );
       });
 
-    } else {
-      // If list is empty then hide sidenav and update layout
-      $contentToc.hide();
-      $contentBody.addClass('col-md-offset-2');
+      // Update layout and display table of contents
+      $contentBody.removeClass('col-md-offset-2');
+      $contentToc.removeClass('hidden');
     }
 	});
 </script>

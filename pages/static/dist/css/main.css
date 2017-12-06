@@ -9154,7 +9154,7 @@ ul.list-plain,
     background: gainsboro; }
 
 .nav-toc a.list-group-item {
-  color: #2490ff; }
+  color: #337ab7; }
 
 .navbar--microsite .microsite-header-image {
   width: auto;
@@ -9894,6 +9894,10 @@ ul.list-plain,
       -webkit-flex: 0 0 100%;
       -ms-flex: 0 0 100%;
       flex: 0 0 100%; } }
+
+.form-uppercase .form-group label {
+  letter-spacing: 1px;
+  text-transform: uppercase; }
 
 .sign-up-form .module__heading, .sign-up-form .module__heading--small {
   margin-bottom: 10px; }

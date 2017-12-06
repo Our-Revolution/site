@@ -1,33 +1,42 @@
+.form-uppercase {
+  .form-group {
+    label {
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+  }
+}
+
 .sign-up-form {
   .module__heading {
     margin-bottom: 10px;
   }
-  
+
   label {
     // font-size: 14px;
     font-weight: bolder;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
-  
+
   input {
     font-size: 16px;
   }
-  
+
   &--block {
     .form-group {
       display: block;
       margin-right: 0;
       margin-top: 20px;
-      
+
       &:first-child {
         margin-top: 0;
       }
-    
+
       &.submit {
         width: 100%;
       }
-    
+
     }
   }
 
@@ -53,7 +62,7 @@
     }
 
   }
-  
+
   &.petition {
     .form-group {
       margin-bottom: 20px;
@@ -63,11 +72,11 @@
       &.zip, &.first-name {
         width: 48%;
       }
-      
+
       &.zip {
         margin-right: 0;
       }
-      
+
       &.email {
         width: 99%;
         display: block;
@@ -81,45 +90,45 @@
 
     }
   }
-  
+
   .alert {
     display: none;
   }
-  
+
   .alert-danger {
     a {
       color: #a94442;
     }
   }
-  
+
   &.new {
     .form-group {
       margin-top: 10px;
-      
+
       &:first-child {
         margin-top: 0;
       }
-      
+
       &.full {
         width: 100%;
         margin-right: 0;
         display: block;
       }
-      
+
       &.half {
         width: 49%;
         display: block;
         float: left;
         margin-right: 0;
-        
+
         &.left {
           margin-right: 1%;
         }
-        
+
         &.right {
           margin-left: 1%;
         }
-        
+
         @include until($medium) {
           width: 100%;
           margin-right: 0;
@@ -129,7 +138,7 @@
         };
       }
     }
-    
+
     button {
       margin-top: 10px;
     }
@@ -147,15 +156,15 @@
 div.recurrence-widget {
   border-radius: 3px;
   width: 100%;
-  
+
   .add-button.add-date {
     display: none;
   }
-  
+
   input[type=checkbox], input[type=radio] {
     display: inline-block;
   }
-  
+
   .panel {
     margin-bottom: 0;
   }
