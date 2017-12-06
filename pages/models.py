@@ -29,6 +29,9 @@ from random import randint
 import csv, json
 from .forms import GroupForm
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class AboutPage(Page):
     board_description = RichTextField()
@@ -483,16 +486,19 @@ class NewsIndex(Page):
     ]
 
     '''
-    Include all paged urls in cached paths
+    Add extra paths for pagination
+
+    Return url fragments after main page path, such as '/' and '/?page=1'
+    for urls '/press/' and '/press/?page=1'
     http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
     '''
     def get_cached_paths(self):
-        # Yield the main URL
-        yield self.url
+        # Yield the main URL by just returning '/' for initial value
+        yield '/'
 
         # Yield one URL per page in paginator to make sure all pages are purged
         for page_number in range(1, self.get_news_paginator().num_pages + 1):
-            yield self.url + '?page=' + str(page_number)
+            yield '/?page=' + str(page_number)
 
     def get_context(self, request):
         context = super(NewsIndex, self).get_context(request)
