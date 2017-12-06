@@ -1,38 +1,18 @@
-{% extends "pages/base_page.html" %}
+{% extends "group_portal.html" %}
 
 {% load bootstrap3 %}
 
 {% block page_title %}Our Revolution - Group Leader Login{% endblock %}
 
+{% block content_pre_heading %}
+<span class="article-type">Groups Dashboard</span>
+{% endblock %}
+
+{% block content_heading %}Group Leader Login{% endblock %}
+
 {% block content %}
 
 <div class="container-fluid">
-  <div class="row blue-bg white-text pb2">
-    <div class="back-bar clearfix">
-      <div class="container clearfix uppercase">
-
-        <span class="pull-right">
-          {% if request.user.is_authenticated %}
-          {{ request.user.get_username }} |
-          <a href="{% url 'logout' %}?next={{ request.path | urlencode }}">
-            Logout
-          </a>
-          {% else %}
-          <a href="{% url 'groups-login' %}?next={{ request.path | urlencode }}">
-            <strong>Groups Portal</strong>
-          </a>
-          {% endif %}
-        </span>
-      </div>
-    </div>
-
-    <div class="container pt2">
-      <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Groups Dashboard</span>
-        <h1 class="mt0 mb0">Group Leader Login</h1>
-      </div>
-    </div>
-  </div>
 
   <div class="row pt4 pb4">
     <div class="container">

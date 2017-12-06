@@ -529,6 +529,13 @@
   }
 }
 
+.nav-toc {
+
+  a.list-group-item {
+    color: $link-color;
+  }
+}
+
 .navbar--microsite {
   .microsite-header-image {
     width: auto;
