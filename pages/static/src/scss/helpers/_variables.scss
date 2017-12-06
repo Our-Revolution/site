@@ -13,3 +13,10 @@ $small: 480px;
 $medium: 768px;
 $large: 992px;
 $extra-large: 1200px;
+
+// List Group
+$list-group-active-bg:          #fafafa;
+$list-group-border:             #ddd;
+$list-group-link-color:         $blue;
+$list-group-active-border:      $list-group-border;
+$list-group-active-color:       $list-group-link-color;

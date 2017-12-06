@@ -7,3 +7,14 @@ ul {
     padding: 0px;
   }
 }
+
+.list-group {
+
+  .list-group-item {
+
+    &.active {
+      border-left: 6px solid $list-group-active-color;
+      padding-left: 10px;
+    }
+  }
+}

@@ -9,8 +9,16 @@ import requests
 
 
 # TODO: replace with real page
-class GroupDashboardView(TemplateView):
+class GroupDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "group_dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupDashboardView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['group'] = Group.objects.filter(
+                rep_email=self.request.user.email
+            ).first()
+        return context
 
 
 # View for Admin updates to Group Info

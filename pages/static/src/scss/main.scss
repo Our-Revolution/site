@@ -1,7 +1,10 @@
-// Bootstrap
+// Load Bootstrap configs first
+@import 'helpers/variables';
+
+// Load Bootstrap
 @import 'vendor/bootstrap/bootstrap';
 
-@import 'helpers/variables';
+// Load everything else
 @import 'helpers/mixins';
 @import 'helpers/css-helpers';
 @import 'helpers/normalize';
@@ -9,6 +12,7 @@
 @import 'layout/tpptoolkit';
 @import 'layout/prop61toolkit';
 @import 'components/buttons';
+@import 'components/card';
 @import 'components/list';
 @import 'components/nav';
 @import 'components/footer';

@@ -2,10 +2,130 @@
 
 {% load bootstrap3 %}
 
+{% block page_title %}Our Revolution - Dashboard{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Groups Portal</span>
+{% endblock %}
+
+{% block content_heading %}{{ group.name }}{% endblock %}
+
 {% block content %}
 
 {% bootstrap_messages %}
 
-TODO: dashboard
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <h3 class="mb20 mt0">
+          Dashboard
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% include "partials/group_portal_nav.html" %}
+      </div>
+
+      <div class="col-md-9">
+
+        <ul class="card-list card-list-tools third">
+
+          {% with link_text="Action Network" link_url="https://actionnetwork.org/" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Event Hosting & Promotions" link_url="https://events.ourrevolution.com/" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Nominations Platform" link_url="https://ourrevolution.com/groups/nominations" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Phonebanking" link_url="http://ourrev.us/call" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Text for Our Revolution" link_url="http://ourrev.us/text" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Local Organizing Slack" link_url="http://ourrev.us/join-us-on-slack" %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+        </ul>
+
+        <div class="pt2">
+          <p>
+            You can browse the full suite of Our Revolution digital tools and
+            organizing resources using the menu to the left.
+          </p>
+
+          <p>
+            <strong>Need help?</strong> You can reach us at
+            <strong><a href="mailto:organizing@ourrevolution.com">
+              organizing@ourrevolution.com
+            </a></strong>
+          </p>
+        </div>
+
+      </div>
+  </div>
+</div>
 
 {% endblock %}
