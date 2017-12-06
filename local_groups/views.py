@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView, UpdateView
 from .forms import SlackInviteForm
 from .models import Group
@@ -13,7 +14,7 @@ class GroupDashboardView(TemplateView):
 
 
 # View for Admin updates to Group Info
-class GroupUpdateView(UserPassesTestMixin, UpdateView):
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     fields = [
         'description',
@@ -54,18 +55,31 @@ class GroupUpdateView(UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return "/groups/" + self.object.slug + "/update/"
 
-    # True if user email matches rep email, otherwise false
-    def test_func(self):
-        can_access = (
-            self.request.user.is_authenticated
-            and self.get_object().rep_email == self.request.user.email
+    # Check if user email is same as group leader email
+    def can_access(self):
+        return self.get_object().rep_email == self.request.user.email
+
+    # Redirect user to dashboard page
+    def redirect_user(self):
+        messages.error(
+            self.request,
+            "Please login with the Group Leader account to access this page."
         )
-        if not can_access:
-            messages.error(
-                self.request,
-                "Please login with the Group Leader account to access this page."
-            )
-        return can_access
+        return redirect('groups-dashboard')
+
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(GroupUpdateView, self).get(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
+
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(GroupUpdateView, self).post(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
 
 
 class SlackInviteView(FormView):
