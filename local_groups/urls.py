@@ -27,7 +27,11 @@ if settings.BSD_LOGIN_ENABLED:
             ),
             url('^', include('django.contrib.auth.urls')),
             url(r'^(?P<slug>[\w-]+)/', include([
-                url(r'^update', GroupUpdateView.as_view()),
+                url(
+                    r'^manage',
+                    GroupUpdateView.as_view(),
+                    name='groups-manage'
+                ),
             ]))
         ]))
     ]

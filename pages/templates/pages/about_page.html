@@ -1,5 +1,7 @@
 {% extends "pages/base_page.html" %}
 
+{% load wagtailcore_tags %}
+
 {% block content %}
 
 <div class="container-fluid fs18">
@@ -96,11 +98,11 @@
 			<div class="row">
 				<div class="col-md-6 pb2">
 					<h1>Our Board</h1>
-					{{ page.board_description | safe }}
+					{{ page.board_description | richtext }}
 				</div>
 
 				<div class="col-md-5 col-md-offset-1 blue-bg white-text pa20 br3 list-plain">
-					{{ page.board_list | safe }}
+					{{ page.board_list | richtext }}
 				</div>
 			</div>
 		</div>
@@ -111,11 +113,11 @@
 			<div class="row">
 				<div class="col-md-6 pb2">
 					<h1>Our Staff</h1>
-					{{ page.staff_description | safe }}
+					{{ page.staff_description | richtext }}
 				</div>
 
 				<div class="col-md-5 col-md-offset-1 light-wash pa20 br3 list-plain">
-					{{ page.staff_list | safe }}
+					{{ page.staff_list | richtext }}
 				</div>
 			</div>
 		</div>
@@ -126,7 +128,7 @@
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2 pb2">
 					<h1>Our Donors</h1>
-					{{ page.donors_description | safe }}
+					{{ page.donors_description | richtext }}
 					<strong><a href="/donors" class="btn btn-secondary uppercase ls2 mt20">View our Donors</a></strong>
 				</div>
 		</div>

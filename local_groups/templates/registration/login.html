@@ -1,85 +1,70 @@
-{% extends "pages/base_page.html" %}
+{% extends "group_portal.html" %}
 
 {% load bootstrap3 %}
 
 {% block page_title %}Our Revolution - Group Leader Login{% endblock %}
 
+{% block nav %}
+    {% with center_header=True %}
+        {{ block.super }}
+    {% endwith%}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Groups Dashboard</span>
+{% endblock %}
+
+{% block content_heading %}Group Leader Login{% endblock %}
+
 {% block content %}
 
-<div class="container-fluid">
-  <div class="row blue-bg white-text pb2">
-    <div class="back-bar clearfix">
-      <div class="container clearfix uppercase">
-
-        <span class="pull-right">
-          {% if request.user.is_authenticated %}
-          {{ request.user.get_username }} |
-          <a href="{% url 'logout' %}?next={{ request.path | urlencode }}">
-            Logout
-          </a>
-          {% else %}
-          <a href="{% url 'groups-login' %}?next={{ request.path | urlencode }}">
-            <strong>Groups Portal</strong>
-          </a>
-          {% endif %}
-        </span>
-      </div>
-    </div>
-
-    <div class="container pt2">
-      <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Groups Dashboard</span>
-        <h1 class="mt0 mb0">Group Leader Login</h1>
-      </div>
-    </div>
-  </div>
+<div class="container">
 
   <div class="row pt4 pb4">
-    <div class="container">
-      <div class="col-md-6 col-md-offset-3">
 
-        <p class="fs18">
-          Log in with your Our Revolution account to manage your local
-          group.
-        </p>
+    <div class="col-md-6 col-md-offset-3">
 
-        {% bootstrap_messages %}
-        {% bootstrap_form_errors form %}
+      <p class="fs18">
+        Log in with your Our Revolution account to manage your local
+        group.
+      </p>
 
-        <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
+      {% bootstrap_messages %}
+      {% bootstrap_form_errors form %}
 
-          <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}"
-          method="post" class="form form-uppercase">
+      <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
 
-            {% csrf_token %}
+        <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}"
+        method="post" class="form form-uppercase">
 
-            {% bootstrap_field form.username placeholder="you@example.com" %}
+          {% csrf_token %}
 
-            {% bootstrap_field form.password placeholder="" %}
+          {% bootstrap_field form.username placeholder="you@example.com" %}
 
-            <div class="form-group">
-              <p class="help-block fs14">
-                <a href="https://go.ourrevolution.com/page/user/forgot">
-                  <strong>Need to reset password?</strong>
-                </a>
-              </p>
-            </div>
+          {% bootstrap_field form.password placeholder="" %}
 
-            {% buttons %}
-            {% bootstrap_button "Log In" button_type="submit" button_class="btn-primary btn-block uppercase" %}
-            {% endbuttons %}
+          <div class="form-group">
+            <p class="help-block fs14">
+              <a href="https://go.ourrevolution.com/page/user/forgot">
+                <strong>Need to reset password?</strong>
+              </a>
+            </p>
+          </div>
 
-          </form>
-        </div>
+          {% buttons %}
+          {% bootstrap_button "Log In" button_type="submit" button_class="btn-primary btn-block uppercase" %}
+          {% endbuttons %}
 
-        <p class="fs18">
-          Don't have an Our Revolution account?
-          <a href="https://go.ourrevolution.com/ctl/Constituent/Login">
-            <strong>Create one now.</strong>
-          </a>
-        </p>
-
+        </form>
       </div>
+
+      <p class="fs18">
+        Don't have an Our Revolution account?
+        <a href="https://go.ourrevolution.com/ctl/Constituent/Login">
+          <strong>Create one now.</strong>
+        </a>
+      </p>
+
     </div>
   </div>
 </div>

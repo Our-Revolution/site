@@ -1004,6 +1004,37 @@ class GroupPage(RoutablePageMixin, Page):
             'group':group
         })
 
+
+# Groups Portal Resource Page
+class GroupResourcePage(Page):
+    body = RichTextField(
+        help_text='''
+        All H# tags will be automatically converted to a table of contents.
+        '''
+    )
+    sub_heading = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Optional text content to appear below page title.'
+    )
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('sub_heading'),
+        FieldPanel('body'),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel('social_image')
+    ]
+
+
 class PeoplesSummitStreamPage(Page):
     stream_id = models.CharField(max_length=30)
     facebook_stream_url = models.CharField(max_length=250, null=True, blank=True)
