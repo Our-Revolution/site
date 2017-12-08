@@ -1,14 +1,20 @@
+from allauth.account.adapter import get_adapter
+from allauth.account.models import EmailAddress
+from allauth.account.views import ConfirmEmailView, EmailView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView, UpdateView
+from .decorators import verified_email_required
 from .forms import SlackInviteForm
 from .models import Group
 import os
 import requests
 
 
-# TODO: replace with real page
 class GroupDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "group_dashboard.html"
 
@@ -22,6 +28,7 @@ class GroupDashboardView(LoginRequiredMixin, TemplateView):
 
 
 # View for Admin updates to Group Info
+@method_decorator(verified_email_required, name='dispatch')
 class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     fields = [
@@ -124,3 +131,36 @@ class SlackInviteView(FormView):
 
         # redirect
         return super(SlackInviteView, self).form_valid(form)
+
+
+class VerifyEmailConfirmView(ConfirmEmailView):
+    template_name = "verify_email_confirm.html"
+
+
+class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
+    template_name = "verify_email_request.html"
+    success_url = reverse_lazy('groups-verify-email-request')
+
+    # Send email confirmation message on post
+    def post(self, request, *args, **kwargs):
+        return self._action_send(request)
+
+    # Get email address from user model and send email confirmation
+    def _action_send(self, request, *args, **kwargs):
+        email = request.user.email
+
+        try:
+            email_address = EmailAddress.objects.get(
+                user=request.user,
+                email=email,
+            )
+            get_adapter(request).add_message(
+                request,
+                messages.INFO,
+                'account/messages/'
+                'email_confirmation_sent.txt',
+                {'email': email})
+            email_address.send_confirmation(request)
+            return HttpResponseRedirect(self.get_success_url())
+        except EmailAddress.DoesNotExist:
+            pass

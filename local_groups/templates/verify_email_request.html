@@ -1,0 +1,46 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block page_title %}Our Revolution - Email Verification{% endblock %}
+
+{% block nav %}
+    {% with center_header=True %}
+        {{ block.super }}
+    {% endwith%}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Groups Portal</span>
+{% endblock %}
+
+{% block content_heading %}Email Verification{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row pt4 pb4">
+
+    <div class="col-md-6 col-md-offset-3">
+
+      {% bootstrap_messages %}
+
+      <p class="fs18 mb20">
+        The page you requested requires email address verification. Please
+        verify your email address and then try again.
+      </p>
+
+      <form action="{% url 'groups-verify-email-request' %}" method="post">
+        {% csrf_token %}
+
+        {% buttons %}
+        {% bootstrap_button "Send Email Verification" button_type="submit" button_class="btn-primary btn-block uppercase" %}
+        {% endbuttons %}
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

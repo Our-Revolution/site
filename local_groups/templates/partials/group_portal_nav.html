@@ -4,9 +4,11 @@
   href="{{ link_url }}">
   Dashboard
   </a>
-  {% url 'groups-manage' group.slug as link_url %}
-  <a class="list-group-item {% if link_url in request.path %}active{% endif %}"
-  href="{{ link_url }}">
-    Manage Group
-  </a>
+  {% if group %}
+    {% url 'groups-manage' group.slug as link_url %}
+    <a class="list-group-item {% if link_url in request.path %}active{% endif %}"
+    href="{{ link_url }}">
+      Manage Group
+    </a>
+  {% endif %}
 </div>
