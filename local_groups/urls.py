@@ -25,7 +25,12 @@ if settings.BSD_LOGIN_ENABLED:
                 },
                 name='groups-login'
             ),
-            url('^', include('django.contrib.auth.urls')),
+            url(
+                r'^logout/',
+                auth_views.logout,
+                {'next_page': 'groups-login'},
+                name='groups-logout'
+            ),
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(
                     r'^manage',
