@@ -15,7 +15,7 @@
         <span class="pull-right">
           {% if request.user.is_authenticated %}
           {{ request.user.get_username }} |
-          <a href="{% url 'logout' %}">
+          <a href="{% url 'groups-logout' %}">
             Logout
           </a>
           {% else %}

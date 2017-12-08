@@ -171,20 +171,20 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
-AUTHENTICATION_BACKENDS = (
-    'bsd.backends.BSDAuthenticationBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-BSD_API_HOST    = os.environ.get('BSD_API_HOST')
-BSD_API_ID      = os.environ.get('BSD_API_ID')
-BSD_API_SECRET  = os.environ.get('BSD_API_SECRET')
 BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 
+
 # BSD login urls
-LOGIN_URL = 'groups-login'
-LOGIN_REDIRECT_URL = 'groups-dashboard'
-LOGOUT_REDIRECT_URL = 'groups-login'
+if BSD_LOGIN_ENABLED:
+    AUTHENTICATION_BACKENDS = (
+        'bsd.backends.BSDAuthenticationBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
+    BSD_API_HOST = os.environ.get('BSD_API_HOST')
+    BSD_API_ID = os.environ.get('BSD_API_ID')
+    BSD_API_SECRET = os.environ.get('BSD_API_SECRET')
+    LOGIN_URL = 'groups-login'
+    LOGIN_REDIRECT_URL = 'groups-dashboard'
 
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
