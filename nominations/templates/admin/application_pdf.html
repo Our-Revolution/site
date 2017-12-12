@@ -1,7 +1,7 @@
 {% extends "easy_pdf/base.html" %}
 
 {% block content %}
-    {% load static %}
+    {% load static humanize %}
     <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=122">
 
     <style>
@@ -161,19 +161,19 @@
         </li>
 
         <li>
-          Previous Election Turnout: {{app.vol_turnout}}
+          Previous Election Turnout: {{ app.vol_turnout | intcomma }}
         </li>
 
         <li>
-          Win Number: {{app.vol_win_number}}
+          Win Number: {{ app.vol_win_number | intcomma }}
         </li>
 
         <li>
-          Fundraising: ${{app.vol_fundraising}}
+          Fundraising: ${{ app.vol_fundraising | intcomma }}
         </li>
 
         <li>
-          Opponent Fundraising: ${{app.vol_opponent_fundraising}}
+          Opponent Fundraising: ${{ app.vol_opponent_fundraising | intcomma }}
         </li>
 
         <li>
