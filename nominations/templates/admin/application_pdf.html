@@ -1,182 +1,245 @@
 {% extends "easy_pdf/base.html" %}
 
-
-
 {% block content %}
-    {% load static %}
+    {% load static humanize %}
     <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?v=122">
 
     <style>
+
       body {
         font-size: 14px;
       }
 
-      h2, h3 {
-        margin-bottom: 0;
-        color: #218fff;
+      h1 {
+        font-size: 22px;
       }
 
-      .header {
-        background: #218fff;
-        color: white;
-        padding: 20px 20px 10px;
-        margin-top: 0;
+      h2 {
+        font-size: 18px;
+      }
+
+      h3 {
+        font-size: 14px;
+      }
+
+      h1, h2, h3 {
         margin-bottom: 0;
-        border-radius: 3px;
+        color: #218fff;
       }
 
       p {
         margin-top: 0;
       }
+
+      .bg-blue {
+        background: #218fff;
+        border-radius: 3px;
+        color: white;
+        padding: 10px 10px 0;
+      }
+
+      .bg-blue h1,
+      .bg-blue h2,
+      .bg-blue h3 {
+        color: white;
+        margin-bottom: 10px;
+      }
+
     </style>
 
     <div id="content">
-      <div class="header">
-        <h1>{{app.candidate_first_name}} {{app.candidate_last_name}} for {{app.candidate_office}}</h1>
-      </div>
 
-      <p><small><strong>Submitted:</strong> {{app.submitted_dt}}</small></p>
+      <section>
 
+        <div class="bg-blue">
+          <h1>
+            {{ app.candidate_office }}
+            {{ app.candidate_district }}
+            in {{ app.candidate_state }}
+          </h1>
+        </div>
 
-      <h2>Candidate Info</h2>
+        <p>
+          <strong>Submitted: {{ app.submitted_dt|date:"Y-m-d" }}</strong><br />
+          <strong>
+            Primary election date:
+            {{ app.questionnaire.primary_election_date|date:"Y-m-d" }}
+          </strong><br />
+          <strong>
+            General election date:
+            {{ app.questionnaire.general_election_date|date:"Y-m-d" }}
+          </strong>
+        </p>
+
+        <p>
+          <strong>
+            Classification: Level {{ app.get_classification_level_display }}
+          </strong>
+        </p>
+
+        <p>
+          <strong>
+            Recommendation written by: {{ app.get_staff_display }}
+          </strong>
+        </p>
+
+        <p>
+          <strong>Staff Recommendation:</strong>
+          {{ app.get_recommendation_display }}
+          {{ app.candidate_first_name }} {{ app.candidate_last_name }}
+        </p>
+
+      </section>
+
+      <section>
+        <p>
+          The following candidate(s) have been nominated for this race:
+        </p>
+
+        <div class="bg-blue">
+          <h2>
+            {{ app.candidate_first_name }} {{ app.candidate_last_name }}
+          </h2>
+        </div>
+
+        <p>
+          <strong>Campaign Website:</strong>
+          {% with app.questionnaire.candidate_website_url as link_url %}
+          <a href="{{ link_url }}">{{ link_url }}</a>
+          {% endwith %}
+        </p>
+
+        <h3>Candidate Bio</h3>
+
+        {{ app.staff_bio|safe }}
+
+        <p>
+          <strong>Party:</strong> {{ app.questionnaire.candidate_party }}
+        </p>
+
+        <p>
+          <strong>Political Questionnaire:</strong>
+          {% url 'admin:nominations_questionnaire_change' app.questionnaire.id as link_path %}
+          <a href="{{ base_url }}{{ link_path }}">Attached.</a>
+        </p>
+
+        <p>
+          <strong>City:</strong> {{ app.candidate_city }}
+        </p>
+
+        <p>
+          <strong>State:</strong> {{ app.candidate_state }}
+        </p>
+
+        <p>
+          <strong>Has the candidate ever held public office?</strong>
+          {{ app.questionnaire.candidate_held_office|yesno:"Yes, No, Unknown" }}
+        </p>
+
+      </section>
+
+      <section>
+
+      <h2>
+        State of the Race
+      </h2>
+
+      {{ app.state_of_the_race|safe }}
+
       <ul>
-        <li><strong>Name:</strong> {{app.candidate_first_name}} {{app.candidate_last_name}}</li>
 
-        {% if app.questionnaire.candidate_party %}
-          <li><strong>Party:</strong> {{app.questionnaire.candidate_party}}</li>
-        {% endif %}
+        <li>
+          Other candidates running: {{ app.vol_other_progressives }}
+        </li>
 
-        {% if app.candidate_district %}
-          <li><strong>District: </strong> {{app.candidate_district}}</li>
-        {% endif %}
+        <li>
+          Previous Election Advantage: {{app.vol_advantage}}
+        </li>
 
-        {% if app.candidate_city %}
-          <li><strong>City: </strong> {{app.candidate_city}}</li>
-        {% endif %}
+        <li>
+          Polling: {{app.vol_polling}}
+        </li>
 
-        {% if app.candidate_state %}
-          <li><strong>State: </strong> {{app.candidate_state}}</li>
-        {% endif %}
+        <li>
+          Previous Election Turnout: {{ app.vol_turnout | intcomma }}
+        </li>
 
-        {% if app.questionnaire.candidate_held_office is True %}
-          <li>Has previously held office.</li>
-        {% elif app.questionnaire.candidate_held_office is False %}
-          <li>Has not previously held office.</li>
-        {% endif %}
+        <li>
+          Win Number: {{ app.vol_win_number | intcomma }}
+        </li>
 
-        {% if app.questionnaire.candidate_website_url %}
-          <li><strong>Campaign Website:</strong> <a href="{{app.questionnaire.candidate_website_url}}">{{app.questionnaire.candidate_website_url}}</a></li>
-        {% endif %}
+        <li>
+          Fundraising: ${{ app.vol_fundraising | intcomma }}
+        </li>
+
+        <li>
+          Opponent Fundraising: ${{ app.vol_opponent_fundraising | intcomma }}
+        </li>
+
+        <li>
+          Candidate is incumbent?
+          {{ app.vol_incumbent|yesno:"Yes, No, Unknown" }}
+        </li>
+
+        <li>
+          Dem challenger? {{ app.vol_dem_challenger|yesno:"Yes, No, Unknown" }}
+        </li>
 
       </ul>
 
-      <ul>
-        {% if app.primary_election_date %}
-          <li><strong>Primary election date:</strong> {{app.primary_election_date}}</li>
-        {% endif %}
+    </section>
 
-        {% if app.general_election_date %}
-          <li><strong>General election date:</strong> {{app.general_election_date}}</li>
-        {% endif %}
+    <section>
 
-        <li><strong>Classification: </strong> Level {{app.get_classification_level_display}}</li>
+      <h2>OR Local Group Info</h2>
 
-        <li><strong>Recommendation written by:</strong> {{app.get_staff_display}}</li>
+      <p>
+        {{app.group}}
+      </p>
 
-        <li><strong>Staff Recommendation:</strong> <strong>{{app.get_recommendation_display}}</strong> {{app.candidate_first_name}} {{app.candidate_last_name}} for {{app.candidate_office}}</li>
-      </ul>
+      <h3>Local Endorsement Process</h3>
 
-      {% if app.state_of_the_race %}
-        <h2>State of the Race</h2>
-        {{app.state_of_the_race|safe}}
+      {{ app.local_group_info|safe }}
 
-        <ul>
-          <li>
-            {% if app.vol_incumbent %}
-              <strong>Candidate {{app.vol_incumbent|yesno:"is, is not"}} an incumbent.</strong>
-            {% endif %}
-          </li>
+      <h3>Commitments from group</h3>
 
-          <li>
-            {% if app.vol_dem_challenger %}
-              Dem challenger? {{app.dem_challenge|yesno:"Yes, No"}}
-            {% endif %}
-          </li>
+      {{ app.local_support|safe }}
 
-          <li>
-            {% if app.vol_other_progressives %}
-              <strong>Other progressives in race:</strong> {{app.vol_other_progressives }}
-            {% endif %}
-          </li>
+      </section>
 
-          <li>
-            {% if app.vol_polling %}
-              <strong>Polling:</strong> {{app.vol_polling}}
-            {% endif %}
-          </li>
+      <section>
 
-          <li>
-            {% if app.vol_endorsments %}
-              <strong>Endorsements:</strong> {{app.vol_endorsements}}
-            {% endif %}
-          </li>
+        <h2>Vet</h2>
 
-          <li>
-            {% if app.vol_advantage %}
-              <strong>Previous Election D% or R% Advantage:</strong> {{app.vol_advantage}}
-            {% endif %}
-          </li>
+        <p>
+           {{ app.get_vet_status_display }}
+        </p>
 
-          <li>
-            {% if app.vol_turnout %}
-              <strong>Previous Election Year Turnout:</strong> {{app.vol_turnout}}
-            {% endif %}
-          </li>
+        {{ app.vet|safe }}
 
-          <li>
-            {% if app.vol_win_number %}
-              <strong>Win Number:</strong> {{app.vol_win_number}}
-            {% endif %}
-          </li>
+        <p>
+          Conducted by volunteers: {{ app.vol_crimes }}
+        </p>
 
-          <li>
-            {% if app.vol_fundraising %}
-              <strong>Fundraising:</strong> ${{app.vol_fundraising}}
-            {% endif %}
-          </li>
+      </section>
 
-          <li>
-            {% if app.vol_opponent_fundraising %}
-              <strong>Opponent Fundraising:</strong> ${{app.vol_opponent_fundraising}}
-            {% endif %}
-          </li>
-        </ul>
-      {% endif %}
+      <section>
 
-      {% if app.local_group_info %}
-        <h2>{{app.group}} Info</h2>
-        {{app.local_group_info|safe}}
-      {% endif %}
+        <h2>Endorsements</h2>
 
-      {% if app.staff_bio %}
-        <h2>Candidate Bio</h2>
-        {{app.staff_bio|safe}}
-      {% endif %}
+        <p>
+         {{ app.vol_endorsements }}
+        </p>
 
-      {% if app.staff_notes %}
-        <h2>Notes or Flags</h2>
-        {{app.staff_notes|safe}}
-      {% endif %}
+      </section>
 
-      {% if app.vet %}
-        <h2>Vetting - {{app.get_vet_status_display}}</h2>
-        {{app.vet|safe}}
-      {% endif %}
+      <section>
 
-      {% if app.local_support %}
-        <h2>Local Support</h2>
-        {{app.local_support|safe}}
-      {% endif %}
+        <h2>Staff Notes</h2>
+
+        {{ app.staff_notes|safe }}
+
+      </section>
 
     </div>
 {% endblock %}
