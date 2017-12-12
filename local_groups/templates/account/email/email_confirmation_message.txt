@@ -1,0 +1,4 @@
+If you requested email verification for your Our Revolution account, then
+please visit the link below to complete the process.
+
+Confirm Email Verification: {{ activate_url }}

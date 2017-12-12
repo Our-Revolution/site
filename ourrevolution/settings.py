@@ -30,6 +30,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
+DEFAULT_FROM_EMAIL = "info@ourrevolution.com"
+
+ACCOUNT_ADAPTER = ("local_groups.adapter.AccountAdapter")
+
 ALLOWED_HOSTS = '*'
 
 ADMINS = [
@@ -39,7 +43,6 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
-
 # Application definition
 '''
 When several applications provide different versions of the same resource
@@ -48,7 +51,7 @@ first in INSTALLED_APPS has precedence.
 '''
 INSTALLED_APPS = [
 
-    # OR
+    # OR apps
     'endorsements',
     'pages',
     'social_redirects',
@@ -56,7 +59,12 @@ INSTALLED_APPS = [
     'nominations',
     'bsd',
 
-    #Django gulp
+    # Other apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # Django gulp
     'django_gulp',
 
     'anymail',
@@ -173,12 +181,12 @@ DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 
-
 # BSD login urls
 if BSD_LOGIN_ENABLED:
     AUTHENTICATION_BACKENDS = (
         'bsd.backends.BSDAuthenticationBackend',
         'django.contrib.auth.backends.ModelBackend',
+        'allauth.account.auth_backends.AuthenticationBackend',
     )
     BSD_API_HOST = os.environ.get('BSD_API_HOST')
     BSD_API_ID = os.environ.get('BSD_API_ID')
@@ -219,7 +227,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

@@ -14,7 +14,10 @@
 
         <span class="pull-right">
           {% if request.user.is_authenticated %}
-          {{ request.user.get_username }} |
+
+          <a href="{% url 'groups-dashboard' %}">
+            {{ request.user.email }}
+          </a> |
           <a href="{% url 'groups-logout' %}">
             Logout
           </a>
