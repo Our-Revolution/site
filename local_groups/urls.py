@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from .forms import GroupLoginForm
 from .views import (
     GroupDashboardView,
-    GroupUpdateView,
+    GroupManageView,
     SlackInviteView,
     VerifyEmailRequestView,
     VerifyEmailConfirmView
@@ -52,7 +52,7 @@ if settings.BSD_LOGIN_ENABLED:
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(
                     r'^manage',
-                    GroupUpdateView.as_view(),
+                    GroupManageView.as_view(),
                     name='groups-manage'
                 ),
             ]))

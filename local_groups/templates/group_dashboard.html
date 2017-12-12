@@ -8,7 +8,9 @@
 <span class="article-type">Groups Portal</span>
 {% endblock %}
 
-{% block content_heading %}{{ group.name }}{% endblock %}
+{% block content_heading %}
+<a href="/groups/{{ group.slug }}">{{ group.name }}</a>
+{% endblock %}
 
 {% block content %}
 

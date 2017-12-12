@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView, UpdateView
 from .decorators import verified_email_required
-from .forms import SlackInviteForm
+from .forms import GroupManageForm, SlackInviteForm
 from .models import Group
 import os
 import requests
@@ -29,46 +29,14 @@ class GroupDashboardView(LoginRequiredMixin, TemplateView):
 
 # View for Admin updates to Group Info
 @method_decorator(verified_email_required, name='dispatch')
-class GroupUpdateView(LoginRequiredMixin, UpdateView):
+class GroupManageView(LoginRequiredMixin, UpdateView):
     model = Group
-    fields = [
-        'description',
-        'city',
-        'state',
-        'county',
-        'country',
-        'postal_code',
-        'size',
-        # Edit group email instead of rep email so BSD auth still works
-        'group_contact_email',
-        'rep_first_name',
-        'rep_last_name',
-        'rep_phone',
-        'rep_postal_code',
-        'website_url',
-        'facebook_url',
-        'twitter_url',
-        'instagram_url',
-        'other_social',
-        'types_of_organizing',
-        'other_types_of_organizing',
-        'issues',
-        'other_issues',
-        'constituency',
-        'last_meeting',
-        'recurring_meeting',
-        'meeting_address_line1',
-        'meeting_address_line2',
-        'meeting_city',
-        'meeting_state_province',
-        'meeting_postal_code',
-        'meeting_country',
-    ]
-    template_name_suffix = '_update_form'
+    form_class = GroupManageForm
+    template_name_suffix = '_manage_form'
 
     # Redirect to same page on success
     def get_success_url(self):
-        return "/groups/" + self.object.slug + "/update/"
+        return reverse_lazy('groups-manage', kwargs={'slug': self.object.slug})
 
     # Check if user email is same as group leader email
     def can_access(self):
@@ -85,14 +53,14 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
     # Use default get logic but add custom access check
     def get(self, request, *args, **kwargs):
         if self.can_access():
-            return super(GroupUpdateView, self).get(request, *args, **kwargs)
+            return super(GroupManageView, self).get(request, *args, **kwargs)
         else:
             return self.redirect_user()
 
     # Use default post logic but add custom access check
     def post(self, request, *args, **kwargs):
         if self.can_access():
-            return super(GroupUpdateView, self).post(request, *args, **kwargs)
+            return super(GroupManageView, self).post(request, *args, **kwargs)
         else:
             return self.redirect_user()
 

@@ -22,12 +22,12 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
+from local_groups.forms import GroupForm
 from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv, json
-from .forms import GroupForm
 
 
 class AboutPage(Page):
