@@ -208,7 +208,13 @@ class Application(models.Model):
     vol_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much money fundraised?')
     vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
     vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
-    vol_notes = models.TextField(null=True, blank=True, max_length=1000, verbose_name='Notes:', help_text = 'Max length 1000 characters.')
+    vol_notes = models.TextField(
+        null=True,
+        blank=True,
+        max_length=1000,
+        verbose_name='Volunteer Notes:',
+        help_text='Max length 1000 characters.'
+    )
 
     # Staff only research fields
     CLASSIFICATIONS = (
@@ -225,6 +231,7 @@ class Application(models.Model):
         ('0', 'Pending'),
         ('1', 'Passed'),
         ('2', 'Failed'),
+        ('3', 'Not Submitted'),
     )
 
     RECOMMENDATIONS = (
@@ -273,7 +280,7 @@ class Application(models.Model):
     staff_notes = RichTextField(
         null=True,
         blank=True,
-        verbose_name='Notes or Flags:',
+        verbose_name='Staff Notes or Flags:',
         help_text='This will prepopulate from volunteer notes if left blank.'
     )
 
