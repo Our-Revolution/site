@@ -2,7 +2,13 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from .forms import GroupLoginForm
-from .views import GroupDashboardView, GroupUpdateView, SlackInviteView
+from .views import (
+    GroupDashboardView,
+    GroupUpdateView,
+    SlackInviteView,
+    VerifyEmailRequestView,
+    VerifyEmailConfirmView
+)
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
@@ -31,6 +37,18 @@ if settings.BSD_LOGIN_ENABLED:
                 {'next_page': 'groups-login'},
                 name='groups-logout'
             ),
+            url(r'^verify-email/', include([
+                url(
+                    r"^confirm/(?P<key>[-:\w]+)/$",
+                    VerifyEmailConfirmView.as_view(),
+                    name="groups-verify-email-confirm"
+                ),
+                url(
+                    r'^request/',
+                    VerifyEmailRequestView.as_view(),
+                    name='groups-verify-email-request',
+                ),
+            ])),
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(
                     r'^manage',
