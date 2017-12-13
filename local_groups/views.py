@@ -61,7 +61,7 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
 
     # Redirect to same page on success
     def get_success_url(self):
-        return "/groups/" + self.object.slug + "/update/"
+        return "/groups/" + self.object.slug + "/manage/"
 
     # Check if user email is same as group leader email
     def can_access(self):

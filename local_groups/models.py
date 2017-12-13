@@ -8,6 +8,7 @@ from endorsements.models import Issue
 from django_countries.fields import CountryField
 from recurrence.fields import RecurrenceField
 from django.contrib.gis.db.models import PointField
+from wagtail.contrib.wagtailfrontendcache.utils import purge_url_from_cache
 
 
 class Group(models.Model):
@@ -262,6 +263,10 @@ class Group(models.Model):
         null=True,
         verbose_name="Notes"
     )
+
+    def save(self, *args, **kwargs):
+        purge_url_from_cache('groups/' + self.slug)
+        super(Group, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
