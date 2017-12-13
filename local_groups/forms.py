@@ -45,7 +45,7 @@ class GisForm(forms.ModelForm):
         super(GisForm, self).__init__(*args, **kwargs)
 
 
-class GroupForm(forms.ModelForm):
+class GroupCreateForm(forms.ModelForm):
     required_css_class = 'required'
 
     class Meta:
@@ -54,12 +54,26 @@ class GroupForm(forms.ModelForm):
         widgets = {
             'rep_phone': PhoneNumberInternationalFallbackWidget(),
             'last_meeting': forms.DateInput(),
-            'description': forms.Textarea(attrs={'rows': '5'}),
+            'description': forms.Textarea(attrs={'rows': '2'}),
             'other_social': forms.Textarea(attrs={'rows': '2'}),
-            'other_issues': forms.Textarea(attrs={'rows': '4'}),
-            'constituency': forms.Textarea(attrs={'rows': '3'}),
+            'other_issues': forms.Textarea(attrs={'rows': '2'}),
+            'constituency': forms.Textarea(attrs={'rows': '2'}),
             'issues': forms.CheckboxSelectMultiple
         }
+
+
+# Customize AuthenticationForm as needed
+class GroupLoginForm(AuthenticationForm):
+    username = UsernameField(
+        label=_("Group Leader Email"),
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
+    error_messages = {
+        'invalid_login': _(
+            "The email address or password you entered is invalid."
+        ),
+        'inactive': _("This account is inactive."),
+    }
 
 
 class GroupManageForm(forms.ModelForm):
@@ -110,18 +124,8 @@ class GroupManageForm(forms.ModelForm):
             'issues': forms.CheckboxSelectMultiple
         }
 
-# Customize AuthenticationForm as needed
-class GroupLoginForm(AuthenticationForm):
-    username = UsernameField(
-        label=_("Group Leader Email"),
-        widget=forms.TextInput(attrs={'autofocus': True})
-    )
-    error_messages = {
-        'invalid_login': _(
-            "The email address or password you entered is invalid."
-        ),
-        'inactive': _("This account is inactive."),
-    }
+
+
 
 
 class SlackInviteForm(forms.Form):

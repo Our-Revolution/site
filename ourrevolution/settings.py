@@ -184,9 +184,8 @@ BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
 # BSD login urls
 if BSD_LOGIN_ENABLED:
     AUTHENTICATION_BACKENDS = (
-        'bsd.backends.BSDAuthenticationBackend',
         'django.contrib.auth.backends.ModelBackend',
-        'allauth.account.auth_backends.AuthenticationBackend',
+        'bsd.backends.BSDAuthenticationBackend',
     )
     BSD_API_HOST = os.environ.get('BSD_API_HOST')
     BSD_API_ID = os.environ.get('BSD_API_ID')
