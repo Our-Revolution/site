@@ -125,9 +125,6 @@ class GroupManageForm(forms.ModelForm):
         }
 
 
-
-
-
 class SlackInviteForm(forms.Form):
     email = forms.EmailField(label="Your Email Address", help_text="We'll send your Slack invite here.")
     full_name = forms.CharField(required=False, label="Your Full Name", help_text="Optional")
