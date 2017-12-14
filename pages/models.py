@@ -22,12 +22,12 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
+from local_groups.forms import GroupCreateForm
 from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv, json
-from .forms import GroupForm
 
 
 class AboutPage(Page):
@@ -923,7 +923,7 @@ class GroupPage(RoutablePageMixin, Page):
     @route(r'^new/$')
     def add_group_view(self, request):
         # if this is a POST request we need to process the form data
-        form = GroupForm(request.POST or None)
+        form = GroupCreateForm(request.POST or None)
 
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:

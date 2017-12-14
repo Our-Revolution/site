@@ -21,7 +21,7 @@ class Group(models.Model):
     group_contact_email = models.EmailField(
         blank=True,
         help_text="""Optional Group Contact Email to publicly display an email
-        different from Individual Contact Email""",
+        different from Group Leader Email""",
         max_length=254,
         null=True,
     )

@@ -1,6 +1,6 @@
 {% extends "group_portal.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 local_groups_tags %}
 
 {% block page_title %}Our Revolution - Dashboard{% endblock %}
 
@@ -8,15 +8,18 @@
 <span class="article-type">Groups Portal</span>
 {% endblock %}
 
-{% block content_heading %}{{ group.name }}{% endblock %}
+{% block content_heading %}
+<a href="/groups/{{ group.slug }}">{{ group.name }}</a>
+{% endblock %}
 
 {% block content %}
-
-{% bootstrap_messages %}
 
 <div class="container pt4">
   <div class="row">
       <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
         <h3 class="mb20 mt0">
           Dashboard
         </h3>
@@ -29,7 +32,7 @@
   <div class="row">
 
       <div class="col-md-3">
-        {% include "partials/group_portal_nav.html" %}
+        {% group_portal_nav %}
       </div>
 
       <div class="col-md-9">

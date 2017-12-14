@@ -1,0 +1,64 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block page_title %}Our Revolution - Confirm Email Verification{% endblock %}
+
+{% block nav %}
+    {% with center_header=True %}
+        {{ block.super }}
+    {% endwith%}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Groups Portal</span>
+{% endblock %}
+
+{% block content_heading %}Confirm Email Verification{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row pt4 pb4">
+
+    <div class="col-md-6 col-md-offset-3">
+
+      {% bootstrap_messages %}
+
+      {% if confirmation %}
+      {% with confirmation.email_address.email as email %}
+
+      <p class="fs18 mb20">
+        Please confirm that you requested email verification for your account
+        and <strong>{{ email }}</strong> is the correct email.
+      </p>
+
+      {% endwith %}
+      <form action="{% url 'groups-verify-email-confirm' confirmation.key %}"
+      method="post" >
+
+        {% csrf_token %}
+
+        {% buttons %}
+        {% bootstrap_button "Confirm Email Verification" button_type="submit" button_class="btn-primary btn-block uppercase" %}
+        {% endbuttons %}
+
+      </form>
+
+      {% else %}
+
+      <p class="fs18">
+        This email confirmation link is expired or invalid. Please
+        <a href="{% url 'groups-verify-email-request' %}">
+          submit a new email verification request
+        </a>.
+      </p>
+
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
