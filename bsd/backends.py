@@ -33,14 +33,11 @@ class BSDAuthenticationBackend:
                 user = User.objects.get(email=username)
             except User.DoesNotExist:
                 # Create user but dont set password since we use BSD password
-                # TODO: keep track of bsd source for user
                 user = User.objects.create_user(
                     username=username,
                     email=username,
                     password=None
                 )
-
-            # TODO assert bsd source for user
             return user
 
         except AssertionError:
