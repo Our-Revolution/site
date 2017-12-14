@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView, UpdateView
 from .decorators import verified_email_required
@@ -29,9 +30,10 @@ class GroupDashboardView(LoginRequiredMixin, TemplateView):
 
 # View for Admin updates to Group Info
 @method_decorator(verified_email_required, name='dispatch')
-class GroupManageView(LoginRequiredMixin, UpdateView):
+class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Group
     form_class = GroupManageForm
+    success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
 
     # Redirect to same page on success
