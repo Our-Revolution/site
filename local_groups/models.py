@@ -267,6 +267,8 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # TODO: make main groups url an environment variable
         # and replace hardcoded /groups throughout site
+
+        purge_url_from_cache('/groups')
         purge_url_from_cache('/groups/' + self.slug)
         super(Group, self).save(*args, **kwargs)
 
