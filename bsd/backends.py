@@ -23,7 +23,7 @@ class BSDAuthenticationBackend:
 
         # Find user in db if it exists
         try:
-            user = User.objects.get(email=username)
+            user = User.objects.get(email__iexact=username)
 
         except User.DoesNotExist:
             user = None
