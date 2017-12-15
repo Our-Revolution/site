@@ -21,6 +21,7 @@ class BSDAuthenticationBackend:
         if '@' not in username:
             return None
 
+        # Find user in db if it exists
         try:
             user = User.objects.get(email=username)
 
@@ -28,7 +29,10 @@ class BSDAuthenticationBackend:
             user = None
 
         try:
-            # Assert bsd profile exists so we dont authenticate wrong user type
+            '''
+            If db user exists, assert bsd profile exists too so we dont
+            authenticate wrong user type
+            '''
             if (user is not None):
                 assert hasattr(user, 'bsdprofile')
 
@@ -44,6 +48,10 @@ class BSDAuthenticationBackend:
             assert cons.find('has_account').text == "1"
             assert cons.find('is_banned').text == "0"
 
+            '''
+            If authentication passed in BSD and no db user exists, create new
+            db user and bsd profile for this account
+            '''
             # Create user and bsd profile but dont set db password
             if (user is None):
                 user = User.objects.create_user(
