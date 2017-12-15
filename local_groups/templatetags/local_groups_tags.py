@@ -9,7 +9,7 @@ register = template.Library()
 def group_portal_nav(context):
 
     group = Group.objects.filter(
-        rep_email=context['request'].user.email
+        rep_email__iexact=context['request'].user.email
     ).first()
 
     return {

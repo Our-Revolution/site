@@ -22,8 +22,9 @@ class GroupDashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(GroupDashboardView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
+            # Case insensitive check for group rep email matches user email
             context['group'] = Group.objects.filter(
-                rep_email=self.request.user.email
+                rep_email__iexact=self.request.user.email
             ).first()
         return context
 
@@ -40,9 +41,11 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('groups-manage', kwargs={'slug': self.object.slug})
 
-    # Check if user email is same as group leader email
+    # Check if user email is same as group leader email (case insensitive)
     def can_access(self):
-        return self.get_object().rep_email == self.request.user.email
+        email1 = self.get_object().rep_email
+        email2 = self.request.user.email
+        return email1.lower() == email2.lower()
 
     # Redirect user to dashboard page
     def redirect_user(self):
