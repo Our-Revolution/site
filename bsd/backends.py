@@ -21,35 +21,38 @@ class BSDAuthenticationBackend:
         if '@' not in username:
             return None
 
-        # Check credentials via BSD api
-        apiResult = api.account_checkCredentials(username, password)
+        try:
+            user = User.objects.get(email=username)
 
-        # Parse and validate response
-        tree = ElementTree().parse(StringIO(apiResult.body))
+        except User.DoesNotExist:
+            user = None
 
         try:
+            # Assert bsd profile exists so we dont authenticate wrong user type
+            if (user is not None):
+                assert hasattr(user, 'bsdprofile')
+
+            # Check credentials via BSD api
+            apiResult = api.account_checkCredentials(username, password)
+
+            # Parse and validate response
+            tree = ElementTree().parse(StringIO(apiResult.body))
+
             cons = tree.find('cons')
             # assertions copied from hydra app
             assert cons is not None
             assert cons.find('has_account').text == "1"
             assert cons.find('is_banned').text == "0"
 
-            # Look for existing user and bsd profile, or create new user
-            user = User.objects.get(email=username)
+            # Create user and bsd profile but dont set db password
+            if (user is None):
+                user = User.objects.create_user(
+                    username=username,
+                    email=username,
+                    password=None
+                )
+                BSDProfile.objects.create(user=user)
 
-            # Assert bsd profile exists so we dont authenticate wrong user type
-            assert hasattr(user, 'bsdprofile')
-            return user
-
-        except User.DoesNotExist:
-            # Create user but dont set password since we use BSD password
-            user = User.objects.create_user(
-                username=username,
-                email=username,
-                password=None
-            )
-            # Create BSD profile for new user
-            BSDProfile.objects.create(user=user)
             return user
 
         except AssertionError:
