@@ -11,6 +11,10 @@ api = BSD().api
 
 class BSDAuthenticationBackend:
 
+    '''
+    Authenticate users via BSD if they have an existing user record with bsd
+    profile, or if there is no existing user record
+    '''
     def authenticate(self, username=None, password=None):
 
         # Basic email validation
