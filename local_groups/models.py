@@ -274,7 +274,5 @@ class Group(models.Model):
 
         super(Group, self).save(*args, **kwargs)
 
-        super(Group, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return self.name
