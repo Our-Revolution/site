@@ -6579,8 +6579,6 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   font-weight: bolder; }
   .our-dream-bg .module__heading, .our-dream-bg .module__heading--small {
     text-shadow: none; }
-  .our-dream-bg .article-type {
-    font-weight: bolder; }
 
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
