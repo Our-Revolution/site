@@ -6572,6 +6572,14 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
   .web-store-bg .article-type {
     font-weight: bolder; }
 
+.our-dream-bg {
+  background: #356c84 url("../img/our-dream-site-bg.jpg") center;
+  background-size: cover;
+  color: white;
+  font-weight: bolder; }
+  .our-dream-bg .module__heading, .our-dream-bg .module__heading--small {
+    text-shadow: none; }
+
 .cupcake-bg {
   background: white url("../img/year-one/birthday-background.png") center repeat; }
 
