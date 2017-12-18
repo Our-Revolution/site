@@ -272,7 +272,7 @@ class Group(models.Model):
 
         if self.slug:
             purge_url_from_cache('/groups')
-            purge_url_from_cache('/groups/' + self.slug)
+            purge_url_from_cache('/groups/' + self.slug +'/')
 
     def __unicode__(self):
         return self.name
