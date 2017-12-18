@@ -267,19 +267,12 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # TODO: make main groups url an environment variable
         # and replace hardcoded /groups throughout site
-<<<<<<< HEAD
-
-        super(Group, self).save(*args, **kwargs)
 
         if self.slug:
             purge_url_from_cache('/groups/')
             purge_url_from_cache('/groups/' + self.slug + '/')
-=======
-        super(Group, self).save(*args, **kwargs)
 
-        purge_url_from_cache('/groups/')
-        purge_url_from_cache('/groups/' + self.slug + '/')
->>>>>>> parent of 26f3a712... TECH-564 automate clear cache when group info updated by group leader
+        super(Group, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
