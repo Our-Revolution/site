@@ -44,7 +44,7 @@ class Group(models.Model):
     group_contact_email = models.EmailField(
         blank=True,
         help_text="""Optional Group Contact Email to publicly display an email
-        different from Group Leader Email""",
+        different from Individual Contact Email""",
         max_length=254,
         null=True,
     )
@@ -259,7 +259,7 @@ class Group(models.Model):
     notes = models.TextField(
         blank=True,
         help_text="""Please include dates here along with notes to make
-            reporting easier.""",
+                    reporting easier.""",
         null=True,
         verbose_name="Notes"
     )
@@ -267,12 +267,19 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # TODO: make main groups url an environment variable
         # and replace hardcoded /groups throughout site
+<<<<<<< HEAD
 
         super(Group, self).save(*args, **kwargs)
 
         if self.slug:
             purge_url_from_cache('/groups/')
             purge_url_from_cache('/groups/' + self.slug + '/')
+=======
+        super(Group, self).save(*args, **kwargs)
+
+        purge_url_from_cache('/groups/')
+        purge_url_from_cache('/groups/' + self.slug + '/')
+>>>>>>> parent of 26f3a712... TECH-564 automate clear cache when group info updated by group leader
 
     def __unicode__(self):
         return self.name
