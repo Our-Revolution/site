@@ -223,10 +223,6 @@ class Application(models.Model):
         ('3', 'III'),
     )
 
-    STAFF = (
-        ('1', 'Erika Andiola'),
-    )
-
     VET_STATUSES = (
         ('0', 'Pending'),
         ('1', 'Passed'),
@@ -247,8 +243,8 @@ class Application(models.Model):
 
     staff = models.CharField(
         max_length=64,
-        choices=STAFF,
-        default='1'
+        blank=True,
+        null=True,
     )
 
     recommendation = models.CharField(
