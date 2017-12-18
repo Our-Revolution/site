@@ -267,10 +267,12 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # TODO: make main groups url an environment variable
         # and replace hardcoded /groups throughout site
+
         super(Group, self).save(*args, **kwargs)
 
-        purge_url_from_cache('/groups/')
-        purge_url_from_cache('/groups/' + self.slug + '/')
+        if self.slug:
+            purge_url_from_cache('/groups')
+            purge_url_from_cache('/groups/' + self.slug +'/')
 
     def __unicode__(self):
         return self.name
