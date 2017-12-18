@@ -269,8 +269,10 @@ class Group(models.Model):
         # and replace hardcoded /groups throughout site
 
         if self.slug:
-            purge_url_from_cache('/groups/')
-            purge_url_from_cache('/groups/' + self.slug + '/')
+            purge_url_from_cache('/groups')
+            purge_url_from_cache('/groups/' + self.slug)
+
+        super(Group, self).save(*args, **kwargs)
 
         super(Group, self).save(*args, **kwargs)
 
