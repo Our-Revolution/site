@@ -9,8 +9,9 @@ from django.db import migrations, models
 def update_application_staff_data(apps, schema_editor):
     Application = apps.get_model('nominations', 'Application')
     for application in Application.objects.all():
-        application.staff = "Erika Andiola"
-        application.save()
+        if application.staff == "1":
+            application.staff = "Erika Andiola"
+            application.save()
 
 
 class Migration(migrations.Migration):
