@@ -51,7 +51,7 @@ if settings.BSD_LOGIN_ENABLED:
             ])),
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(
-                    r'^manage',
+                    r'^manage/',
                     GroupManageView.as_view(),
                     name='groups-manage'
                 ),
