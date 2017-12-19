@@ -1012,11 +1012,13 @@ class GroupResourcePage(Page):
         All H# tags will be automatically converted to a table of contents.
         '''
     )
+    parent_page_types = ['pages.IndexPage', 'pages.GroupResourcePage']
     sub_heading = models.TextField(
         blank=True,
         null=True,
         help_text='Optional text content to appear below page title.'
     )
+    subpage_types = ['pages.GroupResourcePage']
     social_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
