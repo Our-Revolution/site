@@ -16,9 +16,9 @@ urlpatterns = [
 
 if settings.BSD_LOGIN_ENABLED:
     urlpatterns += [
-        url(r'^groups/', include([
+        url(r'^groups/portal/', include([
             url(
-                r'^dashboard/',
+                r'^$',
                 GroupDashboardView.as_view(),
                 name='groups-dashboard'
             ),
@@ -51,7 +51,7 @@ if settings.BSD_LOGIN_ENABLED:
             ])),
             url(r'^(?P<slug>[\w-]+)/', include([
                 url(
-                    r'^manage',
+                    r'^manage/',
                     GroupManageView.as_view(),
                     name='groups-manage'
                 ),
