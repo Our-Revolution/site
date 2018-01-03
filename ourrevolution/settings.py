@@ -33,6 +33,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 DEFAULT_FROM_EMAIL = "info@ourrevolution.com"
 
 ACCOUNT_ADAPTER = ("local_groups.adapter.AccountAdapter")
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 
 ALLOWED_HOSTS = '*'
 
