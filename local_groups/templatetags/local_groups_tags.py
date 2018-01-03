@@ -4,7 +4,7 @@ from pages.models import Group
 register = template.Library()
 
 
-# Groups Portal Navigation menu
+# Organizing Hub Navigation menu
 @register.inclusion_tag('partials/group_portal_nav.html', takes_context=True)
 def group_portal_nav(context):
 

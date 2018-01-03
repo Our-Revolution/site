@@ -1005,7 +1005,7 @@ class GroupPage(RoutablePageMixin, Page):
         })
 
 
-# Groups Portal Resource Page
+# Organizing Hub Resource Page
 class GroupResourcePage(Page):
     body = RichTextField(
         help_text='''
