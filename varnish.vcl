@@ -26,17 +26,25 @@ sub vcl_recv {
 }
 
 sub vcl_recv {
+    # pro-tip: you can copy this directly from our Fastly VCL to minimize errors
 
-    if (req.url !~ "^/admin/" && req.url !~ "^/cms/" && req.url !~ "^/docs/" && req.url !~ "^/groups/new/" && req.url !~ "^/organizing-hub/" && req.url !~ "^/join-us-on-slack" && req.url !~ "^/groups/nominations/"){
+    # remove cookie and cache control on every request but ones that start with the following urls
+    # this fixes CSRF issues
+    if (req.url !~ "^/admin" && req.url !~ "^/cms" && req.url !~ "^/docs" && req.url !~ "^/groups/new" && req.url !~ "^/organizing-hub" && req.url !~ "^/join-us-on-slack" && req.url !~ "^/groups/nominations"){
         unset req.http.Cookie;
         unset req.http.Cache-Control;
+    }
+    
+    # don't cache the following 
+    if( req.url ~ "^/admin" || req.url ~ "^/cms" || req.url ~ "^/docs" || req.url ~ "^/groups/nominations" || req.url ~ "^/groups/new" || req.url ~ "^/organizing-hub" || req.url ~ "^/join-us-on-slack" ) {
+        return(pass);
     }
 }
 
 sub vcl_backend_response {
     if (bereq.uncacheable) {
         return (deliver);
-    } else if (bereq.url !~ "^/admin/" && bereq.url !~ "^/cms/" && bereq.url !~ "^/docs/" && bereq.url !~ "^/groups/new/" && bereq.url !~ "^/organizing-hub/" && bereq.url !~ "^/join-us-on-slack" && bereq.url !~ "^/groups/nominations/") {
+    } else if (bereq.url !~ "^/admin" && bereq.url !~ "^/cms" && bereq.url !~ "^/docs" && bereq.url !~ "^/groups/new" && bereq.url !~ "^/organizing-hub" && bereq.url !~ "^/join-us-on-slack" && bereq.url !~ "^/groups/nominations") {
         unset beresp.http.Set-Cookie;
         unset beresp.http.Cache-control;
         set beresp.ttl = 4h;
