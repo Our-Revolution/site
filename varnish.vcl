@@ -26,6 +26,8 @@ sub vcl_recv {
 }
 
 sub vcl_recv {
+    # pro-tip: you can copy this directly from our Fastly VCL to minimize errors
+
     # remove cookie and cache control on every request but ones that start with the following urls
     # this fixes CSRF issues
     if (req.url !~ "^/admin" && req.url !~ "^/cms" && req.url !~ "^/docs" && req.url !~ "^/groups/new" && req.url !~ "^/organizing-hub" && req.url !~ "^/join-us-on-slack" && req.url !~ "^/groups/nominations"){
