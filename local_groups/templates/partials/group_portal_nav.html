@@ -12,11 +12,9 @@
     </a>
   {% endif %}
 
-  {% with link_url="/organizing-guides/"  %}
-  <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
-  href="{{ link_url }}">
+  <a class="list-group-item {% if organizing_guides_url == request.path %}active{% endif %}"
+  href="{{ organizing_guides_url }}">
   Organizing Guides
   </a>
-  {% endwith %}
 
 </div>

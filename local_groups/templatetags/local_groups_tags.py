@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from pages.models import Group
 
 register = template.Library()
@@ -14,5 +15,6 @@ def group_portal_nav(context):
 
     return {
         'group': group,
+        'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
         'request': context['request'],
     }
