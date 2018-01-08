@@ -11,4 +11,10 @@
       Manage Group
     </a>
   {% endif %}
+
+  <a class="list-group-item {% if organizing_guides_url == request.path %}active{% endif %}"
+  href="{{ organizing_guides_url }}">
+  Organizing Guides
+  </a>
+
 </div>
