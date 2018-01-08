@@ -13,7 +13,9 @@
   <div class="row pt4 pb4">
 
     <div class="col-md-3">
-      {% group_portal_nav %}
+      {% if user.is_authenticated %}
+        {% group_portal_nav %}
+      {% endif %}
       
       <div class="panel panel-default hidden" id="content-body-toc">
         <div class="panel-heading">
