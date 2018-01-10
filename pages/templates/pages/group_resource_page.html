@@ -1,11 +1,9 @@
 {% extends "group_portal.html" %}
 
-{% load bootstrap3 wagtailcore_tags %}
+{% load bootstrap3 wagtailcore_tags local_groups_tags %}
 
 {% block nav %}
-    {% with center_header=True %}
-        {{ block.super }}
-    {% endwith%}
+    {{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -14,8 +12,12 @@
 
   <div class="row pt4 pb4">
 
-    <div class="col-md-3 hidden" id="content-body-toc">
-      <div class="panel panel-default">
+    <div class="col-md-3">
+      {% if user.is_authenticated %}
+        {% group_portal_nav %}
+      {% endif %}
+      
+      <div class="panel panel-default hidden" id="content-body-toc">
         <div class="panel-heading">
           <h3 class="panel-title">Contents</h3>
         </div>
