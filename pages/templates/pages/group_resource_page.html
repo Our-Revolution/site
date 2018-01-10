@@ -12,11 +12,11 @@
 
   <div class="row pt4 pb4">
 
-    <div class="col-md-3">
+    <div class="col-md-3 hidden" id="content-sidebar">
       {% if user.is_authenticated %}
         {% group_portal_nav %}
       {% endif %}
-      
+
       <div class="panel panel-default hidden" id="content-body-toc">
         <div class="panel-heading">
           <h3 class="panel-title">Contents</h3>
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="col-md-9 col-md-offset-3" id="content-body">
+    <div class="col-md-8 col-md-offset-2" id="content-body">
       {{ page.body | richtext }}
     </div>
 
@@ -39,8 +39,12 @@
 <script>
   $(document).ready(function() {
 
+    // Get if user is logged in
+    var $is_authenticated = {{ user.is_authenticated|yesno:"true,false" }}
+
     // Get layout elements
     var $contentBody = $("#content-body");
+    var $contentSidebar = $("#content-sidebar");
 
     // Get all headings from content body
     var $headings = $("h1, h2, h3, h4, h5, h6", $contentBody);
@@ -60,9 +64,13 @@
         );
       });
 
-      // Update layout and display table of contents
-      $contentBody.removeClass('col-md-offset-3');
       $contentToc.removeClass('hidden');
+    }
+
+    if ($headings.length || $is_authenticated) {
+      $contentSidebar.removeClass('hidden');
+      $contentBody.addClass('col-md-9');
+      $contentBody.removeClass('col-md-8 col-md-offset-2');
     }
   });
 </script>
