@@ -1,7 +1,18 @@
 from django import template
+from django.conf import settings
 from pages.models import Group
 
 register = template.Library()
+
+
+@register.simple_tag
+def bsd_create_account_url():
+    return settings.BSD_CREATE_ACCOUNT_URL
+
+
+@register.simple_tag
+def bsd_reset_password_url():
+    return settings.BSD_RESET_PASSWORD_URL
 
 
 # Organizing Hub Navigation menu
@@ -14,5 +25,6 @@ def group_portal_nav(context):
 
     return {
         'group': group,
+        'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
         'request': context['request'],
     }

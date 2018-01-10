@@ -180,7 +180,9 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
+BSD_CREATE_ACCOUNT_URL = 'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/ctl/Constituent/Login'
 BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
+BSD_RESET_PASSWORD_URL = 'https://ourrevdev.cp.bsd.net/page/user/forgot' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/page/user/forgot'
 
 # BSD login urls
 if BSD_LOGIN_ENABLED:
@@ -244,6 +246,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
 
+ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 
 if os.environ.get('env', 'development') == 'production':
 
