@@ -26,5 +26,6 @@ def group_portal_nav(context):
     return {
         'group': group,
         'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
+        'organizing_docs_url': settings.ORGANIZING_DOCS_URL,
         'request': context['request'],
     }
