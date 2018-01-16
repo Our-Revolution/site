@@ -5,7 +5,7 @@ from django.template.defaultfilters import yesno
 
 class Election(models.Model):
     title = models.CharField(max_length=128)
-    # TODO: remove from db after deploying code changes
+    # TODO: TECH-707: remove from db after deploying code changes
     is_active = models.BooleanField(default=False)
     # others may become necessary for historical reasons?
 
