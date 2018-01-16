@@ -12,6 +12,9 @@ class Election(models.Model):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        ordering = ["-id"]
+
 
 class Candidate(models.Model):
     # info
