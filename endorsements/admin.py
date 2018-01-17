@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(Election)
 class ElectionAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title', 'is_active']
 
 
 @admin.register(Candidate)
