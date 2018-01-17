@@ -5,11 +5,15 @@ from django.template.defaultfilters import yesno
 
 class Election(models.Model):
     title = models.CharField(max_length=128)
+    # TODO: TECH-707: remove from db after deploying code changes
     is_active = models.BooleanField(default=False)
     # others may become necessary for historical reasons?
 
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-id"]
 
 
 class Candidate(models.Model):
