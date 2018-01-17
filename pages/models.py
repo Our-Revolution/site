@@ -337,6 +337,12 @@ class IndexPage(Page):
 class CandidateEndorsementPage(Page):
     body = RichTextField()
     candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
+    election = models.ForeignKey(
+        'endorsements.Election',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     signup_tagline = models.CharField(max_length=128, blank=True, null=True)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['pages.CandidateEndorsementIndexPage']
@@ -344,7 +350,8 @@ class CandidateEndorsementPage(Page):
 
     content_panels = Page.content_panels + [
             FieldPanel('body', classname="full"),
-            FieldPanel('candidate')
+            FieldPanel('candidate'),
+            FieldPanel('election')
         ]
 
     promote_panels = Page.promote_panels + [
@@ -365,7 +372,6 @@ class CandidateEndorsementIndexPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['candidates'] = self.get_children().live().filter(
-            candidateendorsementpage__candidate__election__is_active=True,
             candidateendorsementpage__candidate__show=True
         ).select_related(
             'candidateendorsementpage',
@@ -386,6 +392,12 @@ class CandidateEndorsementIndexPage(Page):
 
 class InitiativeEndorsementPage(Page):
     body = RichTextField()
+    election = models.ForeignKey(
+        'endorsements.Election',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     initiative = models.ForeignKey('endorsements.Initiative', null=True, blank=True, on_delete=models.SET_NULL)
     signup_tagline = models.CharField(max_length=128, blank=True, null=True)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -395,6 +407,7 @@ class InitiativeEndorsementPage(Page):
     content_panels = Page.content_panels + [
             FieldPanel('body', classname="full"),
             FieldPanel('initiative'),
+            FieldPanel('election'),
             FieldPanel('signup_tagline')
         ]
 
@@ -403,9 +416,17 @@ class InitiativeEndorsementPage(Page):
         ]
 
     def get_context(self, *args, **kwargs):
+        state_initiatives = InitiativeEndorsementPage.objects.live().filter(
+            initiative__show=True,
+            initiative__state=self.initiativeendorsementpage.initiative.state
+        ).exclude(id=self.id).select_related('initiative')
+        similar_initiatives = InitiativeEndorsementPage.objects.live().filter(
+            initiative__show=True,
+            initiative__category=self.initiativeendorsementpage.initiative.category
+        ).exclude(id=self.id).select_related('initiative')
         context = super(InitiativeEndorsementPage, self).get_context(*args, **kwargs)
-        context['state_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__election__is_active=True, initiative__state=self.initiativeendorsementpage.initiative.state).exclude(id=self.id).select_related('initiative')
-        context['similar_initiatives'] = InitiativeEndorsementPage.objects.live().filter(initiative__election__is_active=True, initiative__category=self.initiativeendorsementpage.initiative.category).exclude(id=self.id).select_related('initiative')
+        context['state_initiatives'] = state_initiatives
+        context['similar_initiatives'] = similar_initiatives
         return context
 
 
