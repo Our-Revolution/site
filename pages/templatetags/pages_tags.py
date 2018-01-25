@@ -1,6 +1,6 @@
 from django import template
 from django.conf import settings
-from pages.models import NotificationBanner
+from pages.models import *
 
 register = template.Library()
 
@@ -20,15 +20,10 @@ def navigation_menu(context):
 
 
 # Notification Banner snippet set to show
-@register.inclusion_tag(
-    'pages/tags/notification_banner.html',
-    takes_context=True
-)
+@register.inclusion_tag('pages/tags/notification_banner.html', takes_context=True)
 def notification_banner(context):
     return {
-        'notification_banner': NotificationBanner.objects.filter(
-            show=True
-        ).first(),
+        'notification_banner': NotificationBanner.objects.filter(show=True).first(),
         'request': context['request'],
     }
 
