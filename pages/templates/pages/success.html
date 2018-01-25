@@ -1,5 +1,6 @@
 {% extends "pages/base_page.html" %}
 
+{% load pages_tags %}
 
 {% block title %}Thanks for Signing Up | {{ block.super }}{% endblock %}
 {% block page_title %}Thanks for Signing Up | {{ block.super }}{% endblock %}
@@ -52,7 +53,7 @@
                 </a>
               </li>
               <li class="action-list__action col-md-4">
-                <a class="action__link" href="/candidates">
+                <a class="action__link" href="{% candidates_url %}">
                   <h3>Explore Our Candidates</h3>
                   <p class="action__description">Find out who will continue the political revolution, and what you can do to help them win.</p>
                   <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>

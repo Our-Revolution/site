@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load pages_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
@@ -82,12 +82,18 @@
                             {{ page.body | safe }}
                         {% endif %} -->
 
+                        <h2>Our Candidates</h2>
+                        <hr>
+
                         {% if candidate_race_snippets.exists %}
-                            <h2>Our Candidates</h2>
-                            <hr>
+
 
                             <div id="candidates-list">
-                              <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
+
+                              <div class="no-result text-center">
+                                <h3>No Matching Candidates Found</h3>
+                              </div>
+
                               <ul class="card-list third list card-list--results">
                                   {% for candidate_race_snippet in candidate_race_snippets %}
 
@@ -98,10 +104,12 @@
                                                 {% if candidate_race.candidate_endorsement_page %}
                                                 <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
                                                 {% else %}
-                                                <a href="/candidates/{{ candidate.slug }}">
+                                                <a href="{% candidates_url %}{{ candidate.slug }}">
                                                 {% endif %}
+
                                                 <div class="card__photo"
                                                 style="background-image: url({{ candidate.photo.url }})">
+
                                                 </div>
 
                                                 <div class="card__content">
@@ -111,19 +119,6 @@
                                                     <span class="card__item bottom">{{ candidate.office }}</span>
                                                   </div>
 
-                                                  {% comment %}
-                                                    <div class="card__item card__item--share">
-                                                      <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                                      <a href="https://twitter.com/intent/tweet?text={% spaceless %}
-                                                            {% if candidate_race.candidate_votes == 0 and candidate_race.opponent_votes == 0 %}
-                                                                Polls for {{ candidate.name }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
-                                                            {% elif candidate_race.candidate_votes > candidate_race.opponent_votes %}
-                                                                {{ candidate.name }} is leading {{ candidate_race.candidate_votes_percentage | urlencode }} to {{ candidate_race.opponent_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                            {% else %}
-                                                                {{ candidate.name }} is trailing {{ candidate_race.opponent_votes_percentage | urlencode }} to {{ candidate_race.candidate_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                            {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                                    </div>
-                                                  {% endcomment %}
                                                 </div>
                                               </a>
 
@@ -171,14 +166,27 @@
                                                           </div>
                                                         </div>
                                                     </div>
+                                              </li>
 
                                           {% endwith %}
-
                                       {% endwith %}
 
                                   {% endfor %}
                               </ul>
                             </div>
+
+                            {% else %}
+
+                              <div class="text-center" style="margin: 40px 0 60px;">
+                                <h3>No Candidate Results To Show Yet</h3>
+                                <p>
+                                  Head over to
+                                  <a href="{% candidates_url %}">
+                                    Our Candidates
+                                  </a>
+                                  to keep an eye on candidates we may be endorsing.
+                                </p>
+                              </div>
 
                         {% endif %}
 
@@ -186,9 +194,10 @@
 
                     <div id="initiatives">
 
+                      <h2>Our Initiatives</h2>
+                      <hr>
+
                       {% if initiative_race_snippets.exists %}
-                          <h2>Our Initiatives</h2>
-                          <hr>
 
                           <div id="initiatives-list">
                           <div class="no-result text-center"><h3>No Matching Initiatives Found</h3></div>
@@ -211,20 +220,6 @@
                                             <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
                                           </div>
                                           <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
-
-                                          {% comment %}
-                                            <div class="card__item card__item--share">
-                                              <a href="#" class="social-icon facebook-icon facebook-bg">Share on Facebook</a>
-                                              <a href="https://twitter.com/intent/tweet?text={% spaceless %}
-                                                              {% if initiative_race.initiative_votes == 0 and initiative_race.opponent_votes == 0 %}
-                                                                  Polls for {{ initiative.title }} aren't in yet. Track this race and other progressive's results nationwide LIVE.
-                                                              {% elif initiative_race.initiative_votes > initiative_race.opponent_votes %}
-                                                                  {{ initiative.name }} is leading {{ initiative_race.initiative_votes_percentage | urlencode }} to {{ initiative_race.opponent_votes_percentage | urlencode}}. Track this race and other progressive's results nationwide LIVE.
-                                                              {% else %}
-                                                                  {{ initiative.name }} is trailing {{ initiative_race.opponent_votes_percentage | urlencode }} to {{ initiative_race.initiative_votes_percentage | urlencode }}. Track this race and other progressive's results nationwide LIVE.
-                                                              {% endif %}{% endspaceless %}&url=https://ourrevolution.com/election-2016" class="social-icon twitter-icon twitter-bg">Tweet</a>
-                                            </div>
-                                          {% endcomment %}
 
                                         </div>
                                         </a>
@@ -272,9 +267,6 @@
 
                       {% else %}
 
-                        <h2>Our Initiatives</h2>
-                        <hr>
-
                         <div class="text-center" style="margin: 40px 0 60px;">
                           <h3>No Initiative Results To Show Yet</h3>
                           <p>Head over to <a href="/ballot-initiatives/">Our Initiatives</a> to
@@ -283,6 +275,25 @@
 
                       {% endif %}
 
+                    </div>
+
+                    <hr>
+
+                    <div class="mb20">
+                      <a href="{% results_url %}"
+                      class="btn btn-block btn-secondary ls2 uppercase">
+                      2018 Results
+                      </a>
+
+                      <a href="{% results_2017_url %}"
+                      class="btn btn-block btn-secondary ls2 uppercase">
+                      2017 Results
+                      </a>
+
+                      <a href="{% results_2016_url %}"
+                      class="btn btn-block btn-secondary ls2 uppercase">
+                      2016 Results
+                      </a>
                     </div>
 
                 </div>

@@ -39,9 +39,16 @@
           </li>
           {% endwith %}
           <li><a href="/issues" class="{% if "/issues" in request.path %}active{% endif %} issues" id="issues-nav-link">Issues</a></li>
-          <li><a href="/candidates" class="{% if "/candidates" in request.path %}active{% endif %} candidates" id="candidates-nav-link">
-            {% if shop_nav_enabled %} Endorsements {% else %} Candidates {% endif %}
-          </a></li>
+
+          {% candidates_url as link_url %}
+          <li>
+            <a href="{{ link_url }}"
+            class="{% if link_url in request.path %}active{% endif %} candidates"
+            id="candidates-nav-link">
+            Endorsements
+            </a>
+          </li>
+
           {% if not shop_nav_enabled %}
           <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
           {% endif %}
