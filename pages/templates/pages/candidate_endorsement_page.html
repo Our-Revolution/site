@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load static %}
+{% load pages_tags static %}
 
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
@@ -17,7 +17,12 @@
     <div class="row">
         <div class="container">
             <div class="page-sub-nav">
-            <a href="/candidates"><span class="glyphicon glyphicon-chevron-left"></span></a> Our Candidates / {{ page.candidate.state }} / {{ page.candidate.name }}
+            <a href="{% candidates_url %}">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            Our Candidates
+            / {{ page.candidate.state }}
+            / {{ page.candidate.name }}
             </div>
 
             <div class="page-heading">

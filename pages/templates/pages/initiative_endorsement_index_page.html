@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load static wagtailcore_tags %}
+{% load pages_tags static wagtailcore_tags %}
 
 {% block content %}
 
@@ -91,16 +91,23 @@
 
         <p class="fs18"><strong>Submit recommendations for ballot initiatives by emailing <a href="mailto:political@ourrevolution.com">political@ourrevolution.com</a>, or view our past election results below.</strong></p>
 
-        <div class="row">
-          <div class="col-md-12">
-            <a href="/2017-elections-results/" class="btn btn-block btn-primary ls2 uppercase mt20">
-              View 2017 Election Results
-            </a>
-            <a href="/election-2016" class="btn btn-block btn-secondary ls2 uppercase">
-              View 2016 Election Results
-            </a>
-          </div>
+        <div class="mb20 mt20">
+          <a href="{% results_url %}"
+          class="btn btn-block btn-primary ls2 uppercase">
+            View 2018 Election Results
+          </a>
+
+          <a href="{% results_2017_url %}"
+          class="btn btn-block btn-secondary ls2 uppercase">
+            View 2017 Election Results
+          </a>
+
+          <a href="{% results_2016_url %}"
+          class="btn btn-block btn-secondary ls2 uppercase">
+            View 2016 Election Results
+          </a>
         </div>
+
 			</div>
 </div>
 

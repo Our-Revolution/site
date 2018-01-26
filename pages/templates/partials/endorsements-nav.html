@@ -1,8 +1,8 @@
-{% load bootstrap3 %}
+{% load bootstrap3 pages_tags %}
 
 <div id="endorsements-nav" class="btn-toolbar" role="toolbar">
 
-  {% with "/candidates/" as link_url %}
+  {% candidates_url as link_url %}
   {% if link_url not in request.path %}
   <div class="btn-group" role="group">
     <a href="{{ link_url }}" class="btn btn-secondary">
@@ -10,7 +10,6 @@
     </a>
   </div>
   {% endif %}
-  {% endwith %}
 
   {% with "/ballot-initiatives/" as link_url %}
   {% if link_url not in request.path %}
@@ -23,9 +22,9 @@
   {% endwith %}
 
   <div class="btn-group" role="group">
-    <a href="/2017-elections-results" class="btn btn-secondary">
+    <a href="{% results_url %}" class="btn btn-secondary">
       Results
     </a>
   </div>
-  
+
 </div>

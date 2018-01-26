@@ -42,6 +42,8 @@ ADMINS = [
     ('Eric Broder', 'eric@ourrevolution.com')
 ]
 
+CANDIDATES_URL = '/candidates/'
+
 MANAGERS = ADMINS
 
 # Application definition
@@ -248,6 +250,9 @@ MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' el
 
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
+RESULTS_URL = '/results/'
+RESULTS_2016_URL = '/election-2016/'
+RESULTS_2017_URL = '/2017-elections-results/'
 
 if os.environ.get('env', 'development') == 'production':
 
