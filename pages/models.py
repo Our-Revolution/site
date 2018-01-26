@@ -311,7 +311,177 @@ class TemplatePage(Page):
 
 
 class IndexPage(Page):
-    template = "pages/index.html"
+    background_color_default = '218fff'
+    button_url_new_window_help_text = 'Open new window for button url.'
+    color_help_text = '6 digit CSS color code.'
+    embed_code_help_text = 'Raw HTML embed code for video, etc.'
+
+    COLORS = (
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('red', 'Red'),
+    )
+
+    block_1_background_color = models.CharField(
+        default=background_color_default,
+        max_length=6,
+        help_text=color_help_text
+    )
+    block_1_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    block_1_button_color = models.CharField(
+        blank=True,
+        max_length=128,
+        null=True,
+        choices=COLORS,
+    )
+    block_1_button_text = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True,
+    )
+    block_1_button_url = models.URLField(null=True, blank=True)
+    block_1_button_url_new_window = models.BooleanField(
+        default=False,
+        help_text=button_url_new_window_help_text
+    )
+    block_1_embed_code = models.TextField(
+        blank=True,
+        null=True,
+        help_text=embed_code_help_text
+    )
+    block_1_text = models.CharField(
+        max_length=140,
+        blank=True,
+        null=True,
+    )
+    block_2_background_color = models.CharField(
+        default=background_color_default,
+        max_length=6,
+        help_text=color_help_text
+    )
+    block_2_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    block_2_button_color = models.CharField(
+        blank=True,
+        max_length=128,
+        null=True,
+        choices=COLORS,
+    )
+    block_2_button_text = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True,
+    )
+    block_2_button_url = models.URLField(null=True, blank=True)
+    block_2_button_url_new_window = models.BooleanField(
+        default=False,
+        help_text=button_url_new_window_help_text
+    )
+    block_2_embed_code = models.TextField(
+        blank=True,
+        null=True,
+        help_text=embed_code_help_text
+    )
+    block_2_text = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+    block_3_background_color = models.CharField(
+        default=background_color_default,
+        max_length=6,
+        help_text=color_help_text
+    )
+    block_3_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    block_3_button_color = models.CharField(
+        blank=True,
+        max_length=128,
+        null=True,
+        choices=COLORS,
+    )
+    block_3_button_text = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True,
+    )
+    block_3_button_url = models.URLField(null=True, blank=True)
+    block_3_button_url_new_window = models.BooleanField(
+        default=False,
+        help_text=button_url_new_window_help_text
+    )
+    block_3_embed_code = models.TextField(
+        blank=True,
+        null=True,
+        help_text=embed_code_help_text
+    )
+    block_3_text = models.CharField(
+        max_length=60,
+        blank=True,
+        null=True,
+    )
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel('block_1_text'),
+                FieldPanel('block_1_button_text'),
+                FieldPanel('block_1_button_url'),
+                FieldPanel('block_1_button_url_new_window'),
+                FieldPanel('block_1_button_color'),
+                ImageChooserPanel('block_1_background_image'),
+                FieldPanel('block_1_background_color'),
+                FieldPanel('block_1_embed_code'),
+            ],
+            heading="Block 1",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('block_2_text'),
+                FieldPanel('block_2_button_text'),
+                FieldPanel('block_2_button_url'),
+                FieldPanel('block_2_button_url_new_window'),
+                FieldPanel('block_2_button_color'),
+                ImageChooserPanel('block_2_background_image'),
+                FieldPanel('block_2_background_color'),
+                FieldPanel('block_2_embed_code'),
+            ],
+            heading="Block 2",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('block_3_text'),
+                FieldPanel('block_3_button_text'),
+                FieldPanel('block_3_button_url'),
+                FieldPanel('block_3_button_url_new_window'),
+                FieldPanel('block_3_button_color'),
+                ImageChooserPanel('block_3_background_image'),
+                FieldPanel('block_3_background_color'),
+                FieldPanel('block_3_embed_code'),
+            ],
+            heading="Block 3",
+            classname="collapsible"
+        ),
+    ]
+
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     parent_page_types = ['wagtailcore.Page']
 
