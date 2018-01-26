@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.conf import settings
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
@@ -311,6 +312,10 @@ class TemplatePage(Page):
 
 
 class IndexPage(Page):
+    # TODO: TECH-750: remove legacy code after switching over
+    if not settings.HOMEPAGE_CMS_ENABLED:
+        template = "pages/index.html"
+
     background_color_default = '218fff'
     button_url_new_window_help_text = 'Open new window for button url.'
     color_help_text = '6 digit CSS color code.'
@@ -393,6 +398,9 @@ class IndexPage(Page):
         null=True,
         help_text=embed_code_help_text
     )
+    block_2_show = models.BooleanField(
+        default=False
+    )
     block_2_text = models.CharField(
         max_length=100,
         blank=True,
@@ -431,6 +439,9 @@ class IndexPage(Page):
         null=True,
         help_text=embed_code_help_text
     )
+    block_3_show = models.BooleanField(
+        default=False
+    )
     block_3_text = models.CharField(
         max_length=60,
         blank=True,
@@ -454,6 +465,7 @@ class IndexPage(Page):
         ),
         MultiFieldPanel(
             [
+                FieldPanel('block_2_show'),
                 FieldPanel('block_2_text'),
                 FieldPanel('block_2_button_text'),
                 FieldPanel('block_2_button_url'),
@@ -468,6 +480,7 @@ class IndexPage(Page):
         ),
         MultiFieldPanel(
             [
+                FieldPanel('block_3_show'),
                 FieldPanel('block_3_text'),
                 FieldPanel('block_3_button_text'),
                 FieldPanel('block_3_button_url'),

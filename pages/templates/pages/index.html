@@ -1,47 +1,8 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags %}
 
 {% block page_title %}Our Revolution{% endblock %}
-
-{% block meta %}
-  {{ block.super }}
-
-  <style>
-
-/* TODO: move to scss  */
-    .home-block {
-      background-position: center;
-      background-size: cover;
-    }
-
-    #home-block-1 {
-      background-color: #{{ page.block_1_background_color }};
-      {% if page.block_1_background_image %}
-        {% image page.block_1_background_image original as block_1_background_image %}
-        background-image: url({{ block_1_background_image.url }});
-      {% endif %}
-    }
-
-    #home-block-2 {
-      background-color: #{{ page.block_2_background_color }};
-      {% if page.block_2_background_image %}
-        {% image page.block_2_background_image original as block_2_background_image %}
-        background-image: url({{ block_2_background_image.url }});
-      {% endif %}
-    }
-
-    #home-block-3 {
-      background-color: #{{ page.block_3_background_color }};
-      {% if page.block_3_background_image %}
-        {% image page.block_3_background_image original as block_3_background_image %}
-        background-image: url({{ block_3_background_image.url }});
-      {% endif %}
-    }
-
-  </style>
-
-{% endblock %}
 
 {% block content %}
 
@@ -49,190 +10,59 @@
   <div class="row row--main home">
     <div class="container">
       <section class="module-container module-container--ppl clearfix">
-
-        <div class="module-col margin-right table
-        {% if page.block_2_show %}
-        sixty
-        {% else %}
-        full
-        {% endif %}">
-
-          <!-- block 1 -->
-
-          {% if page.block_1_embed_code %}
-
-            <div id="home-block-1"
-            class="home-block module module--video full centered margin-bottom white-text br3">
-              <div class="module__content br3">
-                <div class="embed-responsive embed-responsive-16by9 dark-wash">
-                  {{page.block_1_embed_code | safe }}
-                </div>
-              </div>
-            </div>
-
-          {% else %}
-
-          <div id="home-block-1"
-          class="home-block module full centered white-text br3">
-
+        <div class="module-col sixty margin-right table">
+          <div class="module full centered our-dream-bg white-text br3">
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
-
                 <h3 class="mt0">
-                  {{ page.block_1_text }}
+                  We are going to keep fighting to win a clean DREAM Act. Add
+                  your name and join us.
                 </h3>
-
-                {% if page.block_1_button_text %}
-                <a href="{{ page.block_1_button_url }}"
-                class="btn btn-block ls2 uppercase
-                {% if page.block_1_button_color == 'green' %}
-                btn-primary
-                {% elif page.block_1_button_color == 'red' %}
-                btn-donate
-                {% else %}
-                btn-secondary
-                {% endif %}"
-                {% if page.block_1_button_url_new_window %}
-                onclick="trackOutboundLink('{{ page.block_1_button_url }}',true)"
-                target="_blank"
-                {% endif %}>
-                  {{ page.block_1_button_text }}
+                <a href="https://go.ourrevolution.com/page/s/the-fight-for-a-clean-dream-act-continues?source=ws180122"
+                class="btn btn-block btn-primary ls2 uppercase">
+                  Get Started
                 </a>
-                {% endif %}
-
               </div>
             </div>
-
           </div>
-
-          {% endif %}
-
-          <!-- /block 1 -->
-
         </div>
 
-        {% if page.block_2_show %}
         <div class="module-col forty margin-left table">
 
-          <!-- block 2 -->
-
-          {% if page.block_2_embed_code %}
-
-            <div id="home-block-2"
-            class="home-block module module--video centered margin-bottom white-text br3
-            {% if page.block_3_show %}
-            sixty
-            {% else %}
-            full
-            {% endif %}">
-              <div class="module__content br3">
-                <div class="embed-responsive embed-responsive-16by9 dark-wash">
-                  {{ page.block_2_embed_code | safe }}
-                </div>
-              </div>
-            </div>
-
-          {% else %}
-
-
-          <div id="home-block-2"
-          class="home-block module centered margin-bottom white-text br3
-          {% if page.block_3_show %}
-          sixty
-          {% else %}
-          full
-          {% endif %}">
+          <div class="module sixty centered margin-bottom health-bg white-text br3">
               <div class="module__content br3">
                 <div class="pa20 br3 dark-wash">
-
                   <h3 class="mt0">
-                    {{ page.block_2_text }}
+                    Watch Bernie's Medicare for All National Town Hall.
                   </h3>
 
-                  {% if page.block_2_button_text %}
-                  <a href="{{ page.block_2_button_url }}"
-                  class="btn btn-block ls2 uppercase
-                  {% if page.block_2_button_color == 'green' %}
-                  btn-primary
-                  {% elif page.block_2_button_color == 'red' %}
-                  btn-donate
-                  {% else %}
-                  btn-secondary
-                  {% endif %}"
-                  {% if page.block_2_button_url_new_window %}
-                  onclick="trackOutboundLink('{{ page.block_2_button_url }}',true)"
+                  {% with link_url="http://ourrev.us/bernie-stream?v=20180123" %}
+                  <a href="{{ link_url }}"
+                  onclick="trackOutboundLink('{{ link_url }}',true)"
                   target="_blank"
-                  {% endif %}>
-                    {{ page.block_2_button_text }}
+                  class="btn btn-block btn-secondary ls2 uppercase">
+                    Watch 
                   </a>
-                  {% endif %}
+                  {% endwith %}
 
                 </div>
               </div>
           </div>
 
-          {% endif %}
-
-          <!-- /block 2 -->
-
-          {% if page.block_3_show %}
-          <!-- block 3 -->
-
-          {% if page.block_3_embed_code %}
-
-            <div id="home-block-3"
-            class="home-block module module--video forty centered margin-bottom white-text br3">
-              <div class="module__content br3">
-                <div class="embed-responsive embed-responsive-16by9 dark-wash">
-                  {{ page.block_3_embed_code | safe }}
-                </div>
-              </div>
-            </div>
-
-          {% else %}
-
-          <div id="home-block-3"
-          class="home-block module forty centered white-text br3">
-
+          <div class="module forty centered map-bg white-text br3">
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
-
-
-
                 <h3 class="mt0">
-                  {{ page.block_3_text }}
+                  Find or create a local group in your area today.
                 </h3>
-
-                {% if page.block_3_button_text %}
-                <a href="{{ page.block_3_button_url }}"
-                class="btn btn-block ls2 uppercase
-                {% if page.block_3_button_color == 'green' %}
-                btn-primary
-                {% elif page.block_3_button_color == 'red' %}
-                btn-donate
-                {% else %}
-                btn-secondary
-                {% endif %}"
-                {% if page.block_3_button_url_new_window %}
-                onclick="trackOutboundLink('{{ page.block_3_button_url }}',true)"
-                target="_blank"
-                {% endif %}>
-                  {{ page.block_3_button_text }}
+                <a href="/groups" class="btn btn-block btn-secondary ls2 uppercase">
+                  Find a Group
                 </a>
-                {% endif %}
-
               </div>
             </div>
-
           </div>
-          {% endif %}
-
-          <!-- /block 3 -->
-          {% endif %}
 
         </div>
-        {% endif %}
-
       </section>
     </div>
   </div>
