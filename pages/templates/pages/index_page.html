@@ -10,18 +10,28 @@
   <div class="row row--main home">
     <div class="container">
       <section class="module-container module-container--ppl clearfix">
+
+        {# TODO: remove legacy homepage stuff after deploy #}
+        {% if not page.block_1_text %}
+        {% include "partials/old-homepage-content.html" %}
+        {% else %}
+
         <div class="module-col sixty margin-right table">
           <div class="module full centered our-dream-bg white-text br3">
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
+                
                 <h3 class="mt0">
-                  We are going to keep fighting to win a clean DREAM Act. Add
-                  your name and join us.
+                  {{ page.block_1_text }}
                 </h3>
-                <a href="https://go.ourrevolution.com/page/s/the-fight-for-a-clean-dream-act-continues?source=ws180122"
+
+                {% if page.block_1_button_text %}
+                <a href="{{ page.block_1_button_url }}"
                 class="btn btn-block btn-primary ls2 uppercase">
-                  Get Started
+                  {{ page.block_1_button_text }}
                 </a>
+                {% endif %}
+
               </div>
             </div>
           </div>
@@ -41,7 +51,7 @@
                   onclick="trackOutboundLink('{{ link_url }}',true)"
                   target="_blank"
                   class="btn btn-block btn-secondary ls2 uppercase">
-                    Watch 
+                    Watch
                   </a>
                   {% endwith %}
 
@@ -63,6 +73,9 @@
           </div>
 
         </div>
+
+        {% endif %}
+
       </section>
     </div>
   </div>
