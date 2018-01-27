@@ -451,9 +451,9 @@ class IndexPage(Page):
         MultiFieldPanel(
             [
                 FieldPanel('block_1_text'),
-                FieldPanel('block_1_button_text'),
                 FieldPanel('block_1_button_url'),
                 FieldPanel('block_1_button_url_new_window'),
+                FieldPanel('block_1_button_text'),
                 FieldPanel('block_1_button_color'),
                 ImageChooserPanel('block_1_background_image'),
                 FieldPanel('block_1_background_color'),
@@ -466,9 +466,9 @@ class IndexPage(Page):
             [
                 FieldPanel('block_2_show'),
                 FieldPanel('block_2_text'),
-                FieldPanel('block_2_button_text'),
                 FieldPanel('block_2_button_url'),
                 FieldPanel('block_2_button_url_new_window'),
+                FieldPanel('block_2_button_text'),
                 FieldPanel('block_2_button_color'),
                 ImageChooserPanel('block_2_background_image'),
                 FieldPanel('block_2_background_color'),
@@ -481,9 +481,9 @@ class IndexPage(Page):
             [
                 FieldPanel('block_3_show'),
                 FieldPanel('block_3_text'),
-                FieldPanel('block_3_button_text'),
                 FieldPanel('block_3_button_url'),
                 FieldPanel('block_3_button_url_new_window'),
+                FieldPanel('block_3_button_text'),
                 FieldPanel('block_3_button_color'),
                 ImageChooserPanel('block_3_background_image'),
                 FieldPanel('block_3_background_color'),

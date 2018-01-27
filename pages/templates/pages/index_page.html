@@ -75,14 +75,18 @@
           <div id="home-block-1"
           class="home-block module full centered white-text br3">
 
+            {% if page.block_1_text or page.block_1_button_url %}
+
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
 
+                {% if page.block_1_text %}
                 <h3 class="mt0">
                   {{ page.block_1_text }}
                 </h3>
+                {% endif %}
 
-                {% if page.block_1_button_text %}
+                {% if page.block_1_button_url %}
                 <a href="{{ page.block_1_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_1_button_color == 'green' %}
@@ -102,6 +106,8 @@
 
               </div>
             </div>
+
+            {% endif %}
 
           </div>
 
@@ -141,14 +147,19 @@
           {% else %}
           full
           {% endif %}">
+
+          {% if page.block_2_text or page.block_2_button_url %}
+
               <div class="module__content br3">
                 <div class="pa20 br3 dark-wash">
 
+                  {% if page.block_2_text %}
                   <h3 class="mt0">
                     {{ page.block_2_text }}
                   </h3>
+                  {% endif %}
 
-                  {% if page.block_2_button_text %}
+                  {% if page.block_2_button_url %}
                   <a href="{{ page.block_2_button_url }}"
                   class="btn btn-block ls2 uppercase
                   {% if page.block_2_button_color == 'green' %}
@@ -168,6 +179,9 @@
 
                 </div>
               </div>
+
+              {% endif %}
+
           </div>
 
           {% endif %}
@@ -193,14 +207,18 @@
           <div id="home-block-3"
           class="home-block module forty centered white-text br3">
 
+            {% if page.block_3_text or page.block_3_button_url %}
+
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
 
+                {% if page.block_3_text %}
                 <h3 class="mt0">
                   {{ page.block_3_text }}
                 </h3>
+                {% endif %}
 
-                {% if page.block_3_button_text %}
+                {% if page.block_3_button_url %}
                 <a href="{{ page.block_3_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_3_button_color == 'green' %}
@@ -220,6 +238,8 @@
 
               </div>
             </div>
+
+            {% endif %}
 
           </div>
           {% endif %}
