@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load static wagtailcore_tags %}
+{% load pages_tags static wagtailcore_tags %}
 
 {% block content %}
 
@@ -80,9 +80,23 @@
       		<div class="col-md-8 col-md-offset-2">
             <div class="row">
               <div class="col-md-8 col-md-offset-2">
+
                 <h2 class="mb20">Past Election Results</h2>
-                <a href="/2017-elections-results/" class="btn btn-block btn-primary ls2 uppercase">2017 Results</a>
-                <a href="/election-2016" class="btn btn-block btn-secondary ls2 uppercase">2016 Results</a>
+
+                <a href="{% results_url %}"
+                class="btn btn-block btn-primary ls2 uppercase">
+                2018 Results
+                </a>
+
+                <a href="{% results_2017_url %}"
+                class="btn btn-block btn-secondary ls2 uppercase">
+                2017 Results
+                </a>
+
+                <a href="{% results_2016_url %}"
+                class="btn btn-block btn-secondary ls2 uppercase">
+                2016 Results
+                </a>
 
                 <hr>
 
