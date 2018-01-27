@@ -317,6 +317,10 @@ class IndexPage(Page):
         template = "pages/index.html"
 
     background_color_default = '218fff'
+    block_1_text_max_length = 140
+    block_2_text_max_length = 100
+    block_3_text_max_length = 60
+    button_text_max_length = 16
     button_url_new_window_help_text = 'Open new window for button url.'
     color_help_text = '6 digit CSS color code.'
     COLORS = (
@@ -324,11 +328,13 @@ class IndexPage(Page):
         ('green', 'Green'),
         ('red', 'Red'),
     )
+    color_css_max_length = 6
+    color_select_max_length = 128
     embed_code_help_text = 'Raw HTML embed code for video, etc.'
 
     block_1_background_color = models.CharField(
         default=background_color_default,
-        max_length=6,
+        max_length=color_css_max_length,
         help_text=color_help_text
     )
     block_1_background_image = models.ForeignKey(
@@ -340,12 +346,12 @@ class IndexPage(Page):
     )
     block_1_button_color = models.CharField(
         blank=True,
-        max_length=128,
+        max_length=color_select_max_length,
         null=True,
         choices=COLORS,
     )
     block_1_button_text = models.CharField(
-        max_length=16,
+        max_length=button_text_max_length,
         blank=True,
         null=True,
     )
@@ -360,13 +366,13 @@ class IndexPage(Page):
         help_text=embed_code_help_text
     )
     block_1_text = models.CharField(
-        max_length=140,
+        max_length=block_1_text_max_length,
         blank=True,
         null=True,
     )
     block_2_background_color = models.CharField(
         default=background_color_default,
-        max_length=6,
+        max_length=color_css_max_length,
         help_text=color_help_text
     )
     block_2_background_image = models.ForeignKey(
@@ -378,12 +384,12 @@ class IndexPage(Page):
     )
     block_2_button_color = models.CharField(
         blank=True,
-        max_length=128,
+        max_length=color_select_max_length,
         null=True,
         choices=COLORS,
     )
     block_2_button_text = models.CharField(
-        max_length=16,
+        max_length=button_text_max_length,
         blank=True,
         null=True,
     )
@@ -401,13 +407,13 @@ class IndexPage(Page):
         default=False
     )
     block_2_text = models.CharField(
-        max_length=100,
+        max_length=block_2_text_max_length,
         blank=True,
         null=True,
     )
     block_3_background_color = models.CharField(
         default=background_color_default,
-        max_length=6,
+        max_length=color_css_max_length,
         help_text=color_help_text
     )
     block_3_background_image = models.ForeignKey(
@@ -419,12 +425,12 @@ class IndexPage(Page):
     )
     block_3_button_color = models.CharField(
         blank=True,
-        max_length=128,
+        max_length=color_select_max_length,
         null=True,
         choices=COLORS,
     )
     block_3_button_text = models.CharField(
-        max_length=16,
+        max_length=button_text_max_length,
         blank=True,
         null=True,
     )
@@ -442,7 +448,7 @@ class IndexPage(Page):
         default=False
     )
     block_3_text = models.CharField(
-        max_length=60,
+        max_length=block_3_text_max_length,
         blank=True,
         null=True,
     )
