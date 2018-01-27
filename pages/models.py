@@ -319,13 +319,12 @@ class IndexPage(Page):
     background_color_default = '218fff'
     button_url_new_window_help_text = 'Open new window for button url.'
     color_help_text = '6 digit CSS color code.'
-    embed_code_help_text = 'Raw HTML embed code for video, etc.'
-
     COLORS = (
         ('blue', 'Blue'),
         ('green', 'Green'),
         ('red', 'Red'),
     )
+    embed_code_help_text = 'Raw HTML embed code for video, etc.'
 
     block_1_background_color = models.CharField(
         default=background_color_default,

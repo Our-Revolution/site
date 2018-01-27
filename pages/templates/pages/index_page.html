@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load pages_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block page_title %}Our Revolution{% endblock %}
 
@@ -134,7 +134,6 @@
 
           {% else %}
 
-
           <div id="home-block-2"
           class="home-block module centered margin-bottom white-text br3
           {% if page.block_3_show %}
@@ -196,8 +195,6 @@
 
             <div class="module__content br3">
               <div class="pa20 br3 dark-wash">
-
-
 
                 <h3 class="mt0">
                   {{ page.block_3_text }}
@@ -263,7 +260,8 @@
                 </a>
               </li>
               <li class="action-list__action col-md-4">
-                <a class="action__link" id="candidates-secondary-link" href="/candidates">
+                <a class="action__link" id="candidates-secondary-link"
+                href="{% candidates_url %}">
                   <h3>Explore Our Candidates</h3>
                   <p class="action__description">Find out who will continue the political revolution, and what you can do to help them win.</p>
                   <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
