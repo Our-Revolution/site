@@ -320,14 +320,15 @@ class IndexPage(Page):
     block_1_text_max_length = 140
     block_2_text_max_length = 100
     block_3_text_max_length = 60
-    button_text_max_length = 16
-    button_url_new_window_help_text = 'Open new window for button url.'
-    color_help_text = '6 digit CSS color code.'
-    COLORS = (
+    button_colors = (
         ('blue', 'Blue'),
         ('green', 'Green'),
         ('red', 'Red'),
     )
+    button_text_max_length = 16
+    button_url_new_window_help_text = 'Open new window for button url.'
+
+    color_css_help_text = '6 digit CSS color code.'
     color_css_max_length = 6
     color_select_max_length = 128
     embed_code_help_text = 'Raw HTML embed code for video, etc.'
@@ -335,7 +336,7 @@ class IndexPage(Page):
     block_1_background_color = models.CharField(
         default=background_color_default,
         max_length=color_css_max_length,
-        help_text=color_help_text
+        help_text=color_css_help_text
     )
     block_1_background_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -348,7 +349,7 @@ class IndexPage(Page):
         blank=True,
         max_length=color_select_max_length,
         null=True,
-        choices=COLORS,
+        choices=button_colors,
     )
     block_1_button_text = models.CharField(
         max_length=button_text_max_length,
@@ -373,7 +374,7 @@ class IndexPage(Page):
     block_2_background_color = models.CharField(
         default=background_color_default,
         max_length=color_css_max_length,
-        help_text=color_help_text
+        help_text=color_css_help_text
     )
     block_2_background_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -386,7 +387,7 @@ class IndexPage(Page):
         blank=True,
         max_length=color_select_max_length,
         null=True,
-        choices=COLORS,
+        choices=button_colors,
     )
     block_2_button_text = models.CharField(
         max_length=button_text_max_length,
@@ -414,7 +415,7 @@ class IndexPage(Page):
     block_3_background_color = models.CharField(
         default=background_color_default,
         max_length=color_css_max_length,
-        help_text=color_help_text
+        help_text=color_css_help_text
     )
     block_3_background_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -427,7 +428,7 @@ class IndexPage(Page):
         blank=True,
         max_length=color_select_max_length,
         null=True,
-        choices=COLORS,
+        choices=button_colors,
     )
     block_3_button_text = models.CharField(
         max_length=button_text_max_length,
