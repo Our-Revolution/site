@@ -327,7 +327,6 @@ class IndexPage(Page):
     )
     button_text_max_length = 16
     button_url_new_window_help_text = 'Open new window for button url.'
-
     color_css_help_text = '6 digit CSS color code.'
     color_css_max_length = 6
     color_select_max_length = 128
