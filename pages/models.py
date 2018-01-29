@@ -331,17 +331,19 @@ class IndexPage(Page):
         ]
 
 
-
-## CANDIDATES
-
+# CANDIDATES
 class CandidateEndorsementPage(Page):
     body = RichTextField(verbose_name="Bio")
+    # Legacy field for old pages
     candidate = models.ForeignKey(
         'endorsements.Candidate',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
+    # Show old template for legacy pages
+    # if candidate:
+    #     template = "pages/candidate_endorsement_page_old.html"
     election = models.ForeignKey(
         'endorsements.Election',
         null=True,

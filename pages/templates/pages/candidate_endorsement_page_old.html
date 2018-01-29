@@ -1,0 +1,98 @@
+{% extends "pages/base_page.html" %}
+
+{% load pages_tags static %}
+
+{% block meta_og %}
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="{{ page.candidate.name }}" />
+    <meta property="og:description" content="The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." />
+    <meta property="og:site_name" content="Our Revolution" />
+    <meta property="og:image" content="{{ page.candidate.photo.url }}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            <div class="page-sub-nav">
+            <a href="{% candidates_url %}">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            Our Candidates
+            / {{ page.candidate.state }}
+            / {{ page.candidate.name }}
+            </div>
+
+            <div class="page-heading">
+                <div>
+                    <h1>{{ page.candidate.name }}</h1>
+                    <div>Running for {{ page.candidate.office }}</div>
+                    <span>{{ page.candidate.state }}</span>
+                    {% if page.candidate.primary_date %}<div><strong>Election: {{page.candidate.primary_date}}</strong></div>{% endif %}
+                </div>
+
+            </div>
+
+            <div class="candidate-action-bar clearfix">
+
+                {% if page.candidate.primary_cta_enabled %}
+                    <a href="{{ page.candidate.primary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.primary_cta_link }}', true);" class="btn btn-donate" target="_blank">{{ page.candidate.primary_cta }}</a>
+                {% endif %}
+
+                {% if page.candidate.secondary_cta %}
+                    <a href="{{ page.candidate.secondary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.secondary_cta_link }}', true);" class="btn btn-primary" target="_blank">{{ page.candidate.secondary_cta }}</a>
+                {% endif %}
+
+                {% if page.candidate.website %}
+                    <a href="{{ page.candidate.website }}" onclick="trackOutboundLink('{{ page.candidate.website }}', true);" class="btn btn-secondary" target="_blank">Website</a>
+                {% endif %}
+
+                {% if page.candidate.facebook or page.candidate.twitter or page.candidate.instagram or page.candidate.youtube %}
+                    <div class="pull-right">
+                        {% if page.candidate.twitter %}
+                            <a href="{{ page.candidate.twitter }}" onclick="trackOutboundLink('{{ page.candidate.twitter }}', true);" target="_blank">
+                                <img alt="Twitter" src="{% static "dist/img/icons/twitter.svg" %}" class="social-icon">
+                            </a>
+                        {% endif %}
+
+                        {% if page.candidate.facebook %}
+                            <a href="{{ page.candidate.facebook }}" onclick="trackOutboundLink('{{ page.candidate.facebook }}', true);" target="_blank">
+                                <img alt="Facebook" src="{% static "dist/img/icons/facebook.svg" %}" class="social-icon">
+                            </a>
+                        {% endif %}
+
+                        {% if page.candidate.youtube %}
+                            <a href="{{ page.candidate.youtube }}" onclick="trackOutboundLink('{{ page.candidate.youtube }}', true);" target="_blank">
+                                <img alt="YouTube" src="{% static "dist/img/icons/youtube.svg" %}" class="social-icon">
+                            </a>
+                        {% endif %}
+
+                        {% if page.candidate.instagram %}
+                            <a href="{{ page.candidate.instagram }}" onclick="trackOutboundLink('{{ page.candidate.instagram }}', true);" target="_blank">
+                                <img alt="Instagram" src="{% static "dist/img/icons/instagram.svg" %}" class="social-icon">
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="candidate-content clearfix">
+                <div class="col-md-2 col-md-offset-2 col-sm-3 col-xs-4">
+                    <div class="candidate-photo" style="background-image: url('{{ page.candidate.photo.url }}')"></div>
+                </div>
+                <div class="col-md-6 col-sm-9 col-xs-8">
+                    <div class="candidate-bio">
+                        {{ page.body | safe }}
+                    </div>
+                </div>
+            </div>
+
+            {% include "partials/sign-up.html" %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
