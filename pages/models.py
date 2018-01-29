@@ -440,6 +440,7 @@ class CandidateEndorsementIndexPage(Page):
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     subpage_types = ['pages.CandidateEndorsementPage']
 
+    # TODO: update for new candidate endorsement model
     def get_context(self, *args, **kwargs):
         context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
         context['candidates'] = self.get_children().live().filter(
