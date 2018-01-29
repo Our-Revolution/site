@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.conf import settings
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
@@ -333,31 +334,27 @@ class IndexPage(Page):
 
 # CANDIDATES
 class CandidateEndorsementPage(Page):
+    result_choices = (
+        ('win', 'Win'),
+        ('loss', 'Loss'),
+    )
+    result_max_length = 16
+
     body = RichTextField(verbose_name="Bio")
-    # Legacy field for old pages
     candidate = models.ForeignKey(
         'endorsements.Candidate',
+        help_text='Ignore - legacy field for old pages.',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    # Show old template for legacy pages
-    # if candidate:
-    #     template = "pages/candidate_endorsement_page_old.html"
+    donate_url = models.URLField(null=True, blank=True)
     election = models.ForeignKey(
         'endorsements.Election',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-
-    result_choices = (
-        ('win', 'Win'),
-        ('loss', 'Loss'),
-    )
-    result_max_length = 16
-    donate_url = models.URLField(null=True, blank=True)
     facebook_url = models.URLField(null=True, blank=True)
     general_election_date = models.DateField(null=True, blank=True)
     general_election_result = models.CharField(
@@ -381,6 +378,13 @@ class CandidateEndorsementPage(Page):
         choices=result_choices,
         null=True,
         blank=True
+    )
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
     )
     state_or_territory = models.CharField(null=True, blank=True, max_length=32)
     twitter_url = models.URLField(null=True, blank=True)
@@ -425,6 +429,11 @@ class CandidateEndorsementPage(Page):
             heading="Links",
             classname="collapsible"
         ),
+        MultiFieldPanel(
+            [FieldPanel('candidate')],
+            heading="Legacy fields",
+            classname="collapsible collapsed"
+        ),
     ]
 
     promote_panels = Page.promote_panels + [
@@ -439,30 +448,52 @@ class CandidateEndorsementIndexPage(Page):
         FieldPanel('content_heading'),
         FieldPanel('body'),
     ]
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
     subpage_types = ['pages.CandidateEndorsementPage']
 
-    # TODO: update for new candidate endorsement model
     def get_context(self, *args, **kwargs):
-        context = super(CandidateEndorsementIndexPage, self).get_context(*args, **kwargs)
-        context['candidates'] = self.get_children().live().filter(
-            candidateendorsementpage__candidate__show=True
-        ).select_related(
-            'candidateendorsementpage',
-            'candidateendorsementpage__candidate'
-        ).order_by(
-            'candidateendorsementpage__candidate__state',
-            'candidateendorsementpage__candidate__district'
+        context = super(CandidateEndorsementIndexPage, self).get_context(
+            *args,
+            **kwargs
         )
+
+        # TODO: remove legacy support after switching over
+        if not settings.CANDIDATE_INDEX_UPDATE_ENABLED:
+            context['candidates'] = self.get_children().live().filter(
+                candidateendorsementpage__candidate__show=True
+            ).select_related(
+                'candidateendorsementpage',
+                'candidateendorsementpage__candidate'
+            ).order_by(
+                'candidateendorsementpage__candidate__state',
+                'candidateendorsementpage__candidate__district'
+            )
+        else:
+            # Filter out legacy pages and past elections
+            context['candidates'] = self.get_children().live().filter(
+                candidateendorsementpage__candidate__isnull=True,
+                candidateendorsementpage__general_election_result__isnull=True,
+            ).exclude(
+                candidateendorsementpage__primary_election_result='loss',
+            ).order_by(
+                'candidateendorsementpage__state_or_territory',
+                'candidateendorsementpage__office',
+                'candidateendorsementpage__title',
+            )
         return context
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
 
-
-## INITIATIVES
+# INITIATIVES
 
 class InitiativeEndorsementPage(Page):
     body = RichTextField()

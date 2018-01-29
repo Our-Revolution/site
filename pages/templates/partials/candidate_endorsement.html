@@ -1,0 +1,131 @@
+{% extends "pages/base_page.html" %}
+
+{% load pages_tags static wagtailimages_tags %}
+
+{% block meta_og %}
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:description" content="The next step for Bernie Sanders'
+    movement is a new group called Our Revolution, which will fight to transform
+    America and advance the progressive agenda that we believe in." />
+    <meta property="og:site_name" content="Our Revolution" />
+    {% image page.photo original as photo_img %}
+    <meta property="og:image" content="{{ photo_img.url }}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            <div class="page-sub-nav">
+            <a href="{% candidates_url %}">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            Our Candidates
+            / {{ page.state_or_territory }}
+            / {{ page.title }}
+            </div>
+
+            <div class="page-heading">
+                <div>
+                    <h1>{{ page.title }}</h1>
+                    <div>Running for {{ page.office }}</div>
+                    <span>{{ page.state_or_territory }}</span>
+                    {% if page.primary_election_date %}
+                    <div>
+                      <strong>
+                        Election: {{ page.primary_election_date }}
+                      </strong>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="candidate-action-bar clearfix">
+
+              {% if page.donate_url %}
+              <a href="{{ page.donate_url }}"
+                onclick="trackOutboundLink('{{ page.donate_url }}', true);"
+                class="btn btn-donate" target="_blank">
+                Donate
+              </a>
+              {% endif %}
+
+              {% if page.volunteer_url %}
+              <a href="{{ page.volunteer_url }}"
+              onclick="trackOutboundLink('{{ page.volunteer_url }}', true);"
+              class="btn btn-primary" target="_blank">
+                Volunteer
+              </a>
+              {% endif %}
+
+              {% if page.website_url %}
+              <a href="{{ page.website_url }}"
+              onclick="trackOutboundLink('{{ page.website_url }}', true);"
+              class="btn btn-secondary" target="_blank">
+                Website
+              </a>
+              {% endif %}
+
+              {% if page.facebook_url or page.twitter_url or page.instagram_url or page.youtube_url %}
+              <div class="pull-right">
+
+                {% if page.twitter_url %}
+                <a href="{{ page.twitter_url }}" target="_blank"
+                onclick="trackOutboundLink('{{ page.twitter_url }}', true);">
+                  <img alt="Twitter" class="social-icon"
+                  src="{% static "dist/img/icons/twitter.svg" %}" >
+                </a>
+                {% endif %}
+
+                {% if page.facebook_url %}
+                <a href="{{ page.facebook_url }}" target="_blank"
+                onclick="trackOutboundLink('{{ page.facebook_url }}', true);">
+                  <img alt="Facebook" class="social-icon"
+                  src="{% static "dist/img/icons/facebook.svg" %}">
+                </a>
+                {% endif %}
+
+                {% if page.youtube_url %}
+                <a href="{{ page.youtube_url }}" target="_blank"
+                onclick="trackOutboundLink('{{ page.youtube_url }}', true);">
+                  <img alt="YouTube" class="social-icon"
+                  src="{% static "dist/img/icons/youtube.svg" %}">
+                </a>
+                {% endif %}
+
+                {% if page.instagram_url %}
+                <a href="{{ page.instagram_url }}" target="_blank"
+                onclick="trackOutboundLink('{{ page.instagram_url }}', true);" >
+                  <img alt="Instagram" class="social-icon"
+                  src="{% static "dist/img/icons/instagram.svg" %}">
+                </a>
+                {% endif %}
+
+              </div>
+              {% endif %}
+
+            </div>
+
+            <div class="candidate-content clearfix">
+              <div class="col-md-2 col-md-offset-2 col-sm-3 col-xs-4">
+                {% image page.photo original as photo_img %}
+                <div class="candidate-photo"
+                style="background-image: url('{{ photo_img.url }}')"></div>
+              </div>
+              <div class="col-md-6 col-sm-9 col-xs-8">
+                  <div class="candidate-bio">
+                      {{ page.body | safe }}
+                  </div>
+              </div>
+            </div>
+
+            {% include "partials/sign-up.html" %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
