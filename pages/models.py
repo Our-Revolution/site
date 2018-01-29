@@ -335,28 +335,99 @@ class IndexPage(Page):
 ## CANDIDATES
 
 class CandidateEndorsementPage(Page):
-    body = RichTextField()
-    candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
+    body = RichTextField(verbose_name="Bio")
+    candidate = models.ForeignKey(
+        'endorsements.Candidate',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     election = models.ForeignKey(
         'endorsements.Election',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    signup_tagline = models.CharField(max_length=128, blank=True, null=True)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    result_choices = (
+        ('win', 'Win'),
+        ('loss', 'Loss'),
+    )
+    result_max_length = 16
+    donate_url = models.URLField(null=True, blank=True)
+    facebook_url = models.URLField(null=True, blank=True)
+    general_election_date = models.DateField(null=True, blank=True)
+    general_election_result = models.CharField(
+        max_length=result_max_length,
+        choices=result_choices,
+        null=True,
+        blank=True
+    )
+    instagram_url = models.URLField(null=True, blank=True)
+    office = models.CharField(null=True, blank=True, max_length=128)
+    photo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    primary_election_date = models.DateField(null=True, blank=True)
+    primary_election_result = models.CharField(
+        max_length=result_max_length,
+        choices=result_choices,
+        null=True,
+        blank=True
+    )
+    state_or_territory = models.CharField(null=True, blank=True, max_length=32)
+    twitter_url = models.URLField(null=True, blank=True)
+    volunteer_url = models.URLField(null=True, blank=True)
+    website_url = models.URLField(null=True, blank=True)
+    youtube_url = models.URLField(null=True, blank=True)
+
     parent_page_types = ['pages.CandidateEndorsementIndexPage']
 
-
     content_panels = Page.content_panels + [
-            FieldPanel('body', classname="full"),
-            FieldPanel('candidate'),
-            FieldPanel('election')
-        ]
+        MultiFieldPanel(
+            [
+                FieldPanel('body', classname="full"),
+                ImageChooserPanel('photo'),
+            ],
+            heading="Candidate",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('office'),
+                FieldPanel('state_or_territory'),
+                FieldPanel('election'),
+                FieldPanel('primary_election_date'),
+                FieldPanel('primary_election_result'),
+                FieldPanel('general_election_date'),
+                FieldPanel('general_election_result'),
+            ],
+            heading="Election",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('donate_url'),
+                FieldPanel('volunteer_url'),
+                FieldPanel('website_url'),
+                FieldPanel('twitter_url'),
+                FieldPanel('facebook_url'),
+                FieldPanel('youtube_url'),
+                FieldPanel('instagram_url'),
+            ],
+            heading="Links",
+            classname="collapsible"
+        ),
+    ]
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
 
 class CandidateEndorsementIndexPage(Page):
