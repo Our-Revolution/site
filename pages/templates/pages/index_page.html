@@ -1,0 +1,376 @@
+{% extends "pages/base_page.html" %}
+
+{% load pages_tags wagtailcore_tags wagtailimages_tags %}
+
+{% block page_title %}Our Revolution{% endblock %}
+
+{% block meta %}
+  {{ block.super }}
+
+  <style>
+
+    #home-block-1 {
+      background-color: #{{ page.block_1_background_color }};
+      {% if page.block_1_background_image %}
+        {% image page.block_1_background_image original as block_1_background_image %}
+        background-image: url({{ block_1_background_image.url }});
+      {% endif %}
+    }
+
+    #home-block-2 {
+      background-color: #{{ page.block_2_background_color }};
+      {% if page.block_2_background_image %}
+        {% image page.block_2_background_image original as block_2_background_image %}
+        background-image: url({{ block_2_background_image.url }});
+      {% endif %}
+    }
+
+    #home-block-3 {
+      background-color: #{{ page.block_3_background_color }};
+      {% if page.block_3_background_image %}
+        {% image page.block_3_background_image original as block_3_background_image %}
+        background-image: url({{ block_3_background_image.url }});
+      {% endif %}
+    }
+
+  </style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row row--main home">
+    <div class="container">
+      <section class="module-container module-container--ppl clearfix">
+
+        <div class="module-col margin-right table
+        {% if page.block_2_show %}
+        sixty
+        {% else %}
+        full
+        {% endif %}">
+
+          <!-- block 1 -->
+
+          {% if page.block_1_embed_code %}
+
+            <div id="home-block-1"
+            class="home-block module module--video full centered margin-bottom white-text br3">
+              <div class="module__content br3">
+                <div class="embed-responsive embed-responsive-16by9 dark-wash">
+                  {{page.block_1_embed_code | safe }}
+                </div>
+              </div>
+            </div>
+
+          {% else %}
+
+          <div id="home-block-1"
+          class="home-block module full centered white-text br3">
+
+            {% if page.block_1_text or page.block_1_button_url %}
+
+            <div class="module__content br3">
+              <div class="pa20 br3 dark-wash">
+
+                {% if page.block_1_text %}
+                <h3 class="mt0">
+                  {{ page.block_1_text }}
+                </h3>
+                {% endif %}
+
+                {% if page.block_1_button_url and page.block_1_button_text %}
+                <a href="{{ page.block_1_button_url }}"
+                class="btn btn-block ls2 uppercase
+                {% if page.block_1_button_color == 'green' %}
+                btn-primary
+                {% elif page.block_1_button_color == 'red' %}
+                btn-donate
+                {% else %}
+                btn-secondary
+                {% endif %}"
+                {% if page.block_1_button_url_new_window %}
+                onclick="trackOutboundLink('{{ page.block_1_button_url }}',true)"
+                target="_blank"
+                {% endif %}>
+                  {{ page.block_1_button_text }}
+                </a>
+                {% endif %}
+
+              </div>
+            </div>
+
+            {% endif %}
+
+          </div>
+
+          {% endif %}
+
+          <!-- /block 1 -->
+
+        </div>
+
+        {% if page.block_2_show %}
+        <div class="module-col forty margin-left table">
+
+          <!-- block 2 -->
+
+          {% if page.block_2_embed_code %}
+
+            <div id="home-block-2"
+            class="home-block module module--video centered margin-bottom white-text br3
+            {% if page.block_3_show %}
+            sixty
+            {% else %}
+            full
+            {% endif %}">
+              <div class="module__content br3">
+                <div class="embed-responsive embed-responsive-16by9 dark-wash">
+                  {{ page.block_2_embed_code | safe }}
+                </div>
+              </div>
+            </div>
+
+          {% else %}
+
+          <div id="home-block-2"
+          class="home-block module centered margin-bottom white-text br3
+          {% if page.block_3_show %}
+          sixty
+          {% else %}
+          full
+          {% endif %}">
+
+          {% if page.block_2_text or page.block_2_button_url %}
+
+              <div class="module__content br3">
+                <div class="pa20 br3 dark-wash">
+
+                  {% if page.block_2_text %}
+                  <h3 class="mt0">
+                    {{ page.block_2_text }}
+                  </h3>
+                  {% endif %}
+
+                  {% if page.block_2_button_url and page.block_2_button_text %}
+                  <a href="{{ page.block_2_button_url }}"
+                  class="btn btn-block ls2 uppercase
+                  {% if page.block_2_button_color == 'green' %}
+                  btn-primary
+                  {% elif page.block_2_button_color == 'red' %}
+                  btn-donate
+                  {% else %}
+                  btn-secondary
+                  {% endif %}"
+                  {% if page.block_2_button_url_new_window %}
+                  onclick="trackOutboundLink('{{ page.block_2_button_url }}',true)"
+                  target="_blank"
+                  {% endif %}>
+                    {{ page.block_2_button_text }}
+                  </a>
+                  {% endif %}
+
+                </div>
+              </div>
+
+              {% endif %}
+
+          </div>
+
+          {% endif %}
+
+          <!-- /block 2 -->
+
+          {% if page.block_3_show %}
+          <!-- block 3 -->
+
+          {% if page.block_3_embed_code %}
+
+            <div id="home-block-3"
+            class="home-block module module--video forty centered margin-bottom white-text br3">
+              <div class="module__content br3">
+                <div class="embed-responsive embed-responsive-16by9 dark-wash">
+                  {{ page.block_3_embed_code | safe }}
+                </div>
+              </div>
+            </div>
+
+          {% else %}
+
+          <div id="home-block-3"
+          class="home-block module forty centered white-text br3">
+
+            {% if page.block_3_text or page.block_3_button_url %}
+
+            <div class="module__content br3">
+              <div class="pa20 br3 dark-wash">
+
+                {% if page.block_3_text %}
+                <h3 class="mt0">
+                  {{ page.block_3_text }}
+                </h3>
+                {% endif %}
+
+                {% if page.block_3_button_url and page.block_3_button_text %}
+                <a href="{{ page.block_3_button_url }}"
+                class="btn btn-block ls2 uppercase
+                {% if page.block_3_button_color == 'green' %}
+                btn-primary
+                {% elif page.block_3_button_color == 'red' %}
+                btn-donate
+                {% else %}
+                btn-secondary
+                {% endif %}"
+                {% if page.block_3_button_url_new_window %}
+                onclick="trackOutboundLink('{{ page.block_3_button_url }}',true)"
+                target="_blank"
+                {% endif %}>
+                  {{ page.block_3_button_text }}
+                </a>
+                {% endif %}
+
+              </div>
+            </div>
+
+            {% endif %}
+
+          </div>
+          {% endif %}
+
+          <!-- /block 3 -->
+          {% endif %}
+
+        </div>
+        {% endif %}
+
+      </section>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <section class='home-section--info col-md-10 col-md-offset-1'>
+        <div class='col-md-8 col-md-offset-2'>
+          <h2>When we stand together there is nothing we cannot accomplish.</h2>
+          <p class="info__description">Our Revolution will reclaim democracy for the working people of our country by harnessing the transformative energy of the “political revolution.”  Through supporting a new generation of progressive leaders, empowering millions to fight for progressive change and elevating the political consciousness, Our Revolution will transform American politics to make our political and economic systems once again responsive to the needs of working families.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="action-list">
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="action-secondary-link" href="/action">
+                  <h3>Take Action</h3>
+                  <p class="action__description">Volunteer today and help continue our political revolution through grassroots organization.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="issues-secondary-link" href="/issues">
+                  <h3>Learn About the Issues</h3>
+                  <p class="action__description">Learn about the important issues facing our country today, and what you can do to fix them.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+              <li class="action-list__action col-md-4">
+                <a class="action__link" id="candidates-secondary-link"
+                href="{% candidates_url %}">
+                  <h3>Explore Our Candidates</h3>
+                  <p class="action__description">Find out who will continue the political revolution, and what you can do to help them win.</p>
+                  <span class="glyphicon glyphicon-chevron-right hidden-md hidden-sm"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  {% if news %}
+    <div class="row row--dark">
+      <div class="container">
+        <section class="home-section--news col-md-10 col-md-offset-1" id="news-section">
+            <h2 class="section-heading">In the News</h2>
+            {% for news_item in news %}
+              <div class="col-md-4 content">
+                <div class="news-item">
+                  <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
+                  <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
+                  <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
+                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="col-xs-12 col-p10 mt10">
+              <a href="/press" class="btn btn-primary btn-block uppercase ls2">Read More News <span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </section>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="container">
+      <section class="home-section--sign-up col-md-6 col-md-offset-3 sign-up-form">
+        <h2>Sign up for the future of our political movement.</h2>
+
+        <form action="https://go.ourrevolution.com/page/s/join?source=ourrevolution.com/-secondary" method="POST">
+          <span class="form-group email">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" class="email" placeholder="you@example.com" required>
+          </span>
+
+          <span class="form-group zip ">
+            <label for="zip">Zip Code</label>
+            <input type="text" name="zip" id="zip" class="zip" placeholder="90210" required>
+          </span>
+
+          <span class="form-group submit">
+            <button class="btn btn-primary btn-block uppercase ls2">Join</button>
+          </span>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="row row--dark">
+    <div class="container">
+      <section class="home-section--donate col-md-6 col-md-offset-3">
+        <h3>Donate to Our Revolution</h3>
+        <p>Our Revolution is a non-profit that runs off of funds from contributors like you. Help us continue this movement.</p>
+        <form id="quick-donate" class="quick-donate" action="https://secure.actblue.com/contribute/page/ourrevolution?amount=15" method="GET">
+          <button type="button" class="btn btn-default btn-amount" value="15">$15</button>
+          <button type="button" class="btn btn-primary btn-amount" value="27">$27</button>
+          <button type="button" class="btn btn-default btn-amount" value="50">$50</button>
+          <button type="button" class="btn btn-default btn-amount" value="100">$100</button>
+          <input type="text" placeholder="$___" class="input-amount">
+          <button class="btn btn-continue btn-secondary uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
+          <input type="hidden" name="amount" id="amount">
+          <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
+        </form>
+      </section>
+
+      <script>
+        $(document).ready(function() {
+          var keycode;
+          $('.btn-amount').on('click touchstart', function(e) {
+            e.preventDefault();
+            $("input#amount").val(this.value);
+            $('form#quick-donate').submit();
+          });
+          $('.input-amount').on('keyup', function(e) {
+            keycode = (event.keyCode ? event.keyCode : event.which);
+            $("input#amount").val(this.value);
+            if(keycode == 13) {
+              $('form#quick-donate').submit();
+            }
+          });
+        });
+      </script>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

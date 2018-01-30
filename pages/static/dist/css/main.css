@@ -8818,6 +8818,10 @@ footer {
     padding: 15px;
     right: 0px; }
 
+.home-block {
+  background-position: center;
+  background-size: cover; }
+
 ul.list-plain,
 .list-plain ul {
   list-style-type: none;
