@@ -80,7 +80,7 @@
                 </h3>
                 {% endif %}
 
-                {% if page.block_1_button_url %}
+                {% if page.block_1_button_url and page.block_1_button_text %}
                 <a href="{{ page.block_1_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_1_button_color == 'green' %}
@@ -153,7 +153,7 @@
                   </h3>
                   {% endif %}
 
-                  {% if page.block_2_button_url %}
+                  {% if page.block_2_button_url and page.block_2_button_text %}
                   <a href="{{ page.block_2_button_url }}"
                   class="btn btn-block ls2 uppercase
                   {% if page.block_2_button_color == 'green' %}
@@ -212,7 +212,7 @@
                 </h3>
                 {% endif %}
 
-                {% if page.block_3_button_url %}
+                {% if page.block_3_button_url and page.block_3_button_text %}
                 <a href="{{ page.block_3_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_3_button_color == 'green' %}

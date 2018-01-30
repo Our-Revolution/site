@@ -317,6 +317,10 @@ class IndexPage(Page):
         template = "pages/index.html"
 
     background_color_default = '218fff'
+    block_text_help_text = '''
+    Main copy in content block/module to provide information on the
+    call-to-action.
+    '''
     block_1_text_max_length = 140
     block_2_text_max_length = 100
     block_3_text_max_length = 60
@@ -325,7 +329,14 @@ class IndexPage(Page):
         ('green', 'Green'),
         ('red', 'Red'),
     )
+    button_text_help_text = '''
+    Call-to-action text to display on the button. Use action-oriented verbs if
+    possible.
+    '''
     button_text_max_length = 16
+    button_url_help_text = '''
+    Button will display if both url and text fields are filled in.
+    '''
     button_url_new_window_help_text = 'Open new window for button url.'
     color_css_help_text = '6 digit CSS color code.'
     color_css_max_length = 6
@@ -351,11 +362,16 @@ class IndexPage(Page):
         choices=button_colors,
     )
     block_1_button_text = models.CharField(
-        max_length=button_text_max_length,
         blank=True,
+        help_text=button_text_help_text,
+        max_length=button_text_max_length,
         null=True,
     )
-    block_1_button_url = models.URLField(null=True, blank=True)
+    block_1_button_url = models.URLField(
+        blank=True,
+        help_text=button_url_help_text,
+        null=True,
+    )
     block_1_button_url_new_window = models.BooleanField(
         default=False,
         help_text=button_url_new_window_help_text
@@ -366,8 +382,9 @@ class IndexPage(Page):
         help_text=embed_code_help_text
     )
     block_1_text = models.CharField(
-        max_length=block_1_text_max_length,
         blank=True,
+        help_text=block_text_help_text,
+        max_length=block_1_text_max_length,
         null=True,
     )
     block_2_background_color = models.CharField(
@@ -389,11 +406,16 @@ class IndexPage(Page):
         choices=button_colors,
     )
     block_2_button_text = models.CharField(
-        max_length=button_text_max_length,
         blank=True,
+        help_text=button_text_help_text,
+        max_length=button_text_max_length,
         null=True,
     )
-    block_2_button_url = models.URLField(null=True, blank=True)
+    block_2_button_url = models.URLField(
+        blank=True,
+        help_text=button_url_help_text,
+        null=True,
+    )
     block_2_button_url_new_window = models.BooleanField(
         default=False,
         help_text=button_url_new_window_help_text
@@ -407,8 +429,9 @@ class IndexPage(Page):
         default=False
     )
     block_2_text = models.CharField(
-        max_length=block_2_text_max_length,
         blank=True,
+        help_text=block_text_help_text,
+        max_length=block_2_text_max_length,
         null=True,
     )
     block_3_background_color = models.CharField(
@@ -430,11 +453,16 @@ class IndexPage(Page):
         choices=button_colors,
     )
     block_3_button_text = models.CharField(
-        max_length=button_text_max_length,
         blank=True,
+        help_text=button_text_help_text,
+        max_length=button_text_max_length,
         null=True,
     )
-    block_3_button_url = models.URLField(null=True, blank=True)
+    block_3_button_url = models.URLField(
+        blank=True,
+        help_text=button_url_help_text,
+        null=True,
+    )
     block_3_button_url_new_window = models.BooleanField(
         default=False,
         help_text=button_url_new_window_help_text
@@ -448,8 +476,9 @@ class IndexPage(Page):
         default=False
     )
     block_3_text = models.CharField(
-        max_length=block_3_text_max_length,
         blank=True,
+        help_text=block_text_help_text,
+        max_length=block_3_text_max_length,
         null=True,
     )
 
