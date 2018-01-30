@@ -44,6 +44,9 @@ ADMINS = [
 
 CANDIDATES_URL = '/candidates/'
 
+# TODO: TECH-750: remove legacy code after switching over
+HOMEPAGE_CMS_ENABLED = bool(int(os.environ.get('HOMEPAGE_CMS_ENABLED', 0)))
+
 MANAGERS = ADMINS
 
 # Application definition
