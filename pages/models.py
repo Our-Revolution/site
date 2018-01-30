@@ -494,7 +494,7 @@ class IndexPage(Page):
                 FieldPanel('block_1_background_color'),
                 FieldPanel('block_1_embed_code'),
             ],
-            heading="Block 1",
+            heading="Content Block 1",
             classname="collapsible"
         ),
         MultiFieldPanel(
@@ -509,7 +509,7 @@ class IndexPage(Page):
                 FieldPanel('block_2_background_color'),
                 FieldPanel('block_2_embed_code'),
             ],
-            heading="Block 2",
+            heading="Content Block 2",
             classname="collapsible"
         ),
         MultiFieldPanel(
@@ -524,7 +524,7 @@ class IndexPage(Page):
                 FieldPanel('block_3_background_color'),
                 FieldPanel('block_3_embed_code'),
             ],
-            heading="Block 3",
+            heading="Content Block 3",
             classname="collapsible"
         ),
     ]
