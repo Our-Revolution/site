@@ -20,7 +20,7 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# TODO: remove legacy support after switching over
+# TODO: TECH-772: remove legacy code after switching over
 CANDIDATE_INDEX_UPDATE_ENABLED = bool(int(os.environ.get(
     'CANDIDATE_INDEX_UPDATE_ENABLED',
     0

@@ -656,8 +656,30 @@ class CandidateEndorsementPage(Page):
         ImageChooserPanel('social_image')
     ]
 
+    '''
+    Get election date for general or primary depending on which is relevant
+    '''
+    def _get_election_date(self):
+        # Return general date if there is a result
+        if self.general_election_result is not None:
+            return self.general_election_date
+        # Return primary date if candidate lost primary
+        elif self.primary_election_result == 'loss':
+            return self.primary_election_date
+        # Return primary date if it is active
+        elif self.primary_election_date is not None and self.primary_election_result is None:
+            return self.primary_election_date
+        # Return general date otherwise
+        else:
+            return self.general_election_date
+    election_date = property(_get_election_date)
+
 
 class CandidateEndorsementIndexPage(Page):
+    # TODO: TECH-772: remove legacy code after switching over
+    if not settings.CANDIDATE_INDEX_UPDATE_ENABLED:
+        template = "pages/candidate_endorsement_index_page_old.html"
+
     body = RichTextField(null=True, blank=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
     content_panels = Page.content_panels + [
@@ -692,11 +714,14 @@ class CandidateEndorsementIndexPage(Page):
             )
         else:
             # Filter out legacy pages and past elections
-            context['candidates'] = self.get_children().live().filter(
+            context['candidates'] = self.get_children().live(
+            ).filter(
                 candidateendorsementpage__candidate__isnull=True,
                 candidateendorsementpage__general_election_result__isnull=True,
             ).exclude(
                 candidateendorsementpage__primary_election_result='loss',
+            ).select_related(
+                'candidateendorsementpage',
             ).order_by(
                 'candidateendorsementpage__state_or_territory',
                 'candidateendorsementpage__office',
