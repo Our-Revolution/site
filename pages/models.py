@@ -660,14 +660,18 @@ class CandidateEndorsementPage(Page):
     Get election date for general or primary depending on which is relevant
     '''
     def _get_election_date(self):
-        # Return general date if there is a result
-        if self.general_election_result is not None:
-            return self.general_election_date
-        # Return primary date if candidate lost primary
-        elif self.primary_election_result == 'loss':
-            return self.primary_election_date
         # Return primary date if it is active
-        elif self.primary_election_date is not None and self.primary_election_result is None:
+        if (
+            self.general_election_result is None and
+            self.primary_election_date is not None and
+            self.primary_election_result is None
+        ):
+            return self.primary_election_date
+        # Return primary date if candidate lost primary
+        elif (
+            self.general_election_result is None and
+            self.primary_election_result == 'loss'
+        ):
             return self.primary_election_date
         # Return general date otherwise
         else:
