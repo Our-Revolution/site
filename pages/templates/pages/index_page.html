@@ -13,7 +13,7 @@
       background-color: #{{ page.block_1_background_color }};
       {% if page.block_1_background_image %}
         {% image page.block_1_background_image original as block_1_background_image %}
-        background-image: url({{ block_1_background_image.url }});
+        background-image: url('{{ block_1_background_image.url }}');
       {% endif %}
     }
 
@@ -21,7 +21,7 @@
       background-color: #{{ page.block_2_background_color }};
       {% if page.block_2_background_image %}
         {% image page.block_2_background_image original as block_2_background_image %}
-        background-image: url({{ block_2_background_image.url }});
+        background-image: url('{{ block_2_background_image.url }}');
       {% endif %}
     }
 
@@ -29,7 +29,7 @@
       background-color: #{{ page.block_3_background_color }};
       {% if page.block_3_background_image %}
         {% image page.block_3_background_image original as block_3_background_image %}
-        background-image: url({{ block_3_background_image.url }});
+        background-image: url('{{ block_3_background_image.url }}');
       {% endif %}
     }
 
