@@ -46,21 +46,14 @@
                 <div class="filter__sort pull-right">
                     Sort By:
                     <div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
-                        <button type="button" class="btn btn-default" sort-by="state">
-                          State <span class="caret"></span>
-                        </button>
-                        <button type="button" class="btn btn-default" sort-by="date">
-                          Election Date <span class="caret"></span>
-                        </button>
+                      <button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
+                      <button type="button" class="btn btn-default" sort-by="date">Election Date <span class="caret"></span></button>
                     </div>
                 </div>
             </div>
 
       <div id="candidates-list">
-        <div class="no-result text-center">
-          <h3>No Matching Candidates Found</h3>
-        </div>
-
+        <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
         <ul class="card-list list">
 
           {% for candidate in candidates %}
