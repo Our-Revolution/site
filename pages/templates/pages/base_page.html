@@ -26,7 +26,7 @@
                 {% image page.social_image original as social_image_url %}
                 <meta property="og:image" content="{{ social_image_url.url }}?1" />
             {% else %}
-                <meta property="og:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png?1" />
+                <meta property="og:image" content="{% default_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 
@@ -39,7 +39,7 @@
                 {% image page.social_image original as social_image_url %}
                 <meta name="twitter:image" content="{{ social_image_url.url }}?1" />
             {% else %}
-                <meta name="twitter:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png?1" />
+                <meta name="twitter:image" content="{% default_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 

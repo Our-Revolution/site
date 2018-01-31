@@ -36,6 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', None)
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
 
 DEFAULT_FROM_EMAIL = "info@ourrevolution.com"
+DEFAULT_META_IMAGE_URL = 'https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png?1'
 
 ACCOUNT_ADAPTER = ("local_groups.adapter.AccountAdapter")
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
