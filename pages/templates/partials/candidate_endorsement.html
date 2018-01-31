@@ -5,12 +5,23 @@
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="{{ page.title }}" />
-    <meta property="og:description" content="The next step for Bernie Sanders'
-    movement is a new group called Our Revolution, which will fight to transform
-    America and advance the progressive agenda that we believe in." />
+    <meta property="og:description"
+    content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}"
+    />
     <meta property="og:site_name" content="Our Revolution" />
     {% image page.photo original as photo_img %}
     <meta property="og:image" content="{{ photo_img.url }}" />
+{% endblock %}
+
+{% block meta_twitter %}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{{ page.title }}"/>
+    <meta name="twitter:description"
+    content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}"
+    />
+    <meta name="twitter:site" content="@OurRevolution"/>
+    {% image page.photo original as photo_img %}
+    <meta name="twitter:image" content="{{ photo_img.url }}" />
 {% endblock %}
 
 {% block content %}

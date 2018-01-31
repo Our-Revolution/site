@@ -10,6 +10,11 @@ def candidates_url():
     return settings.CANDIDATES_URL
 
 
+@register.simple_tag
+def default_meta_image_url():
+    return settings.DEFAULT_META_IMAGE_URL
+
+
 # Navigation menu
 @register.inclusion_tag('partials/nav.html', takes_context=True)
 def navigation_menu(context):
