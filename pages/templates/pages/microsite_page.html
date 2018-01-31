@@ -64,7 +64,7 @@
 
       {% if page.primary_content_background_image %}
         {% image page.primary_content_background_image original as primary_img %}
-        background-image: url({{ primary_img.url }});
+        background-image: url('{{ primary_img.url }}');
       {% endif %}
     }
 
@@ -86,7 +86,7 @@
 
       {% if page.secondary_content_background_image %}
         {% image page.secondary_content_background_image original as secondary_img %}
-        background-image: url({{ secondary_img.url }});
+        background-image: url('{{ secondary_img.url }}');
       {% endif %}
     }
 
@@ -108,7 +108,7 @@
 
       {% if page.custom_footer_background_image %}
         {% image page.custom_footer_background_image original as secondary_img %}
-        background-image: url({{ secondary_img.url }});
+        background-image: url('{{ secondary_img.url }}');
       {% endif %}
     }
 
