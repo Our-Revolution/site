@@ -12,6 +12,7 @@ from django.db.models.signals import pre_delete
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from localflavor.us.models import USStateField
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -564,23 +565,23 @@ class CandidateEndorsementPage(Page):
         blank=True,
         on_delete=models.SET_NULL
     )
-    donate_url = models.URLField(null=True, blank=True)
+    donate_url = models.URLField(blank=True, null=True)
     election = models.ForeignKey(
         'endorsements.Election',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    facebook_url = models.URLField(null=True, blank=True)
-    general_election_date = models.DateField(null=True, blank=True)
+    facebook_url = models.URLField(blank=True, null=True)
+    general_election_date = models.DateField(blank=True, null=True)
     general_election_result = models.CharField(
         max_length=result_max_length,
         choices=result_choices,
         null=True,
         blank=True
     )
-    instagram_url = models.URLField(null=True, blank=True)
-    office = models.CharField(null=True, blank=True, max_length=128)
+    instagram_url = models.URLField(blank=True, null=True)
+    office = models.CharField(blank=True, max_length=128, null=True)
     photo = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -588,7 +589,7 @@ class CandidateEndorsementPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    primary_election_date = models.DateField(null=True, blank=True)
+    primary_election_date = models.DateField(blank=True, null=True)
     primary_election_result = models.CharField(
         max_length=result_max_length,
         choices=result_choices,
@@ -602,11 +603,11 @@ class CandidateEndorsementPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    state_or_territory = models.CharField(null=True, blank=True, max_length=32)
-    twitter_url = models.URLField(null=True, blank=True)
-    volunteer_url = models.URLField(null=True, blank=True)
-    website_url = models.URLField(null=True, blank=True)
-    youtube_url = models.URLField(null=True, blank=True)
+    state_or_territory = USStateField(blank=True, null=True)
+    twitter_url = models.URLField(blank=True, null=True)
+    volunteer_url = models.URLField(blank=True, null=True)
+    website_url = models.URLField(blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)
 
     parent_page_types = ['pages.CandidateEndorsementIndexPage']
 
@@ -684,7 +685,7 @@ class CandidateEndorsementIndexPage(Page):
     if not settings.CANDIDATE_INDEX_UPDATE_ENABLED:
         template = "pages/candidate_endorsement_index_page_old.html"
 
-    body = RichTextField(null=True, blank=True)
+    body = RichTextField(blank=True, null=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
     content_panels = Page.content_panels + [
         FieldPanel('content_heading'),
