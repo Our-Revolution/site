@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load pages_tags static wagtailcore_tags wagtailimages_tags %}
+{% load pages_tags static wagtailcore_tags %}
 
 {% block content %}
 
@@ -55,54 +55,20 @@
       <div id="candidates-list">
         <div class="no-result text-center"><h3>No Matching Candidates Found</h3></div>
         <ul class="card-list list">
-
-          {% for candidate in candidates %}
-          {% with candidateendorsementpage=candidate.candidateendorsementpage %}
-
-          <li class="card clearfix">
-
-            <a href="{% pageurl candidateendorsementpage %}">
-
-              {% image candidateendorsementpage.photo original as photo_img %}
-              <div class="card__photo"
-              style="background-image: url('{{ photo_img.url }}')"></div>
-
-              <div class="card__content">
-
-                <span class="card__item name">
-                  {{ candidateendorsementpage.title }}
-                </span>
-
-                <span class="card__item bold smaller state">
-                  {{ candidateendorsementpage.get_state_or_territory_display }}
-                </span>
-
-                <span class="card__item bottom">
-
-                  {% if candidateendorsementpage.election_date %}
-
-                  <div class="card__item smaller bold">
-                    Election:
-                    <span class="date hidden">
-                      {{ candidateendorsementpage.election_date|date:"U" }}
-                    </span>
-                    {{ candidateendorsementpage.election_date }}
-                  </div>
-
-                  {% endif %}
-
-                  {{ candidateendorsementpage.office }}
-
-                </span>
-              </div>
-
-            </a>
-
-          </li>
-
-          {% endwith %}
+          {% for candidate_page in candidates %}
+              {% with candidate_page.candidateendorsementpage.candidate as candidate %}
+                  <li class="card clearfix">
+                      <a href="{% pageurl candidate_page %}">
+                          <div class="card__photo" style="background-image: url('{{ candidate.photo.url }}')"></div>
+                          <div class="card__content">
+                              <span class="card__item name">{{ candidate.name }}</span>
+                              <span class="card__item bold smaller state">{{ candidate.state }} {{ candidate.district }}</span>
+                              <span class="card__item bottom">{% if candidate.primary_date %}<div class="card__item smaller bold">Election: <span class="date hidden">{{ candidate.primary_date|date:"U" }}</span>{{ candidate.primary_date }}</div> {% endif %}{{ candidate.office }}</span>
+                          </div>
+                      </a>
+                  </li>
+              {% endwith %}
           {% endfor %}
-
         </ul>
       </div>
   </div>

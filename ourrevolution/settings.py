@@ -20,6 +20,11 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# TODO: TECH-772: remove legacy code after switching over
+CANDIDATE_INDEX_UPDATE_ENABLED = bool(int(os.environ.get(
+    'CANDIDATE_INDEX_UPDATE_ENABLED',
+    0
+)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
