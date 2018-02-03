@@ -1,5 +1,6 @@
+from datetime import datetime
 from django.contrib import admin
-
+from django.db.models import Q
 from .models import *
 from local_groups.models import Group
 from local_groups.actions import export_as_csv_action
@@ -147,6 +148,96 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         'completed_by_candidate',
     )
 
+
+class ElectionMonthFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = 'election month'
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'election_month'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('1', 'January'),
+            ('2', 'February'),
+            ('3', 'March'),
+            ('4', 'April'),
+            ('5', 'May'),
+            ('6', 'June'),
+            ('7', 'July'),
+            ('8', 'August'),
+            ('9', 'September'),
+            ('10', 'October'),
+            ('11', 'November'),
+            ('12', 'December'),
+
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value to decide how to filter the queryset.
+        month_string = self.value()
+        if month_string is not None:
+            month = int(month_string)
+            return queryset.filter(
+                Q(questionnaire__primary_election_date__month=month) |
+                Q(questionnaire__general_election_date__month=month)
+            )
+
+
+class ElectionYearFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = 'election year'
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'election_year'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        current_year = datetime.datetime.now().year
+        filter_options = []
+        # List several years starting with last year
+        for x in range(0, 4):
+            y = str(current_year + x - 1)
+            filter_options.append((y, y))
+
+        return filter_options
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value to decide how to filter the queryset.
+        year_string = self.value()
+        if year_string is not None:
+            year = int(year_string)
+            return queryset.filter(
+                Q(questionnaire__primary_election_date__year=year) |
+                Q(questionnaire__general_election_date__year=year)
+            )
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
@@ -236,7 +327,12 @@ class ApplicationAdmin(admin.ModelAdmin):
     # set actions to include csv export with field list
     actions = [export_as_csv_action("CSV Export", export_fields)]
 
-    list_filter = ('status','candidate_state',)
+    list_filter = (
+        'status',
+        ElectionMonthFilter,
+        ElectionYearFilter,
+        'candidate_state'
+    )
 
     search_fields = ('group__name','group__group_id','candidate_first_name','candidate_last_name','candidate_state')
 
@@ -391,6 +487,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         #Disable delete
         return False
+
 
 @admin.register(InitiativeApplication)
 class InitiativeApplicationAdmin(admin.ModelAdmin):
