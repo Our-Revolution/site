@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from django.contrib import admin
 from django.db.models import Q
 from .models import *
@@ -213,13 +213,14 @@ class ElectionYearFilter(admin.SimpleListFilter):
         human-readable name for the option that will appear
         in the right sidebar.
         """
-        return (
-            ('2016', '2016'),
-            ('2017', '2017'),
-            ('2018', '2018'),
-            ('2019', '2019'),
-            ('2020', '2020'),
-        )
+        current_year = datetime.datetime.now().year
+        filter_options = []
+        # List several years starting with last year
+        for x in range(0, 4):
+            y = str(current_year + x - 1)
+            filter_options.append((y, y))
+
+        return filter_options
 
     def queryset(self, request, queryset):
         """
