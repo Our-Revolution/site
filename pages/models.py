@@ -72,6 +72,13 @@ class MemberNewsletterPage(Page):
     body = StreamField([
         ('white_background', blocks.RichTextBlock()),
         ('blue_background', blocks.RichTextBlock()),
+        ('image_block', blocks.StructBlock([
+            ('image_file', ImageChooserBlock()),
+            ('image_caption', blocks.RichTextBlock(
+                blank=True,
+                null=True,
+            )),
+        ])),
     ])
 
     content_panels = Page.content_panels + [
