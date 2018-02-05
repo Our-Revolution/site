@@ -20,6 +20,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChoo
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.signals import page_published
+from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
@@ -64,6 +65,42 @@ class BasePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+class MemberNewsletterPage(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+    ])
+    custom_footer_content = RichTextField(null=True, blank=True)
+    custom_footer_show = models.BooleanField(
+        default=False,
+        help_text='Show custom footer.'
+    )
+    custom_footer_text_color = models.CharField(
+        max_length=6,
+        blank=True,
+        null=True,
+        help_text=color_help_text
+    )
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('custom_favicon'),
+        MultiFieldPanel(
+            [
+                FieldPanel('show_accent_border'),
+            ],
+            heading="Header",
+            classname="collapsible"
+        ),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel('social_image')
+    ]
 
 
 class MicrositePage(Page):
