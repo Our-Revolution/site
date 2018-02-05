@@ -68,38 +68,15 @@ class BasePage(Page):
 
 
 class MemberNewsletterPage(Page):
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post date")
+    sub_heading = RichTextField()
     body = StreamField([
-        ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
+        ('white_background', blocks.RichTextBlock()),
+        ('blue_background', blocks.RichTextBlock()),
     ])
-    custom_footer_content = RichTextField(null=True, blank=True)
-    custom_footer_show = models.BooleanField(
-        default=False,
-        help_text='Show custom footer.'
-    )
-    custom_footer_text_color = models.CharField(
-        max_length=6,
-        blank=True,
-        null=True,
-        help_text=color_help_text
-    )
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('custom_favicon'),
-        MultiFieldPanel(
-            [
-                FieldPanel('show_accent_border'),
-            ],
-            heading="Header",
-            classname="collapsible"
-        ),
-    ]
-
-    promote_panels = Page.promote_panels + [
-        ImageChooserPanel('social_image')
+        FieldPanel('sub_heading'),
+        StreamFieldPanel('body'),
     ]
 
 
