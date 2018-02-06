@@ -135,9 +135,11 @@
       <![endif]--><div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
       <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:0px;" align="left">
 
-            <div
-            style="cursor:auto;color:#FFF;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
+          <div
+          style="cursor:auto;color:#FFF;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
+
             {% include_block block %}
+
           </div>
 
             </td></tr></tbody></table></div><!--[if mso | IE]>
@@ -210,7 +212,7 @@
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
 
 
-        {%if block.value.header %}
+        {% if block.value.header %}
         <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:10px;" align="left">
           <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
 
@@ -223,15 +225,17 @@
           <tr><td style="word-wrap:break-word;font-size:0px;padding:0px;" align="center">
             <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border-spacing:0px;" align="center" border="0"><tbody>
             <tr><td style="width:600px;">
+
               {% image block.value.image original as image %}
               <img alt="" height="auto" src="{{ image.url }}"
               style="border:none;border-radius:0px;display:block;font-size:13px;outline:none;text-decoration:none;width:100%;height:auto;"
               width="600">
+
             </td></tr>
           </tbody></table>
         </td></tr>
 
-        {%if block.value.caption %}
+        {% if block.value.caption %}
         <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;" align="left">
           <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
 
@@ -277,8 +281,7 @@
 
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
 
-
-        {%if block.value.header %}
+        {% if block.value.header %}
         <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:10px;" align="left">
           <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
 
@@ -296,7 +299,7 @@
           </div>
         </td></tr>
 
-        {%if block.value.caption %}
+        {% if block.value.caption %}
         <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;" align="left">
           <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
 
