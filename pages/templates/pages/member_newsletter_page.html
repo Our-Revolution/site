@@ -50,10 +50,12 @@
         @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 
     </style>
-  <!--<![endif]--><style type="text/css">
-      p { margin-top: 15px; color:#4a4a4a; } body { border: 1px solid #ccc; color:#4a4a4a; } a { color: #218fff; font-weight: 700; text-decoration: underline; } .blue a, .blue a:visited, .blue a:active, .blue a:hover, .blue a:focus { color: white !important;
+  <!--<![endif]-->
+  <style type="text/css">
+      p { margin-top: 15px; color:#4a4a4a; } body { border: 1px solid #ccc; color:#4a4a4a; } a { color: #218fff; font-weight: 700; text-decoration: underline; } .blue a, .blue a:visited, .blue a:active, .blue a:hover, .blue a:focus, .blue p { color: white !important;
       } ul { padding-left: 30px; margin: 0; } p { margin-top: 10px; } .footer { color:#4a4a4a; font-family:"Lato", sans-serif; }
-    </style><style type="text/css">
+    </style>
+    <style type="text/css">
   @media only screen and (min-width:480px) {
     .mj-column-per-100 { width:100%!important; }
   }
@@ -97,7 +99,9 @@
           <td style="vertical-align:top;width:600px;">
       <![endif]--><div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-wrap:break-word;font-size:0px;padding:25px;" align="center">
       <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:16px;font-weight:700;line-height:140%;text-align:center;">
-        {{ page.sub_heading | richtext }}
+
+        {{ page.header | richtext }}
+
       </div>
     </td></tr>
     </tbody></table></div><!--[if mso | IE]>
@@ -129,9 +133,9 @@
       <![endif]--><div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
       <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:0px;" align="left">
 
-            <div class="blue-bg"
-            style="cursor:auto;color:#FFF;font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;font-weight:700;line-height:140%;text-align:left;">
-            blue: {% include_block block %}
+            <div
+            style="cursor:auto;color:#FFF;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
+            {% include_block block %}
           </div>
 
             </td></tr></tbody></table></div><!--[if mso | IE]>
@@ -158,16 +162,14 @@
       <table role="presentation" border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="vertical-align:top;width:600px;">
-      <![endif]--><div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:10px;" align="left">
-      <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;font-weight:700;line-height:140%;text-align:left;">
-        Content Block
-      </div>
-    </td></tr>
+      <![endif]--><div class="mj-column-per-100 outlook-group-fix"
+      style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
+
     <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;" align="left">
-      <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
-
-        white: {% include_block block %}
-
+      <div
+      style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
+        {% include_block block %}
       </div>
     </td></tr>
 
@@ -205,24 +207,37 @@
 
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
 
+
+        {%if block.value.header %}
+        <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:10px;" align="left">
+          <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
+
+            {{ block.value.header | richtext }}
+
+          </div>
+        </td></tr>
+        {% endif %}
+
           <tr><td style="word-wrap:break-word;font-size:0px;padding:0px;" align="center">
             <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border-spacing:0px;" align="center" border="0"><tbody>
             <tr><td style="width:600px;">
-              {% image block.value.image_file original as image_file %}
-              <img alt="" height="auto" src="{{ image_file.url }}"
+              {% image block.value.image original as image %}
+              <img alt="" height="auto" src="{{ image.url }}"
               style="border:none;border-radius:0px;display:block;font-size:13px;outline:none;text-decoration:none;width:100%;height:auto;"
               width="600">
             </td></tr>
           </tbody></table>
         </td></tr>
 
+        {%if block.value.caption %}
         <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;" align="left">
           <div style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
 
-            {{ block.value.image_caption | richtext }}
+            {{ block.value.caption | richtext }}
 
           </div>
         </td></tr>
+        {% endif %}
 
       </tbody></table>
 

@@ -68,21 +68,19 @@ class BasePage(Page):
 
 
 class MemberNewsletterPage(Page):
-    sub_heading = RichTextField()
+    header = RichTextField()
     body = StreamField([
         ('white_background', blocks.RichTextBlock()),
         ('blue_background', blocks.RichTextBlock()),
         ('image_block', blocks.StructBlock([
-            ('image_file', ImageChooserBlock()),
-            ('image_caption', blocks.RichTextBlock(
-                blank=True,
-                null=True,
-            )),
+            ('header', blocks.RichTextBlock(required=False)),
+            ('image', ImageChooserBlock()),
+            ('caption', blocks.RichTextBlock(required=False)),
         ])),
     ])
 
     content_panels = Page.content_panels + [
-        FieldPanel('sub_heading'),
+        FieldPanel('header'),
         StreamFieldPanel('body'),
     ]
 
