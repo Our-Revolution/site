@@ -13,6 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from localflavor.us.models import USStateField
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -70,11 +71,16 @@ class BasePage(Page):
 class MemberNewsletterPage(Page):
     header = RichTextField()
     body = StreamField([
-        ('white_background', blocks.RichTextBlock()),
-        ('blue_background', blocks.RichTextBlock()),
+        ('white_block', blocks.RichTextBlock()),
+        ('blue_block', blocks.RichTextBlock()),
         ('image_block', blocks.StructBlock([
             ('header', blocks.RichTextBlock(required=False)),
             ('image', ImageChooserBlock()),
+            ('caption', blocks.RichTextBlock(required=False)),
+        ])),
+        ('table_block', blocks.StructBlock([
+            ('header', blocks.RichTextBlock(required=False)),
+            ('table', TableBlock()),
             ('caption', blocks.RichTextBlock(required=False)),
         ])),
     ])
