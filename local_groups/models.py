@@ -48,9 +48,6 @@ class Group(models.Model):
         default=4
     )
 
-    # TODO: Remove after deploy TECH-794
-    state_organizing_committee = models.BooleanField(default=False)
-
     # Individual Rep Email should match BSD authentication account
     rep_email = models.EmailField(
         null=True,
