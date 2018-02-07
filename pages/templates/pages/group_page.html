@@ -15,6 +15,7 @@
 
       <div class="container pt6">
         <p class="mb0">
+          <!-- See GROUP_TYPES tuple in local groups model for group types -->
           {% if group.group_type != 1 %}
             {% with group.city|add:", "|default:"" as city %}
               {% if city %}
