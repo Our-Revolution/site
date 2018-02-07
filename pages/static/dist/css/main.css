@@ -10537,6 +10537,25 @@ div.recurrence-widget {
     position: relative;
     border-bottom: solid 1px #ddd; }
 
+.groups-map__icon {
+  text-align: center;
+  border-radius: 100%;
+  background: #218fff;
+  color: white;
+  opacity: 0.9;
+  -webkit-transition: opacity 0.25s;
+  transition: opacity 0.25s;
+  border: 1px solid white; }
+  .groups-map__icon:hover {
+    opacity: 1; }
+  .groups-map__icon.large {
+    line-height: 32px;
+    border: none; }
+  .groups-map__icon.blue {
+    background: #218fff; }
+  .groups-map__icon.red {
+    background: #ff3939; }
+
 .groups-map .component__heading {
   padding: 20px; }
 

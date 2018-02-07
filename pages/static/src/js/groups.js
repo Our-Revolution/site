@@ -1,5 +1,5 @@
 module.exports = function() {
-  var map, active = null, usedSearch = false, data = {}, mapboxToken = 'pk.eyJ1Ijoib3VycmV2b2x1dGlvbiIsImEiOiJjaXpzdm91M3UwMDA3MzNvY2NhZXZtZ21hIn0.WBmvgFv12o8eEnv2GsZthA';
+  var map, active = null, usedSearch = false, data = {}, blueIcon, redIcon, markers, mapboxToken = 'pk.eyJ1Ijoib3VycmV2b2x1dGlvbiIsImEiOiJjaXpzdm91M3UwMDA3MzNvY2NhZXZtZ21hIn0.WBmvgFv12o8eEnv2GsZthA';
 
   function init(mapDiv) {
     initMap(mapDiv);
@@ -12,6 +12,37 @@ module.exports = function() {
         maxZoom: 18
       }
     ).addTo(map);
+    
+    blueIcon = L.divIcon({
+      className: 'groups-map__icon blue',
+
+
+      iconSize:     [16, 16], // size of the icon
+      iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+      popupAnchor:  [8, 8] // point from which the popup should open relative to the iconAnchor
+    });
+
+    redIcon = L.divIcon({
+      className: 'groups-map__icon red',
+
+      iconSize:     [16, 16], // size of the icon
+      iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+      popupAnchor:  [8, 8] // point from which the popup should open relative to the iconAnchor
+    });
+    
+    // markers = L.markerClusterGroup({
+    //   iconCreateFunction: function(cluster) {
+		//      // return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+    //      return L.divIcon({
+    //        className: 'groups-map__icon blue large',
+    // 
+    //        iconSize:     [32, 32], // size of the icon
+    // 
+    //        html: '<b>' + cluster.getChildCount() + '</b>'
+    //      });
+	  //    },
+    //    maxClusterRadius: 40
+    // });
 
     $(map).on('zoomend', function() {
 
@@ -83,11 +114,18 @@ module.exports = function() {
   function addGroup(group) {
     if (group.geometry!=null) {
       var coords = group.geometry.coordinates;
-      var marker = L.marker(coords.reverse());
-
+      var marker;
+      
+      if (group.properties.state_organizing_committee) {
+        // if SOC, color red and put on top layer
+        marker = L.marker(coords.reverse(), {icon: redIcon, zIndexOffset: 1000})
+      } else {
+        marker = L.marker(coords.reverse(), {icon: blueIcon});
+      }
+      
       marker.properties = group.properties;
 
-      marker.bindPopup('<h4>'+ group.properties.name + '</h1>');
+      marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>');
 
       marker.on('click touchstart', function() {
         updateInfo([this]);
