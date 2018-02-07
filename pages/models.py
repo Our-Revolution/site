@@ -338,10 +338,6 @@ class TemplatePage(Page):
 
 
 class IndexPage(Page):
-    # TODO: TECH-750: remove legacy code after switching over
-    if not settings.HOMEPAGE_CMS_ENABLED:
-        template = "pages/index.html"
-
     background_color_default = '218fff'
     block_text_help_text = '''
     Main copy in content block/module to provide information on the
