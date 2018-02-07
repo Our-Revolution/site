@@ -199,7 +199,7 @@ module.exports = function() {
               <h4 class="component__name">' + groups[i].properties.name  + '</h4>\
             </div>\
             <div class="component__info">\
-              <a href="/groups/'+ groups[i].properties.slug + '/''" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
+              <a href="/groups/'+ groups[i].properties.slug + '/" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
             </div> \
           </div>\
         ');
