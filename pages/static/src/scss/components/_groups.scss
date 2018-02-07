@@ -137,6 +137,44 @@
     }
   }
   
+  &__icon {
+    text-align: center;
+    border-radius: 100%;
+    background: $blue;
+    color: white;
+    opacity: 0.9;
+    transition: opacity 0.25s;
+    border: 1px solid white;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    
+    &:hover {
+      opacity: 1;
+    }
+    
+    &.large {
+      line-height: 32px;
+      border: none;
+      height: 32px;
+      width: 32px;
+    }
+    
+    &.small {
+      width: 12px;
+      height: 12px;
+    }
+    
+    &.blue {
+      background: $blue;
+    }
+    
+    &.red {
+      // TODO: replace with $red once we've switched site over to on-brand red
+      background: #ff3939;
+    }
+  }
+  
   .component { 
     &__heading{
       // background: #f4f4f4;
