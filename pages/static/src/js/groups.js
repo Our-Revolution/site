@@ -142,7 +142,7 @@ module.exports = function() {
   }
 
   function updateInfo(groups) {
-    var location = '', city, county, state, country;
+    var location = '', city, county, state, country, group_type;
 
     resetInfo();
 
@@ -179,11 +179,20 @@ module.exports = function() {
 
         // TODO: show recurring meeting here instead
         description = groups[i].properties.description;
+        group_type = groups[i].properties.group_type;
+        
+        if (group_type == 'state-organizing-committee') {
+          group_type = 'State Organizing Committee';
+        } else if (group_type='state-chapter') {
+          group_type = 'State Chapter';
+        } else {
+          group_type = null;
+        }
 
         $('.groups-map-info__status').append('\
           <div class="component">\
             <div class="component__heading">\
-              <span class="component__location">' + location + ((groups[i].properties.group_type == 'state-organizing-committee') ? " - State Organizing Committee" : "") + '</span>\
+              <span class="component__location">' + location + ((group_type) ? ' - ' + group_type : "") + '</span>\
               <h4 class="component__name">' + groups[i].properties.name  + '</h4>\
             </div>\
             <div class="component__info">\

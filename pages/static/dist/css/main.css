@@ -10545,12 +10545,20 @@ div.recurrence-widget {
   opacity: 0.9;
   -webkit-transition: opacity 0.25s;
   transition: opacity 0.25s;
-  border: 1px solid white; }
+  border: 1px solid white;
+  height: 16px;
+  width: 16px;
+  display: inline-block; }
   .groups-map__icon:hover {
     opacity: 1; }
   .groups-map__icon.large {
     line-height: 32px;
-    border: none; }
+    border: none;
+    height: 32px;
+    width: 32px; }
+  .groups-map__icon.small {
+    width: 12px;
+    height: 12px; }
   .groups-map__icon.blue {
     background: #218fff; }
   .groups-map__icon.red {

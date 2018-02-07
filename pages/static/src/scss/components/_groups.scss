@@ -145,6 +145,9 @@
     opacity: 0.9;
     transition: opacity 0.25s;
     border: 1px solid white;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
     
     &:hover {
       opacity: 1;
@@ -153,6 +156,13 @@
     &.large {
       line-height: 32px;
       border: none;
+      height: 32px;
+      width: 32px;
+    }
+    
+    &.small {
+      width: 12px;
+      height: 12px;
     }
     
     &.blue {
