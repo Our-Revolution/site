@@ -142,7 +142,7 @@ module.exports = function() {
   }
 
   function updateInfo(groups) {
-    var location = '', city, county, state, country, group_type;
+    var location = '', city, county, state, country, group_type = null;
 
     resetInfo();
 
@@ -183,7 +183,7 @@ module.exports = function() {
         
         if (group_type == 'state-organizing-committee') {
           group_type = 'State Organizing Committee';
-        } else if (group_type='state-chapter') {
+        } else if (group_type == 'state-chapter') {
           group_type = 'State Chapter';
         } else {
           group_type = null;
