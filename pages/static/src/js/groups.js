@@ -30,6 +30,7 @@ module.exports = function() {
       popupAnchor:  [8, 8] // point from which the popup should open relative to the iconAnchor
     });
     
+    // TODO: implement clustering to avoid UX and performance issues with many dots on map
     // markers = L.markerClusterGroup({
     //   iconCreateFunction: function(cluster) {
 		//      // return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
@@ -185,6 +186,8 @@ module.exports = function() {
           group_type = 'State Organizing Committee';
         } else if (group_type == 'state-chapter') {
           group_type = 'State Chapter';
+        } else if (group_type == 'campus') {
+          group_type = 'Campus Group'; 
         } else {
           group_type = null;
         }
