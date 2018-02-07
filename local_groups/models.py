@@ -34,19 +34,22 @@ class Group(models.Model):
         unique=True
     )
 
+    # Order by group priority
     GROUP_TYPES = (
-        ('state-organizing-committee', 'State Organizing Committee'),
-        ('state-chapter', 'State Chapter'),
-        ('campus', 'Campus'),
-        ('local-group', 'Local Group')
+        (1, 'State Organizing Committee'),
+        (2, 'State Chapter'),
+        (3, 'Campus'),
+        (4, 'Local Group')
     )
-    group_type = models.CharField(
-        max_length=64,
+    group_type = models.IntegerField(
         blank=False,
         null=False,
         choices=GROUP_TYPES,
-        default='local-group'
+        default=4
     )
+
+    # TODO: Remove after deploy TECH-794
+    state_organizing_committee = models.BooleanField(default=False)
 
     # Individual Rep Email should match BSD authentication account
     rep_email = models.EmailField(

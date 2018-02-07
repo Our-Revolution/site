@@ -12,7 +12,7 @@ module.exports = function() {
         maxZoom: 18
       }
     ).addTo(map);
-    
+
     blueIcon = L.divIcon({
       className: 'groups-map__icon blue',
 
@@ -29,16 +29,16 @@ module.exports = function() {
       iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
       popupAnchor:  [8, 8] // point from which the popup should open relative to the iconAnchor
     });
-    
+
     // TODO: implement clustering to avoid UX and performance issues with many dots on map
     // markers = L.markerClusterGroup({
     //   iconCreateFunction: function(cluster) {
 		//      // return L.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
     //      return L.divIcon({
     //        className: 'groups-map__icon blue large',
-    // 
+    //
     //        iconSize:     [32, 32], // size of the icon
-    // 
+    //
     //        html: '<b>' + cluster.getChildCount() + '</b>'
     //      });
 	  //    },
@@ -116,14 +116,15 @@ module.exports = function() {
     if (group.geometry!=null) {
       var coords = group.geometry.coordinates;
       var marker;
-      
-      if (group.properties.group_type == 'state-organizing-committee' || group.properties.group_type == 'state-chapter') {
-        // if SOC, color red and put on top layer
+
+      if (group.properties.group_type == 1 || group.properties.group_type == 2) {
+        // if State Organizing Committee  or State Chapter
+        // color red and put on top layer
         marker = L.marker(coords.reverse(), {icon: redIcon, zIndexOffset: 1000})
       } else {
         marker = L.marker(coords.reverse(), {icon: blueIcon});
       }
-      
+
       marker.properties = group.properties;
 
       marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'/" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>');
@@ -181,13 +182,14 @@ module.exports = function() {
         // TODO: show recurring meeting here instead
         description = groups[i].properties.description;
         group_type = groups[i].properties.group_type;
-        
-        if (group_type == 'state-organizing-committee') {
+
+        // See GROUP_TYPES tuple in local groups model for group types
+        if (group_type == 1) {
           group_type = 'State Organizing Committee';
-        } else if (group_type == 'state-chapter') {
+        } else if (group_type == 2) {
           group_type = 'State Chapter';
-        } else if (group_type == 'campus') {
-          group_type = 'Campus Group'; 
+        } else if (group_type == 3) {
+          group_type = 'Campus Group';
         } else {
           group_type = null;
         }
