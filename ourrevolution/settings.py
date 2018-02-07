@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'taggit',
 
     #
+    "wagtail.contrib.table_block",
     'wagtail.contrib.wagtailfrontendcache',
     'wagtail.contrib.wagtailroutablepage',
 

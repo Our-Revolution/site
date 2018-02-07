@@ -13,6 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from localflavor.us.models import USStateField
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailcore import blocks
@@ -20,6 +21,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChoo
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.signals import page_published
+from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
@@ -64,6 +66,29 @@ class BasePage(Page):
     promote_panels = Page.promote_panels + [
             ImageChooserPanel('social_image')
         ]
+
+
+class MemberNewsletterPage(Page):
+    header = RichTextField()
+    body = StreamField([
+        ('white_block', blocks.RichTextBlock()),
+        ('blue_block', blocks.RichTextBlock()),
+        ('image_block', blocks.StructBlock([
+            ('header', blocks.RichTextBlock(required=False)),
+            ('image', ImageChooserBlock()),
+            ('caption', blocks.RichTextBlock(required=False)),
+        ])),
+        ('table_block', blocks.StructBlock([
+            ('header', blocks.RichTextBlock(required=False)),
+            ('table', TableBlock()),
+            ('caption', blocks.RichTextBlock(required=False)),
+        ])),
+    ])
+
+    content_panels = Page.content_panels + [
+        FieldPanel('header'),
+        StreamFieldPanel('body'),
+    ]
 
 
 class MicrositePage(Page):
