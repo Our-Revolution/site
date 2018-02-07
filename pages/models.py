@@ -1306,6 +1306,7 @@ class GroupPage(RoutablePageMixin, Page):
 
                 # Get new group id
                 group.group_id = str(self.get_new_group_id())
+                group.group_type = 'local-group'
 
                 slug = slugify(group.name)
 

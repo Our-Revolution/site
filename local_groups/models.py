@@ -42,8 +42,8 @@ class Group(models.Model):
     )
     group_type = models.CharField(
         max_length=64,
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         choices=GROUP_TYPES,
         default='local-group'
     )
