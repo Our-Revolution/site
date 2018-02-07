@@ -16,7 +16,7 @@
         <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
       </div>
     </div>
-    
+
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Start a new application</h1>
@@ -24,12 +24,10 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
-        <div class="alert alert-danger br3"><strong>Note:</strong> All candidate applications for <strong>2017</strong> races must be completed by September 15, 2017, to be considered for an endorsement. Please email <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a> if you need help.</div>
-        
         {% crispy form %}
       </div>
     </div>
@@ -38,7 +36,7 @@
 
 <script>
   $(document).ready(function(){
-    
+
     $('#agree_field').change(function(){
       if(this.checked) {
         $('#submit_button').removeClass('disabled')
@@ -46,7 +44,7 @@
         $('#submit_button').addClass('disabled')
       }
     });
-    
+
   });
 </script>
 

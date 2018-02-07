@@ -338,10 +338,6 @@ class TemplatePage(Page):
 
 
 class IndexPage(Page):
-    # TODO: TECH-750: remove legacy code after switching over
-    if not settings.HOMEPAGE_CMS_ENABLED:
-        template = "pages/index.html"
-
     background_color_default = '218fff'
     block_text_help_text = '''
     Main copy in content block/module to provide information on the
@@ -706,10 +702,6 @@ class CandidateEndorsementPage(Page):
 
 
 class CandidateEndorsementIndexPage(Page):
-    # TODO: TECH-772: remove legacy code after switching over
-    if not settings.CANDIDATE_INDEX_UPDATE_ENABLED:
-        template = "pages/candidate_endorsement_index_page_old.html"
-
     body = RichTextField(blank=True, null=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
     content_panels = Page.content_panels + [
@@ -731,32 +723,20 @@ class CandidateEndorsementIndexPage(Page):
             **kwargs
         )
 
-        # TODO: remove legacy support after switching over
-        if not settings.CANDIDATE_INDEX_UPDATE_ENABLED:
-            context['candidates'] = self.get_children().live().filter(
-                candidateendorsementpage__candidate__show=True
-            ).select_related(
-                'candidateendorsementpage',
-                'candidateendorsementpage__candidate'
-            ).order_by(
-                'candidateendorsementpage__candidate__state',
-                'candidateendorsementpage__candidate__district'
-            )
-        else:
-            # Filter out legacy pages and past elections
-            context['candidates'] = self.get_children().live(
-            ).filter(
-                candidateendorsementpage__candidate__isnull=True,
-                candidateendorsementpage__general_election_result__isnull=True,
-            ).exclude(
-                candidateendorsementpage__primary_election_result='loss',
-            ).select_related(
-                'candidateendorsementpage',
-            ).order_by(
-                'candidateendorsementpage__state_or_territory',
-                'candidateendorsementpage__office',
-                'candidateendorsementpage__title',
-            )
+        # Filter out legacy pages and past elections
+        context['candidates'] = self.get_children().live(
+        ).filter(
+            candidateendorsementpage__candidate__isnull=True,
+            candidateendorsementpage__general_election_result__isnull=True,
+        ).exclude(
+            candidateendorsementpage__primary_election_result='loss',
+        ).select_related(
+            'candidateendorsementpage',
+        ).order_by(
+            'candidateendorsementpage__state_or_territory',
+            'candidateendorsementpage__office',
+            'candidateendorsementpage__title',
+        )
         return context
 
     promote_panels = Page.promote_panels + [
