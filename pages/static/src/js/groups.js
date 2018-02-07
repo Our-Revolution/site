@@ -116,7 +116,7 @@ module.exports = function() {
       var coords = group.geometry.coordinates;
       var marker;
       
-      if (group.properties.state_organizing_committee) {
+      if (group.properties.group_type == 'state-organizing-committee' || group.properties.group_type == 'state-chapter') {
         // if SOC, color red and put on top layer
         marker = L.marker(coords.reverse(), {icon: redIcon, zIndexOffset: 1000})
       } else {
@@ -183,8 +183,8 @@ module.exports = function() {
         $('.groups-map-info__status').append('\
           <div class="component">\
             <div class="component__heading">\
-              <span class="component__location">' + location + '</span>\
-              <h4 class="component__name">' + groups[i].properties.name + ((groups[i].properties.state_organizing_committee) ? " (SOC) " : "") + '</h4>\
+              <span class="component__location">' + location + ((groups[i].properties.group_type == 'state-organizing-committee') ? " - State Organizing Committee" : "") + '</span>\
+              <h4 class="component__name">' + groups[i].properties.name  + '</h4>\
             </div>\
             <div class="component__info">\
               <a href="/groups/'+ groups[i].properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\

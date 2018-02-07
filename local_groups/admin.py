@@ -6,14 +6,17 @@ from .actions import export_as_csv_action, geocode_groups
 # Register your models here.
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['name', 'state','city','postal_code','status','signup_date','group_id','organizer','signed_mou_version']
-    list_filter = ['status','signed_mou_version','organizer','state']
-    search_fields = ['name', 'state','city','group_id']
+    list_display = [
+        'name', 'state', 'city', 'postal_code', 'status', 'signup_date',
+        'group_id', 'organizer', 'signed_mou_version', 'group_type'
+    ]
+    list_filter = ['status', 'signed_mou_version', 'organizer', 'state']
+    search_fields = ['name', 'state', 'city', 'group_id']
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)
     form = GisForm
-    actions = [export_as_csv_action("CSV Export"),geocode_groups]
-    
+    actions = [export_as_csv_action("CSV Export"), geocode_groups]
+
     def get_actions(self, request):
         #Disable delete
         actions = super(GroupAdmin, self).get_actions(request)

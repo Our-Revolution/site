@@ -1272,7 +1272,7 @@ class DonationPage(Page):
 class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
-        groups = Group.objects.all().order_by('state_organizing_committee')
+        groups = Group.objects.all().order_by('group_type')
 
         geojson_data = serializers.serialize("geojson",groups)
 

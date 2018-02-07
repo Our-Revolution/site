@@ -33,6 +33,21 @@ class Group(models.Model):
         blank=False,
         unique=True
     )
+
+    GROUP_TYPES = (
+        ('state-organizing-committee', 'State Organizing Committee'),
+        ('state-chapter', 'State Chapter'),
+        ('campus', 'Campus'),
+        ('local-group', 'Local Group')
+    )
+    group_type = models.CharField(
+        max_length=64,
+        blank=False,
+        null=False,
+        choices=GROUP_TYPES,
+        default='local-group'
+    )
+
     # Individual Rep Email should match BSD authentication account
     rep_email = models.EmailField(
         null=True,
@@ -202,8 +217,6 @@ class Group(models.Model):
         verbose_name="Other Social Media",
         max_length=250
     )
-
-    state_organizing_committee = models.BooleanField(default=False)
 
     STATUSES = (
         ('submitted', 'Submitted'),
