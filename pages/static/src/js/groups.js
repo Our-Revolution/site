@@ -126,7 +126,7 @@ module.exports = function() {
       
       marker.properties = group.properties;
 
-      marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>');
+      marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'/" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>');
 
       marker.on('click touchstart', function() {
         updateInfo([this]);
