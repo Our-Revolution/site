@@ -50,7 +50,9 @@ class GroupCreateForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        exclude = ('slug', 'signup_date', 'status', 'point')
+        exclude = (
+            'slug', 'signup_date', 'status', 'point', 'group_id', 'group_type'
+        )
         widgets = {
             'rep_phone': PhoneNumberInternationalFallbackWidget(),
             'last_meeting': forms.DateInput(),

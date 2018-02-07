@@ -15,7 +15,8 @@
 
       <div class="container pt6">
         <p class="mb0">
-          {% if group.group_type != 'state-organizing-committee' %}
+          <!-- See GROUP_TYPES tuple in local groups model for group types -->
+          {% if group.group_type != 1 %}
             {% with group.city|add:", "|default:"" as city %}
               {% if city %}
                 {{ city }}{{ group.state|default:"" }} {% if group.county %}| {{ group.county }} County{% endif %}

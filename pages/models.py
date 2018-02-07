@@ -1272,7 +1272,8 @@ class DonationPage(Page):
 class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
-        groups = Group.objects.all().order_by('group_type')
+        # Order is set by integer value in GROUP_TYPES tuple in models
+        groups = Group.objects.all().order_by('-group_type')
 
         geojson_data = serializers.serialize("geojson",groups)
 
@@ -1306,7 +1307,6 @@ class GroupPage(RoutablePageMixin, Page):
 
                 # Get new group id
                 group.group_id = str(self.get_new_group_id())
-                group.group_type = 'local-group'
 
                 slug = slugify(group.name)
 
