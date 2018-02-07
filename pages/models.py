@@ -68,6 +68,11 @@ class BasePage(Page):
         ]
 
 
+class MemberNewsletterIndexPage(Page):
+    parent_page_types = ['pages.IndexPage']
+    subpage_types = ['pages.MemberNewsletterPage']
+
+
 class MemberNewsletterPage(Page):
     header = RichTextField()
     body = StreamField([
@@ -89,6 +94,9 @@ class MemberNewsletterPage(Page):
         FieldPanel('header'),
         StreamFieldPanel('body'),
     ]
+
+    parent_page_types = ['pages.MemberNewsletterIndexPage']
+    subpage_types = []
 
 
 class MicrositePage(Page):
