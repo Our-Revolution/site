@@ -2,10 +2,14 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
 from ckeditor.fields import RichTextField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField
+from wagtail.wagtailsnippets.models import register_snippet
 
 import datetime
 
@@ -61,6 +65,24 @@ class NominationResponse(models.Model):
 
     def __unicode__(self):
         return unicode(self.question)
+
+
+@register_snippet
+@python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
+class NominationsPlatformAlert(models.Model):
+    content = WagtailRichTextField()
+    show = models.BooleanField(
+        default=False,
+        help_text='Show alert on nominations platform pages.'
+    )
+
+    panels = [
+        FieldPanel('content'),
+        FieldPanel('show'),
+    ]
+
+    def __str__(self):
+        return self.content
 
 
 class Questionnaire(models.Model):

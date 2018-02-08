@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 nominations_tags %}
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
@@ -32,6 +32,9 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
+
+        {% nominations_platform_alert %}
+
         <h2>Endorsement Type</h2>
         <ul class="action-list">
           <li class="action-list__action col-md-6">

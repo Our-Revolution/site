@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+
+{% if nominations_platform_alert %}
+<!-- nominations_platform_alert -->
+
+<div class="alert alert-danger br3">
+  {{ nominations_platform_alert.content | richtext }}
+</div>
+
+{% endif %}
