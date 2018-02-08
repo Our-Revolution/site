@@ -16,10 +16,22 @@ import os
 import requests
 
 
+# TODO: TECH-787: add login required
+# TODO: TECH-787: add email verification required
+# TODO: TECH-787: add group leader verification required
 class EventCreateView(SuccessMessageMixin, CreateView):
     model = Event
     form_class = EventForm
     success_message = "Your event was created successfully."
+
+    def get_context_data(self, **kwargs):
+        context = super(EventCreateView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            # Case insensitive check for group rep email matches user email
+            context['group'] = Group.objects.filter(
+                rep_email__iexact=self.request.user.email
+            ).first()
+        return context
 
     def get_success_url(self):
         return reverse_lazy('groups-event-create')
