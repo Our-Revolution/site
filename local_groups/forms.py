@@ -1,11 +1,52 @@
 from django import forms
-from .models import Group
+from .models import Event, Group
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.gis.geos import Point
+from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 import os, requests
+
+
+class HTML5DateInput(widgets.DateInput):
+    input_type = 'date'
+
+
+class HTML5TimeInput(widgets.TimeInput):
+    input_type = 'time'
+
+
+# TODO: TECH-787: finish form
+class EventForm(forms.ModelForm):
+
+    class Meta:
+        fields = [
+            'capacity',
+            'contact_phone',
+            'creator_name',
+            'name',
+            'description',
+            'duration',
+            'host_receive_rsvp_emails',
+            'public_phone',
+            'start_day',
+            'start_time',
+            'start_tz',
+            'venue_name',
+            'venue_addr1',
+            'venue_addr2',
+            'venue_city',
+            'venue_country',
+            'venue_directions',
+            'venue_state_cd',
+            'venue_zip',
+        ]
+        model = Event
+        widgets = {
+            'start_day': HTML5DateInput(),
+            'start_time': HTML5TimeInput(),
+        }
 
 
 class GisForm(forms.ModelForm):

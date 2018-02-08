@@ -8,12 +8,21 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
-from django.views.generic import FormView, TemplateView, UpdateView
+from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from .decorators import verified_email_required
-from .forms import GroupManageForm, SlackInviteForm
-from .models import Group
+from .forms import EventForm, GroupManageForm, SlackInviteForm
+from .models import Event, Group
 import os
 import requests
+
+
+class EventCreateView(SuccessMessageMixin, CreateView):
+    model = Event
+    form_class = EventForm
+    success_message = "Your event was created successfully."
+
+    def get_success_url(self):
+        return reverse_lazy('groups-event-create')
 
 
 class GroupDashboardView(LoginRequiredMixin, TemplateView):

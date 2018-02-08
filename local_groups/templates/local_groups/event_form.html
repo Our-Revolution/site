@@ -1,0 +1,49 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block page_title %}Our Revolution - Create Event{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+<a href="/groups/{{ group.slug }}">{{ group.name }}</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        <h3 class="mb20 mt0">
+          Create Event
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save" />
+        </form>
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -11,6 +11,77 @@ from django.contrib.gis.db.models import PointField
 from wagtail.contrib.wagtailfrontendcache.utils import purge_url_from_cache
 
 
+class Event(models.Model):
+    TIME_ZONE_CHOICES = (('US/%s' % pair, pair) for pair in (
+        'Eastern',
+        'Central',
+        'Mountain',
+        'Pacific',
+        'Alaska',
+        'Hawaii'
+    ))
+
+    capacity = models.IntegerField(
+        default=0,
+        help_text="Including guests. Leave 0 for unlimited.",
+        verbose_name='Capacity Limit',
+    )
+    contact_phone = models.CharField(max_length=25)
+    creator_name = models.CharField(max_length=255, verbose_name='Host Name')
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+    duration = models.IntegerField()
+    host_receive_rsvp_emails = models.IntegerField(
+        default=1,
+        verbose_name='Notify me when new people RSVP'
+    )
+    public_phone = models.IntegerField(
+        default=1,
+        verbose_name='Make my phone number public to attendees'
+    )
+    start_day = models.DateField(verbose_name='Date')
+    start_time = models.TimeField(verbose_name='Start Time')
+    start_tz = models.CharField(
+        max_length=40,
+        blank=False,
+        null=True,
+        verbose_name='Time Zone',
+        choices=TIME_ZONE_CHOICES,
+        default='America/Eastern'
+    )
+    venue_name = models.CharField(max_length=255, verbose_name='Venue Name')
+    venue_addr1 = models.CharField(
+        max_length=255,
+        verbose_name='Venue Address'
+    )
+    venue_addr2 = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Venue Address #2'
+    )
+    venue_city = models.CharField(max_length=64, verbose_name='Venue City')
+    venue_country = models.CharField(
+        max_length=2,
+        verbose_name='Venue Country',
+        default='US'
+    )
+    venue_directions = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='Directions to Venue'
+    )
+    venue_state_cd = USStateField(verbose_name='Venue State')
+    venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
+
+    def save(self, *args, **kwargs):
+        # TODO: TECH-787: save to BSD and auto-approve event
+        return
+
+    class Meta:
+        managed = False
+
+
 class Group(models.Model):
     name = models.CharField(
         max_length=64,
@@ -289,70 +360,3 @@ class Group(models.Model):
 
     def __unicode__(self):
         return self.name
-
-
-class Event(models.Model):
-    TIME_ZONE_CHOICES = (('US/%s' % pair, pair) for pair in (
-        'Eastern',
-        'Central',
-        'Mountain',
-        'Pacific',
-        'Alaska',
-        'Hawaii'
-    ))
-
-    capacity = models.IntegerField(
-        default=0,
-        help_text="Including guests. Leave 0 for unlimited.",
-        verbose_name='Capacity Limit',
-    )
-    contact_phone = models.CharField(max_length=25)
-    creator_name = models.CharField(max_length=255, verbose_name='Host Name')
-    name = models.CharField(max_length=128)
-    description = models.TextField()
-    duration = models.IntegerField()
-    host_receive_rsvp_emails = models.IntegerField(
-        default=1,
-        verbose_name='Notify me when new people RSVP'
-    )
-    public_phone = models.IntegerField(
-        default=1,
-        verbose_name='Make my phone number public to attendees'
-    )
-    start_day = models.DateField(verbose_name='Date')
-    start_time = models.TimeField(verbose_name='Start Time')
-    start_tz = models.CharField(
-        max_length=40,
-        blank=False,
-        null=True,
-        verbose_name='Time Zone',
-        choices=TIME_ZONE_CHOICES,
-        default='America/Eastern'
-    )
-    venue_name = models.CharField(max_length=255, verbose_name='Venue Name')
-    venue_addr1 = models.CharField(
-        max_length=255,
-        verbose_name='Venue Address'
-    )
-    venue_addr2 = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name='Venue Address #2'
-    )
-    venue_city = models.CharField(max_length=64, verbose_name='Venue City')
-    venue_country = models.CharField(
-        max_length=2,
-        verbose_name='Venue Country',
-        default='US'
-    )
-    venue_directions = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name='Directions to Venue'
-    )
-    venue_state_cd = USStateField(verbose_name='Venue State')
-    venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
-
-    class Meta:
-        managed = False
