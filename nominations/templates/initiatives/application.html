@@ -1,6 +1,6 @@
 {% extends "pages/base_page.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 nominations_tags %}
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
@@ -16,7 +16,7 @@
         <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
       </div>
     </div>
-    
+
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Submit a new ballot initiative application</h1>
@@ -25,10 +25,13 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
+
+        {% nominations_platform_alert %}
+
         {% crispy form %}
       </div>
     </div>
@@ -50,12 +53,12 @@
   }
 
   $(document).ready(function(){
-    
+
     // set locality fields
     var locality = $('#locality_field').val();
-    
+
     setLocality(locality);
-    
+
     // watch agree field to enable form
     $('#agree_field').change(function(){
       if(this.checked) {
@@ -64,12 +67,12 @@
         $('#submit_button').addClass('disabled')
       }
     });
-    
+
     // change locality selections based on locality
     $('#locality_field').on('change', function() {
       setLocality($(this).val());
     })
-    
+
   });
 </script>
 
