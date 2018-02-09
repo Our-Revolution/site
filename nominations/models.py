@@ -9,8 +9,6 @@ from ckeditor.fields import RichTextField
 
 import datetime
 
-# TODO: automate endorsement -> approval -> candidates page
-
 
 class Nomination(models.Model):
     group_nomination_process = models.TextField(

@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 bsdApi = BSD().api
 
 
+# Event model for creating group leader events in BSD
 class Event(models.Model):
     event_type_choices = (
         (1, 'Volunteer Activity or Meeting'),
@@ -46,7 +47,9 @@ class Event(models.Model):
         verbose_name='Capacity Limit',
     )
     contact_phone = models.CharField(max_length=25)
+    creator_cons_id = models.CharField(max_length=128)
     creator_name = models.CharField(max_length=255, verbose_name='Host Name')
+    # Default to 1 = Volunteer activity
     event_type = models.IntegerField(choices=event_type_choices, default=1)
     name = models.CharField(max_length=128)
     description = models.TextField()
@@ -94,11 +97,15 @@ class Event(models.Model):
     venue_state_cd = USStateField(verbose_name='Venue State')
     venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
 
+    # Custom logic to create event via BSD api
     def save(self, *args, **kwargs):
+
+        logger.debug('save creator_cons_id: ' + self.creator_cons_id)
+
         # Save to BSD and auto-approve event
         query = {
             'event_type_id': self.event_type,
-            'creator_cons_id': '3',  # TODO: need to get bsd id from user email
+            'creator_cons_id': self.creator_cons_id,
             'name': self.name,
             'description': self.description,
             'local_timezone': self.start_tz,
@@ -115,7 +122,6 @@ class Event(models.Model):
             'venue_state_cd': self.venue_state_cd,
             'flag_approval': '0',  # 0 = approved, 1 = needs approval
         }
-
         apiResult = bsdApi.doRequest(
             '/event/create_event',
             {},
@@ -125,7 +131,6 @@ class Event(models.Model):
                 'values': json.dumps(query)
             },
         )
-
         logger.debug('apiResult.body: ' + apiResult.body)
         return
 

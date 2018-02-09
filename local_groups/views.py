@@ -14,6 +14,10 @@ from .forms import EventForm, GroupManageForm, SlackInviteForm
 from .models import Event, Group
 import os
 import requests
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 # TODO: TECH-787: add login required
@@ -26,6 +30,17 @@ class EventCreateView(SuccessMessageMixin, CreateView):
     Your event was created successfully. Visit Manage & Promote Events tool
     below to view or promote your events.
     '''
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        # Set cons_id based on current user and save
+        logger.debug('form_valid old creator_cons_id: ' + form.instance.creator_cons_id)
+        # self.creator_cons_id = user.bsdprofile.cons_id
+        form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+        logger.debug('form_valid new creator_cons_id: ' + form.instance.creator_cons_id)
+        # self.object = form.save()
+        return super(EventCreateView, self).form_valid(form)
+
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
