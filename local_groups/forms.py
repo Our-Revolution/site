@@ -6,7 +6,8 @@ from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-import os, requests
+import os
+import requests
 
 
 class HTML5DateInput(widgets.DateInput):
@@ -22,6 +23,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         fields = [
+            'event_type',
             'capacity',
             'contact_phone',
             'creator_name',

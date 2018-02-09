@@ -22,7 +22,10 @@ import requests
 class EventCreateView(SuccessMessageMixin, CreateView):
     model = Event
     form_class = EventForm
-    success_message = "Your event was created successfully."
+    success_message = '''
+    Your event was created successfully. Visit Manage & Promote Events tool
+    below to view or promote your events.
+    '''
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
@@ -34,7 +37,7 @@ class EventCreateView(SuccessMessageMixin, CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('groups-event-create')
+        return reverse_lazy('groups-dashboard')
 
 
 class GroupDashboardView(LoginRequiredMixin, TemplateView):

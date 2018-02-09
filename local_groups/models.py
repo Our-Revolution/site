@@ -1,18 +1,37 @@
 from __future__ import unicode_literals
-
+from django.core import serializers
 from django.db import models
 from localflavor.us.models import USStateField
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
 from endorsements.models import Issue
 from django_countries.fields import CountryField
 from recurrence.fields import RecurrenceField
 from django.contrib.gis.db.models import PointField
 from wagtail.contrib.wagtailfrontendcache.utils import purge_url_from_cache
+from bsd.api import BSD
+import datetime
+import logging
+import urllib
+import json
+
+
+logger = logging.getLogger(__name__)
+
+# Get bsd api
+bsdApi = BSD().api
 
 
 class Event(models.Model):
-    TIME_ZONE_CHOICES = (('US/%s' % pair, pair) for pair in (
+    event_type_choices = (
+        (1, 'Volunteer Activity or Meeting'),
+        (2, 'Phone Bank'),
+        (3, 'Rally'),
+        (4, 'Party Meetings'),
+    )
+    time_zone_choices = (('US/%s' % pair, pair) for pair in (
         'Eastern',
         'Central',
         'Mountain',
@@ -28,6 +47,7 @@ class Event(models.Model):
     )
     contact_phone = models.CharField(max_length=25)
     creator_name = models.CharField(max_length=255, verbose_name='Host Name')
+    event_type = models.IntegerField(choices=event_type_choices, default=1)
     name = models.CharField(max_length=128)
     description = models.TextField()
     duration = models.IntegerField()
@@ -46,7 +66,7 @@ class Event(models.Model):
         blank=False,
         null=True,
         verbose_name='Time Zone',
-        choices=TIME_ZONE_CHOICES,
+        choices=time_zone_choices,
         default='America/Eastern'
     )
     venue_name = models.CharField(max_length=255, verbose_name='Venue Name')
@@ -75,7 +95,38 @@ class Event(models.Model):
     venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
 
     def save(self, *args, **kwargs):
-        # TODO: TECH-787: save to BSD and auto-approve event
+        # Save to BSD and auto-approve event
+        query = {
+            'event_type_id': self.event_type,
+            'creator_cons_id': '3',  # TODO: need to get bsd id from user email
+            'name': self.name,
+            'description': self.description,
+            'local_timezone': self.start_tz,
+            "days": [{
+                'start_datetime_system': str(datetime.datetime.combine(
+                    self.start_day,
+                    self.start_time
+                )),
+                'duration': self.duration
+            }],
+            'venue_name': self.venue_name,
+            'venue_zip': self.venue_zip,
+            'venue_city': self.venue_city,
+            'venue_state_cd': self.venue_state_cd,
+            'flag_approval': '0',  # 0 = approved, 1 = needs approval
+        }
+
+        apiResult = bsdApi.doRequest(
+            '/event/create_event',
+            {},
+            bsdApi.POST,
+            {
+                'event_api_version': '2',
+                'values': json.dumps(query)
+            },
+        )
+
+        logger.debug('apiResult.body: ' + apiResult.body)
         return
 
     class Meta:
