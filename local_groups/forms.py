@@ -20,13 +20,30 @@ class HTML5TimeInput(widgets.TimeInput):
 
 # TODO: TECH-787: finish form
 class EventForm(forms.ModelForm):
+    host_receive_rsvp_emails = forms.ChoiceField(
+        choices=(
+            (1, "YES, please email me when new people RSVP (recommended)"),
+            (0, "No thanks")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
+    public_phone = forms.ChoiceField(
+        choices=(
+            (1, '''
+            YES, make my phone number visible to people viewing your event
+            (recommended)
+            '''),
+            (0, "Please keep my number private")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
 
     class Meta:
         fields = [
             'event_type',
             'capacity',
             'contact_phone',
-            'creator_name',
+            'host_name',
             'name',
             'description',
             'duration_count',
@@ -35,13 +52,13 @@ class EventForm(forms.ModelForm):
             'public_phone',
             'start_day',
             'start_time',
-            'start_tz',
+            'start_time_zone',
             'venue_name',
             'venue_addr1',
             'venue_addr2',
             'venue_city',
             'venue_directions',
-            'venue_state_cd',
+            'venue_state_or_territory',
             'venue_zip',
         ]
         model = Event

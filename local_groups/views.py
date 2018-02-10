@@ -1,6 +1,7 @@
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.views import ConfirmEmailView, EmailView
+from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
@@ -13,6 +14,7 @@ from bsd.models import BSDProfile
 from .decorators import verified_email_required
 from .forms import EventForm, GroupManageForm, SlackInviteForm
 from .models import Event, Group
+import datetime
 import os
 import requests
 import logging
@@ -41,9 +43,19 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
-        # Set cons_id based on current user and save
+        # Set cons_id based on current user
         form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
-        return super(EventCreateView, self).form_valid(form)
+        try:
+            return super(EventCreateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error creating your event. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect('groups-event-create')
 
     def get_context_data(self, **kwargs):
         context = super(EventCreateView, self).get_context_data(**kwargs)
@@ -52,6 +64,15 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             rep_email__iexact=self.request.user.email
         ).first()
         return context
+
+    def get_initial(self, *args, **kwargs):
+        initial = {
+            'start_day': datetime.date.today() + datetime.timedelta(days=4),
+            'start_time': datetime.time(hour=17, minute=0, second=0),
+            'host_receive_rsvp_emails': 1,
+            'public_phone': 1,
+        }
+        return initial
 
     def get_success_url(self):
         return reverse_lazy('groups-dashboard')
