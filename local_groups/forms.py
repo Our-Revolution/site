@@ -29,7 +29,8 @@ class EventForm(forms.ModelForm):
             'creator_name',
             'name',
             'description',
-            'duration',
+            'duration_count',
+            'duration_type',
             'host_receive_rsvp_emails',
             'public_phone',
             'start_day',
@@ -39,15 +40,16 @@ class EventForm(forms.ModelForm):
             'venue_addr1',
             'venue_addr2',
             'venue_city',
-            'venue_country',
             'venue_directions',
             'venue_state_cd',
             'venue_zip',
         ]
         model = Event
         widgets = {
+            'description': forms.Textarea(attrs={'rows': '2'}),
             'start_day': HTML5DateInput(),
             'start_time': HTML5TimeInput(),
+            'venue_directions': forms.Textarea(attrs={'rows': '2'}),
         }
 
 

@@ -26,6 +26,10 @@ bsdApi = BSD().api
 
 # Event model for creating group leader events in BSD
 class Event(models.Model):
+    duration_type_choices = (
+        (1, 'Minutes'),
+        (2, 'Hours'),
+    )
     event_type_choices = (
         (1, 'Volunteer Activity or Meeting'),
         (2, 'Phone Bank'),
@@ -49,11 +53,17 @@ class Event(models.Model):
     contact_phone = models.CharField(max_length=25)
     creator_cons_id = models.CharField(max_length=128)
     creator_name = models.CharField(max_length=255, verbose_name='Host Name')
-    # Default to 1 = Volunteer activity
-    event_type = models.IntegerField(choices=event_type_choices, default=1)
+    event_type = models.IntegerField(
+        choices=event_type_choices,
+        verbose_name='Choose an Event Type',
+    )
     name = models.CharField(max_length=128)
     description = models.TextField()
-    duration = models.IntegerField()
+    duration_count = models.IntegerField()
+    duration_type = models.IntegerField(
+        choices=duration_type_choices,
+        default=1,  # default to minutes
+    )
     host_receive_rsvp_emails = models.IntegerField(
         default=1,
         verbose_name='Notify me when new people RSVP'
@@ -97,6 +107,14 @@ class Event(models.Model):
     venue_state_cd = USStateField(verbose_name='Venue State')
     venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
 
+    # Duration in minutes
+    def duration_minutes(self):
+        # Multiply count by 60 if unit is hours
+        if self.duration_type == 2:
+            return self.duration_count * 60
+        else:
+            return self.duration_count
+
     # Custom logic to create event via BSD api
     def save(self, *args, **kwargs):
 
@@ -114,7 +132,7 @@ class Event(models.Model):
                     self.start_day,
                     self.start_time
                 )),
-                'duration': self.duration
+                'duration': self.duration_minutes()
             }],
             'venue_name': self.venue_name,
             'venue_zip': self.venue_zip,
