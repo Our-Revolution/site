@@ -45,6 +45,8 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         """If the form is valid, save the associated model."""
         # Set cons_id based on current user
         form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+
+        # Call save via super form_valid and handle BSD errors
         try:
             return super(EventCreateView, self).form_valid(form)
         except ValidationError:

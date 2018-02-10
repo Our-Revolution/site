@@ -4,8 +4,6 @@ from django.db import models
 from localflavor.us.models import USStateField
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
-from StringIO import StringIO
-from xml.etree.ElementTree import ElementTree
 from endorsements.models import Issue
 from django_countries.fields import CountryField
 from recurrence.fields import RecurrenceField
@@ -14,7 +12,6 @@ from wagtail.contrib.wagtailfrontendcache.utils import purge_url_from_cache
 from bsd.api import BSD
 import datetime
 import logging
-import urllib
 import json
 
 

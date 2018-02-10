@@ -18,7 +18,6 @@ class HTML5TimeInput(widgets.TimeInput):
     input_type = 'time'
 
 
-# TODO: TECH-787: finish form
 class EventForm(forms.ModelForm):
     host_receive_rsvp_emails = forms.ChoiceField(
         choices=(
