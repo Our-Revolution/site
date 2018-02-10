@@ -38,7 +38,10 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             rep_email__iexact=self.request.user.email,
             status__exact='approved',
         ).first() is not None
-        has_valid_cons_id = self.request.user.bsdprofile.cons_id is not BSDProfile.cons_id_default
+        user = self.request.user
+        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+            user.bsdprofile.cons_id != BSDProfile.cons_id_default
+        )
         return is_group_leader and has_valid_cons_id
 
     def form_valid(self, form):
