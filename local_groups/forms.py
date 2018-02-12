@@ -1,11 +1,72 @@
 from django import forms
-from .models import Group
+from .models import Event, Group
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.gis.geos import Point
+from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-import os, requests
+import os
+import requests
+
+
+class HTML5DateInput(widgets.DateInput):
+    input_type = 'date'
+
+
+class HTML5TimeInput(widgets.TimeInput):
+    input_type = 'time'
+
+
+class EventForm(forms.ModelForm):
+    host_receive_rsvp_emails = forms.ChoiceField(
+        choices=(
+            (1, "YES, please email me when new people RSVP (recommended)"),
+            (0, "No thanks")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
+    public_phone = forms.ChoiceField(
+        choices=(
+            (1, '''
+            YES, make my phone number visible to people viewing your event
+            (recommended)
+            '''),
+            (0, "Please keep my number private")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
+
+    class Meta:
+        fields = [
+            'event_type',
+            'capacity',
+            'contact_phone',
+            'host_name',
+            'name',
+            'description',
+            'duration_count',
+            'duration_type',
+            'host_receive_rsvp_emails',
+            'public_phone',
+            'start_day',
+            'start_time',
+            'start_time_zone',
+            'venue_name',
+            'venue_addr1',
+            'venue_addr2',
+            'venue_city',
+            'venue_directions',
+            'venue_state_or_territory',
+            'venue_zip',
+        ]
+        model = Event
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': '2'}),
+            'start_day': HTML5DateInput(),
+            'start_time': HTML5TimeInput(),
+            'venue_directions': forms.Textarea(attrs={'rows': '2'}),
+        }
 
 
 class GisForm(forms.ModelForm):
