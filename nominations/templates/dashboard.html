@@ -47,9 +47,9 @@
                 <tbody>
                   {% for app in applications %}
                     <tr>
-                      <td>{{app}}</td>
-                      <td>{% if app.status == 'incomplete' %}Incomplete{% else %}Submitted{% endif %}</td>
-                      <td><a href="/groups/nominations/application?id={{app.id}}" class="pull-right btn btn-secondary uppercase ls2">{% if app.status == 'incomplete' %}Edit{% else %}View{% endif %}</a></td>
+                      <td><a href="/groups/nominations/application?id={{app.id}}">{{app}}</a></td>
+                      <td>{{app.get_status_display}}</td>
+                      <td><a href="/groups/nominations/application?id={{app.id}}" class="pull-right btn btn-secondary uppercase ls2">{% if app.is_editable %}Edit{% else %}View{% endif %}</a></td>
                     </tr>
                   {% endfor %}
                 </tbody>

@@ -33,8 +33,8 @@
             <li class="list-group-item"><a href="/groups/nominations/nomination?id={{application.id}}"><span class="glyphicon {% if application.nomination.status == 'complete' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 2. Complete the group nomination form</a></li>
             <li class="list-group-item"><a href="/groups/nominations/questionnaire?id={{application.id}}"><span class="glyphicon {% if application.questionnaire.status == 'complete' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 3. Have your candidate fill out the candidate questionaire</a></li>
             
-            {% if application.status == 'incomplete' %}
-              <li class="list-group-item"><a href="/groups/nominations/submit?id={{application.id}}"><span class="glyphicon {% if application.status == 'submitted' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 4. Submit your nomination</a></li>
+            {% if application.is_editable %}
+              <li class="list-group-item"><a href="/groups/nominations/submit?id={{application.id}}"><span class="glyphicon glyphicon-unchecked"></span> 4. Submit your nomination</a></li>
             {% else %}  
               <li class="list-group-item"><span class="glyphicon glyphicon-check"></span> 4. Submit your nomination</li>
             {% endif %}
@@ -42,7 +42,7 @@
           </ul>
         </div>
       
-        {% if application.status != 'submitted' %}
+        {% if application.is_editable %}
           <a href="/groups/nominations/nomination?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Next Step</a>
         {% endif %}
       

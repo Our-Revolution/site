@@ -198,17 +198,29 @@ class Application(models.Model):
 
     authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)
 
+    # TODO TECH-840 convert statuses to integer fields
     STATUSES = (
-       ('incomplete', 'Incomplete'),
-       ('submitted', 'Submitted'),
-       ('needs-research','Needs Research'),
-       ('needs-staff-review', 'Needs Staff Review'),
-       ('approved', 'Endorsed'),
-       ('removed', 'Not Endorsed'),
-       ('expired', 'Expired'),
-       ('hold', 'Hold'),
+        (
+            'needs-group-form-and-questionnaire',
+            'Needs Group Form and Questionnaire'
+        ),
+        ('needs-questionnaire', 'Group Form Complete, Needs Questionnaire'),
+        ('needs-group-form', 'Needs Group Form, Questionnaire Complete'),
+        ('incomplete', 'Needs Submission'),
+        ('submitted', 'Submitted'),
+        ('needs-research', 'Needs Research'),
+        ('needs-staff-review', 'Needs Staff Review'),
+        ('unde-review', 'Under Review'),
+        ('approved', 'Endorsed'),
+        ('removed', 'Not Endorsed'),
+        ('expired', 'Expired'),
+        ('hold', 'Hold'),
     )
-    status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
+    status = models.CharField(
+        max_length=64,
+        choices=STATUSES,
+        default='needs-group-form-and-questionnaire'
+    )
 
     # Volunteer Data Entry
     vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
@@ -320,6 +332,22 @@ class Application(models.Model):
         verbose_name='Local Support:',
         help_text='This will prepopulate from the local group\'s support question if left blank.'
     )
+
+    @property
+    def is_editable(self):
+        """Returns whether the user can edit this application."""
+
+        editable_statuses = [
+            'needs-group-form-and-questionnaire',
+            'needs-questionnaire',
+            'needs-group-form',
+            'incomplete', 'Needs Submission'
+        ]
+
+        if self.status in editable_statuses:
+            return True
+        else:
+            return False
 
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
