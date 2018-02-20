@@ -84,4 +84,4 @@ class ApplicationTestCase(TestCase):
         self.assertEqual(app.nomination.status, 'complete')
         self.assertEqual(app.questionnaire.status, 'complete')
         # I don't know why this is failing
-        # self.assertEqual(app.status, 'incomplete')
+        self.assertEqual(app.status, 'incomplete')
