@@ -47,9 +47,23 @@
                 <tbody>
                   {% for app in applications %}
                     <tr>
-                      <td><a href="/groups/nominations/application?id={{app.id}}">{{app}}</a></td>
-                      <td>{{app.get_status_display}}</td>
-                      <td><a href="/groups/nominations/application?id={{app.id}}" class="pull-right btn btn-secondary uppercase ls2">{% if app.is_editable %}Edit{% else %}View{% endif %}</a></td>
+                      <td>
+                        <a href="/groups/nominations/application?id={{app.id}}">
+                          {{app}}
+                        </a>
+                      </td>
+                      <td>
+                        {% if app.is_editable %}
+                          {{app.get_status_display}}
+                        {% else %}
+                          Submitted
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="/groups/nominations/application?id={{app.id}}" class="pull-right btn btn-secondary uppercase ls2">
+                          {% if app.is_editable %}Edit{% else %}View{% endif %}
+                        </a>
+                      </td>
                     </tr>
                   {% endfor %}
                 </tbody>
