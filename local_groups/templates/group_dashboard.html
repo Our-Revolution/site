@@ -51,6 +51,9 @@
           </li>
           {% endwith %}
 
+          {# TODO: TECH-850: remove legacy code after switching over #}
+          {% event_create_enabled as display_event_create %}
+          {% if display_event_create %}
           {% with link_text="Create an Event" %}
           {% url 'groups-event-create' as link_url %}
           <li class="card clearfix">
@@ -63,6 +66,7 @@
             </a>
           </li>
           {% endwith %}
+          {% endif %}
 
           {% with link_text="Manage & Promote Events" link_url="https://events.ourrevolution.com/" %}
           <li class="card clearfix">
