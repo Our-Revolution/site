@@ -3,6 +3,9 @@ from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from .api import BSD
 from .models import BSDProfile
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # TODO: what is best way to do this?
@@ -45,6 +48,8 @@ class BSDAuthenticationBackend:
             cons = tree.find('cons')
             # assertions copied from hydra app
             assert cons is not None
+            cons_id = cons.get('id')
+            assert cons_id is not None
             assert cons.find('has_account').text == "1"
             assert cons.find('is_banned').text == "0"
 
@@ -59,7 +64,13 @@ class BSDAuthenticationBackend:
                     email=username,
                     password=None
                 )
-                BSDProfile.objects.create(user=user)
+                BSDProfile.objects.create(cons_id=cons_id, user=user)
+            else:
+                # Sync cons_id in bsd profile
+                bsdprofile = user.bsdprofile
+                if bsdprofile.cons_id != cons_id:
+                    bsdprofile.cons_id = cons_id
+                    bsdprofile.save()
 
             return user
 

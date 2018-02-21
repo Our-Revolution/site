@@ -15,6 +15,11 @@ def bsd_reset_password_url():
     return settings.BSD_RESET_PASSWORD_URL
 
 
+@register.simple_tag
+def event_create_enabled():
+    return settings.EVENT_CREATE_ENABLED
+
+
 # Organizing Hub Navigation menu
 @register.inclusion_tag('partials/group_portal_nav.html', takes_context=True)
 def group_portal_nav(context):
