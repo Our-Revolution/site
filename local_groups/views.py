@@ -1,6 +1,5 @@
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
-# from allauth.account import signals
 from allauth.account.views import ConfirmEmailView, EmailView
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
