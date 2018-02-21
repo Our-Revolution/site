@@ -86,7 +86,11 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def redirect_user(self):
         messages.error(
             self.request,
-            "Please login with a Group Leader account to access this page."
+            '''
+            This is not a Group Leader account, or your session is out of date.
+            Please logout and log back in with a Group Leader account to access
+            this page.
+            '''
         )
         return redirect('groups-dashboard')
 
@@ -225,4 +229,11 @@ class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
             email_address.send_confirmation(request)
             return HttpResponseRedirect(self.get_success_url())
         except EmailAddress.DoesNotExist:
-            pass
+            messages.error(
+                self.request,
+                '''
+                We are unable to verify this email address. Please try again or
+                use a different email address for email verification.
+                '''
+            )
+            return redirect('groups-verify-email-request')

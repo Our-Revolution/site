@@ -113,7 +113,13 @@ class Event(models.Model):
 
     # Custom logic to create event via BSD api
     def save(self, *args, **kwargs):
-        # Save to BSD and auto-approve event
+        '''
+        Save to BSD and auto-approve event
+        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+        '''
+        api_call = '/event/create_event'
+        api_params = {}
+        request_type = bsdApi.POST
         query = {
             # Show Attendee First Names + Last Initial
             'attendee_visibility': 'FIRST',
@@ -143,15 +149,12 @@ class Event(models.Model):
             'venue_state_cd': self.venue_state_or_territory,
             'venue_zip': self.venue_zip,
         }
-        apiResult = bsdApi.doRequest(
-            '/event/create_event',
-            {},
-            bsdApi.POST,
-            {
-                'event_api_version': '2',
-                'values': json.dumps(query)
-            },
-        )
+        body = {
+            'event_api_version': '2',
+            'values': json.dumps(query)
+        }
+
+        apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
         logger.debug('Event.save() apiResult.body: ' + apiResult.body)
 
         try:
