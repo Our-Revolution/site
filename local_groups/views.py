@@ -86,7 +86,11 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def redirect_user(self):
         messages.error(
             self.request,
-            "Please login with a Group Leader account to access this page."
+            '''
+            This is not a Group Leader account, or your session is out of date.
+            Please logout and log back in with a Group Leader account to access
+            this page.
+            '''
         )
         return redirect('groups-dashboard')
 
