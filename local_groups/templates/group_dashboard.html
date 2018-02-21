@@ -51,7 +51,20 @@
           </li>
           {% endwith %}
 
-          {% with link_text="Event Hosting & Promotions" link_url="https://events.ourrevolution.com/" %}
+          {% with link_text="Create an Event" %}
+          {% url 'groups-event-create' as link_url %}
+          <li class="card clearfix">
+            <a href="{{ link_url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ link_text }}
+                </div>
+              </div>
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with link_text="Manage & Promote Events" link_url="https://events.ourrevolution.com/" %}
           <li class="card clearfix">
             <a href="{{ link_url }}">
               <div class="card__content full">
