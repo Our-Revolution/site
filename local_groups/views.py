@@ -1,5 +1,6 @@
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
+# from allauth.account import signals
 from allauth.account.views import ConfirmEmailView, EmailView
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
@@ -229,4 +230,11 @@ class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
             email_address.send_confirmation(request)
             return HttpResponseRedirect(self.get_success_url())
         except EmailAddress.DoesNotExist:
-            pass
+            messages.error(
+                self.request,
+                '''
+                We are unable to verify this email address. Please try again or
+                use a different email address for email verification.
+                '''
+            )
+            return redirect('groups-verify-email-request')
