@@ -98,25 +98,24 @@
                                   {% for candidate_race_snippet in candidate_race_snippets %}
 
                                       {% with candidate_race_snippet.candidate_race as candidate_race %}
-                                          {% with candidate_race.candidate as candidate %}
 
                                               <li class="card clearfix">
                                                 {% if candidate_race.candidate_endorsement_page %}
                                                 <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
                                                 {% else %}
-                                                <a href="{% candidates_url %}{{ candidate.slug }}">
+                                                <a href="{% candidates_url %}{{ candidate_race.candidate.slug }}">
                                                 {% endif %}
 
                                                 <div class="card__photo"
-                                                style="background-image: url('{{ candidate.photo.url }}')">
+                                                style="background-image: url('{{ candidate_race.candidate_photo_url }}')">
 
                                                 </div>
 
                                                 <div class="card__content">
                                                   <div class="candidate__info">
-                                                    <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate.name }}</span>
-                                                    <span class="card__item smaller"><span class="state">{{ candidate.state }}</span> {{ candidate.district }}</span>
-                                                    <span class="card__item bottom">{{ candidate.office }}</span>
+                                                    <span class="card__item bold bigger name wins" sort-by="wins">{{ candidate_race.candidate_name }}</span>
+                                                    <span class="card__item smaller"><span class="state">{{ candidate_race.state_or_territory }}</span> {{ candidate_race.district }}</span>
+                                                    <span class="card__item bottom">{{ candidate_race.office }}</span>
                                                   </div>
 
                                                 </div>
@@ -137,7 +136,7 @@
 
                                                         <div class="card__results--numbers">
                                                           <div class="card__results--result">
-                                                              <div>{{candidate.name}}</div>
+                                                              <div>{{candidate_race.candidate_name}}</div>
                                                               <div class="card__results--percentage">{{ candidate_race.candidate_votes_percentage }}</div>
                                                               <div class="card__results--votes">{{ candidate_race.candidate_votes | intcomma }}</div>
                                                           </div>
@@ -168,9 +167,7 @@
                                                     </div>
                                               </li>
 
-                                          {% endwith %}
                                       {% endwith %}
-
                                   {% endfor %}
                               </ul>
                             </div>

@@ -32,6 +32,9 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv, json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class AboutPage(Page):
@@ -979,7 +982,7 @@ class CandidateRace(models.Model):
         )
     candidate = models.ForeignKey('endorsements.Candidate', null=True, blank=True, on_delete=models.SET_NULL)
     candidate_endorsement_page = models.ForeignKey(
-        'wagtailcore.Page',
+        'pages.CandidateEndorsementPage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -993,8 +996,81 @@ class CandidateRace(models.Model):
     notes = RichTextField(blank=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    '''
+    Get candidate name
+    '''
+    def _get_candidate_name(self):
+        # Support legacy candidate model
+        if self.candidate:
+            return self.candidate.name
+        # Return page title
+        elif self.candidate_endorsement_page:
+            return self.candidate_endorsement_page.title
+        # Otherwise return empty string - this should not happen in practice
+        else:
+            return ''
+    candidate_name = property(_get_candidate_name)
+
+    '''
+    Get candidate photo_url
+    '''
+    def _get_candidate_photo_url(self):
+
+        # Support legacy candidate model
+        if self.candidate:
+            return self.candidate.photo.url
+        # Return page photo url
+        elif self.candidate_endorsement_page:
+            return self.candidate_endorsement_page.photo.file.url
+        # Otherwise return empty string - this should not happen in practice
+        else:
+            return ''
+    candidate_photo_url = property(_get_candidate_photo_url)
+
+    '''
+    Get district - legacy support only
+    '''
+    def _get_district(self):
+        # Support legacy candidate model
+        if self.candidate:
+            return self.candidate.district
+        # Otherwise return empty string
+        else:
+            return ''
+    district = property(_get_district)
+
+    '''
+    Get office
+    '''
+    def _get_office(self):
+        # Support legacy candidate model
+        if self.candidate:
+            return self.candidate.office
+        # Return page office
+        elif self.candidate_endorsement_page:
+            return self.candidate_endorsement_page.office
+        # Otherwise return empty string - this should not happen in practice
+        else:
+            return ''
+    office = property(_get_office)
+
+    '''
+    Get state or territory
+    '''
+    def _get_state_or_territory(self):
+        # Support legacy candidate model
+        if self.candidate:
+            return self.candidate.state
+        # Return page state or territory
+        elif self.candidate_endorsement_page:
+            return self.candidate_endorsement_page.get_state_or_territory_display
+        # Otherwise return empty string - this should not happen in practice
+        else:
+            return ''
+    state_or_territory = property(_get_state_or_territory)
+
     def __unicode__(self):
-        return self.candidate.name
+        return self.candidate_name
 
     def candidate_votes_percentage(self):
         try:
