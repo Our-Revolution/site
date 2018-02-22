@@ -1028,18 +1028,6 @@ class CandidateRace(models.Model):
     candidate_photo_url = property(_get_candidate_photo_url)
 
     '''
-    Get district - legacy support only
-    '''
-    def _get_district(self):
-        # Support legacy candidate model
-        if self.candidate:
-            return self.candidate.district
-        # Otherwise return empty string
-        else:
-            return ''
-    district = property(_get_district)
-
-    '''
     Get office
     '''
     def _get_office(self):
@@ -1060,7 +1048,7 @@ class CandidateRace(models.Model):
     def _get_state_or_territory(self):
         # Support legacy candidate model
         if self.candidate:
-            return self.candidate.state
+            return self.candidate.state + ' ' + self.candidate.district
         # Return page state or territory
         elif self.candidate_endorsement_page:
             return self.candidate_endorsement_page.get_state_or_territory_display
