@@ -238,9 +238,19 @@ class ElectionYearFilter(admin.SimpleListFilter):
             )
 
 
+class ApplicationCandidateInline(admin.StackedInline):
+    model = ApplicationCandidate
+    verbose_name = "Candidate"
+    verbose_name_plural = "Other Candidates"
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
+
+    inlines = [
+        ApplicationCandidateInline,
+    ]
 
     list_display = (
         'submitted_dt',

@@ -157,7 +157,6 @@ class Response(models.Model):
         return unicode(self.question)
 
 
-
 class Application(models.Model):
     """
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
@@ -357,6 +356,38 @@ class Application(models.Model):
 
     class Meta:
         verbose_name = 'Candidate Application'
+
+
+class ApplicationCandidate(models.Model):
+    '''
+    Information about candidates in a race related to an application
+    '''
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    first_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    last_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    party = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+        verbose_name="Candidate Party Affiliation",
+    )
+    website_url = models.URLField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+
+    def __unicode__(self):
+        return self.first_name + ' ' + self.last_name
+
 
 class InitiativeApplication(models.Model):
     user_id = models.CharField(max_length=255, null=True, blank=True)
