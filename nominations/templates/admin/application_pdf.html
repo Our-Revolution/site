@@ -92,6 +92,19 @@
       </section>
 
       <section>
+
+        <h2>
+          Stand Out Information
+        </h2>
+
+        {{ app.stand_out_information | safe }}
+
+        <h2>
+          State of the Race
+        </h2>
+
+        {{ app.state_of_the_race|safe }}
+
         <p>
           The following candidate(s) have been nominated for this race:
         </p>
@@ -139,12 +152,6 @@
       </section>
 
       <section>
-
-      <h2>
-        State of the Race
-      </h2>
-
-      {{ app.state_of_the_race|safe }}
 
       <ul>
 
