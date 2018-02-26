@@ -256,6 +256,7 @@ class ApplicationCandidateInline(admin.StackedInline):
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
 
+    # TODO: TECH-871: remove legacy code after switching over
     if settings.APPLICATION_CANDIDATE_ENABLED:
         inlines = [
             ApplicationCandidateInline,
