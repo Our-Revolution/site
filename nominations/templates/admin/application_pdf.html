@@ -92,6 +92,19 @@
       </section>
 
       <section>
+
+        <h2>
+          Stand Out Information
+        </h2>
+
+        {{ app.stand_out_information|safe }}
+
+        <h2>
+          State of the Race
+        </h2>
+
+        {{ app.state_of_the_race|safe }}
+
         <p>
           The following candidate(s) have been nominated for this race:
         </p>
@@ -140,12 +153,6 @@
 
       <section>
 
-      <h2>
-        State of the Race
-      </h2>
-
-      {{ app.state_of_the_race|safe }}
-
       <ul>
 
         <li>
@@ -161,19 +168,19 @@
         </li>
 
         <li>
-          Previous Election Turnout: {{ app.vol_turnout | intcomma }}
+          Previous Election Turnout: {{ app.vol_turnout|intcomma }}
         </li>
 
         <li>
-          Win Number: {{ app.vol_win_number | intcomma }}
+          Win Number: {{ app.vol_win_number|intcomma }}
         </li>
 
         <li>
-          Fundraising: ${{ app.vol_fundraising | intcomma }}
+          Fundraising: ${{ app.vol_fundraising|intcomma }}
         </li>
 
         <li>
-          Opponent Fundraising: ${{ app.vol_opponent_fundraising | intcomma }}
+          Opponent Fundraising: ${{ app.vol_opponent_fundraising|intcomma }}
         </li>
 
         <li>
