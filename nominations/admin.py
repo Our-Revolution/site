@@ -417,6 +417,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'staff',
                     'classification_level',
                     'staff_bio',
+                    'stand_out_information',
                     'state_of_the_race',
                     'local_group_info',
                     'staff_notes',

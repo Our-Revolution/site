@@ -279,6 +279,11 @@ class Application(models.Model):
         help_text='This will prepopulate from the candidate questionnaire if left blank.'
     )
 
+    stand_out_information = RichTextField(
+        blank=True,
+        null=True,
+    )
+
     state_of_the_race = RichTextField(
         null=True,
         blank=True,
