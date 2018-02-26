@@ -130,7 +130,25 @@
           {% for candidate in candidates %}
 
           <li>
-            test: {{ candidate }}
+
+            Name: {{ candidate.name }}
+
+            <ul>
+
+              <li>
+                Website:
+                {% if candidate.website_url %}
+                <a href="{{ candidate.website_url }}">{{ candidate.website_url }}</a>
+                {% endif %}
+              </li>
+
+              <li>
+                Description:
+                {{ candidate.description }}
+              </li>
+
+            </ul>
+
           </li>
 
           {% endfor %}

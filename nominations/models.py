@@ -415,8 +415,12 @@ class ApplicationCandidate(models.Model):
         null=True,
     )
 
-    def __unicode__(self):
+    def _name(self):
         return self.first_name + ' ' + self.last_name
+    name = property(_name)
+
+    def __unicode__(self):
+        return self.name
 
 
 class InitiativeApplication(models.Model):
