@@ -507,7 +507,7 @@ class ApplicationPDFView(PDFTemplateView):
 
     def get_context_data(self, **kwargs):
         app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application, pk=app_id)
+        app = get_object_or_404(Application.objects.select_related(), pk=app_id)
 
         return super(ApplicationPDFView, self).get_context_data(
             pagesize='letter',

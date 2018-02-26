@@ -99,11 +99,39 @@
 
         {{ app.stand_out_information|safe }}
 
+      </section>
+
+      <section>
+
         <h2>
           State of the Race
         </h2>
 
         {{ app.state_of_the_race|safe }}
+
+      </section>
+
+      <section>
+
+        <h2>
+          Candidates
+        </h2>
+
+        <ul>
+
+          {% for application_candidate in app.applicationcandidate_set.all %}
+
+          <li>
+            test: {{ application_candidate.first_name }}
+          </li>
+
+          {% endfor %}
+
+        </ul>
+
+      </section>
+
+      <section>
 
         <p>
           The following candidate(s) have been nominated for this race:
