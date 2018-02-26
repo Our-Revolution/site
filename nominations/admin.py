@@ -410,7 +410,6 @@ class ApplicationAdmin(admin.ModelAdmin):
                 'fields': (
                     'vol_incumbent',
                     'vol_dem_challenger',
-                    'vol_other_progressives',
                     'vol_polling',
                     'vol_endorsements',
                     'vol_advantage',
@@ -433,10 +432,49 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'staff_notes',
                     'vet_status',
                     'vet',
-                    'local_support'
+                    'local_support',
+                    'vol_other_progressives',  # Legacy field, staff-only
                 ),
             })
         )
+
+        '''
+        TODO: TECH-871: remove after going live. Support legacy field if
+        disabled.
+        '''
+        if settings.APPLICATION_CANDIDATE_ENABLED:
+            volunteer_research_fieldset = ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'vol_dem_challenger',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            })
+        else:
+            volunteer_research_fieldset = ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'vol_dem_challenger',
+                    'vol_other_progressives',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            })
 
         volunteer_fieldsets = (
             (None, {
@@ -462,23 +500,10 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'get_primary_election',
                 ),
             }),
-            ('Volunteer Research', {
-                'fields': (
-                    'vol_incumbent',
-                    'vol_dem_challenger',
-                    'vol_other_progressives',
-                    'vol_polling',
-                    'vol_endorsements',
-                    'vol_advantage',
-                    'vol_turnout',
-                    'vol_win_number',
-                    'vol_fundraising',
-                    'vol_opponent_fundraising',
-                    'vol_crimes',
-                    'vol_notes',
-                ),
-            }),
+            volunteer_research_fieldset,
         )
+
+
 
         is_vol = request.user.groups.filter(
             name="Elections Research Volunteers"

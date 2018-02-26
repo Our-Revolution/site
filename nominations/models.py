@@ -212,6 +212,7 @@ class Application(models.Model):
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
     # TODO: rename to vol_other_candidates and remove old field from code and db
     # after a/b deploy issues are resolved
+    # legacy field
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
