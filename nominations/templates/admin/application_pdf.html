@@ -117,17 +117,28 @@
           Candidates
         </h2>
 
+        {% for party, candidates in app.candidates_by_party %}
+
+        {% with candidates|first as first_candidate %}
+        <h3>
+          {{ first_candidate.get_party_display }}
+        </h3>
+        {% endwith %}
+
         <ul>
 
-          {% for application_candidate in app.applicationcandidate_set.all %}
+          {% for candidate in candidates %}
 
           <li>
-            test: {{ application_candidate.first_name }}
+            test: {{ candidate }}
           </li>
 
           {% endfor %}
 
         </ul>
+
+        {% endfor %}
+
 
       </section>
 

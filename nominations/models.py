@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from collections import defaultdict
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -326,6 +326,18 @@ class Application(models.Model):
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
+    '''
+    Group candidates by party and return list
+    '''
+    def _candidates_by_party(self):
+        candidates = defaultdict(list)
+        for application_candidate in self.applicationcandidate_set.all():
+            candidates[application_candidate.party].append(
+                application_candidate
+            )
+        return candidates.items
+    candidates_by_party = property(_candidates_by_party)
+
     def save(self, *args, **kwargs):
         if not self.nomination:
             self.nomination = Nomination.objects.create()
@@ -367,7 +379,21 @@ class ApplicationCandidate(models.Model):
     '''
     Information about candidates in a race related to an application
     '''
+    party_choices = (
+        (1, 'Democratic'),
+        (2, 'Green'),
+        (3, 'Independent/No Party Affiliation'),
+        (4, 'Republican'),
+        (5, 'Libertarian'),
+        (6, 'Vermont Progressive'),
+        (99, 'Other'),
+    )
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    description = models.CharField(
+        blank=True,
+        max_length=500,
+        null=True,
+    )
     first_name = models.CharField(
         blank=True,
         max_length=255,
@@ -378,11 +404,10 @@ class ApplicationCandidate(models.Model):
         max_length=255,
         null=True,
     )
-    party = models.CharField(
+    party = models.IntegerField(
         blank=True,
-        max_length=255,
+        choices=party_choices,
         null=True,
-        verbose_name="Candidate Party Affiliation",
     )
     website_url = models.URLField(
         blank=True,

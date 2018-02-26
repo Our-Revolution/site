@@ -1,5 +1,6 @@
-from datetime import datetime
+from django.conf import settings
 from django.contrib import admin
+from datetime import datetime
 from django.db.models import Q
 from .models import *
 from local_groups.models import Group
@@ -239,6 +240,13 @@ class ElectionYearFilter(admin.SimpleListFilter):
 
 
 class ApplicationCandidateInline(admin.StackedInline):
+    fields = [
+        'first_name',
+        'last_name',
+        'party',
+        'website_url',
+        'description',
+    ]
     model = ApplicationCandidate
     verbose_name = "Candidate"
     verbose_name_plural = "Other Candidates"
@@ -248,9 +256,10 @@ class ApplicationCandidateInline(admin.StackedInline):
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
 
-    inlines = [
-        ApplicationCandidateInline,
-    ]
+    if settings.APPLICATION_CANDIDATE_ENABLED:
+        inlines = [
+            ApplicationCandidateInline,
+        ]
 
     list_display = (
         'submitted_dt',

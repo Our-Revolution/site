@@ -1,10 +1,11 @@
+from django.db.models import Count
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
 from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
-from .models import Application, Nomination, InitiativeApplication
+from .models import Application, ApplicationCandidate, Nomination, InitiativeApplication
 from auth0.v3.authentication import GetToken, Users, Passwordless
 import json, os
 from urlparse import urlparse
@@ -507,7 +508,10 @@ class ApplicationPDFView(PDFTemplateView):
 
     def get_context_data(self, **kwargs):
         app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application.objects.select_related(), pk=app_id)
+        app = get_object_or_404(
+            Application.objects.select_related(),
+            pk=app_id
+        )
 
         return super(ApplicationPDFView, self).get_context_data(
             pagesize='letter',
