@@ -503,8 +503,6 @@ class ApplicationAdmin(admin.ModelAdmin):
             volunteer_research_fieldset,
         )
 
-
-
         is_vol = request.user.groups.filter(
             name="Elections Research Volunteers"
         ).exists()

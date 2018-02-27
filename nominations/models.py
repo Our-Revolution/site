@@ -381,12 +381,12 @@ class ApplicationCandidate(models.Model):
     Information about candidates in a race related to an application
     '''
     party_choices = (
-        (1, 'Democratic'),
-        (2, 'Green'),
+        (1, 'Democratic Party'),
+        (2, 'Green Party'),
         (3, 'Independent/No Party Affiliation'),
-        (4, 'Republican'),
-        (5, 'Libertarian'),
-        (6, 'Vermont Progressive'),
+        (4, 'Republican Party'),
+        (5, 'Libertarian Party'),
+        (6, 'Vermont Progressive Party'),
         (99, 'Other'),
     )
     application = models.ForeignKey(Application, on_delete=models.CASCADE)
