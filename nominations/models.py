@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from collections import defaultdict
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -157,7 +157,6 @@ class Response(models.Model):
         return unicode(self.question)
 
 
-
 class Application(models.Model):
     """
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
@@ -213,6 +212,7 @@ class Application(models.Model):
     vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
     # TODO: rename to vol_other_candidates and remove old field from code and db
     # after a/b deploy issues are resolved
+    # legacy field
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
@@ -327,6 +327,18 @@ class Application(models.Model):
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
+    '''
+    Group candidates by party and return list
+    '''
+    def _candidates_by_party(self):
+        candidates = defaultdict(list)
+        for application_candidate in self.applicationcandidate_set.all():
+            candidates[application_candidate.party].append(
+                application_candidate
+            )
+        return candidates.items
+    candidates_by_party = property(_candidates_by_party)
+
     def save(self, *args, **kwargs):
         if not self.nomination:
             self.nomination = Nomination.objects.create()
@@ -362,6 +374,55 @@ class Application(models.Model):
 
     class Meta:
         verbose_name = 'Candidate Application'
+
+
+class ApplicationCandidate(models.Model):
+    '''
+    Information about candidates in a race related to an application
+    '''
+    party_choices = (
+        (1, 'Democratic Party'),
+        (2, 'Green Party'),
+        (3, 'Independent/No Party Affiliation'),
+        (4, 'Republican Party'),
+        (5, 'Libertarian Party'),
+        (6, 'Vermont Progressive Party'),
+        (99, 'Other'),
+    )
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    description = models.CharField(
+        blank=True,
+        max_length=500,
+        null=True,
+    )
+    first_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    last_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    party = models.IntegerField(
+        blank=True,
+        choices=party_choices,
+        null=True,
+    )
+    website_url = models.URLField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+
+    def _name(self):
+        return self.first_name + ' ' + self.last_name
+    name = property(_name)
+
+    def __unicode__(self):
+        return self.name
+
 
 class InitiativeApplication(models.Model):
     user_id = models.CharField(max_length=255, null=True, blank=True)

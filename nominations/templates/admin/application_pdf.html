@@ -99,11 +99,68 @@
 
         {{ app.stand_out_information|safe }}
 
+      </section>
+
+      <section>
+
         <h2>
           State of the Race
         </h2>
 
         {{ app.state_of_the_race|safe }}
+
+      </section>
+
+      <section>
+
+        <h2>
+          Candidates
+        </h2>
+
+        {% for party, candidates in app.candidates_by_party %}
+
+        {% with candidates|first as first_candidate %}
+        <h3>
+          {{ first_candidate.get_party_display }}
+        </h3>
+        {% endwith %}
+
+        <ul>
+
+          {% for candidate in candidates %}
+
+          <li>
+
+            Name: {{ candidate.name }}
+
+            <ul>
+
+              <li>
+                Website:
+                {% if candidate.website_url %}
+                <a href="{{ candidate.website_url }}">{{ candidate.website_url }}</a>
+                {% endif %}
+              </li>
+
+              <li>
+                Description:
+                {{ candidate.description }}
+              </li>
+
+            </ul>
+
+          </li>
+
+          {% endfor %}
+
+        </ul>
+
+        {% endfor %}
+
+
+      </section>
+
+      <section>
 
         <p>
           The following candidate(s) have been nominated for this race:
@@ -154,10 +211,6 @@
       <section>
 
       <ul>
-
-        <li>
-          Other candidates running: {{ app.vol_other_progressives }}
-        </li>
 
         <li>
           Previous Election Advantage: {{app.vol_advantage}}
