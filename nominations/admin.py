@@ -409,6 +409,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             ('Volunteer Research', {
                 'fields': (
                     'vol_incumbent',
+                    'primary_election_type',
                     'vol_dem_challenger',
                     'vol_polling',
                     'vol_endorsements',
@@ -446,6 +447,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             volunteer_research_fieldset = ('Volunteer Research', {
                 'fields': (
                     'vol_incumbent',
+                    'primary_election_type',
                     'vol_dem_challenger',
                     'vol_polling',
                     'vol_endorsements',
@@ -462,6 +464,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             volunteer_research_fieldset = ('Volunteer Research', {
                 'fields': (
                     'vol_incumbent',
+                    'primary_election_type',
                     'vol_dem_challenger',
                     'vol_other_progressives',
                     'vol_polling',
