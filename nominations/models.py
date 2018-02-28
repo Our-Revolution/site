@@ -502,16 +502,6 @@ class Application(models.Model):
         return candidates.items
     candidates_by_party = property(_candidates_by_party)
 
-    def save(self, *args, **kwargs):
-        if not self.nomination:
-            self.nomination = Nomination.objects.create()
-
-        if not self.questionnaire:
-            self.questionnaire = Questionnaire.objects.create()
-
-        if self.status == 'submitted' and self.submitted_dt is None:
-            self.submitted_dt = datetime.datetime.now()
-
     def auto_populate_research_fields(self):
         """Auto-populate staff write-up fields from already present info"""        
     
