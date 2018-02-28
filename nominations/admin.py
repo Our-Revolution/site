@@ -547,17 +547,18 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     def get_actions(self, request):
 
-        # Hide actions from volunteers
+        """Hide actions from volunteers"""
         is_vol = request.user.groups.filter(
             name="Elections Research Volunteers"
         ).exists()
         if is_vol:
             return OrderedDict()
         else:
-
-            # Disable delete
             actions = super(ApplicationAdmin, self).get_actions(request)
+
+            """Disable delete action"""
             del actions['delete_selected']
+
             return actions
 
     def has_delete_permission(self, request, obj=None):
