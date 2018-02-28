@@ -17,6 +17,12 @@ import datetime
 
 
 class Nomination(models.Model):
+    """
+    A nomination form is filled out by the group with basic information about
+    the group and what it will do to help the candidate.
+    """
+
+    # TODO: move this into application model
     group_nomination_process = models.TextField(
         max_length=500,
         blank=False,
@@ -45,8 +51,10 @@ class Nomination(models.Model):
     def save(self, *args, **kwargs):
         super(Nomination, self).save(*args, **kwargs)
 
-        # save the application to update statuses and do other conditional logic
-        # if the nomination has an application, save that application
+        '''
+        Save the application to update statuses and do other conditional logic
+        if the nomination has an application, save that application
+        '''
         if hasattr(self, 'application'):
             self.application.save()
 
@@ -95,10 +103,10 @@ class Questionnaire(models.Model):
     """
 
     STATUSES = (
-       ('incomplete', 'Incomplete'),
-       ('complete', 'Complete'),
-       ('sent', 'Sent to Candidate'),
-   )
+        ('incomplete', 'Incomplete'),
+        ('complete', 'Complete'),
+        ('sent', 'Sent to Candidate'),
+    )
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
 
     # Candidate Information and Social Media
@@ -127,7 +135,7 @@ class Questionnaire(models.Model):
 
     def __unicode__(self):
         try:
-            app = self.application_set.first()
+            app = self.application
             return str(app) + ' Questionnaire'
         except:
             return 'Questionnaire ' + str(self.pk)
@@ -139,9 +147,13 @@ class Questionnaire(models.Model):
             for q in Question.objects.all():
                 self.response_set.create(question=q)
 
-        if self.application_set.all().exists():
-            # TODO: support multiple candidates
-            self.application_set.first().save()
+        '''
+        Save the application attached to a questionnaire when the
+        questionnaire is saved.
+        '''
+        if hasattr(self, 'application'):
+            self.application.save()
+
 
 class Question(models.Model):
     text = models.TextField(verbose_name="Question Text")
@@ -192,7 +204,7 @@ class Application(models.Model):
         verbose_name='Group Nomination Form:',
     )
 
-    questionnaire = models.ForeignKey(
+    questionnaire = models.OneToOneField(
         Questionnaire,
         on_delete=models.SET_NULL,
         null=True,
@@ -284,6 +296,15 @@ class Application(models.Model):
         ('expired', 'Expired'),
         ('hold', 'Hold'),
     )
+
+    # Statuses that signify whether a group can still edit an application
+    EDITABLE_STATUSES = [
+        'needs-group-form-and-questionnaire',
+        'needs-questionnaire',
+        'needs-group-form',
+        'incomplete'
+    ]
+
     status = models.CharField(
         max_length=64,
         choices=STATUSES,
@@ -479,35 +500,37 @@ class Application(models.Model):
             self.questionnaire = Questionnaire.objects.create()
 
     def generate_application_status(self):
-        """Returns a generated status based on completion of various items."""
+        """Returns a generated status based on completion of various items.
 
-        if self.nomination.status == 'incomplete':
-            if self.questionnaire.status == 'complete':
-                status = 'needs-group-form'
+        nomination is filled out by the group with basic information about
+        the group and what it will do to help the candidate.
+
+        quesionnaire is filled out by the candidate with basic information and
+        in-depth policy positions.
+        """
+
+        if self.status in self.EDITABLE_STATUSES:
+            if self.nomination.status == 'incomplete':
+                if self.questionnaire.status == 'complete':
+                    status = 'needs-group-form'
+                else:
+                    status = 'needs-group-form-and-questionnaire'
             else:
-                status = 'needs-group-form-and-questionnaire'
+                # nomination complete
+                if self.questionnaire.status == 'incomplete':
+                    # needs questionaire
+                    status = 'needs-questionnaire'
+                else:
+                    # questionnaire complete
+                    status = 'incomplete'
         else:
-            # nomination complete
-            if self.questionnaire.status == 'incomplete':
-                # needs questionaire
-                status = 'needs-questionnaire'
-            else:
-                # questionnaire complete
-                status = 'incomplete'
+            status = self.status
         return status
 
     def is_editable(self):
-        """Returns whether the user can edit this application."""
+        """Returns whether a group can edit this application."""
 
-        # TODO possibly move this to settings.py or env
-        editable_statuses = [
-            'needs-group-form-and-questionnaire',
-            'needs-questionnaire',
-            'needs-group-form',
-            'incomplete'
-        ]
-
-        if self.status in editable_statuses:
+        if self.status in self.EDITABLE_STATUSES:
             return True
         else:
             return False
@@ -521,21 +544,7 @@ class Application(models.Model):
 
         self.auto_populate_research_fields()
 
-        # TODO move to settings.py or env?
-        # dont run status generator if set to these
-        exempt_statuses = [
-            'submitted',
-            'needs-research',
-            'needs-staff-review',
-            'under-review',
-            'approved',
-            'removed',
-            'expired',
-            'hold'
-        ]
-
-        if self.status not in exempt_statuses:
-            self.status = self.generate_application_status()
+        self.status = self.generate_application_status()
 
         if self.status == 'submitted' and self.submitted_dt is None:
             self.submitted_dt = datetime.datetime.now()

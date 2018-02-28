@@ -31,8 +31,7 @@
             <div class="alert alert-danger br3"><strong>Note:</strong> We strongly recommend having the candidate fill out this form because their level of alignment with our national platform is an important factor in our endorsement decision. You can send this form to the candidate <a href="/groups/nominations/questionnaire/?id={{application.id}}">here</a>.</div>
           {% endif %}
           
-          {% comment %} if application isn't editable or questionnaire is complete, display read-only fields to user {% endcomment %}
-          {% if not application.is_editable or questionnaire.status == 'complete' %}
+          {% if questionnaire.status == 'complete' %}
             {% for form in formset %}
               <div class="form-group pa20 br3 f5f5f5-bg">
                 <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
