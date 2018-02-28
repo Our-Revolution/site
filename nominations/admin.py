@@ -246,6 +246,7 @@ class ApplicationCandidateInline(admin.StackedInline):
         'party',
         'website_url',
         'description',
+        'fundraising',
     ]
     model = ApplicationCandidate
     verbose_name = "Candidate"
@@ -375,7 +376,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     get_group_id.admin_order_field = 'group__group_id'
 
     def get_fieldsets(self, request, obj=None, **kwargs):
-        fieldsets = (
+        staff_fieldsets = (
             (None, {
                 'fields': (
                     'submitted_dt',
@@ -417,7 +418,9 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'vol_turnout',
                     'vol_win_number',
                     'vol_fundraising',
-                    'vol_opponent_fundraising',
+                    'fundraising_date_of_filing',
+                    'fundraising_date_accessed',
+                    'fundraising_source_url',
                     'vol_crimes',
                     'vol_notes',
                 ),
@@ -435,12 +438,13 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'vet',
                     'local_support',
                     'vol_other_progressives',  # Legacy field, staff-only
+                    'vol_opponent_fundraising',  # Legacy field, staff-only
                 ),
             })
         )
 
         '''
-        TODO: TECH-871: remove after going live. Support legacy field if
+        TODO: TECH-871: remove after going live. Support legacy fields if
         disabled.
         '''
         if settings.APPLICATION_CANDIDATE_ENABLED:
@@ -455,7 +459,9 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'vol_turnout',
                     'vol_win_number',
                     'vol_fundraising',
-                    'vol_opponent_fundraising',
+                    'fundraising_date_of_filing',
+                    'fundraising_date_accessed',
+                    'fundraising_source_url',
                     'vol_crimes',
                     'vol_notes',
                 ),
@@ -473,6 +479,9 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'vol_turnout',
                     'vol_win_number',
                     'vol_fundraising',
+                    'fundraising_date_of_filing',
+                    'fundraising_date_accessed',
+                    'fundraising_source_url',
                     'vol_opponent_fundraising',
                     'vol_crimes',
                     'vol_notes',
@@ -513,7 +522,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         if is_vol:
             self.fieldsets = volunteer_fieldsets
         else:
-            self.fieldsets = fieldsets
+            self.fieldsets = staff_fieldsets
 
         return super(ApplicationAdmin, self).get_fieldsets(request, obj, **kwargs)
 
