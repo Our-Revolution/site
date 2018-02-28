@@ -31,6 +31,25 @@
         margin-top: 0;
       }
 
+      table {
+        margin-bottom: 10px;
+      }
+
+      th {
+        background-color: #E5E5E5;
+        text-align: left;
+      }
+
+      th, td {
+        border: solid 1px black;
+        padding: 4px 4px 0;
+      }
+
+      td.value,
+      th.value {
+        text-align: right;
+      }
+
       .bg-blue {
         background: #218fff;
         border-radius: 3px;
@@ -167,7 +186,51 @@
 
         <p>
           <strong>Type of primary:</strong>
-          {{ app.get_primary_election_type_display }}
+          {{ app.get_primary_election_type_display }}<br />
+
+          <strong>General fundraising:</strong>
+          ${{ app.vol_fundraising|intcomma }}
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Candidate</th>
+              <th>Party</th>
+              <th class="value">Cash on Hand</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            {% for party, candidates in app.candidates_by_party %}
+            {% for candidate in candidates %}
+            <tr>
+              <td>{{ candidate.name }}</td>
+              <td>{{ candidate.get_party_display }}</td>
+              <td class="value">
+                {% if candidate.fundraising %}
+                ${{ candidate.fundraising|intcomma }}
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+        <p>
+          <strong>Date of Fundraising Report filing:</strong>
+          {{ app.fundraising_date_of_filing|date:"Y-m-d" }}<br />
+
+          <strong>Date accessed:</strong>
+          {{ app.fundraising_date_accessed|date:"Y-m-d" }}<br />
+
+          <strong>Source:</strong>
+          {% if app.fundraising_source_url %}
+          <a href="{{ app.fundraising_source_url }}">{{ app.fundraising_source_url }}</a>
+          {% endif %}
         </p>
 
       </section>
@@ -238,14 +301,6 @@
 
         <li>
           Win Number: {{ app.vol_win_number|intcomma }}
-        </li>
-
-        <li>
-          Fundraising: ${{ app.vol_fundraising|intcomma }}
-        </li>
-
-        <li>
-          Opponent Fundraising: ${{ app.vol_opponent_fundraising|intcomma }}
         </li>
 
         <li>
