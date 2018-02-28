@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.conf import settings
 from django.contrib import admin
 from datetime import datetime
@@ -255,6 +256,27 @@ class ApplicationCandidateInline(admin.StackedInline):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
+
+    def set_to_needs_research(self, request, queryset):
+        queryset.update(status='needs-research')
+
+    def set_to_needs_staff_review(self, request, queryset):
+        queryset.update(status='needs-staff-review')
+
+    def set_to_approved(self, request, queryset):
+        queryset.update(status='approved')
+    set_to_approved.short_description = "Set to endorsed"
+
+    def set_to_removed(self, request, queryset):
+        queryset.update(status='removed')
+    set_to_removed.short_description = "Set to not endorsed"
+
+    def set_to_expired(self, request, queryset):
+        queryset.update(status='expired')
+
+    def set_to_hold(self, request, queryset):
+        queryset.update(status='hold')
+
     exclude = ('user_id',)
 
     # TODO: TECH-871: remove legacy code after switching over
@@ -277,8 +299,6 @@ class ApplicationAdmin(admin.ModelAdmin):
     )
 
     list_display_links = list_display
-
-    actions = [export_as_csv_action("CSV Export")]
 
     list_filter = ('status', 'candidate_state')
 
@@ -346,7 +366,15 @@ class ApplicationAdmin(admin.ModelAdmin):
     )
 
     # set actions to include csv export with field list
-    actions = [export_as_csv_action("CSV Export", export_fields)]
+    actions = [
+        export_as_csv_action("CSV Export", export_fields),
+        'set_to_needs_research',
+        'set_to_needs_staff_review',
+        'set_to_approved',
+        'set_to_removed',
+        'set_to_expired',
+        'set_to_hold',
+    ]
 
     list_filter = (
         'status',
@@ -526,19 +554,21 @@ class ApplicationAdmin(admin.ModelAdmin):
 
         return super(ApplicationAdmin, self).get_fieldsets(request, obj, **kwargs)
 
-
     def get_actions(self, request):
+
+        """Hide actions from volunteers"""
         is_vol = request.user.groups.filter(
             name="Elections Research Volunteers"
         ).exists()
-
-        # Disable delete
-        actions = super(ApplicationAdmin, self).get_actions(request)
-        del actions['delete_selected']
-
         if is_vol:
-            del actions['export_as_csv']
-        return actions
+            return OrderedDict()
+        else:
+            actions = super(ApplicationAdmin, self).get_actions(request)
+
+            """Disable delete action"""
+            del actions['delete_selected']
+
+            return actions
 
     def has_delete_permission(self, request, obj=None):
         #Disable delete
