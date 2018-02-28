@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from .forms import GroupLoginForm
 from .views import (
+    EventCreateView,
     GroupDashboardView,
     GroupManageView,
     SlackInviteView,
@@ -22,6 +23,13 @@ if settings.BSD_LOGIN_ENABLED:
                 GroupDashboardView.as_view(),
                 name='groups-dashboard'
             ),
+            url(r'^event/', include([
+                url(
+                    r'^create/',
+                    EventCreateView.as_view(),
+                    name='groups-event-create'
+                ),
+            ])),
             url(
                 r'^login/',
                 auth_views.login,

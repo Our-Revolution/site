@@ -1,0 +1,163 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block page_title %}Our Revolution - Create Event{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+<a href="/groups/{{ group.slug }}/">{{ group.name }}</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        <h3 class="mb20 mt0">
+          Create Event
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <form action="{% url 'groups-event-create' %}" method="post"
+        class="form mb20">
+          {% csrf_token %}
+
+            <div class="clearfix mb20">
+                <div class="row">
+                    <div class="col-xs-12">
+
+                      <h4 class="mt0">Event Information</h4>
+
+                      {% bootstrap_field form.event_type %}
+
+                      {% bootstrap_field form.name %}
+
+                      {% bootstrap_field form.description %}
+
+                      {% bootstrap_field form.capacity %}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix mb20">
+                <div class="row">
+
+                    <div class="col-xs-12">
+                      <h4 class="mt0">Date and Time</h4>
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.start_day %}
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.start_time %}
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.start_time_zone %}
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.duration_count %}
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.duration_type %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="clearfix mb20">
+                <div class="row">
+
+                    <div class="col-xs-12">
+                      <h4 class="mt0">Location</h4>
+
+                      {% bootstrap_field form.venue_name %}
+
+                      {% bootstrap_field form.venue_addr1 %}
+
+                      {% bootstrap_field form.venue_addr2 show_label=False %}
+                    </div>
+
+                    <div class="col-md-4">
+                      {% bootstrap_field form.venue_city %}
+                    </div>
+
+                    <div class="col-md-4">
+                      {% bootstrap_field form.venue_state_or_territory %}
+                    </div>
+
+                    <div class="col-md-4">
+                      {% bootstrap_field form.venue_zip %}
+                    </div>
+
+                    <div class="col-xs-12">
+                      {% bootstrap_field form.venue_directions %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="clearfix mb20">
+                <div class="row">
+
+                    <div class="col-xs-12">
+                      <h4 class="mt0">Host Information</h4>
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.host_name %}
+                    </div>
+
+                    <div class="col-md-6">
+                      {% bootstrap_field form.contact_phone %}
+                    </div>
+
+                    <div class="col-xs-12">
+                      {% bootstrap_field form.public_phone %}
+
+                      {% bootstrap_field form.host_receive_rsvp_emails %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                  <button type="submit"
+                  class="btn btn-primary btn-block uppercase ls2">
+                  Create My Event!
+                </button>
+                </div>
+            </div>
+        </form>
+
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

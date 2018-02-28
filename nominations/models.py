@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from collections import defaultdict
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -12,8 +12,6 @@ from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField
 from wagtail.wagtailsnippets.models import register_snippet
 
 import datetime
-
-# TODO: automate endorsement -> approval -> candidates page
 
 
 class Nomination(models.Model):
@@ -186,6 +184,18 @@ class Application(models.Model):
     many-to-one relationship with a group.
     """
 
+    # See http://www.ncsl.org/research/elections-and-campaigns/primary-types.aspx
+    primary_election_type_choices = (
+        (1, 'Closed Primary'),
+        (2, 'Partially Closed Primary'),
+        (3, 'Partially Open Primary'),
+        (4, 'Open to Unaffiliated Voters Primary'),
+        (5, 'Open Primary'),
+        (6, 'Top-Two Primary'),
+        (7, 'Presidential Primary'),
+        (99, 'Other'),
+    )
+
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(
@@ -203,7 +213,11 @@ class Application(models.Model):
         related_name='application',
         verbose_name='Group Nomination Form:',
     )
-
+    primary_election_type = models.IntegerField(
+        blank=True,
+        choices=primary_election_type_choices,
+        null=True,
+    )
     questionnaire = models.OneToOneField(
         Questionnaire,
         on_delete=models.SET_NULL,
@@ -325,6 +339,7 @@ class Application(models.Model):
 
     # TODO: rename to vol_other_candidates and remove old field from code
     # and db after a/b deploy issues are resolved
+    # legacy field
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
@@ -429,6 +444,11 @@ class Application(models.Model):
         help_text='This will prepopulate from the candidate questionnaire if left blank.'
     )
 
+    stand_out_information = RichTextField(
+        blank=True,
+        null=True,
+    )
+
     state_of_the_race = RichTextField(
         null=True,
         blank=True,
@@ -467,10 +487,34 @@ class Application(models.Model):
         verbose_name='Local Support:',
         help_text='This will prepopulate from the local group\'s support question if left blank.'
     )
+    def __unicode__(self):
+        return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
+
+    '''
+    Group candidates by party and return list
+    '''
+    def _candidates_by_party(self):
+        candidates = defaultdict(list)
+        for application_candidate in self.applicationcandidate_set.all():
+            candidates[application_candidate.party].append(
+                application_candidate
+            )
+        return candidates.items
+    candidates_by_party = property(_candidates_by_party)
+
+    def save(self, *args, **kwargs):
+        if not self.nomination:
+            self.nomination = Nomination.objects.create()
+
+        if not self.questionnaire:
+            self.questionnaire = Questionnaire.objects.create()
+
+        if self.status == 'submitted' and self.submitted_dt is None:
+            self.submitted_dt = datetime.datetime.now()
 
     def auto_populate_research_fields(self):
-        """Auto-populate staff write-up fields from already present info"""
-
+        """Auto-populate staff write-up fields from already present info"""        
+    
         if self.questionnaire:
             if self.questionnaire.candidate_bio and not self.staff_bio:
                 self.staff_bio = self.questionnaire.candidate_bio
@@ -553,6 +597,55 @@ class Application(models.Model):
 
     class Meta:
         verbose_name = 'Candidate Application'
+
+
+class ApplicationCandidate(models.Model):
+    '''
+    Information about candidates in a race related to an application
+    '''
+    party_choices = (
+        (1, 'Democratic Party'),
+        (2, 'Green Party'),
+        (3, 'Independent/No Party Affiliation'),
+        (4, 'Republican Party'),
+        (5, 'Libertarian Party'),
+        (6, 'Vermont Progressive Party'),
+        (99, 'Other'),
+    )
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    description = models.CharField(
+        blank=True,
+        max_length=500,
+        null=True,
+    )
+    first_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    last_name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+    party = models.IntegerField(
+        blank=True,
+        choices=party_choices,
+        null=True,
+    )
+    website_url = models.URLField(
+        blank=True,
+        max_length=255,
+        null=True,
+    )
+
+    def _name(self):
+        return self.first_name + ' ' + self.last_name
+    name = property(_name)
+
+    def __unicode__(self):
+        return self.name
+
 
 class InitiativeApplication(models.Model):
     user_id = models.CharField(max_length=255, null=True, blank=True)

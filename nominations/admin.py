@@ -1,5 +1,6 @@
-from datetime import datetime
+from django.conf import settings
 from django.contrib import admin
+from datetime import datetime
 from django.db.models import Q
 from .models import *
 from local_groups.models import Group
@@ -238,9 +239,28 @@ class ElectionYearFilter(admin.SimpleListFilter):
             )
 
 
+class ApplicationCandidateInline(admin.StackedInline):
+    fields = [
+        'first_name',
+        'last_name',
+        'party',
+        'website_url',
+        'description',
+    ]
+    model = ApplicationCandidate
+    verbose_name = "Candidate"
+    verbose_name_plural = "Other Candidates"
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     exclude = ('user_id',)
+
+    # TODO: TECH-871: remove legacy code after switching over
+    if settings.APPLICATION_CANDIDATE_ENABLED:
+        inlines = [
+            ApplicationCandidateInline,
+        ]
 
     list_display = (
         'submitted_dt',
@@ -389,8 +409,8 @@ class ApplicationAdmin(admin.ModelAdmin):
             ('Volunteer Research', {
                 'fields': (
                     'vol_incumbent',
+                    'primary_election_type',
                     'vol_dem_challenger',
-                    'vol_other_progressives',
                     'vol_polling',
                     'vol_endorsements',
                     'vol_advantage',
@@ -407,15 +427,57 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'staff',
                     'classification_level',
                     'staff_bio',
+                    'stand_out_information',
                     'state_of_the_race',
                     'local_group_info',
                     'staff_notes',
                     'vet_status',
                     'vet',
-                    'local_support'
+                    'local_support',
+                    'vol_other_progressives',  # Legacy field, staff-only
                 ),
             })
         )
+
+        '''
+        TODO: TECH-871: remove after going live. Support legacy field if
+        disabled.
+        '''
+        if settings.APPLICATION_CANDIDATE_ENABLED:
+            volunteer_research_fieldset = ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'primary_election_type',
+                    'vol_dem_challenger',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            })
+        else:
+            volunteer_research_fieldset = ('Volunteer Research', {
+                'fields': (
+                    'vol_incumbent',
+                    'primary_election_type',
+                    'vol_dem_challenger',
+                    'vol_other_progressives',
+                    'vol_polling',
+                    'vol_endorsements',
+                    'vol_advantage',
+                    'vol_turnout',
+                    'vol_win_number',
+                    'vol_fundraising',
+                    'vol_opponent_fundraising',
+                    'vol_crimes',
+                    'vol_notes',
+                ),
+            })
 
         volunteer_fieldsets = (
             (None, {
@@ -441,22 +503,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'get_primary_election',
                 ),
             }),
-            ('Volunteer Research', {
-                'fields': (
-                    'vol_incumbent',
-                    'vol_dem_challenger',
-                    'vol_other_progressives',
-                    'vol_polling',
-                    'vol_endorsements',
-                    'vol_advantage',
-                    'vol_turnout',
-                    'vol_win_number',
-                    'vol_fundraising',
-                    'vol_opponent_fundraising',
-                    'vol_crimes',
-                    'vol_notes',
-                ),
-            }),
+            volunteer_research_fieldset,
         )
 
         is_vol = request.user.groups.filter(

@@ -20,9 +20,15 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# TODO: TECH-772: remove legacy code after switching over
-CANDIDATE_INDEX_UPDATE_ENABLED = bool(int(os.environ.get(
-    'CANDIDATE_INDEX_UPDATE_ENABLED',
+# TODO: TECH-871: remove legacy code after switching over
+APPLICATION_CANDIDATE_ENABLED = bool(int(os.environ.get(
+    'APPLICATION_CANDIDATE_ENABLED',
+    0
+)))
+
+# TODO: TECH-850: remove legacy code after switching over
+EVENT_CREATE_ENABLED = bool(int(os.environ.get(
+    'EVENT_CREATE_ENABLED',
     0
 )))
 

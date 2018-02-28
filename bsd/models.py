@@ -4,4 +4,7 @@ from django.db import models
 
 
 class BSDProfile(models.Model):
+    # 0 should only be used for legacy records that predate this field
+    cons_id_default = '0'
+    cons_id = models.CharField(default=cons_id_default, max_length=128)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
