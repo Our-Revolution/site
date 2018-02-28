@@ -162,6 +162,18 @@ class Application(models.Model):
     An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
     """
 
+    # See http://www.ncsl.org/research/elections-and-campaigns/primary-types.aspx
+    primary_election_type_choices = (
+        (1, 'Closed Primary'),
+        (2, 'Partially Closed Primary'),
+        (3, 'Partially Open Primary'),
+        (4, 'Open to Unaffiliated Voters Primary'),
+        (5, 'Open Primary'),
+        (6, 'Top-Two Primary'),
+        (7, 'Presidential Primary'),
+        (99, 'Other'),
+    )
+
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(null=True, blank=True, verbose_name = 'Submitted at')
@@ -175,7 +187,11 @@ class Application(models.Model):
         related_name='application',
         verbose_name='Group Nomination Form:',
     )
-
+    primary_election_type = models.IntegerField(
+        blank=True,
+        choices=primary_election_type_choices,
+        null=True,
+    )
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.SET_NULL, null=True, blank=True)
 
     group = models.ForeignKey(Group, to_field="group_id")
