@@ -32,6 +32,12 @@ EVENT_CREATE_ENABLED = bool(int(os.environ.get(
     0
 )))
 
+# TODO: TECH-886: remove legacy code after switching over
+NOMINATIONS_STATUS_ACTION_ENABLED = bool(int(os.environ.get(
+    'NOMINATIONS_STATUS_ACTION_ENABLED',
+    0
+)))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
