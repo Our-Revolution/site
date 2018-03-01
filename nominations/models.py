@@ -141,7 +141,7 @@ class Questionnaire(models.Model):
         except:
             return 'Questionnaire ' + str(self.pk)
 
-          """Get response to question about issues, or None"""
+    """Get response to question about issues, or None"""
     def _campaign_issues(self, *args, **kwargs):
         response = self.response_set.filter(
             question_id=settings.NOMINATIONS_QUESTION_ISSUES_ID,
