@@ -2,9 +2,8 @@ from __future__ import unicode_literals
 from collections import defaultdict
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
-from localflavor.us.models import USStateField, USZipCodeField
+from localflavor.us.models import USStateField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
 from ckeditor.fields import RichTextField
@@ -19,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 class Nomination(models.Model):
+    """
+    A nomination form is filled out by the group with basic information about
+    the group and what it will do to help the candidate.
+    """
+
+    # TODO: move this into application model
     group_nomination_process = models.TextField(
         max_length=500,
         blank=False,
@@ -40,14 +45,20 @@ class Nomination(models.Model):
 
     def __unicode__(self):
         try:
-            app = self.application
             return self.application.candidate_first_name + ' ' + self.application.candidate_last_name + ' - ' + ' Nomination'
         except:
             return 'Nomination ' + str(self.pk)
 
     def save(self, *args, **kwargs):
-        # self.cleaned_data['status'] = 'complete'
         super(Nomination, self).save(*args, **kwargs)
+
+        '''
+        Save the application to update statuses and do other conditional logic
+        if the nomination has an application, save that application
+        '''
+        if hasattr(self, 'application'):
+            self.application.save()
+
         if self.nominationresponse_set.count() == 0:
             for q in NominationQuestion.objects.all():
                 self.nominationresponse_set.create(question=q)
@@ -93,10 +104,10 @@ class Questionnaire(models.Model):
     """
 
     STATUSES = (
-       ('incomplete', 'Incomplete'),
-       ('complete', 'Complete'),
-       ('sent', 'Sent to Candidate'),
-   )
+        ('incomplete', 'Incomplete'),
+        ('complete', 'Complete'),
+        ('sent', 'Sent to Candidate'),
+    )
     status = models.CharField(max_length=16, choices=STATUSES, default='incomplete', blank=True)
 
     # Candidate Information and Social Media
@@ -130,13 +141,7 @@ class Questionnaire(models.Model):
         except:
             return 'Questionnaire ' + str(self.pk)
 
-    def save(self, *args, **kwargs):
-        super(Questionnaire, self).save(*args, **kwargs)
-        if self.response_set.count() == 0:
-            for q in Question.objects.all():
-                self.response_set.create(question=q)
-
-    """Get response to question about issues, or None"""
+          """Get response to question about issues, or None"""
     def _campaign_issues(self, *args, **kwargs):
         response = self.response_set.filter(
             question_id=settings.NOMINATIONS_QUESTION_ISSUES_ID,
@@ -145,6 +150,19 @@ class Questionnaire(models.Model):
         return position
     campaign_issues = property(_campaign_issues)
 
+    def save(self, *args, **kwargs):
+        super(Questionnaire, self).save(*args, **kwargs)
+
+        if self.response_set.count() == 0:
+            for q in Question.objects.all():
+                self.response_set.create(question=q)
+
+        '''
+        Save the application(s) attached to a questionnaire when the
+        questionnaire is saved.
+        '''
+        for app in self.application_set.all():
+            app.save()
 
 class Question(models.Model):
     text = models.TextField(verbose_name="Question Text")
@@ -172,7 +190,9 @@ class Response(models.Model):
 
 class Application(models.Model):
     """
-    An application is a single submission for an endorsement. Each application consists of a group nomination and a candidate questionnaire, and has a many-to-one relationship with a group.
+    An application is a single submission for an endorsement. Each application
+    consists of a group nomination and a candidate questionnaire, and has a
+    many-to-one relationship with a group.
     """
 
     # See http://www.ncsl.org/research/elections-and-campaigns/primary-types.aspx
@@ -205,7 +225,11 @@ class Application(models.Model):
     )
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
-    submitted_dt = models.DateTimeField(null=True, blank=True, verbose_name = 'Submitted at')
+    submitted_dt = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Submitted at'
+    )
 
     nomination = models.OneToOneField(
         Nomination,
@@ -221,59 +245,181 @@ class Application(models.Model):
         choices=primary_election_type_choices,
         null=True,
     )
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.SET_NULL, null=True, blank=True)
+    questionnaire = models.ForeignKey(
+        Questionnaire,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     group = models.ForeignKey(Group, to_field="group_id")
 
-    rep_email = models.EmailField(null=True, blank=False, verbose_name="Contact Email", max_length=254)
-    rep_first_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="First Name")
-    rep_last_name = models.CharField(max_length=35, null=True, blank=False, verbose_name="Last Name")
-    rep_phone = PhoneNumberField(null=True, blank=True, verbose_name="Phone Number")
+    rep_email = models.EmailField(
+        null=True,
+        blank=False,
+        verbose_name="Contact Email",
+        max_length=254
+    )
+    rep_first_name = models.CharField(
+        max_length=35,
+        null=True,
+        blank=False,
+        verbose_name="First Name"
+    )
+    rep_last_name = models.CharField(
+        max_length=35,
+        null=True,
+        blank=False,
+        verbose_name="Last Name"
+    )
+    rep_phone = PhoneNumberField(
+        null=True,
+        blank=True,
+        verbose_name="Phone Number"
+    )
 
-    #TODO: change to foreign key and create new object for each new candidate, implement autocomplete to  minimize duplicate candidates
-    candidate_first_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate First Name")
-    candidate_last_name = models.CharField(max_length=255, null=True, blank=False, verbose_name="Candidate Last Name")
-    candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
-    candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
-    candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
+    # TODO: change to foreign key and create new object for each new candidate,
+    # implement autocomplete to  minimize duplicate candidates
+    candidate_first_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=False,
+        verbose_name="Candidate First Name"
+    )
+    candidate_last_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=False,
+        verbose_name="Candidate Last Name"
+    )
+    candidate_office = models.CharField(
+        null=True,
+        max_length=255,
+        blank=False,
+        verbose_name="Candidate Office"
+    )
+    candidate_district = models.CharField(
+        null=True,
+        max_length=255,
+        blank=True,
+        verbose_name="Candidate District"
+    )
+    candidate_city = models.CharField(
+        null=True,
+        max_length=255,
+        blank=True,
+        verbose_name="Candidate City"
+    )
     candidate_state = USStateField(max_length=2, null=True, blank=False)
 
-    authorized_email = models.EmailField(null=True, blank=True, verbose_name="Authorized Email", max_length=254)
-
-    STATUSES = (
-       ('incomplete', 'Incomplete'),
-       ('submitted', 'Submitted'),
-       ('needs-research','Needs Research'),
-       ('needs-staff-review', 'Needs Staff Review'),
-       ('approved', 'Endorsed'),
-       ('removed', 'Not Endorsed'),
-       ('expired', 'Expired'),
-       ('hold', 'Hold'),
+    authorized_email = models.EmailField(
+        null=True,
+        blank=True,
+        verbose_name="Authorized Email",
+        max_length=254
     )
-    status = models.CharField(max_length=64, choices=STATUSES, default='incomplete')
+
+    # TODO TECH-840 convert statuses to integer fields
+    STATUSES = (
+        (
+            'needs-group-form-and-questionnaire',
+            'Needs Group Form and Questionnaire'
+        ),
+        ('needs-questionnaire', 'Needs Questionnaire'),
+        ('needs-group-form', 'Needs Group Form'),
+        ('incomplete', 'Needs Submission'),
+        ('submitted', 'Submitted'),
+        ('needs-research', 'Needs Research'),
+        ('needs-staff-review', 'Needs Staff Review'),
+        ('under-review', 'Under Review'),
+        ('approved', 'Endorsed'),
+        ('removed', 'Not Endorsed'),
+        ('expired', 'Expired'),
+        ('hold', 'Hold'),
+    )
+
+    # Statuses that signify whether a group can still edit an application
+    EDITABLE_STATUSES = [
+        'needs-group-form-and-questionnaire',
+        'needs-questionnaire',
+        'needs-group-form',
+        'incomplete'
+    ]
+
+    status = models.CharField(
+        max_length=64,
+        choices=STATUSES,
+        default='needs-group-form-and-questionnaire'
+    )
 
     # Volunteer Data Entry
-    vol_incumbent = models.NullBooleanField(null=True, blank=True, verbose_name='Incumbent?')
-    vol_dem_challenger = models.NullBooleanField(null=True, blank=True, verbose_name='If primary, who are the Democratic challengers?')
-    # TODO: rename to vol_other_candidates and remove old field from code and db
-    # after a/b deploy issues are resolved
+    vol_incumbent = models.NullBooleanField(
+        null=True,
+        blank=True,
+        verbose_name='Incumbent?'
+    )
+    vol_dem_challenger = models.NullBooleanField(
+        null=True,
+        blank=True,
+        verbose_name='If primary, who are the Democratic challengers?'
+    )
+
+    # TODO: rename to vol_other_candidates and remove old field from code
+    # and db after a/b deploy issues are resolved
     # legacy field
     vol_other_progressives = models.TextField(
         null=True,
         blank=True,
         max_length=500,
         verbose_name='Other candidates running:',
-        help_text = 'Please indicate party affiliation and other progressives. Max length 500 characters.'
+        help_text='Please indicate party affiliation and other progressives. Max length 500 characters.'
     )
-    vol_polling = models.TextField(null=True, blank=True, max_length=500, verbose_name='Polling:')
-    vol_endorsements = models.TextField(null=True, blank=True, max_length=500, verbose_name='Endorsements:')
-    vol_advantage = models.CharField(null=True, blank=True, max_length=50, verbose_name='Previous Election D% or R% Advantage:')
-    vol_turnout = models.CharField(null=True, blank=True, max_length=10, verbose_name='Previous Election Year Turnout:')
-    vol_win_number = models.IntegerField(null=True, blank=True, verbose_name='Win Number:')
-    vol_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much money fundraised?')
-    # legacy field
-    vol_opponent_fundraising = models.IntegerField(null=True, blank=True, verbose_name='How much competitors have fundraised?')
-    vol_crimes = models.TextField(null=True, blank=True, max_length=500, verbose_name='Crimes or Scandals (please add links to source):')
+    vol_polling = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+        verbose_name='Polling:'
+    )
+    vol_endorsements = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+        verbose_name='Endorsements:'
+    )
+    vol_advantage = models.CharField(
+        null=True,
+        blank=True,
+        max_length=50,
+        verbose_name='Previous Election D% or R% Advantage:'
+    )
+    vol_turnout = models.CharField(
+        null=True,
+        blank=True,
+        max_length=10,
+        verbose_name='Previous Election Year Turnout:'
+    )
+    vol_win_number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='Win Number:'
+    )
+    vol_fundraising = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='How much money fundraised?'
+    )
+    #legacy field
+    vol_opponent_fundraising = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='How much competitors have fundraised?'
+    )
+    vol_crimes = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+        verbose_name='Crimes or Scandals (please add links to source):'
+    )
     vol_notes = models.TextField(
         null=True,
         blank=True,
@@ -369,7 +515,6 @@ class Application(models.Model):
         verbose_name='Local Support:',
         help_text='This will prepopulate from the local group\'s support question if left blank.'
     )
-
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
@@ -389,17 +534,8 @@ class Application(models.Model):
         return candidates.items
     candidates_by_party = property(_candidates_by_party)
 
-    def save(self, *args, **kwargs):
-        if not self.nomination:
-            self.nomination = Nomination.objects.create()
-
-        if not self.questionnaire:
-            self.questionnaire = Questionnaire.objects.create()
-
-        if self.status == 'submitted' and self.submitted_dt is None:
-            self.submitted_dt = datetime.datetime.now()
-
-        # pre-populate staff write-up fields from already present info
+    def auto_populate_research_fields(self):
+        """Auto-populate staff write-up fields from already present info"""
         if self.questionnaire:
             if self.questionnaire.candidate_bio and not self.staff_bio:
                 self.staff_bio = self.questionnaire.candidate_bio
@@ -419,6 +555,64 @@ class Application(models.Model):
 
         if self.vol_notes and not self.staff_notes:
             self.staff_notes = self.vol_notes
+
+    def create_related_objects(self):
+        """Create related nomination and questionnaire for application."""
+        if not self.nomination:
+            self.nomination = Nomination.objects.create()
+
+        if not self.questionnaire:
+            self.questionnaire = Questionnaire.objects.create()
+
+    def generate_application_status(self):
+        """Returns a generated status based on completion of various items.
+
+        nomination is filled out by the group with basic information about
+        the group and what it will do to help the candidate.
+
+        quesionnaire is filled out by the candidate with basic information and
+        in-depth policy positions.
+        """
+
+        if self.status in self.EDITABLE_STATUSES:
+            if self.nomination.status == 'incomplete':
+                if self.questionnaire.status == 'complete':
+                    status = 'needs-group-form'
+                else:
+                    status = 'needs-group-form-and-questionnaire'
+            else:
+                # nomination complete
+                if self.questionnaire.status == 'incomplete':
+                    # needs questionaire
+                    status = 'needs-questionnaire'
+                else:
+                    # questionnaire complete
+                    status = 'incomplete'
+        else:
+            status = self.status
+        return status
+
+    def is_editable(self):
+        """Returns whether a group can edit this application."""
+
+        if self.status in self.EDITABLE_STATUSES:
+            return True
+        else:
+            return False
+
+    def __unicode__(self):
+        return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
+
+    def save(self, *args, **kwargs):
+        if not self.nomination or not self.questionnaire:
+            self.create_related_objects()
+
+        self.auto_populate_research_fields()
+
+        self.status = self.generate_application_status()
+
+        if self.status == 'submitted' and self.submitted_dt is None:
+            self.submitted_dt = datetime.datetime.now()
 
         super(Application, self).save(*args, **kwargs)
 

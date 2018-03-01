@@ -26,7 +26,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2 clearfix">
-          {% if application.status == 'incomplete' %}
+          {% if application.is_editable %}
             {% if application.questionnaire.status == 'complete' %}
               <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">View Questionnaire</a>
               <a href="/groups/nominations/submit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Submit Your Application</a>
