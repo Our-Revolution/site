@@ -582,12 +582,12 @@ class Application(models.Model):
                     status = 'needs-group-form-and-questionnaire'
             else:
                 # nomination complete
-                if self.questionnaire.status == 'incomplete':
-                    # needs questionaire
-                    status = 'needs-questionnaire'
-                else:
+                if self.questionnaire.status == 'complete':
                     # questionnaire complete
                     status = 'incomplete'
+                else:
+                    # needs questionaire
+                    status = 'needs-questionnaire'
         else:
             status = self.status
         return status
