@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 from collections import defaultdict
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
-from localflavor.us.models import USStateField, USZipCodeField
+from localflavor.us.models import USStateField
 from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
 from ckeditor.fields import RichTextField
@@ -133,7 +132,7 @@ class Questionnaire(models.Model):
 
     def __unicode__(self):
         try:
-            app = self.application
+            app = self.application_set.first()
             return str(app) + ' Questionnaire'
         except:
             return 'Questionnaire ' + str(self.pk)
@@ -146,12 +145,11 @@ class Questionnaire(models.Model):
                 self.response_set.create(question=q)
 
         '''
-        Save the application attached to a questionnaire when the
+        Save the application(s) attached to a questionnaire when the
         questionnaire is saved.
         '''
-        if hasattr(self, 'application'):
-            self.application.save()
-
+        for app in self.application_set.all():
+            app.save()
 
 class Question(models.Model):
     text = models.TextField(verbose_name="Question Text")
@@ -218,7 +216,7 @@ class Application(models.Model):
         choices=primary_election_type_choices,
         null=True,
     )
-    questionnaire = models.OneToOneField(
+    questionnaire = models.ForeignKey(
         Questionnaire,
         on_delete=models.SET_NULL,
         null=True,
@@ -503,8 +501,7 @@ class Application(models.Model):
     candidates_by_party = property(_candidates_by_party)
 
     def auto_populate_research_fields(self):
-        """Auto-populate staff write-up fields from already present info"""        
-    
+        """Auto-populate staff write-up fields from already present info"""
         if self.questionnaire:
             if self.questionnaire.candidate_bio and not self.staff_bio:
                 self.staff_bio = self.questionnaire.candidate_bio

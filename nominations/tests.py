@@ -86,7 +86,7 @@ class ApplicationTestCase(TestCase):
 
         # check that they are properly related to the application
         self.assertEqual(app, app.nomination.application)
-        self.assertEqual(app, app.questionnaire.application)
+        self.assertEqual(app, app.questionnaire.application_set.first())
 
         # check that their individual default statuses are properly set
         self.assertEqual(app.nomination.status, 'incomplete')
@@ -97,6 +97,7 @@ class ApplicationTestCase(TestCase):
         app.nomination.status = 'complete'
         app.nomination.save()
 
+        self.assertEqual(app.nomination.status, 'complete')
         self.assertEqual(app.status, 'needs-questionnaire')
 
         # check that generate_application_status is called after
@@ -104,4 +105,11 @@ class ApplicationTestCase(TestCase):
         app.questionnaire.status = 'complete'
         app.questionnaire.save()
 
+        self.assertEqual(app.questionnaire.status, 'complete')
+
+        # this works
+        self.assertEqual(app.questionnaire.application_set.first(), app)
+
+        # but this doesn't?
         self.assertEqual(app.status, 'incomplete')
+
