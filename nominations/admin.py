@@ -366,15 +366,21 @@ class ApplicationAdmin(admin.ModelAdmin):
     )
 
     # set actions to include csv export with field list
-    actions = [
-        export_as_csv_action("CSV Export", export_fields),
-        'set_to_needs_research',
-        'set_to_needs_staff_review',
-        'set_to_approved',
-        'set_to_removed',
-        'set_to_expired',
-        'set_to_hold',
-    ]
+    # TODO: TECH-886: remove legacy code after switching over
+    if settings.NOMINATIONS_STATUS_ACTION_ENABLED:
+        actions = [
+            export_as_csv_action("CSV Export", export_fields),
+            'set_to_needs_research',
+            'set_to_needs_staff_review',
+            'set_to_approved',
+            'set_to_removed',
+            'set_to_expired',
+            'set_to_hold',
+        ]
+    else:
+        actions = [
+            export_as_csv_action("CSV Export", export_fields),
+        ]
 
     list_filter = (
         'status',
