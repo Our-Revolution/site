@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from collections import defaultdict
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -134,6 +135,15 @@ class Questionnaire(models.Model):
         if self.response_set.count() == 0:
             for q in Question.objects.all():
                 self.response_set.create(question=q)
+
+    """Get response to question about issues, or None"""
+    def _campaign_issues(self, *args, **kwargs):
+        response = self.response_set.filter(
+            question_id=settings.NOMINATIONS_QUESTION_ISSUES_ID,
+        ).first()
+        position = response.position if response else None
+        return position
+    campaign_issues = property(_campaign_issues)
 
 
 class Question(models.Model):
