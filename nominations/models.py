@@ -11,6 +11,9 @@ from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField
 from wagtail.wagtailsnippets.models import register_snippet
 
 import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Nomination(models.Model):
@@ -194,6 +197,22 @@ class Application(models.Model):
         (99, 'Other'),
     )
 
+    fundraising_date_of_filing = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name='Filing Date for Fundraising Report'
+    )
+    fundraising_date_accessed = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name='Date fundraising information was accessed'
+    )
+    fundraising_source_url = models.URLField(
+        blank=True,
+        max_length=255,
+        null=True,
+        verbose_name='Fundraising Source URL'
+    )
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(
@@ -379,6 +398,7 @@ class Application(models.Model):
         blank=True,
         verbose_name='How much money fundraised?'
     )
+    #legacy field
     vol_opponent_fundraising = models.IntegerField(
         null=True,
         blank=True,
@@ -493,7 +513,11 @@ class Application(models.Model):
     '''
     def _candidates_by_party(self):
         candidates = defaultdict(list)
-        for application_candidate in self.applicationcandidate_set.all():
+        for application_candidate in self.applicationcandidate_set.order_by(
+            'party',
+            'first_name',
+            'last_name'
+        ):
             candidates[application_candidate.party].append(
                 application_candidate
             )
@@ -609,6 +633,11 @@ class ApplicationCandidate(models.Model):
         blank=True,
         max_length=255,
         null=True,
+    )
+    fundraising = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Cash on Hand'
     )
     last_name = models.CharField(
         blank=True,
