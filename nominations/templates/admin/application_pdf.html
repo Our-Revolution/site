@@ -68,44 +68,37 @@
 
     <div id="content">
 
+      <h1>Our Revolution</h1>
+
       <section>
 
-        <div class="bg-blue">
-          <h1>
+        <p>
+
+          <strong>
+            {{ app.candidate_first_name }} {{ app.candidate_last_name }}
+          </strong><br />
+
+          <strong>
+            {{ app.candidate_city }}
             {{ app.candidate_office }}
             {{ app.candidate_district }}
             in {{ app.candidate_state }}
-          </h1>
-        </div>
-
-        <p>
-          <strong>Submitted: {{ app.submitted_dt|date:"Y-m-d" }}</strong><br />
-          <strong>
-            Primary election date:
-            {{ app.questionnaire.primary_election_date|date:"Y-m-d" }}
           </strong><br />
-          <strong>
-            General election date:
-            {{ app.questionnaire.general_election_date|date:"Y-m-d" }}
-          </strong>
-        </p>
 
-        <p>
-          <strong>
-            Classification: Level {{ app.get_classification_level_display }}
-          </strong>
+          <strong>Submitted:</strong> {{ app.submitted_dt|date:"Y-m-d" }}<br />
+
+          <strong>Primary election date:</strong>
+          {{ app.questionnaire.primary_election_date|date:"Y-m-d" }}<br />
+
+          <strong>General election date:</strong>
+          {{ app.questionnaire.general_election_date|date:"Y-m-d" }}
+
         </p>
 
         <p>
           <strong>
             Recommendation written by: {{ app.staff }}
           </strong>
-        </p>
-
-        <p>
-          <strong>Staff Recommendation:</strong>
-          {{ app.get_recommendation_display }}
-          {{ app.candidate_first_name }} {{ app.candidate_last_name }}
         </p>
 
       </section>
@@ -188,6 +181,9 @@
           <strong>Type of primary:</strong>
           {{ app.get_primary_election_type_display }}<br />
 
+          <strong>Previous election advantage:</strong>
+          {{ app.vol_advantage }}<br />
+
           <strong>General fundraising:</strong>
           ${{ app.vol_fundraising|intcomma }}
         </p>
@@ -233,12 +229,34 @@
           {% endif %}
         </p>
 
+
+        <p>
+
+          <strong>Polling:</strong> {{ app.vol_polling }}<br />
+
+          <strong>Previous election turnout:</strong>
+          {{ app.vol_turnout|intcomma }}
+
+        </p>
+
+      </section>
+
+      <section>
+
+        <h2>OR Local Group Info</h2>
+
+        <p>
+          {{app.group}}
+        </p>
+
+        {{ app.local_group_info|safe }}
+
       </section>
 
       <section>
 
         <p>
-          The following candidate(s) have been nominated for this race:
+          The following candidate has been nominated for this race:
         </p>
 
         <div class="bg-blue">
@@ -249,122 +267,61 @@
 
         <p>
           <strong>Campaign Website:</strong>
-          {% with app.questionnaire.candidate_website_url as link_url %}
-          <a href="{{ link_url }}">{{ link_url }}</a>
-          {% endwith %}
+          {% if app.questionnaire.candidate_website_url %}
+          <a href="{{ app.questionnaire.candidate_website_url }}">{{ app.questionnaire.candidate_website_url }}</a>
+          {% endif %}
         </p>
-
-        <h3>Candidate Bio</h3>
-
-        {{ app.staff_bio|safe }}
 
         <p>
           <strong>Party:</strong> {{ app.questionnaire.candidate_party }}
         </p>
 
-        <p>
-          <strong>Political Questionnaire:</strong>
-          {% url 'admin:nominations_questionnaire_change' app.questionnaire.id as link_path %}
-          <a href="{{ base_url }}{{ link_path }}">Attached.</a>
-        </p>
+      </section>
+
+      <section>
+
+        <div>
+
+          <strong>Bio:</strong><br />
+
+          {{ app.staff_bio|safe }}
+
+        </div>
+
+      </section>
+
+      <section>
 
         <p>
-          <strong>City:</strong> {{ app.candidate_city }}
-        </p>
-
-        <p>
-          <strong>State:</strong> {{ app.candidate_state }}
-        </p>
-
-        <p>
-          <strong>Has the candidate ever held public office?</strong>
-          {{ app.questionnaire.candidate_held_office|yesno:"Yes, No, Unknown" }}
+          <strong>Issues:</strong><br />
+          {{ app.questionnaire.campaign_issues }}
         </p>
 
       </section>
 
       <section>
 
-      <ul>
+        <div>
 
-        <li>
-          Previous Election Advantage: {{app.vol_advantage}}
-        </li>
+          <strong>Vet:</strong> {{ app.get_vet_status_display }}<br />
 
-        <li>
-          Polling: {{app.vol_polling}}
-        </li>
+          <em>Conducted by Spiros Consulting and Research</em><br />
 
-        <li>
-          Previous Election Turnout: {{ app.vol_turnout|intcomma }}
-        </li>
+          {{ app.vet|safe }}
+        </div>
 
-        <li>
-          Win Number: {{ app.vol_win_number|intcomma }}
-        </li>
-
-        <li>
-          Candidate is incumbent?
-          {{ app.vol_incumbent|yesno:"Yes, No, Unknown" }}
-        </li>
-
-        <li>
-          Dem challenger? {{ app.vol_dem_challenger|yesno:"Yes, No, Unknown" }}
-        </li>
-
-      </ul>
-
-    </section>
-
-    <section>
-
-      <h2>OR Local Group Info</h2>
-
-      <p>
-        {{app.group}}
-      </p>
-
-      <h3>Local Endorsement Process</h3>
-
-      {{ app.local_group_info|safe }}
-
-      <h3>Commitments from group</h3>
-
-      {{ app.local_support|safe }}
 
       </section>
 
       <section>
 
-        <h2>Vet</h2>
+        <div>
 
-        <p>
-           {{ app.get_vet_status_display }}
-        </p>
+          <strong>Local Support:</strong><br />
 
-        {{ app.vet|safe }}
+          {{ app.local_support|safe }}
 
-        <p>
-          Conducted by volunteers: {{ app.vol_crimes }}
-        </p>
-
-      </section>
-
-      <section>
-
-        <h2>Endorsements</h2>
-
-        <p>
-         {{ app.vol_endorsements }}
-        </p>
-
-      </section>
-
-      <section>
-
-        <h2>Staff Notes</h2>
-
-        {{ app.staff_notes|safe }}
+        </div>
 
       </section>
 

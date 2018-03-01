@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from collections import defaultdict
+from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField
@@ -139,6 +140,15 @@ class Questionnaire(models.Model):
             return str(app) + ' Questionnaire'
         except:
             return 'Questionnaire ' + str(self.pk)
+
+    """Get response to question about issues, or None"""
+    def _campaign_issues(self, *args, **kwargs):
+        response = self.response_set.filter(
+            question_id=settings.NOMINATIONS_QUESTION_ISSUES_ID,
+        ).first()
+        position = response.position if response else None
+        return position
+    campaign_issues = property(_campaign_issues)
 
     def save(self, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)

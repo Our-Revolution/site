@@ -261,6 +261,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
 
+"""ID of 'Briefly list important local issues...' Question"""
+NOMINATIONS_QUESTION_ISSUES_ID = 24
+
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 RESULTS_URL = '/results/'
