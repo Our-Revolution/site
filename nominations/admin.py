@@ -272,7 +272,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             ),
             url(
                 r'^bulk-status-change/(?P<status>[\w-]+)/$',
-                staff_member_required(ApplicationsStatusChangeView.as_view()),
+                ApplicationsStatusChangeView.as_view(),
             ),
         ]
         return my_urls + urls
