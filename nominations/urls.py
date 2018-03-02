@@ -1,8 +1,7 @@
 from django.conf.urls import include, url
-from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire, ApplicationPDFView
+from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
 from django.views.generic import TemplateView
 from .decorators import is_authenticated, is_authenticated_candidate
-from django.contrib.admin.views.decorators import staff_member_required
 
 # placeholder urls to code templates
 urlpatterns = [
@@ -37,5 +36,4 @@ urlpatterns = [
         url(r'^new/$', is_authenticated(CreateInitiativeView.as_view())),
         url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
     ])),
-    url(r'^admin/application_export/$', staff_member_required(ApplicationPDFView.as_view())),
 ]

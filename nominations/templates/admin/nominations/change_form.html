@@ -33,7 +33,7 @@
         <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
     </li>
     <li>
-      <a href="/admin/application_export?id={{original.pk}}" class="historylink">{% trans "Export Write-Up" %}</a>
+      <a href="/admin/nominations/application/export/pdf?id={{original.pk}}" class="historylink">{% trans "Export Write-Up" %}</a>
     </li>
     {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
     {% endblock %}
