@@ -1,20 +1,12 @@
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 from .forms import ApplicationsStatusChangeForm
-from .models import Application, Nomination, InitiativeApplication
-import json, os
-from urlparse import urlparse
-from django.utils.decorators import method_decorator
-from django.template.loader import get_template
-from django.template import Context
-
+from .models import Application
 from easy_pdf.views import PDFTemplateView
-
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,7 +30,6 @@ class ApplicationPDFView(PDFTemplateView):
             base_url=settings.BASE_URL,
             **kwargs
         )
-
 
 
 class ApplicationsStatusChangeView(PermissionRequiredMixin, FormView):

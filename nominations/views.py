@@ -13,9 +13,6 @@ from .decorators import is_authenticated
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
-
-from easy_pdf.views import PDFTemplateView
-
 import logging
 
 logger = logging.getLogger(__name__)
