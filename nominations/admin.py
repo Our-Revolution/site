@@ -1,8 +1,7 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 from collections import OrderedDict
 from django.conf import settings
 from django.contrib import admin
-from django.urls import reverse_lazy
 from datetime import datetime
 from django.db.models import Q
 from .models import *
@@ -10,7 +9,6 @@ from .admin_views import ApplicationPDFView, ApplicationsStatusChangeView
 from local_groups.models import Group
 from local_groups.actions import export_as_csv_action
 import pprint
-from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 
