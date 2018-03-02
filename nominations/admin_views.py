@@ -55,5 +55,6 @@ class ApplicationsStatusChangeView(PermissionRequiredMixin, FormView):
     def form_valid(self, form):
         status = self.kwargs['status']
         ids = self.request.GET.getlist('id')
+        """TODO: validate params"""
         Application.objects.filter(pk__in=ids).update(status=status)
         return HttpResponseRedirect(self.get_success_url())
