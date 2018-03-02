@@ -341,3 +341,7 @@ class InitiativeApplicationForm(forms.ModelForm):
         widgets = {
             'election_date': DateInput(),
         }
+
+
+class ApplicationsStatusChangeForm(forms.Form):
+    confirm = forms.BooleanField(required=True)

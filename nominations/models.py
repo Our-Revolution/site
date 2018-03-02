@@ -617,6 +617,12 @@ class Application(models.Model):
         super(Application, self).save(*args, **kwargs)
 
     class Meta:
+        permissions = (
+            (
+                "bulk_change_application_status",
+                "Can bulk change status of applications"
+            ),
+        )
         verbose_name = 'Candidate Application'
 
 

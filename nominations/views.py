@@ -501,21 +501,21 @@ class CreateInitiativeView(CreateView):
 
 
 
-class ApplicationPDFView(PDFTemplateView):
-
-    template_name = 'admin/application_pdf.html'
-
-    def get_context_data(self, **kwargs):
-        app_id = self.request.GET.get('id')
-        app = get_object_or_404(
-            Application.objects.select_related(),
-            pk=app_id
-        )
-
-        return super(ApplicationPDFView, self).get_context_data(
-            pagesize='letter',
-            title=app,
-            app=app,
-            base_url=settings.BASE_URL,
-            **kwargs
-        )
+# class ApplicationPDFView(PDFTemplateView):
+#
+#     template_name = 'admin/application_pdf.html'
+#
+#     def get_context_data(self, **kwargs):
+#         app_id = self.request.GET.get('id')
+#         app = get_object_or_404(
+#             Application.objects.select_related(),
+#             pk=app_id
+#         )
+#
+#         return super(ApplicationPDFView, self).get_context_data(
+#             pagesize='letter',
+#             title=app,
+#             app=app,
+#             base_url=settings.BASE_URL,
+#             **kwargs
+#         )

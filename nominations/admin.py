@@ -1,12 +1,18 @@
+from django.conf.urls import include, url
 from collections import OrderedDict
 from django.conf import settings
 from django.contrib import admin
+from django.urls import reverse_lazy
 from datetime import datetime
 from django.db.models import Q
 from .models import *
+from .admin_views import ApplicationPDFView, ApplicationsStatusChangeView
 from local_groups.models import Group
 from local_groups.actions import export_as_csv_action
 import pprint
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseRedirect
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 class ReadOnlyAdmin(admin.ModelAdmin):
@@ -257,25 +263,48 @@ class ApplicationCandidateInline(admin.StackedInline):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
 
+    def get_urls(self):
+        urls = super(ApplicationAdmin, self).get_urls()
+        my_urls = [
+            url(
+                r'^export/pdf/$',
+                staff_member_required(ApplicationPDFView.as_view())
+            ),
+            url(
+                r'^bulk-status-change/(?P<status>[\w-]+)/$',
+                staff_member_required(ApplicationsStatusChangeView.as_view()),
+            ),
+        ]
+        return my_urls + urls
+
+    def _set_to_status(self, request, status):
+        selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+        return HttpResponseRedirect(
+            "/admin/nominations/application/bulk-status-change/%s/?id=%s" % (
+                status,
+                "&id=".join(selected)
+            )
+        )
+
     def set_to_needs_research(self, request, queryset):
-        queryset.update(status='needs-research')
+        return self._set_to_status(request, 'needs-research')
 
     def set_to_needs_staff_review(self, request, queryset):
-        queryset.update(status='needs-staff-review')
+        return self._set_to_status(request, 'needs-staff-review')
 
     def set_to_approved(self, request, queryset):
-        queryset.update(status='approved')
+        return self._set_to_status(request, 'approved')
     set_to_approved.short_description = "Set to endorsed"
 
     def set_to_removed(self, request, queryset):
-        queryset.update(status='removed')
+        return self._set_to_status(request, 'removed')
     set_to_removed.short_description = "Set to not endorsed"
 
     def set_to_expired(self, request, queryset):
-        queryset.update(status='expired')
+        return self._set_to_status(request, 'expired')
 
     def set_to_hold(self, request, queryset):
-        queryset.update(status='hold')
+        return self._set_to_status(request, 'hold')
 
     exclude = ('user_id',)
 
