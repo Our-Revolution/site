@@ -10212,12 +10212,11 @@ div.recurrence-widget {
 .election-tracker .card__content {
   padding: 10px 75px 10px 10px; }
 
-.election-tracker .card__content.initiative {
-  height: auto; }
-  .election-tracker .card__content.initiative .icon {
-    margin-left: 0; }
-  .election-tracker .card__content.initiative .card__item {
-    margin-left: 35px; }
+.election-tracker .card__content.initiative .icon {
+  margin-left: 0; }
+
+.election-tracker .card__content.initiative .card__item {
+  margin-left: 35px; }
 
 .election-tracker .card__results--seperator {
   -webkit-align-self: center;

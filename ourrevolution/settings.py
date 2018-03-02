@@ -265,7 +265,8 @@ BASE_URL = 'http://localhost:8000' if os.environ.get('env', 'development') != 'p
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
+MEDIA_URL = 'https://s3.amazonaws.com/our-revolution-dot-com/'
+# MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
 
 """ID of 'Briefly list important local issues...' Question"""
 NOMINATIONS_QUESTION_ISSUES_ID = 24
