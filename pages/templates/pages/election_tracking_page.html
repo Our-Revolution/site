@@ -297,6 +297,7 @@
             </div>
         </div>
 
+        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.js"></script>
 
         <script>
@@ -343,12 +344,12 @@
               list.on("updated", function(list) {
                 console.log('test');
                 if (list.matchingItems.length > 0) {
-                  $('.no-result').hide()
+                  $('.no-result').hide();
                 } else {
-                  $('.no-result').show()
+                  $('.no-result').show();
                 }
-              })
-            })
+              });
+            });
 
             var sortingBy = "state";
             var sortingAsc = true;
