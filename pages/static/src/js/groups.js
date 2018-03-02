@@ -65,7 +65,7 @@ module.exports = function() {
       return;
     } else {
       $('.groups-map__intro').addClass('collapsed');
-      map.flyTo([place.geometry.location.lat(), place.geometry.location.lng()], 9, {duration:1});
+      map.flyTo([place.geometry.location.lat(), place.geometry.location.lng()], 10, {duration:1});
     }
   }
 
@@ -204,7 +204,7 @@ module.exports = function() {
       $('.groups-map-info__status').append('\
         <div class="groups-map__add relative">\
         <h4 class="mt0">We couldn\'t find any groups here.</h4>\
-        <p class="mb20">Try searching a different city, zooming out, or using the buttons below to start your own group.</p>\
+        <p class="mb20">Try searching for a different city, zooming out, or using the buttons below to start your own group.</p>\
         <a href="https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit" class="btn btn-block btn-primary uppercase ls2" target="_blank" onclick="trackOutboundLink(\'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit\', true)">Start a group</a>\
         <a href="/groups/new" class="btn btn-block btn-secondary uppercase ls2">Add your group</a>\
       </div>');
