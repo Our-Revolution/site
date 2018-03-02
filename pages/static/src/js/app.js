@@ -5,12 +5,11 @@ window.smoothScroll = require('smooth-scroll');
 window.Groups = require('./groups.js');
 
 var bootstrap = require('bootstrap-sass'),
-  List = require('list.js'),
   validator = require('bootstrap-validator');
 
-window.initAutocomplete = function initAutocomplete() {		
+window.initAutocomplete = function initAutocomplete() {
   var input = document.getElementById('autocomplete-input');
-  
+
   window.autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */(input),
     {
