@@ -1,0 +1,55 @@
+{% load pages_tags wagtailcore_tags %}
+
+{% with candidate_race_snippet.candidate_race as candidate_race %}
+
+<li class="card clearfix">
+  {% if candidate_race.candidate_endorsement_page %}
+  <a href="{% pageurl candidate_race.candidate_endorsement_page %}">
+  {% else %}
+  <a href="{% candidates_url %}{{ candidate_race.candidate.slug }}">
+  {% endif %}
+
+  <div class="card__photo"
+  style="background-image: url('{{ candidate_race.candidate_photo_url }}')">
+
+  </div>
+
+  <div class="card__content">
+    <div class="candidate__info">
+      <span class="card__item name wins" sort-by="wins">{{ candidate_race.candidate_name }}</span>
+      <span class="card__item bold smaller"><span class="state">{{ candidate_race.state_or_territory }}</span></span>
+      <span class="card__item bottom">{{ candidate_race.office }}</span>
+    </div>
+
+  </div>
+
+  <div class="card__results {% if candidate_race.result %}
+    {{ candidate_race.get_result_display }}
+  {% endif %}" {% if candidate_race.result %}
+  data-won="{{ candidate_race.get_result_display }}"
+  {% endif %}>
+
+      <div class="card__results--status clearfix">
+        <div class="card__results--reporting pull-left">
+
+          {% if 'win' in candidate_race.result %}
+          <span class="uppercase ls2 boldest">
+            Won
+          </span>
+          {% elif 'lose' in candidate_race.result %}
+          <span class="uppercase ls2 boldest">
+            Lost
+          </span>
+          {% elif candidate_race.notes %}
+          {{ candidate_race.notes }}
+          {% endif %}
+
+        </div>
+      </div>
+
+  </div>
+
+  </a>
+
+</li>
+{% endwith %}

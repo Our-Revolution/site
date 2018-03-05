@@ -10116,12 +10116,6 @@ div.recurrence-widget {
       .election-tracker .card-list.third .card:nth-child(2n) {
         margin-right: 0; } }
 
-.election-tracker .card-list .card:hover {
-  -webkit-transform: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-  opacity: 1; }
-
 .election-tracker .status-indicator {
   font-size: 1.25em;
   position: relative;
@@ -10209,15 +10203,13 @@ div.recurrence-widget {
   float: left;
   border-radius: 3px 0 0; }
 
-.election-tracker .card__content {
-  padding: 10px 75px 10px 10px; }
+.election-tracker .card__content.initiative .icon {
+  height: 40px;
+  margin: 20px 0 0 20px;
+  width: 40px; }
 
-.election-tracker .card__content.initiative {
-  height: auto; }
-  .election-tracker .card__content.initiative .icon {
-    margin-left: 0; }
-  .election-tracker .card__content.initiative .card__item {
-    margin-left: 35px; }
+.election-tracker .card__content.initiative .card__item {
+  margin-left: 100px; }
 
 .election-tracker .card__results--seperator {
   -webkit-align-self: center;
