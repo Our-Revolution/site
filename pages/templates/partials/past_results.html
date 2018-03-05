@@ -12,20 +12,29 @@
                 Past Election Results
               </h2>
 
-              <a href="{% results_url %}"
-              class="btn btn-block btn-primary ls2 uppercase">
+              {% results_url as link_url %}
+              {% if link_url != request.path %}
+              <a href="{{ link_url }}"
+              class="btn btn-block btn-secondary ls2 uppercase">
               2018 Results
               </a>
+              {% endif %}
 
-              <a href="{% results_2017_url %}"
+              {% results_2017_url as link_url %}
+              {% if link_url != request.path %}
+              <a href="{{ link_url }}"
               class="btn btn-block btn-secondary ls2 uppercase">
               2017 Results
               </a>
+              {% endif %}
 
-              <a href="{% results_2016_url %}"
+              {% results_2016_url as link_url %}
+              {% if link_url != request.path %}
+              <a href="{{ link_url }}"
               class="btn btn-block btn-secondary ls2 uppercase">
               2016 Results
               </a>
+              {% endif %}
 
               <hr>
 
@@ -38,7 +47,9 @@
               </p>
 
               <a href="/groups/nominations"
-              class="btn btn-secondary btn-block ls2 uppercase mt20">Get Started</a>
+              class="btn btn-primary btn-block ls2 uppercase mt20">
+                Get Started
+              </a>
 
               <p class="mt20">
                 <small>
