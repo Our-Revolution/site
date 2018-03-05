@@ -127,29 +127,11 @@
                             </div>
 
                     </div>
-
-                    <hr>
-
-                    <div class="mb20">
-                      <a href="{% results_url %}"
-                      class="btn btn-block btn-secondary ls2 uppercase">
-                      2018 Results
-                      </a>
-
-                      <a href="{% results_2017_url %}"
-                      class="btn btn-block btn-secondary ls2 uppercase">
-                      2017 Results
-                      </a>
-
-                      <a href="{% results_2016_url %}"
-                      class="btn btn-block btn-secondary ls2 uppercase">
-                      2016 Results
-                      </a>
-                    </div>
-
                 </div>
             </div>
         </div>
+
+        {% include "partials/past_results.html" %}
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.js"></script>
