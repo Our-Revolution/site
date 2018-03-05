@@ -66,11 +66,6 @@
 
   }
 
-  .card-list .card:hover {
-    transform: scale(1);
-    opacity: 1;
-  }
-
   .status-indicator {
     font-size: 1.25em;
     position: relative;
@@ -162,20 +157,16 @@
     }
   }
 
-  .card__content {
-    // background: #fafafa;
-    // border-width: 1px 1px 0 1px;
-    padding: 10px 75px 10px 10px;
-  }
-
   .card__content.initiative {
 
     .icon {
-      margin-left: 0;
+      height: 40px;
+      margin: 20px 0 0 20px;
+      width: 40px;
     }
 
     .card__item {
-      margin-left: 35px;
+      margin-left: 100px;
     }
   }
 

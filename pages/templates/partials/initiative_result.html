@@ -10,15 +10,15 @@
           {% else %}
           <a href="/ballot-initiatives/{{ initiative.slug }}">
           {% endif %}
+
           <div class="card__content full initiative">
             <div>
               <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
-              <span class="card__item bold name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
+              <span class="card__item name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
             </div>
-            <span class="card__item state">{{ initiative.state }} {{ initiative.district }}</span>
+            <span class="card__item bold smaller state">{{ initiative.state }} {{ initiative.district }}</span>
 
           </div>
-          </a>
 
           <div class="card__results {% if initiative_race.result %}
             {{ initiative_race.get_result_display }}
@@ -43,6 +43,9 @@
               </div>
 
           </div>
+
+          </a>
+
         </li>
 
     {% endwith %}
