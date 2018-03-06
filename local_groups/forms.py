@@ -4,10 +4,17 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.gis.geos import Point
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
+from bsd.api import BSD
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 import os
 import requests
+import logging
+
+# Get bsd api
+bsdApi = BSD().api
+
+logger = logging.getLogger(__name__)
 
 
 class HTML5DateInput(widgets.DateInput):
@@ -210,3 +217,49 @@ class SlackInviteForm(forms.Form):
         channel_choices.insert(0, (None, 'None'))
 
         self.fields['state'].choices = channel_choices
+
+
+class PasswordChangeForm(forms.Form):
+    """
+    Custom password change form for Organizing Hub users
+
+    Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/forms.py#L295
+    """
+    error_messages = {
+        'password_mismatch': _("The two password fields didn't match."),
+    }
+    new_password_max_length = 128
+    new_password_min_length = 4
+    new_password1 = forms.CharField(
+        label=_("New password"),
+        max_length=new_password_max_length,
+        min_length=new_password_min_length,
+        widget=forms.PasswordInput,
+        strip=False,
+        # help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        label=_("New password confirmation"),
+        max_length=new_password_max_length,
+        min_length=new_password_min_length,
+        strip=False,
+        widget=forms.PasswordInput,
+    )
+    old_password = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autofocus': ''}),
+    )
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        # password_validation.validate_password(password2, self.user)
+        return password2
+
+    field_order = ['old_password', 'new_password1', 'new_password2']

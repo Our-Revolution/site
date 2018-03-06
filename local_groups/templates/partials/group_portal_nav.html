@@ -6,6 +6,8 @@
   Dashboard
   </a>
 
+  {% if request.user.is_authenticated %}
+
   {% if group %}
 
   {% url 'groups-manage' group.slug as link_url %}
@@ -16,12 +18,22 @@
 
   {% endif %}
 
-  <a class="list-group-item {% if organizing_guides_url == request.path %}active{% endif %}"
-  href="{{ organizing_guides_url }}">
-  Organizing Guides
+  {% url 'groups-password-change' as link_url %}
+  <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
+  href="{{ link_url }}">
+    Change Password
   </a>
 
-  <a class="list-group-item {% if organizing_docs_url == request.path %}active{% endif %}" href="{{ organizing_docs_url }}">
+  {% endif %}
+
+  <a class="list-group-item {% if organizing_guides_url == request.path %}active{% endif %}"
+  href="{{ organizing_guides_url }}">
+    Organizing Guides
+  </a>
+
+  <a class="list-group-item {% if organizing_docs_url == request.path %}active{% endif %}"
+  href="{{ organizing_docs_url }}">
     Documentation
   </a>
+
 </div>

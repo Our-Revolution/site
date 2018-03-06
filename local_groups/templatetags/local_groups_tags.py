@@ -20,13 +20,32 @@ def event_create_enabled():
     return settings.EVENT_CREATE_ENABLED
 
 
+def find_group_by_email(email):
+    # Case insensitive search by group rep email for approved groups
+    group = Group.objects.filter(
+        rep_email__iexact=email,
+        status__exact='approved',
+    ).first()
+    return group
+
+
+# Organizing Hub templates
+@register.inclusion_tag('partials/group_link.html', takes_context=True)
+def group_link(context):
+
+    group = find_group_by_email(context['request'].user.email)
+
+    return {
+        'group': group,
+        'request': context['request'],
+    }
+
+
 # Organizing Hub Navigation menu
 @register.inclusion_tag('partials/group_portal_nav.html', takes_context=True)
 def group_portal_nav(context):
 
-    group = Group.objects.filter(
-        rep_email__iexact=context['request'].user.email
-    ).first()
+    group = find_group_by_email(context['request'].user.email)
 
     return {
         'group': group,
