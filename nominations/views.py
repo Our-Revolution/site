@@ -340,7 +340,13 @@ def reset_questionnaire(request):
     questionnaire.status = 'incomplete'
     questionnaire.save()
 
-    return redirect('/groups/nominations/questionnaire/edit?id=' + app_id)
+    # if next query string exists, redirect there after
+    next_url = request.GET.get(
+        'next',
+        '/groups/nominations/questionnaire/edit?id=' + app_id
+    )
+
+    return redirect(next_url)
 
 def handle_candidate_callback(request):
     code = request.GET.get('code')
