@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
 from django.http import HttpResponseRedirect
 from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
@@ -448,12 +449,19 @@ class CandidateSubmitView(FormView):
         rep_email = application.rep_email
         rep_name = application.rep_first_name + ' ' + application.rep_last_name
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
+        nominations_submit_url = self.request.build_absolute_uri(
+            reverse_lazy('nominations-submit') + ('?id=%i' % application.id)
+        )
 
         # send email to group
         plaintext = get_template('email/group_email.txt')
         htmly     = get_template('email/group_email.html')
 
-        d = Context({'rep_name': rep_name,'candidate_name':candidate_name})
+        d = Context({
+            'rep_name': rep_name,
+            'candidate_name': candidate_name,
+            'nominations_submit_url': nominations_submit_url,
+        })
 
         subject= candidate_name + " has completed your candidate questionnaire!"
         from_email='Our Revolution <info@ourrevolution.com>'
