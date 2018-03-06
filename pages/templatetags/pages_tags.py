@@ -6,6 +6,11 @@ register = template.Library()
 
 
 @register.simple_tag
+def add_group_url():
+    return settings.ADD_GROUP_URL
+
+
+@register.simple_tag
 def candidates_url():
     return settings.CANDIDATES_URL
 
@@ -46,3 +51,8 @@ def results_2016_url():
 @register.simple_tag
 def results_2017_url():
     return settings.RESULTS_2017_URL
+
+
+@register.simple_tag
+def start_group_url():
+    return settings.START_GROUP_URL
