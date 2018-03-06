@@ -116,14 +116,14 @@
 
 {% block footer_scripts %}
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
 <script>
   var sortingBy = "featured";
   var sortingAsc = true;
   // Functions
   function fuzzySearch(e) {
-	initiativesList.fuzzySearch.search(e.value);
+	initiativesList.search(e.value);
   }
   function sort(sortBy) {
 	if (sortingBy === sortBy) {
@@ -194,9 +194,6 @@
 		'vote',
 		'category',
 		{ name: 'featured', data: 'is-featured' }
-	  ],
-	  plugins: [
-		ListFuzzySearch()
 	  ]
   };
   var initiativesList = new List('initiatives-list', options);
@@ -217,7 +214,7 @@
 	  $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
 	}
 	$("#fuzzy-search").val("");
-	initiativesList.fuzzySearch.search();
+	initiativesList.search();
 	var category = $(e.target).closest("li").attr("category") || false;
 	if (category) {
 	  setActive(category);

@@ -131,9 +131,9 @@
         </div>
 
         {% include "partials/past_results.html" %}
-
-        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.js"></script>
+        
+        {# TODO: remove vendor folder from js #}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
         <script>
 
@@ -177,9 +177,6 @@
                   'name',
                   'state',
                   { attr: 'sort-by', data: 'wins' }
-                ],
-                plugins: [
-                  ListFuzzySearch()
                 ]
             };
 
@@ -190,7 +187,7 @@
             // sorting
             // Functions
             function fuzzySearch(e) {
-              list.fuzzySearch.search(e.value);
+              list.search(e.value);
             }
 
             function sort(sortBy) {

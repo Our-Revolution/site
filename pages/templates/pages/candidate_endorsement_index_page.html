@@ -116,7 +116,7 @@
   var sortingAsc = true;
   // Functions
   function fuzzySearch(e) {
-    candidatesList.fuzzySearch.search(e.value);
+    candidatesList.search(e.value);
   }
   function sort(sortBy) {
     if (sortingBy === sortBy) {
@@ -211,7 +211,7 @@
       $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
     }
     $("#fuzzy-search").val("");
-    candidatesList.fuzzySearch.search();
+    candidatesList.search();
     var category = $(e.target).closest("li").attr("category") || false;
     if (category) {
       setActive(category);
