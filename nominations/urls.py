@@ -6,7 +6,11 @@ from .decorators import is_authenticated, is_authenticated_candidate
 # placeholder urls to code templates
 urlpatterns = [
     url(r'^groups/nominations/', include([
-        url(r'^submit/$', is_authenticated(SubmitView.as_view())),
+        url(
+            r'^submit/$',
+            is_authenticated(SubmitView.as_view()),
+            name='nominations-submit',
+        ),
         url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
         url(r'^email-success/$', is_authenticated(TemplateView.as_view(template_name='email-success.html'))),
         url(r'^dashboard/$', is_authenticated(DashboardView.as_view())),
