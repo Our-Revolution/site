@@ -132,7 +132,7 @@
 
         {% include "partials/past_results.html" %}
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/list.fuzzysearch.js/0.1.0/list.fuzzysearch.js"></script>
 
         <script>
@@ -194,6 +194,8 @@
             }
 
             function sort(sortBy) {
+              console.log(sortBy);
+              console.log(sortingBy);
             if (sortingBy === sortBy) {
               if (sortingAsc) {
                 list.sort(sortBy, { order: 'desc'});
