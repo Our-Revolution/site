@@ -270,11 +270,13 @@ MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' el
 """ID of 'Briefly list important local issues...' Question"""
 NOMINATIONS_QUESTION_ISSUES_ID = 24
 
+ADD_GROUP_URL = '/groups/new/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 RESULTS_URL = '/results/'
 RESULTS_2016_URL = '/election-2016/'
 RESULTS_2017_URL = '/2017-elections-results/'
+START_GROUP_URL = 'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit'
 
 if os.environ.get('env', 'development') == 'production':
 
