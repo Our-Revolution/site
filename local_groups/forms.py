@@ -202,7 +202,7 @@ class PasswordChangeForm(forms.Form):
         'password_mismatch': _("The two password fields didn't match."),
     }
     new_password_max_length = 100
-    new_password_min_length = 15
+    new_password_min_length = 8
     new_password1 = forms.CharField(
         label=_("New password"),
         help_text='''
