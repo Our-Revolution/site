@@ -6,6 +6,7 @@ from .views import (
     EventCreateView,
     GroupDashboardView,
     GroupManageView,
+    PasswordChangeView,
     SlackInviteView,
     VerifyEmailRequestView,
     VerifyEmailConfirmView
@@ -22,6 +23,11 @@ if settings.BSD_LOGIN_ENABLED:
                 r'^$',
                 GroupDashboardView.as_view(),
                 name='groups-dashboard'
+            ),
+            url(
+                r'^change-password/',
+                PasswordChangeView.as_view(),
+                name='groups-password-change',
             ),
             url(r'^event/', include([
                 url(

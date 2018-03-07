@@ -10,15 +10,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
+from bsd.api import BSD
 from bsd.models import BSDProfile
 from .decorators import verified_email_required
-from .forms import EventForm, GroupManageForm, SlackInviteForm
+from .forms import (
+    EventForm,
+    GroupManageForm,
+    PasswordChangeForm,
+    SlackInviteForm,
+)
 from .models import Event, Group
 import datetime
 import os
 import requests
 import logging
 
+# Get bsd api
+bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
@@ -62,14 +72,6 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             )
             return redirect('groups-event-create')
 
-    def get_context_data(self, **kwargs):
-        context = super(EventCreateView, self).get_context_data(**kwargs)
-        # Case insensitive check for group rep email matches user email
-        context['group'] = Group.objects.filter(
-            rep_email__iexact=self.request.user.email
-        ).first()
-        return context
-
     def get_initial(self, *args, **kwargs):
         initial = {
             'start_day': datetime.date.today() + datetime.timedelta(days=4),
@@ -112,15 +114,6 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class GroupDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "group_dashboard.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(GroupDashboardView, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            # Case insensitive check for group rep email matches user email
-            context['group'] = Group.objects.filter(
-                rep_email__iexact=self.request.user.email
-            ).first()
-        return context
-
 
 # View for Admin updates to Group Info
 @method_decorator(verified_email_required, name='dispatch')
@@ -161,6 +154,80 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return super(GroupManageView, self).post(request, *args, **kwargs)
         else:
             return self.redirect_user()
+
+
+class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    form_class = PasswordChangeForm
+    success_message = "Your password has been updated successfully."
+    success_url = reverse_lazy('groups-dashboard')
+    template_name = "password_change.html"
+
+    def check_old_password(self, form):
+        """Check if old password is valid in BSD"""
+        username = self.request.user.email
+        old_password = form.cleaned_data['old_password']
+        checkCredentialsResult = bsdApi.account_checkCredentials(
+            username,
+            old_password
+        )
+
+        '''
+        Should get 200 response and constituent record
+
+        https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
+        '''
+        assert checkCredentialsResult.http_status is 200
+        tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
+        cons = tree.find('cons')
+        assert cons is not None
+        cons_id = cons.get('id')
+        assert cons_id is not None
+        assert cons.find('has_account').text == "1"
+        assert cons.find('is_banned').text == "0"
+
+    def set_new_password(self, form):
+        """Set new password in BSD"""
+        username = self.request.user.email
+        new_password = form.cleaned_data['new_password1']
+        setPasswordResult = bsdApi.account_setPassword(
+            username,
+            new_password
+        )
+        '''
+        Should get 204 response on success_url
+
+        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+        '''
+        assert setPasswordResult.http_status is 204
+
+    def form_valid(self, form):
+        """Check old password"""
+        try:
+            self.check_old_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error validating your old password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        """Set new password"""
+        try:
+            self.set_new_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error setting your new password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        return super(PasswordChangeView, self).form_valid(form)
 
 
 class SlackInviteView(FormView):
