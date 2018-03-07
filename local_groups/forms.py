@@ -209,7 +209,6 @@ class PasswordChangeForm(forms.Form):
         min_length=new_password_min_length,
         widget=forms.PasswordInput,
         strip=False,
-        # help_text=password_validation.password_validators_help_text_html(),
     )
     new_password2 = forms.CharField(
         label=_("New password confirmation"),
@@ -232,7 +231,6 @@ class PasswordChangeForm(forms.Form):
                     self.error_messages['password_mismatch'],
                     code='password_mismatch',
                 )
-        # password_validation.validate_password(password2, self.user)
         return password2
 
     field_order = ['old_password', 'new_password1', 'new_password2']
