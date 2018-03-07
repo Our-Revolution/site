@@ -337,8 +337,14 @@ def reset_questionnaire(request):
         messages.error(self.request, "We could not find your questionnaire. Please try again.")
         return redirect("/groups/nominations/dashboard?c=1")
 
+    # get the application attached to the questionnaire
+    # application = questionnaire.application_set.first()
+
     questionnaire.status = 'incomplete'
+    # application.authorized_email = None
     questionnaire.save()
+    # application.save()
+
 
     # if next query string exists, redirect there after
     next_url = request.GET.get(
