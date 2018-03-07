@@ -201,10 +201,14 @@ class PasswordChangeForm(forms.Form):
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
     }
-    new_password_max_length = 128
-    new_password_min_length = 4
+    new_password_max_length = 100
+    new_password_min_length = 8
     new_password1 = forms.CharField(
         label=_("New password"),
+        help_text='''
+        For strong password use at least 15 characters and multiple character
+        types.
+        ''',
         max_length=new_password_max_length,
         min_length=new_password_min_length,
         widget=forms.PasswordInput,
