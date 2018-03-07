@@ -1,6 +1,11 @@
 from django import forms
 from .models import Event, Group
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordResetForm,
+    UsernameField,
+)
+from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
@@ -192,7 +197,7 @@ class GroupManageForm(forms.ModelForm):
         }
 
 
-class PasswordChangeForm(forms.Form):
+class GroupPasswordChangeForm(forms.Form):
     """
     Custom password change form for Organizing Hub users
 
@@ -238,6 +243,23 @@ class PasswordChangeForm(forms.Form):
         return password2
 
     field_order = ['old_password', 'new_password1', 'new_password2']
+
+
+class GroupPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label=_("Group Leader Email"),
+        max_length=254
+    )
+
+    # todo: bsd account exists, but has never logged into hub, no user in db
+    def get_users(self, email):
+        """Given an email, return matching user(s) who should receive a reset.
+        This allows subclasses to more easily customize the default policies
+        that prevent inactive users and users with unusable passwords from
+        resetting their password.
+        """
+        active_users = User.objects.filter(email__iexact=email, is_active=True)
+        return active_users
 
 
 class SlackInviteForm(forms.Form):

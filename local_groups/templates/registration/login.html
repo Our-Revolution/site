@@ -45,8 +45,7 @@
 
           <div class="form-group">
             <p class="help-block fs14">
-              <a href="{% bsd_reset_password_url %}" target="_blank"
-              onclick="trackOutboundLink('{% bsd_reset_password_url %}',true)">
+              <a href="{% url 'password_reset' %}">
                 <strong>Need to reset password?</strong>
               </a>
             </p>
@@ -59,13 +58,7 @@
         </form>
       </div>
 
-      <p class="fs18">
-        Don't have an Our Revolution account?
-        <a href="{% bsd_create_account_url %}" target="_blank"
-        onclick="trackOutboundLink('{% bsd_create_account_url %}',true)">
-          <strong>Create one now.</strong>
-        </a>
-      </p>
+      {% include 'partials/create_account.html' %}
 
     </div>
   </div>

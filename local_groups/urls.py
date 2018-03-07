@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from .forms import GroupLoginForm
+from .forms import GroupLoginForm, GroupPasswordResetForm
 from .views import (
     EventCreateView,
     GroupDashboardView,
@@ -23,11 +23,6 @@ if settings.BSD_LOGIN_ENABLED:
                 r'^$',
                 GroupDashboardView.as_view(),
                 name='groups-dashboard'
-            ),
-            url(
-                r'^change-password/',
-                PasswordChangeView.as_view(),
-                name='groups-password-change',
             ),
             url(r'^event/', include([
                 url(
@@ -51,6 +46,36 @@ if settings.BSD_LOGIN_ENABLED:
                 {'next_page': 'groups-login'},
                 name='groups-logout'
             ),
+            url(r'^password/', include([
+                url(
+                    r'^change/',
+                    PasswordChangeView.as_view(),
+                    name='groups-password-change',
+                ),
+                url(r'^reset/', include([
+                    url(
+                        r'^$',
+                        auth_views.password_reset,
+                        {'password_reset_form': GroupPasswordResetForm},
+                        name='password_reset',
+                    ),
+                    url(
+                        r'^complete/',
+                        auth_views.password_reset_complete,
+                        name='password_reset_complete',
+                    ),
+                    url(
+                        r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+                        auth_views.password_reset_confirm,
+                        name='password_reset_confirm',
+                    ),
+                    url(
+                        r'^done/',
+                        auth_views.password_reset_done,
+                        name='password_reset_done',
+                    ),
+                ])),
+            ])),
             url(r'^verify-email/', include([
                 url(
                     r"^confirm/(?P<key>[-:\w]+)/$",

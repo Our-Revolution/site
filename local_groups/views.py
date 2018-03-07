@@ -18,7 +18,7 @@ from .decorators import verified_email_required
 from .forms import (
     EventForm,
     GroupManageForm,
-    PasswordChangeForm,
+    GroupPasswordChangeForm,
     SlackInviteForm,
 )
 from .models import Event, Group
@@ -157,7 +157,7 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
-    form_class = PasswordChangeForm
+    form_class = GroupPasswordChangeForm
     success_message = "Your password has been updated successfully."
     success_url = reverse_lazy('groups-dashboard')
     template_name = "password_change.html"
