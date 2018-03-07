@@ -4,15 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.gis.geos import Point
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
-from bsd.api import BSD
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 import os
 import requests
 import logging
 
-# Get bsd api
-bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
@@ -195,30 +192,6 @@ class GroupManageForm(forms.ModelForm):
         }
 
 
-class SlackInviteForm(forms.Form):
-    email = forms.EmailField(label="Your Email Address", help_text="We'll send your Slack invite here.")
-    full_name = forms.CharField(required=False, label="Your Full Name", help_text="Optional")
-    state = forms.ChoiceField(label="Invite me to a specific Slack channel", help_text="You can join others once you log in.",initial="C36GU58J0")
-
-    def __init__(self, *args, **kwargs):
-
-        super(SlackInviteForm, self).__init__(*args, **kwargs)
-
-        channel_names = {
-            'gis-nerdery': 'GIS Nerdery',
-            'nc-research': 'NC Research',
-            'techprojects': 'Tech Projects',
-        }
-
-        # fetch Slack channels
-        req = requests.get("https://slack.com/api/channels.list?token=%s" % os.environ['LOCAL_OR_ORGANIZING_API_TOKEN'])
-        channel_choices = [(c['id'], channel_names.get(c['name'], c['name'].replace('_', ' ').title())) for c in req.json()['channels']]
-
-        channel_choices.insert(0, (None, 'None'))
-
-        self.fields['state'].choices = channel_choices
-
-
 class PasswordChangeForm(forms.Form):
     """
     Custom password change form for Organizing Hub users
@@ -263,3 +236,27 @@ class PasswordChangeForm(forms.Form):
         return password2
 
     field_order = ['old_password', 'new_password1', 'new_password2']
+
+
+class SlackInviteForm(forms.Form):
+    email = forms.EmailField(label="Your Email Address", help_text="We'll send your Slack invite here.")
+    full_name = forms.CharField(required=False, label="Your Full Name", help_text="Optional")
+    state = forms.ChoiceField(label="Invite me to a specific Slack channel", help_text="You can join others once you log in.",initial="C36GU58J0")
+
+    def __init__(self, *args, **kwargs):
+
+        super(SlackInviteForm, self).__init__(*args, **kwargs)
+
+        channel_names = {
+            'gis-nerdery': 'GIS Nerdery',
+            'nc-research': 'NC Research',
+            'techprojects': 'Tech Projects',
+        }
+
+        # fetch Slack channels
+        req = requests.get("https://slack.com/api/channels.list?token=%s" % os.environ['LOCAL_OR_ORGANIZING_API_TOKEN'])
+        channel_choices = [(c['id'], channel_names.get(c['name'], c['name'].replace('_', ' ').title())) for c in req.json()['channels']]
+
+        channel_choices.insert(0, (None, 'None'))
+
+        self.fields['state'].choices = channel_choices

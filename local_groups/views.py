@@ -156,6 +156,80 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return self.redirect_user()
 
 
+class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    form_class = PasswordChangeForm
+    success_message = "Your password has been updated successfully."
+    success_url = reverse_lazy('groups-dashboard')
+    template_name = "password_change.html"
+
+    def check_old_password(self, form):
+        """Check if old password is valid in BSD"""
+        username = self.request.user.email
+        old_password = form.cleaned_data['old_password']
+        checkCredentialsResult = bsdApi.account_checkCredentials(
+            username,
+            old_password
+        )
+
+        '''
+        Should get 200 response and constituent record
+
+        https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
+        '''
+        assert checkCredentialsResult.http_status is 200
+        tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
+        cons = tree.find('cons')
+        assert cons is not None
+        cons_id = cons.get('id')
+        assert cons_id is not None
+        assert cons.find('has_account').text == "1"
+        assert cons.find('is_banned').text == "0"
+
+    def set_new_password(self, form):
+        """Set new password in BSD"""
+        username = self.request.user.email
+        new_password = form.cleaned_data['new_password1']
+        setPasswordResult = bsdApi.account_setPassword(
+            username,
+            new_password
+        )
+        '''
+        Should get 204 response on success_url
+
+        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+        '''
+        assert setPasswordResult.http_status is 204
+
+    def form_valid(self, form):
+        """Check old password"""
+        try:
+            self.check_old_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error validating your old password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        """Set new password"""
+        try:
+            self.set_new_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error setting your new password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        return super(PasswordChangeView, self).form_valid(form)
+
+
 class SlackInviteView(FormView):
     form_class = SlackInviteForm
     template_name = "slack_invite.html"
@@ -230,77 +304,3 @@ class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
                 '''
             )
             return redirect('groups-verify-email-request')
-
-
-class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
-    form_class = PasswordChangeForm
-    success_message = "Your password has been updated successfully."
-    success_url = reverse_lazy('groups-dashboard')
-    template_name = "password_change.html"
-
-    def check_old_password(self, form):
-        """Check if old password is valid in BSD"""
-        username = self.request.user.email
-        old_password = form.cleaned_data['old_password']
-        checkCredentialsResult = bsdApi.account_checkCredentials(
-            username,
-            old_password
-        )
-
-        '''
-        Should get 200 response and constituent record
-
-        https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
-        '''
-        assert checkCredentialsResult.http_status is 200
-        tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
-        cons = tree.find('cons')
-        assert cons is not None
-        cons_id = cons.get('id')
-        assert cons_id is not None
-        assert cons.find('has_account').text == "1"
-        assert cons.find('is_banned').text == "0"
-
-    def set_new_password(self, form):
-        """Set new password in BSD"""
-        username = self.request.user.email
-        new_password = form.cleaned_data['new_password1']
-        setPasswordResult = bsdApi.account_setPassword(
-            username,
-            new_password
-        )
-        '''
-        Should get 204 response on success_url
-
-        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
-        '''
-        assert setPasswordResult.http_status is 204
-
-    def form_valid(self, form):
-        """Check old password"""
-        try:
-            self.check_old_password(form)
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error validating your old password. Please make
-                sure all fields are filled with correct data and try again.
-                '''
-            )
-            return redirect('groups-password-change')
-
-        """Set new password"""
-        try:
-            self.set_new_password(form)
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error setting your new password. Please make
-                sure all fields are filled with correct data and try again.
-                '''
-            )
-            return redirect('groups-password-change')
-
-        return super(PasswordChangeView, self).form_valid(form)
