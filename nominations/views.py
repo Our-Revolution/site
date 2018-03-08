@@ -465,12 +465,14 @@ class CandidateQuestionnaireView(UpdateView):
         user = self.request.session['profile']
         email = user['email']
 
-        application = Application.objects.all().filter(
-            authorized_email__iexact=email,
-            pk=app_id
-        ).first()
-
-        questionnaire = application.questionnaire
+        try:
+            application = Application.objects.all().filter(
+                authorized_email__iexact=email,
+                pk=app_id
+            ).first()
+            questionnaire = application.questionnaire
+        except (Application.DoesNotExist, AttributeError):
+            questionnaire = None
 
         return questionnaire
 
