@@ -197,15 +197,16 @@ class GroupManageForm(forms.ModelForm):
         }
 
 
-class GroupPasswordChangeForm(forms.Form):
+class GroupPasswordResetForm(forms.Form):
     """
-    Custom password change form for Organizing Hub users
+    Custom password reset form for Organizing Hub users
 
     Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/forms.py#L295
     """
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
     }
+    field_order = ['new_password1', 'new_password2']
     new_password_max_length = 100
     new_password_min_length = 8
     new_password1 = forms.CharField(
@@ -226,10 +227,6 @@ class GroupPasswordChangeForm(forms.Form):
         strip=False,
         widget=forms.PasswordInput,
     )
-    old_password = forms.CharField(
-        strip=False,
-        widget=forms.PasswordInput(attrs={'autofocus': ''}),
-    )
 
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')
@@ -242,7 +239,19 @@ class GroupPasswordChangeForm(forms.Form):
                 )
         return password2
 
+
+class GroupPasswordChangeForm(GroupPasswordResetForm):
+    """
+    Custom password change form for Organizing Hub users
+
+    Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/forms.py#L295
+    """
     field_order = ['old_password', 'new_password1', 'new_password2']
+
+    old_password = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autofocus': ''}),
+    )
 
 
 class GroupPasswordResetForm(PasswordResetForm):
