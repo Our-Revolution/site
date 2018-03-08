@@ -388,7 +388,6 @@ def reset_questionnaire(request):
         return redirect('/groups/nominations/dashboard/')
 
     # get the application attached to the questionnaire
-    questionnaire = application.questionnaire
     questionnaire.status = 'incomplete'
     application.authorized_email = None
     questionnaire.save()
