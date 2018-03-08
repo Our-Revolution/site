@@ -246,15 +246,51 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
     success_url = reverse_lazy('groups-login')
     template_name = "registration/password_reset_confirm.html"
 
+    def form_invalid(self, form, user):
+        """
+        If the form is invalid, re-render the context data with the
+        data-filled form and errors.
+        """
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            email=user.email
+        ))
+
+    def form_valid(self, form, user):
+        try:
+            """Set new password in BSD"""
+            username = user.email
+            new_password = form.cleaned_data['new_password1']
+            setPasswordResult = bsdApi.account_setPassword(
+                username,
+                new_password
+            )
+            '''
+            Should get 204 response on success_url
+
+            https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+            '''
+            assert setPasswordResult.http_status is 204
+
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error resetting your password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        return super(GroupPasswordResetView, self).form_valid(form)
+
     def get(self, request, *args, **kwargs):
         """Get user if url is valid"""
         user = self.get_user_from_url(request)
         if user:
-            return super(GroupPasswordResetView, self).get(
-                request,
-                *args,
-                **kwargs
-            )
+            return self.render_to_response(self.get_context_data(
+                email=user.email
+            ))
         else:
             return self.redirect_user()
 
@@ -284,37 +320,15 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
         else:
             return None
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
         """Get user if url is valid"""
-        user = self.get_user_from_url(self.request)
-
+        user = self.get_user_from_url(request)
         if user:
-            try:
-                """Set new password in BSD"""
-                username = user.email
-                new_password = form.cleaned_data['new_password1']
-                setPasswordResult = bsdApi.account_setPassword(
-                    username,
-                    new_password
-                )
-                '''
-                Should get 204 response on success_url
-
-                https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
-                '''
-                assert setPasswordResult.http_status is 204
-
-            except AssertionError:
-                messages.error(
-                    self.request,
-                    '''
-                    There was an error setting your new password. Please make
-                    sure all fields are filled with correct data and try again.
-                    '''
-                )
-                return redirect('groups-password-change')
-
-            return super(GroupPasswordResetView, self).form_valid(form)
+            form = self.get_form()
+            if form.is_valid():
+                return self.form_valid(form, user)
+            else:
+                return self.form_invalid(form, user)
         else:
             return self.redirect_user()
 
