@@ -6,9 +6,14 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import ugettext as _
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
@@ -19,6 +24,7 @@ from .forms import (
     EventForm,
     GroupManageForm,
     GroupPasswordChangeForm,
+    GroupPasswordResetForm,
     SlackInviteForm,
 )
 from .models import Event, Group
@@ -156,7 +162,11 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return self.redirect_user()
 
 
-class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class GroupPasswordChangeView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    FormView
+):
     form_class = GroupPasswordChangeForm
     success_message = "Your password has been updated successfully."
     success_url = reverse_lazy('groups-dashboard')
@@ -227,7 +237,47 @@ class PasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, FormView):
             )
             return redirect('groups-password-change')
 
-        return super(PasswordChangeView, self).form_valid(form)
+        return super(GroupPasswordChangeView, self).form_valid(form)
+
+
+class GroupPasswordResetView(SuccessMessageMixin, FormView):
+    form_class = GroupPasswordResetForm
+    success_message = "Your password has been reset successfully."
+    success_url = reverse_lazy('groups-login')
+    template_name = "registration/password_reset_confirm.html"
+
+    """Verify that the url is valid and redirect if not."""
+    def dispatch(self, request, *args, **kwargs):
+        uidb64 = self.kwargs['uidb64']
+        token = self.kwargs['token']
+
+        """Check the hash in password reset link."""
+        UserModel = get_user_model()
+        assert uidb64 is not None and token is not None  # checked by URLconf
+
+        try:
+            # urlsafe_base64_decode() decodes to bytestring on Python 3
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        validlink = user is not None and default_token_generator.check_token(
+            user,
+            token
+        )
+
+        if validlink:
+            return super(GroupPasswordResetView, self).dispatch(request, *args, **kwargs)
+        else:
+            messages.error(
+                self.request,
+                '''
+                The password reset link was invalid, possibly because it has
+                already been used.  Please request a new password reset.
+                '''
+            )
+            return redirect('password_reset')
 
 
 class SlackInviteView(FormView):

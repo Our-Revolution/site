@@ -6,7 +6,8 @@ from .views import (
     EventCreateView,
     GroupDashboardView,
     GroupManageView,
-    PasswordChangeView,
+    GroupPasswordChangeView,
+    GroupPasswordResetView,
     SlackInviteView,
     VerifyEmailRequestView,
     VerifyEmailConfirmView
@@ -49,7 +50,7 @@ if settings.BSD_LOGIN_ENABLED:
             url(r'^password/', include([
                 url(
                     r'^change/',
-                    PasswordChangeView.as_view(),
+                    GroupPasswordChangeView.as_view(),
                     name='groups-password-change',
                 ),
                 url(r'^reset/', include([
@@ -66,7 +67,8 @@ if settings.BSD_LOGIN_ENABLED:
                     ),
                     url(
                         r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-                        auth_views.password_reset_confirm,
+                        # auth_views.password_reset_confirm,
+                        GroupPasswordResetView.as_view(),
                         name='password_reset_confirm',
                     ),
                     url(
