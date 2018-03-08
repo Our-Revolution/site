@@ -8,7 +8,7 @@ from django.views.generic import (
     DetailView,
     FormView
 )
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from .forms import (
     ApplicationForm,
     NominationForm,
@@ -46,6 +46,11 @@ auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
 auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
 auth0_candidate_callback_url = os.environ['AUTH0_CANDIDATE_CALLBACK_URL']
 
+QUESTIONNAIRE_NOT_FOUND_ERROR = """
+We couldn't find that questionnaire. Make sure you're logged in
+with the correct email address and that you have access to edit the current
+application.
+"""
 
 class NominationsIndexView(TemplateView):
     template_name = "index.html"
@@ -361,27 +366,33 @@ def reset_questionnaire(request):
     app_id = request.GET.get('id')
     user = request.session['profile']
     user_id = user['user_id']
-
-    try:
-        questionnaire = Application.objects.all().filter(user_id=user_id,pk=app_id).first().questionnaire
-    except (Application.DoesNotExist, KeyError):
-        # TODO: Fix the error thrown when no nomination
-        messages.error(self.request, "We could not find your questionnaire. Please try again.")
-        return redirect("/groups/nominations/dashboard?c=1")
-
-    # get the application attached to the questionnaire
-    application = questionnaire.application_set.first()
-
-    questionnaire.status = 'incomplete'
-    application.authorized_email = None
-    questionnaire.save()
-    application.save()
+    default_next_url = '/groups/nominations/questionnaire/edit?id=' + app_id
 
     # if next query string exists, redirect there after
     next_url = request.GET.get(
         'next',
-        '/groups/nominations/questionnaire/edit?id=' + app_id
+        default_next_url
     )
+
+    try:
+        application = Application.objects.all().filter(
+            user_id=user_id,
+            pk=app_id
+        ).first()
+        questionnaire = application.questionnaire
+    except (Application.DoesNotExist, AttributeError):
+        messages.error(
+            request,
+            QUESTIONNAIRE_NOT_FOUND_ERROR
+        )
+        return redirect('/groups/nominations/dashboard/')
+
+    # get the application attached to the questionnaire
+    questionnaire = application.questionnaire
+    questionnaire.status = 'incomplete'
+    application.authorized_email = None
+    questionnaire.save()
+    application.save()
 
     return redirect(next_url)
 
@@ -443,11 +454,7 @@ class CandidateQuestionnaireView(UpdateView):
         if not self.object:
             messages.error(
                 self.request,
-                """
-                We couldn't find that questionnaire. Make sure you're logged
-                with the email address you received the quetsionnaire at and
-                that you still have access to edit it.
-                """
+                QUESTIONNAIRE_NOT_FOUND_ERROR
             )
             return redirect("/groups/nominations/candidate/dashboard/")
         else:
