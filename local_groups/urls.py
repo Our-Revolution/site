@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from .forms import GroupLoginForm, GroupPasswordResetForm
+from .forms import GroupLoginForm, GroupPasswordResetRequestForm
 from .views import (
     EventCreateView,
     GroupDashboardView,
@@ -57,7 +57,7 @@ if settings.BSD_LOGIN_ENABLED:
                     url(
                         r'^$',
                         auth_views.password_reset,
-                        {'password_reset_form': GroupPasswordResetForm},
+                        {'password_reset_form': GroupPasswordResetRequestForm},
                         name='password_reset',
                     ),
                     url(
@@ -67,7 +67,6 @@ if settings.BSD_LOGIN_ENABLED:
                     ),
                     url(
                         r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-                        # auth_views.password_reset_confirm,
                         GroupPasswordResetView.as_view(),
                         name='password_reset_confirm',
                     ),

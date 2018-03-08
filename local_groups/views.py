@@ -246,8 +246,20 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
     success_url = reverse_lazy('groups-login')
     template_name = "registration/password_reset_confirm.html"
 
-    """Verify that the url is valid and redirect if not."""
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        """Get user if url is valid"""
+        user = self.get_user_from_url(request)
+        if user:
+            return super(GroupPasswordResetView, self).get(
+                request,
+                *args,
+                **kwargs
+            )
+        else:
+            return self.redirect_user()
+
+    """Verify that the url is valid and return user."""
+    def get_user_from_url(self, request, *args, **kwargs):
         uidb64 = self.kwargs['uidb64']
         token = self.kwargs['token']
 
@@ -268,16 +280,53 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
         )
 
         if validlink:
-            return super(GroupPasswordResetView, self).dispatch(request, *args, **kwargs)
+            return user
         else:
-            messages.error(
-                self.request,
+            return None
+
+    def form_valid(self, form):
+        """Get user if url is valid"""
+        user = self.get_user_from_url(self.request)
+
+        if user:
+            try:
+                """Set new password in BSD"""
+                username = user.email
+                new_password = form.cleaned_data['new_password1']
+                setPasswordResult = bsdApi.account_setPassword(
+                    username,
+                    new_password
+                )
                 '''
-                The password reset link was invalid, possibly because it has
-                already been used.  Please request a new password reset.
+                Should get 204 response on success_url
+
+                https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
                 '''
-            )
-            return redirect('password_reset')
+                assert setPasswordResult.http_status is 204
+
+            except AssertionError:
+                messages.error(
+                    self.request,
+                    '''
+                    There was an error setting your new password. Please make
+                    sure all fields are filled with correct data and try again.
+                    '''
+                )
+                return redirect('groups-password-change')
+
+            return super(GroupPasswordResetView, self).form_valid(form)
+        else:
+            return self.redirect_user()
+
+    def redirect_user(self):
+        messages.error(
+            self.request,
+            '''
+            The password reset link was invalid, possibly because it has
+            already been used.  Please request a new password reset.
+            '''
+        )
+        return redirect('password_reset')
 
 
 class SlackInviteView(FormView):

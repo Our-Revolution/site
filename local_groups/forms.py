@@ -254,7 +254,7 @@ class GroupPasswordChangeForm(GroupPasswordResetForm):
     )
 
 
-class GroupPasswordResetForm(PasswordResetForm):
+class GroupPasswordResetRequestForm(PasswordResetForm):
     email = forms.EmailField(
         label=_("Group Leader Email"),
         max_length=254
