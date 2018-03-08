@@ -273,10 +273,10 @@ class GroupPasswordResetRequestForm(PasswordResetForm):
         resetting their password.
         """
 
-        active_users = User.objects.filter(email__iexact=email, is_active=True)
+        users = User.objects.filter(email__iexact=email)
 
         """If user isn't in db, check for bsd account"""
-        if not active_users:
+        if not users:
             try:
                 '''
                 Get constituents from BSD by email
@@ -306,12 +306,12 @@ class GroupPasswordResetRequestForm(PasswordResetForm):
                 BSDProfile.objects.create(cons_id=cons_id, user=user)
 
                 """Return new user"""
-                active_users = [user]
+                users = [user]
 
             except AssertionError:
                 pass
 
-        return active_users
+        return users
 
 
 class SlackInviteForm(forms.Form):
