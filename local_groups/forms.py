@@ -9,12 +9,18 @@ from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
+from bsd.api import BSD
+from bsd.models import BSDProfile
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 import os
 import requests
 import logging
 
+# Get bsd api
+bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
@@ -260,14 +266,51 @@ class GroupPasswordResetRequestForm(PasswordResetForm):
         max_length=254
     )
 
-    # todo: bsd account exists, but has never logged into hub, no user in db
     def get_users(self, email):
         """Given an email, return matching user(s) who should receive a reset.
         This allows subclasses to more easily customize the default policies
         that prevent inactive users and users with unusable passwords from
         resetting their password.
         """
+
         active_users = User.objects.filter(email__iexact=email, is_active=True)
+
+        """If user isn't in db, check for bsd account"""
+        if not active_users:
+            try:
+                '''
+                Get constituents from BSD by email
+
+                https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+                '''
+                api_call = '/cons/get_constituents_by_email'
+                api_params = {'emails': email}
+                apiResult = bsdApi.doRequest(api_call, api_params)
+
+                """Validate response"""
+                assert apiResult.http_status is 200
+                tree = ElementTree().parse(StringIO(apiResult.body))
+                cons = tree.find('cons')
+                assert cons is not None
+                cons_id = cons.get('id')
+                assert cons_id is not None
+                assert cons.find('has_account').text == "1"
+                assert cons.find('is_banned').text == "0"
+
+                """Create user in db for valid BSD account"""
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=None
+                )
+                BSDProfile.objects.create(cons_id=cons_id, user=user)
+
+                """Return new user"""
+                active_users = [user]
+
+            except AssertionError:
+                pass
+
         return active_users
 
 

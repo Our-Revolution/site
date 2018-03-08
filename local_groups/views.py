@@ -13,7 +13,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.utils.translation import ugettext as _
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
@@ -294,7 +293,11 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
         else:
             return self.redirect_user()
 
-    """Verify that the url is valid and return user."""
+    """
+    Verify that the url is valid and return user.
+
+    Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/views.py#L236
+    """
     def get_user_from_url(self, request, *args, **kwargs):
         uidb64 = self.kwargs['uidb64']
         token = self.kwargs['token']
