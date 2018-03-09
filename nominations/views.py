@@ -392,6 +392,7 @@ def reset_questionnaire(request):
     questionnaire.status = 'incomplete'
     application.authorized_email = None
     questionnaire.save()
+    application.save()
 
     return redirect(next_url)
 
