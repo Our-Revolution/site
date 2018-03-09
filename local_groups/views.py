@@ -279,7 +279,10 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
                 sure all fields are filled with correct data and try again.
                 '''
             )
-            return redirect('groups-password-change')
+            return redirect(reverse_lazy('password_reset_confirm', kwargs={
+                'token': self.kwargs['token'],
+                'uidb64': self.kwargs['uidb64'],
+            }))
 
         return super(GroupPasswordResetView, self).form_valid(form)
 
