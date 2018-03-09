@@ -366,7 +366,9 @@ def reset_questionnaire(request):
     app_id = request.GET.get('id')
     user = request.session['profile']
     user_id = user['user_id']
-    default_next_url = '/groups/nominations/questionnaire/edit?id=' + app_id
+    default_next_url = reverse_lazy(
+        'nominations-questionnaire-edit'
+    ) + '?id=' + app_id
 
     # if next query string exists, redirect there after
     next_url = request.GET.get(
@@ -387,11 +389,9 @@ def reset_questionnaire(request):
         )
         return redirect('/groups/nominations/dashboard/')
 
-    # get the application attached to the questionnaire
     questionnaire.status = 'incomplete'
     application.authorized_email = None
     questionnaire.save()
-    application.save()
 
     return redirect(next_url)
 
