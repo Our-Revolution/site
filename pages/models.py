@@ -712,7 +712,7 @@ class CandidateEndorsementPage(Page):
     election_date = property(_get_election_date)
 
     '''
-    Get election date for general or primary depending on which is relevant
+    Get election result for general or primary depending on which is relevant
     '''
     def _get_result(self):
         # Return general election result if it exists
