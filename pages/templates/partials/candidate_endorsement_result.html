@@ -13,7 +13,17 @@
       <span class="card__item name wins"
       sort-by="wins">{{ candidate_endorsement_page.title }}</span>
       <span class="card__item bold smaller"><span class="state">{{ candidate_endorsement_page.get_state_or_territory_display }}</span></span>
-      <span class="card__item bottom">{{ candidate_endorsement_page.office }}</span>
+      <span class="card__item bottom">
+
+        {% if candidate_endorsement_page.election_date %}
+        <div class="card__item smaller bold">
+          Election: {{ candidate_endorsement_page.election_date }}
+        </div>
+        {% endif %}
+
+        {{ candidate_endorsement_page.office }}
+
+      </span>
     </div>
   </div>
 

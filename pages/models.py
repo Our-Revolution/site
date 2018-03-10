@@ -1235,7 +1235,12 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
                 'office',
                 'title',
             )
-            context['candidate_endorsement_pages'] = candidate_pages
+            candidate_pages_sorted = sorted(
+                candidate_pages,
+                key=lambda x: x.election_date,
+                reverse=True,
+            )
+            context['candidate_endorsement_pages'] = candidate_pages_sorted
 
         context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())
         ).order_by(
