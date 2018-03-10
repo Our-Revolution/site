@@ -1,0 +1,36 @@
+{% load pages_tags wagtailcore_tags wagtailimages_tags %}
+
+<li class="card clearfix">
+  <a href="{% pageurl candidate_endorsement_page %}">
+
+  {% image candidate_endorsement_page.photo original as photo_img %}
+  <div class="card__photo"
+  style="background-image: url('{{ photo_img.url }}')">
+  </div>
+
+  <div class="card__content">
+    <div class="candidate__info">
+      <span class="card__item name wins"
+      sort-by="wins">{{ candidate_endorsement_page.title }}</span>
+      <span class="card__item bold smaller"><span class="state">{{ candidate_endorsement_page.get_state_or_territory_display }}</span></span>
+      <span class="card__item bottom">{{ candidate_endorsement_page.office }}</span>
+    </div>
+  </div>
+
+  <div class="card__results {{ candidate_endorsement_page.result }}">
+    <div class="card__results--status clearfix">
+      <div class="card__results--reporting pull-left">
+        <span class="uppercase ls2 boldest">
+        {% if 'win' in candidate_endorsement_page.result %}
+          Won
+        {% else %}
+          Lost
+        {% endif %}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  </a>
+
+</li>

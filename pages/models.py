@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.template.loader import get_template
 from django.template import Context
 from django.contrib import messages
-from django.db.models import Case, IntegerField, Value, When
+from django.db.models import Case, IntegerField, Q, Value, When
 from django.db.models.signals import pre_delete
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
@@ -711,6 +711,21 @@ class CandidateEndorsementPage(Page):
             return self.general_election_date
     election_date = property(_get_election_date)
 
+    '''
+    Get election date for general or primary depending on which is relevant
+    '''
+    def _get_result(self):
+        # Return general election result if it exists
+        if (self.general_election_result is not None):
+            return self.general_election_result
+        # Return primary election result if candidate lost primary
+        elif (self.primary_election_result == 'loss'):
+            return self.primary_election_result
+        # Return None otherwise
+        else:
+            return None
+    result = property(_get_result)
+
 
 class CandidateEndorsementIndexPage(Page):
     body = RichTextField(blank=True, null=True)
@@ -1190,7 +1205,10 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('abstract'),
         FieldPanel('body', classname="full"),
-        InlinePanel('candidate_race_snippets', label="Candidates"),
+        InlinePanel(
+            'candidate_race_snippets',
+            label="Candidates (Ignore - legacy field for old pages)"
+        ),
         InlinePanel('initiative_race_snippets', label="Initiatives"),
     ]
 
@@ -1199,8 +1217,26 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         ]
 
     def get_context(self, *args, **kwargs):
-
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
+
+        """
+        Get list of endorsements published with results
+
+        TODO: remove legacy support once we have consolidated results pages
+        """
+        if self.url in [settings.RESULTS_2016_URL, settings.RESULTS_2017_URL]:
+            context['candidate_endorsement_pages'] = []
+        else:
+            candidate_pages = CandidateEndorsementPage.objects.live().filter(
+                Q(general_election_result__isnull=False) |
+                Q(primary_election_result='loss')
+            ).order_by(
+                'state_or_territory',
+                'office',
+                'title',
+            )
+            context['candidate_endorsement_pages'] = candidate_pages
+
         context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())
         ).order_by(
             'win_sort_order',
