@@ -150,7 +150,7 @@ class Questionnaire(models.Model):
         return position
     campaign_issues = property(_campaign_issues)
 
-    def save(self, *args, **kwargs):
+    def save(self, skip_application_save=False, *args, **kwargs):
         super(Questionnaire, self).save(*args, **kwargs)
 
         if self.response_set.count() == 0:
@@ -161,8 +161,9 @@ class Questionnaire(models.Model):
         Save the application(s) attached to a questionnaire when the
         questionnaire is saved.
         '''
-        for app in self.application_set.all():
-            app.save()
+        if not skip_application_save:
+            for app in self.application_set.all():
+                app.save()
 
 class Question(models.Model):
     text = models.TextField(verbose_name="Question Text")

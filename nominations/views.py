@@ -1,16 +1,37 @@
-from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, FormView
+from django.views.generic import (
+    CreateView,
+    UpdateView,
+    TemplateView,
+    DetailView,
+    FormView
+)
 from django.http import HttpResponseRedirect
-from .forms import ApplicationForm, NominationForm, NominationResponseFormset,  LoginForm, CandidateLoginForm, NominationResponseFormsetHelper, QuestionnaireForm, QuestionnaireResponseFormset, QuestionnaireResponseFormsetHelper, SubmitForm, CandidateEmailForm, CandidateSubmitForm, InitiativeApplicationForm
-from .models import Application, Nomination, InitiativeApplication
+from .forms import (
+    ApplicationForm,
+    NominationForm,
+    NominationResponseFormset,
+    LoginForm,
+    CandidateLoginForm,
+    NominationResponseFormsetHelper,
+    QuestionnaireForm,
+    QuestionnaireResponseFormset,
+    QuestionnaireResponseFormsetHelper,
+    SubmitForm,
+    CandidateEmailForm,
+    CandidateSubmitForm,
+    InitiativeApplicationForm
+)
+from .models import (
+    Application,
+    InitiativeApplication,
+    Questionnaire
+)
 from auth0.v3.authentication import GetToken, Users, Passwordless
-import json, os
-from urlparse import urlparse
-from django.utils.decorators import method_decorator
-from .decorators import is_authenticated
+import json
+import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
@@ -25,12 +46,19 @@ auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
 auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
 auth0_candidate_callback_url = os.environ['AUTH0_CANDIDATE_CALLBACK_URL']
 
+QUESTIONNAIRE_NOT_FOUND_ERROR = """
+We couldn't find that questionnaire. Make sure you're logged in
+with the correct email address and that you have access to edit the current
+application.
+"""
+
 class NominationsIndexView(TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
         context = super(NominationsIndexView, self).get_context_data(**kwargs)
         return context
+
 
 class ApplicationTypeView(TemplateView):
     template_name = 'application_type.html'
@@ -41,6 +69,7 @@ class ApplicationTypeView(TemplateView):
         context_data = super(ApplicationTypeView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         return context_data
+
 
 class CreateApplicationView(CreateView):
     form_class = ApplicationForm
@@ -91,7 +120,6 @@ class EditNominationView(UpdateView):
 
         return form_valid
 
-
     def get_context_data(self, *args, **kwargs):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
@@ -101,6 +129,7 @@ class EditNominationView(UpdateView):
         context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
         context_data['user'] = self.request.session['profile']
         return context_data
+
 
 class EditQuestionnaireView(UpdateView):
     form_class = QuestionnaireForm
@@ -137,7 +166,6 @@ class EditQuestionnaireView(UpdateView):
 
         return form_valid
 
-
     def get_context_data(self, *args, **kwargs):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
@@ -152,6 +180,7 @@ class EditQuestionnaireView(UpdateView):
         context_data['user'] = self.request.session['profile']
         return context_data
 
+
 class DashboardView(TemplateView):
     template_name = 'dashboard.html'
 
@@ -163,6 +192,7 @@ class DashboardView(TemplateView):
         context_data['applications'] = Application.objects.all().filter(user_id=user['user_id'])
         context_data['initiative_applications'] = InitiativeApplication.objects.all().filter(user_id=user['user_id'])
         return context_data
+
 
 class ApplicationView(DetailView):
     template_name = 'application_status.html'
@@ -178,6 +208,7 @@ class ApplicationView(DetailView):
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
         return context_data
+
 
 class QuestionnaireIndexView(FormView):
     form_class = CandidateEmailForm
@@ -233,6 +264,7 @@ class QuestionnaireIndexView(FormView):
         context_data['user'] = self.request.session['profile']
         return context_data
 
+
 class SubmitView(FormView):
     template_name = 'submit.html'
     form_class = SubmitForm
@@ -259,6 +291,7 @@ class SubmitView(FormView):
         context_data['user'] = self.request.session['profile']
         return context_data
 
+
 def login(request):
     # if user is already logged in
     if 'profile' in request.session:
@@ -282,6 +315,7 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
 
+
 def handle_auth0_callback(request):
     code = request.GET.get('code')
 
@@ -297,10 +331,12 @@ def handle_auth0_callback(request):
     messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
     return redirect('/groups/nominations/dashboard?c=1')
 
+
 def logout(request):
     request.session.clear()
     base_url = 'https://ourrevolution.com/groups/nominations'
     return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))
+
 
 # Candidate Facing Dashboard
 def candidate_login(request):
@@ -325,22 +361,41 @@ def candidate_login(request):
 
     return render(request, 'candidate/login.html', {'form': form})
 
+
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
     user = request.session['profile']
     user_id = user['user_id']
+    default_next_url = reverse_lazy(
+        'nominations-questionnaire-edit'
+    ) + '?id=' + app_id
+
+    # if next query string exists, redirect there after
+    next_url = request.GET.get(
+        'next',
+        default_next_url
+    )
 
     try:
-        questionnaire = Application.objects.all().filter(user_id=user_id,pk=app_id).first().questionnaire
-    except (Application.DoesNotExist, KeyError):
-        # TODO: Fix the error thrown when no nomination
-        messages.error(self.request, "We could not find your questionnaire. Please try again.")
-        return redirect("/groups/nominations/dashboard?c=1")
+        application = Application.objects.all().filter(
+            user_id=user_id,
+            pk=app_id
+        ).first()
+        questionnaire = application.questionnaire
+    except (Application.DoesNotExist, AttributeError):
+        messages.error(
+            request,
+            QUESTIONNAIRE_NOT_FOUND_ERROR
+        )
+        return redirect('/groups/nominations/dashboard/')
 
     questionnaire.status = 'incomplete'
-    questionnaire.save()
+    application.authorized_email = None
+    questionnaire.save(skip_application_save=True)
+    application.save()
 
-    return redirect('/groups/nominations/questionnaire/edit?id=' + app_id)
+    return redirect(next_url)
+
 
 def handle_candidate_callback(request):
     code = request.GET.get('code')
@@ -361,6 +416,7 @@ def handle_candidate_callback(request):
 
     messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
     return redirect('/groups/nominations/candidate/dashboard?c=1')
+
 
 class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
@@ -385,23 +441,41 @@ class CandidateDashboardView(TemplateView):
 
         return context_data
 
+
 class CandidateQuestionnaireView(UpdateView):
+    model = Questionnaire
     form_class = QuestionnaireForm
     template_name = "candidate/questionnaire.html"
     success_url = "/groups/nominations/candidate/submit"
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if not self.object:
+            messages.error(
+                self.request,
+                QUESTIONNAIRE_NOT_FOUND_ERROR
+            )
+            return redirect("/groups/nominations/candidate/dashboard/")
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+
     def get_object(self):
         app_id = self.request.GET.get('id')
         user = self.request.session['profile']
-        user_id = user['user_id']
         email = user['email']
 
         try:
-            return Application.objects.all().filter(authorized_email__iexact=email,pk=app_id).first().questionnaire
-        except (Application.DoesNotExist, KeyError):
-            # TODO: Fix the error thrown when no nomination
-            messages.error(self.request, "We could not find your questionnaire. Please try again.")
-            return redirect("/groups/nominations/dashboard?c=1")
+            application = Application.objects.all().filter(
+                authorized_email__iexact=email,
+                pk=app_id
+            ).first()
+            questionnaire = application.questionnaire
+        except (Application.DoesNotExist, AttributeError):
+            questionnaire = None
+
+        return questionnaire
 
     def get_success_url(self):
         return "/groups/nominations/candidate/submit?id=" + self.request.GET.get('id')
@@ -410,7 +484,11 @@ class CandidateQuestionnaireView(UpdateView):
         form_valid = super(CandidateQuestionnaireView, self).form_valid(form)
 
         # save responses
-        formset = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        formset = QuestionnaireResponseFormset(
+            self.request.POST or None,
+            instance=self.object,
+            prefix="questions"
+        )
         if formset.is_valid():
             formset.save()
         else:
@@ -419,15 +497,20 @@ class CandidateQuestionnaireView(UpdateView):
 
         return form_valid
 
-
     def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        context_data = super(CandidateQuestionnaireView, self).get_context_data(*args, **kwargs)
-        context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data = super(
+            CandidateQuestionnaireView,
+            self
+        ).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['formset'] = QuestionnaireResponseFormset(
+            self.request.POST or None, instance=self.object, prefix="questions"
+        )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['questionnaire'] = self.object
         context_data['user'] = self.request.session['profile']
+        context_data['questionnaire'] = self.object
         return context_data
 
 
@@ -483,6 +566,7 @@ class CandidateSubmitView(FormView):
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
         return context_data
+
 
 # Ballot initiatives
 class CreateInitiativeView(CreateView):

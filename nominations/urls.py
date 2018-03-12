@@ -19,12 +19,24 @@ urlpatterns = [
         url(r'^callback/$', handle_auth0_callback),
         url(r'^verify/$', TemplateView.as_view(template_name='verify.html')),
         url(r'^application/$', is_authenticated(ApplicationView.as_view())),
-        url(r'^questionnaire/$', is_authenticated(QuestionnaireIndexView.as_view())),
+        url(
+            r'^questionnaire/$',
+            is_authenticated(QuestionnaireIndexView.as_view()),
+            name='nominations-questionnaire'
+        ),
         url(r'^new/$', is_authenticated(CreateApplicationView.as_view())),
         url(r'^application-type/$', is_authenticated(ApplicationTypeView.as_view())),
         url(r'^nomination/$', is_authenticated(EditNominationView.as_view())),
-        url(r'^questionnaire/edit$', is_authenticated(EditQuestionnaireView.as_view())),
-        url(r'^questionnaire/reset$', is_authenticated(reset_questionnaire)),
+        url(
+            r'^questionnaire/edit$',
+            is_authenticated(EditQuestionnaireView.as_view()),
+            name='nominations-questionnaire-edit'
+        ),
+        url(
+            r'^questionnaire/reset$',
+            is_authenticated(reset_questionnaire),
+            name='nominations-questionnaire-reset'
+        ),
         url(r'^$', NominationsIndexView.as_view()),
     ])),
     url(r'^groups/nominations/candidate/', include([

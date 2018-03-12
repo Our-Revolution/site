@@ -19,11 +19,11 @@
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Candidate Questionnaire</h1>
         <p class="fs18">Congratulations on receiving an endorsement nomination from a local Our Revolution group! In order for Our Revolution to consider your candidacy for a national endorsement, you must fill out and submit the following questionnaire.</p>
-        
+
         <p class="fs18">Note, the office you are seeking may not have jurisdiction over some of these issues. Please completely fill out the entire questionnaire as they will be used to determine how aligned you are with our national platform.</p>
-        
+
         <p class="fs18"><strong>Please keep in mind that the following factors will be considered essential for consideration of a national endorsement:</strong></p>
-        
+
         <div class="pa20 br3 light-wash clearfix mb20">
           <ol class="fs18">
             <li><strong>Values:</strong> How aligned is the candidate with Our Revolution’s values?</li>
@@ -32,7 +32,7 @@
           </ol>
         </div>
 
-        <p class="pa20 br3 light-wash"><strong>Note:</strong> Answers provided in the candidate questionnaire will be considered official campaign responses and made public. Fields marked * are required, and each question has a 1000 character limit.</p>           
+        <p class="pa20 br3 light-wash"><strong>Note:</strong> Answers provided in the candidate questionnaire will be considered official campaign responses and made public. Fields marked * are required, and each question has a 1000 character limit.</p>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
             <form action="" method="POST" class="row">
               {{ formset.management_form|crispy }}
               {% crispy form %}
-              
+
               <div class="col-md-12">
                 {% for form in formset %}
                   {% for hidden in form.hidden_fields %}
@@ -59,7 +59,7 @@
                 <button type='submit' value='Submit' class='btn btn-block btn-primary uppercase ls2'>Next</button>
               </div>
             </form>
-          {% else %}  
+          {% else %}
           {% for form in formset %}
             <div class="form-group pa20 br3 f5f5f5-bg">
               <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
