@@ -20,7 +20,7 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
-from wagtail.wagtailcore.signals import page_published
+from wagtail.wagtailcore.signals import page_published, page_unpublished
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
@@ -730,6 +730,39 @@ class CandidateEndorsementPage(Page):
     result = property(_get_result)
 
 
+'''
+Purge candidate endorsement index & results pages when endorsement changes
+
+http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
+'''
+
+
+def candidate_endorsement_page_changed(candidate_endorsement_page):
+
+    """Purge Candidate Endorsement Index page"""
+    for candidate_index_page in CandidateEndorsementIndexPage.objects.live():
+        purge_page_from_cache(candidate_index_page)
+
+    """Purge results"""
+    for election_tracking_page in ElectionTrackingPage.objects.live():
+        purge_page_from_cache(election_tracking_page)
+
+
+@receiver(pre_delete, sender=CandidateEndorsementPage)
+def candidate_endorsement_deleted_handler(instance, **kwargs):
+    candidate_endorsement_page_changed(instance)
+
+
+@receiver(page_published, sender=CandidateEndorsementPage)
+def candidate_endorsement_published_handler(instance, **kwargs):
+    candidate_endorsement_page_changed(instance)
+
+
+@receiver(page_unpublished, sender=CandidateEndorsementPage)
+def candidate_endorsement_unpublished_handler(instance, **kwargs):
+    candidate_endorsement_page_changed(instance)
+
+
 class CandidateEndorsementIndexPage(Page):
     body = RichTextField(blank=True, null=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
@@ -983,6 +1016,11 @@ def news_post_changed(news_post):
 
 @receiver(page_published, sender=NewsPost)
 def news_published_handler(instance, **kwargs):
+    news_post_changed(instance)
+
+
+@receiver(page_unpublished, sender=NewsPost)
+def news_unpublished_handler(instance, **kwargs):
     news_post_changed(instance)
 
 
