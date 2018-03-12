@@ -99,9 +99,15 @@
 
                               <ul class="card-list list card-list--results">
 
+                                  {% for candidate_endorsement_page in candidate_endorsement_pages %}
+                                  {% if 'win' in candidate_endorsement_page.result %}
+                                  {% include "partials/candidate_endorsement_result.html" %}
+                                  {% endif %}
+                                  {% endfor %}
+
                                   {% for candidate_race_snippet in candidate_race_snippets %}
                                   {% if 'win' in candidate_race_snippet.candidate_race.result %}
-                                  {% include "partials/candidate_result.html" %}
+                                  {% include "partials/candidate_snippet_result.html" %}
                                   {% endif %}
                                   {% endfor %}
 
@@ -111,9 +117,15 @@
                                   {% endif %}
                                   {% endfor %}
 
+                                  {% for candidate_endorsement_page in candidate_endorsement_pages %}
+                                  {% if 'win' not in candidate_endorsement_page.result %}
+                                  {% include "partials/candidate_endorsement_result.html" %}
+                                  {% endif %}
+                                  {% endfor %}
+
                                   {% for candidate_race_snippet in candidate_race_snippets %}
                                   {% if 'win' not in candidate_race_snippet.candidate_race.result %}
-                                  {% include "partials/candidate_result.html" %}
+                                  {% include "partials/candidate_snippet_result.html" %}
                                   {% endif %}
                                   {% endfor %}
 
@@ -131,7 +143,7 @@
         </div>
 
         {% include "partials/past_results.html" %}
-        
+
         {# TODO: remove vendor folder from js #}
         <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 

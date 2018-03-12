@@ -10159,7 +10159,7 @@ div.recurrence-widget {
   height: auto;
   width: 100%;
   border-top: 5px solid #218fff; }
-  .election-tracker .card__results.Win {
+  .election-tracker .card__results.win, .election-tracker .card__results.Win {
     border-top: 5px solid #45d363;
     background: #2cb94a; }
 

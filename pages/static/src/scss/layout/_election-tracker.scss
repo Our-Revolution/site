@@ -104,6 +104,7 @@
     width: 100%;
     border-top: 5px solid $blue;
 
+    &.win,
     &.Win {
       border-top: 5px solid $green;
       background: darken($green, 10);
