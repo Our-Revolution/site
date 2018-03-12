@@ -623,6 +623,10 @@ class Application(models.Model):
                 "bulk_change_application_status",
                 "Can bulk change status of applications"
             ),
+            (
+                "export_pdf_application",
+                "Can export to pdf"
+            ),
         )
         verbose_name = 'Candidate Application'
 
