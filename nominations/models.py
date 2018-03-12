@@ -162,7 +162,6 @@ class Questionnaire(models.Model):
         questionnaire is saved.
         '''
         if not skip_application_save:
-            print 'saving app'
             for app in self.application_set.all():
                 app.save()
 
