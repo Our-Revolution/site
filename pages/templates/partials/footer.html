@@ -1,10 +1,12 @@
+{% load pages_tags %}
+
 <footer class="text-center footer">
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
             <div class="footer__info">
                 <p>Paid for by Our Revolution</p>
-                <p>603 2nd St, NE</p>
-                <p>Washington, DC, 20002</p>
+                <p>{% or_address_street %}</p>
+                <p>{% or_address_city %}, {% or_address_state %} {% or_address_zip %}</p>
             </div>
 
             <div class="footer__disclaimer">
@@ -15,11 +17,11 @@
               <div>
                 <strong>Contact Us: </strong><a href="mailto:info@ourrevolution.com?subject=Site%20Feedback">info@ourrevolution.com</a>
               </div>
-              
+
               <div>
                 <strong>Press: </strong><a href="mailto:press@ourrevolution.com?subject=Press%20Inquiry">press@ourrevolution.com</a>
               </div>
-              
+
               <div class="mt1">
                 <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms-of-use">Terms of Use</a> | <a href="/page/bylaws">Bylaws</a> | <a href="http://ourrev.us/jobs">Careers</a>
               </div>
