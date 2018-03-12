@@ -713,6 +713,9 @@ class CandidateEndorsementPage(Page):
 
     '''
     Get election result for general or primary depending on which is relevant
+
+    Only return result for when the endorsed campaign is over. If endorsed
+    campaign won primary and is moving on to the general, then return None.
     '''
     def _get_result(self):
         # Return general election result if it exists
