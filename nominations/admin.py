@@ -290,6 +290,9 @@ class ApplicationAdmin(admin.ModelAdmin):
     def set_to_needs_staff_review(self, request, queryset):
         return self._set_to_status(request, 'needs-staff-review')
 
+    def set_to_under_review(self, request, queryset):
+        return self._set_to_status(request, 'under-review')
+
     def set_to_approved(self, request, queryset):
         return self._set_to_status(request, 'approved')
     set_to_approved.short_description = "Set to endorsed"
@@ -399,6 +402,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             export_as_csv_action("CSV Export", export_fields),
             'set_to_needs_research',
             'set_to_needs_staff_review',
+            'set_to_under_review',
             'set_to_approved',
             'set_to_removed',
             'set_to_expired',
