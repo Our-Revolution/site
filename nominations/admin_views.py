@@ -12,8 +12,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ApplicationPDFView(PDFTemplateView):
-
+class ApplicationPDFView(PermissionRequiredMixin, PDFTemplateView):
+    login_url = reverse_lazy('admin:nominations_application_changelist')
+    permission_required = 'nominations.export_pdf_application'
     template_name = 'admin/application_pdf.html'
 
     def get_context_data(self, **kwargs):
