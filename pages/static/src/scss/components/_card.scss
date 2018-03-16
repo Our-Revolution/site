@@ -3,7 +3,7 @@
   margin: 0 0 1% 0;
   padding: 0;
 
-  &.third:not(.card-list-tools) {
+  #initiatives-list &.third {
     margin: 0 -15px 10px;
   }
 

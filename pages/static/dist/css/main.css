@@ -8518,6 +8518,10 @@ footer {
         -ms-transform: scale(1.05);
         transform: scale(1.05); }
 
+.bg-cover, .home-block {
+  background-position: center;
+  background-size: cover; }
+
 .btn {
   font-weight: 700;
   height: 40px;
@@ -8703,7 +8707,7 @@ footer {
   list-style-type: none;
   margin: 0 0 1% 0;
   padding: 0; }
-  .card-list.third:not(.card-list-tools) {
+  #initiatives-list .card-list.third {
     margin: 0 -15px 10px; }
   .card-list.third .card {
     width: 32.3%;
@@ -8822,10 +8826,6 @@ footer {
     left: 0px;
     padding: 15px;
     right: 0px; }
-
-.home-block {
-  background-position: center;
-  background-size: cover; }
 
 ul.list-plain,
 .list-plain ul {
