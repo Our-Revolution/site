@@ -124,6 +124,13 @@
       position: absolute;
       left: 10px;
       bottom: 10px;
+
+      &.large {
+        bottom: 15px;
+        font-size: 18px;
+        font-weight: 700;
+        left: 20px;
+      }
     }
   }
 

@@ -12,8 +12,15 @@
 
     <div class="back-bar clearfix">
       <div class="container clearfix">
-        <a href="{% pageurl page.get_parent %}">< Transform the Party</a>
-        / <strong>{{ page.title }}</strong>
+
+        {% if page.transformpartypage %}
+        <a href="{% pageurl page.get_parent %}">
+          < {{ page.get_parent.title }}
+        </a> /
+        {% endif %}
+
+        <a href="{% pageurl page %}"><strong>{{ page.title }}</strong></a>
+
       </div>
     </div>
 

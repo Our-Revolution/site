@@ -1,0 +1,38 @@
+{% extends "transform/transform_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+<div class="container pb2 pt2">
+
+  <div class="row">
+
+    <div class="col-xs-12">
+      Get Involved Locally
+
+      <ul class="card-list third">
+
+        {% for transform_party_page in transform_party_pages %}
+
+        <li class="card clearfix">
+          <a href="{% pageurl transform_party_page %}">
+            <div class="card__content full">
+              <div class="card__item bottom large">
+              {{ transform_party_page.title }}
+              </div>
+            </div>
+          </a>
+        </li>
+
+        {% endfor %}
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
