@@ -1,0 +1,31 @@
+{% extends "transform/transform_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block page_title %}Our Revolution - Dashboard{% endblock %}
+
+{% block content_heading %}
+{{ page.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container pb2 pt2">
+
+  <div class="row">
+
+    {% if page.signup_embed_code %}
+    <div class="col-md-4">
+      {{page.signup_embed_code | safe }}
+    </div>
+    {% endif %}
+
+    <div class="col-md-8{% if not page.signup_embed_code %} col-md-offset-2{% endif %}">
+      {{ page.body | richtext }}
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

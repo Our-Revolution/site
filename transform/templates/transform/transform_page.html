@@ -1,0 +1,48 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block nav %}
+
+{{ block.super }}
+
+<div class="container-fluid">
+
+  <div class="row blue-bg white-text pb2">
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <a href="{% pageurl page.get_parent %}">< Transform the Party</a>
+        / <strong>{{ page.title }}</strong>
+      </div>
+    </div>
+
+    <div class="container {% if center_header %}pb2 pt4{% else %}pt6{% endif %}">
+
+      {% if center_header %}
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+      {% endif %}
+
+      {% block content_pre_heading %}{% endblock %}
+
+      <h1 class="mt0 mb0">
+        {% block content_heading %}
+        {{ page.title }}
+        {% endblock %}
+      </h1>
+
+      {% if page.sub_heading %}
+        <p class="mt10 fs18">
+          {{ page.sub_heading }}
+        </p>
+      {% endif %}
+
+      {% if center_header %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
