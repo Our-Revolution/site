@@ -1,0 +1,32 @@
+{% extends "pages/base_page.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block nav %}
+
+{{ block.super }}
+
+<div class="container-fluid">
+
+  <div class="row blue-bg white-text pb2">
+
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <a href="{% pageurl page.get_parent %}">< Transform the Party</a>
+        / <strong>{{ page.title }}</strong>
+      </div>
+    </div>
+
+    <div class="container pt6">
+      <h1 class="mt0 mb0">
+        {% block content_heading %}
+        {{ page.title }}
+        {% endblock %}
+      </h1>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

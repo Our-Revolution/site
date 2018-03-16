@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'endorsements',
     'pages',
     'social_redirects',
+    'transform',
     'local_groups',
     'nominations',
     'bsd',
