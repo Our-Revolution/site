@@ -33,9 +33,7 @@ class TransformPartyPage(Page):
 
 
 class TransformPartyIndexPage(Page):
-    primary_content = RichTextField(
-        default='',
-    )
+    primary_content = RichTextField()
     primary_content_background_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
