@@ -6,7 +6,9 @@
 
 {{ block.super }}
 
-{% include "partials/organizing_hub_header_static.html" %}
+{% with static_content=True %}
+{% include "partials/organizing_hub_header.html" %}
+{% endwith%}
 
 {% endblock %}
 
