@@ -6,25 +6,46 @@
 
 {{ block.super }}
 
-<div class="container-fluid">
+<div id="content-header" class="blue-bg white-text pb2 bg-cover">
 
-  <div class="row blue-bg white-text pb2">
+  <div class="container-fluid back-bar">
+    <div class="row ">
+      <div class="col-xs-12">
 
-    <div class="back-bar clearfix">
-      <div class="container clearfix">
-        <a href="{% pageurl page.get_parent %}">< Transform the Party</a>
-        / <strong>{{ page.title }}</strong>
+        <div class="container">
+          <div class="row ">
+            <div class="col-xs-12">
+
+              {% if page.transformpartypage %}
+              <a href="{% pageurl page.get_parent %}">
+                < {{ page.get_parent.title }}
+              </a> /
+              {% endif %}
+
+              <a href="{% pageurl page %}"><strong>{{ page.title }}</strong></a>
+
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+  </div>
 
-    <div class="container pt6">
-      <h1 class="mt0 mb0">
-        {% block content_heading %}
-        {{ page.title }}
-        {% endblock %}
-      </h1>
+  <div class="container">
+    <div class="row ">
+      <div class="col-xs-12">
+
+      {% block content_header %}
+      <div class="pt6">
+        <h1 class="mt0 mb0">
+          {{ page.title }}
+        </h1>
+      </div>
+      {% endblock %}
+
+      </div>
     </div>
-
   </div>
 
 </div>

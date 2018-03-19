@@ -1,0 +1,83 @@
+{% extends "transform/transform_page.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block meta %}
+  {{ block.super }}
+
+  <style>
+
+    {% if page.primary_content_background_image %}
+    {% image page.primary_content_background_image original as primary_content_background_image %}
+    #content-header {
+      background-image: url('{{ primary_content_background_image.url }}');
+    }
+    {% endif %}
+
+  </style>
+
+{% endblock %}
+
+{% block content_header %}
+
+<div class="row">
+  <div class="col-md-6">
+
+    <div class="pa20 pb2 pt2">
+
+      {{ page.primary_content|richtext }}
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container pb2 pt2">
+
+  {% if page.secondary_content %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="pb2">
+        {{ page.secondary_content|richtext }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-xs-12">
+
+      <ul class="card-list third">
+
+        {% for transform_party_page in transform_party_pages %}
+        <li class="card clearfix">
+          <a href="{% pageurl transform_party_page %}">
+            <div class="card__content full">
+              <div class="card__item bottom large">
+              {{ transform_party_page.title }}
+              </div>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+
+      </ul>
+
+    </div>
+  </div>
+
+  {% if page.signup_embed_code %}
+  <div class="row">
+    <div class="col-xs-12">
+      {{ page.signup_embed_code|safe }}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
