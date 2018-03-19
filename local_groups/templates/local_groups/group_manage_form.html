@@ -54,12 +54,22 @@
               {{form.media}}
                 <div class="clearfix mb20">
                     <div class="row">
-                        <div class="col-md-12">
 
-                          <h4 class="mt0">Group Information</h4>
+                      <div class="col-md-12">
+                        <h4 class="mt0">Group Information</h4>
+                      </div>
 
-                          {% bootstrap_field form.description placeholder="Our Revolution is the successor to the Bernie Sanders campaign, and empowers individuals to work toward furthering a platform that works for all of us." %}
-                        </div>
+                      <div class="col-md-6">
+                        {% bootstrap_field form.name %}
+                      </div>
+
+                      <div class="col-md-2">
+                        {% bootstrap_field form.group_id %}
+                      </div>
+
+                      <div class="col-md-12">
+                        {% bootstrap_field form.description placeholder="Our Revolution is the successor to the Bernie Sanders campaign, and empowers individuals to work toward furthering a platform that works for all of us." %}
+                      </div>
 
                         <div class="col-md-6">
                           {% bootstrap_field form.city placeholder="Burlington" %}
@@ -79,15 +89,7 @@
                         <div class="col-sm-2 col-xs-4">
                           {% bootstrap_field form.size placeholder="27" %}
                         </div>
-                        <div class="col-xs-12">
-                          <p>
-                            If you want to change Group Name "{{ group.name }}",
-                            please contact
-                            {% with 'organizing@ourrevolution.com' as email_address %}
-                            <a href="mailto:{{ email_address }}">{{ email_address }}</a>
-                            {% endwith %}
-                          </p>
-                        </div>
+
                     </div>
                 </div>
 
@@ -111,19 +113,14 @@
                         </div>
 
                         <div class="col-md-12">
-                          {% bootstrap_field form.group_contact_email placeholder="organizing@ourrevolution.com" %}
+                          {% organizing_email as placeholder_email %}
+                          {% bootstrap_field form.group_contact_email placeholder=placeholder_email %}
                         </div>
 
-                        <div class="col-xs-12">
-                          <p>
-                            If you want to change Group Leader Email
-                            "{{ group.rep_email }}", please contact
-                            {% with 'organizing@ourrevolution.com' as email_address %}
-                            <a
-                            href="mailto:{{ email_address }}">{{ email_address }}</a>
-                            {% endwith %}
-                          </p>
+                        <div class="col-md-12">
+                          {% bootstrap_field form.rep_email %}
                         </div>
+
                     </div>
                 </div>
 

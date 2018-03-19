@@ -53,3 +53,8 @@ def group_portal_nav(context):
         'organizing_docs_url': settings.ORGANIZING_DOCS_URL,
         'request': context['request'],
     }
+
+
+@register.simple_tag
+def organizing_email():
+    return settings.ORGANIZING_EMAIL
