@@ -1,6 +1,7 @@
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.views import ConfirmEmailView, EmailView
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -45,6 +46,8 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = '''
     Your event was created successfully. Visit Manage & Promote Events tool
     below to view or promote your events.
+    ''' if settings.EVENT_AUTO_APPROVAL else '''
+    Your event was created successfully and is now being reviewed by our team.
     '''
 
     # Check if user is a group leader and has a valid bsd cons_id

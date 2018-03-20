@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from localflavor.us.models import USStateField
@@ -113,8 +114,12 @@ class Event(models.Model):
 
     # Custom logic to create event via BSD api
     def save(self, *args, **kwargs):
+
+        # Set flag_approval to '0' for auto approval, otherwise '1'
+        flag_approval = '0' if settings.EVENT_AUTO_APPROVAL else '1'
+
         '''
-        Save to BSD and auto-approve event
+        Save event to BSD
         https://github.com/bluestatedigital/bsd-api-python#raw-api-method
         '''
         api_call = '/event/create_event'
@@ -136,7 +141,7 @@ class Event(models.Model):
                 'duration': self.duration_minutes()
             }],
             'description': self.description,
-            'flag_approval': '0',  # 0 = approved, 1 = needs approval
+            'flag_approval': flag_approval,
             'host_receive_rsvp_emails': self.host_receive_rsvp_emails,
             'local_timezone': self.start_time_zone,
             'name': self.name,
