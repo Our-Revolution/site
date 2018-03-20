@@ -26,6 +26,13 @@ APPLICATION_CANDIDATE_ENABLED = bool(int(os.environ.get(
     0
 )))
 
+"""Auto approve events created by Group Leaders"""
+EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
+    'EVENT_AUTO_APPROVAL',
+    0
+)))
+
+"""Display Create Event card on Organizing Hub Dashboard page"""
 # TODO: TECH-850: remove legacy code after switching over
 EVENT_CREATE_ENABLED = bool(int(os.environ.get(
     'EVENT_CREATE_ENABLED',
