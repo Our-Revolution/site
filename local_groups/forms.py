@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from .models import Event, Group
 from django.contrib.auth.forms import (
     AuthenticationForm,
@@ -156,11 +157,25 @@ class GroupLoginForm(AuthenticationForm):
 
 class GroupManageForm(forms.ModelForm):
     required_css_class = 'required'
+    group_id = forms.CharField(
+        disabled=True,
+        label=_("Group ID"),
+    )
+    name = forms.CharField(
+        disabled=True,
+        help_text='To change Group Name, contact %s' % settings.ORGANIZING_EMAIL,
+    )
+    rep_email = forms.CharField(
+        disabled=True,
+        label=_("Group leader email"),
+        help_text='To change Group Leader Email, contact %s' % settings.ORGANIZING_EMAIL,
+    )
 
     class Meta:
         model = Group
-        # exclude name and rep_email. include group_contact_email.
         fields = [
+            'name',
+            'group_id',
             'description',
             'city',
             'state',
@@ -168,6 +183,7 @@ class GroupManageForm(forms.ModelForm):
             'country',
             'postal_code',
             'size',
+            'rep_email',
             'group_contact_email',
             'rep_first_name',
             'rep_last_name',
