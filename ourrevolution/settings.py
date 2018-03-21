@@ -20,28 +20,9 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# TODO: TECH-871: remove legacy code after switching over
-APPLICATION_CANDIDATE_ENABLED = bool(int(os.environ.get(
-    'APPLICATION_CANDIDATE_ENABLED',
-    0
-)))
-
 """Auto approve events created by Group Leaders"""
 EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     'EVENT_AUTO_APPROVAL',
-    0
-)))
-
-"""Display Create Event card on Organizing Hub Dashboard page"""
-# TODO: TECH-850: remove legacy code after switching over
-EVENT_CREATE_ENABLED = bool(int(os.environ.get(
-    'EVENT_CREATE_ENABLED',
-    0
-)))
-
-# TODO: TECH-886: remove legacy code after switching over
-NOMINATIONS_STATUS_ACTION_ENABLED = bool(int(os.environ.get(
-    'NOMINATIONS_STATUS_ACTION_ENABLED',
     0
 )))
 

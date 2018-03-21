@@ -15,11 +15,6 @@ def bsd_reset_password_url():
     return settings.BSD_RESET_PASSWORD_URL
 
 
-@register.simple_tag
-def event_create_enabled():
-    return settings.EVENT_CREATE_ENABLED
-
-
 def find_group_by_email(email):
     # Case insensitive search by group rep email for approved groups
     group = Group.objects.filter(
