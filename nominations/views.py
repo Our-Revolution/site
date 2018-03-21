@@ -240,17 +240,10 @@ class QuestionnaireIndexView(FormView):
         subject="You're being nominated for endorsement by an official Our Revolution group!"
         from_email='Our Revolution <info@ourrevolution.com>'
         to_email=["%s <%s>" % (candidate_name,candidate_email)]
-        cc_email=["%s <%s>" % (group,rep_email)]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(
-            subject,
-            text_content,
-            from_email,
-            to_email,
-            cc=cc_email
-        )
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
