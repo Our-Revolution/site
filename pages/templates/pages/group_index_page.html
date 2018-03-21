@@ -2,6 +2,16 @@
 
 {% load static wagtailcore_tags %}
 
+{% block nav %}
+
+{{ block.super }}
+
+{% with static_content=True %}
+{% include "partials/organizing_hub_header.html" %}
+{% endwith%}
+
+{% endblock %}
+
 {% block content %}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
