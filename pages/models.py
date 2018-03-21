@@ -809,29 +809,119 @@ class CandidateEndorsementIndexPage(Page):
 # INITIATIVES
 
 class InitiativeEndorsementPage(Page):
+    category_choices = (
+        ('corporate-tax', 'Corporate Tax'),
+        ('death-penalty', 'Death Penalty'),
+        ('education', 'Education'),
+        ('election-reform', 'Election Reform'),
+        ('environment', 'Environment'),
+        ('health-care', 'Health Care'),
+        ('labor', 'Labor'),
+        ('marijuana', 'Marijuana'),
+        ('minimum-wage', 'Minimum Wage'),
+        ('money-in-politics', 'Money in Politics'),
+    )
+    category_max_length = 32
+    initiative_name_max_length = 128
+    initiative_title_max_length = 128
+    result_choices = (
+        ('win', 'Win'),
+        ('loss', 'Loss'),
+    )
+    result_max_length = 16
+
     body = RichTextField()
+    category = models.CharField(
+        blank=True,
+        choices=category_choices,
+        null=True,
+        max_length=32
+    )
     election = models.ForeignKey(
         'endorsements.Election',
         null=True,
         blank=True,
         on_delete=models.SET_NULL
     )
-    initiative = models.ForeignKey('endorsements.Initiative', null=True, blank=True, on_delete=models.SET_NULL)
-    signup_tagline = models.CharField(max_length=128, blank=True, null=True)
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-    parent_page_types = ['pages.InitiativeEndorsementIndexPage']
-
+    election_date = models.DateField(blank=True, null=True)
+    election_result = models.CharField(
+        blank=True,
+        choices=result_choices,
+        max_length=result_max_length,
+        null=True,
+    )
+    how_to_vote = models.BooleanField(
+        default=True,
+        help_text='Check box for Vote Yes, uncheck for Vote No.',
+        verbose_name="Vote Yes?",
+    )
+    initiative = models.ForeignKey(
+        'endorsements.Initiative',
+        blank=True,
+        help_text='Ignore - legacy field for old pages.',
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    initiative_name = models.CharField(
+        blank=True,
+        null=True,
+        max_length=initiative_name_max_length,
+    )
+    initiative_title = models.CharField(
+        blank=True,
+        null=True,
+        max_length=initiative_title_max_length,
+    )
+    signup_tagline = models.CharField(
+        blank=True,
+        help_text='Ignore - legacy field for old pages.',
+        max_length=128,
+        null=True
+    )
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+    state_or_territory = USStateField(blank=True, null=True)
+    website_url = models.URLField(blank=True, null=True)
 
     content_panels = Page.content_panels + [
-            FieldPanel('body', classname="full"),
-            FieldPanel('initiative'),
-            FieldPanel('election'),
-            FieldPanel('signup_tagline')
-        ]
-
+        MultiFieldPanel(
+            [
+                FieldPanel('initiative_title'),
+                FieldPanel('initiative_name'),
+                FieldPanel('how_to_vote'),
+                FieldPanel('body', classname="full"),
+                FieldPanel('website_url'),
+            ],
+            heading="Initiative",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('election'),
+                FieldPanel('election_date'),
+                FieldPanel('election_result'),
+            ],
+            heading="Election",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('initiative'),
+                FieldPanel('signup_tagline'),
+            ],
+            heading="Legacy fields",
+            classname="collapsible collapsed"
+        ),
+    ]
+    parent_page_types = ['pages.InitiativeEndorsementIndexPage']
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
     def get_context(self, *args, **kwargs):
         state_initiatives = InitiativeEndorsementPage.objects.live().filter(
@@ -842,18 +932,30 @@ class InitiativeEndorsementPage(Page):
             initiative__show=True,
             initiative__category=self.initiativeendorsementpage.initiative.category
         ).exclude(id=self.id).select_related('initiative')
-        context = super(InitiativeEndorsementPage, self).get_context(*args, **kwargs)
+        context = super(InitiativeEndorsementPage, self).get_context(
+            *args,
+            **kwargs
+        )
         context['state_initiatives'] = state_initiatives
         context['similar_initiatives'] = similar_initiatives
         return context
 
 
 class InitiativeEndorsementIndexPage(Page):
-    social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
     subpage_types = ['pages.InitiativeEndorsementPage']
 
     def get_context(self, *args, **kwargs):
-        context = super(InitiativeEndorsementIndexPage, self).get_context(*args, **kwargs)
+        context = super(InitiativeEndorsementIndexPage, self).get_context(
+            *args,
+            **kwargs
+        )
         context['initiatives'] = self.get_children().live().filter(
             initiativeendorsementpage__initiative__show=True
         ).select_related(
@@ -866,8 +968,8 @@ class InitiativeEndorsementIndexPage(Page):
         return context
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
 
 
 ## ISSUES
