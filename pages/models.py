@@ -850,6 +850,10 @@ class InitiativeEndorsementPage(Page):
         max_length=result_max_length,
         null=True,
     )
+    featured = models.BooleanField(
+        default=False,
+        help_text='Check box to feature initiative at top of list.',
+    )
     how_to_vote = models.BooleanField(
         default=True,
         help_text='Check box for Vote Yes, uncheck for Vote No.',
@@ -899,6 +903,7 @@ class InitiativeEndorsementPage(Page):
                 FieldPanel('body', classname="full"),
                 FieldPanel('website_url'),
                 FieldPanel('category'),
+                FieldPanel('featured'),
             ],
             heading="Initiative",
             classname="collapsible"
@@ -928,14 +933,31 @@ class InitiativeEndorsementPage(Page):
     ]
 
     def get_context(self, *args, **kwargs):
+
+        """Support legacy pages too"""
+        if self.initiative:
+            category = self.initiative.category
+            state_or_territory = self.initiative.state_initials
+        else:
+            category = self.category
+            state_or_territory = self.state_or_territory
         state_initiatives = InitiativeEndorsementPage.objects.live().filter(
-            initiative__show=True,
-            # initiative__state=self.initiativeendorsementpage.initiative.state
-        ).exclude(id=self.id).select_related('initiative')
+            initiative__isnull=True,
+            election_result__isnull=True,
+            state_or_territory=state_or_territory
+        ).order_by(
+            '-featured',
+            'initiative_title',
+        ).exclude(id=self.id)
         similar_initiatives = InitiativeEndorsementPage.objects.live().filter(
-            initiative__show=True,
-            # initiative__category=self.initiativeendorsementpage.initiative.category
-        ).exclude(id=self.id).select_related('initiative')
+            initiative__isnull=True,
+            election_result__isnull=True,
+            category=category
+        ).order_by(
+            '-featured',
+            'state_or_territory',
+            'initiative_title',
+        ).exclude(id=self.id)
         context = super(InitiativeEndorsementPage, self).get_context(
             *args,
             **kwargs
@@ -960,14 +982,16 @@ class InitiativeEndorsementIndexPage(Page):
             *args,
             **kwargs
         )
+        # Filter out legacy pages and past elections
         context['initiatives'] = self.get_children().live().filter(
-            initiativeendorsementpage__initiative__show=True
+            initiativeendorsementpage__initiative__isnull=True,
+            initiativeendorsementpage__election_result__isnull=True,
         ).select_related(
-            'initiativeendorsementpage',
-            'initiativeendorsementpage__initiative'
+            'initiativeendorsementpage'
         ).order_by(
-            '-initiativeendorsementpage__initiative__featured',
-            'initiativeendorsementpage__initiative__state'
+            '-initiativeendorsementpage__featured',
+            'initiativeendorsementpage__state_or_territory',
+            'initiativeendorsementpage__initiative_title',
         )
         return context
 
