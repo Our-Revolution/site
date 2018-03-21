@@ -1,0 +1,86 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="page-sub-nav">
+        <a href="{% pageurl page.get_parent %}"><span
+          class="glyphicon glyphicon-chevron-left"></span></a>
+          Our Initiatives
+          / {{ page.get_state_or_territory_display }}
+          / {{ page.initiative_title }}:
+          {{ page.initiative_name }}
+      </div>
+
+      <div class="page-heading">
+        <div>
+          <h1>
+            {{ page.how_to_vote | yesno | title }} on
+            {{ page.initiative_title }}:
+            {{ page.initiative_name }}
+          </h1>
+          <span>
+            {{ page.get_state_or_territory_display }}
+          </span>
+        </div>
+      </div>
+
+      <div class="candidate-content clearfix">
+        <div class="col-md-6 col-md-offset-3 pt4 pb4">
+
+          {{ page.body|richtext }}
+
+          {% if page.website_url %}
+          <a class="btn btn-primary btn-block ls2 uppercase"
+          href="{{ page.website_url }}" target="_blank"
+          onclick="trackOutboundLink('{{ page.website_url }}', true);">
+            Learn More
+          </a>
+          {% endif %}
+
+        </div>
+
+        {% if state_initiatives.exists %}
+          <div class="col-md-10 col-md-offset-1">
+            <h2>Other Initiatives in {{ page.get_state_or_territory_display }}</h2>
+            <ul class="card-list third list">
+              {% for initiative_page in state_initiatives %}
+                {% with initiative_page.initiative as initiative %}
+                  {% include "partials/initiative_card.html" %}
+                {% endwith %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if similar_initiatives.exists %}
+          <div class="col-md-10 col-md-offset-1">
+            <h2>Similar Initiatives</h2>
+            <ul class="card-list third list">
+              {% for initiative_page in similar_initiatives %}
+                {% with initiative_page.initiative as initiative %}
+                  {% include "partials/initiative_card.html" %}
+                {% endwith %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </div>
+
+      {% if page.signup_tagline %}
+        {% with page.signup_tagline as tagline %}
+          {% include "partials/sign-up.html" %}
+        {% endwith %}
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

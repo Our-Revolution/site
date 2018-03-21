@@ -930,11 +930,11 @@ class InitiativeEndorsementPage(Page):
     def get_context(self, *args, **kwargs):
         state_initiatives = InitiativeEndorsementPage.objects.live().filter(
             initiative__show=True,
-            initiative__state=self.initiativeendorsementpage.initiative.state
+            # initiative__state=self.initiativeendorsementpage.initiative.state
         ).exclude(id=self.id).select_related('initiative')
         similar_initiatives = InitiativeEndorsementPage.objects.live().filter(
             initiative__show=True,
-            initiative__category=self.initiativeendorsementpage.initiative.category
+            # initiative__category=self.initiativeendorsementpage.initiative.category
         ).exclude(id=self.id).select_related('initiative')
         context = super(InitiativeEndorsementPage, self).get_context(
             *args,
