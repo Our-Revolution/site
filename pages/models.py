@@ -864,11 +864,13 @@ class InitiativeEndorsementPage(Page):
     )
     initiative_name = models.CharField(
         blank=True,
+        help_text='Secondary name/subtitle of initiative.',
         null=True,
         max_length=initiative_name_max_length,
     )
     initiative_title = models.CharField(
         blank=True,
+        help_text='Primary title of initiative.',
         null=True,
         max_length=initiative_title_max_length,
     )
@@ -896,12 +898,14 @@ class InitiativeEndorsementPage(Page):
                 FieldPanel('how_to_vote'),
                 FieldPanel('body', classname="full"),
                 FieldPanel('website_url'),
+                FieldPanel('category'),
             ],
             heading="Initiative",
             classname="collapsible"
         ),
         MultiFieldPanel(
             [
+                FieldPanel('state_or_territory'),
                 FieldPanel('election'),
                 FieldPanel('election_date'),
                 FieldPanel('election_result'),
