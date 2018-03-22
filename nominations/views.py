@@ -250,7 +250,10 @@ class QuestionnaireIndexView(FormView):
         to_email = ["%s <%s>" % (candidate_name, candidate_email)]
         cc_emails = [
             "%s <%s>" % (group, rep_email),
-            "%s <%s>" % (group, settings.ELECTORAL_COORDINATOR_EMAIL)
+            "%s <%s>" % (
+                'Our Revolution National',
+                settings.ELECTORAL_COORDINATOR_EMAIL
+            )
         ]
 
         text_content = plaintext.render(d)
