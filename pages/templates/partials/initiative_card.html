@@ -1,16 +1,41 @@
 {% load wagtailcore_tags %}
 
-<li class="card clearfix {% if initiative.featured %}featured{% endif %}">
-    {% with initiative_page.slug as slug %}
-      <a href="{% pageurl initiative_page %}" {% if initiative.featured %}is-featured="true"{% endif %}>
-          <div class="card__content full">
-              <div>
-                  <span class="icon {{ initiative.category }} category">{{ initiative.category }}</span>
-                  <span class="card__item bold"><span class="uppercase vote">{{ initiative.vote | yesno }}</span> on <span class="title">{{ initiative.title }}</span></span>
-                  <span class="card__item name">{{ initiative.name }}</span>
-              </div>
-              <span class="card__item bottom bold state">{{ initiative.state }}</span>
-          </div>
-      </a>
-    {% endwith %}
+<li class="card clearfix {% if initiative_page.featured %}featured{% endif %}">
+  <a href="{% pageurl initiative_page %}"
+  {% if initiative_page.featured %}is-featured="true"{% endif %}
+  >
+
+    <div class="card__content full">
+
+        <div>
+
+            <span class="icon {{ initiative_page.category }} category">
+              {{ initiative_page.category }}
+            </span>
+
+            <span class="card__item bold">
+
+              <span class="uppercase vote">
+                {{ initiative_page.how_to_vote|yesno }}
+              </span> on
+
+              <span class="title">
+                {{ initiative_page.initiative_title }}
+              </span>
+
+            </span>
+
+            <span class="card__item name">
+              {{ initiative_page.initiative_name }}
+            </span>
+
+        </div>
+
+        <span class="card__item bottom bold state">
+          {{ initiative_page.get_state_or_territory_display }}
+        </span>
+
+    </div>
+
+  </a>
 </li>

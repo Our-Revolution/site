@@ -44,6 +44,15 @@
 					<li role="presentation" category="all" class="active">
 						<a href="#"><span class="icon labor-2"></span>All Initiatives</span></a>
 					</li>
+
+          {% comment "Leave out animal rights category" %}
+					<li role="presentation" category="animal-rights">
+						<a href="#">
+              <span class="icon animal-rights"></span>Animal Rights
+            </a>
+					</li>
+          {% endcomment %}
+
 					<li role="presentation" category="corporate-tax">
 						<a href="#"><span class="icon corporate-tax"></span>Corporate Tax</span></a>
 					</li>
@@ -79,12 +88,15 @@
 
 			<div class="col-md-9" id="initiatives-list">
 				<div class="no-result text-center pa20 br3 f5f5f5-bg"><h3 class="mt0 mb0">No Matching Initiatives Found</h3></div>
+
 				<ul class="card-list third list">
-					{% for initiative_page in initiatives %}
-						{% with initiative_page.initiativeendorsementpage.initiative as initiative %}
-  						{% include "partials/initiative_card.html" %}
-						{% endwith %}
-					{% endfor %}
+
+          {% for initiative in initiatives %}
+          {% with initiative.initiativeendorsementpage as initiative_page %}
+          {% include "partials/initiative_card.html" %}
+          {% endwith %}
+          {% endfor %}
+
 				</ul>
 
         <p class="fs18">Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our complete new slate of ballot initiatives.</p>
