@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -220,7 +221,10 @@ class QuestionnaireIndexView(FormView):
     def form_valid(self, form):
         app_id = self.request.GET.get('id')
         user_id = self.request.session['profile']['user_id']
-        application = Application.objects.all().filter(user_id=user_id,pk=app_id).first()
+        application = Application.objects.all().filter(
+            user_id=user_id,
+            pk=app_id
+        ).first()
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
@@ -233,17 +237,34 @@ class QuestionnaireIndexView(FormView):
         application.questionnaire.save()
 
         plaintext = get_template('email/candidate_email.txt')
-        htmly     = get_template('email/candidate_email.html')
+        htmly = get_template('email/candidate_email.html')
 
-        d = Context({'group': group,'candidate_name':candidate_name,'group_rep_email':rep_email})
+        d = Context({
+            'group': group,
+            'candidate_name':candidate_name,
+            'group_rep_email':rep_email
+        })
 
-        subject="You're being nominated for endorsement by an official Our Revolution group!"
-        from_email='Our Revolution <info@ourrevolution.com>'
-        to_email=["%s <%s>" % (candidate_name,candidate_email)]
+        subject = "You're being nominated for endorsement by an official Our Revolution group!"
+        from_email = 'Our Revolution <info@ourrevolution.com>'
+        to_email = ["%s <%s>" % (candidate_name, candidate_email)]
+        cc_emails = [
+            "%s <%s>" % (group, rep_email),
+            "%s <%s>" % (
+                'Our Revolution National',
+                settings.ELECTORAL_COORDINATOR_EMAIL
+            )
+        ]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg = EmailMultiAlternatives(
+            subject,
+            text_content,
+            from_email,
+            to_email,
+            cc=cc_emails
+        )
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
