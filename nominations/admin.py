@@ -309,11 +309,9 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     exclude = ('user_id',)
 
-    # TODO: TECH-871: remove legacy code after switching over
-    if settings.APPLICATION_CANDIDATE_ENABLED:
-        inlines = [
-            ApplicationCandidateInline,
-        ]
+    inlines = [
+        ApplicationCandidateInline,
+    ]
 
     list_display = (
         'submitted_dt',
@@ -396,22 +394,16 @@ class ApplicationAdmin(admin.ModelAdmin):
     )
 
     # set actions to include csv export with field list
-    # TODO: TECH-886: remove legacy code after switching over
-    if settings.NOMINATIONS_STATUS_ACTION_ENABLED:
-        actions = [
-            export_as_csv_action("CSV Export", export_fields),
-            'set_to_needs_research',
-            'set_to_needs_staff_review',
-            'set_to_under_review',
-            'set_to_approved',
-            'set_to_removed',
-            'set_to_expired',
-            'set_to_hold',
-        ]
-    else:
-        actions = [
-            export_as_csv_action("CSV Export", export_fields),
-        ]
+    actions = [
+        export_as_csv_action("CSV Export", export_fields),
+        'set_to_needs_research',
+        'set_to_needs_staff_review',
+        'set_to_under_review',
+        'set_to_approved',
+        'set_to_removed',
+        'set_to_expired',
+        'set_to_hold',
+    ]
 
     list_filter = (
         'status',
@@ -508,50 +500,24 @@ class ApplicationAdmin(admin.ModelAdmin):
             })
         )
 
-        '''
-        TODO: TECH-871: remove after going live. Support legacy fields if
-        disabled.
-        '''
-        if settings.APPLICATION_CANDIDATE_ENABLED:
-            volunteer_research_fieldset = ('Volunteer Research', {
-                'fields': (
-                    'vol_incumbent',
-                    'primary_election_type',
-                    'vol_dem_challenger',
-                    'vol_polling',
-                    'vol_endorsements',
-                    'vol_advantage',
-                    'vol_turnout',
-                    'vol_win_number',
-                    'vol_fundraising',
-                    'fundraising_date_of_filing',
-                    'fundraising_date_accessed',
-                    'fundraising_source_url',
-                    'vol_crimes',
-                    'vol_notes',
-                ),
-            })
-        else:
-            volunteer_research_fieldset = ('Volunteer Research', {
-                'fields': (
-                    'vol_incumbent',
-                    'primary_election_type',
-                    'vol_dem_challenger',
-                    'vol_other_progressives',
-                    'vol_polling',
-                    'vol_endorsements',
-                    'vol_advantage',
-                    'vol_turnout',
-                    'vol_win_number',
-                    'vol_fundraising',
-                    'fundraising_date_of_filing',
-                    'fundraising_date_accessed',
-                    'fundraising_source_url',
-                    'vol_opponent_fundraising',
-                    'vol_crimes',
-                    'vol_notes',
-                ),
-            })
+        volunteer_research_fieldset = ('Volunteer Research', {
+            'fields': (
+                'vol_incumbent',
+                'primary_election_type',
+                'vol_dem_challenger',
+                'vol_polling',
+                'vol_endorsements',
+                'vol_advantage',
+                'vol_turnout',
+                'vol_win_number',
+                'vol_fundraising',
+                'fundraising_date_of_filing',
+                'fundraising_date_accessed',
+                'fundraising_source_url',
+                'vol_crimes',
+                'vol_notes',
+            ),
+        })
 
         volunteer_fieldsets = (
             (None, {
