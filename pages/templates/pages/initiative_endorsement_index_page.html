@@ -133,148 +133,178 @@
 <script>
   var sortingBy = "featured";
   var sortingAsc = true;
+
   // Functions
+
   function fuzzySearch(e) {
-	initiativesList.search(e.value);
+    initiativesList.search(e.value);
   }
+
   function sort(sortBy) {
-	if (sortingBy === sortBy) {
-	  if (sortingAsc) {
-		initiativesList.sort(sortBy, { order: 'desc'});
-		sortingAsc = false;
-	  }
-	  else {
-		initiativesList.sort(sortBy, { order: 'asc'});
-		sortingAsc = true;
-	  }
-	} else {
-	  initiativesList.sort(sortBy, { order: 'asc'});
-	  sortingAsc = true;
-	}
-	sortingBy = sortBy;
+  	if (sortingBy === sortBy) {
+  	  if (sortingAsc) {
+  		initiativesList.sort(sortBy, { order: 'desc'});
+  		sortingAsc = false;
+  	  }
+  	  else {
+  		initiativesList.sort(sortBy, { order: 'asc'});
+  		sortingAsc = true;
+  	  }
+  	} else {
+  	  initiativesList.sort(sortBy, { order: 'asc'});
+  	  sortingAsc = true;
+  	}
+  	sortingBy = sortBy;
   }
+
   function filter(category) {
-	if (category && category != 'all') {
-	  initiativesList.filter(function (item) {
-		if(category == item._values.category)
-		  return true;
-		else
-		  return false;
-	  });
-	} else {
-	  initiativesList.filter();
-	}
+  	if (category && category != 'all') {
+  	  initiativesList.filter(function (item) {
+
+  		if(category == item._values.category.trim())
+  		  return true;
+  		else
+  		  return false;
+  	  });
+
+  	} else {
+  	  initiativesList.filter();
+  	}
   }
+
   function getParameterByName(name, url) {
-	if (!url) {
-	  url = window.location.href;
-	}
-	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-		results = regex.exec(url);
-	if (!results) return null;
-	if (!results[2]) return '';
-	return decodeURIComponent(results[2].replace(/\+/g, " "));
+  	if (!url) {
+  	  url = window.location.href;
+  	}
+  	name = name.replace(/[\[\]]/g, "\\$&");
+  	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+  		results = regex.exec(url);
+  	if (!results) return null;
+  	if (!results[2]) return '';
+  	return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
+
   function isCategory(category) {
-	var nav = $('.issues__nav');
-	if (nav.find("[category='" + category + "']").length > 0)
-	  return true;
-	else
-	  return false;
+  	var nav = $('.issues__nav');
+  	if (nav.find("[category='" + category + "']").length > 0)
+  	  return true;
+  	else
+  	  return false;
   }
+
   function setActive(category) {
-	var nav = $('.issues__nav');
-	// set active state
-	nav.find('li').each(function () {
-	  $(this).removeClass("active");
-	})
-	nav.find("[category='" + category + "']").toggleClass("active");
-	updateUrl(category);
+  	var nav = $('.issues__nav');
+  	// set active state
+  	nav.find('li').each(function () {
+  	  $(this).removeClass("active");
+  	});
+  	nav.find("[category='" + category + "']").toggleClass("active");
+  	updateUrl(category);
   }
+
   function updateUrl(category) {
-	if (category)
-	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives?category=' + category);
-	else
-	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
+  	if (category)
+  	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives?category=' + category);
+  	else
+  	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
   }
+
   var options = {
 	  valueNames: [
-		'state',
-		'name',
-		'title',
-		'vote',
-		'category',
-		{ name: 'featured', data: 'is-featured' }
+  		'state',
+  		'name',
+  		'title',
+  		'vote',
+  		'category',
+  		{ name: 'featured', data: 'is-featured' }
 	  ]
   };
   var initiativesList = new List('initiatives-list', options);
   var self = this;
+
   // Filter list by URL category
   if (getParameterByName('category')) {
-	var category = getParameterByName('category');
-	if (isCategory(category)) {
-	  setActive(category);
-	  self.filter(category);
-	}
+  	var category = getParameterByName('category');
+  	if (isCategory(category)) {
+  	  setActive(category);
+  	  self.filter(category);
+  	}
   }
+
   $("#initiatives-nav").on("click", function(e) {
-	e.preventDefault();
-	if($("#initiatives-nav").hasClass("expanded")) {
-	  $("#initiatives-nav").removeClass("expanded");
-	  $('.toggle-nav__icon').removeClass('glyphicon-remove');
-	  $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
-	}
-	$("#fuzzy-search").val("");
-	initiativesList.search();
-	var category = $(e.target).closest("li").attr("category") || false;
-	if (category) {
-	  setActive(category);
-	  self.filter(category);
-	}
+  	e.preventDefault();
+
+  	if($("#initiatives-nav").hasClass("expanded")) {
+  	  $("#initiatives-nav").removeClass("expanded");
+  	  $('.toggle-nav__icon').removeClass('glyphicon-remove');
+  	  $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
+  	}
+
+  	$("#fuzzy-search").val("");
+  	initiativesList.search();
+  	var category = $(e.target).closest("li").attr("category") || false;
+
+  	if (category) {
+  	  setActive(category);
+  	  self.filter(category);
+  	}
+
   });
+
   initiativesList.on("updated", function(list) {
-	if (list.matchingItems.length > 0) {
-	  $('.no-result').hide()
-	} else {
-	  $('.no-result').show()
-	}
-  })
+  	if (list.matchingItems.length > 0) {
+  	  $('.no-result').hide();
+  	} else {
+  	  $('.no-result').show();
+  	}
+  });
+
   $(".sort-buttons").on("click", function(e) {
-	var btn = $(e.target).closest(".btn");
-	var sortByData = btn.attr("sort-by");
-	sort(sortByData);
-	if (sortingBy == sortByData) {
-	  $(".sort-buttons .btn").each(function(e) {
-		$(this).removeClass("active");
-		$(this).removeClass("asc");
-		$(this).removeClass("desc");
-	  });
-	  btn.toggleClass("active");
-	  if (sortingAsc) {
-		btn.addClass("asc");
-		btn.removeClass("desc");
-	  } else {
-		btn.addClass("desc");
-		btn.removeClass("asc");
-	  }
-	}
-  })
+  	var btn = $(e.target).closest(".btn");
+  	var sortByData = btn.attr("sort-by");
+  	sort(sortByData);
+
+  	if (sortingBy == sortByData) {
+
+  	  $(".sort-buttons .btn").each(function(e) {
+    		$(this).removeClass("active");
+    		$(this).removeClass("asc");
+    		$(this).removeClass("desc");
+  	  });
+
+  	  btn.toggleClass("active");
+
+  	  if (sortingAsc) {
+    		btn.addClass("asc");
+    		btn.removeClass("desc");
+  	  } else {
+    		btn.addClass("desc");
+    		btn.removeClass("asc");
+  	  }
+
+  	}
+
+  });
+
 </script>
 
 <script>
   $(document).ready(function() {
-	$('.toggle-nav__icon').on('click touchstart', function(e) {
-	  e.preventDefault();
-	  $('.issues__nav').toggleClass('expanded');
-	  if($('.toggle-nav__icon').hasClass('glyphicon-menu-hamburger')) {
-		$('.toggle-nav__icon').removeClass('glyphicon-menu-hamburger');
-		$('.toggle-nav__icon').addClass('glyphicon-remove');
-	  } else {
-		$('.toggle-nav__icon').removeClass('glyphicon-remove');
-		$('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
-	  }
-	})
+  	$('.toggle-nav__icon').on('click touchstart', function(e) {
+
+  	  e.preventDefault();
+  	  $('.issues__nav').toggleClass('expanded');
+
+  	  if($('.toggle-nav__icon').hasClass('glyphicon-menu-hamburger')) {
+    		$('.toggle-nav__icon').removeClass('glyphicon-menu-hamburger');
+    		$('.toggle-nav__icon').addClass('glyphicon-remove');
+
+  	  } else {
+    		$('.toggle-nav__icon').removeClass('glyphicon-remove');
+    		$('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
+  	  }
+
+  	});
   });
 </script>
 
