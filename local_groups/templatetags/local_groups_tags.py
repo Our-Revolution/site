@@ -10,11 +10,6 @@ def bsd_create_account_url():
     return settings.BSD_CREATE_ACCOUNT_URL
 
 
-@register.simple_tag
-def bsd_reset_password_url():
-    return settings.BSD_RESET_PASSWORD_URL
-
-
 def find_group_by_email(email):
     # Case insensitive search by group rep email for approved groups
     group = Group.objects.filter(
