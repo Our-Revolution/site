@@ -22,9 +22,11 @@ class OrganizingHubDashboardPage(Page):
         StreamFieldPanel('body'),
     ]
 
-    parent_page_types = ['pages.IndexPage']
-    subpage_types = ['pages.GroupResourcePage']
-
     @method_decorator(login_required)
     def serve(self, request, *args, **kwargs):
-        return super(OrganizingHubDashboardPage, self).serve(request, request, *args, **kwargs)
+        return super(OrganizingHubDashboardPage, self).serve(
+            request,
+            request,
+            *args,
+            **kwargs
+        )
