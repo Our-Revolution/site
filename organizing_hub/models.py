@@ -26,7 +26,6 @@ class OrganizingHubDashboardPage(Page):
     def serve(self, request, *args, **kwargs):
         return super(OrganizingHubDashboardPage, self).serve(
             request,
-            request,
             *args,
             **kwargs
         )
