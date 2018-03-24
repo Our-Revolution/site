@@ -99,41 +99,54 @@
 
                               <ul class="card-list list card-list--results">
 
-                                  {% for candidate_endorsement_page in candidate_endorsement_pages %}
-                                  {% if 'win' in candidate_endorsement_page.result %}
-                                  {% include "partials/candidate_endorsement_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for candidate_endorsement_page in candidate_endorsement_pages %}
+                                {% if 'win' in candidate_endorsement_page.result %}
+                                {% include "partials/candidate_endorsement_result.html" %}
+                                {% endif %}
+                                {% endfor %}
 
-                                  {% for candidate_race_snippet in candidate_race_snippets %}
-                                  {% if 'win' in candidate_race_snippet.candidate_race.result %}
-                                  {% include "partials/candidate_snippet_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for candidate_race_snippet in candidate_race_snippets %}
+                                {% if 'win' in candidate_race_snippet.candidate_race.result %}
+                                {% include "partials/candidate_snippet_result.html" %}
+                                {% endif %}
+                                {% endfor %}
 
-                                  {% for initiative_race_snippet in initiative_race_snippets %}
-                                  {% if 'win' in initiative_race_snippet.initiative_race.result %}
-                                  {% include "partials/initiative_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for initiative_endorsement_page in initiative_endorsement_pages %}
+                                {% if 'win' in initiative_endorsement_page.election_result %}
+                                {% include "partials/initiative_result.html" %}
+                                {% endif %}
+                                {% endfor %}
 
-                                  {% for candidate_endorsement_page in candidate_endorsement_pages %}
-                                  {% if 'win' not in candidate_endorsement_page.result %}
-                                  {% include "partials/candidate_endorsement_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for initiative_race_snippet in initiative_race_snippets %}
+                                {% if 'win' in initiative_race_snippet.initiative_race.result %}
+                                {% include "partials/initiative_snippet_result.html" %}
+                                {% endif %}
+                                {% endfor %}
 
-                                  {% for candidate_race_snippet in candidate_race_snippets %}
-                                  {% if 'win' not in candidate_race_snippet.candidate_race.result %}
-                                  {% include "partials/candidate_snippet_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for candidate_endorsement_page in candidate_endorsement_pages %}
+                                {% if 'win' not in candidate_endorsement_page.result %}
+                                {% include "partials/candidate_endorsement_result.html" %}
+                                {% endif %}
+                                {% endfor %}
 
-                                  {% for initiative_race_snippet in initiative_race_snippets %}
-                                  {% if 'win' not in initiative_race_snippet.initiative_race.result %}
-                                  {% include "partials/initiative_result.html" %}
-                                  {% endif %}
-                                  {% endfor %}
+                                {% for candidate_race_snippet in candidate_race_snippets %}
+                                {% if 'win' not in candidate_race_snippet.candidate_race.result %}
+                                {% include "partials/candidate_snippet_result.html" %}
+                                {% endif %}
+                                {% endfor %}
+
+                                {% for initiative_endorsement_page in initiative_endorsement_pages %}
+                                {% if 'win' not in initiative_endorsement_page.election_result %}
+                                {% include "partials/initiative_result.html" %}
+                                {% endif %}
+                                {% endfor %}
+
+                                {% for initiative_race_snippet in initiative_race_snippets %}
+                                {% if 'win' not in initiative_race_snippet.initiative_race.result %}
+                                {% include "partials/initiative_snippet_result.html" %}
+                                {% endif %}
+                                {% endfor %}
+
                               </ul>
                             </div>
 

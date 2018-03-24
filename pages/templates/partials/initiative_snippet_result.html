@@ -1,0 +1,53 @@
+{% load wagtailcore_tags %}
+
+{% with initiative_race_snippet.initiative_race as initiative_race %}
+    {% with initiative_race.initiative as initiative %}
+
+        <li class="card clearfix">
+
+          {% if initiative_race.initiative_endorsement_page %}
+          <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
+          {% else %}
+          <a href="/ballot-initiatives/{{ initiative.slug }}">
+          {% endif %}
+
+          <div class="card__content full initiative">
+            <div>
+              <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
+              <span class="card__item name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
+            </div>
+            <span class="card__item bold smaller state">{{ initiative.state }} {{ initiative.district }}</span>
+
+          </div>
+
+          <div class="card__results {% if initiative_race.result %}
+            {{ initiative_race.get_result_display }}
+          {% endif %}">
+
+              <div class="card__results--status clearfix">
+                <div class="card__results--reporting pull-left">
+
+                  {% if 'win' in initiative_race.result %}
+                  <span class="uppercase ls2 boldest">
+                    Won
+                  </span>
+                  {% elif 'lose' in initiative_race.result %}
+                  <span class="uppercase ls2 boldest">
+                    Lost
+                  </span>
+                  {% elif initiative_race.notes %}
+                  {{ initiative_race.notes }}
+                  {% endif %}
+
+                </div>
+              </div>
+
+          </div>
+
+          </a>
+
+        </li>
+
+    {% endwith %}
+
+{% endwith %}

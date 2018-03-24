@@ -1,53 +1,55 @@
 {% load wagtailcore_tags %}
 
-{% with initiative_race_snippet.initiative_race as initiative_race %}
-    {% with initiative_race.initiative as initiative %}
+<li class="card clearfix">
 
-        <li class="card clearfix">
+  <a href="{% pageurl initiative_endorsement_page %}">
 
-          {% if initiative_race.initiative_endorsement_page %}
-          <a href="{% pageurl initiative_race.initiative_endorsement_page %}">
+    <div class="card__content full initiative">
+
+      <div>
+
+        <span class="icon {{ initiative_endorsement_page.category }} category pull-left">
+          {{ initiative_endorsement_page.category }}
+        </span>
+
+        <span class="card__item name">
+          {{ initiative_endorsement_page.how_to_vote|yesno|title }} on
+          {{ initiative_endorsement_page.initiative_title }}:
+          {{ initiative_endorsement_page.initiative_name }}
+        </span>
+
+      </div>
+
+      <span class="card__item bold smaller state">
+        {{ initiative_endorsement_page.get_state_or_territory_display }}
+      </span>
+
+      {% if initiative_endorsement_page.election_date %}
+      <span class="card__item bold bottom smaller">
+        Election: {{ initiative_endorsement_page.election_date }}
+      </span>
+      {% endif %}
+
+    </div>
+
+    <div class="card__results {{ initiative_endorsement_page.election_result }}">
+
+      <div class="card__results--status clearfix">
+        <div class="card__results--reporting pull-left">
+
+        <span class="uppercase ls2 boldest">
+          {% if 'win' in initiative_endorsement_page.election_result %}
+            Won
           {% else %}
-          <a href="/ballot-initiatives/{{ initiative.slug }}">
+            Lost
           {% endif %}
+        </span>
 
-          <div class="card__content full initiative">
-            <div>
-              <span class="icon {{initiative.category}} category pull-left">{{initiative.category}}</span>
-              <span class="card__item name"><span>{{ initiative.title }}: {{ initiative.name }}</span></span>
-            </div>
-            <span class="card__item bold smaller state">{{ initiative.state }} {{ initiative.district }}</span>
+        </div>
+      </div>
 
-          </div>
+    </div>
 
-          <div class="card__results {% if initiative_race.result %}
-            {{ initiative_race.get_result_display }}
-          {% endif %}">
+  </a>
 
-              <div class="card__results--status clearfix">
-                <div class="card__results--reporting pull-left">
-
-                  {% if 'win' in initiative_race.result %}
-                  <span class="uppercase ls2 boldest">
-                    Won
-                  </span>
-                  {% elif 'lose' in initiative_race.result %}
-                  <span class="uppercase ls2 boldest">
-                    Lost
-                  </span>
-                  {% elif initiative_race.notes %}
-                  {{ initiative_race.notes }}
-                  {% endif %}
-
-                </div>
-              </div>
-
-          </div>
-
-          </a>
-
-        </li>
-
-    {% endwith %}
-
-{% endwith %}
+</li>
