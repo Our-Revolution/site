@@ -2,8 +2,6 @@
 
 {% load bootstrap3 local_groups_tags %}
 
-{% block page_title %}Our Revolution - Dashboard{% endblock %}
-
 {% block content_pre_heading %}
 <span class="article-type">Organizing Hub</span>
 {% endblock %}
@@ -21,7 +19,7 @@
         {% bootstrap_messages %}
 
         <h3 class="mb20 mt0">
-          Dashboard
+          {{ page.title }}
         </h3>
       </div>
   </div>
