@@ -4,7 +4,6 @@ from django.contrib.auth import views as auth_views
 from .forms import GroupLoginForm, GroupPasswordResetRequestForm
 from .views import (
     EventCreateView,
-    GroupDashboardView,
     GroupManageView,
     GroupPasswordChangeView,
     GroupPasswordResetView,
@@ -20,11 +19,6 @@ urlpatterns = [
 if settings.BSD_LOGIN_ENABLED:
     urlpatterns += [
         url(r'^organizing-hub/', include([
-            url(
-                r'^$',
-                GroupDashboardView.as_view(),
-                name='groups-dashboard'
-            ),
             url(r'^event/', include([
                 url(
                     r'^create/',

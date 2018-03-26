@@ -1,0 +1,76 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+{% group_link %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        <h3 class="mb20 mt0">
+          {{ page.title }}
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <ul class="card-list card-list-tools third">
+
+          {% for block in page.body %}
+
+          <li class="card clearfix">
+            <a href="{{ block.value.url }}">
+              <div class="card__content full">
+                <div class="card__item bottom">
+                {{ block.value.text }}
+                </div>
+              </div>
+            </a>
+          </li>
+
+          {% endfor block %}
+
+        </ul>
+
+        <div class="pt2">
+          {% comment "Will reactivate when side-nav fleshed out" %}
+            <p>
+              You can browse the full suite of Our Revolution digital tools and
+              organizing resources using the menu to the left.
+            </p>
+          {% endcomment %}
+
+          <p>
+            <strong>Need help?</strong> Visit our <strong><a href="/docs">documentation</a></strong>, or reach us at
+            <strong><a href="mailto:organizing@ourrevolution.com">
+              organizing@ourrevolution.com
+            </a></strong>
+          </p>
+        </div>
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

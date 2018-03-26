@@ -90,7 +90,7 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return initial
 
     def get_success_url(self):
-        return reverse_lazy('groups-dashboard')
+        return settings.ORGANIZING_HUB_DASHBOARD_URL
 
     # Redirect user to dashboard page
     def redirect_user(self):
@@ -102,7 +102,7 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             this page.
             '''
         )
-        return redirect('groups-dashboard')
+        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
 
     # Use default get logic but add custom access check
     def get(self, request, *args, **kwargs):
@@ -117,10 +117,6 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             return super(EventCreateView, self).post(request, *args, **kwargs)
         else:
             return self.redirect_user()
-
-
-class GroupDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "group_dashboard.html"
 
 
 # View for Admin updates to Group Info
@@ -147,7 +143,7 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             self.request,
             "Please login with the Group Leader account to access this page."
         )
-        return redirect('groups-dashboard')
+        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
 
     # Use default get logic but add custom access check
     def get(self, request, *args, **kwargs):
@@ -171,7 +167,7 @@ class GroupPasswordChangeView(
 ):
     form_class = GroupPasswordChangeForm
     success_message = "Your password has been updated successfully."
-    success_url = reverse_lazy('groups-dashboard')
+    success_url = settings.ORGANIZING_HUB_DASHBOARD_URL
     template_name = "password_change.html"
 
     def check_old_password(self, form):

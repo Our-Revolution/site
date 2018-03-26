@@ -26,6 +26,13 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     0
 )))
 
+# Organizing Hub Urls
+ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
+ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
+ORGANIZING_DOCS_URL = '/docs/'
+BSD_CREATE_ACCOUNT_URL = 'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/ctl/Constituent/Login'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -62,6 +69,7 @@ INSTALLED_APPS = [
 
     # OR apps
     'endorsements',
+    'organizing_hub',
     'pages',
     'social_redirects',
     'transform',
@@ -190,9 +198,7 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
-BSD_CREATE_ACCOUNT_URL = 'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/ctl/Constituent/Login'
 BSD_LOGIN_ENABLED = bool(int(os.environ.get('BSD_LOGIN_ENABLED', 0)))
-BSD_RESET_PASSWORD_URL = 'https://ourrevdev.cp.bsd.net/page/user/forgot' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/page/user/forgot'
 
 # BSD login urls
 if BSD_LOGIN_ENABLED:
@@ -204,7 +210,7 @@ if BSD_LOGIN_ENABLED:
     BSD_API_ID = os.environ.get('BSD_API_ID')
     BSD_API_SECRET = os.environ.get('BSD_API_SECRET')
     LOGIN_URL = 'groups-login'
-    LOGIN_REDIRECT_URL = 'groups-dashboard'
+    LOGIN_REDIRECT_URL = ORGANIZING_HUB_DASHBOARD_URL
 
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
@@ -269,8 +275,6 @@ OR_ADDRESS_STATE = 'DC'
 OR_ADDRESS_STREET = 'PO Box 66208'
 OR_ADDRESS_ZIP = '20035'
 ORGANIZING_EMAIL = 'organizing@ourrevolution.com'
-ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
-ORGANIZING_DOCS_URL = '/docs/'
 RESULTS_URL = '/results/'
 RESULTS_2016_URL = '/election-2016/'
 RESULTS_2017_URL = '/2017-elections-results/'
