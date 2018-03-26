@@ -967,6 +967,34 @@ class InitiativeEndorsementPage(Page):
         return context
 
 
+'''
+Purge initiative endorsement index & results pages when endorsement changes
+
+http://docs.wagtail.io/en/v1.10.1/reference/contrib/frontendcache.html
+'''
+
+
+def initiative_endorsement_page_changed(initiative_endorsement_page):
+
+    """Purge Initiative Endorsement Index page"""
+    parent_page = initiative_endorsement_page.get_parent()
+    purge_page_from_cache(parent_page)
+
+    """Purge results"""
+    for election_tracking_page in ElectionTrackingPage.objects.live():
+        purge_page_from_cache(election_tracking_page)
+
+
+@receiver(page_published, sender=InitiativeEndorsementPage)
+def initiative_endorsement_published_handler(instance, **kwargs):
+    initiative_endorsement_page_changed(instance)
+
+
+@receiver(page_unpublished, sender=InitiativeEndorsementPage)
+def initiative_endorsement_unpublished_handler(instance, **kwargs):
+    initiative_endorsement_page_changed(instance)
+
+
 class InitiativeEndorsementIndexPage(Page):
     social_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -1397,6 +1425,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         """
         if self.url in [settings.RESULTS_2016_URL, settings.RESULTS_2017_URL]:
             context['candidate_endorsement_pages'] = []
+            context['initiative_endorsement_pages'] = []
         else:
             candidate_pages = CandidateEndorsementPage.objects.live().filter(
                 Q(general_election_result__isnull=False) |
@@ -1412,6 +1441,16 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
                 reverse=True,
             )
             context['candidate_endorsement_pages'] = candidate_pages_sorted
+
+            initiative_pages = InitiativeEndorsementPage.objects.live().filter(
+                election_result__isnull=False,
+            ).order_by(
+                '-election_result',
+                '-election_date',
+                'state_or_territory',
+                'initiative_title',
+            )
+            context['initiative_endorsement_pages'] = initiative_pages
 
         context['candidate_race_snippets'] = self.candidate_race_snippets.select_related('candidate_race', 'candidate_race__candidate').annotate(win_sort_order=Case(When(candidate_race__result='win', then=Value(1)), When(candidate_race__result=None, then=Value(2)), When(candidate_race__result='lose', then=Value(3)), output_field=IntegerField())
         ).order_by(
