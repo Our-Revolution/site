@@ -3,5 +3,5 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - easy_install boto
+  - easy_install distribute
   - pip install -r requirements.txt
