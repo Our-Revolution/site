@@ -301,7 +301,7 @@ class SubmitView(FormView):
         application.status = 'submitted'
         application.save()
 
-        """Send email notification to group and candidate"""
+        """Send notification after submit"""
         self.send_notification(application)
 
         return super(SubmitView, self).form_valid(form)
@@ -316,7 +316,9 @@ class SubmitView(FormView):
         return context_data
 
     def send_notification(self, application):
-        """Send email notification to group and candidate"""
+        """
+        Send email notification for submission to group, candidate, and OR.
+        """
         candidate_name = application.candidate_name
         candidate_email = application.authorized_email
         group_name = application.group.name
