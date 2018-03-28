@@ -301,6 +301,9 @@ class SubmitView(FormView):
         application.status = 'submitted'
         application.save()
 
+        """Send notification after submit"""
+        self.send_notification(application)
+
         return super(SubmitView, self).form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
@@ -311,6 +314,49 @@ class SubmitView(FormView):
         context_data['application'] = self.app
         context_data['user'] = self.request.session['profile']
         return context_data
+
+    def send_notification(self, application):
+        """
+        Send email notification for submission to group, candidate, and OR.
+        """
+        candidate_name = application.candidate_name
+        candidate_email = application.authorized_email
+        group_name = application.group.name
+        group_email = application.rep_email
+
+        cc_emails = [
+            "%s <%s>" % (candidate_name, candidate_email),
+            "%s <%s>" % (
+                'Our Revolution Electoral Coordinator',
+                settings.ELECTORAL_COORDINATOR_EMAIL
+            ),
+        ]
+        from_email = "%s <%s>" % (
+            'Our Revolution Electoral Coordinator',
+            settings.ELECTORAL_COORDINATOR_EMAIL
+        )
+        to_email = [
+            "%s <%s>" % (group_name, group_email),
+        ]
+
+        subject = """
+        Your nomination for %s has been submitted! Here are the next steps.
+        """ % candidate_name
+
+        html_template = get_template('email/application_submit_email.html')
+        html_content = html_template.render()
+        text_template = get_template('email/application_submit_email.txt')
+        text_content = text_template.render()
+
+        msg = EmailMultiAlternatives(
+            subject,
+            text_content,
+            from_email,
+            to_email,
+            cc=cc_emails
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
 def login(request):
