@@ -1122,15 +1122,10 @@ class NewsIndex(Page):
     def get_news_posts(self):
         all_posts = NewsPost.objects.live()
 
-        """
-        Sort by most recent first. Set default date to Nov 1 2016 for legacy
-        pages.
-        """
-        eastern = timezone('US/Eastern')
-        d = eastern.localize(datetime.datetime(2016, 11, 1, 12, 0))
+        """Sort by most recent first. Use go_live_at for legacy pages"""
         sorted_posts = sorted(
             all_posts,
-            key=lambda x: (x.public_date_time if x.public_date_time else d),
+            key=lambda x: (x.public_date_time if x.public_date_time else x.go_live_at),
             reverse=True,
         )
         return sorted_posts
