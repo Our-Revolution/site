@@ -13,7 +13,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from localflavor.us.models import USStateField
-from pytz import timezone
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -33,7 +32,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv, json
-import datetime
 import logging
 
 logger = logging.getLogger(__name__)
