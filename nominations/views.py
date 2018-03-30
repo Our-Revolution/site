@@ -241,8 +241,9 @@ class QuestionnaireIndexView(FormView):
 
         d = Context({
             'group': group,
-            'candidate_name':candidate_name,
-            'group_rep_email':rep_email
+            'candidate_name': candidate_name,
+            'group_rep_email': rep_email,
+            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
         })
 
         subject = "You're being nominated for endorsement by an official Our Revolution group!"
@@ -343,10 +344,14 @@ class SubmitView(FormView):
         Your nomination for %s has been submitted! Here are the next steps.
         """ % candidate_name
 
+        d = Context({
+            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
+        })
+
         html_template = get_template('email/application_submit_email.html')
-        html_content = html_template.render()
+        html_content = html_template.render(d)
         text_template = get_template('email/application_submit_email.txt')
-        text_content = text_template.render()
+        text_content = text_template.render(d)
 
         msg = EmailMultiAlternatives(
             subject,
@@ -611,6 +616,7 @@ class CandidateSubmitView(FormView):
             'rep_name': rep_name,
             'candidate_name': candidate_name,
             'nominations_submit_url': nominations_submit_url,
+            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
         })
 
         subject= candidate_name + " has completed your candidate questionnaire!"
