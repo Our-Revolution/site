@@ -13,7 +13,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from localflavor.us.models import USStateField
-from pytz import timezone
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -33,7 +32,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv, json
-import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -1122,15 +1120,10 @@ class NewsIndex(Page):
     def get_news_posts(self):
         all_posts = NewsPost.objects.live()
 
-        """
-        Sort by most recent first. Set default date to Nov 1 2016 for legacy
-        pages.
-        """
-        eastern = timezone('US/Eastern')
-        d = eastern.localize(datetime.datetime(2016, 11, 1, 12, 0))
+        """Sort by most recent first. Use go_live_at for legacy pages"""
         sorted_posts = sorted(
             all_posts,
-            key=lambda x: (x.public_date_time if x.public_date_time else d),
+            key=lambda x: (x.public_date_time if x.public_date_time else x.go_live_at),
             reverse=True,
         )
         return sorted_posts
