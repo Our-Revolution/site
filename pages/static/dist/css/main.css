@@ -10558,6 +10558,8 @@ div.recurrence-widget {
     height: 12px; }
   .groups-map__icon.blue {
     background: #218fff; }
+  .groups-map__icon.dark-blue, .groups-map__icon.module.dark-blue-transparent {
+    background: #134d88; }
   .groups-map__icon.red {
     background: #ff3939; }
 
