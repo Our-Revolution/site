@@ -8845,7 +8845,7 @@ ul.list-plain,
   .navbar .navbar__logo {
     display: block;
     background: url("../img/logo.svg") center no-repeat;
-    width: 80px;
+    width: 47px;
     height: 40px;
     color: white;
     margin: 0 auto;
@@ -9139,7 +9139,6 @@ ul.list-plain,
       .navbar .navbar__logo {
         margin: 0 auto 0 50px;
         top: 0;
-        width: 70px;
         position: relative; }
       .navbar .navbar__buttons {
         display: none;
