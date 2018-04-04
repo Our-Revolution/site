@@ -16,11 +16,6 @@ def candidates_url():
 
 
 @register.simple_tag
-def default_meta_image_url():
-    return settings.DEFAULT_META_IMAGE_URL
-
-
-@register.simple_tag
 def or_address():
     return '%s %s, %s %s' % (
         settings.OR_ADDRESS_STREET,
@@ -48,6 +43,11 @@ def or_address_street():
 @register.simple_tag
 def or_address_zip():
     return settings.OR_ADDRESS_ZIP
+
+
+@register.simple_tag
+def or_meta_image_url():
+    return settings.OR_META_IMAGE_URL
 
 
 # Navigation menu
