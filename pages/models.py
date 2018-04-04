@@ -568,10 +568,9 @@ class IndexPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(IndexPage, self).get_context(*args, **kwargs)
         try:
-            news = self.get_children().get(title='News').get_children().live()
-            q = news.extra(select={'first_published_at_is_null':'first_published_at IS NULL'})
-            sorted_news = q.order_by('first_published_at_is_null','-first_published_at','-go_live_at')[0:3]
-            context['news'] = sorted_news
+            """Get 1st 3 news posts from NewsIndex page"""
+            news_posts = NewsIndex.objects.live().first().get_news_posts()[0:3]
+            context['news'] = news_posts
         except Page.DoesNotExist:
             pass
         return context
@@ -1114,18 +1113,20 @@ class NewsIndex(Page):
         return context
 
     def get_news_paginator(self):
-        all_posts = self.get_children().live()
-        q = all_posts.extra(
-            select={'first_published_at_is_null': 'first_published_at IS NULL'}
-        )
-        sorted_posts = q.order_by(
-            'first_published_at_is_null',
-            '-first_published_at',
-            '-go_live_at'
-        )
         # Show 5 resources per page
         count = 5
-        return Paginator(sorted_posts, count)
+        return Paginator(self.get_news_posts(), count)
+
+    def get_news_posts(self):
+        all_posts = NewsPost.objects.live()
+
+        """Sort by most recent first. Use go_live_at for legacy pages"""
+        sorted_posts = sorted(
+            all_posts,
+            key=lambda x: (x.public_date_time if x.public_date_time else x.go_live_at),
+            reverse=True,
+        )
+        return sorted_posts
 
 
 class NewsPost(Page):
@@ -1134,6 +1135,12 @@ class NewsPost(Page):
             ('statement', 'Statement'),
             ('press-release', 'Press Release'),
         )
+
+    display_date_time = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name='Date & Time for display',
+    )
     post_type = models.CharField(choices=POST_TYPE_CHOICES, null=True, blank=True, max_length=32, default='news')
     header_photo = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     header_photo_byline = models.CharField(max_length=256, blank=True, null=True)
@@ -1144,16 +1151,32 @@ class NewsPost(Page):
     subpage_types = []
 
     content_panels = Page.content_panels + [
-            FieldPanel('post_type'),
-            ImageChooserPanel('header_photo'),
-            FieldPanel('header_photo_byline'),
-            FieldPanel('abstract'),
-            FieldPanel('body', classname="full"),
-        ]
+        FieldPanel('display_date_time'),
+        FieldPanel('post_type'),
+        ImageChooserPanel('header_photo'),
+        FieldPanel('header_photo_byline'),
+        FieldPanel('abstract'),
+        FieldPanel('body', classname="full"),
+    ]
 
     promote_panels = Page.promote_panels + [
-            ImageChooserPanel('social_image')
-        ]
+        ImageChooserPanel('social_image')
+    ]
+
+    '''
+    Get date & time for NewsPost, for public display and sorting purposes
+    '''
+    def _get_public_date_time(self):
+        """
+        Return display date if available, otherwise first published at date
+        """
+        if self.display_date_time:
+            date = self.display_date_time
+        else:
+            date = self.first_published_at
+        return date
+
+    public_date_time = property(_get_public_date_time)
 
 
 '''

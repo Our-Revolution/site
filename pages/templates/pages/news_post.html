@@ -14,8 +14,10 @@
             <span class="article-type">{{ page.get_post_type_display }}</span>
                 <h1>{{ page.title }}</h1>
                 {% timezone "America/New_York" %}
-                    {% if page.first_published_at %}
-                        <span class="article-date">{{page.first_published_at|date:"jS F, Y"}}</span>
+                    {% if page.public_date_time %}
+                        <span class="article-date">
+                          {{ page.public_date_time|date:"jS F, Y" }}
+                        </span>
                     {% endif %}
                 {% endtimezone %}
                 <span class="attribution">{{ page.header_photo_byline }}</span>

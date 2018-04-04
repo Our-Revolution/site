@@ -18,7 +18,7 @@
     float: left;
     background: #fafafa;
     border: solid 1px #ddd;
-    
+
     @include until($medium) {
       height: auto;
       max-height: 300px;
@@ -27,21 +27,21 @@
       border-bottom: solid 1px #ddd;
       background: #f5f5f5;
     };
-    
+
     &__status {
       max-height: calc(100% - 120px);
       overflow: auto;
       background: #fafafa;
       // padding: 20px;
     }
-    
+
     &__search {
       padding: 5px;
       border: 1px solid #ddd;
       border-width: 1px 0;
       background: #f5f5f5;
       position: relative;
-      
+
       &::after {
         content: "\e003";
         position: absolute;
@@ -56,18 +56,18 @@
         -webkit-font-smoothing: antialiased;
         color: #ccc;
       }
-      
+
       &.active::after {
         color: $blue;
       }
-    
+
       input {
         border-radius: 3px;
         border: 1px solid #ccc;
         font-size: 16px;
         height: 40px;
         padding-right: 25px;
-        
+
         &::placeholder {
           color:#777;
           // font-weight: bold;
@@ -75,14 +75,14 @@
       }
     }
   }
-  
+
   &__heading {
     position: relative;
   }
-  
+
   &__intro {
     position: relative;
-    
+
     .glyphicon {
       position: absolute;
       right: 0;
@@ -93,35 +93,35 @@
       cursor: pointer;
       height: 15px;
       line-height: 15px;
-      
+
       &:hover {
         opacity: 0.7;
       }
     }
-    
+
     &.collapsed {
       .glyphicon {
         transform: rotate(0);
       }
-      
+
       p {
         display: none;
       }
     }
-  
+
   }
-  
+
   &__map {
     height: 600px;
     margin-left: 340px;
-    
+
     @include until($medium) {
       height: 400px;
       width: 100%;
       margin-left: 0;
     };
   }
-  
+
   &__add {
     position: absolute;
     left: 0;
@@ -130,13 +130,13 @@
     background: #eee;
     padding: 20px;
     border-top: solid 1px #ddd;
-    
+
     &.relative {
       position: relative;
       border-bottom: solid 1px #ddd;
     }
   }
-  
+
   &__icon {
     text-align: center;
     border-radius: 100%;
@@ -148,60 +148,64 @@
     height: 16px;
     width: 16px;
     display: inline-block;
-    
+
     &:hover {
       opacity: 1;
     }
-    
+
     &.large {
       line-height: 32px;
       border: none;
       height: 32px;
       width: 32px;
     }
-    
+
     &.small {
       width: 12px;
       height: 12px;
     }
-    
+
     &.blue {
       background: $blue;
     }
-    
+
+    &.dark-blue {
+      background: $dark-blue;
+    }
+
     &.red {
       // TODO: replace with $red once we've switched site over to on-brand red
       background: #ff3939;
     }
   }
-  
-  .component { 
+
+  .component {
     &__heading{
       // background: #f4f4f4;
       padding: 20px;
       // border-bottom: 1px solid rgba(0,0,0,.1)
     }
-    
+
     &__location {
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
-    
+
     &__name {
       margin: 0;
       font-size: 18px;
     }
-    
+
     &__info {
       padding: 5px 20px 20px;
       border-bottom: 1px solid rgba(0,0,0,.1);
     }
-    
+
     &__description {
       font-size: 14px;
     }
-    
+
     .btn {
       padding: 8px 10px;
       font-size: 13px;
@@ -209,19 +213,19 @@
       height: auto;
     }
   }
-  
+
   .leaflet-container {
     font-family: 'Lato', sans-serif;
   }
-  
+
   .leaflet-container a.btn {
     color: white;
   }
-  
+
   .leaflet-popup-content {
     margin: 20px;
   }
-  
+
   .leaflet-popup-content-wrapper {
     border-radius: 3px;
   }

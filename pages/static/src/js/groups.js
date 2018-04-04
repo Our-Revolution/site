@@ -1,5 +1,5 @@
 module.exports = function() {
-  var map, active = null, usedSearch = false, data = {}, blueIcon, redIcon, markers, mapboxToken = 'pk.eyJ1Ijoib3VycmV2b2x1dGlvbiIsImEiOiJjaXpzdm91M3UwMDA3MzNvY2NhZXZtZ21hIn0.WBmvgFv12o8eEnv2GsZthA';
+  var map, active = null, usedSearch = false, data = {}, blueIcon, darkBlueIcon, redIcon, markers, mapboxToken = 'pk.eyJ1Ijoib3VycmV2b2x1dGlvbiIsImEiOiJjaXpzdm91M3UwMDA3MzNvY2NhZXZtZ21hIn0.WBmvgFv12o8eEnv2GsZthA';
 
   function init(mapDiv) {
     initMap(mapDiv);
@@ -15,6 +15,15 @@ module.exports = function() {
 
     blueIcon = L.divIcon({
       className: 'groups-map__icon blue',
+
+
+      iconSize:     [16, 16], // size of the icon
+      iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+      popupAnchor:  [8, 8] // point from which the popup should open relative to the iconAnchor
+    });
+
+    darkBlueIcon = L.divIcon({
+      className: 'groups-map__icon dark-blue',
 
 
       iconSize:     [16, 16], // size of the icon
@@ -115,7 +124,13 @@ module.exports = function() {
         // if State Organizing Committee  or State Chapter
         // color red and put on top layer
         marker = L.marker(coords.reverse(), {icon: redIcon, zIndexOffset: 1000})
+
+      } else if (group.properties.group_type == 3) {
+        // Dark blue icon for Campus Groups, middle layer
+        marker = L.marker(coords.reverse(), {icon: darkBlueIcon, zIndexOffset: 100})
+
       } else {
+        // Blue icon otherwise
         marker = L.marker(coords.reverse(), {icon: blueIcon});
       }
 

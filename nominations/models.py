@@ -519,6 +519,10 @@ class Application(models.Model):
     def __unicode__(self):
         return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
+    def _candidate_name(self):
+        return self.candidate_first_name + ' ' + self.candidate_last_name
+    candidate_name = property(_candidate_name)
+
     '''
     Group candidates by party and return list
     '''
