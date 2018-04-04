@@ -146,7 +146,10 @@ class GroupLoginForm(AuthenticationForm):
     username = UsernameField(
         label=_("Group Leader Email"),
         widget=forms.TextInput(attrs={'autofocus': True}),
-        help_text='This is the official group leader email address registered with Our Revolution',
+        help_text='''
+            This should be the official group leader email
+            address registered with Our Revolution
+        '''
     )
     error_messages = {
         'invalid_login': _(
