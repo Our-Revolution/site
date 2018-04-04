@@ -51,8 +51,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ALLOWED_HOSTS = '*'
 
 ADMINS = [
-    ('Chris Mabry', 'chris@ourrevolution.com'),
-    ('Eric Broder', 'eric@ourrevolution.com')
+    ('Our Revolution Tech Team', 'tech-team@ourrevolution.com'),
 ]
 
 CANDIDATES_URL = '/candidates/'
