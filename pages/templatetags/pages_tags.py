@@ -45,9 +45,11 @@ def or_address_zip():
     return settings.OR_ADDRESS_ZIP
 
 
-@register.simple_tag
-def or_meta_image_url():
-    return settings.OR_META_IMAGE_URL
+@register.simple_tag(takes_context=True)
+def or_meta_image_url(context):
+    request = context['request']
+    absolute_url = request.build_absolute_uri(settings.OR_META_IMAGE_URL)
+    return absolute_url
 
 
 # Navigation menu

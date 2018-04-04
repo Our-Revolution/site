@@ -279,7 +279,7 @@ OR_LOGO_SECONDARY_OLD = 'https://s.bsd.net/bernie16/ourrevolution/page/-/images/
 OR_LOGO_SECONDARY_NEW = 'https://our-revolution-dot-com.s3.amazonaws.com/images/our-revolution-logo-secondary-300x353.original.png'
 OR_LOGO_SECONDARY = OR_LOGO_SECONDARY_NEW if OR_LOGO_ENABLED else OR_LOGO_SECONDARY_OLD
 OR_META_IMAGE_OLD = 'https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png?1'
-OR_META_IMAGE_NEW = BASE_URL + '/static/dist/img/our-revolution-meta-image.png'
+OR_META_IMAGE_NEW = '/static/dist/img/our-revolution-meta-image.png'
 OR_META_IMAGE_URL = OR_META_IMAGE_NEW if OR_LOGO_ENABLED else OR_META_IMAGE_OLD
 
 ORGANIZING_EMAIL = 'organizing@ourrevolution.com'
