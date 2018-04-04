@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    {% load static %}
+    {% load static pages_tags %}
     {% load wagtailcore_tags %}
     {% load wagtailimages_tags %}
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
 
     {% block meta %}
 
-        {% block meta_seo %} 
+        {% block meta_seo %}
             <meta name="description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
         {% endblock %}
 
@@ -24,10 +24,10 @@
                     <meta property="og:image" content="{% static social_image %}" />
                 {% endwith %}
             {% elif page.social_image %}
-                {% image page.social_image original as social_image_url %}            
+                {% image page.social_image original as social_image_url %}
                 <meta property="og:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta property="og:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png" />
+                <meta property="og:image" content="{% or_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 
@@ -37,10 +37,10 @@
             <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
             <meta name="twitter:site" content="@OurRevolution"/>
             {% if page.social_image %}
-                {% image page.social_image original as social_image_url %}            
+                {% image page.social_image original as social_image_url %}
                 <meta name="twitter:image" content="{{ social_image_url.url }}" />
             {% else %}
-                <meta name="twitter:image" content="https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png" />
+                <meta name="twitter:image" content="{% or_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 
@@ -60,7 +60,7 @@
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
 
     {% include "partials/splash_nav.html" %}
-        
+
     {% block content %}
 
         <div class="container-fluid">

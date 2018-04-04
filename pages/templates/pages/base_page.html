@@ -26,7 +26,7 @@
                 {% image page.social_image original as social_image_url %}
                 <meta property="og:image" content="{{ social_image_url.url }}?1" />
             {% else %}
-                <meta property="og:image" content="{% default_meta_image_url %}" />
+                <meta property="og:image" content="{% or_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 
@@ -39,7 +39,7 @@
                 {% image page.social_image original as social_image_url %}
                 <meta name="twitter:image" content="{{ social_image_url.url }}?1" />
             {% else %}
-                <meta name="twitter:image" content="{% default_meta_image_url %}" />
+                <meta name="twitter:image" content="{% or_meta_image_url %}" />
             {% endif %}
         {% endblock %}
 
