@@ -246,10 +246,14 @@
         <h2>OR Local Group Info</h2>
 
         <p>
-          {{app.group}}
+          {{ app.group }}
         </p>
 
         {{ app.local_group_info|safe }}
+
+        <p>
+          <strong>Endorsements:</strong> {{ app.vol_endorsements }}
+        </p>
 
       </section>
 
