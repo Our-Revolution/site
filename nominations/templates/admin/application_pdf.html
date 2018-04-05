@@ -252,7 +252,8 @@
         {{ app.local_group_info|safe }}
 
         <p>
-          <strong>Endorsements:</strong> {{ app.vol_endorsements }}
+          <strong>Endorsements:</strong>
+          {% if app.vol_endorsements %}{{ app.vol_endorsements }}{% endif %}
         </p>
 
       </section>
