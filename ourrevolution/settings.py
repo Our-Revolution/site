@@ -31,8 +31,10 @@ ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 
-# TODO: move to env config
-BSD_CREATE_ACCOUNT_URL = 'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/ctl/Constituent/Login'
+BSD_CREATE_ACCOUNT_URL = os.environ.get(
+    'BSD_CREATE_ACCOUNT_URL',
+    'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login'
+)
 
 
 # Quick-start development settings - unsuitable for production
@@ -251,7 +253,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, '.static')
 
 WAGTAIL_SITE_NAME = 'Our Revolution'
 
-# Set base url for wagtail email notifications https://github.com/wagtail/wagtail/issues/826
+"""
+Set base url for wagtail email notifications
+https://github.com/wagtail/wagtail/issues/826
+"""
 BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
