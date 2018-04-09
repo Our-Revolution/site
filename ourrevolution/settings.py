@@ -30,6 +30,8 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
 ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
+
+# TODO: move to env config
 BSD_CREATE_ACCOUNT_URL = 'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login' if os.environ.get('env', 'development') != 'production' else 'https://go.ourrevolution.com/ctl/Constituent/Login'
 
 
@@ -250,10 +252,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, '.static')
 WAGTAIL_SITE_NAME = 'Our Revolution'
 
 # Set base url for wagtail email notifications https://github.com/wagtail/wagtail/issues/826
-BASE_URL = 'http://localhost:8000' if os.environ.get('env', 'development') != 'production' else 'https://ourrevolution.com'
+# TODO: move to env config
+BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# TODO: move to env config
 MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
 
 """ID of 'Briefly list important local issues...' Question"""
@@ -284,6 +288,7 @@ RESULTS_2016_URL = '/election-2016/'
 RESULTS_2017_URL = '/2017-elections-results/'
 START_GROUP_URL = 'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit'
 
+# TODO: move to env config
 if os.environ.get('env', 'development') == 'production':
 
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
