@@ -252,13 +252,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, '.static')
 WAGTAIL_SITE_NAME = 'Our Revolution'
 
 # Set base url for wagtail email notifications https://github.com/wagtail/wagtail/issues/826
-# TODO: move to env config
 BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# TODO: move to env config
-MEDIA_URL = '/media/' if os.environ.get('env', 'development') != 'production' else 'https://s3.amazonaws.com/our-revolution-dot-com/'
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 
 """ID of 'Briefly list important local issues...' Question"""
 NOMINATIONS_QUESTION_ISSUES_ID = 24
