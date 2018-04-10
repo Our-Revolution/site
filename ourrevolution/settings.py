@@ -291,19 +291,18 @@ RESULTS_2016_URL = '/election-2016/'
 RESULTS_2017_URL = '/2017-elections-results/'
 START_GROUP_URL = 'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit'
 
-# TODO: move to env config
-if os.environ.get('env', 'development') == 'production':
-
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
-    AWS_QUERYSTRING_AUTH = False
-
-    AWS_AUTO_CREATE_BUCKET = True
-    # AWS_DEFAULT_ACL
-
+DEFAULT_FILE_STORAGE = os.environ.get(
+    'DEFAULT_FILE_STORAGE',
+    'django.core.files.storage.FileSystemStorage'
+)
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+AWS_QUERYSTRING_AUTH = bool(int(os.environ.get('AWS_QUERYSTRING_AUTH', '1')))
+AWS_AUTO_CREATE_BUCKET = bool(int(os.environ.get(
+    'AWS_AUTO_CREATE_BUCKET',
+    '0'
+)))
 
 TEST_RUNNER = 'pages.tests.NoDbTestRunner'
 
