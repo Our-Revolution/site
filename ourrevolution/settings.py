@@ -275,16 +275,8 @@ OR_ADDRESS_CITY = 'Washington'
 OR_ADDRESS_STATE = 'DC'
 OR_ADDRESS_STREET = 'PO Box 66208'
 OR_ADDRESS_ZIP = '20035'
-
-# TODO: TECH-1016: remove old logo after launch
-OR_LOGO_ENABLED = bool(int(os.environ.get('OR_LOGO_ENABLED', 0)))
-OR_LOGO_SECONDARY_OLD = 'https://s.bsd.net/bernie16/ourrevolution/page/-/images/our-revolution-logo-3-color.png'
-OR_LOGO_SECONDARY_NEW = 'https://our-revolution-dot-com.s3.amazonaws.com/images/our-revolution-logo-secondary-300x353.original.png'
-OR_LOGO_SECONDARY = OR_LOGO_SECONDARY_NEW if OR_LOGO_ENABLED else OR_LOGO_SECONDARY_OLD
-OR_META_IMAGE_OLD = 'https://our-revolution-dot-com.s3.amazonaws.com/images/fb-share.original.png?1'
-OR_META_IMAGE_NEW = '/static/dist/img/our-revolution-meta-image.png'
-OR_META_IMAGE_URL = OR_META_IMAGE_NEW if OR_LOGO_ENABLED else OR_META_IMAGE_OLD
-
+OR_LOGO_SECONDARY = 'https://our-revolution-dot-com.s3.amazonaws.com/images/our-revolution-logo-secondary-300x353.original.png'
+OR_META_IMAGE_URL = '/static/dist/img/our-revolution-meta-image.png'
 ORGANIZING_EMAIL = 'organizing@ourrevolution.com'
 RESULTS_URL = '/results/'
 RESULTS_2016_URL = '/election-2016/'
