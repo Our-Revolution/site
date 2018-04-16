@@ -71,12 +71,12 @@ class BasePage(Page):
         ]
 
 
-class MemberNewsletterIndexPage(Page):
+class EmailContentIndexPage(Page):
     parent_page_types = ['pages.IndexPage']
-    subpage_types = ['pages.MemberNewsletterPage']
+    subpage_types = ['pages.EmailContentPage']
 
 
-class MemberNewsletterPage(Page):
+class EmailContentPage(Page):
     header = RichTextField()
     body = StreamField([
         ('white_block', blocks.RichTextBlock()),
@@ -92,13 +92,22 @@ class MemberNewsletterPage(Page):
             ('caption', blocks.RichTextBlock(required=False)),
         ])),
     ])
+    # max length is based on Twitter 280 minus a link which is max 23
+    share_copy = models.CharField(
+        max_length=257,
+        blank=True,
+        null=True,
+        help_text="""
+            Copy that will be included in social posts when the share
+            buttons at the bottom of the email are used."""
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('header'),
         StreamFieldPanel('body'),
     ]
 
-    parent_page_types = ['pages.MemberNewsletterIndexPage']
+    parent_page_types = ['pages.EmailContentIndexPage']
     subpage_types = []
 
 
