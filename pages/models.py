@@ -71,12 +71,12 @@ class BasePage(Page):
         ]
 
 
-class EmailContentIndexPage(Page):
+class MemberNewsletterIndexPage(Page):
     parent_page_types = ['pages.IndexPage']
-    subpage_types = ['pages.EmailContentPage']
+    subpage_types = ['pages.MemberNewsletterPage']
 
 
-class EmailContentPage(Page):
+class MemberNewsletterPage(Page):
     header = RichTextField()
     body = StreamField([
         ('white_block', blocks.RichTextBlock()),
@@ -92,9 +92,10 @@ class EmailContentPage(Page):
             ('caption', blocks.RichTextBlock(required=False)),
         ])),
     ])
-    # max length is based on Twitter 280 minus a link which is max 23
+
+    # max length is based on Twitter 280 minus a link which is max 24
     share_copy = models.CharField(
-        max_length=257,
+        max_length=256,
         blank=True,
         null=True,
         help_text="""
@@ -104,10 +105,11 @@ class EmailContentPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('header'),
+        FieldPanel('share_copy'),
         StreamFieldPanel('body'),
     ]
 
-    parent_page_types = ['pages.EmailContentIndexPage']
+    parent_page_types = ['pages.MemberNewsletterIndexPage']
     subpage_types = []
 
 

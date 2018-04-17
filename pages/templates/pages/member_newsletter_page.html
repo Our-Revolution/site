@@ -78,7 +78,7 @@
         <tr>
           <td style="vertical-align:top;width:600px;">
       <![endif]--><div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr><td style="word-wrap:break-word;font-size:0px;padding:0px;" align="center"><table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border-spacing:0px;" align="center" border="0"><tbody><tr><td style="width:100px;">
-        <img alt="Our Revolution Member Newsletter" height="auto"
+        <img alt="Our Revolution" height="auto"
         src="https://s.bsd.net/ourrev/main/page/-/images/newsletter/member-newsletter-logo-no-text.png"
         style="border:none;border-radius:0px;display:block;font-size:13px;outline:none;text-decoration:none;width:100%;height:auto;"
         width="100">
@@ -347,7 +347,7 @@
         <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
           <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-bottom:0px;" align="center">
             <div style="cursor:auto;color:#fff;font-family:Lato, Helvetica, Arial, sans-serif;font-size:24px;font-weight:700;line-height:140%;text-align:center;">
-              Share this newsletter.
+              Share this email.
             </div>
           </td></tr>
           <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
@@ -360,7 +360,7 @@
           <table role="presentation" cellpadding="0" cellspacing="0"
           style="background:#55acee;border-radius:3px;width:20px;" border="0"><tbody>
         <tr><td style="font-size:0px;vertical-align:middle;width:20px;height:20px;">
-          <a href="https://twitter.com/home?status=Check%20out%20Our%20Revolution%27s%20Member%20Newsletter%20-%20a%20guide%20to%20the%20political%20revolution%2C%20and%20how%20you%20can%20be%20a%20part%20of%20it.%20https://ourrevolution.com{% pageurl page %}">
+          <a href="https://twitter.com/home?status={% if page.share_copy %}{{ page.share_copy|urlencode }}%20{% endif %}https://ourrevolution.com{% pageurl page %}">
             <img alt="twitter" height="20"
             src="https://www.mailjet.com/images/theme/v1/icons/ico-social/twitter.png"
             style="display:block;border-radius:3px;" width="20">
@@ -368,7 +368,7 @@
         </td></tr>
       </tbody></table></td>
       <td style="padding:4px 4px 4px 0;vertical-align:middle;">
-        <a href="https://twitter.com/home?status=Check%20out%20Our%20Revolution%27s%20Member%20Newsletter%20-%20a%20guide%20to%20the%20political%20revolution%2C%20and%20how%20you%20can%20be%20a%20part%20of%20it.%20https://ourrevolution.com{% pageurl page %}"
+        <a href="https://twitter.com/home?status={% if page.share_copy %}{{ page.share_copy|urlencode }}%20{% endif %}https://ourrevolution.com{% pageurl page %}"
         style="text-decoration:none;text-align:left;display:block;color:#fff;font-family:Lato, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;border-radius:3px;">
         Tweet
         </a>
