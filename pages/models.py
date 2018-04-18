@@ -71,16 +71,42 @@ class BasePage(Page):
         ]
 
 
-class MemberNewsletterIndexPage(Page):
+class EmailContentIndexPage(Page):
     parent_page_types = ['pages.IndexPage']
-    subpage_types = ['pages.MemberNewsletterPage']
+    subpage_types = ['pages.EmailContentPage']
 
 
-class MemberNewsletterPage(Page):
-    header = RichTextField()
+class EmailContentPage(Page):
+    button_colors = (
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('red', 'Red'),
+    )
+
+    header = RichTextField(
+        blank=True,
+        null=True
+    )
     body = StreamField([
         ('white_block', blocks.RichTextBlock()),
         ('blue_block', blocks.RichTextBlock()),
+        ('button_block', blocks.StructBlock([
+            (('content'), blocks.RichTextBlock(
+                required=False
+            )),
+            (('button_copy'), blocks.CharBlock(
+                max_length=16,
+                required=False
+            )),
+            (('button_url'), blocks.URLBlock(
+                required=False
+            )),
+            (('button_color'), blocks.ChoiceBlock(
+                choices=button_colors,
+                max_length=16,
+                required=False
+            ))
+        ])),
         ('image_block', blocks.StructBlock([
             ('header', blocks.RichTextBlock(required=False)),
             ('image', ImageChooserBlock()),
@@ -93,12 +119,23 @@ class MemberNewsletterPage(Page):
         ])),
     ])
 
+    # max length is based on Twitter 280 minus a link which is max 24
+    share_copy = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        help_text="""
+            Copy that will be included in social posts when the share
+            buttons at the bottom of the email are used."""
+    )
+
     content_panels = Page.content_panels + [
         FieldPanel('header'),
+        FieldPanel('share_copy'),
         StreamFieldPanel('body'),
     ]
 
-    parent_page_types = ['pages.MemberNewsletterIndexPage']
+    parent_page_types = ['pages.EmailContentIndexPage']
     subpage_types = []
 
 
