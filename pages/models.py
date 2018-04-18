@@ -77,10 +77,36 @@ class MemberNewsletterIndexPage(Page):
 
 
 class MemberNewsletterPage(Page):
-    header = RichTextField()
+    button_colors = (
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('red', 'Red'),
+    )
+
+    header = RichTextField(
+        blank=True,
+        null=True
+    )
     body = StreamField([
         ('white_block', blocks.RichTextBlock()),
         ('blue_block', blocks.RichTextBlock()),
+        ('button_block', blocks.StructBlock([
+            (('content'), blocks.RichTextBlock(
+                required=False
+            )),
+            (('button_copy'), blocks.CharBlock(
+                max_length=16,
+                required=False
+            )),
+            (('button_url'), blocks.URLBlock(
+                required=False
+            )),
+            (('button_color'), blocks.ChoiceBlock(
+                choices=button_colors,
+                max_length=16,
+                required=False
+            ))
+        ])),
         ('image_block', blocks.StructBlock([
             ('header', blocks.RichTextBlock(required=False)),
             ('image', ImageChooserBlock()),
