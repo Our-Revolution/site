@@ -71,12 +71,12 @@ class BasePage(Page):
         ]
 
 
-class MemberNewsletterIndexPage(Page):
+class EmailContentIndexPage(Page):
     parent_page_types = ['pages.IndexPage']
-    subpage_types = ['pages.MemberNewsletterPage']
+    subpage_types = ['pages.EmailContentPage']
 
 
-class MemberNewsletterPage(Page):
+class EmailContentPage(Page):
     button_colors = (
         ('blue', 'Blue'),
         ('green', 'Green'),
@@ -135,7 +135,7 @@ class MemberNewsletterPage(Page):
         StreamFieldPanel('body'),
     ]
 
-    parent_page_types = ['pages.MemberNewsletterIndexPage']
+    parent_page_types = ['pages.EmailContentIndexPage']
     subpage_types = []
 
 

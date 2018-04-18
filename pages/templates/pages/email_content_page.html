@@ -98,6 +98,8 @@
       <![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
         </td>
       </tr>
+
+      {% if page.header %}
       <tr>
         <td style="width:600px;">
       <![endif]--><div style="margin:0px auto;border-radius:3px;max-width:600px;background:#FFF;"><table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;border-radius:3px;background:#FFF;" align="center" border="0"><tbody><tr><td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:0px;"><!--[if mso | IE]>
@@ -120,6 +122,7 @@
       <![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
       </td></tr></table>
       <![endif]-->
+      {% endif %}
 
       {% for block in page.body %}
 
@@ -344,12 +347,16 @@
       style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;">
       <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
 
+      {% if block.value.content %}
+
       <tr><td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;" align="left">
         <div
         style="cursor:auto;color:#4A4A4A;font-family:Lato, Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;line-height:140%;text-align:left;">
         {% include_block block.value.content %}
         </div>
       </td></tr>
+
+      {% endif %}
 
       {% if block.value.button_copy and block.value.button_url and block.value.button_color %}
 
