@@ -358,13 +358,13 @@
 
       {% endif %}
 
-      {% if block.value.button_copy and block.value.button_url and block.value.button_color %}
+      {% if block.value.button_copy and block.value.button_url %}
 
       <tr><td align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
           <tr>
-            <td align="center" bgcolor="#{% if block.value.button_color == 'green' %}45d363{% elif block.value.button_color == 'red' %}d74e5b{% else %}218fff{% endif %}" role="presentation" style="border:none;border-radius:3px;color:#FFFFFF;cursor:auto;padding:10px 25px;" valign="middle">
-              <a href="{{block.value.button_url}}" style="background:#{% if block.value.button_color == 'green' %}45d363{% elif block.value.button_color == 'red' %}d74e5b{% else %}218fff{% endif %};color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:18px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:uppercase;" target="_blank">
+            <td align="center" bgcolor="#{% if block.value.button_color == 'green' %}45d363{% elif block.value.button_color == 'blue' %}218fff{% else %}d74e5b{% endif %}" role="presentation" style="border:none;border-radius:3px;color:#FFFFFF;cursor:auto;padding:10px 25px;" valign="middle">
+              <a href="{{block.value.button_url}}" style="background:#{% if block.value.button_color == 'green' %}45d363{% elif block.value.button_color == 'blue' %}218fff{% else %}d74e5b{% endif %};color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:18px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-transform:uppercase;" target="_blank">
                 {{block.value.button_copy}}
               </a>
             </td>
