@@ -96,10 +96,10 @@ class MemberNewsletterPage(Page):
             )),
             (('button_copy'), blocks.CharBlock(
                 max_length=16,
-                required=False
+                required=True
             )),
             (('button_url'), blocks.URLBlock(
-                required=False
+                required=True
             )),
             (('button_color'), blocks.ChoiceBlock(
                 choices=button_colors,
