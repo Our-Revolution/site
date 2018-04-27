@@ -15,14 +15,14 @@
                 {{ page.body | richtext }}
               {% endif %}
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </div>
   </div>
-      
+
 	<div class="container-fluid">
-    <div class="row">      
+    <div class="row">
       <div class="container pa20 pb20 fs16">
   			<div class="col-md-12">
           <h2>Contributions</h2>
@@ -33,34 +33,36 @@
 								<button id="q2_2017" class="btn btn-default">Q2 2017</a>
 					</div>
   				<ul class="lst0 pa0 list-3-col clearfix">
+						{% comment %}
 						<div id="2016_list" class="donor-list">
 	  					{% for donor in donations %}
 	    				  {% if donor.first_name_2016 is not None %}<li>{{ donor.first_name_2016 }} {{ donor.last_name_2016 }}</li>{% endif %}
 	  					{% endfor %}
 						</div>
-						
+
 						<div id="q1_2017_list" class='donor-list'>
 							{% for donor in donations %}
 	    				  {% if donor.first_name_q1_2017 is not None %}<li>{{ donor.first_name_q1_2017 }} {{ donor.last_name_q1_2017 }}</li>{% endif %}
 	  					{% endfor %}
 						</div>
-						
+
 						<div id="q2_2017_list" class='donor-list'>
 							{% for donor in donations %}
 	    				  {% if donor.first_name_q2_2017 is not None %}<li>{{ donor.first_name_q2_2017 }} {{ donor.last_name_q2_2017 }}</li>{% endif %}
 	  					{% endfor %}
 						</div>
+						{% endcomment %}
   				</ul>
         </div>
       </div>
     </div>
   </div>
-	
-	<script>
+
+	<!-- <script>
 		$(document).ready(function (){
 			$('#q1_2017_list').hide();
 			$('#q2_2017_list').hide();
-			
+
 			$('#q_selector').on('click touchstart', function(e) {
 				$('#q_selector .btn').removeClass('active');
 				$(e.target).addClass('active');
@@ -68,6 +70,6 @@
 				$('#' + $(e.target).attr('id') + '_list').show();
 			})
 		});
-	</script>
+	</script> -->
 
 {% endblock %}

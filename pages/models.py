@@ -21,6 +21,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChoo
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.signals import page_published, page_unpublished
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
@@ -31,8 +32,10 @@ from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
-import csv, json
+import csv
+import json
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -1638,20 +1641,61 @@ class FullContentPage(Page):
 class DonationPage(Page):
     abstract = RichTextField(null=True, blank=True)
     body = RichTextField(null=True, blank=True)
+    # TODO: TECH-1093 Remove legacy csv file field on donation page
     csv_file = models.FileField(null=True, blank=True)
 
+    QUARTER_CHOICES = [
+        (1, 'Q1'),
+        (2, 'Q2'),
+        (3, 'Q3'),
+        (4, 'Q4')
+    ]
+
+    donors = StreamField([
+        ('donors_info', blocks.StructBlock([
+            ('csv_file', DocumentChooserBlock(label='CSV File')),
+            ('quarter', blocks.ChoiceBlock(
+                choices=QUARTER_CHOICES,
+                required=False
+            )),
+            ('year', blocks.CharBlock(
+                max_length=4
+            ))
+        ]))
+    ])
+
     content_panels = Page.content_panels + [
-            FieldPanel('abstract', classname="full"),
-            FieldPanel('body', classname="full"),
-            FieldPanel('csv_file'),
-        ]
+        FieldPanel('abstract', classname="full"),
+        FieldPanel('body', classname="full"),
+        StreamFieldPanel('donors'),
+        MultiFieldPanel(
+            [FieldPanel('csv_file')],
+            heading="Legacy fields",
+            classname="collapsible collapsed"
+        )
+    ]
 
     def get_context(self, *args, **kwargs):
         context = super(DonationPage, self).get_context(*args, **kwargs)
 
-        reader = csv.DictReader(self.csv_file, fieldnames=['first_name_2016','last_name_2016','first_name_q1_2017','last_name_q1_2017','first_name_q2_2017','last_name_q2_2017'])
-        reader.next()
-        context['donations'] = list(reader)
+        legacy_reader = csv.DictReader(self.csv_file, fieldnames=['first_name_2016','last_name_2016','first_name_q1_2017','last_name_q1_2017','first_name_q2_2017','last_name_q2_2017'])
+        legacy_reader.next()
+        context['donations'] = list(legacy_reader)
+
+        # donor_dict = {}
+        #
+        # # print vars(self.donors.stream_block.child_blocks)
+        #
+        # # for file in self.csv_files:
+        # #     reader = csv.DictReader(
+        # #         file.value.file,
+        # #         fieldnames=['first_name', 'last_name']
+        # #     )
+        # #     reader.next()
+        # #     # donor_dict[]
+        #
+        #
+        # context['donations_new'] = donor_dict
 
         return context
 
