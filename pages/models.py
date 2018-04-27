@@ -31,7 +31,8 @@ from local_groups.models import Group
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
-import csv, json
+import csv
+import json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -1649,7 +1650,23 @@ class DonationPage(Page):
     def get_context(self, *args, **kwargs):
         context = super(DonationPage, self).get_context(*args, **kwargs)
 
-        reader = csv.DictReader(self.csv_file, fieldnames=['first_name_2016','last_name_2016','first_name_q1_2017','last_name_q1_2017','first_name_q2_2017','last_name_q2_2017'])
+        reader = csv.DictReader(
+            self.csv_file,
+            fieldnames=[
+                'first_name_2016',
+                'last_name_2016',
+                'first_name_q1_2017',
+                'last_name_q1_2017',
+                'first_name_q2_2017',
+                'last_name_q2_2017',
+                'first_name_q3_2017',
+                'last_name_q3_2017',
+                'first_name_q4_2017',
+                'last_name_q4_2017',
+                'first_name_q1_2018',
+                'last_name_q1_2018'
+            ]
+        )
         reader.next()
         context['donations'] = list(reader)
 
