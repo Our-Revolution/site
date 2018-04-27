@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Start installing dependencies"
+echo "Start installing packages"
 cd /home/ubuntu/ourrevolution
 source $(which virtualenvwrapper.sh)
 workon ourrevolution
@@ -11,4 +11,4 @@ npm install
 echo "Install package requirements from requirements.txt"
 pip install -r requirements.txt
 
-echo "Finished installing dependencies"
+echo "Finished installing packages"
