@@ -88,19 +88,19 @@ hooks:
   #     runas:
 # During the BeforeInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
-  BeforeInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 300
-      runas: ubuntu
+  # BeforeInstall:
+  #   - location:
+  #     timeout:
+  #     runas:
   #   - location:
   #     timeout:
   #     runas:
 # During the AfterInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
-  # AfterInstall:
-  #   - location:
-  #     timeout:
-  #     runas:
+  AfterInstall:
+    - location: scripts/install_packages.sh
+      timeout: 300
+      runas: ubuntu
   #   - location:
   #     timeout:
   #     runas:
