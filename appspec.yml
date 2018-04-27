@@ -79,10 +79,10 @@ hooks:
 # During the ApplicationStop deployment lifecycle event, run the commands
 #   in the script specified in "location" starting from the root of the
 #   revision's file bundle.
-  # ApplicationStop:
-  #   - location:
-  #     timeout:
-  #     runas:
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 60
+      runas: ubuntu
   #   - location:
   #     timeout:
   #     runas:
@@ -106,10 +106,10 @@ hooks:
   #     runas:
 # During the ApplicationStart deployment lifecycle event, run the commands
 #   in the script specified in "location".
-  # ApplicationStart:
-  #   - location:
-  #     timeout:
-  #     runas:
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 60
+      runas: ubuntu
   #   - location:
   #     timeout:
   #     runas:

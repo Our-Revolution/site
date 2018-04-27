@@ -1,8 +1,6 @@
 #!/bin/bash
 
 echo "Start installing dependencies"
-
-echo "Change directory"
 cd /home/ubuntu/ourrevolution
 
 echo "Work on ourrevolution"
