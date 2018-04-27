@@ -2,7 +2,7 @@
 
 echo "Start installing packages"
 cd /home/ubuntu/ourrevolution
-source $(which virtualenvwrapper.sh)
+source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
 echo "Install build tools"
