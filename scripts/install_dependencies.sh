@@ -2,15 +2,13 @@
 
 echo "Start installing dependencies"
 cd /home/ubuntu/ourrevolution
-
-echo "Work on ourrevolution"
 source $(which virtualenvwrapper.sh)
 workon ourrevolution
 
-echo "Install build tools"
+echo "npm install..."
 npm install
 
-echo "Install package requirements from requirements.txt"
+echo "pip install..."
 pip install -r requirements.txt
 
 echo "Finished installing dependencies"
