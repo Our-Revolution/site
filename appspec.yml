@@ -22,9 +22,9 @@ os: linux
 # If you are not copying any files to the Amazon EC2 instance, then remove the
 #   "files" section altogether. A blank or incomplete "files" section
 #   may cause associated deployments to fail.
-# files:
-#   - source:
-#     destination:
+files:
+  - source: /
+    destination: /home/ubuntu/ourrevolution
 #   - source:
 #     destination:
 # For deployments to Amazon Linux, Ubuntu Server, or RHEL instances,
