@@ -101,9 +101,9 @@ hooks:
     - location: scripts/install_packages.sh
       timeout: 300
       runas: ubuntu
-  #   - location:
-  #     timeout:
-  #     runas:
+    - location: scripts/run_migrations.sh
+      timeout: 300
+      runas: ubuntu
 # During the ApplicationStart deployment lifecycle event, run the commands
 #   in the script specified in "location".
   ApplicationStart:
