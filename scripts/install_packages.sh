@@ -11,4 +11,7 @@ npm install
 echo "Install package requirements from requirements.txt"
 pip install -r requirements.txt
 
+echo "Collect static files"
+./manage.py collectstatic --noinput
+
 echo "Finished installing packages"
