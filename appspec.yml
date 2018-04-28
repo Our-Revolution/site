@@ -90,8 +90,8 @@ hooks:
 #   in the script specified in "location".
   BeforeInstall:
     - location: scripts/before_install.sh
-      timeout:
-      runas:
+      timeout: 60
+      runas: ubuntu
   #   - location:
   #     timeout:
   #     runas:
