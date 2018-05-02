@@ -15,9 +15,10 @@ class is_authenticated(object):
         if 'profile' in request.session:
             response = self.view_func(request, *args, **kwargs)
         else:
-            response = redirect('/groups/nominations/login')
+            response = redirect('/groups/nominations/')
 
         return response
+
 
 class is_authenticated_candidate(object):
 

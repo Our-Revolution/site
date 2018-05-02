@@ -2,46 +2,53 @@
 
 {% block page_title %}Our Revolution Nominations{% endblock %}
 
+{% block nav %}
+
+{{ block.super }}
+
+{% include "partials/organizing_hub_header.html" %}
+
+{% endblock %}
+
 {% block content %}
 
 <div class="container-fluid">
   <div class="row blue-bg nina-bg white-text pb4">
-    <div class="back-bar--small">
-      <div class="container">
-        <a href="/groups/nominations/login" class="btn btn-primary uppercase ls2 pull-right">Login</a>
-      </div>
-    </div>
+
     <div class="container pt2">
       <div class="col-md-6">
         <h1 class="mb0">Nominate a Candidate or Ballot Initiative</h1>
-        
+
         <div class="fs18">
           <p>Our Revolution is made up of hundreds of local groups all across the world, and all of our endorsements must first originate with a nomination from an official group.</p>
-          
-          <p>Get started submitting your group’s nomination now, or learn more about our nomination process below.</p> 
+
+          <p>Get started submitting your group’s nomination now, or learn more about our nomination process below.</p>
         </div>
-        
+
         <div class="mt20 mb20">
-          <a class="btn btn-primary ls2 uppercase" href="/groups/nominations/login">Get Started</a> 
+          <a class="btn btn-primary ls2 uppercase"
+          href="{% url 'nominations-dashboard' %}">
+            Get Started
+          </a>
           <a class="btn btn-dark ls2 uppercase" href="#learn-more" data-scroll>Learn More <span class="glyphicon glyphicon-chevron-down"></span></a>
         </div>
-        
+
         <p><small>Not part of a group? <a href="/groups"><strong>Find or form one today.</strong></a></small></p>
       </div>
     </div>
   </div>
-  
+
   <div class="container pt2 pb2" id="learn-more">
     <div class="col-md-6">
       <h2>Our Nomination Process</h2>
-      
+
       <p>Our Revolution seeks to empower the next generation of progressive leaders by inspiring and supporting progressive candidates to run for offices across the entire spectrum of government. From school boards to congressional seats, a new generation of political leaders, dedicated to transforming America’s corrupt campaign finance system and rigged economy, will be elected into office.</p>
 
       <p>In order to transform our country, we need everyone - progressive activists, women of color, immigrants, Native Americans, religious minorities, working class americans, and members of marginalized communities - to be elected into office at all levels.</p>
 
       <p>We value the power of local grassroots organizing and because of that, only candidates or initiatives that have been nominated by local Our Revolution groups, or strategically identified by OR staff and supported by the local group, will be considered for an Our Revolution national endorsement.</p>
     </div>
-    
+
     <div class="col-md-6">
       <div class="pa20 f5f5f5-bg br3 mt20 mb20 fs18">
         <ol>
@@ -50,18 +57,21 @@
           <li>Submit the nomination</li>
         </ol>
       </div>
-      
-      <a href="/groups/nominations/login" class="btn btn-primary btn-block ls2 uppercase mb20">Get Started</a>
-      
+
+      <a href="{% url 'nominations-dashboard' %}"
+      class="btn btn-primary btn-block ls2 uppercase mb20">
+        Get Started
+      </a>
+
       <p><small>Not part of a group? <a href="/groups/new">Find or form one today.</a></small></p>
     </div>
   </div>
-  
+
   <div class="row f5f5f5-bg pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
         <h2>Our Revolution will provide leaders inspired by the political revolution with the following resources on a race-by-race basis.</h2>
-        
+
         <ul class="fs18 col-md-10 col-md-offset-1 lst0 mt20">
           <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-usd mr20"></i>Grassroots Fundraising</li>
           <li class="pa20 br3 white-bg mb20"><i class="glyphicon glyphicon-phone mr20 "></i>GOTV Texting</li>
@@ -72,7 +82,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="container pb2 pt2">
     <div class="col-md-8 col-md-offset-2">
       <h2>To be considered for an endorsement, candidates must meet the following criteria:</h2>
@@ -84,11 +94,11 @@
         <li>Run a positive campaign.</li>
         <li>Reject money from corporate interests.</li>
       </ul>
-      
+
       <p><strong>Note:</strong> Nominations submitted less than 30 days before the election are unlikely to be considered.</p>
     </div>
   </div>
-  
+
   <div class="row f5f5f5-bg pt2 pb2">
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
@@ -100,9 +110,12 @@
             <li>Submit the nomination</li>
           </ol>
         </div>
-        
-        <a href="/groups/nominations/login" class="btn btn-primary btn-block ls2 uppercase mb20">Get Started</a>
-        
+
+        <a href="{% url 'nominations-dashboard' %}"
+        class="btn btn-primary btn-block ls2 uppercase mb20">
+          Get Started
+        </a>
+
         <p><small>Not part of a group? <a href="/groups">Find or form one today.</a></small></p>
       </div>
     </div>

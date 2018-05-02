@@ -1,5 +1,5 @@
 from django.conf.urls import include, url
-from .views import CreateApplicationView, NominationsIndexView, EditNominationView, handle_auth0_callback, logout, login, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
+from .views import CreateApplicationView, NominationsIndexView, EditNominationView, logout, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
 from django.views.generic import TemplateView
 from .decorators import is_authenticated, is_authenticated_candidate
 
@@ -8,33 +8,35 @@ urlpatterns = [
     url(r'^groups/nominations/', include([
         url(
             r'^submit/$',
-            is_authenticated(SubmitView.as_view()),
+            SubmitView.as_view(),
             name='nominations-submit',
         ),
-        url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
-        url(r'^email-success/$', is_authenticated(TemplateView.as_view(template_name='email-success.html'))),
-        url(r'^dashboard/$', is_authenticated(DashboardView.as_view())),
-        url(r'^login/$', login),
+        url(r'^success/$', TemplateView.as_view(template_name='success.html')),
+        url(r'^email-success/$', TemplateView.as_view(template_name='email-success.html')),
+        url(
+            r'^dashboard/$',
+            DashboardView.as_view(),
+            name='nominations-dashboard'
+        ),
         url(r'^logout/$', is_authenticated(logout)),
-        url(r'^callback/$', handle_auth0_callback),
         url(r'^verify/$', TemplateView.as_view(template_name='verify.html')),
-        url(r'^application/$', is_authenticated(ApplicationView.as_view())),
+        url(r'^application/$', ApplicationView.as_view()),
         url(
             r'^questionnaire/$',
             is_authenticated(QuestionnaireIndexView.as_view()),
             name='nominations-questionnaire'
         ),
-        url(r'^new/$', is_authenticated(CreateApplicationView.as_view())),
-        url(r'^application-type/$', is_authenticated(ApplicationTypeView.as_view())),
-        url(r'^nomination/$', is_authenticated(EditNominationView.as_view())),
+        url(r'^new/$', CreateApplicationView.as_view()),
+        url(r'^application-type/$', ApplicationTypeView.as_view()),
+        url(r'^nomination/$', EditNominationView.as_view()),
         url(
             r'^questionnaire/edit$',
-            is_authenticated(EditQuestionnaireView.as_view()),
+            EditQuestionnaireView.as_view(),
             name='nominations-questionnaire-edit'
         ),
         url(
             r'^questionnaire/reset$',
-            is_authenticated(reset_questionnaire),
+            reset_questionnaire,
             name='nominations-questionnaire-reset'
         ),
         url(r'^$', NominationsIndexView.as_view()),
@@ -49,7 +51,7 @@ urlpatterns = [
         url(r'^success/$', is_authenticated_candidate(TemplateView.as_view(template_name='candidate/success.html'))),
     ])),
     url(r'^groups/nominations/initiatives/', include([
-        url(r'^new/$', is_authenticated(CreateInitiativeView.as_view())),
-        url(r'^success/$', is_authenticated(TemplateView.as_view(template_name='success.html'))),
+        url(r'^new/$', CreateInitiativeView.as_view()),
+        url(r'^success/$', TemplateView.as_view(template_name='success.html')),
     ])),
 ]

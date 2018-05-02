@@ -31,6 +31,7 @@ from .models import (
     Questionnaire
 )
 from auth0.v3.authentication import GetToken, Users, Passwordless
+from auth0.v3.management import Users as Auth0Users
 import json
 import os
 from django.core.mail import EmailMultiAlternatives
@@ -186,7 +187,21 @@ class DashboardView(TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
+        email = 'broder.eric@gmail.com'
+
         user = self.request.session['profile']
+        get_token = GetToken(auth0_domain)
+        token = get_token.client_credentials(
+            auth0_client_id,
+            auth0_client_secret,
+            'https://{}/api/v2/'.format(auth0_domain)
+        )
+        mgmt_api_token = token['access_token']
+        auth0_users = Auth0Users(auth0_domain, mgmt_api_token)
+        query = 'email:%s' % email
+        results = auth0_users.list(q=query, search_engine='v2')
+        auth0_user_id = results['users'][0]['user_id']
+        logger.debug('auth0_user_id: %s' % auth0_user_id)
 
         context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
@@ -362,46 +377,6 @@ class SubmitView(FormView):
         )
         msg.attach_alternative(html_content, "text/html")
         msg.send()
-
-
-def login(request):
-    # if user is already logged in
-    if 'profile' in request.session:
-        print request.session['profile']
-        return redirect('/groups/nominations/dashboard?c=1')
-
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-
-        if form.is_valid():
-            # initiatie Auth0 passwordless
-            passwordless = Passwordless(auth0_domain)
-
-            email = form.cleaned_data['email']
-            passwordless.email(auth0_client_id,email,auth_params={'response_type':'code'})
-
-            return HttpResponseRedirect('/groups/nominations/verify')
-
-    else:
-        form = LoginForm()
-
-    return render(request, 'login.html', {'form': form})
-
-
-def handle_auth0_callback(request):
-    code = request.GET.get('code')
-
-    if code:
-        get_token = GetToken(auth0_domain)
-        auth0_users = Users(auth0_domain)
-        token = get_token.authorization_code(auth0_client_id,
-                                             auth0_client_secret, code, auth0_callback_url)
-        user_info = auth0_users.userinfo(token['access_token'])
-        request.session['profile'] = json.loads(user_info)
-        return redirect('/groups/nominations/dashboard?c=1')
-
-    messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
-    return redirect('/groups/nominations/dashboard?c=1')
 
 
 def logout(request):
