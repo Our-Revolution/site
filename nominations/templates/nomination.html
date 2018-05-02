@@ -1,4 +1,4 @@
-{% extends "pages/base_page.html" %}
+{% extends "nominations_portal.html" %}
 
 {% load bootstrap3 %}
 {% load crispy_forms_tags %}
@@ -16,11 +16,11 @@
         <h1 class="mb0 mt0">Nomination Form</h1>
         <p class="fs18">The nomination form should be filled out by your group detailing why you are nominating this candidate, what makes this candidate a progressive champion, and why a national endorsement is necessary.
 
-        <p class="pa20 br3 light-wash">Fields marked * are required, and each question has a 1000 character limit.</p>         
+        <p class="pa20 br3 light-wash">Fields marked * are required, and each question has a 1000 character limit.</p>
       </div>
     </div>
   </div>
-  
+
 
     <div class="row pt2 pb2">
       <div class="container">
@@ -40,7 +40,7 @@
               <div class="pa20 br3 f5f5f5-bg mb20 pb ">
                 {% crispy form %}
               </div>
-              
+
               <button type='submit' value='submit' class="btn btn-block btn-primary uppercase ls2">Save</button>
             </form>
           {% else %}
@@ -55,7 +55,7 @@
               <label class="control-label fs16" required>10. {{form.group_nomination_process.label}}*</label>
               <p class="pa20 br3 white-bg mt20">{{form.group_nomination_process.value}}</p>
             </div>
-            
+
             <a href="/groups/nominations/questionnaire?id={{application.id}}" class="btn btn-block btn-primary uppercase ls2">Next</a>
           {% endif %}
         </div>

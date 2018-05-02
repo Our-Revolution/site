@@ -1,4 +1,4 @@
-{% extends "pages/base_page.html" %}
+{% extends "nominations_portal.html" %}
 
 {% load bootstrap3 %}
 {% load crispy_forms_tags %}
@@ -10,7 +10,9 @@
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pb2">
+
     {% include 'partials/status_bar.html' with active='status' %}
+
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <span class="article-type">Application</span>

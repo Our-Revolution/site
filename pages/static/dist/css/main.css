@@ -7221,23 +7221,25 @@ h1, h2, h3, h4 {
   .page-heading--small {
     padding-top: 100px; }
 
-.back-bar, .back-bar--small {
+.back-bar, .back-bar--stacked, .back-bar--small {
   background: rgba(0, 0, 0, 0.1);
   padding: 15px; }
+  .back-bar--stacked {
+    padding-top: 0; }
   .back-bar--small {
     padding: 10px; }
-  .back-bar .btn, .back-bar--small .btn {
+  .back-bar .btn, .back-bar--stacked .btn, .back-bar--small .btn {
     height: 30px;
     padding: 5px 10px; }
-  .back-bar .breadcrumb, .back-bar--small .breadcrumb {
+  .back-bar .breadcrumb, .back-bar--stacked .breadcrumb, .back-bar--small .breadcrumb {
     background-color: transparent;
     padding: 0;
     margin-bottom: 0;
     border-radius: 0;
     color: white; }
-    .back-bar .breadcrumb li:before, .back-bar--small .breadcrumb li:before {
+    .back-bar .breadcrumb li:before, .back-bar--stacked .breadcrumb li:before, .back-bar--small .breadcrumb li:before {
       color: white; }
-    .back-bar .breadcrumb .active, .back-bar--small .breadcrumb .active {
+    .back-bar .breadcrumb .active, .back-bar--stacked .breadcrumb .active, .back-bar--small .breadcrumb .active {
       font-weight: 900; }
 
 .social-bar {
