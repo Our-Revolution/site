@@ -131,14 +131,11 @@ class EditNominationView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-
-        try:
-            return Application.objects.get(pk=app_id,user_id=user_id).nomination
-        except (Application.DoesNotExist, KeyError):
-            # TODO: Fix the error thrown when no nomination
-            messages.error(self.request, "We could not find your nomination application. Please try again.")
-            return redirect("/groups/nominations/dashboard?c=1")
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app.nomination
+        else:
+            raise Http404(_("No application found matching the query"))
 
     def get_success_url(self):
         return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
@@ -158,13 +155,17 @@ class EditNominationView(LoginRequiredMixin, UpdateView):
         return form_valid
 
     def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        context_data = super(EditNominationView, self).get_context_data(*args, **kwargs)
-        context_data['formset'] = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data = super(EditNominationView, self).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['formset'] = NominationResponseFormset(
+            self.request.POST or None,
+            instance=self.object,
+            prefix="questions"
+        )
         context_data['helper'] = NominationResponseFormsetHelper()
-        context_data['application'] = Application.objects.get(pk=app_id,user_id=user_id)
-        context_data['user'] = self.request.session['profile']
+        context_data['application'] = self.object.application
         return context_data
 
 
