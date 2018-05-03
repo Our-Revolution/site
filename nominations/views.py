@@ -229,7 +229,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
         ).order_by('-create_dt')
         context_data['initiative_applications'] = InitiativeApplication.objects.all(
-        ).filter(user_id=auth0_user_id)
+        ).filter(
+            Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
+        ).order_by('-create_dt')
         return context_data
 
 
@@ -647,7 +649,7 @@ class CreateInitiativeView(LoginRequiredMixin, CreateView):
     success_url = '/groups/nominations/initiatives/success'
 
     def form_valid(self, form):
-        form.instance.user_id = self.request.session['profile']['user_id']
+        form.instance.auth_user = self.request.user
         form.instance.locality = form.cleaned_data['locality']
         form.instance.status = 'submitted'
 
@@ -656,6 +658,8 @@ class CreateInitiativeView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url + '?id=' + str(self.object.pk))
 
     def get_context_data(self, *args, **kwargs):
-        context_data = super(CreateInitiativeView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = self.request.session['profile']
+        context_data = super(CreateInitiativeView, self).get_context_data(
+            *args,
+            **kwargs
+        )
         return context_data

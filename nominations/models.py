@@ -697,6 +697,13 @@ class ApplicationCandidate(models.Model):
 
 
 class InitiativeApplication(models.Model):
+    """Django User to use instead of legacy auth0 user"""
+    auth_user = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+    )
+    """Legacy Auth0 user id"""
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(null=True, blank=True, verbose_name = 'Submitted at')
