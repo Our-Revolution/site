@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.contrib.auth.decorators import login_required
 from .views import CreateApplicationView, NominationsIndexView, EditNominationView, logout, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
 from django.views.generic import TemplateView
 from .decorators import is_authenticated, is_authenticated_candidate
@@ -11,8 +12,12 @@ urlpatterns = [
             SubmitView.as_view(),
             name='nominations-submit',
         ),
-        url(r'^success/$', TemplateView.as_view(template_name='success.html')),
-        url(r'^email-success/$', TemplateView.as_view(template_name='email-success.html')),
+        url(r'^success/$', login_required(TemplateView.as_view(
+            template_name='success.html'
+        ))),
+        url(r'^email-success/$', login_required(TemplateView.as_view(
+            template_name='email-success.html'
+        ))),
         url(
             r'^dashboard/$',
             DashboardView.as_view(),
@@ -51,6 +56,8 @@ urlpatterns = [
     ])),
     url(r'^groups/nominations/initiatives/', include([
         url(r'^new/$', CreateInitiativeView.as_view()),
-        url(r'^success/$', TemplateView.as_view(template_name='success.html')),
+        url(r'^success/$', login_required(TemplateView.as_view(
+            template_name='success.html'
+        ))),
     ])),
 ]

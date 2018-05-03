@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -53,6 +55,7 @@ with the correct email address and that you have access to edit the current
 application.
 """
 
+
 class NominationsIndexView(TemplateView):
     template_name = "index.html"
 
@@ -61,7 +64,7 @@ class NominationsIndexView(TemplateView):
         return context
 
 
-class ApplicationTypeView(TemplateView):
+class ApplicationTypeView(LoginRequiredMixin, TemplateView):
     template_name = 'application_type.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -72,7 +75,7 @@ class ApplicationTypeView(TemplateView):
         return context_data
 
 
-class CreateApplicationView(CreateView):
+class CreateApplicationView(LoginRequiredMixin, CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
     success_url = '/groups/nominations/application'
@@ -89,7 +92,7 @@ class CreateApplicationView(CreateView):
         return context_data
 
 
-class EditNominationView(UpdateView):
+class EditNominationView(LoginRequiredMixin, UpdateView):
     form_class = NominationForm
     template_name = "nomination.html"
 
@@ -132,7 +135,7 @@ class EditNominationView(UpdateView):
         return context_data
 
 
-class EditQuestionnaireView(UpdateView):
+class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
     form_class = QuestionnaireForm
     template_name = "questionnaire.html"
     success_url = "/groups/nominations/submit"
@@ -182,7 +185,7 @@ class EditQuestionnaireView(UpdateView):
         return context_data
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -209,7 +212,7 @@ class DashboardView(TemplateView):
         return context_data
 
 
-class ApplicationView(DetailView):
+class ApplicationView(LoginRequiredMixin, DetailView):
     template_name = 'application_status.html'
 
     def get_object(self):
@@ -225,7 +228,7 @@ class ApplicationView(DetailView):
         return context_data
 
 
-class QuestionnaireIndexView(FormView):
+class QuestionnaireIndexView(LoginRequiredMixin, FormView):
     form_class = CandidateEmailForm
     template_name = 'questionnaire_index.html'
 
@@ -301,7 +304,7 @@ class QuestionnaireIndexView(FormView):
         return context_data
 
 
-class SubmitView(FormView):
+class SubmitView(LoginRequiredMixin, FormView):
     template_name = 'submit.html'
     form_class = SubmitForm
     success_url = '/groups/nominations/success'
@@ -408,6 +411,7 @@ def candidate_login(request):
     return render(request, 'candidate/login.html', {'form': form})
 
 
+@login_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
     user = request.session['profile']
@@ -616,7 +620,7 @@ class CandidateSubmitView(FormView):
 
 
 # Ballot initiatives
-class CreateInitiativeView(CreateView):
+class CreateInitiativeView(LoginRequiredMixin, CreateView):
     form_class = InitiativeApplicationForm
     template_name = "initiatives/application.html"
     success_url = '/groups/nominations/initiatives/success'
