@@ -336,10 +336,7 @@ class SubmitView(LoginRequiredMixin, FormView):
     # TODO: add conditional for candidate submission
 
     def form_valid(self, form):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        application = Application.objects.all().filter(user_id=user_id,pk=app_id).first()
-
+        application = self.get_object()
         application.status = 'submitted'
         application.save()
 
@@ -349,13 +346,20 @@ class SubmitView(LoginRequiredMixin, FormView):
         return super(SubmitView, self).form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
-        context_data = super(SubmitView, self).get_context_data(*args, **kwargs)
-        context_data['application'] = self.app
-        context_data['user'] = self.request.session['profile']
+        context_data = super(SubmitView, self).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['application'] = self.get_object()
         return context_data
+
+    def get_object(self):
+        app_id = self.request.GET.get('id')
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
 
     def send_notification(self, application):
         """
