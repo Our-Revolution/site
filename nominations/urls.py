@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 from .views import CreateApplicationView, NominationsIndexView, EditNominationView, logout, DashboardView, CandidateDashboardView, ApplicationView, EditQuestionnaireView, QuestionnaireIndexView, CandidateQuestionnaireView, SubmitView, CandidateSubmitView, handle_candidate_callback, candidate_login, ApplicationTypeView, CreateInitiativeView, reset_questionnaire
 from django.views.generic import TemplateView
-from .decorators import is_authenticated, is_authenticated_candidate
+from .decorators import is_authenticated_candidate
 
 # placeholder urls to code templates
 urlpatterns = [
@@ -23,11 +23,11 @@ urlpatterns = [
             DashboardView.as_view(),
             name='nominations-dashboard'
         ),
-        url(r'^logout/$', is_authenticated(logout)),
+        url(r'^logout/$', logout),
         url(r'^application/$', ApplicationView.as_view()),
         url(
             r'^questionnaire/$',
-            is_authenticated(QuestionnaireIndexView.as_view()),
+            QuestionnaireIndexView.as_view(),
             name='nominations-questionnaire'
         ),
         url(r'^new/$', CreateApplicationView.as_view()),

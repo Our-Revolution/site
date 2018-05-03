@@ -135,7 +135,7 @@ class EditNominationView(LoginRequiredMixin, UpdateView):
         if is_application_owner(self.request.user, app):
             return app.nomination
         else:
-            raise Http404(_("No application found matching the query"))
+            raise Http404(_("No nomination found matching the query"))
 
     def get_success_url(self):
         return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
@@ -177,16 +177,11 @@ class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         app_id = self.request.GET.get('id')
-        user = self.request.session['profile']
-        user_id = user['user_id']
-        email = user['email']
-
-        try:
-            return Application.objects.get(pk=app_id,user_id=user_id).questionnaire
-        except (Application.DoesNotExist, KeyError):
-            # TODO: Fix the error thrown when no nomination
-            messages.error(self.request, "We could not find your questionnaire. Please try again.")
-            return redirect("/groups/nominations/dashboard?c=1")
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app.questionnaire
+        else:
+            raise Http404(_("No questionnaire found matching the query"))
 
     def get_success_url(self):
         return "/groups/nominations/submit?id=" + self.request.GET.get('id')
@@ -206,17 +201,18 @@ class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
         return form_valid
 
     def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-
-        application = Application.objects.get(pk=app_id,user_id=user_id)
-
-        context_data = super(EditQuestionnaireView, self).get_context_data(*args, **kwargs)
-        context_data['formset'] = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
+        context_data = super(EditQuestionnaireView, self).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['formset'] = QuestionnaireResponseFormset(
+            self.request.POST or None,
+            instance=self.object,
+            prefix="questions"
+        )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['application'] = application
+        context_data['application'] = self.object.application_set.first()
         context_data['questionnaire'] = self.object
-        context_data['user'] = self.request.session['profile']
         return context_data
 
 
@@ -267,12 +263,7 @@ class QuestionnaireIndexView(LoginRequiredMixin, FormView):
         return "/groups/nominations/email-success"
 
     def form_valid(self, form):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        application = Application.objects.all().filter(
-            user_id=user_id,
-            pk=app_id
-        ).first()
+        application = self.get_object().application_set.first()
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
@@ -321,17 +312,18 @@ class QuestionnaireIndexView(LoginRequiredMixin, FormView):
 
     def get_object(self):
         app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        # TODO: redirect/better error message instead of 404ing
-        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app.questionnaire
+        else:
+            raise Http404(_("No questionnaire found matching the query"))
 
     def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
-        context_data = super(QuestionnaireIndexView, self).get_context_data(*args, **kwargs)
-        context_data['application'] = self.app
-        context_data['user'] = self.request.session['profile']
+        context_data = super(QuestionnaireIndexView, self).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['application'] = self.get_object().application_set.first()
         return context_data
 
 
@@ -443,11 +435,16 @@ def candidate_login(request):
     return render(request, 'candidate/login.html', {'form': form})
 
 
-@method_decorator(verified_email_required, name='dispatch')
+@verified_email_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
-    user = request.session['profile']
-    user_id = user['user_id']
+    application = get_object_or_404(Application, pk=app_id)
+
+    if not is_application_owner(request.user, application):
+        raise Http404(_("No application found matching the query"))
+
+    questionnaire = application.questionnaire
+
     default_next_url = reverse_lazy(
         'nominations-questionnaire-edit'
     ) + '?id=' + app_id
@@ -457,19 +454,6 @@ def reset_questionnaire(request):
         'next',
         default_next_url
     )
-
-    try:
-        application = Application.objects.all().filter(
-            user_id=user_id,
-            pk=app_id
-        ).first()
-        questionnaire = application.questionnaire
-    except (Application.DoesNotExist, AttributeError):
-        messages.error(
-            request,
-            QUESTIONNAIRE_NOT_FOUND_ERROR
-        )
-        return redirect('/groups/nominations/dashboard/')
 
     questionnaire.status = 'incomplete'
     application.authorized_email = None
