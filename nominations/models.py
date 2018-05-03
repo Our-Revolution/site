@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from collections import defaultdict
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField
@@ -208,6 +209,12 @@ class Application(models.Model):
         (99, 'Other'),
     )
 
+    """Django User to use instead of legacy auth0 user"""
+    auth_user = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+    )
     fundraising_date_of_filing = models.DateField(
         blank=True,
         null=True,
@@ -224,6 +231,7 @@ class Application(models.Model):
         null=True,
         verbose_name='Fundraising Source URL'
     )
+    """Legacy field for auth0 user id"""
     user_id = models.CharField(max_length=255, null=True, blank=True)
     create_dt = models.DateTimeField(auto_now_add=True)
     submitted_dt = models.DateTimeField(

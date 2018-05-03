@@ -1,9 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
+from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views.generic import (
     CreateView,
     UpdateView,
@@ -56,6 +59,46 @@ application.
 """
 
 
+def get_auth0_user_id_by_email(email):
+    """Get Auth0 user id by user email"""
+
+    get_token = GetToken(auth0_domain)
+    token = get_token.client_credentials(
+        auth0_client_id,
+        auth0_client_secret,
+        'https://{}/api/v2/'.format(auth0_domain)
+    )
+    mgmt_api_token = token['access_token']
+    auth0_users = Auth0Users(auth0_domain, mgmt_api_token)
+    query = 'email:%s' % email
+    results = auth0_users.list(q=query, search_engine='v3')
+    if results['users']:
+        auth0_user_id = results['users'][0]['user_id']
+    else:
+        auth0_user_id = None
+
+    return auth0_user_id
+
+
+def is_application_owner(user, application):
+    """Check if a user owns an application"""
+
+    if application.auth_user == user:
+        """Check auth_user first"""
+        return True
+
+    elif not application.auth_user and application.user_id:
+        """Check Auth0 for legacy applications"""
+        if application.user_id == get_auth0_user_id_by_email(user.email):
+            return True
+        else:
+            return False
+
+    else:
+        """Otherwise false"""
+        return False
+
+
 class NominationsIndexView(TemplateView):
     template_name = "index.html"
 
@@ -67,13 +110,6 @@ class NominationsIndexView(TemplateView):
 class ApplicationTypeView(LoginRequiredMixin, TemplateView):
     template_name = 'application_type.html'
 
-    def get_context_data(self, *args, **kwargs):
-        user = self.request.session['profile']
-
-        context_data = super(ApplicationTypeView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = user
-        return context_data
-
 
 @method_decorator(verified_email_required, name='dispatch')
 class CreateApplicationView(LoginRequiredMixin, CreateView):
@@ -82,15 +118,10 @@ class CreateApplicationView(LoginRequiredMixin, CreateView):
     success_url = '/groups/nominations/application'
 
     def form_valid(self, form):
-        form.instance.user_id = self.request.session['profile']['user_id']
+        form.instance.auth_user = self.request.user
         super(CreateApplicationView, self).form_valid(form)
 
         return redirect(self.success_url + '?id=' + str(self.object.pk))
-
-    def get_context_data(self, *args, **kwargs):
-        context_data = super(CreateApplicationView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = self.request.session['profile']
-        return context_data
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -193,26 +224,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        email = 'broder.eric@gmail.com'
-
-        user = self.request.session['profile']
-        get_token = GetToken(auth0_domain)
-        token = get_token.client_credentials(
-            auth0_client_id,
-            auth0_client_secret,
-            'https://{}/api/v2/'.format(auth0_domain)
-        )
-        mgmt_api_token = token['access_token']
-        auth0_users = Auth0Users(auth0_domain, mgmt_api_token)
-        query = 'email:%s' % email
-        results = auth0_users.list(q=query, search_engine='v2')
-        auth0_user_id = results['users'][0]['user_id']
-        logger.debug('auth0_user_id: %s' % auth0_user_id)
+        auth0_user_id = get_auth0_user_id_by_email(self.request.user.email)
 
         context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = user
-        context_data['applications'] = Application.objects.all().filter(user_id=user['user_id'])
-        context_data['initiative_applications'] = InitiativeApplication.objects.all().filter(user_id=user['user_id'])
+        """Get both legacy auth0 applications and new applications"""
+        context_data['applications'] = Application.objects.all().filter(
+            Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
+        ).order_by('-create_dt')
+        context_data['initiative_applications'] = InitiativeApplication.objects.all(
+        ).filter(user_id=auth0_user_id)
         return context_data
 
 
@@ -222,14 +242,18 @@ class ApplicationView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         app_id = self.request.GET.get('id')
-        user_id = self.request.session['profile']['user_id']
-        # TODO: redirect/better error message instead of 404ing
-        self.app = get_object_or_404(Application, pk=app_id,user_id=user_id)
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
 
     def get_context_data(self, *args, **kwargs):
-        context_data = super(ApplicationView, self).get_context_data(*args, **kwargs)
-        context_data['application'] = self.app
-        context_data['user'] = self.request.session['profile']
+        context_data = super(ApplicationView, self).get_context_data(
+            *args,
+            **kwargs
+        )
+        context_data['application'] = self.object
         return context_data
 
 
