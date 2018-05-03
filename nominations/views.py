@@ -45,7 +45,6 @@ logger = logging.getLogger(__name__)
 auth0_domain = os.environ['AUTH0_DOMAIN']
 auth0_client_id = os.environ['AUTH0_CLIENT_ID']
 auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
-auth0_callback_url = os.environ['AUTH0_CALLBACK_URL']
 auth0_candidate_callback_url = os.environ['AUTH0_CANDIDATE_CALLBACK_URL']
 
 QUESTIONNAIRE_NOT_FOUND_ERROR = """

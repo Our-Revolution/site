@@ -19,7 +19,6 @@ urlpatterns = [
             name='nominations-dashboard'
         ),
         url(r'^logout/$', is_authenticated(logout)),
-        url(r'^verify/$', TemplateView.as_view(template_name='verify.html')),
         url(r'^application/$', ApplicationView.as_view()),
         url(
             r'^questionnaire/$',

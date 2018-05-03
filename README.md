@@ -4,7 +4,7 @@
 
 1. [Python 2.7](https://www.python.org/downloads/) and [Pip](https://pip.pypa.io/en/stable/installing/)
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
-3. [Node + NPM](https://nodejs.org/en/download/) for building front-end. 
+3. [Node + NPM](https://nodejs.org/en/download/) for building front-end.
 
 ## Installation
 Because 'site' is not a descriptive project name ...
@@ -17,17 +17,16 @@ Because 'site' is not a descriptive project name ...
 
 4. Run `./setup-osx` (it will take a minute; it's making a number of installs HTTP requests)
 
-If db connection throws authentication error, try updating `.env` db url config 
+If db connection throws authentication error, try updating `.env` db url config
 to be `postgres:///ourrevolution` [without host and port](https://www.peterbe.com/plog/connecting-with-psycopg2-without-a-username-and-password).
 
-If `.env` keys are not generated correctly try updating script with something 
+If `.env` keys are not generated correctly try updating script with something
 like this:
 ```
 echo "SECRET_KEY=lebowski" >> .env
 echo "AUTH0_DOMAIN=lebowski" >> .env
 echo "AUTH0_CLIENT_ID=lebowski" >> .env
 echo "AUTH0_CLIENT_SECRET=lebowski" >> .env
-echo "AUTH0_CALLBACK_URL=lebowski" >> .env
 echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
 ```
 
