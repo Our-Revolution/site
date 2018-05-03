@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import (
     CreateView,
     UpdateView,
@@ -12,11 +12,11 @@ from django.views.generic import (
     FormView
 )
 from django.http import HttpResponseRedirect
+from organizing_hub.decorators import verified_email_required
 from .forms import (
     ApplicationForm,
     NominationForm,
     NominationResponseFormset,
-    LoginForm,
     CandidateLoginForm,
     NominationResponseFormsetHelper,
     QuestionnaireForm,
@@ -75,6 +75,7 @@ class ApplicationTypeView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CreateApplicationView(LoginRequiredMixin, CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
@@ -92,6 +93,7 @@ class CreateApplicationView(LoginRequiredMixin, CreateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class EditNominationView(LoginRequiredMixin, UpdateView):
     form_class = NominationForm
     template_name = "nomination.html"
@@ -135,6 +137,7 @@ class EditNominationView(LoginRequiredMixin, UpdateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
     form_class = QuestionnaireForm
     template_name = "questionnaire.html"
@@ -185,6 +188,7 @@ class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
@@ -212,6 +216,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class ApplicationView(LoginRequiredMixin, DetailView):
     template_name = 'application_status.html'
 
@@ -228,6 +233,7 @@ class ApplicationView(LoginRequiredMixin, DetailView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class QuestionnaireIndexView(LoginRequiredMixin, FormView):
     form_class = CandidateEmailForm
     template_name = 'questionnaire_index.html'
@@ -304,6 +310,7 @@ class QuestionnaireIndexView(LoginRequiredMixin, FormView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class SubmitView(LoginRequiredMixin, FormView):
     template_name = 'submit.html'
     form_class = SubmitForm
@@ -411,7 +418,7 @@ def candidate_login(request):
     return render(request, 'candidate/login.html', {'form': form})
 
 
-@login_required
+@method_decorator(verified_email_required, name='dispatch')
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
     user = request.session['profile']
@@ -620,6 +627,7 @@ class CandidateSubmitView(FormView):
 
 
 # Ballot initiatives
+@method_decorator(verified_email_required, name='dispatch')
 class CreateInitiativeView(LoginRequiredMixin, CreateView):
     form_class = InitiativeApplicationForm
     template_name = "initiatives/application.html"
