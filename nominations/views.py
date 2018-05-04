@@ -221,17 +221,27 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        auth0_user_id = get_auth0_user_id_by_email(self.request.user.email)
+        context_data = super(DashboardView, self).get_context_data(
+            *args,
+            **kwargs
+        )
 
-        context_data = super(DashboardView, self).get_context_data(*args, **kwargs)
         """Get both legacy auth0 applications and new applications"""
-        context_data['applications'] = Application.objects.all().filter(
-            Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
-        ).order_by('-create_dt')
-        context_data['initiative_applications'] = InitiativeApplication.objects.all(
-        ).filter(
-            Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
-        ).order_by('-create_dt')
+        auth0_user_id = get_auth0_user_id_by_email(self.request.user.email)
+        if auth0_user_id:
+            context_data['applications'] = Application.objects.all().filter(
+                Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
+            ).order_by('-create_dt')
+            context_data['initiative_applications'] = InitiativeApplication.objects.all(
+            ).filter(
+                Q(auth_user_id=self.request.user.id) | Q(user_id=auth0_user_id)
+            ).order_by('-create_dt')
+        else:
+            context_data['applications'] = Application.objects.all().filter(
+                auth_user_id=self.request.user.id
+            ).order_by('-create_dt')
+            context_data['initiative_applications'] = InitiativeApplication.objects.all(
+            ).filter(auth_user_id=self.request.user.id).order_by('-create_dt')
         return context_data
 
 
