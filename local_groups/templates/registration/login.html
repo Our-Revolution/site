@@ -1,6 +1,6 @@
 {% extends "group_portal.html" %}
 
-{% load bootstrap3 local_groups_tags %}
+{% load bootstrap3 local_groups_tags organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Group Admin Login{% endblock %}
 
@@ -23,6 +23,8 @@
   <div class="row pt4 pb4">
 
     <div class="col-md-6 col-md-offset-3">
+
+      {% organizing_hub_login_alert %}
 
       <p class="fs18">
         Log in with your Our Revolution account to manage your local
