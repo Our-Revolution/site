@@ -13,3 +13,11 @@ install:
 # run tests
 script:
   - echo skip tests
+# deploy via aws codedeploy
+deploy:
+- provider: codedeploy
+  revision_type: github
+  access_key_id: AKIAI2BWTZAGQ3FQPAHQ
+  application: ourrevolution
+  deployment_group: QA
+  region: us-west-2
