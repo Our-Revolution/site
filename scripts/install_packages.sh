@@ -9,6 +9,7 @@ echo "Install build tools"
 npm install
 
 echo "Install package requirements from requirements.txt"
+easy_install distribute
 pip install -r requirements.txt
 
 echo "Collect static files"
