@@ -1,6 +1,6 @@
 from django import template
 from django.conf import settings
-from pages.models import *
+from pages.models import NotificationBanner, QUARTER_CHOICES_LOOKUP
 
 register = template.Library()
 
@@ -88,3 +88,11 @@ def results_2017_url():
 @register.simple_tag
 def start_group_url():
     return settings.START_GROUP_URL
+
+
+@register.simple_tag
+def get_quarter_display(choice):
+    if choice:
+        return QUARTER_CHOICES_LOOKUP[int(choice)]
+    else:
+        return ''

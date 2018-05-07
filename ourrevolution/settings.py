@@ -210,6 +210,7 @@ BSD_API_SECRET = os.environ.get('BSD_API_SECRET')
 LOGIN_URL = 'groups-login'
 LOGIN_REDIRECT_URL = ORGANIZING_HUB_DASHBOARD_URL
 
+NEW_DONOR_PAGE_ENABLED = bool(int(os.environ.get('NEW_DONOR_PAGE_ENABLED', 0)))
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))
 
 # Password validation

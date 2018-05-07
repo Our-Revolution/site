@@ -35,6 +35,9 @@ from random import randint
 import csv
 import json
 import logging
+import urllib2
+from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+
 
 
 logger = logging.getLogger(__name__)
@@ -1638,6 +1641,18 @@ class FullContentPage(Page):
             ImageChooserPanel('social_image')
         ]
 
+
+QUARTER_CHOICES = [
+    (1, 'Q1'),
+    (2, 'Q2'),
+    (3, 'Q3'),
+    (4, 'Q4')
+]
+
+# used for get_quarter_display template tag
+QUARTER_CHOICES_LOOKUP = dict(QUARTER_CHOICES)
+
+
 class DonationPage(Page):
     abstract = RichTextField(null=True, blank=True)
     body = RichTextField(null=True, blank=True)
@@ -1672,7 +1687,7 @@ class DonationPage(Page):
             [FieldPanel('csv_file')],
             heading="Legacy fields",
             classname="collapsible collapsed"
-        )
+        ),
     ]
 
     def get_context(self, *args, **kwargs):
@@ -1682,22 +1697,18 @@ class DonationPage(Page):
         legacy_reader.next()
         context['donations'] = list(legacy_reader)
 
-        # donor_dict = {}
-        #
-        # # print vars(self.donors.stream_block.child_blocks)
-        #
-        # # for file in self.csv_files:
-        # #     reader = csv.DictReader(
-        # #         file.value.file,
-        # #         fieldnames=['first_name', 'last_name']
-        # #     )
-        # #     reader.next()
-        # #     # donor_dict[]
-        #
-        #
-        # context['donations_new'] = donor_dict
-
         return context
+
+
+class CSVFile(Orderable):
+    page = ParentalKey(DonationPage, related_name='csv_files')
+    csv_file = models.ForeignKey(
+        'wagtaildocs.Document', on_delete=models.CASCADE, related_name='+'
+    )
+
+    panels = [
+        DocumentChooserPanel('csv_file'),
+    ]
 
 ## LOCAL GROUPS
 
