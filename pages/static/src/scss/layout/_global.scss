@@ -309,6 +309,13 @@ h1, h2, h3, h4 {
   background: rgba(0,0,0,0.1);
   padding: 15px;
 
+  // Back bar stacked under another back bar
+  &--stacked {
+    @extend .back-bar;
+
+    padding-top: 0;
+  }
+
   &--small {
     @extend .back-bar;
 

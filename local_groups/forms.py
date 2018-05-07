@@ -144,11 +144,12 @@ class GroupCreateForm(forms.ModelForm):
 # Customize AuthenticationForm as needed
 class GroupLoginForm(AuthenticationForm):
     username = UsernameField(
-        label=_("Group Leader Email"),
+        label=_("Group Admin Email"),
         widget=forms.TextInput(attrs={'autofocus': True}),
         help_text='''
-            This should be the official group leader email
-            address registered with Our Revolution
+            This should be the official group leader email address registered
+            with Our Revolution, or the email you use for submitting
+            nominations
         '''
     )
     error_messages = {
@@ -282,7 +283,7 @@ class GroupPasswordChangeForm(GroupPasswordResetForm):
 
 class GroupPasswordResetRequestForm(PasswordResetForm):
     email = forms.EmailField(
-        label=_("Group Leader Email"),
+        label=_("Group Admin Email"),
         max_length=254
     )
 

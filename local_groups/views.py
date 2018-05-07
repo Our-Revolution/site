@@ -19,7 +19,7 @@ from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
 from bsd.models import BSDProfile
-from .decorators import verified_email_required
+from organizing_hub.decorators import verified_email_required
 from .forms import (
     EventForm,
     GroupManageForm,

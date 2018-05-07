@@ -1,6 +1,7 @@
-<div class="back-bar">
+<div id="nominations-status-bar" class="back-bar--stacked">
   <div class="container">
-    <ol class="breadcrumb pull-left">
+
+    <ol class="breadcrumb">
       <li {% if "dashboard" in request.path %}class='active'{% endif %}><a href="/groups/nominations/dashboard?id={{application.id}}">Dashboard</a></li>
       <li {% if "/groups/nominations/application" in request.path %}class='active'{% endif %}><a href="/groups/nominations/application?id={{application.id}}">Application Status</a></li>
       <li {% if "/groups/nominations/nomination" in request.path %}class='active'{% endif %}><a href="/groups/nominations/nomination?id={{application.id}}">Nomination Form</a></li>
@@ -9,6 +10,6 @@
         <li {% if "/groups/nominations/submit" in request.path %}class='active'{% endif %}><a href="/groups/nominations/submit?id={{application.id}}">Submit</a></li>
       {% endif %}
     </ol>
-    <span class="pull-right">{{user.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
+
   </div>
 </div>

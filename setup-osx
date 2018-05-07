@@ -24,7 +24,6 @@ key=`date | md5` && echo "SECRET_KEY=$key" >> .env
 # echo "AUTH0_DOMAIN=lebowski" >> .env
 # echo "AUTH0_CLIENT_ID=lebowski" >> .env
 # echo "AUTH0_CLIENT_SECRET=lebowski" >> .env
-# echo "AUTH0_CALLBACK_URL=lebowski" >> .env
 # echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
 
 echo "Migrating database..."
