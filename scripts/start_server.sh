@@ -6,7 +6,14 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
 echo "Start server"
-supervisord -c supervisord.conf
 supervisorctl start gunicorn
+
+if [ "$DEPLOYMENT_GROUP_NAME" == "Production" ]
+then
+    echo "Start varnish"
+    sudo service varnish start
+else
+    echo "Skip varnish"
+fi
 
 echo "Server started"
