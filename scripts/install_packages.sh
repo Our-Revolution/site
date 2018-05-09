@@ -5,6 +5,9 @@ cd /home/ubuntu/ourrevolution
 source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
+echo "Update varnish file"
+sudo cp varnish.vcl /etc/varnish/default.vcl
+
 echo "Install build tools"
 npm install
 
