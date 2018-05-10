@@ -17,6 +17,7 @@ easy_install distribute
 pip install -r requirements.txt
 
 echo "Collect static files"
+sudo chown ubuntu -R .static/
 ./manage.py collectstatic --noinput
 
 echo "Finished installing packages"
