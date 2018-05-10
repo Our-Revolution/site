@@ -103,7 +103,9 @@
 
         <p>
           <strong>Staff Recommendation:</strong>
+          {% if app.staff_recommendation %}
           {{ app.get_staff_recommendation_display }}
+          {% endif %}
         </p>
 
       </section>
