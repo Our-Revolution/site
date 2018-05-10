@@ -83,9 +83,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    # Django gulp
-    'django_gulp',
-
     'anymail',
     'django.contrib.humanize',
 

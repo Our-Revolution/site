@@ -10,6 +10,7 @@ sudo cp varnish.vcl /etc/varnish/default.vcl
 
 echo "Install build tools"
 npm install
+# gulp build --production
 
 echo "Install package requirements from requirements.txt"
 easy_install distribute
