@@ -6,7 +6,8 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
 echo "Install build tools"
-sudo npm install
+npm install
+# gulp build --production
 
 echo "Install package requirements from requirements.txt"
 easy_install distribute
