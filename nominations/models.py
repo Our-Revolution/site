@@ -208,6 +208,11 @@ class Application(models.Model):
         (7, 'Presidential Primary'),
         (99, 'Other'),
     )
+    staff_recommendation_choices = (
+        (1, 'Recommend to Endorse'),
+        (2, 'Recommend Not to Endorse'),
+        (3, 'No Recommendation'),
+    )
 
     """Django User to use instead of legacy auth0 user"""
     auth_user = models.ForeignKey(
@@ -451,6 +456,7 @@ class Application(models.Model):
         ('3', 'Not Submitted'),
     )
 
+    """TODO: remove?"""
     RECOMMENDATIONS = (
         ('1', 'Endorse'),
         ('2', 'Do Not Endorse')
@@ -468,6 +474,7 @@ class Application(models.Model):
         null=True,
     )
 
+    """TODO: remove?"""
     recommendation = models.CharField(
         max_length=64,
         choices=RECOMMENDATIONS,
@@ -480,7 +487,11 @@ class Application(models.Model):
         verbose_name='Candidate Bio:',
         help_text='This will prepopulate from the candidate questionnaire if left blank.'
     )
-
+    staff_recommendation = models.IntegerField(
+        blank=True,
+        choices=staff_recommendation_choices,
+        null=True,
+    )
     stand_out_information = RichTextField(
         blank=True,
         null=True,

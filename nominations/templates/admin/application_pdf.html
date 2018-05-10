@@ -97,8 +97,13 @@
 
         <p>
           <strong>
-            Recommendation written by: {{ app.staff }}
+            Written by: {{ app.staff }}
           </strong>
+        </p>
+
+        <p>
+          <strong>Staff Recommendation:</strong>
+          {{ app.get_staff_recommendation_display }}
         </p>
 
       </section>
@@ -239,6 +244,11 @@
 
         </p>
 
+        <p>
+          <strong>Endorsements:</strong>
+          {% if app.vol_endorsements %}{{ app.vol_endorsements }}{% endif %}
+        </p>
+
       </section>
 
       <section>
@@ -251,10 +261,13 @@
 
         {{ app.local_group_info|safe }}
 
-        <p>
-          <strong>Endorsements:</strong>
-          {% if app.vol_endorsements %}{{ app.vol_endorsements }}{% endif %}
-        </p>
+        <div>
+
+          <strong>Local Support:</strong><br />
+
+          {{ app.local_support|safe }}
+
+        </div>
 
       </section>
 
@@ -313,19 +326,6 @@
           <em>Conducted by Spiros Consulting and Research</em><br />
 
           {{ app.vet|safe }}
-        </div>
-
-
-      </section>
-
-      <section>
-
-        <div>
-
-          <strong>Local Support:</strong><br />
-
-          {{ app.local_support|safe }}
-
         </div>
 
       </section>
