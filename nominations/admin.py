@@ -255,7 +255,7 @@ class ApplicationCandidateInline(admin.StackedInline):
     ]
     model = ApplicationCandidate
     verbose_name = "Candidate"
-    verbose_name_plural = "Other Candidates"
+    verbose_name_plural = "All Candidates"
 
 
 @admin.register(Application)
@@ -487,6 +487,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'staff',
                     'classification_level',
                     'staff_bio',
+                    'staff_recommendation',
                     'stand_out_information',
                     'state_of_the_race',
                     'local_group_info',
