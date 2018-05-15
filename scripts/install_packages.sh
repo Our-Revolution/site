@@ -8,9 +8,12 @@ workon ourrevolution
 echo "Update varnish file"
 sudo cp varnish.vcl /etc/varnish/default.vcl
 
-echo "Install build tools"
+echo "Install front end packages"
 npm install
-# gulp build --production
+
+echo "Build front end assets"
+sudo chown ubuntu -R pages/static/dist/
+gulp build --production
 
 echo "Install package requirements from requirements.txt"
 easy_install distribute
