@@ -5,6 +5,7 @@
 1. [Python 2.7](https://www.python.org/downloads/) and [Pip](https://pip.pypa.io/en/stable/installing/)
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
 3. [Node + NPM](https://nodejs.org/en/download/) for building front-end.
+4. [gulp-cli](https://gulpjs.com/) cli installed globally: `npm install gulp-cli -g`
 
 ## Installation
 Because 'site' is not a descriptive project name ...
@@ -53,7 +54,7 @@ INSERT INTO django_site (domain, name) VALUES ('localhost:8000', 'Our Rev Dev');
 ## GULP and the Front End
 We use [gulp](http://gulpjs.com/) to automate building and minifying of production files.
 
-The default gulp task runs with `./manage.py runserver` with the help of [django-gulp](https://pypi.python.org/pypi/django-gulp/2.0.0). It does the following:
+The default gulp task runs with `gulp build --production`. It does the following:
 1. Compiles, minifies, auto-prefixes, and gzips SASS from `ourrevolution/pages/src/scss/main.scss`.
 2. Builds and minifies JS from `ourrevolution/pages/src/js/app.js` with the help of [browserify](http://browserify.org/).
 3. Watches project files to recompile SASS, JS, optimize images, and live reload the browser on the fly.
