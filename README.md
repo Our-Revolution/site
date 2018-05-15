@@ -5,7 +5,7 @@
 1. [Python 2.7](https://www.python.org/downloads/) and [Pip](https://pip.pypa.io/en/stable/installing/)
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
 3. [Node + NPM](https://nodejs.org/en/download/) for building front-end.
-4. [gulp-cli](https://gulpjs.com/) cli installed globally: `npm install gulp-cli -g`
+4. [gulp-cli](https://gulpjs.com/) installed globally: `npm install gulp-cli -g`
 
 ## Installation
 Because 'site' is not a descriptive project name ...
