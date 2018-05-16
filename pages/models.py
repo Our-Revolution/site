@@ -1488,6 +1488,18 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             context['candidate_endorsement_pages'] = []
             context['initiative_endorsement_pages'] = []
         else:
+            """Get primary victories that don't have general result yet"""
+            primary_pages = CandidateEndorsementPage.objects.live().filter(
+                general_election_result__isnull=True,
+                primary_election_result='win'
+            ).order_by(
+                '-primary_election_date',
+                'state_or_territory',
+                'office',
+                'title',
+            )
+            context['primary_pages'] = primary_pages
+
             candidate_pages = CandidateEndorsementPage.objects.live().filter(
                 Q(general_election_result__isnull=False) |
                 Q(primary_election_result='loss')

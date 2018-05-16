@@ -1,6 +1,10 @@
 {% load pages_tags wagtailcore_tags wagtailimages_tags %}
 
-<li class="card clearfix">
+<li class="card clearfix
+{% if candidate_endorsement_page.primary_election_result == 'win' and not candidate_endorsement_page.general_election_result %}
+faded
+{% endif %}
+">
   <a href="{% pageurl candidate_endorsement_page %}">
 
   {% image candidate_endorsement_page.photo original as photo_img %}
@@ -17,7 +21,15 @@
 
         {% if candidate_endorsement_page.election_date %}
         <div class="card__item smaller bold">
-          Election: {{ candidate_endorsement_page.election_date }}
+
+          {% if candidate_endorsement_page.primary_election_result == 'win' and not candidate_endorsement_page.general_election_result %}
+          Primary:
+          {{ candidate_endorsement_page.primary_election_date }}
+          {% else %}
+          Election:
+          {{ candidate_endorsement_page.election_date }}
+          {% endif %}
+
         </div>
         {% endif %}
 
@@ -27,12 +39,20 @@
     </div>
   </div>
 
-  <div class="card__results {{ candidate_endorsement_page.result }}">
+  <div class="card__results
+  {% if candidate_endorsement_page.result %}
+  {{ candidate_endorsement_page.result }}
+  {% elif 'win' in candidate_endorsement_page.primary_election_result and not candidate_endorsement_page.general_election_result %}
+  {{ candidate_endorsement_page.primary_election_result }}
+  {% endif %}
+  ">
     <div class="card__results--status clearfix">
       <div class="card__results--reporting pull-left">
         <span class="uppercase ls2 boldest">
         {% if 'win' in candidate_endorsement_page.result %}
           Won
+        {% elif 'win' in candidate_endorsement_page.primary_election_result and not candidate_endorsement_page.general_election_result %}
+          Won Primary
         {% else %}
           Lost
         {% endif %}

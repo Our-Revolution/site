@@ -123,6 +123,10 @@
                                 {% endif %}
                                 {% endfor %}
 
+                                {% for candidate_endorsement_page in primary_pages %}
+                                {% include "partials/candidate_endorsement_result.html" %}
+                                {% endfor %}
+
                                 {% for candidate_endorsement_page in candidate_endorsement_pages %}
                                 {% if 'win' not in candidate_endorsement_page.result %}
                                 {% include "partials/candidate_endorsement_result.html" %}
