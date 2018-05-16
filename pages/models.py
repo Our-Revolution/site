@@ -1485,9 +1485,22 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         TODO: remove legacy support once we have consolidated results pages
         """
         if self.url in [settings.RESULTS_2016_URL, settings.RESULTS_2017_URL]:
+            context['primary_pages'] = []
             context['candidate_endorsement_pages'] = []
             context['initiative_endorsement_pages'] = []
         else:
+            """Get primary victories that don't have general result yet"""
+            primary_pages = CandidateEndorsementPage.objects.live().filter(
+                general_election_result__isnull=True,
+                primary_election_result='win'
+            ).order_by(
+                '-primary_election_date',
+                'state_or_territory',
+                'office',
+                'title',
+            )
+            context['primary_pages'] = primary_pages
+
             candidate_pages = CandidateEndorsementPage.objects.live().filter(
                 Q(general_election_result__isnull=False) |
                 Q(primary_election_result='loss')

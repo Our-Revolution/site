@@ -8750,6 +8750,10 @@ footer {
       display: block;
       float: right;
       margin-left: 10px; }
+    .card-list .card.faded {
+      opacity: 0.8; }
+      .card-list .card.faded:hover {
+        opacity: 0.7; }
     .card-list .card.featured {
       border-right: 4px solid #d74e5b; }
     .card-list .card__content {

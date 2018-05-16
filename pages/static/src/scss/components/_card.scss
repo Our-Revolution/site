@@ -67,6 +67,14 @@
       margin-left: 10px;
     }
 
+    &.faded {
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
     &.featured {
       border-right: 4px solid $red;
     }
