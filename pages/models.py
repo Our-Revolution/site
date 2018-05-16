@@ -1485,6 +1485,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         TODO: remove legacy support once we have consolidated results pages
         """
         if self.url in [settings.RESULTS_2016_URL, settings.RESULTS_2017_URL]:
+            context['primary_pages'] = []
             context['candidate_endorsement_pages'] = []
             context['initiative_endorsement_pages'] = []
         else:
