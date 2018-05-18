@@ -20,9 +20,10 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-"""Secure cookies for https"""
+"""Fastly and Varnish caching"""
+CACHE_FRONTEND_ENABLED = bool(int(os.environ.get('CACHE_FRONTEND_ENABLED', 0)))
+
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
-SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
 
 """Auto approve events created by Group Leaders"""
 EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
@@ -35,11 +36,12 @@ ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 
+SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
+
 BSD_CREATE_ACCOUNT_URL = os.environ.get(
     'BSD_CREATE_ACCOUNT_URL',
     'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login'
 )
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -323,7 +325,7 @@ IGNORABLE_404_URLS = [
 
 WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
-if not DEBUG:
+if CACHE_FRONTEND_ENABLED and not DEBUG:
 
     WAGTAILFRONTENDCACHE = OrderedDict((
 
