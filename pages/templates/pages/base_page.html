@@ -51,11 +51,11 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static "dist/css/main.css" %}">
-    <script src="{% static "dist/js/bundle.min.js" %}?v=16"></script>
+    <script src="{% static "dist/js/bundle.min.js" %}"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
     <meta name="google-site-verification" content="devyaHsbJD6w8nNEWsAu3SsODhEfijQqCOhFbuXdpCc" />
     {% block favicon %}
-      <link rel="icon" type="image/x-icon" href="{% static "dist/img/favicon.ico" %}?c=1" />
+      <link rel="icon" type="image/x-icon" href="{% static "dist/img/favicon.ico" %}" />
     {% endblock %}
 </head>
 <body class="no-padding">
