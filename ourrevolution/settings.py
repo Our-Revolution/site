@@ -20,6 +20,10 @@ mimetypes.add_type('image/svg+xml', 'svg')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+"""Secure cookies for https"""
+CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
+SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
+
 """Auto approve events created by Group Leaders"""
 EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     'EVENT_AUTO_APPROVAL',
