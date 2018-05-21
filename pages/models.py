@@ -40,10 +40,16 @@ logger = logging.getLogger(__name__)
 
 class AboutPage(Page):
     board_description = RichTextField()
-    board_list = RichTextField()
+    board_list = RichTextField(
+        blank=True,
+        null=True
+    )
     donors_description = RichTextField()
     staff_description = RichTextField()
-    staff_list = RichTextField()
+    staff_list = RichTextField(
+        blank=True,
+        null=True
+    )
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     content_panels = Page.content_panels + [
