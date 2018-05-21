@@ -13,3 +13,9 @@
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
+
+{# https://github.com/django-ckeditor/django-ckeditor/issues/346#issuecomment-286420032 #}
+{% block extrahead %}
+<script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+{{ block.super }}
+{% endblock %}
