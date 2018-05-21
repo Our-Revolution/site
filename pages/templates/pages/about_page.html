@@ -96,7 +96,7 @@
 	<section class="row pt4 pb4" id="board">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 {{ page.board_list|yesno:",col-md-offset-3" }} pb2">
+				<div class="{{ page.board_list|yesno:"col-md-6,col-md-8 col-md-offset-2" }} pb2">
 					<h1>Our Board</h1>
 					{{ page.board_description | richtext }}
 				</div>
@@ -113,7 +113,7 @@
 	<section class="blue-bg white-text row pt4 pb4" id="staff">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 {{ page.staff_list|yesno:",col-md-offset-3" }} pb2">
+				<div class="{{ page.staff_list|yesno:"col-md-6,col-md-8 col-md-offset-2" }} pb2">
 					<h1>Our Staff</h1>
 					{{ page.staff_description | richtext }}
 				</div>
