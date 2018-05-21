@@ -96,7 +96,7 @@
 	<section class="row pt4 pb4" id="board">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 {{ page.board_list|yesno:"col-md-6,col-md-8 col-md-offset-2" }} pb2">
+				<div class="{{ page.board_list|yesno:"col-md-6,col-md-8 col-md-offset-2" }} pb2">
 					<h1>Our Board</h1>
 					{{ page.board_description | richtext }}
 				</div>
