@@ -96,14 +96,16 @@
 	<section class="row pt4 pb4" id="board">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 pb2">
+				<div class="col-md-6 {{ page.board_list|yesno:",col-md-offset-3" }} pb2">
 					<h1>Our Board</h1>
 					{{ page.board_description | richtext }}
 				</div>
 
+				{% if page.board_list %}
 				<div class="col-md-5 col-md-offset-1 blue-bg white-text pa20 br3 list-plain">
 					{{ page.board_list | richtext }}
 				</div>
+				{% endif %}
 			</div>
 		</div>
 	</section>
@@ -111,14 +113,16 @@
 	<section class="blue-bg white-text row pt4 pb4" id="staff">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 pb2">
+				<div class="col-md-6 {{ page.staff_list|yesno:",col-md-offset-3" }} pb2">
 					<h1>Our Staff</h1>
 					{{ page.staff_description | richtext }}
 				</div>
 
+				{% if page.staff_list %}
 				<div class="col-md-5 col-md-offset-1 light-wash pa20 br3 list-plain">
 					{{ page.staff_list | richtext }}
 				</div>
+				{% endif %}
 			</div>
 		</div>
 	</section>
