@@ -464,11 +464,14 @@ class LocalGroupProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __unicode__(self):
+        return self.user.username
+
 
 class LocalGroupAffiliation(models.Model):
     """
     Local Group Affiliation is similar to Auth User Groups except it is
-    specific for a Local Group
+    meant for a specific Local Group
     """
 
     """Auth roles for this specific local group & user"""
@@ -477,3 +480,9 @@ class LocalGroupAffiliation(models.Model):
     """Link to specific user and local group"""
     local_group = models.ForeignKey(Group)
     local_group_profile = models.ForeignKey(LocalGroupProfile)
+
+    def __unicode__(self):
+        return self.local_group.slug + ": " + self.local_group_profile.user.username
+
+    class Meta:
+        unique_together = ["local_group", "local_group_profile"]
