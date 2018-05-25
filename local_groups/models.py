@@ -465,7 +465,7 @@ class LocalGroupProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __unicode__(self):
-        return self.user.username
+        return str(self.user.id) + ": " + self.user.email
 
 
 class LocalGroupAffiliation(models.Model):
@@ -482,7 +482,7 @@ class LocalGroupAffiliation(models.Model):
     local_group_profile = models.ForeignKey(LocalGroupProfile)
 
     def __unicode__(self):
-        return self.local_group.slug + ": " + self.local_group_profile.user.username
+        return str(self.local_group.group_id) + ": " + str(self.local_group) + " | " + str(self.local_group_profile)
 
     class Meta:
         unique_together = ["local_group", "local_group_profile"]
