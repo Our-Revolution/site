@@ -451,6 +451,14 @@ class Group(models.Model):
 
         super(Group, self).save(*args, **kwargs)
 
+        """
+        TODO: Sync Group Leader
+
+        Look up existing group leader affiliations for this groups
+        make sure correct user has group leader role
+        make sure no one else has group leader role
+        """
+
         if self.slug:
             purge_url_from_cache('/groups/')
             purge_url_from_cache('/groups/' + self.slug +'/')
