@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 from django.conf import settings
+from django.contrib.auth.models import Group as AuthGroup
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from localflavor.us.models import USStateField
@@ -455,3 +457,32 @@ class Group(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class LocalGroupProfile(models.Model):
+    """Local group information for a user"""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return str(self.user.id) + ": " + self.user.email
+
+
+class LocalGroupAffiliation(models.Model):
+    """
+    Local Group Affiliation is similar to Auth User Groups except it is
+    meant for a specific Local Group
+    """
+
+    """Auth roles for this specific local group & user"""
+    auth_groups = models.ManyToManyField(AuthGroup)
+
+    """Link to specific user and local group"""
+    local_group = models.ForeignKey(Group)
+    local_group_profile = models.ForeignKey(LocalGroupProfile)
+
+    def __unicode__(self):
+        return str(self.local_group.group_id) + ": " + str(self.local_group) + " | " + str(self.local_group_profile)
+
+    class Meta:
+        unique_together = ["local_group", "local_group_profile"]
