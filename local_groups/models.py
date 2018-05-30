@@ -472,6 +472,13 @@ class LocalGroupProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def get_affiliation_for_local_group(self, local_group):
+        """Get Affiliation for Local Group, otherwise None"""
+        affiliation = self.localgroupaffiliation_set.filter(
+            local_group=local_group
+        ).first()
+        return affiliation
+
     def __unicode__(self):
         return str(self.user.id) + ": " + self.user.email
 
