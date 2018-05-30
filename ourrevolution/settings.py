@@ -31,14 +31,9 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     0
 )))
 
-"""Local Groups Role: Group Admin"""
-LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = int(os.environ.get(
-    'LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID',
-    0
-))
 """Local Groups Role: Group Leader"""
-LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = int(os.environ.get(
-    'LOCAL_GROUPS_ROLE_GROUP_LEADER_ID',
+AUTH_GROUP_LOCAL_GROUP_LEADER_ID = int(os.environ.get(
+    'AUTH_GROUP_LOCAL_GROUP_LEADER_ID',
     0
 ))
 
