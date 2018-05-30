@@ -451,14 +451,6 @@ class Group(models.Model):
 
         super(Group, self).save(*args, **kwargs)
 
-        """
-        TODO: Sync Group Leader
-
-        Look up existing group leader affiliations for this groups
-        make sure correct user has group leader role
-        make sure no one else has group leader role
-        """
-
         if self.slug:
             purge_url_from_cache('/groups/')
             purge_url_from_cache('/groups/' + self.slug +'/')
@@ -471,6 +463,13 @@ class LocalGroupProfile(models.Model):
     """Local group information for a user"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def get_affiliations_for_auth_group_id(self, auth_group_id):
+        """Get Affiliations for Auth Group"""
+        affiliations = self.localgroupaffiliation_set.filter(
+            auth_groups=auth_group_id
+        )
+        return affiliations
 
     def get_affiliation_for_local_group(self, local_group):
         """Get Affiliation for Local Group, otherwise None"""

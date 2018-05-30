@@ -15,39 +15,6 @@ logger = logging.getLogger(__name__)
 AUTH_GROUP_LOCAL_GROUP_LEADER_ID = settings.AUTH_GROUP_LOCAL_GROUP_LEADER_ID
 
 
-def sync_group_leader_affiliation_for_local_group(local_group):
-    """
-    Sync Group Leader Affiliation for Local Group
-    """
-
-    """Only sync for approved local group, otherwise do nothing"""
-    if local_group.status == 'approved':
-
-        """Find group leader user in db if it exists"""
-        try:
-            group_leader_user = User.objects.get(
-                email__iexact=local_group.rep_email
-            )
-        except User.DoesNotExist:
-            group_leader_user = None
-
-        """Get group leader affiliations that don't match group leader user"""
-        old_group_leader_affiliations = LocalGroupAffiliation.objects.filter(
-            local_group=local_group,
-            auth_groups=AUTH_GROUP_LOCAL_GROUP_LEADER_ID
-        ).exclude(local_group_profile__user=group_leader_user)
-
-        """Remove outdated group leader affiliations"""
-        for old_group_leader_affiliation in old_group_leader_affiliations:
-            old_group_leader_affiliation.auth_groups.remove(
-                AUTH_GROUP_LOCAL_GROUP_LEADER_ID
-            )
-
-        """Add group leader role for user if it exists"""
-        if group_leader_user:
-            add_group_leader_role_for_user(group_leader_user, local_group)
-
-
 def add_group_leader_role_for_user(user, local_group):
     """
     Add Group Leader Role to Affiliation for User & Group. Create Profile and
@@ -81,6 +48,71 @@ def add_group_leader_role_for_user(user, local_group):
         )
 
 
+def sync_group_leader_affiliation_for_local_group(local_group):
+    """
+    Sync Group Leader Affiliation for Local Group
+    """
+
+    """Only sync for approved local group, otherwise do nothing"""
+    if local_group.status == 'approved':
+
+        """Find group leader user in db if it exists"""
+        try:
+            group_leader_user = User.objects.get(
+                email__iexact=local_group.rep_email
+            )
+        except User.DoesNotExist:
+            group_leader_user = None
+
+        """Get group leader affiliations that don't match group leader user"""
+        old_group_leader_affiliations = LocalGroupAffiliation.objects.filter(
+            local_group=local_group,
+            auth_groups=AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+        ).exclude(local_group_profile__user=group_leader_user)
+
+        """Remove outdated group leader affiliations"""
+        for old_group_leader_affiliation in old_group_leader_affiliations:
+            old_group_leader_affiliation.auth_groups.remove(
+                AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+            )
+
+        """Add group leader role for user if it exists"""
+        if group_leader_user:
+            add_group_leader_role_for_user(group_leader_user, local_group)
+
+
+def sync_group_leader_affiliation_for_user(user):
+
+    """Get list of Local Groups with user as rep email (group leader)"""
+    local_groups_lead_by_user = LocalGroup.objects.filter(
+        rep_email__iexact=user.email,
+        status__exact='approved',
+    )
+
+    """Remove Group Leader role for non-matching Groups"""
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+
+        """Get outdated Group Leader Affiliations for User"""
+        old_affiliations = local_group_profile.get_affiliations_for_auth_group_id(
+            AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+        ).exclude(local_group__in=local_groups_lead_by_user)
+
+        for old_affiliation in old_affiliations:
+            old_affiliation.auth_groups.remove(
+                AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+            )
+
+    """Add Group Leader role for User and Group"""
+    for local_group_lead_by_user in local_groups_lead_by_user:
+        add_group_leader_role_for_user(user, local_group_lead_by_user)
+
+
 @receiver(post_save, sender=LocalGroup)
 def local_group_post_save_handler(instance, **kwargs):
     sync_group_leader_affiliation_for_local_group(instance)
+
+
+@receiver(post_save, sender=User)
+def user_post_save_handler(instance, **kwargs):
+    sync_group_leader_affiliation_for_user(instance)
