@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import LocalGroupAffiliation, LocalGroupProfile, Group
+from .models import (
+    LocalGroupAffiliation,
+    LocalGroupProfile,
+    LocalGroupRole,
+    Group
+)
 from .forms import GisForm
 from .actions import export_as_csv_action, geocode_groups
 
@@ -11,6 +16,11 @@ class LocalGroupAffiliationAdmin(admin.ModelAdmin):
 
 @admin.register(LocalGroupProfile)
 class LocalGroupProfileAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(LocalGroupRole)
+class LocalGroupRoleAdmin(admin.ModelAdmin):
     pass
 
 

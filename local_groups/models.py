@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.conf import settings
-from django.contrib.auth.models import Group as AuthGroup
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User
 from django.core.exceptions import ValidationError
 from django.db import models
 from localflavor.us.models import USStateField
@@ -468,21 +467,47 @@ class LocalGroupProfile(models.Model):
         return str(self.user.id) + ": " + self.user.email
 
 
+class LocalGroupRole(models.Model):
+
+    """Hardcode the role types, but also store role permissions in db"""
+    role_type_choices = (
+        (1, 'Group Leader'),
+        (2, 'Group Admin'),
+    )
+
+    permissions = models.ManyToManyField(
+        Permission,
+        blank=True,
+    )
+    role_type = models.IntegerField(
+        choices=role_type_choices,
+        unique=True
+    )
+
+    def __unicode__(self):
+        return self.get_role_type_display()
+
+
 class LocalGroupAffiliation(models.Model):
     """
     Local Group Affiliation is similar to Auth User Groups except it is
     meant for a specific Local Group
     """
 
-    """Auth roles for this specific local group & user"""
-    auth_groups = models.ManyToManyField(AuthGroup)
-
-    """Link to specific user and local group"""
+    """Link to specific User Profile and Local Group"""
     local_group = models.ForeignKey(Group)
     local_group_profile = models.ForeignKey(LocalGroupProfile)
 
+    """Roles for this specific Local Group & User"""
+    local_group_roles = models.ManyToManyField(
+        LocalGroupRole,
+        blank=True,
+    )
+
     def __unicode__(self):
-        return str(self.local_group.group_id) + ": " + str(self.local_group) + " | " + str(self.local_group_profile)
+        return str(self.local_group.group_id) + ": " + str(
+            self.local_group
+        ) + " | " + str(self.local_group_profile)
 
     class Meta:
         unique_together = ["local_group", "local_group_profile"]
