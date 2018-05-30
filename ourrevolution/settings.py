@@ -17,10 +17,6 @@ import dj_database_url, mimetypes, os, re
 mimetypes.add_type('image/svg+xml', 'svg')
 
 
-"""Local Groups Roles"""
-LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2
-LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,6 +30,10 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     'EVENT_AUTO_APPROVAL',
     0
 )))
+
+"""Local Groups Roles"""
+LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2
+LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
 
 # Organizing Hub Urls
 ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
