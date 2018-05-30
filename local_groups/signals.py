@@ -94,9 +94,15 @@ def sync_group_leader_affiliation_for_user(user):
         local_group_profile = user.localgroupprofile
 
         """Get outdated Group Leader Affiliations for User"""
-        old_affiliations = local_group_profile.get_affiliations_for_auth_group_id(
+        group_leader_affiliations = local_group_profile.get_affiliations_for_auth_group_id(
             AUTH_GROUP_LOCAL_GROUP_LEADER_ID
-        ).exclude(local_group__in=local_groups_lead_by_user)
+        )
+        logger.debug('group_leader_affiliations: ' + str(group_leader_affiliations))
+        """TODO: fix query"""
+        old_affiliations = group_leader_affiliations.exclude(
+            local_group__in=local_groups_lead_by_user
+        )
+        logger.debug('old_affiliations: ' + str(old_affiliations))
 
         for old_affiliation in old_affiliations:
             old_affiliation.auth_groups.remove(
