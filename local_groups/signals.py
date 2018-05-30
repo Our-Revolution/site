@@ -12,7 +12,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-AUTH_GROUP_LOCAL_GROUP_LEADER_ID = settings.AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = settings.LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
 
 
 def add_group_leader_role_for_user(user, local_group):
@@ -40,11 +40,11 @@ def add_group_leader_role_for_user(user, local_group):
         )
 
     """Add Group Leader role to Affiliation if it doesn't exist"""
-    if not local_group_affiliation.auth_groups.filter(
-        id=AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+    if not local_group_affiliation.local_group_roles.filter(
+        id=LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
     ).exists():
-        local_group_affiliation.auth_groups.add(
-            AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+        local_group_affiliation.local_group_roles.add(
+            LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         )
 
 
@@ -64,16 +64,14 @@ def sync_group_leader_affiliation_for_local_group(local_group):
         except User.DoesNotExist:
             group_leader_user = None
 
-        """Get group leader affiliations that don't match group leader user"""
+        """Remove outdated group leader affiliations"""
         old_group_leader_affiliations = LocalGroupAffiliation.objects.filter(
             local_group=local_group,
-            auth_groups=AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+            local_group_roles=LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         ).exclude(local_group_profile__user=group_leader_user)
-
-        """Remove outdated group leader affiliations"""
         for old_group_leader_affiliation in old_group_leader_affiliations:
-            old_group_leader_affiliation.auth_groups.remove(
-                AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+            old_group_leader_affiliation.local_group_roles.remove(
+                LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
             )
 
         """Add group leader role for user if it exists"""
@@ -94,22 +92,18 @@ def sync_group_leader_affiliation_for_user(user):
         local_group_profile = user.localgroupprofile
 
         """Get outdated Group Leader Affiliations for User"""
-        group_leader_affiliations = local_group_profile.get_affiliations_for_auth_group_id(
-            AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+        group_leader_affiliations = local_group_profile.get_affiliations_for_local_group_role_id(
+            LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         )
-        logger.debug('group_leader_affiliations: ' + str(group_leader_affiliations))
-        """TODO: fix query"""
         old_affiliations = group_leader_affiliations.exclude(
             local_group__in=local_groups_lead_by_user
         )
-        logger.debug('old_affiliations: ' + str(old_affiliations))
-
         for old_affiliation in old_affiliations:
-            old_affiliation.auth_groups.remove(
-                AUTH_GROUP_LOCAL_GROUP_LEADER_ID
+            old_affiliation.local_group_roles.remove(
+                LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
             )
 
-    """Add Group Leader role for User and Group"""
+    """Add Group Leader role for matching Groups"""
     for local_group_lead_by_user in local_groups_lead_by_user:
         add_group_leader_role_for_user(user, local_group_lead_by_user)
 

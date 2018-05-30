@@ -17,11 +17,9 @@ import dj_database_url, mimetypes, os, re
 mimetypes.add_type('image/svg+xml', 'svg')
 
 
-"""Local Groups Role: Group Leader"""
-AUTH_GROUP_LOCAL_GROUP_LEADER_ID = int(os.environ.get(
-    'AUTH_GROUP_LOCAL_GROUP_LEADER_ID',
-    0
-))
+"""Local Groups Roles"""
+LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2
+LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

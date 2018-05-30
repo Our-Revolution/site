@@ -459,14 +459,14 @@ class Group(models.Model):
 
 
 class LocalGroupProfile(models.Model):
-    """Local group information for a user"""
+    """Local Group information for a user"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    def get_affiliations_for_auth_group_id(self, auth_group_id):
-        """Get Affiliations for Auth Group"""
+    def get_affiliations_for_local_group_role_id(self, local_group_role_id):
+        """Get Affiliations for Local Group Role"""
         affiliations = self.localgroupaffiliation_set.filter(
-            auth_groups=auth_group_id
+            local_group_roles=local_group_role_id
         )
         return affiliations
 
@@ -485,8 +485,8 @@ class LocalGroupRole(models.Model):
 
     """Hardcode the role types, but also store role permissions in db"""
     role_type_choices = (
-        (1, 'Group Leader'),
-        (2, 'Group Admin'),
+        (settings.LOCAL_GROUPS_ROLE_GROUP_LEADER_ID, 'Group Leader'),
+        (settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID, 'Group Admin'),
     )
 
     permissions = models.ManyToManyField(
