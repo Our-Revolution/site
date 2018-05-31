@@ -482,7 +482,7 @@ class LocalGroupProfile(models.Model):
 
         affiliation = self.get_affiliation_for_local_group(local_group)
         if affiliation:
-            for role in affiliation.local_group_roles:
+            for role in affiliation.local_group_roles.all():
                 if role.has_permission(permission):
                     return True
         return False
@@ -519,7 +519,7 @@ class LocalGroupRole(models.Model):
     )
 
     def has_permission(self, permission):
-        has_perm = permission in self.permissions
+        has_perm = permission in self.permissions.all()
         return has_perm
 
     def __unicode__(self):

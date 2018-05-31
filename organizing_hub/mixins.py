@@ -14,7 +14,6 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
     def get_local_group(self):
         """
         Override this method to override the local_group attribute.
-        Must return an iterable.
         """
         if self.local_group is None:
             raise ImproperlyConfigured(
@@ -30,9 +29,12 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
         local_group = self.get_local_group()
         permissions = self.get_permission_required()
 
-        """Return True for empty permission list, otherwise verify"""
+        """Return True for empty permission list"""
         if not permissions:
             return True
+        elif local_group.status != 'approved':
+            """Return False for non-approved local group"""
+            return False
         else:
             """Check permissions against Local Group Profile"""
             user = self.request.user
