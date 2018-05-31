@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.decorators import method_decorator
+from .decorators import verified_email_required
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
     """
-    Local Group based Permission verification
+    Local Group based Permissions check with Email verification
     """
     local_group = None
 

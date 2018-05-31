@@ -497,7 +497,6 @@ class LocalGroupProfile(models.Model):
                 return False
         return True
 
-
     def __unicode__(self):
         return str(self.user.id) + ": " + self.user.email
 
