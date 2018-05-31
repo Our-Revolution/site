@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from collections import OrderedDict
+from django.conf import settings
 from django.contrib import admin
 from datetime import datetime
 from django.db.models import Q
