@@ -31,10 +31,6 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     0
 )))
 
-"""Local Groups Roles"""
-LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2
-LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
-
 # Organizing Hub Urls
 ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
