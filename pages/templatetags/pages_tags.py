@@ -11,6 +11,11 @@ def add_group_url():
 
 
 @register.simple_tag
+def base_url():
+    return settings.BASE_URL
+
+
+@register.simple_tag
 def candidates_url():
     return settings.CANDIDATES_URL
 

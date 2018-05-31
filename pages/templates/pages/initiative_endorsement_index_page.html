@@ -1,6 +1,41 @@
 {% extends "pages/base_page.html" %}
 
-{% load pages_tags static wagtailcore_tags %}
+{% load pages_tags static wagtailcore_tags wagtailimages_tags %}
+
+{% block meta_og %}
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
+    <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Our Revolution" />
+    {% if request.GET.category and request.GET.category != 'all' %}
+        {% with "dist/img/meta/"|add:request.GET.category|add:".png" as social_image %}
+            <meta property="og:image" content="{% base_url %}{% static social_image %}" />
+        {% endwith %}
+    {% elif page.social_image %}
+        {% image page.social_image original as social_image_url %}
+        <meta property="og:image" content="{{ social_image_url.url }}" />
+    {% else %}
+        <meta property="og:image" content="{% or_meta_image_url %}" />
+    {% endif %}
+{% endblock %}
+
+{% block meta_twitter %}
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{% firstof page.seo_title page.title "Our Revolution" %}"/>
+    <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+    <meta name="twitter:site" content="@OurRevolution"/>
+    {% if request.GET.category and request.GET.category != 'all' %}
+        {% with "dist/img/meta/"|add:request.GET.category|add:".png" as social_image %}
+            <meta name="twitter:image" content="{% base_url %}{% static social_image %}" />
+        {% endwith %}
+    {% elif page.social_image %}
+        {% image page.social_image original as social_image_url %}
+        <meta name="twitter:image" content="{{ social_image_url.url }}" />
+    {% else %}
+        <meta name="twitter:image" content="{% or_meta_image_url %}" />
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 
