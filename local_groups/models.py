@@ -477,6 +477,27 @@ class LocalGroupProfile(models.Model):
         )
         return affiliations
 
+    def has_permission_for_local_group(self, local_group, permission):
+        """Get Affiliation and check if any Role has permission"""
+
+        affiliation = self.get_affiliation_for_local_group(local_group)
+        if affiliation:
+            for role in affiliation.local_group_roles:
+                if role.has_permission(permission):
+                    return True
+        return False
+
+    def has_permissions_for_local_group(self, local_group, permissions):
+        """Verify if user has all permissions for local group"""
+        for permission in permissions:
+            if not self.has_permission_for_local_group(
+                local_group,
+                permission
+            ):
+                return False
+        return True
+
+
     def __unicode__(self):
         return str(self.user.id) + ": " + self.user.email
 
@@ -497,6 +518,10 @@ class LocalGroupRole(models.Model):
         choices=role_type_choices,
         unique=True
     )
+
+    def has_permission(self, permission):
+        has_perm = permission in self.permissions
+        return has_perm
 
     def __unicode__(self):
         return self.get_role_type_display()

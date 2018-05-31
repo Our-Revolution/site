@@ -1,0 +1,44 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import ImproperlyConfigured
+
+
+class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
+    """
+    Local Group based Permission verification
+    """
+    local_group = None
+
+    def get_local_group(self):
+        """
+        Override this method to override the local_group attribute.
+        Must return an iterable.
+        """
+        if self.local_group is None:
+            raise ImproperlyConfigured(
+                '{0} is missing the local_group attribute. Define {0}.local_group, or override '
+                '{0}.get_local_group().'.format(self.__class__.__name__)
+            )
+        return self.local_group
+
+    def has_permission(self):
+        """
+        Override this method to customize the way permissions are checked.
+        """
+        local_group = self.get_local_group()
+        permissions = self.get_permission_required()
+
+        """Return True for empty permission list, otherwise verify"""
+        if not permissions:
+            return True
+        else:
+            """Check permissions against Local Group Profile"""
+            user = self.request.user
+            if not hasattr(user, 'localgroupprofile'):
+                return False
+            else:
+                profile = user.localgroupprofile
+                has_permissions = profile.has_permissions_for_local_group(
+                    local_group,
+                    permissions
+                )
+                return has_permissions
