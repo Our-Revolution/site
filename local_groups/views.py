@@ -126,13 +126,6 @@ class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = GroupManageForm
     success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
-    permission_required = 'local_groups.change_group'
-
-    def get_local_group(self):
-        """
-        Override this method to override the local_group attribute.
-        """
-        return self.get_object()
 
     # Redirect to same page on success
     def get_success_url(self):
