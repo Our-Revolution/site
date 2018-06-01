@@ -20,7 +20,6 @@ from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
 from bsd.models import BSDProfile
 from organizing_hub.decorators import verified_email_required
-from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from .forms import (
     EventForm,
     GroupManageForm,
@@ -121,21 +120,13 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 # View for Admin updates to Group Info
-class GroupManageView(
-    LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
-    UpdateView
-):
+@method_decorator(verified_email_required, name='dispatch')
+class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Group
     form_class = GroupManageForm
     success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
-    # local_group = object
-    # form_class = ApplicationsStatusChangeForm
-    # login_url = reverse_lazy('admin:nominations_application_changelist')
     permission_required = 'local_groups.change_group'
-    # success_url = reverse_lazy('admin:nominations_application_changelist')
-    # template_name = 'admin/applications_status_change.html'
 
     def get_local_group(self):
         """
@@ -148,32 +139,32 @@ class GroupManageView(
         return reverse_lazy('groups-manage', kwargs={'slug': self.object.slug})
 
     # Check if user email is same as group leader email (case insensitive)
-    # def can_access(self):
-    #     email1 = self.get_object().rep_email
-    #     email2 = self.request.user.email
-    #     return email1.lower() == email2.lower()
+    def can_access(self):
+        email1 = self.get_object().rep_email
+        email2 = self.request.user.email
+        return email1.lower() == email2.lower()
 
     # Redirect user to dashboard page
-    # def redirect_user(self):
-    #     messages.error(
-    #         self.request,
-    #         "Please login with the Group Leader account to access this page."
-    #     )
-    #     return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
+    def redirect_user(self):
+        messages.error(
+            self.request,
+            "Please login with the Group Leader account to access this page."
+        )
+        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
 
     # Use default get logic but add custom access check
-    # def get(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(GroupManageView, self).get(request, *args, **kwargs)
-    #     else:
-    #         return self.redirect_user()
+    def get(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(GroupManageView, self).get(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
 
     # Use default post logic but add custom access check
-    # def post(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(GroupManageView, self).post(request, *args, **kwargs)
-    #     else:
-    #         return self.redirect_user()
+    def post(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(GroupManageView, self).post(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
 
 
 class GroupPasswordChangeView(
