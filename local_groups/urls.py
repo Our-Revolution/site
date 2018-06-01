@@ -31,7 +31,7 @@ urlpatterns += [
             auth_views.login,
             {
                 'authentication_form': GroupLoginForm,
-                # 'redirect_authenticated_user': True
+                'redirect_authenticated_user': True
             },
             name='groups-login'
         ),

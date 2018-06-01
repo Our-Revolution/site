@@ -1,9 +1,11 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from .decorators import verified_email_required
 import logging
-
 logger = logging.getLogger(__name__)
 
 
@@ -24,6 +26,16 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
                 '{0}.get_local_group().'.format(self.__class__.__name__)
             )
         return self.local_group
+
+    def handle_no_permission(self):
+        """
+        Override default logic and redirect to Dashboard instead
+        """
+        messages.error(
+            self.request,
+            "You do not have permission to access this page."
+        )
+        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
 
     def has_permission(self):
         """
