@@ -2,6 +2,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.decorators import method_decorator
 from .decorators import verified_email_required
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(verified_email_required, name='dispatch')

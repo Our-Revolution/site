@@ -519,8 +519,11 @@ class LocalGroupRole(models.Model):
     )
 
     def has_permission(self, permission):
-        has_perm = permission in self.permissions.all()
-        return has_perm
+        for perm in self.permissions.all():
+            code = perm.content_type.app_label + '.' + perm.codename
+            if code == permission:
+                return True
+        return False
 
     def __unicode__(self):
         return self.get_role_type_display()
