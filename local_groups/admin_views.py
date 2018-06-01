@@ -1,6 +1,7 @@
 # from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.http import HttpResponseRedirect
 # from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -28,9 +29,9 @@ class GroupLeaderSyncView(PermissionRequiredMixin, FormView):
     template_name = 'admin/group_leader_sync.html'
 
     def form_valid(self, form):
-        """Save all users to trigger sync in user_post_save_handler"""
+        """Trigger post-save signal for all users to sync group leader roles"""
         users = User.objects.all()
         for user in users:
-            user.save()
+            post_save.send(User, instance=user)
 
         return HttpResponseRedirect(self.get_success_url())

@@ -524,4 +524,5 @@ class LocalGroupAffiliation(models.Model):
         ) + " | " + str(self.local_group_profile)
 
     class Meta:
+        ordering = ["local_group__group_id", "local_group_profile__user__id"]
         unique_together = ["local_group", "local_group_profile"]

@@ -141,6 +141,10 @@ class GroupCreateForm(forms.ModelForm):
         }
 
 
+class GroupLeaderSyncForm(forms.Form):
+    confirm = forms.BooleanField(required=True)
+
+
 # Customize AuthenticationForm as needed
 class GroupLoginForm(AuthenticationForm):
     username = UsernameField(
