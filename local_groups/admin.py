@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 from .admin_views import GroupLeaderSyncView
 from .models import (
     LocalGroupAffiliation,
@@ -24,22 +23,6 @@ class LocalGroupAffiliationAdmin(admin.ModelAdmin):
             ),
         ]
         return my_urls + urls
-
-    def go_to_group_leader_sync(self, request, queryset):
-        return HttpResponseRedirect(
-            "/admin/local_groups/localgroupaffiliation/group-leader-sync/"
-        )
-
-    actions = [
-        # go_to_group_leader_sync("CSV Export"),
-        'go_to_group_leader_sync',
-        # 'set_to_needs_staff_review',
-        # 'set_to_under_review',
-        # 'set_to_approved',
-        # 'set_to_removed',
-        # 'set_to_expired',
-        # 'go_to_group_leader_sync',
-    ]
 
 
 @admin.register(LocalGroupProfile)

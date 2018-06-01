@@ -5,21 +5,14 @@
 
 <div id="content-main">
 
+  <h2>
+    Group Leader Sync
+  </h2>
+
   <p>
-    GROUP LEADER SYNC
-    Are you sure you want to bulk update the following candidate
-    applications to all have status = <strong>{{ status }}</strong>?
+    Are you sure you want to sync Group Leader Affiliation
+    <strong>for all users</strong>?
   </p>
-
-  <ul>
-
-    {% for application in applications %}
-    <li>
-      {{ application.id }}: {{ application }}
-    </li>
-    {% endfor %}
-
-  </ul>
 
   <form action="{{ request.get_full_path }}" method="post">
     {% csrf_token %}

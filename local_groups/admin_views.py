@@ -21,10 +21,12 @@ class GroupLeaderSyncView(PermissionRequiredMixin, FormView):
     https://docs.djangoproject.com/en/1.10/ref/contrib/admin/#adding-views-to-admin-sites
     '''
     form_class = GroupLeaderSyncForm
-    # login_url = reverse_lazy('admin:nominations_application_changelist')
+    login_url = reverse_lazy(
+        'admin:local_groups_localgroupaffiliation_changelist'
+    )
     permission_required = 'local_groups.add_localgroupaffiliation'
     success_url = reverse_lazy(
-        'local_groups:local_groups_localgroupaffiliation_changelist'
+        'admin:local_groups_localgroupaffiliation_changelist'
     )
     template_name = 'admin/group_leader_sync.html'
 

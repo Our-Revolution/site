@@ -478,8 +478,10 @@ class LocalGroupProfile(models.Model):
         return affiliations
 
     def __unicode__(self):
-        return str(self.user.id) + ": " + self.user.email
+        return self.user.email + " [" + str(self.user.id) + "]"
 
+    class Meta:
+        ordering = ["user__email"]
 
 class LocalGroupRole(models.Model):
 
@@ -519,10 +521,14 @@ class LocalGroupAffiliation(models.Model):
     )
 
     def __unicode__(self):
-        return str(self.local_group.group_id) + ": " + str(
-            self.local_group
-        ) + " | " + str(self.local_group_profile)
+        return self.local_group.name + " [" + self.local_group.group_id + "], " + str(
+            self.local_group_profile
+        )
 
     class Meta:
-        ordering = ["local_group__group_id", "local_group_profile__user__id"]
+        ordering = [
+            "local_group__name",
+            "local_group__group_id",
+            "local_group_profile__user__email"
+        ]
         unique_together = ["local_group", "local_group_profile"]
