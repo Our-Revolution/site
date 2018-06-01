@@ -1,0 +1,33 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block content %}
+
+<div id="content-main">
+
+  <p>
+    Are you sure you want to bulk update the following candidate
+    applications to all have status = <strong>{{ status }}</strong>?
+  </p>
+
+  <ul>
+
+    {% for application in applications %}
+    <li>
+      {{ application.id }}: {{ application }}
+    </li>
+    {% endfor %}
+
+  </ul>
+
+  <form action="{{ request.get_full_path }}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="confirm" id="confirm" value="true">
+    <div class="submit-row">
+      <input type="submit" value="Save" class="default">
+    </div>
+  </form>
+
+</div>
+
+{% endblock %}
