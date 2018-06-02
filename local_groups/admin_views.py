@@ -1,13 +1,10 @@
-# from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.http import HttpResponseRedirect
-# from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from .forms import GroupLeaderSyncForm
-# from .models import Application
 import logging
 
 logger = logging.getLogger(__name__)
