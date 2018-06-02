@@ -1,8 +1,7 @@
-from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from .forms import GroupLoginForm, GroupPasswordResetRequestForm
-from .views import (
+from local_groups.forms import GroupLoginForm, GroupPasswordResetRequestForm
+from local_groups.views import (
     EventCreateView,
     GroupManageView,
     GroupPasswordChangeView,
@@ -16,7 +15,6 @@ urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
 ]
 
-# TODO: move to organizing hub app
 urlpatterns += [
     url(r'^organizing-hub/', include([
         url(r'^event/', include([
