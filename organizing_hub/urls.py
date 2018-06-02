@@ -10,6 +10,7 @@ from local_groups.views import (
     VerifyEmailRequestView,
     VerifyEmailConfirmView
 )
+from .views import GroupAdminsView
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
@@ -77,6 +78,11 @@ urlpatterns += [
             ),
         ])),
         url(r'^(?P<slug>[\w-]+)/', include([
+            url(
+                r'^admins/',
+                GroupAdminsView.as_view(),
+                name='organizing-hub-group-admins'
+            ),
             url(
                 r'^manage/',
                 GroupManageView.as_view(),

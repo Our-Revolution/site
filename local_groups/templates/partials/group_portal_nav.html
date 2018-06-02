@@ -16,6 +16,12 @@
     Manage Group
   </a>
 
+  {% url 'organizing-hub-group-admins' group.slug as link_url %}
+  <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
+  href="{{ link_url }}">
+    Manage Group Admins
+  </a>
+
   {% endif %}
 
   {% url 'groups-password-change' as link_url %}
