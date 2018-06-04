@@ -1,4 +1,6 @@
+from django.conf.urls import url
 from django.contrib import admin
+from .admin_views import GroupLeaderSyncView
 from .models import (
     LocalGroupAffiliation,
     LocalGroupProfile,
@@ -11,7 +13,16 @@ from .actions import export_as_csv_action, geocode_groups
 
 @admin.register(LocalGroupAffiliation)
 class LocalGroupAffiliationAdmin(admin.ModelAdmin):
-    pass
+
+    def get_urls(self):
+        urls = super(LocalGroupAffiliationAdmin, self).get_urls()
+        my_urls = [
+            url(
+                r'^group-leader-sync/',
+                GroupLeaderSyncView.as_view(),
+            ),
+        ]
+        return my_urls + urls
 
 
 @admin.register(LocalGroupProfile)

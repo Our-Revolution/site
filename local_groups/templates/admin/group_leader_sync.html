@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block content %}
+
+<div id="content-main">
+
+  <h2>
+    Group Leader Sync
+  </h2>
+
+  <p>
+    Are you sure you want to sync Group Leader Affiliation
+    <strong>for all users</strong>?
+  </p>
+
+  <form action="{{ request.get_full_path }}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="confirm" id="confirm" value="true">
+    <div class="submit-row">
+      <input type="submit" value="Save" class="default">
+    </div>
+  </form>
+
+</div>
+
+{% endblock %}
