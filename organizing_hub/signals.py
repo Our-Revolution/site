@@ -4,7 +4,10 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
-from .views import add_local_group_role_for_user
+from .views import (
+    add_local_group_role_for_user,
+    remove_local_group_role_for_user
+)
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +37,9 @@ def sync_group_leader_affiliation_for_local_group(local_group):
             local_group_roles=LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         ).exclude(local_group_profile__user=group_leader_user)
         for old_group_leader_affiliation in old_group_leader_affiliations:
-            old_group_leader_affiliation.local_group_roles.remove(
+            remove_local_group_role_for_user(
+                old_group_leader_affiliation.local_group_profile.user,
+                local_group,
                 LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
             )
 
@@ -56,6 +61,7 @@ def sync_group_leader_affiliation_for_user(user):
     )
 
     """Remove Group Leader role for non-matching Groups"""
+
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
 
@@ -67,7 +73,9 @@ def sync_group_leader_affiliation_for_user(user):
             local_group__in=local_groups_lead_by_user
         )
         for old_affiliation in old_affiliations:
-            old_affiliation.local_group_roles.remove(
+            remove_local_group_role_for_user(
+                user,
+                old_affiliation.local_group,
                 LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
             )
 

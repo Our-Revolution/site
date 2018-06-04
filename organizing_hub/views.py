@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+from django.conf import settings
+from django.contrib.auth.models import User
+>>>>>>> TECH-1173 add page for editing group admins
 from django.urls import reverse_lazy
 # from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
@@ -42,13 +47,22 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
             local_group_profile=local_group_profile
         )
 
-    """Add Group Leader role to Affiliation if it doesn't exist"""
-    if not local_group_affiliation.local_group_roles.filter(
-        id=local_group_role_id
-    ).exists():
-        local_group_affiliation.local_group_roles.add(
-            local_group_role_id
+    """Add Group Role to Affiliation"""
+    local_group_affiliation.local_group_roles.add(local_group_role_id)
+
+
+def remove_local_group_role_for_user(user, local_group, local_group_role_id):
+    """Remove Role for Local Group & User if it exists"""
+
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        local_group_affiliation = local_group_profile.get_affiliation_for_local_group(
+            local_group
         )
+        if local_group_affiliation:
+            local_group_affiliation.local_group_roles.remove(
+                local_group_role_id
+            )
 
 
 class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
@@ -62,39 +76,29 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
     def form_valid(self, form):
         email = form.cleaned_data['email']
         is_admin = form.cleaned_data['is_admin']
-        if is_admin:
-            add_role_for_user()
-        else:
-            remove_role_for_user()
-        return super(GroupAdminsView, self).form_valid(form)
 
-        # """Check old password"""
-        # try:
-        #     self.check_old_password(form)
-        # except AssertionError:
-        #     messages.error(
-        #         self.request,
-        #         '''
-        #         There was an error validating your old password. Please make
-        #         sure all fields are filled with correct data and try again.
-        #         '''
-        #     )
-        #     return redirect('groups-password-change')
-        #
-        # """Set new password"""
-        # try:
-        #     self.set_new_password(form)
-        # except AssertionError:
-        #     messages.error(
-        #         self.request,
-        #         '''
-        #         There was an error setting your new password. Please make
-        #         sure all fields are filled with correct data and try again.
-        #         '''
-        #     )
-        #     return redirect('groups-password-change')
-        #
-        # return super(GroupAdminsView, self).form_valid(form)
+        try:
+            user = User.objects.get(email__iexact=email)
+        except User.DoesNotExist:
+            user = None
+
+        if user:
+            logger.debug('if user')
+            local_group = self.get_local_group()
+            if is_admin:
+                add_local_group_role_for_user(
+                    user,
+                    local_group,
+                    LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+                )
+            else:
+                remove_local_group_role_for_user(
+                    user,
+                    local_group,
+                    LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+                )
+
+        return super(GroupAdminsView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(GroupAdminsView, self).get_context_data(
