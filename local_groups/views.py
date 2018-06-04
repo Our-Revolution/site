@@ -14,7 +14,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.views.generic import CreateView, FormView, TemplateView, UpdateView
+from django.views.generic import CreateView, FormView, UpdateView
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
