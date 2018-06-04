@@ -13,6 +13,8 @@ from .actions import export_as_csv_action, geocode_groups
 
 @admin.register(LocalGroupAffiliation)
 class LocalGroupAffiliationAdmin(admin.ModelAdmin):
+    list_filter = ['local_group_roles']
+    search_fields = ['local_group__name', 'local_group_profile__user__email']
 
     def get_urls(self):
         urls = super(LocalGroupAffiliationAdmin, self).get_urls()

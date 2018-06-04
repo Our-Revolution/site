@@ -76,27 +76,35 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
     def form_valid(self, form):
         email = form.cleaned_data['email']
         is_admin = form.cleaned_data['is_admin']
+        local_group = self.get_local_group()
 
         try:
             user = User.objects.get(email__iexact=email)
         except User.DoesNotExist:
             user = None
 
-        if user:
-            logger.debug('if user')
-            local_group = self.get_local_group()
-            if is_admin:
-                add_local_group_role_for_user(
-                    user,
-                    local_group,
-                    LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+        if is_admin:
+            logger.debug('is_admin')
+            """Create User if it doesn't exist and add Role"""
+            if not user:
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=None
                 )
-            else:
-                remove_local_group_role_for_user(
-                    user,
-                    local_group,
-                    LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
-                )
+            add_local_group_role_for_user(
+                user,
+                local_group,
+                LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+            )
+        elif user and not is_admin:
+            logger.debug('user and not is_admin')
+            """Remove Role for User if it exists"""
+            remove_local_group_role_for_user(
+                user,
+                local_group,
+                LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+            )
 
         return super(GroupAdminsView, self).form_valid(form)
 

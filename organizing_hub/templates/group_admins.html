@@ -46,9 +46,9 @@
           <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
           method="post" class="form mb20">
             {% csrf_token %}
-            <input type="hidden" name="email" id="confirm"
+            <input type="hidden" name="email" id="email"
             value="{{ group_admin_affiliation.local_group_profile.user.email }}">
-            <input type="hidden" name="is_admin" id="confirm" value="false">
+            <input type="hidden" name="is_admin" id="is_admin" value="false">
               <div class="row">
 
                 <div class="col-md-9">
@@ -73,14 +73,11 @@
             <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
             method="post" class="form mb20">
               {% csrf_token %}
+              <input type="hidden" name="is_admin" id="is_admin" value="true">
 
               <div class="row">
                   <div class="col-md-12">
                     {% bootstrap_field form.email placeholder="you@example.com" %}
-                  </div>
-
-                  <div class="col-md-12">
-                    {% bootstrap_field form.is_admin %}
                   </div>
               </div>
 
