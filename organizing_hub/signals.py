@@ -3,49 +3,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from local_groups.models import (
-    Group as LocalGroup,
-    LocalGroupAffiliation,
-    LocalGroupProfile
-)
+from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
+from .views import add_local_group_role_for_user
 import logging
 
 logger = logging.getLogger(__name__)
 
 LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = settings.LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
-
-
-def add_group_leader_role_for_user(user, local_group):
-    """
-    Add Group Leader Role to Affiliation for User & Group. Create Profile and
-    Affiliation if they don't already exist
-    """
-
-    """Get or create Local Group Profile for User"""
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-    else:
-        local_group_profile = LocalGroupProfile.objects.create(
-            user=user
-        )
-
-    """Get or create Local Group Affiliation for User & Group"""
-    local_group_affiliation = local_group_profile.get_affiliation_for_local_group(
-        local_group
-    )
-    if not local_group_affiliation:
-        local_group_affiliation = LocalGroupAffiliation.objects.create(
-            local_group=local_group,
-            local_group_profile=local_group_profile
-        )
-
-    """Add Group Leader role to Affiliation if it doesn't exist"""
-    if not local_group_affiliation.local_group_roles.filter(
-        id=LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
-    ).exists():
-        local_group_affiliation.local_group_roles.add(
-            LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
-        )
 
 
 def sync_group_leader_affiliation_for_local_group(local_group):
@@ -76,7 +40,11 @@ def sync_group_leader_affiliation_for_local_group(local_group):
 
         """Add group leader role for user if it exists"""
         if group_leader_user:
-            add_group_leader_role_for_user(group_leader_user, local_group)
+            add_local_group_role_for_user(
+                group_leader_user,
+                local_group,
+                LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
+            )
 
 
 def sync_group_leader_affiliation_for_user(user):
@@ -105,7 +73,11 @@ def sync_group_leader_affiliation_for_user(user):
 
     """Add Group Leader role for matching Groups"""
     for local_group_lead_by_user in local_groups_lead_by_user:
-        add_group_leader_role_for_user(user, local_group_lead_by_user)
+        add_local_group_role_for_user(
+            user,
+            local_group_lead_by_user,
+            LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
+        )
 
 
 @receiver(post_save, sender=LocalGroup)

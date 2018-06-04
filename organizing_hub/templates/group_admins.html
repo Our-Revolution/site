@@ -37,6 +37,39 @@
 
       <div class="col-md-9">
 
+<<<<<<< HEAD
+=======
+        <ul>
+
+        {% for group_admin_affiliation in group_admin_affiliations %}
+        <li>
+          <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
+          method="post" class="form mb20">
+            {% csrf_token %}
+            <input type="hidden" name="email" id="confirm"
+            value="{{ group_admin_affiliation.local_group_profile.user.email }}">
+            <input type="hidden" name="is_admin" id="confirm" value="false">
+              <div class="row">
+
+                <div class="col-md-9">
+                  {{ group_admin_affiliation.local_group_profile.user.email }}
+                </div>
+
+                <div class="col-md-3">
+                    <button type="submit"
+                    class="btn btn-donate uppercase ls2">
+                    Remove User
+                  </button>
+                </div>
+
+              </div>
+          </form>
+        </li>
+        {% endfor %}
+
+        </ul>
+
+>>>>>>> TECH-1173 add page for editing group admins
             <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
             method="post" class="form mb20">
               {% csrf_token %}
