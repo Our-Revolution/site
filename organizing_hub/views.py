@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 # from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView
 from bsd.models import BSDProfile
@@ -12,6 +11,7 @@ from local_groups.models import (
     LocalGroupProfile
 )
 from .forms import GroupAdminsForm
+from .mixins import LocalGroupPermissionRequiredMixin
 import logging
 
 
@@ -69,7 +69,6 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
     permission_required = 'local_groups.add_localgroupaffiliation'
     success_message = "Group Admins have been updated successfully."
     template_name = "group_admins.html"
-    local_group = None
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
