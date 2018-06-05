@@ -116,7 +116,7 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
         group_admin_affiliations = LocalGroupAffiliation.objects.filter(
             local_group=local_group,
             local_group_roles=LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
-        )
+        ).order_by('local_group_profile__user__email')
         context['group_admin_affiliations'] = group_admin_affiliations
         context['local_group'] = local_group
         return context
