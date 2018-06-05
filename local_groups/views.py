@@ -28,6 +28,7 @@ from .forms import (
     SlackInviteForm,
 )
 from .models import Event, Group
+from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import datetime
 import os
 import requests
@@ -40,7 +41,12 @@ logger = logging.getLogger(__name__)
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class EventCreateView(
+    LoginRequiredMixin,
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
     model = Event
     form_class = EventForm
     success_message = '''
@@ -49,6 +55,10 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     ''' if settings.EVENT_AUTO_APPROVAL else '''
     Your event was created successfully and is now being reviewed by our team.
     '''
+    permission_required = 'local_groups.add_event'
+
+    def get_local_group(self):
+        return self.get_object()
 
     # Check if user is a group leader and has a valid bsd cons_id
     def can_access(self):
@@ -121,11 +131,20 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 # View for Admin updates to Group Info
 @method_decorator(verified_email_required, name='dispatch')
-class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class GroupManageView(
+    LoginRequiredMixin,
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
     model = Group
     form_class = GroupManageForm
     success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
+    permission_required = 'local_groups.change_group'
+
+    def get_local_group(self):
+        return self.get_object()
 
     # Redirect to same page on success
     def get_success_url(self):
