@@ -52,12 +52,15 @@
               </a>
 
               <p class="mt20">
-                <small>
                   Endorsement requests must be submitted at least 30 days before the
                   candidate's election in order to be eligible for an endorsement.
-                </small>
               </p>
-
+              
+              {% endorsement_process_url as link_url %}
+              <p>
+                <strong>To learn more about Our Revolution's endorsement process,
+                <a href="{{link_url}}">click here</a>.</strong>
+              </p>
             </div>
           </div>
         </div>

@@ -280,6 +280,7 @@ ELECTORAL_COORDINATOR_EMAIL = str(os.environ.get(
     'ELECTORAL_COORDINATOR_EMAIL',
     'political@ourrevolution.com'
 ))
+ENDORSEMENT_PROCESS_URL = '/docs/our-revolution-endorsement-process/'
 OR_ADDRESS_CITY = 'Washington'
 OR_ADDRESS_STATE = 'DC'
 OR_ADDRESS_STREET = 'PO Box 66208'
