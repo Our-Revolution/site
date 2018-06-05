@@ -37,60 +37,97 @@
 
       <div class="col-md-9">
 
-<<<<<<< HEAD
-=======
-        <ul>
+        <section class="mb20">
 
-        {% for group_admin_affiliation in group_admin_affiliations %}
-        <li>
+          <h4 class="mt0">Group Leader</h4>
+
+          <div class="well well-sm mb10">
+            {{ local_group.rep_email }}
+          </div>
+
+          <p>
+            To change Group Leader Email, contact {% organizing_email %}
+          </p>
+
+        </section>
+
+        <!-- <hr /> -->
+
+        <section class="mb20">
+
+          <h4>Group Admins</h4>
+
+          <p>
+            Group admins will be able to login and manage your group.
+          </p>
+
+          <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h4 class="panel-title">Email Address</h4>
+            </div>
+
+            <!-- List group -->
+            <ul class="list-group">
+
+                {% for group_admin_affiliation in group_admin_affiliations %}
+                <li class="list-group-item">
+
+                  <form
+                  action="{% url 'organizing-hub-group-admins' local_group.slug %}"
+                  method="post" class="form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="email" id="email"
+                    value="{{ group_admin_affiliation.local_group_profile.user.email }}">
+
+                    <input type="hidden" name="is_admin" id="is_admin" value="false">
+
+                      <div class="row">
+
+                        <div class="col-md-9">
+                          {{ group_admin_affiliation.local_group_profile.user.email }}
+                        </div>
+
+                        <div class="col-md-3 text-right">
+                            <button type="submit"class="btn btn-danger btn-sm uppercase ls2">
+                            Remove User
+                          </button>
+                        </div>
+
+                      </div>
+                  </form>
+                </li>
+                {% endfor %}
+
+            </ul>
+          </div>
+
+        </section>
+
+        <!-- <hr /> -->
+
+        <section>
+
+          <h4>Add a Group Admin</h4>
+
           <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
           method="post" class="form mb20">
+
             {% csrf_token %}
-            <input type="hidden" name="email" id="email"
-            value="{{ group_admin_affiliation.local_group_profile.user.email }}">
-            <input type="hidden" name="is_admin" id="is_admin" value="false">
-              <div class="row">
 
-                <div class="col-md-9">
-                  {{ group_admin_affiliation.local_group_profile.user.email }}
-                </div>
+            <input type="hidden" name="is_admin" id="is_admin" value="true">
 
-                <div class="col-md-3">
-                    <button type="submit"
-                    class="btn btn-donate uppercase ls2">
-                    Remove User
-                  </button>
-                </div>
+            {% bootstrap_field form.email placeholder="info@ourrevolution.com" %}
 
-              </div>
+            <button type="submit" class="btn btn-secondary uppercase ls2">
+              Add User
+            </button>
+
           </form>
-        </li>
-        {% endfor %}
 
-        </ul>
-
->>>>>>> TECH-1173 add page for editing group admins
-            <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
-            method="post" class="form mb20">
-              {% csrf_token %}
-              <input type="hidden" name="is_admin" id="is_admin" value="true">
-
-              <div class="row">
-                  <div class="col-md-12">
-                    {% bootstrap_field form.email placeholder="you@example.com" %}
-                  </div>
-              </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit"
-                      class="btn btn-primary btn-block uppercase ls2">
-                      Submit
-                    </button>
-                    </div>
-                </div>
-
-            </form>
+        </section>
 
       </div>
   </div>

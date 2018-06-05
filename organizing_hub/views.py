@@ -1,13 +1,11 @@
-<<<<<<< HEAD
-=======
 from django.conf import settings
 from django.contrib.auth.models import User
->>>>>>> TECH-1173 add page for editing group admins
 from django.urls import reverse_lazy
 # from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView
+from bsd.models import BSDProfile
 from local_groups.models import (
     Group as LocalGroup,
     LocalGroupAffiliation,
@@ -92,6 +90,8 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
                     email=email,
                     password=None
                 )
+                """Create BSD Profile so user can use BSD login"""
+                BSDProfile.objects.create(user=user)
             add_local_group_role_for_user(
                 user,
                 local_group,
@@ -112,9 +112,25 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
         context = super(GroupAdminsView, self).get_context_data(
             **kwargs
         )
+<<<<<<< HEAD
         """TODO: get all current Group Admins"""
         # context['slug'] = self.kwargs['slug']
         context['local_group'] = self.get_local_group()
+=======
+        # rep_email = forms.CharField(
+        #     disabled=True,
+        #     label=_("Group leader email"),
+        #     help_text='To change Group Leader Email, contact %s' % settings.ORGANIZING_EMAIL,
+        # )
+        """Get Local Group and current Group Admins"""
+        local_group = self.get_local_group()
+        group_admin_affiliations = LocalGroupAffiliation.objects.filter(
+            local_group=local_group,
+            local_group_roles=LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+        )
+        context['group_admin_affiliations'] = group_admin_affiliations
+        context['local_group'] = local_group
+>>>>>>> TECH-1173 add page for editing group admins
         return context
 
     def get_local_group(self):
