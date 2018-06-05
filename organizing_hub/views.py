@@ -18,7 +18,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-"""TODO: require permission for local group"""
+LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 
 
 def add_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -112,16 +112,6 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
         context = super(GroupAdminsView, self).get_context_data(
             **kwargs
         )
-<<<<<<< HEAD
-        """TODO: get all current Group Admins"""
-        # context['slug'] = self.kwargs['slug']
-        context['local_group'] = self.get_local_group()
-=======
-        # rep_email = forms.CharField(
-        #     disabled=True,
-        #     label=_("Group leader email"),
-        #     help_text='To change Group Leader Email, contact %s' % settings.ORGANIZING_EMAIL,
-        # )
         """Get Local Group and current Group Admins"""
         local_group = self.get_local_group()
         group_admin_affiliations = LocalGroupAffiliation.objects.filter(
@@ -130,7 +120,6 @@ class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
         )
         context['group_admin_affiliations'] = group_admin_affiliations
         context['local_group'] = local_group
->>>>>>> TECH-1173 add page for editing group admins
         return context
 
     def get_local_group(self):
