@@ -21,6 +21,11 @@ def candidates_url():
 
 
 @register.simple_tag
+def endorsement_process_url():
+    return settings.ENDORSEMENT_PROCESS_URL
+
+
+@register.simple_tag
 def or_address():
     return '%s %s, %s %s' % (
         settings.OR_ADDRESS_STREET,
