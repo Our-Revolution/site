@@ -45,7 +45,7 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
         permissions = self.get_permission_required()
 
         """Return False for non-approved local group"""
-        if local_group.status != 'approved':
+        if local_group and local_group.status != 'approved':
             return False
         elif not permissions:
             """Return True for empty permission list"""

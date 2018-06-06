@@ -27,7 +27,8 @@ from .forms import (
     GroupPasswordResetForm,
     SlackInviteForm,
 )
-from .models import Event, Group
+from .models import Event, Group, LocalGroupAffiliation
+from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import datetime
 import os
 import requests
@@ -39,8 +40,12 @@ bsdApi = BSD().api
 logger = logging.getLogger(__name__)
 
 
-@method_decorator(verified_email_required, name='dispatch')
-class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class EventCreateView(
+    LoginRequiredMixin,
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
     model = Event
     form_class = EventForm
     success_message = '''
@@ -49,18 +54,32 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     ''' if settings.EVENT_AUTO_APPROVAL else '''
     Your event was created successfully and is now being reviewed by our team.
     '''
+    permission_required = 'local_groups.add_event'
 
-    # Check if user is a group leader and has a valid bsd cons_id
+    def get_local_group(self):
+        local_group = None
+        user = self.request.user
+
+        if hasattr(user, 'localgroupprofile'):
+            local_group_profile = user.localgroupprofile
+
+            # TODO: support multiple group affiliations?
+            local_group_affiliation = LocalGroupAffiliation.objects.filter(
+                local_group_profile=local_group_profile,
+                local_group__status__exact='approved',
+            ).first()
+            if local_group_affiliation:
+                local_group = local_group_affiliation.local_group
+
+        return local_group
+
+    # Check if user has a valid bsd cons_id
     def can_access(self):
-        is_group_leader = Group.objects.filter(
-            rep_email__iexact=self.request.user.email,
-            status__exact='approved',
-        ).first() is not None
         user = self.request.user
         has_valid_cons_id = hasattr(user, 'bsdprofile') and (
             user.bsdprofile.cons_id != BSDProfile.cons_id_default
         )
-        return is_group_leader and has_valid_cons_id
+        return has_valid_cons_id
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -120,44 +139,24 @@ class EventCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 # View for Admin updates to Group Info
-@method_decorator(verified_email_required, name='dispatch')
-class GroupManageView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class GroupManageView(
+    LoginRequiredMixin,
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
     model = Group
     form_class = GroupManageForm
     success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
+    permission_required = 'local_groups.change_group'
+
+    def get_local_group(self):
+        return self.get_object()
 
     # Redirect to same page on success
     def get_success_url(self):
         return reverse_lazy('groups-manage', kwargs={'slug': self.object.slug})
-
-    # Check if user email is same as group leader email (case insensitive)
-    def can_access(self):
-        email1 = self.get_object().rep_email
-        email2 = self.request.user.email
-        return email1.lower() == email2.lower()
-
-    # Redirect user to dashboard page
-    def redirect_user(self):
-        messages.error(
-            self.request,
-            "Please login with the Group Leader account to access this page."
-        )
-        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
-
-    # Use default get logic but add custom access check
-    def get(self, request, *args, **kwargs):
-        if self.can_access():
-            return super(GroupManageView, self).get(request, *args, **kwargs)
-        else:
-            return self.redirect_user()
-
-    # Use default post logic but add custom access check
-    def post(self, request, *args, **kwargs):
-        if self.can_access():
-            return super(GroupManageView, self).post(request, *args, **kwargs)
-        else:
-            return self.redirect_user()
 
 
 class GroupPasswordChangeView(

@@ -148,12 +148,12 @@ class GroupLeaderSyncForm(forms.Form):
 # Customize AuthenticationForm as needed
 class GroupLoginForm(AuthenticationForm):
     username = UsernameField(
-        label=_("Group Admin Email"),
+        label=_("Email Address"),
         widget=forms.TextInput(attrs={'autofocus': True}),
         help_text='''
             This should be the official group leader email address registered
-            with Our Revolution, or the email you use for submitting
-            nominations
+            with Our Revolution, a group admin email, or the email you use for
+            submitting nominations.
         '''
     )
     error_messages = {
