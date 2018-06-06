@@ -85,7 +85,6 @@ class GroupAdminsView(
             user = None
 
         if is_admin:
-            logger.debug('is_admin')
             """Create User if it doesn't exist and add Role"""
             if not user:
                 user = User.objects.create_user(
@@ -101,7 +100,6 @@ class GroupAdminsView(
                 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
             )
         elif user and not is_admin:
-            logger.debug('user and not is_admin')
             """Remove Role for User if it exists"""
             remove_local_group_role_for_user(
                 user,
