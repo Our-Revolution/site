@@ -40,7 +40,6 @@ bsdApi = BSD().api
 logger = logging.getLogger(__name__)
 
 
-@method_decorator(verified_email_required, name='dispatch')
 class EventCreateView(
     LoginRequiredMixin,
     LocalGroupPermissionRequiredMixin,
@@ -140,7 +139,6 @@ class EventCreateView(
 
 
 # View for Admin updates to Group Info
-@method_decorator(verified_email_required, name='dispatch')
 class GroupManageView(
     LoginRequiredMixin,
     LocalGroupPermissionRequiredMixin,
