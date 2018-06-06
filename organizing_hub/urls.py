@@ -84,7 +84,7 @@ urlpatterns += [
                 name='organizing-hub-group-admins'
             ),
             url(
-                r'^manage/',
+                r'^info/',
                 GroupManageView.as_view(),
                 name='groups-manage'
             ),

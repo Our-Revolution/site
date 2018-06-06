@@ -51,7 +51,7 @@
 
         </section>
 
-        <!-- <hr /> -->
+        <hr />
 
         <section class="mb20">
 
@@ -71,7 +71,7 @@
             <ul class="list-group">
 
                 {% for group_admin_affiliation in group_admin_affiliations %}
-                <li class="list-group-item">
+                <li class="list-group-item text-right">
 
                   <form
                   action="{% url 'organizing-hub-group-admins' local_group.slug %}"
@@ -84,19 +84,15 @@
 
                     <input type="hidden" name="is_admin" id="is_admin" value="false">
 
-                      <div class="row">
-
-                        <div class="col-md-9">
-                          {{ group_admin_affiliation.local_group_profile.user.email }}
-                        </div>
-
-                        <div class="col-md-3 text-right">
-                            <button type="submit"class="btn btn-danger btn-sm uppercase ls2">
-                            Remove User
-                          </button>
-                        </div>
-
+                      <div class="pull-left">
+                        {{ group_admin_affiliation.local_group_profile.user.email }}
                       </div>
+
+                      <button type="submit"
+                      class="btn btn-danger btn-sm uppercase ls2">
+                        Remove User
+                      </button>
+
                   </form>
                 </li>
                 {% endfor %}
@@ -106,7 +102,7 @@
 
         </section>
 
-        <!-- <hr /> -->
+        <hr />
 
         <section>
 
@@ -119,7 +115,7 @@
 
             <input type="hidden" name="is_admin" id="is_admin" value="true">
 
-            {% bootstrap_field form.email placeholder="info@ourrevolution.com" %}
+            {% bootstrap_field form.email placeholder="user@example.com" %}
 
             <button type="submit" class="btn btn-secondary uppercase ls2">
               Add User

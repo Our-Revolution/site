@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-# from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView
 from bsd.models import BSDProfile
@@ -63,11 +63,15 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             )
 
 
-class GroupAdminsView(LocalGroupPermissionRequiredMixin, FormView):
+class GroupAdminsView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    FormView
+):
     form_class = GroupAdminsForm
     model = LocalGroup
     permission_required = 'local_groups.add_localgroupaffiliation'
-    success_message = "Group Admins have been updated successfully."
+    success_message = "The group admins have been updated successfully."
     template_name = "group_admins.html"
 
     def form_valid(self, form):
