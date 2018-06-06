@@ -1,8 +1,11 @@
 from django import template
 from django.conf import settings
-from pages.models import Group
+from local_groups.models import LocalGroupAffiliation
 
 register = template.Library()
+
+
+ORGANIZING_HUB_ADMINS_ENABLED = settings.ORGANIZING_HUB_ADMINS_ENABLED
 
 
 @register.simple_tag
@@ -10,20 +13,26 @@ def bsd_create_account_url():
     return settings.BSD_CREATE_ACCOUNT_URL
 
 
-def find_group_by_email(email):
-    # Case insensitive search by group rep email for approved groups
-    group = Group.objects.filter(
-        rep_email__iexact=email,
-        status__exact='approved',
-    ).first()
-    return group
+def find_local_group_for_user(user):
+    """Get Local Group for User"""
+
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        local_group_affiliation = LocalGroupAffiliation.objects.filter(
+            local_group_profile=local_group_profile,
+            local_group__status__exact='approved',
+        ).first()
+        if local_group_affiliation:
+            return local_group_affiliation.local_group
+
+    return None
 
 
 # Organizing Hub templates
 @register.inclusion_tag('partials/group_link.html', takes_context=True)
 def group_link(context):
 
-    group = find_group_by_email(context['request'].user.email)
+    group = find_local_group_for_user(context['request'].user)
 
     return {
         'group': group,
@@ -35,12 +44,15 @@ def group_link(context):
 @register.inclusion_tag('partials/group_portal_nav.html', takes_context=True)
 def group_portal_nav(context):
 
-    group = find_group_by_email(context['request'].user.email)
+    group = find_local_group_for_user(context['request'].user)
+
+    show_admins_link = ORGANIZING_HUB_ADMINS_ENABLED
 
     return {
         'group': group,
         'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
         'organizing_docs_url': settings.ORGANIZING_DOCS_URL,
+        'show_admins_link': show_admins_link,
         'request': context['request'],
     }
 

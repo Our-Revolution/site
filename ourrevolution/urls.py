@@ -3,9 +3,7 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.i18n import javascript_catalog
-
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
-from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 
 import documents
@@ -20,12 +18,15 @@ urlpatterns = []
 #     ]
 
 urlpatterns += [
-     # override default wagtail view
-    url(r'^documents/(\d+)/(.*)$', documents.serve_wagtail_doc,
-        name='wagtaildocs_serve'),
+    # override default wagtail view
+    url(
+        r'^documents/(\d+)/(.*)$',
+        documents.serve_wagtail_doc,
+        name='wagtaildocs_serve'
+    ),
     url(r'^cms/', include(wagtailadmin_urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'', include('local_groups.urls')),
+    url(r'', include('organizing_hub.urls')),
     url(r'', include('nominations.urls')),
     url(r'', include(wagtail_urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

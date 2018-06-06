@@ -5,6 +5,11 @@
   padding: 10px 15px;
   // text-transform: uppercase;
   // letter-spacing: 1px;
+
+  &-sm {
+    height: auto;
+    padding: 5px 10px;    
+  }
 }
 
 .btn-round {

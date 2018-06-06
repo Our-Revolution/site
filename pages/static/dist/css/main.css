@@ -8528,6 +8528,9 @@ footer {
   font-weight: 700;
   height: 40px;
   padding: 10px 15px; }
+  .btn-sm, .btn-group-sm > .btn {
+    height: auto;
+    padding: 5px 10px; }
 
 .btn-round {
   border-radius: 50px; }

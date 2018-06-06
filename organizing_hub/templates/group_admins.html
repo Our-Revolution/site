@@ -1,0 +1,139 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags %}
+
+{% block page_title %}Our Revolution - Manage Group Admins{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+{% group_link %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        <h3 class="mb20 mt0">
+          Manage Group Admins
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <section class="mb20">
+
+          <h4 class="mt0">Group Leader</h4>
+
+          <div class="panel panel-default mb10">
+            <div class="panel-body">
+              {{ local_group.rep_email }}
+            </div>
+          </div>
+
+          <p>
+            To change Group Leader Email, contact {% organizing_email %}
+          </p>
+
+        </section>
+
+        <hr />
+
+        <section class="mb20">
+
+          <h4>Group Admins</h4>
+
+          <p>
+            Group admins will be able to login and manage your group.
+          </p>
+
+          <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h4 class="panel-title">Email Address</h4>
+            </div>
+
+            <!-- List group -->
+            <ul class="list-group">
+
+                {% for group_admin_affiliation in group_admin_affiliations %}
+                <li class="list-group-item text-right">
+
+                  <form
+                  action="{% url 'organizing-hub-group-admins' local_group.slug %}"
+                  method="post" class="form">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="email" id="email"
+                    value="{{ group_admin_affiliation.local_group_profile.user.email }}">
+
+                    <input type="hidden" name="is_admin" id="is_admin" value="false">
+
+                      <div class="pull-left">
+                        {{ group_admin_affiliation.local_group_profile.user.email }}
+                      </div>
+
+                      <button type="submit"
+                      class="btn btn-danger btn-sm uppercase ls2">
+                        Remove User
+                      </button>
+
+                  </form>
+                </li>
+                {% endfor %}
+
+                {% if not group_admin_affiliations %}
+                <li class="list-group-item">
+                </li>
+                {% endif %}
+
+            </ul>
+          </div>
+
+        </section>
+
+        <hr />
+
+        <section>
+
+          <h4>Add a Group Admin</h4>
+
+          <form action="{% url 'organizing-hub-group-admins' local_group.slug %}"
+          method="post" class="form mb20">
+
+            {% csrf_token %}
+
+            <input type="hidden" name="is_admin" id="is_admin" value="true">
+
+            {% bootstrap_field form.email placeholder="user@example.com" %}
+
+            <button type="submit" class="btn btn-secondary uppercase ls2">
+              Add User
+            </button>
+
+          </form>
+
+        </section>
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}
