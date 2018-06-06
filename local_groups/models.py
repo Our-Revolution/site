@@ -503,6 +503,7 @@ class LocalGroupProfile(models.Model):
     class Meta:
         ordering = ["user__email"]
 
+
 class LocalGroupRole(models.Model):
 
     """Hardcode the role types, but also store role permissions in db"""
