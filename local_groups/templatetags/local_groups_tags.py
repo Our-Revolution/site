@@ -5,6 +5,9 @@ from local_groups.models import LocalGroupAffiliation
 register = template.Library()
 
 
+ORGANIZING_HUB_ADMINS_ENABLED = settings.ORGANIZING_HUB_ADMINS_ENABLED
+
+
 @register.simple_tag
 def bsd_create_account_url():
     return settings.BSD_CREATE_ACCOUNT_URL
@@ -43,10 +46,13 @@ def group_portal_nav(context):
 
     group = find_local_group_for_user(context['request'].user)
 
+    show_admins_link = ORGANIZING_HUB_ADMINS_ENABLED
+
     return {
         'group': group,
         'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
         'organizing_docs_url': settings.ORGANIZING_DOCS_URL,
+        'show_admins_link': show_admins_link,
         'request': context['request'],
     }
 
