@@ -134,9 +134,13 @@
 
 				</ul>
 
-        <p class="fs18">Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our complete new slate of ballot initiatives.</p>
+        <p>Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our complete new slate of ballot initiatives.</p>
 
-        <p class="fs18"><strong>Submit recommendations for ballot initiatives by emailing <a href="mailto:political@ourrevolution.com">political@ourrevolution.com</a>, or view our past election results below.</strong></p>
+        {% endorsement_process_url as link_url %}
+        <p>
+          <strong>To learn more about Our Revolution's endorsement process,
+          <a href="{{link_url}}">click here</a>.</strong>
+        </p>
 
         <div class="mb20 mt20">
           <a href="{% results_url %}"
