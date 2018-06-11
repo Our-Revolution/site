@@ -169,3 +169,98 @@ div.recurrence-widget {
     margin-bottom: 0;
   }
 }
+
+// Form wrapper to make embedded forms match our style guide
+.form-wrapper {
+
+  #action_info,
+  #can_embed_form #d_sharing,
+  #can_embed_form_inner > h2 + h4,
+  .country_wrap,
+  #logo_wrap {
+    display: none !important;
+  }
+
+  #can_embed_form,
+  #can_embed_form label,
+  #can_embed_form .floatlabel-wrapper .floatlabel-label,
+  #can_embed_form .floatlabel-wrapper .floatlabel-label.floatlabel-label-focus,
+  #can_embed_form_inner *:not(input, select, textarea) {
+    color: inherit !important;
+  }
+
+  #can_embed_form,
+  #can_embed_form h2,
+  #can_embed_form_inner * {
+    font-family: inherit !important;
+  }
+
+  #can_embed_form {
+    border: none !important;
+    padding: 40px !important;
+
+    &,
+    #action_welcome_message #action_welcome_message_inner {
+      background-color: inherit !important;
+    }
+
+    .floatlabel-wrapper .floatlabel-label {
+      display: block !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      left: 0px !important;
+      letter-spacing: 1px !important;
+      margin-bottom: 5px !important;
+      opacity: 1 !important;
+      position: relative !important;
+      text-transform: uppercase !important;
+      top: 0px !important;
+
+      &:after {
+        display: none !important;
+      }
+    }
+
+    input[type=text] {
+      border-radius: 3px !important;
+    }
+
+    input[type=submit] {
+      @extend .btn;
+      @extend .btn-block;
+      @extend .btn-primary;
+      @extend .ls2;
+      @extend .uppercase;
+      background-color: #45d363 !important;
+      border: 1px solid #45d363 !important;
+      border-radius: 4px !important;
+      font-weight: 700 !important;
+      padding: 10px 15px !important;
+
+      &:hover {
+        background-color: #2ec14d !important;
+        border: 1px solid #2ec14d !important;
+      }
+    }
+
+    &.can_float {
+      #form_col1,
+      #form_col2 {
+        float: none !important;
+        width: auto !important;
+      }
+    }
+  }
+
+  .can_embed.form #can_embed_form_inner > h2 {
+    border-bottom: none !important;
+    margin-bottom: 40px !important;
+    padding-bottom: 0 !important;
+    text-align: center !important;
+    text-transform: lowercase !important;
+
+    &::first-letter {
+      text-transform: uppercase !important;
+    }
+  }
+}
