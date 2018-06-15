@@ -2,7 +2,6 @@ from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from local_groups.forms import GroupLoginForm, GroupPasswordResetRequestForm
 from local_groups.views import (
-    EventCreateView,
     GroupManageView,
     GroupPasswordChangeView,
     GroupPasswordResetView,
@@ -10,7 +9,7 @@ from local_groups.views import (
     VerifyEmailRequestView,
     VerifyEmailConfirmView
 )
-from .views import GroupAdminsView
+from .views import EventCreateView, GroupAdminsView
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
