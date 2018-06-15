@@ -1,0 +1,93 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Event List{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+{% group_link %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        <h3 class="mb20 mt0">
+          Event List
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <section>
+
+
+past_create_events
+             <ol>
+             {% for event in object_list.past_create_events %}
+                 <li>
+                   <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
+                   {{ event.start_day }}
+                   {{ event.event_id }}
+                   {{ event.event_id_obfuscated }}
+                 </li>
+             {% empty %}
+                 <li>No events yet.</li>
+             {% endfor %}
+             </ol>
+
+up_create_events
+             <ol>
+             {% for event in object_list.up_create_events %}
+             <li>
+               <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
+               {{ event.start_day }}
+               {{ event.event_id }}
+               {{ event.event_id_obfuscated }}
+             </li>
+             {% empty %}
+                 <li>No events yet.</li>
+             {% endfor %}
+             </ol>
+
+user_events
+             <ol>
+             {% for event in object_list.user_events %}
+             <li>
+               <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
+               {{ event.start_day }}
+               {{ event.event_id }}
+               {{ event.event_id_obfuscated }}
+             </li>
+             {% empty %}
+                 <li>No events yet.</li>
+             {% endfor %}
+             </ol>
+
+
+        </section>
+
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

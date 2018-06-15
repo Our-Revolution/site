@@ -9,7 +9,7 @@ from local_groups.views import (
     VerifyEmailRequestView,
     VerifyEmailConfirmView
 )
-from .views import EventCreateView, GroupAdminsView
+from .views import EventCreateView, EventListView, GroupAdminsView
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
@@ -18,6 +18,11 @@ urlpatterns = [
 urlpatterns += [
     url(r'^organizing-hub/', include([
         url(r'^event/', include([
+            url(
+                r'^$',
+                EventListView.as_view(),
+                name='organizing-hub-event-list'
+            ),
             url(
                 r'^create/',
                 EventCreateView.as_view(),

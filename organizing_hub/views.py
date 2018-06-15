@@ -19,6 +19,7 @@ from local_groups.models import (
 from .forms import GroupAdminsForm
 from .mixins import LocalGroupPermissionRequiredMixin
 import datetime
+import json
 import logging
 
 
@@ -77,15 +78,16 @@ class EventCreateView(
     SuccessMessageMixin,
     CreateView
 ):
-    model = BSDEvent
     form_class = BSDEventForm
+    model = BSDEvent
+    permission_required = 'local_groups.add_event'
     success_message = '''
     Your event was created successfully. Visit Manage & Promote Events tool
     below to view or promote your events.
     ''' if settings.EVENT_AUTO_APPROVAL else '''
     Your event was created successfully and is now being reviewed by our team.
     '''
-    permission_required = 'local_groups.add_event'
+    template_name = "event_create.html"
 
     def get_local_group(self):
         local_group = None
@@ -170,8 +172,8 @@ class EventCreateView(
 
 
 class EventListView(ListView):
-
     model = BSDEvent
+    template_name = "event_list.html"
 
     def get_queryset(self):
         """
@@ -184,57 +186,43 @@ class EventListView(ListView):
         if self.queryset is not None:
             return self.queryset
 
-        '''
-        Save event to BSD
-        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-        '''
-        api_call = '/event/create_event'
-        api_params = {}
-        request_type = bsdApi.POST
-        query = {
-            # Show Attendee First Names + Last Initial
-            'attendee_visibility': 'FIRST',
-            'capacity': self.capacity,
-            'contact_phone': self.contact_phone,
-            'creator_cons_id': self.creator_cons_id,
-            'creator_name': self.host_name,
-            'event_type_id': self.event_type,
-            'days': [{
-                'start_datetime_system': str(datetime.datetime.combine(
-                    self.start_day,
-                    self.start_time
-                )),
-                'duration': self.duration_minutes()
-            }],
-            'description': self.description,
-            'flag_approval': flag_approval,
-            'host_receive_rsvp_emails': self.host_receive_rsvp_emails,
-            'local_timezone': self.start_time_zone,
-            'name': self.name,
-            'public_phone': self.public_phone,
-            'venue_addr1': self.venue_addr1,
-            'venue_addr2': self.venue_addr2,
-            'venue_city': self.venue_city,
-            'venue_directions': self.venue_directions,
-            'venue_name': self.venue_name,
-            'venue_state_cd': self.venue_state_or_territory,
-            'venue_zip': self.venue_zip,
-        }
-        body = {
-            'event_api_version': '2',
-            'values': json.dumps(query)
-        }
+        user = self.request.user
+        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+            user.bsdprofile.cons_id != BSDProfile.cons_id_default
+        )
 
-        apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
+        if has_valid_cons_id:
+            '''
+            Get Events from BSD
+            https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+            '''
+            api_call = '/event/get_events_for_cons'
+            api_params = {}
+            request_type = bsdApi.POST
+            query = {
+                'cons_id': user.bsdprofile.cons_id,
+                # 'creator_cons_id': self.creator_cons_id,
+            }
+            body = {
+                'event_api_version': '2',
+                'values': json.dumps(query)
+            }
 
-        try:
-            # Parse and validate response
-            assert apiResult.http_status is 200
-            assert 'event_id_obfuscated' in json.loads(apiResult.body)
-        except AssertionError:
-            raise ValidationError('''
-                Event creation failed, please check data and try again.
-            ''')
+            apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
+            logger.debug("apiResult: " + str(apiResult.body))
+            events = json.loads(apiResult.body)
+            return events
+        else:
+            return []
+
+        # try:
+        #     # Parse and validate response
+        #     assert apiResult.http_status is 200
+        #     assert 'event_id_obfuscated' in json.loads(apiResult.body)
+        # except AssertionError:
+        #     raise ValidationError('''
+        #         Event creation failed, please check data and try again.
+        #     ''')
 
 
 class GroupAdminsView(
