@@ -82,8 +82,8 @@ class EventCreateView(
     model = BSDEvent
     permission_required = 'local_groups.add_event'
     success_message = '''
-    Your event was created successfully. Visit Manage & Promote Events tool
-    below to view or promote your events.
+    Your event was created successfully. Visit Promote Events tool to promote
+    your events.
     ''' if settings.EVENT_AUTO_APPROVAL else '''
     Your event was created successfully and is now being reviewed by our team.
     '''
@@ -142,7 +142,7 @@ class EventCreateView(
         return initial
 
     def get_success_url(self):
-        return settings.ORGANIZING_HUB_DASHBOARD_URL
+        return reverse_lazy('organizing-hub-event-list')
 
     # Redirect user to dashboard page
     def redirect_user(self):
@@ -236,11 +236,9 @@ class EventUpdateView(
 ):
     form_class = BSDEventForm
     model = BSDEvent
+    object = None
     permission_required = 'local_groups.add_event'
-    success_message = '''
-    Your event was updated successfully. Visit Promote Events tool to
-    promote your events.
-    '''
+    success_message = 'Your event was updated successfully.'
     template_name = "event_update.html"
 
     """Check if user cons_id matches event cons_id"""
@@ -252,7 +250,6 @@ class EventUpdateView(
             cons_id = bsd_profile.cons_id
             has_valid_cons_id = cons_id != BSDProfile.cons_id_default
             if has_valid_cons_id:
-                logger.debug("self.object.creator_cons_id: " + self.object.creator_cons_id)
                 is_creator = cons_id == self.object.creator_cons_id
                 return is_creator
 
@@ -262,6 +259,7 @@ class EventUpdateView(
         """If the form is valid, save the associated model."""
         # Set cons_id based on current user
         form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+        form.instance.event_id_obfuscated = self.object.event_id_obfuscated
 
         # Call save via super form_valid and handle BSD errors
         try:
@@ -279,78 +277,59 @@ class EventUpdateView(
                 self.object.event_id_obfuscated
             )
 
-    # def get_initial(self, *args, **kwargs):
-    #     initial = {
-    #         'start_day': datetime.date.today() + datetime.timedelta(days=4),
-    #         'start_time': datetime.time(hour=17, minute=0, second=0),
-    #         'host_receive_rsvp_emails': 1,
-    #         'public_phone': 1,
-    #     }
-    #     return initial
-
     def get_object(self):
 
-        # if self.object is not None:
+        if self.object is not None:
+            return self.object
+
+        '''
+        Get Event from BSD
+        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+        '''
+        api_call = '/event/get_event_details'
+        api_params = {}
+        request_type = bsd_api.POST
+        query = {
+            'event_id_obfuscated': self.kwargs['event_id_obfuscated'],
+        }
+        body = {
+            'event_api_version': '2',
+            'values': json.dumps(query)
+        }
+
+        api_result = bsd_api.doRequest(api_call, api_params, request_type, body)
+        logger.debug("api_result: " + str(api_result.body))
+
+        event_json = json.loads(api_result.body)
+
+        """TODO: construct Event model from json"""
+        event = BSDEvent.objects.from_json(event_json)
+        self.object = event
+        return self.object
+        #
+        # if self.can_access():
         #     return self.object
+        # else:
+        #     raise Http404
 
-        event_id_obfuscated = self.kwargs['event_id_obfuscated']
-        logger.debug("event_id_obfuscated: " + event_id_obfuscated)
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-event-list')
 
-        user = self.request.user
-        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
-            user.bsdprofile.cons_id != BSDProfile.cons_id_default
-        )
-
-        if has_valid_cons_id:
-            '''
-            Get Event from BSD
-            https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-            '''
-            api_call = '/event/get_event_details'
-            api_params = {}
-            request_type = bsd_api.POST
-            query = {
-                'event_id_obfuscated': event_id_obfuscated,
-            }
-            body = {
-                'event_api_version': '2',
-                'values': json.dumps(query)
-            }
-
-            api_result = bsd_api.doRequest(api_call, api_params, request_type, body)
-            logger.debug("api_result: " + str(api_result.body))
-
-            event_json = json.loads(api_result.body)
-
-            """TODO: construct Event model from json"""
-            event = BSDEvent.objects.create_event_from_json(event_json)
-            logger.debug("event: " + str(event))
-            logger.debug("event.event_id_obfuscated: " + event.event_id_obfuscated)
-
-            self.object = event
-            if self.can_access():
-                return self.object
-            else:
-                raise Http404
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_access():
+            return super(EventUpdateView, self).get(request, *args, **kwargs)
         else:
             raise Http404
 
-    def get_success_url(self):
-        return 'organizing-hub-event-list'
-
-    # # Use default get logic but add custom access check
-    # def get(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(EventUpdateView, self).get(request, *args, **kwargs)
-    #     else:
-    #         raise Http404
-    #
-    # # Use default post logic but add custom access check
-    # def post(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(EventUpdateView, self).post(request, *args, **kwargs)
-    #     else:
-    #         raise Http404
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_access():
+            return super(EventUpdateView, self).post(request, *args, **kwargs)
+        else:
+            raise Http404
 
 
 class GroupAdminsView(

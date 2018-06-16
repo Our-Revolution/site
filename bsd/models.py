@@ -25,13 +25,13 @@ class BSDProfile(models.Model):
 
 class BSDEventManager(models.Manager):
 
-    def create_event_from_json(self, data):
+    def from_json(self, data):
         start_datetime = datetime.datetime.strptime(
             data["days"][0]["start_dt"],
             '%Y-%m-%d %H:%M:%S'
         )
 
-        bsd_event = self.create(
+        bsd_event = self.model(
             capacity=data["days"][0]["capacity"],
             contact_phone=data["contact_phone"],
             creator_cons_id=data["creator_cons_id"],
@@ -153,9 +153,13 @@ class BSDEvent(models.Model):
             return self.duration_count
 
     # Custom logic to create event via BSD api
-    def save(self, *args, **kwargs):
+    def create_event(self, *args, **kwargs):
+        """Create Event in BSD"""
 
-        # Set flag_approval to '0' for auto approval, otherwise '1'
+        """Show Attendee First Names + Last Initial"""
+        attendee_visibility = 'FIRST'
+
+        """Set flag_approval to '0' for auto approval, otherwise '1'"""
         flag_approval = '0' if settings.EVENT_AUTO_APPROVAL else '1'
 
         '''
@@ -166,8 +170,7 @@ class BSDEvent(models.Model):
         api_params = {}
         request_type = bsdApi.POST
         query = {
-            # Show Attendee First Names + Last Initial
-            'attendee_visibility': 'FIRST',
+            'attendee_visibility': attendee_visibility,
             'capacity': self.capacity,
             'contact_phone': self.contact_phone,
             'creator_cons_id': self.creator_cons_id,
@@ -208,6 +211,68 @@ class BSDEvent(models.Model):
         except AssertionError:
             raise ValidationError('''
                 Event creation failed, please check data and try again.
+            ''')
+
+        return
+
+    def save(self, *args, **kwargs):
+
+        """Create or Update event"""
+        logger.debug('event_id_obfuscated: ' + self.event_id_obfuscated)
+        if self.event_id_obfuscated != "":
+            self.update_event(*args, **kwargs)
+        else:
+            self.create_event(*args, **kwargs)
+
+    def update_event(self, *args, **kwargs):
+        '''
+        Update Event in BSD
+        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+        '''
+        api_call = '/event/update_event'
+        api_params = {}
+        request_type = bsdApi.POST
+        query = {
+            'capacity': self.capacity,
+            'contact_phone': self.contact_phone,
+            'creator_cons_id': self.creator_cons_id,
+            'creator_name': self.host_name,
+            'event_id_obfuscated': self.event_id_obfuscated,
+            'event_type_id': self.event_type,
+            'days': [{
+                'start_datetime_system': str(datetime.datetime.combine(
+                    self.start_day,
+                    self.start_time
+                )),
+                'duration': self.duration_minutes()
+            }],
+            'description': self.description,
+            'host_receive_rsvp_emails': self.host_receive_rsvp_emails,
+            'local_timezone': self.start_time_zone,
+            'name': self.name,
+            'public_phone': self.public_phone,
+            'venue_addr1': self.venue_addr1,
+            'venue_addr2': self.venue_addr2,
+            'venue_city': self.venue_city,
+            'venue_directions': self.venue_directions,
+            'venue_name': self.venue_name,
+            'venue_state_cd': self.venue_state_or_territory,
+            'venue_zip': self.venue_zip,
+        }
+        body = {
+            'event_api_version': '2',
+            'values': json.dumps(query)
+        }
+
+        apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
+
+        try:
+            # Parse and validate response
+            assert apiResult.http_status is 200
+            assert 'event_id_obfuscated' in json.loads(apiResult.body)
+        except AssertionError:
+            raise ValidationError('''
+                Event update failed, please check data and try again.
             ''')
 
         return
