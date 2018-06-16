@@ -40,19 +40,6 @@
         <section>
 
 
-past_create_events
-             <ol>
-             {% for event in object_list.past_create_events %}
-                 <li>
-                   <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
-                   {{ event.start_day }}
-                   {{ event.event_id }}
-                   {{ event.event_id_obfuscated }}
-                 </li>
-             {% empty %}
-                 <li>No events yet.</li>
-             {% endfor %}
-             </ol>
 
 up_create_events
              <ol>
@@ -67,6 +54,28 @@ up_create_events
                  <li>No events yet.</li>
              {% endfor %}
              </ol>
+           </section>
+           <section>
+
+             <a class="btn btn-block btn-secondary" href="{% url 'groups-event-create' %}">create event</a>
+
+           </section>
+           <section>
+
+
+             past_create_events
+                          <ol>
+                          {% for event in object_list.past_create_events %}
+                              <li>
+                                <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
+                                {{ event.start_day }}
+                                {{ event.event_id }}
+                                {{ event.event_id_obfuscated }}
+                              </li>
+                          {% empty %}
+                              <li>No events yet.</li>
+                          {% endfor %}
+                          </ol>
 
 user_events
              <ol>
@@ -81,6 +90,7 @@ user_events
                  <li>No events yet.</li>
              {% endfor %}
              </ol>
+
 
 
         </section>
