@@ -23,8 +23,45 @@ class BSDProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
+class BSDEventManager(models.Manager):
+
+    def create_event_from_json(self, data):
+        start_datetime = datetime.datetime.strptime(
+            data["days"][0]["start_dt"],
+            '%Y-%m-%d %H:%M:%S'
+        )
+
+        bsd_event = self.create(
+            capacity=data["days"][0]["capacity"],
+            contact_phone=data["contact_phone"],
+            creator_cons_id=data["creator_cons_id"],
+            event_id_obfuscated=data["event_id_obfuscated"],
+            event_type=data["event_type_id"],
+            host_name=data["creator_name"],
+            name=data["name"],
+            description=data["description"],
+            duration_count=data["days"][0]["duration"],
+            duration_type=1,  # Assume minutes for BSD data
+            host_receive_rsvp_emails=data["host_receive_rsvp_emails"],
+            public_phone=data["public_phone"],
+            start_day=start_datetime.date(),
+            start_time=start_datetime.time(),
+            start_time_zone=data["local_timezone"],
+            venue_name=data["venue_name"],
+            venue_addr1=data["venue_addr1"],
+            venue_addr2=data["venue_addr2"],
+            venue_city=data["venue_city"],
+            venue_country=data["venue_country"],
+            venue_directions=data["venue_directions"],
+            venue_state_or_territory=data["venue_state_code"],
+            venue_zip=data["venue_zip"],
+        )
+        return bsd_event
+
+
 class BSDEvent(models.Model):
     """BSD Event"""
+    objects = BSDEventManager()
 
     duration_type_choices = (
         (1, 'Minutes'),
@@ -53,6 +90,7 @@ class BSDEvent(models.Model):
     )
     contact_phone = models.CharField(max_length=25)
     creator_cons_id = models.CharField(max_length=128)
+    event_id_obfuscated = models.CharField(max_length=128)
     event_type = models.IntegerField(
         choices=event_type_choices,
         verbose_name='Choose an Event Type',

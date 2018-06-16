@@ -49,6 +49,7 @@ up_create_events
                {{ event.start_day }}
                {{ event.event_id }}
                {{ event.event_id_obfuscated }}
+               <a href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">Edit</a>
              </li>
              {% empty %}
                  <li>No events yet.</li>
@@ -57,7 +58,7 @@ up_create_events
            </section>
            <section>
 
-             <a class="btn btn-block btn-secondary" href="{% url 'groups-event-create' %}">create event</a>
+             <a class="btn btn-block btn-secondary" href="{% url 'organizing-hub-event-create' %}">create event</a>
 
            </section>
            <section>

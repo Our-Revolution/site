@@ -4,9 +4,9 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, FormView
-# from django.views.generic import CreateView, FormView, UpdateView
+from django.views.generic import CreateView, FormView, UpdateView
 from django.views.generic.list import ListView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
@@ -26,7 +26,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 """Get BSD api"""
-bsdApi = BSD().api
+bsd_api = BSD().api
 
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 
@@ -130,7 +130,7 @@ class EventCreateView(
                 fields are filled with valid data and try again.
                 '''
             )
-            return redirect('groups-event-create')
+            return redirect('organizing-hub-event-create')
 
     def get_initial(self, *args, **kwargs):
         initial = {
@@ -198,31 +198,159 @@ class EventListView(ListView):
             '''
             api_call = '/event/get_events_for_cons'
             api_params = {}
-            request_type = bsdApi.POST
+            request_type = bsd_api.POST
             query = {
                 'cons_id': user.bsdprofile.cons_id,
-                # 'creator_cons_id': self.creator_cons_id,
             }
             body = {
                 'event_api_version': '2',
                 'values': json.dumps(query)
             }
 
-            apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
-            logger.debug("apiResult: " + str(apiResult.body))
-            events = json.loads(apiResult.body)
+            api_result = bsd_api.doRequest(
+                api_call,
+                api_params,
+                request_type,
+                body
+            )
+            logger.debug("api_result: " + str(api_result.body))
+            events = json.loads(api_result.body)
+            logger.debug("events: " + str(events))
             return events
         else:
             return []
 
         # try:
         #     # Parse and validate response
-        #     assert apiResult.http_status is 200
-        #     assert 'event_id_obfuscated' in json.loads(apiResult.body)
+        #     assert api_result.http_status is 200
+        #     assert 'event_id_obfuscated' in json.loads(api_result.body)
         # except AssertionError:
         #     raise ValidationError('''
         #         Event creation failed, please check data and try again.
         #     ''')
+
+
+class EventUpdateView(
+    SuccessMessageMixin,
+    UpdateView
+):
+    form_class = BSDEventForm
+    model = BSDEvent
+    permission_required = 'local_groups.add_event'
+    success_message = '''
+    Your event was updated successfully. Visit Promote Events tool to
+    promote your events.
+    '''
+    template_name = "event_update.html"
+
+    """Check if user cons_id matches event cons_id"""
+    def can_access(self):
+        user = self.request.user
+
+        if hasattr(user, 'bsdprofile'):
+            bsd_profile = user.bsdprofile
+            cons_id = bsd_profile.cons_id
+            has_valid_cons_id = cons_id != BSDProfile.cons_id_default
+            if has_valid_cons_id:
+                logger.debug("self.object.creator_cons_id: " + self.object.creator_cons_id)
+                is_creator = cons_id == self.object.creator_cons_id
+                return is_creator
+
+        return False
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        # Set cons_id based on current user
+        form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+
+        # Call save via super form_valid and handle BSD errors
+        try:
+            return super(EventUpdateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error updating your event. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect(
+                'organizing-hub-event-update',
+                self.object.event_id_obfuscated
+            )
+
+    # def get_initial(self, *args, **kwargs):
+    #     initial = {
+    #         'start_day': datetime.date.today() + datetime.timedelta(days=4),
+    #         'start_time': datetime.time(hour=17, minute=0, second=0),
+    #         'host_receive_rsvp_emails': 1,
+    #         'public_phone': 1,
+    #     }
+    #     return initial
+
+    def get_object(self):
+
+        # if self.object is not None:
+        #     return self.object
+
+        event_id_obfuscated = self.kwargs['event_id_obfuscated']
+        logger.debug("event_id_obfuscated: " + event_id_obfuscated)
+
+        user = self.request.user
+        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+            user.bsdprofile.cons_id != BSDProfile.cons_id_default
+        )
+
+        if has_valid_cons_id:
+            '''
+            Get Event from BSD
+            https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+            '''
+            api_call = '/event/get_event_details'
+            api_params = {}
+            request_type = bsd_api.POST
+            query = {
+                'event_id_obfuscated': event_id_obfuscated,
+            }
+            body = {
+                'event_api_version': '2',
+                'values': json.dumps(query)
+            }
+
+            api_result = bsd_api.doRequest(api_call, api_params, request_type, body)
+            logger.debug("api_result: " + str(api_result.body))
+
+            event_json = json.loads(api_result.body)
+
+            """TODO: construct Event model from json"""
+            event = BSDEvent.objects.create_event_from_json(event_json)
+            logger.debug("event: " + str(event))
+            logger.debug("event.event_id_obfuscated: " + event.event_id_obfuscated)
+
+            self.object = event
+            if self.can_access():
+                return self.object
+            else:
+                raise Http404
+        else:
+            raise Http404
+
+    def get_success_url(self):
+        return 'organizing-hub-event-list'
+
+    # # Use default get logic but add custom access check
+    # def get(self, request, *args, **kwargs):
+    #     if self.can_access():
+    #         return super(EventUpdateView, self).get(request, *args, **kwargs)
+    #     else:
+    #         raise Http404
+    #
+    # # Use default post logic but add custom access check
+    # def post(self, request, *args, **kwargs):
+    #     if self.can_access():
+    #         return super(EventUpdateView, self).post(request, *args, **kwargs)
+    #     else:
+    #         raise Http404
 
 
 class GroupAdminsView(
