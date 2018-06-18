@@ -6,8 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, FormView, UpdateView
-from django.views.generic.list import ListView
+from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
 from bsd.models import BSDEvent, BSDProfile
@@ -171,29 +170,20 @@ class EventCreateView(
             return self.redirect_user()
 
 
-class EventListView(ListView):
-    model = BSDEvent
+class EventListView(TemplateView):
     template_name = "event_list.html"
 
-    def get_queryset(self):
-        """
-        Return the list of items for this view.
-        The return value must be an iterable and may be an instance of
-        `QuerySet` in which case `QuerySet` specific behavior will be enabled.
-        """
+    def get_context_data(self, **kwargs):
+        context = super(EventListView, self).get_context_data(**kwargs)
 
-        """Return list if we already have it"""
-        if self.queryset is not None:
-            return self.queryset
-
+        """Get BSD Events for this User"""
         user = self.request.user
         has_valid_cons_id = hasattr(user, 'bsdprofile') and (
             user.bsdprofile.cons_id != BSDProfile.cons_id_default
         )
-
         if has_valid_cons_id:
             '''
-            Get Events from BSD
+            Call BSD API
             https://github.com/bluestatedigital/bsd-api-python#raw-api-method
             '''
             api_call = '/event/get_events_for_cons'
@@ -213,21 +203,32 @@ class EventListView(ListView):
                 request_type,
                 body
             )
-            logger.debug("api_result: " + str(api_result.body))
-            events = json.loads(api_result.body)
-            logger.debug("events: " + str(events))
-            return events
-        else:
-            return []
 
-        # try:
-        #     # Parse and validate response
-        #     assert api_result.http_status is 200
-        #     assert 'event_id_obfuscated' in json.loads(api_result.body)
-        # except AssertionError:
-        #     raise ValidationError('''
-        #         Event creation failed, please check data and try again.
-        #     ''')
+            try:
+                """Parse and validate response"""
+                assert api_result.http_status is 200
+                events_json = json.loads(api_result.body)
+                past_events = [BSDEvent.objects.from_json(
+                    x
+                ) for x in events_json["past_create_events"]]
+                upcoming_events = [BSDEvent.objects.from_json(
+                    x
+                ) for x in events_json["up_create_events"]]
+                context['past_events'] = sorted(
+                    past_events,
+                    key=lambda x: x.start_day,
+                    reverse=True,
+                )
+                context['upcoming_events'] = sorted(
+                    upcoming_events,
+                    key=lambda x: x.start_day,
+                )
+            except AssertionError:
+                raise ValidationError("""
+                Events retrieval failed, please try again.
+                """)
+
+        return context
 
 
 class EventUpdateView(
@@ -298,13 +299,10 @@ class EventUpdateView(
         }
 
         api_result = bsd_api.doRequest(api_call, api_params, request_type, body)
-        logger.debug("api_result: " + str(api_result.body))
-
         event_json = json.loads(api_result.body)
-
-        """TODO: construct Event model from json"""
         event = BSDEvent.objects.from_json(event_json)
         self.object = event
+
         return self.object
         #
         # if self.can_access():

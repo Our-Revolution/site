@@ -2,7 +2,7 @@
 
 {% load bootstrap3 local_groups_tags organizing_hub_tags %}
 
-{% block page_title %}Our Revolution - Event List{% endblock %}
+{% block page_title %}Our Revolution - Events{% endblock %}
 
 {% block content_pre_heading %}
 <span class="article-type">Organizing Hub</span>
@@ -21,7 +21,7 @@
         {% bootstrap_messages %}
 
         <h3 class="mb20 mt0">
-          Event List
+          Events
         </h3>
       </div>
   </div>
@@ -37,65 +37,104 @@
 
       <div class="col-md-9">
 
-        <section>
+        <section class="">
 
-
-
-up_create_events
-             <ol>
-             {% for event in object_list.up_create_events %}
-             <li>
-               <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
-               {{ event.start_day }}
-               {{ event.event_id }}
-               {{ event.event_id_obfuscated }}
-               <a href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">Edit</a>
-             </li>
-             {% empty %}
-                 <li>No events yet.</li>
-             {% endfor %}
-             </ol>
-           </section>
-           <section>
-
-             <a class="btn btn-block btn-secondary" href="{% url 'organizing-hub-event-create' %}">create event</a>
-
-           </section>
-           <section>
-
-
-             past_create_events
-                          <ol>
-                          {% for event in object_list.past_create_events %}
-                              <li>
-                                <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
-                                {{ event.start_day }}
-                                {{ event.event_id }}
-                                {{ event.event_id_obfuscated }}
-                              </li>
-                          {% empty %}
-                              <li>No events yet.</li>
-                          {% endfor %}
-                          </ol>
-
-user_events
-             <ol>
-             {% for event in object_list.user_events %}
-             <li>
-               <a href="{% event_url event.event_id_obfuscated %}">{{ event.name }}</a>
-               {{ event.start_day }}
-               {{ event.event_id }}
-               {{ event.event_id_obfuscated }}
-             </li>
-             {% empty %}
-                 <li>No events yet.</li>
-             {% endfor %}
-             </ol>
-
-
+          <a class="btn btn-block btn-secondary" href="{% url 'organizing-hub-event-create' %}">
+            Create a new event
+          </a>
 
         </section>
 
+        <hr />
+
+        <section>
+          <h4>Upcoming Events</h4>
+
+          <div class="panel panel-default">
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th class="text-right">Manage</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {% for event in upcoming_events %}
+                  <tr>
+
+                    <td>
+                      <a href="{% event_url event.event_id_obfuscated %}"
+                      target="_blank">
+                        {{ event.name }}
+                      </a>
+                    </td>
+
+                    <td>
+                      {{ event.start_day|date:"DATE_FORMAT" }}
+                    </td>
+
+                    <td class="text-right">
+                      <a class="btn btn-default btn-sm"
+                      href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">
+                        Edit
+                      </a>
+                    </td>
+
+                  </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+
+        </section>
+
+        <hr />
+
+        <section>
+
+          <h4>Past Events</h4>
+
+          <div class="panel panel-default">
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {% for event in past_events %}
+                  <tr>
+
+                    <td>
+                      <a href="{% event_url event.event_id_obfuscated %}"
+                      target="_blank">
+                        {{ event.name }}
+                      </a>
+                    </td>
+
+                    <td>
+                      {{ event.start_day }}
+                    </td>
+
+                  </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+
+        </section>
 
       </div>
   </div>

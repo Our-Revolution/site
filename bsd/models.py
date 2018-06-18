@@ -26,13 +26,27 @@ class BSDProfile(models.Model):
 class BSDEventManager(models.Manager):
 
     def from_json(self, data):
-        start_datetime = datetime.datetime.strptime(
-            data["days"][0]["start_dt"],
-            '%Y-%m-%d %H:%M:%S'
-        )
+        try:
+            """Expected format for get_event_details"""
+            capacity = data["days"][0]["capacity"]
+            duration_count = data["days"][0]["duration"]
+            start_datetime = datetime.datetime.strptime(
+                data["days"][0]["start_dt"],
+                '%Y-%m-%d %H:%M:%S'
+            )
+            venue_state_or_territory = data["venue_state_code"],
+        except KeyError:
+            """Expected format for get_events_for_cons"""
+            capacity = data["venue_capacity"]
+            duration_count = data["duration"]
+            start_datetime = datetime.datetime.strptime(
+                data["start_datetime_system"],
+                '%Y-%m-%d %H:%M:%S'
+            )
+            venue_state_or_territory = data["venue_state_cd"],
 
         bsd_event = self.model(
-            capacity=data["days"][0]["capacity"],
+            capacity=capacity,
             contact_phone=data["contact_phone"],
             creator_cons_id=data["creator_cons_id"],
             event_id_obfuscated=data["event_id_obfuscated"],
@@ -40,7 +54,7 @@ class BSDEventManager(models.Manager):
             host_name=data["creator_name"],
             name=data["name"],
             description=data["description"],
-            duration_count=data["days"][0]["duration"],
+            duration_count=duration_count,
             duration_type=1,  # Assume minutes for BSD data
             host_receive_rsvp_emails=data["host_receive_rsvp_emails"],
             public_phone=data["public_phone"],
@@ -53,7 +67,7 @@ class BSDEventManager(models.Manager):
             venue_city=data["venue_city"],
             venue_country=data["venue_country"],
             venue_directions=data["venue_directions"],
-            venue_state_or_territory=data["venue_state_code"],
+            venue_state_or_territory=venue_state_or_territory,
             venue_zip=data["venue_zip"],
         )
         return bsd_event
