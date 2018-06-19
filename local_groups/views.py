@@ -2,9 +2,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.views import ConfirmEmailView, EmailView
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -14,22 +12,18 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.views.generic import CreateView, FormView, UpdateView
+from django.views.generic import FormView, UpdateView
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
-from bsd.models import BSDProfile
-from organizing_hub.decorators import verified_email_required
 from .forms import (
-    EventForm,
     GroupManageForm,
     GroupPasswordChangeForm,
     GroupPasswordResetForm,
     SlackInviteForm,
 )
-from .models import Event, Group, LocalGroupAffiliation
+from .models import Group
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
-import datetime
 import os
 import requests
 import logging
@@ -40,107 +34,8 @@ bsdApi = BSD().api
 logger = logging.getLogger(__name__)
 
 
-class EventCreateView(
-    LoginRequiredMixin,
-    LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
-    CreateView
-):
-    model = Event
-    form_class = EventForm
-    success_message = '''
-    Your event was created successfully. Visit Manage & Promote Events tool
-    below to view or promote your events.
-    ''' if settings.EVENT_AUTO_APPROVAL else '''
-    Your event was created successfully and is now being reviewed by our team.
-    '''
-    permission_required = 'local_groups.add_event'
-
-    def get_local_group(self):
-        local_group = None
-        user = self.request.user
-
-        if hasattr(user, 'localgroupprofile'):
-            local_group_profile = user.localgroupprofile
-
-            # TODO: support multiple group affiliations?
-            local_group_affiliation = LocalGroupAffiliation.objects.filter(
-                local_group_profile=local_group_profile,
-                local_group__status__exact='approved',
-            ).first()
-            if local_group_affiliation:
-                local_group = local_group_affiliation.local_group
-
-        return local_group
-
-    # Check if user has a valid bsd cons_id
-    def can_access(self):
-        user = self.request.user
-        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
-            user.bsdprofile.cons_id != BSDProfile.cons_id_default
-        )
-        return has_valid_cons_id
-
-    def form_valid(self, form):
-        """If the form is valid, save the associated model."""
-        # Set cons_id based on current user
-        form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
-
-        # Call save via super form_valid and handle BSD errors
-        try:
-            return super(EventCreateView, self).form_valid(form)
-        except ValidationError:
-            messages.error(
-                self.request,
-                '''
-                There was an error creating your event. Please make sure all
-                fields are filled with valid data and try again.
-                '''
-            )
-            return redirect('groups-event-create')
-
-    def get_initial(self, *args, **kwargs):
-        initial = {
-            'start_day': datetime.date.today() + datetime.timedelta(days=4),
-            'start_time': datetime.time(hour=17, minute=0, second=0),
-            'host_receive_rsvp_emails': 1,
-            'public_phone': 1,
-        }
-        return initial
-
-    def get_success_url(self):
-        return settings.ORGANIZING_HUB_DASHBOARD_URL
-
-    # Redirect user to dashboard page
-    def redirect_user(self):
-        messages.error(
-            self.request,
-            '''
-            This is not a Group Leader account, or your session is out of date.
-            Please logout and log back in with a Group Leader account to access
-            this page.
-            '''
-        )
-        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
-
-    # Use default get logic but add custom access check
-    def get(self, request, *args, **kwargs):
-        if self.can_access():
-            return super(EventCreateView, self).get(request, *args, **kwargs)
-        else:
-            return self.redirect_user()
-
-    # Use default post logic but add custom access check
-    def post(self, request, *args, **kwargs):
-        if self.can_access():
-            return super(EventCreateView, self).post(request, *args, **kwargs)
-        else:
-            return self.redirect_user()
-
-
 # View for Admin updates to Group Info
 class GroupManageView(
-    LoginRequiredMixin,
     LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
     UpdateView

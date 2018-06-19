@@ -48,6 +48,7 @@ ORGANIZING_DOCS_URL = '/docs/'
 
 SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
 
+BSD_BASE_URL = os.environ.get('BSD_BASE_URL', 'https://ourrevdev.cp.bsd.net')
 BSD_CREATE_ACCOUNT_URL = os.environ.get(
     'BSD_CREATE_ACCOUNT_URL',
     'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login'

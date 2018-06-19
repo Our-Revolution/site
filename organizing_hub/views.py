@@ -1,10 +1,16 @@
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404
-from django.views.generic import FormView
-from bsd.models import BSDProfile
+from django.core.exceptions import ValidationError
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import CreateView, FormView, TemplateView, UpdateView
+from bsd.api import BSD
+from bsd.forms import BSDEventForm
+from bsd.models import BSDEvent, BSDProfile
 from local_groups.models import (
     Group as LocalGroup,
     LocalGroupAffiliation,
@@ -12,11 +18,15 @@ from local_groups.models import (
 )
 from .forms import GroupAdminsForm
 from .mixins import LocalGroupPermissionRequiredMixin
+import datetime
+import json
 import logging
 
 
 logger = logging.getLogger(__name__)
 
+"""Get BSD api"""
+bsd_api = BSD().api
 
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 
@@ -49,6 +59,24 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
+def get_local_group_for_user(user):
+
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+
+        # TODO: support multiple group affiliations?
+        # TODO: ignore groups with empty roles/affiliation?
+        local_group_affiliation = LocalGroupAffiliation.objects.filter(
+            local_group_profile=local_group_profile,
+            local_group__status__exact='approved',
+        ).first()
+        if local_group_affiliation:
+            local_group = local_group_affiliation.local_group
+            return local_group
+
+    return None
+
+
 def remove_local_group_role_for_user(user, local_group, local_group_role_id):
     """Remove Role for Local Group & User if it exists"""
 
@@ -61,6 +89,255 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             local_group_affiliation.local_group_roles.remove(
                 local_group_role_id
             )
+
+
+class EventCreateView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
+    form_class = BSDEventForm
+    model = BSDEvent
+    permission_required = 'bsd.add_bsdevent'
+    success_message = '''
+    Your event was created successfully. Visit Promote Events tool to promote
+    your events.
+    ''' if settings.EVENT_AUTO_APPROVAL else '''
+    Your event was created successfully and is now being reviewed by our team.
+    '''
+    template_name = "event_create.html"
+
+    def get_local_group(self):
+        return get_local_group_for_user(self.request.user)
+
+    # Check if user has a valid bsd cons_id
+    def can_access(self):
+        user = self.request.user
+        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+            user.bsdprofile.cons_id != BSDProfile.cons_id_default
+        )
+        return has_valid_cons_id
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        # Set cons_id based on current user
+        form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+
+        # Call save via super form_valid and handle BSD errors
+        try:
+            return super(EventCreateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error creating your event. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect('organizing-hub-event-create')
+
+    def get_initial(self, *args, **kwargs):
+        initial = {
+            'start_day': datetime.date.today() + datetime.timedelta(days=4),
+            'start_time': datetime.time(hour=17, minute=0, second=0),
+            'host_receive_rsvp_emails': 1,
+            'public_phone': 1,
+        }
+        return initial
+
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-event-list')
+
+    # Redirect user to dashboard page
+    def redirect_user(self):
+        messages.error(
+            self.request,
+            '''
+            This is not a Group Leader account, or your session is out of date.
+            Please logout and log back in with a Group Leader account to access
+            this page.
+            '''
+        )
+        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
+
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventCreateView, self).get(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
+
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventCreateView, self).post(request, *args, **kwargs)
+        else:
+            return self.redirect_user()
+
+
+class EventListView(LoginRequiredMixin, TemplateView):
+    template_name = "event_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EventListView, self).get_context_data(**kwargs)
+
+        """Get BSD Events for this User"""
+        user = self.request.user
+        has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+            user.bsdprofile.cons_id != BSDProfile.cons_id_default
+        )
+        if has_valid_cons_id:
+            '''
+            Call BSD API
+            https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+            '''
+            api_call = '/event/get_events_for_cons'
+            api_params = {}
+            request_type = bsd_api.POST
+            query = {
+                'cons_id': user.bsdprofile.cons_id,
+            }
+            body = {
+                'event_api_version': '2',
+                'values': json.dumps(query)
+            }
+
+            api_result = bsd_api.doRequest(
+                api_call,
+                api_params,
+                request_type,
+                body
+            )
+
+            try:
+                """Parse and validate response"""
+                assert api_result.http_status is 200
+                events_json = json.loads(api_result.body)
+                past_events = [BSDEvent.objects.from_json(
+                    x
+                ) for x in events_json["past_create_events"]]
+                upcoming_events = [BSDEvent.objects.from_json(
+                    x
+                ) for x in events_json["up_create_events"]]
+                context['past_events'] = sorted(
+                    past_events,
+                    key=lambda x: x.start_day,
+                    reverse=True,
+                )
+                context['upcoming_events'] = sorted(
+                    upcoming_events,
+                    key=lambda x: x.start_day,
+                )
+            except AssertionError:
+                messages.error(
+                    self.request,
+                    "Events retrieval failed. Reload page to try again."
+                )
+
+        return context
+
+
+class EventUpdateView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
+    form_class = BSDEventForm
+    model = BSDEvent
+    object = None
+    permission_required = 'bsd.change_bsdevent'
+    success_message = 'Your event was updated successfully.'
+    template_name = "event_update.html"
+
+    """Check if user cons_id matches event cons_id"""
+    def can_access(self):
+        user = self.request.user
+
+        if hasattr(user, 'bsdprofile'):
+            bsd_profile = user.bsdprofile
+            cons_id = bsd_profile.cons_id
+            has_valid_cons_id = cons_id != BSDProfile.cons_id_default
+            if has_valid_cons_id:
+                is_creator = cons_id == self.object.creator_cons_id
+                return is_creator
+
+        return False
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        # Set cons_id based on current user
+        form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+        form.instance.event_id_obfuscated = self.object.event_id_obfuscated
+
+        # Call save via super form_valid and handle BSD errors
+        try:
+            return super(EventUpdateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error updating your event. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect(
+                'organizing-hub-event-update',
+                self.object.event_id_obfuscated
+            )
+
+    def get_local_group(self):
+        return get_local_group_for_user(self.request.user)
+
+    def get_object(self):
+
+        if self.object is not None:
+            return self.object
+
+        '''
+        Get Event from BSD
+        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+        '''
+        api_call = '/event/get_event_details'
+        api_params = {}
+        request_type = bsd_api.POST
+        query = {
+            'event_id_obfuscated': self.kwargs['event_id_obfuscated'],
+        }
+        body = {
+            'event_api_version': '2',
+            'values': json.dumps(query)
+        }
+
+        api_result = bsd_api.doRequest(
+            api_call,
+            api_params,
+            request_type,
+            body
+        )
+        event_json = json.loads(api_result.body)
+        event = BSDEvent.objects.from_json(event_json)
+        self.object = event
+
+        return self.object
+
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-event-list')
+
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_access():
+            return super(EventUpdateView, self).get(request, *args, **kwargs)
+        else:
+            raise Http404
+
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.can_access():
+            return super(EventUpdateView, self).post(request, *args, **kwargs)
+        else:
+            raise Http404
 
 
 class GroupAdminsView(

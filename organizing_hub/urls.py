@@ -2,7 +2,6 @@ from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from local_groups.forms import GroupLoginForm, GroupPasswordResetRequestForm
 from local_groups.views import (
-    EventCreateView,
     GroupManageView,
     GroupPasswordChangeView,
     GroupPasswordResetView,
@@ -10,7 +9,12 @@ from local_groups.views import (
     VerifyEmailRequestView,
     VerifyEmailConfirmView
 )
-from .views import GroupAdminsView
+from .views import (
+    EventCreateView,
+    EventListView,
+    EventUpdateView,
+    GroupAdminsView
+)
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
@@ -20,9 +24,19 @@ urlpatterns += [
     url(r'^organizing-hub/', include([
         url(r'^event/', include([
             url(
+                r'^$',
+                EventListView.as_view(),
+                name='organizing-hub-event-list'
+            ),
+            url(
                 r'^create/',
                 EventCreateView.as_view(),
-                name='groups-event-create'
+                name='organizing-hub-event-create'
+            ),
+            url(
+                r'^(?P<event_id_obfuscated>[\w-]+)/update/',
+                EventUpdateView.as_view(),
+                name='organizing-hub-event-update'
             ),
         ])),
         url(
