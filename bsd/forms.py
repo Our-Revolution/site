@@ -1,11 +1,7 @@
 from django import forms
 from django.forms import widgets
-from .api import BSD
 from .models import BSDEvent
 import logging
-
-# Get bsd api
-bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
