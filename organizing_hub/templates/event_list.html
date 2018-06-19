@@ -37,13 +37,21 @@
 
       <div class="col-md-9">
 
-        <section class="">
+        <section>
+
+          {% if not upcoming_events %}
+          <p>
+            You do not have any upcoming events. Ready to host one?
+          </p>
+          {% endif %}
 
           <a class="btn btn-block btn-secondary" href="{% url 'organizing-hub-event-create' %}">
             Create a new event
           </a>
 
         </section>
+
+        {% if upcoming_events %}
 
         <hr />
 
@@ -94,6 +102,10 @@
 
         </section>
 
+        {% endif %}
+
+        {% if past_events %}
+
         <hr />
 
         <section>
@@ -135,6 +147,8 @@
           </div>
 
         </section>
+
+        {% endif %}
 
       </div>
   </div>

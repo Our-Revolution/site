@@ -58,6 +58,24 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
+def get_local_group_for_user(user):
+
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+
+        # TODO: support multiple group affiliations?
+        # TODO: ignore groups with empty roles/affiliation?
+        local_group_affiliation = LocalGroupAffiliation.objects.filter(
+            local_group_profile=local_group_profile,
+            local_group__status__exact='approved',
+        ).first()
+        if local_group_affiliation:
+            local_group = local_group_affiliation.local_group
+            return local_group
+
+    return None
+
+
 def remove_local_group_role_for_user(user, local_group, local_group_role_id):
     """Remove Role for Local Group & User if it exists"""
 
@@ -79,7 +97,7 @@ class EventCreateView(
 ):
     form_class = BSDEventForm
     model = BSDEvent
-    permission_required = 'local_groups.add_event'
+    permission_required = 'bsd.add_bsdevent'
     success_message = '''
     Your event was created successfully. Visit Promote Events tool to promote
     your events.
@@ -89,21 +107,7 @@ class EventCreateView(
     template_name = "event_create.html"
 
     def get_local_group(self):
-        local_group = None
-        user = self.request.user
-
-        if hasattr(user, 'localgroupprofile'):
-            local_group_profile = user.localgroupprofile
-
-            # TODO: support multiple group affiliations?
-            local_group_affiliation = LocalGroupAffiliation.objects.filter(
-                local_group_profile=local_group_profile,
-                local_group__status__exact='approved',
-            ).first()
-            if local_group_affiliation:
-                local_group = local_group_affiliation.local_group
-
-        return local_group
+        return get_local_group_for_user(self.request.user)
 
     # Check if user has a valid bsd cons_id
     def can_access(self):
@@ -224,21 +228,23 @@ class EventListView(TemplateView):
                     key=lambda x: x.start_day,
                 )
             except AssertionError:
-                raise ValidationError("""
-                Events retrieval failed, please try again.
-                """)
+                messages.error(
+                    self.request,
+                    "Events retrieval failed. Reload page to try again."
+                )
 
         return context
 
 
 class EventUpdateView(
+    LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
     UpdateView
 ):
     form_class = BSDEventForm
     model = BSDEvent
     object = None
-    permission_required = 'local_groups.add_event'
+    permission_required = 'bsd.change_bsdevent'
     success_message = 'Your event was updated successfully.'
     template_name = "event_update.html"
 
@@ -277,6 +283,9 @@ class EventUpdateView(
                 'organizing-hub-event-update',
                 self.object.event_id_obfuscated
             )
+
+    def get_local_group(self):
+        return get_local_group_for_user(self.request.user)
 
     def get_object(self):
 

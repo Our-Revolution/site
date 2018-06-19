@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from dateutil import tz
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -26,24 +27,34 @@ class BSDProfile(models.Model):
 class BSDEventManager(models.Manager):
 
     def from_json(self, data):
+
+        """Assume duration type = minutes for BSD data"""
+        duration_type = 1
+
         try:
             """Expected format for get_event_details"""
             capacity = data["days"][0]["capacity"]
             duration_count = data["days"][0]["duration"]
-            start_datetime = datetime.datetime.strptime(
+            start_datetime_utc = datetime.datetime.strptime(
                 data["days"][0]["start_dt"],
                 '%Y-%m-%d %H:%M:%S'
             )
-            venue_state_or_territory = data["venue_state_code"],
+            venue_state_or_territory = data["venue_state_code"]
         except KeyError:
             """Expected format for get_events_for_cons"""
             capacity = data["venue_capacity"]
             duration_count = data["duration"]
-            start_datetime = datetime.datetime.strptime(
+            start_datetime_utc = datetime.datetime.strptime(
                 data["start_datetime_system"],
                 '%Y-%m-%d %H:%M:%S'
             )
-            venue_state_or_territory = data["venue_state_cd"],
+            venue_state_or_territory = data["venue_state_cd"]
+
+        """Get Local Datetime"""
+        utc_zone = tz.gettz('UTC')
+        local_zone = tz.gettz(data["local_timezone"])
+        utc_datetime = start_datetime_utc.replace(tzinfo=utc_zone)
+        local_datetime = utc_datetime.astimezone(local_zone)
 
         bsd_event = self.model(
             capacity=capacity,
@@ -55,11 +66,11 @@ class BSDEventManager(models.Manager):
             name=data["name"],
             description=data["description"],
             duration_count=duration_count,
-            duration_type=1,  # Assume minutes for BSD data
+            duration_type=duration_type,
             host_receive_rsvp_emails=data["host_receive_rsvp_emails"],
             public_phone=data["public_phone"],
-            start_day=start_datetime.date(),
-            start_time=start_datetime.time(),
+            start_day=local_datetime.date(),
+            start_time=local_datetime.time(),
             start_time_zone=data["local_timezone"],
             venue_name=data["venue_name"],
             venue_addr1=data["venue_addr1"],
