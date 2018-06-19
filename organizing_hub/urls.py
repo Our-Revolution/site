@@ -34,7 +34,7 @@ urlpatterns += [
                 name='organizing-hub-event-create'
             ),
             url(
-                r'^(?P<event_id_obfuscated>[\w-]+)/',
+                r'^(?P<event_id_obfuscated>[\w-]+)/update/',
                 EventUpdateView.as_view(),
                 name='organizing-hub-event-update'
             ),
