@@ -39,9 +39,9 @@
 
       <div class="col-md-9">
 
+        {% if not upcoming_events %}
         <section>
 
-          {% if not upcoming_events %}
           <p>
             You do not have any upcoming events. Ready to host one?
           </p>
@@ -51,9 +51,8 @@
             Create a new event
           </a>
 
-          {% endif %}
-
         </section>
+        {% endif %}
 
         {% if upcoming_events %}
 
