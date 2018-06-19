@@ -1,7 +1,7 @@
 from django import forms
-from .models import BSDEvent
 from django.forms import widgets
-from bsd.api import BSD
+from .api import BSD
+from .models import BSDEvent
 import logging
 
 # Get bsd api
