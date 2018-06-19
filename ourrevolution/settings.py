@@ -87,6 +87,7 @@ INSTALLED_APPS = [
 
     # OR apps
     'endorsements',
+    'events',
     'organizing_hub',
     'pages',
     'social_redirects',
