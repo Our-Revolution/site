@@ -6,6 +6,6 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
 echo "Run migrations"
-./manage.py migrate
+./manage.py migrate --noinput
 
 echo "Finished running migrations"
