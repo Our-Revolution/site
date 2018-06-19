@@ -254,7 +254,6 @@ class BSDEvent(models.Model):
     def save(self, *args, **kwargs):
 
         """Create or Update event"""
-        logger.debug('event_id_obfuscated: ' + self.event_id_obfuscated)
         if self.event_id_obfuscated != "":
             self.update_event(*args, **kwargs)
         else:

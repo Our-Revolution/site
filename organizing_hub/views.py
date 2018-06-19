@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -174,7 +175,7 @@ class EventCreateView(
             return self.redirect_user()
 
 
-class EventListView(TemplateView):
+class EventListView(LoginRequiredMixin, TemplateView):
     template_name = "event_list.html"
 
     def get_context_data(self, **kwargs):
