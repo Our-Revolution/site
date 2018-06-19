@@ -307,17 +307,17 @@ class EventUpdateView(
             'values': json.dumps(query)
         }
 
-        api_result = bsd_api.doRequest(api_call, api_params, request_type, body)
+        api_result = bsd_api.doRequest(
+            api_call,
+            api_params,
+            request_type,
+            body
+        )
         event_json = json.loads(api_result.body)
         event = BSDEvent.objects.from_json(event_json)
         self.object = event
 
         return self.object
-        #
-        # if self.can_access():
-        #     return self.object
-        # else:
-        #     raise Http404
 
     def get_success_url(self):
         return reverse_lazy('organizing-hub-event-list')

@@ -62,6 +62,7 @@ class BSDEventManager(models.Manager):
             creator_cons_id=data["creator_cons_id"],
             event_id_obfuscated=data["event_id_obfuscated"],
             event_type=data["event_type_id"],
+            flag_approval=int(data["flag_approval"]),
             host_name=data["creator_name"],
             name=data["name"],
             description=data["description"],
@@ -120,6 +121,9 @@ class BSDEvent(models.Model):
         choices=event_type_choices,
         verbose_name='Choose an Event Type',
     )
+    flag_approval = models.IntegerField(
+        default=1,  # default to needs approval
+    )
     host_name = models.CharField(max_length=255)
     name = models.CharField(max_length=128)
     description = models.TextField()
@@ -168,6 +172,13 @@ class BSDEvent(models.Model):
     )
     venue_state_or_territory = USStateField(verbose_name='Venue State')
     venue_zip = models.CharField(max_length=16, verbose_name='Venue Zip Code')
+
+    def _get_status(self):
+        if self.flag_approval == 1:
+            return 'Pending Approval'
+        else:
+            return 'Approved'
+    status = property(_get_status)
 
     # Duration in minutes
     def duration_minutes(self):
