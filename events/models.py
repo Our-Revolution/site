@@ -6,6 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
+EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 
 
 class EventPromotionRecipient(models.Model):
@@ -21,10 +22,11 @@ class EventPromotion(models.Model):
         (4, 'Skipped'),
     )
 
-    date_sent = models.DateTimeField(null=True, blank=True)
+    date_sent = models.DateTimeField(null=True)
+    date_submitted = models.DateTimeField(null=True, auto_now_add=True)
     """Assume generic external event id"""
     event_external_id = models.CharField(db_index=True, max_length=128)
-    """Optional field for convenience"""
+    """Optional event name for convenience"""
     event_name = models.CharField(
         blank=True,
         max_length=128,
@@ -41,7 +43,6 @@ class EventPromotion(models.Model):
         max_length=128
     )
     status = models.IntegerField(choices=status_choices, default=1)
-    subject = models.CharField(max_length=128)
-    submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    subject = models.CharField(default=EVENTS_DEFAULT_SUBJECT, max_length=128)
     """Assume generic external user id for event owner/host"""
     user_external_id = models.CharField(db_index=True, max_length=128)
