@@ -1,8 +1,11 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from django.db import models
 import logging
 
 logger = logging.getLogger(__name__)
+
+EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
 
 
 class EventPromotionRecipient(models.Model):
@@ -21,14 +24,22 @@ class EventPromotion(models.Model):
     date_sent = models.DateTimeField(null=True, blank=True)
     """Assume generic external event id"""
     event_external_id = models.CharField(db_index=True, max_length=128)
+    """Optional field for convenience"""
+    event_name = models.CharField(
+        blank=True,
+        max_length=128,
+        null=True,
+    )
     max_recipients = models.IntegerField()
     message = models.CharField(max_length=2048)
     recipients = models.ManyToManyField(
         EventPromotionRecipient,
         blank=True,
     )
-    sender_display_name = models.CharField(max_length=128, null=True)
-    sender_email = models.EmailField(null=True)
+    sender_display_name = models.CharField(
+        default=EVENTS_DEFAULT_FROM_NAME,
+        max_length=128
+    )
     status = models.IntegerField(choices=status_choices, default=1)
     subject = models.CharField(max_length=128)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)

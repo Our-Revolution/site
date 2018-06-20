@@ -254,8 +254,8 @@ class EventPromoteView(
     model = EventPromotion
     # permission_required = 'bsd.add_bsdevent'
     success_message = '''
-    Your event promotion request was created successfully and is now being
-    reviewed by our team.
+    Your event promotion request has been submitted and will be reviewed by our
+    team.
     '''
     template_name = "event_promote.html"
 

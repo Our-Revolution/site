@@ -31,6 +31,10 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     0
 )))
 
+EVENTS_DEFAULT_FROM_NAME = os.environ.get(
+    'EVENTS_DEFAULT_FROM_NAME',
+    'Our Revolution'
+)
 EVENTS_PROMOTE_MAX = int(os.environ.get(
     'EVENTS_PROMOTE_MAX',
     4000
