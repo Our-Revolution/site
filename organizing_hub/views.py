@@ -322,45 +322,16 @@ class EventPromoteView(
         event = self.get_event()
         initial = {
             'max_recipients': EVENTS_PROMOTE_MAX,
-            'message': Template("""Hi --
+            'message': Template("""Hello --
 
-Laksh is hosting an organizing event in your area that you might be interested in —— are you be able to attend?
+We are hosting an event near you, {{ event_name }}! Can you make it? We're almost across the finish line and we need to keep up the momentum.
 
-Learn more and RSVP here: https://go.ourrevolution.com/page/event/detail/4jjjv
+{{ event_url }}
 
-You can read a message from the organizer below.
-
-Thanks!
-
-Juliana
-Our Revolution
-
--------------------------------------
-
-Dear friend,
-
-My name is Demie, and I'm a volunteer for a progressive, grassroots ballot initiative for affordable, City-owned housing in San Francisco, written by our very own SF Berniecrats chapter of Our Revolution in conjunction with many housing activists, public policy wonks, and city planners. Among others, we've been formally endorsed by Gayle McLaughlin and the SF Green Party, and tweeted about in support by Robert Reich.
-
-This Wednesday, we are holding office hours to train new signature gatherers to help us collect signatures from San Francisco voters. We need a bare minimum of 9485 valid signatures from registered SF voters by early July (around July 6). That number is huge... but with your help, we can make it happen!
-
-Do you have 15 minutes this Wednesday, to drop by our office hours at illy Caffè (90 New Montgomery St, on Mission) from 11 AM to 5 PM, to be trained as a signature gatherer? We can get you set up right away to collect signatures on your own time, and the location is right near BART for convenience.
-
-We'll need everyone's help to collect the number of signatures we need. Please join us this Wednesday to get started right away! You can also like and follow us on Facebook at www.facebook.com/sfcommunityhousingact/
-
-Thank you,
-Demie
-SFCHA Volunteer
-
-----
-Paid for by Our Revolution
-(not the billionaires)
-
-PO BOX 66208 - WASHINGTON, DC 20035
-
-Email is one of the most important tools we have to reach supporters like you, but if you’d like to, click here to unsubscribe: https://go.ourrevolution.com/page/unsubscribe/
-            """).render(
-                Context({'event': event})
-            )
+Thanks!""").render(Context({
+                'event_name': event.name,
+                'event_url': event.absolute_url
+            }))
 
             # 'start_time': datetime.time(hour=17, minute=0, second=0),
             # 'host_receive_rsvp_emails': 1,
@@ -383,11 +354,10 @@ Email is one of the most important tools we have to reach supporters like you, b
         form.instance.user_external_id = self.request.user.bsdprofile.cons_id
 
         """Set message header/footer content"""
-        event_url = BSDEvent.objects.get_absolute_url(event.event_id_obfuscated)
         user_message = form.cleaned_data['message']
         form.instance.message = Template("""Hi --
 
-One of your neighbors is hosting an organizing event in your area that you might be interested in —— are you be able to attend?
+One of your neighbors is hosting an organizing event in your area that you might be interested in -- are you able to attend?
 
 Learn more and RSVP here: {{ event_url }}
 
@@ -407,13 +377,13 @@ Paid for by Our Revolution
 
 PO BOX 66208 - WASHINGTON, DC 20035
 
-Email is one of the most important tools we have to reach supporters like you, but if you’d like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/"""
+Email is one of the most important tools we have to reach supporters like you, but if you'd like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/
+"""
         ).render(Context({
             'bsd_base_url': BSD_BASE_URL,
-            'event_url': event_url,
+            'event_url': event.absolute_url,
             'user_message': user_message,
         }))
-
 
         # Call save via super form_valid and handle BSD errors
         try:
@@ -422,8 +392,8 @@ Email is one of the most important tools we have to reach supporters like you, b
             messages.error(
                 self.request,
                 '''
-                There was an error submitting your request. Please make sure all
-                fields are filled with valid data and try again.
+                There was an error submitting your request. Please make sure
+                all fields are filled with valid data and try again.
                 '''
             )
             return redirect(

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsdApi = BSD().api
 
-BSD_BASE_URL = settings.BSD_BASE_URL,
+BSD_BASE_URL = settings.BSD_BASE_URL
 
 
 class BSDProfile(models.Model):
@@ -85,12 +85,6 @@ class BSDEventManager(models.Manager):
             venue_zip=data["venue_zip"],
         )
         return bsd_event
-
-    def get_absolute_url(self, event_id_obfuscated):
-        return "%s/page/event/detail/%s" % (
-            BSD_BASE_URL,
-            event_id_obfuscated
-        )
 
 
 class BSDEvent(models.Model):
@@ -189,7 +183,10 @@ class BSDEvent(models.Model):
     status = property(_get_status)
 
     def _get_absolute_url(self):
-        return BSDEventManager.get_absolute_url(self.event_id_obfuscated)
+        return "%s/page/event/detail/%s" % (
+            BSD_BASE_URL,
+            self.event_id_obfuscated
+        )
     absolute_url = property(_get_absolute_url)
 
     # Duration in minutes

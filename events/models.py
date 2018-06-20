@@ -46,3 +46,8 @@ class EventPromotion(models.Model):
     subject = models.CharField(default=EVENTS_DEFAULT_SUBJECT, max_length=128)
     """Assume generic external user id for event owner/host"""
     user_external_id = models.CharField(db_index=True, max_length=128)
+
+    def __unicode__(self):
+        return "Event: " + self.event_external_id + ", User: " + self.user_external_id + (
+            " - " + self.event_name if self.event_name else ""
+        )
