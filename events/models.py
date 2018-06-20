@@ -6,7 +6,8 @@ logger = logging.getLogger(__name__)
 
 
 class EventPromotionRecipient(models.Model):
-    user_external_id = models.CharField(max_length=128)
+    """Assume unique external user id for Recipient"""
+    user_external_id = models.CharField(max_length=128, unique=True)
 
 
 class EventPromotionRequest(models.Model):
@@ -18,7 +19,8 @@ class EventPromotionRequest(models.Model):
     )
 
     date_sent = models.DateTimeField(null=True, blank=True)
-    event_external_id = models.CharField(max_length=128)
+    """Assume generic external event id"""
+    event_external_id = models.CharField(db_index=True, max_length=128)
     message = models.CharField(max_length=2048)
     recipients = models.ManyToManyField(
         EventPromotionRecipient,
@@ -29,5 +31,6 @@ class EventPromotionRequest(models.Model):
     status = models.IntegerField(choices=status_choices, default=1)
     subject = models.CharField(max_length=128)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    user_external_id = models.CharField(max_length=128)
+    """Assume generic external user id for event owner/host"""
+    user_external_id = models.CharField(db_index=True, max_length=128)
     volunteer_count = models.IntegerField()
