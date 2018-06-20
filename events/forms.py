@@ -1,8 +1,19 @@
 from django import forms
+from django.conf import settings
 from .models import EventPromotion
 
 
+EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
+
+
 class EventPromotionForm(forms.ModelForm):
+    promote_max = EVENTS_PROMOTE_MAX
+    max_recipients = forms.IntegerField(
+        label="Please send this to how many nearby supporters",
+        max_value=promote_max,
+        min_value=1
+    )
+
     # required_css_class = 'required'
     # group_id = forms.CharField(
     #     disabled=True,
@@ -23,15 +34,11 @@ class EventPromotionForm(forms.ModelForm):
         fields = [
             'message',
             'subject',
-            'volunteer_count',
+            'max_recipients',
 
         ]
-        # widgets = {
-        #     'rep_phone': PhoneNumberInternationalFallbackWidget(),
-        #     'last_meeting': forms.DateInput(),
-        #     'description': forms.Textarea(attrs={'rows': '2'}),
-        #     'other_social': forms.Textarea(attrs={'rows': '2'}),
-        #     'other_issues': forms.Textarea(attrs={'rows': '2'}),
-        #     'constituency': forms.Textarea(attrs={'rows': '2'}),
-        #     'issues': forms.CheckboxSelectMultiple
-        # }
+        widgets = {
+            # 'rep_phone': PhoneNumberInternationalFallbackWidget(),
+            # 'last_meeting': forms.DateInput(),
+            'message': forms.Textarea(attrs={'rows': '8'}),
+        }

@@ -1,6 +1,6 @@
 {% extends "group_portal.html" %}
 
-{% load bootstrap3 local_groups_tags %}
+{% load bootstrap3 local_groups_tags organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Promote Event{% endblock %}
 
@@ -20,7 +20,7 @@
 
         {% bootstrap_messages %}
 
-        {% include "partials/events_nav.html" %}
+        {% events_nav %}
 
         <h3 class="mb20 mt0">
           Promote Event
@@ -53,9 +53,21 @@
 
                 {% bootstrap_field form.subject %}
 
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-xs-12">
+
                 {% bootstrap_field form.message %}
 
-                {% bootstrap_field form.volunteer_count %}
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-6">
+
+                {% bootstrap_field form.max_recipients %}
 
               </div>
           </div>

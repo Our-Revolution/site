@@ -30,7 +30,9 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
 
 def add_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -230,6 +232,10 @@ class EventListView(LoginRequiredMixin, TemplateView):
                     upcoming_events,
                     key=lambda x: x.start_day,
                 )
+
+                show_event_promote_link = ORGANIZING_HUB_PROMOTE_ENABLED
+                context['show_event_promote_link'] = show_event_promote_link
+
             except AssertionError:
                 messages.error(
                     self.request,
@@ -259,6 +265,15 @@ class EventPromoteView(
         )
         context['event_id_obfuscated'] = self.kwargs['event_id_obfuscated']
         return context
+
+    def get_initial(self, *args, **kwargs):
+        initial = {
+            'max_recipients': EVENTS_PROMOTE_MAX,
+            # 'start_time': datetime.time(hour=17, minute=0, second=0),
+            # 'host_receive_rsvp_emails': 1,
+            # 'public_phone': 1,
+        }
+        return initial
 
     # def get_local_group(self):
     #     return get_local_group_for_user(self.request.user)

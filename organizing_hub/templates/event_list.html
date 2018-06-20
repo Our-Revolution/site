@@ -20,7 +20,7 @@
 
         {% bootstrap_messages %}
 
-        {% include "partials/events_nav.html" %}
+        {% events_nav %}
 
         <h3 class="mb20 mt0">
           Events
@@ -97,10 +97,14 @@
                       href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">
                         Edit
                       </a>
+
+                      {% if show_event_promote_link %}
                       <a class="btn btn-secondary btn-sm"
                       href="{% url 'organizing-hub-event-promote' event.event_id_obfuscated %}">
                         Promote
                       </a>
+                      {% endif %}
+
                     </td>
 
                   </tr>

@@ -21,6 +21,7 @@ class EventPromotion(models.Model):
     date_sent = models.DateTimeField(null=True, blank=True)
     """Assume generic external event id"""
     event_external_id = models.CharField(db_index=True, max_length=128)
+    max_recipients = models.IntegerField()
     message = models.CharField(max_length=2048)
     recipients = models.ManyToManyField(
         EventPromotionRecipient,
@@ -33,4 +34,3 @@ class EventPromotion(models.Model):
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     """Assume generic external user id for event owner/host"""
     user_external_id = models.CharField(db_index=True, max_length=128)
-    volunteer_count = models.IntegerField()
