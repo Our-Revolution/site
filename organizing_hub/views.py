@@ -11,6 +11,8 @@ from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
 from bsd.models import BSDEvent, BSDProfile
+from events.forms import EventPromotionForm
+from events.models import EventPromotion
 from local_groups.models import (
     Group as LocalGroup,
     LocalGroupAffiliation,
@@ -235,6 +237,95 @@ class EventListView(LoginRequiredMixin, TemplateView):
                 )
 
         return context
+
+
+class EventPromoteView(
+    # LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
+    form_class = EventPromotionForm
+    model = EventPromotion
+    # permission_required = 'bsd.add_bsdevent'
+    success_message = '''
+    Your event promotion request was created successfully and is now being
+    reviewed by our team.
+    '''
+    template_name = "event_promote.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EventPromoteView, self).get_context_data(
+            **kwargs
+        )
+        context['event_id_obfuscated'] = self.kwargs['event_id_obfuscated']
+        return context
+
+    # def get_local_group(self):
+    #     return get_local_group_for_user(self.request.user)
+
+    # # Check if user has a valid bsd cons_id
+    # def can_access(self):
+    #     user = self.request.user
+    #     has_valid_cons_id = hasattr(user, 'bsdprofile') and (
+    #         user.bsdprofile.cons_id != BSDProfile.cons_id_default
+    #     )
+    #     return has_valid_cons_id
+
+    # def form_valid(self, form):
+    #     """If the form is valid, save the associated model."""
+    #     # Set cons_id based on current user
+    #     form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
+    #
+    #     # Call save via super form_valid and handle BSD errors
+    #     try:
+    #         return super(EventCreateView, self).form_valid(form)
+    #     except ValidationError:
+    #         messages.error(
+    #             self.request,
+    #             '''
+    #             There was an error creating your event. Please make sure all
+    #             fields are filled with valid data and try again.
+    #             '''
+    #         )
+    #         return redirect('organizing-hub-event-create')
+
+    # def get_initial(self, *args, **kwargs):
+    #     initial = {
+    #         'start_day': datetime.date.today() + datetime.timedelta(days=4),
+    #         'start_time': datetime.time(hour=17, minute=0, second=0),
+    #         'host_receive_rsvp_emails': 1,
+    #         'public_phone': 1,
+    #     }
+    #     return initial
+
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-event-list')
+
+    # # Redirect user to dashboard page
+    # def redirect_user(self):
+    #     messages.error(
+    #         self.request,
+    #         '''
+    #         This is not a Group Leader account, or your session is out of date.
+    #         Please logout and log back in with a Group Leader account to access
+    #         this page.
+    #         '''
+    #     )
+    #     return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
+
+    # # Use default get logic but add custom access check
+    # def get(self, request, *args, **kwargs):
+    #     if self.can_access():
+    #         return super(EventCreateView, self).get(request, *args, **kwargs)
+    #     else:
+    #         return self.redirect_user()
+    #
+    # # Use default post logic but add custom access check
+    # def post(self, request, *args, **kwargs):
+    #     if self.can_access():
+    #         return super(EventCreateView, self).post(request, *args, **kwargs)
+    #     else:
+    #         return self.redirect_user()
 
 
 class EventUpdateView(

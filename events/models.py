@@ -10,7 +10,7 @@ class EventPromotionRecipient(models.Model):
     user_external_id = models.CharField(max_length=128, unique=True)
 
 
-class EventPromotionRequest(models.Model):
+class EventPromotion(models.Model):
     status_choices = (
         (1, 'New'),
         (2, 'Approved'),

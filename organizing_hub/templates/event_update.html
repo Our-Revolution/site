@@ -39,8 +39,8 @@
 
       <div class="col-md-9">
 
-        <form action="{% url 'organizing-hub-event-update' object.event_id_obfuscated %}" method="post"
-        class="form mb20">
+        <form action="{% url 'organizing-hub-event-update' object.event_id_obfuscated %}"
+        method="post" class="form mb20">
           {% csrf_token %}
 
             <div class="clearfix mb20">

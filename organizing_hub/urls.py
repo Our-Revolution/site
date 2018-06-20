@@ -12,6 +12,7 @@ from local_groups.views import (
 from .views import (
     EventCreateView,
     EventListView,
+    EventPromoteView,
     EventUpdateView,
     GroupAdminsView
 )
@@ -32,6 +33,11 @@ urlpatterns += [
                 r'^create/',
                 EventCreateView.as_view(),
                 name='organizing-hub-event-create'
+            ),
+            url(
+                r'^(?P<event_id_obfuscated>[\w-]+)/promote/',
+                EventPromoteView.as_view(),
+                name='organizing-hub-event-promote'
             ),
             url(
                 r'^(?P<event_id_obfuscated>[\w-]+)/update/',
