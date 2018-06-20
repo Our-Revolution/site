@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.template import Context, Template
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -30,6 +31,7 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+BSD_BASE_URL = settings.BSD_BASE_URL
 EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
@@ -63,6 +65,35 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
+def get_event_from_bsd(event_id_obfuscated):
+
+    '''
+    Get Event from BSD
+    https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+    '''
+    api_call = '/event/get_event_details'
+    api_params = {}
+    request_type = bsd_api.POST
+    query = {
+        'event_id_obfuscated': event_id_obfuscated,
+    }
+    body = {
+        'event_api_version': '2',
+        'values': json.dumps(query)
+    }
+
+    api_result = bsd_api.doRequest(
+        api_call,
+        api_params,
+        request_type,
+        body
+    )
+    event_json = json.loads(api_result.body)
+    event = BSDEvent.objects.from_json(event_json)
+
+    return event
+
+
 def get_local_group_for_user(user):
 
     if hasattr(user, 'localgroupprofile'):
@@ -79,6 +110,20 @@ def get_local_group_for_user(user):
             return local_group
 
     return None
+
+
+def is_event_owner(user, event):
+    """Check if user cons_id matches event cons_id"""
+
+    if hasattr(user, 'bsdprofile'):
+        bsd_profile = user.bsdprofile
+        cons_id = bsd_profile.cons_id
+        has_valid_cons_id = cons_id != BSDProfile.cons_id_default
+        if has_valid_cons_id:
+            is_creator = cons_id == event.creator_cons_id
+            return is_creator
+
+    return False
 
 
 def remove_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -250,6 +295,7 @@ class EventPromoteView(
     SuccessMessageMixin,
     CreateView
 ):
+    event = None
     form_class = EventPromotionForm
     model = EventPromotion
     # permission_required = 'bsd.add_bsdevent'
@@ -259,6 +305,12 @@ class EventPromoteView(
     '''
     template_name = "event_promote.html"
 
+    def can_access(self):
+        event = self.get_event()
+        user = self.request.user
+        is_owner = is_event_owner(user, event)
+        return is_owner
+
     def get_context_data(self, **kwargs):
         context = super(EventPromoteView, self).get_context_data(
             **kwargs
@@ -267,8 +319,49 @@ class EventPromoteView(
         return context
 
     def get_initial(self, *args, **kwargs):
+        event = self.get_event()
         initial = {
             'max_recipients': EVENTS_PROMOTE_MAX,
+            'message': Template("""Hi --
+
+Laksh is hosting an organizing event in your area that you might be interested in —— are you be able to attend?
+
+Learn more and RSVP here: https://go.ourrevolution.com/page/event/detail/4jjjv
+
+You can read a message from the organizer below.
+
+Thanks!
+
+Juliana
+Our Revolution
+
+-------------------------------------
+
+Dear friend,
+
+My name is Demie, and I'm a volunteer for a progressive, grassroots ballot initiative for affordable, City-owned housing in San Francisco, written by our very own SF Berniecrats chapter of Our Revolution in conjunction with many housing activists, public policy wonks, and city planners. Among others, we've been formally endorsed by Gayle McLaughlin and the SF Green Party, and tweeted about in support by Robert Reich.
+
+This Wednesday, we are holding office hours to train new signature gatherers to help us collect signatures from San Francisco voters. We need a bare minimum of 9485 valid signatures from registered SF voters by early July (around July 6). That number is huge... but with your help, we can make it happen!
+
+Do you have 15 minutes this Wednesday, to drop by our office hours at illy Caffè (90 New Montgomery St, on Mission) from 11 AM to 5 PM, to be trained as a signature gatherer? We can get you set up right away to collect signatures on your own time, and the location is right near BART for convenience.
+
+We'll need everyone's help to collect the number of signatures we need. Please join us this Wednesday to get started right away! You can also like and follow us on Facebook at www.facebook.com/sfcommunityhousingact/
+
+Thank you,
+Demie
+SFCHA Volunteer
+
+----
+Paid for by Our Revolution
+(not the billionaires)
+
+PO BOX 66208 - WASHINGTON, DC 20035
+
+Email is one of the most important tools we have to reach supporters like you, but if you’d like to, click here to unsubscribe: https://go.ourrevolution.com/page/unsubscribe/
+            """).render(
+                Context({'event': event})
+            )
+
             # 'start_time': datetime.time(hour=17, minute=0, second=0),
             # 'host_receive_rsvp_emails': 1,
             # 'public_phone': 1,
@@ -278,69 +371,92 @@ class EventPromoteView(
     # def get_local_group(self):
     #     return get_local_group_for_user(self.request.user)
 
-    # # Check if user has a valid bsd cons_id
-    # def can_access(self):
-    #     user = self.request.user
-    #     has_valid_cons_id = hasattr(user, 'bsdprofile') and (
-    #         user.bsdprofile.cons_id != BSDProfile.cons_id_default
-    #     )
-    #     return has_valid_cons_id
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
 
-    # def form_valid(self, form):
-    #     """If the form is valid, save the associated model."""
-    #     # Set cons_id based on current user
-    #     form.instance.creator_cons_id = self.request.user.bsdprofile.cons_id
-    #
-    #     # Call save via super form_valid and handle BSD errors
-    #     try:
-    #         return super(EventCreateView, self).form_valid(form)
-    #     except ValidationError:
-    #         messages.error(
-    #             self.request,
-    #             '''
-    #             There was an error creating your event. Please make sure all
-    #             fields are filled with valid data and try again.
-    #             '''
-    #         )
-    #         return redirect('organizing-hub-event-create')
+        """Set event external id & event name"""
+        event = self.get_event()
+        form.instance.event_external_id = event.event_id_obfuscated
+        form.instance.event_name = event.name
 
-    # def get_initial(self, *args, **kwargs):
-    #     initial = {
-    #         'start_day': datetime.date.today() + datetime.timedelta(days=4),
-    #         'start_time': datetime.time(hour=17, minute=0, second=0),
-    #         'host_receive_rsvp_emails': 1,
-    #         'public_phone': 1,
-    #     }
-    #     return initial
+        """Set user external id"""
+        form.instance.user_external_id = self.request.user.bsdprofile.cons_id
+
+        """Set message header/footer content"""
+        event_url = BSDEvent.objects.get_absolute_url(event.event_id_obfuscated)
+        user_message = form.cleaned_data['message']
+        form.instance.message = Template("""Hi --
+
+One of your neighbors is hosting an organizing event in your area that you might be interested in —— are you be able to attend?
+
+Learn more and RSVP here: {{ event_url }}
+
+You can read a message from the organizer below.
+
+Thanks!
+
+Our Revolution
+
+-------------------------------------
+
+{{ user_message }}
+
+----
+Paid for by Our Revolution
+(not the billionaires)
+
+PO BOX 66208 - WASHINGTON, DC 20035
+
+Email is one of the most important tools we have to reach supporters like you, but if you’d like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/"""
+        ).render(Context({
+            'bsd_base_url': BSD_BASE_URL,
+            'event_url': event_url,
+            'user_message': user_message,
+        }))
+
+
+        # Call save via super form_valid and handle BSD errors
+        try:
+            return super(EventPromoteView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error submitting your request. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect(
+                'organizing-hub-event-promote',
+                self.kwargs['event_id_obfuscated']
+            )
+
+    def get_event(self):
+
+        if self.event is not None:
+            return self.event
+
+        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
+        self.event = event
+
+        return self.event
 
     def get_success_url(self):
         return reverse_lazy('organizing-hub-event-list')
 
-    # # Redirect user to dashboard page
-    # def redirect_user(self):
-    #     messages.error(
-    #         self.request,
-    #         '''
-    #         This is not a Group Leader account, or your session is out of date.
-    #         Please logout and log back in with a Group Leader account to access
-    #         this page.
-    #         '''
-    #     )
-    #     return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventPromoteView, self).get(request, *args, **kwargs)
+        else:
+            raise Http404
 
-    # # Use default get logic but add custom access check
-    # def get(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(EventCreateView, self).get(request, *args, **kwargs)
-    #     else:
-    #         return self.redirect_user()
-    #
-    # # Use default post logic but add custom access check
-    # def post(self, request, *args, **kwargs):
-    #     if self.can_access():
-    #         return super(EventCreateView, self).post(request, *args, **kwargs)
-    #     else:
-    #         return self.redirect_user()
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventPromoteView, self).post(request, *args, **kwargs)
+        else:
+            raise Http404
 
 
 class EventUpdateView(
@@ -357,17 +473,10 @@ class EventUpdateView(
 
     """Check if user cons_id matches event cons_id"""
     def can_access(self):
+        event = self.object
         user = self.request.user
-
-        if hasattr(user, 'bsdprofile'):
-            bsd_profile = user.bsdprofile
-            cons_id = bsd_profile.cons_id
-            has_valid_cons_id = cons_id != BSDProfile.cons_id_default
-            if has_valid_cons_id:
-                is_creator = cons_id == self.object.creator_cons_id
-                return is_creator
-
-        return False
+        is_owner = is_event_owner(user, event)
+        return is_owner
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -399,29 +508,7 @@ class EventUpdateView(
         if self.object is not None:
             return self.object
 
-        '''
-        Get Event from BSD
-        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-        '''
-        api_call = '/event/get_event_details'
-        api_params = {}
-        request_type = bsd_api.POST
-        query = {
-            'event_id_obfuscated': self.kwargs['event_id_obfuscated'],
-        }
-        body = {
-            'event_api_version': '2',
-            'values': json.dumps(query)
-        }
-
-        api_result = bsd_api.doRequest(
-            api_call,
-            api_params,
-            request_type,
-            body
-        )
-        event_json = json.loads(api_result.body)
-        event = BSDEvent.objects.from_json(event_json)
+        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
         self.object = event
 
         return self.object

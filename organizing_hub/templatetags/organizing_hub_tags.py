@@ -8,14 +8,6 @@ register = template.Library()
 ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
 
-@register.simple_tag
-def event_url(event_id_obfuscated):
-    return "%s/page/event/detail/%s" % (
-        settings.BSD_BASE_URL,
-        event_id_obfuscated
-    )
-
-
 @register.inclusion_tag('partials/events_nav.html', takes_context=True)
 def events_nav(context):
 
