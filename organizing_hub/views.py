@@ -32,6 +32,8 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
+EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
+EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
@@ -187,6 +189,7 @@ class EventCreateView(
 
     def get_initial(self, *args, **kwargs):
         initial = {
+            'capacity': 0,
             'start_day': datetime.date.today() + datetime.timedelta(days=4),
             'start_time': datetime.time(hour=17, minute=0, second=0),
             'host_receive_rsvp_emails': 1,
@@ -291,14 +294,14 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
 
 class EventPromoteView(
-    # LocalGroupPermissionRequiredMixin,
+    LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
     CreateView
 ):
     event = None
     form_class = EventPromotionForm
     model = EventPromotion
-    # permission_required = 'bsd.add_bsdevent'
+    permission_required = 'events.add_eventpromotion'
     success_message = '''
     Your event promotion request has been submitted and will be reviewed by our
     team.
@@ -320,27 +323,29 @@ class EventPromoteView(
 
     def get_initial(self, *args, **kwargs):
         event = self.get_event()
-        initial = {
-            'max_recipients': EVENTS_PROMOTE_MAX,
-            'message': Template("""Hello --
+        max_recipients = EVENTS_PROMOTE_MAX if event.capacity == 0 else min(
+            EVENTS_PROMOTE_MAX,
+            event.capacity * EVENTS_CAPACITY_RATIO
+        )
+        message = Template("""Hello --
 
 We are hosting an event near you, {{ event_name }}! Can you make it? We're almost across the finish line and we need to keep up the momentum.
 
 {{ event_url }}
 
 Thanks!""").render(Context({
-                'event_name': event.name,
-                'event_url': event.absolute_url
-            }))
-
-            # 'start_time': datetime.time(hour=17, minute=0, second=0),
-            # 'host_receive_rsvp_emails': 1,
-            # 'public_phone': 1,
+            'event_name': event.name,
+            'event_url': event.absolute_url
+        }))
+        initial = {
+            'max_recipients': max_recipients,
+            'message': message,
+            'subject': EVENTS_DEFAULT_SUBJECT,
         }
         return initial
 
-    # def get_local_group(self):
-    #     return get_local_group_for_user(self.request.user)
+    def get_local_group(self):
+        return get_local_group_for_user(self.request.user)
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -352,6 +357,12 @@ Thanks!""").render(Context({
 
         """Set user external id"""
         form.instance.user_external_id = self.request.user.bsdprofile.cons_id
+
+        """Set cap on recipients"""
+        form.instance.max_recipients = min(
+            EVENTS_PROMOTE_MAX,
+            form.cleaned_data['max_recipients']
+        )
 
         """Set message header/footer content"""
         user_message = form.cleaned_data['message']

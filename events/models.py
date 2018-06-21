@@ -48,6 +48,6 @@ class EventPromotion(models.Model):
     user_external_id = models.CharField(db_index=True, max_length=128)
 
     def __unicode__(self):
-        return "Event: " + self.event_external_id + ", User: " + self.user_external_id + (
-            " - " + self.event_name if self.event_name else ""
+        return str(self.id) + " | Event: " + self.event_external_id + " | User: " + self.user_external_id + (
+            " | " + self.event_name if self.event_name else ""
         )

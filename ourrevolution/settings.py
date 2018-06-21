@@ -37,8 +37,12 @@ EVENTS_DEFAULT_FROM_NAME = os.environ.get(
 )
 EVENTS_DEFAULT_SUBJECT = os.environ.get(
     'EVENTS_DEFAULT_SUBJECT',
-    'Please come to my Volunteer event'
+    'Please come to our Volunteer event'
 )
+EVENTS_CAPACITY_RATIO = int(os.environ.get(
+    'EVENTS_CAPACITY_RATIO',
+    40
+))
 EVENTS_PROMOTE_MAX = int(os.environ.get(
     'EVENTS_PROMOTE_MAX',
     4000
