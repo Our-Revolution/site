@@ -14,21 +14,6 @@ class EventPromotionForm(forms.ModelForm):
         min_value=1
     )
 
-    # required_css_class = 'required'
-    # group_id = forms.CharField(
-    #     disabled=True,
-    #     label=_("Group ID"),
-    # )
-    # name = forms.CharField(
-    #     disabled=True,
-    #     help_text='To change Group Name, contact %s' % settings.ORGANIZING_EMAIL,
-    # )
-    # rep_email = forms.CharField(
-    #     disabled=True,
-    #     label=_("Group leader email"),
-    #     help_text='To change Group Leader Email, contact %s' % settings.ORGANIZING_EMAIL,
-    # )
-
     class Meta:
         model = EventPromotion
         fields = [
@@ -38,7 +23,5 @@ class EventPromotionForm(forms.ModelForm):
 
         ]
         widgets = {
-            # 'rep_phone': PhoneNumberInternationalFallbackWidget(),
-            # 'last_meeting': forms.DateInput(),
             'message': forms.Textarea(attrs={'rows': '8'}),
         }
