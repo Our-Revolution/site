@@ -18,6 +18,9 @@ bsdApi = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
 
+duration_type_minutes = 1
+duration_type_hours = 2
+
 
 class BSDProfile(models.Model):
     # 0 should only be used for legacy records that predate this field
@@ -31,7 +34,7 @@ class BSDEventManager(models.Manager):
     def from_json(self, data):
 
         """Assume duration type = minutes for BSD data"""
-        duration_type = 1
+        duration_type = duration_type_minutes
 
         try:
             """Expected format for get_event_details"""
@@ -52,8 +55,13 @@ class BSDEventManager(models.Manager):
             )
             venue_state_or_territory = data["venue_state_cd"]
 
-        """Fix duration format"""
-        duration_count = int(duration) if duration != '' else 0
+        """Set duration to a positive integer if possible"""
+        """TODO: support all day events (-1)?"""
+        if duration != '':
+            duration_int = int(duration)
+            duration_count = duration_int if duration_int > 0 else None
+        else:
+            duration_count = None
 
         """Get Local Datetime"""
         utc_zone = tz.gettz('UTC')
@@ -95,8 +103,8 @@ class BSDEvent(models.Model):
     objects = BSDEventManager()
 
     duration_type_choices = (
-        (1, 'Minutes'),
-        (2, 'Hours'),
+        (duration_type_minutes, 'Minutes'),
+        (duration_type_hours, 'Hours'),
     )
     event_type_choices = (
         (1, 'Volunteer Activity or Meeting'),
@@ -132,7 +140,8 @@ class BSDEvent(models.Model):
     host_name = models.CharField(max_length=255)
     name = models.CharField(max_length=128)
     description = models.TextField()
-    duration_count = models.IntegerField()
+    """Duration is usually required but sometimes we don't have valid data"""
+    duration_count = models.IntegerField(null=True)
     duration_type = models.IntegerField(
         choices=duration_type_choices,
         default=1,  # default to minutes
@@ -192,14 +201,6 @@ class BSDEvent(models.Model):
         )
     absolute_url = property(_get_absolute_url)
 
-    # Duration in minutes
-    def duration_minutes(self):
-        # Multiply count by 60 if unit is hours
-        if self.duration_type == 2:
-            return self.duration_count * 60
-        else:
-            return self.duration_count
-
     # Custom logic to create event via BSD api
     def create_event(self, *args, **kwargs):
         """Create Event in BSD"""
@@ -224,13 +225,7 @@ class BSDEvent(models.Model):
             'creator_cons_id': self.creator_cons_id,
             'creator_name': self.host_name,
             'event_type_id': self.event_type,
-            'days': [{
-                'start_datetime_system': str(datetime.datetime.combine(
-                    self.start_day,
-                    self.start_time
-                )),
-                'duration': self.duration_minutes()
-            }],
+            'days': self.get_days_param(),
             'description': self.description,
             'flag_approval': flag_approval,
             'host_receive_rsvp_emails': self.host_receive_rsvp_emails,
@@ -263,6 +258,31 @@ class BSDEvent(models.Model):
 
         return
 
+    """Duration in minutes if available, otherwise None"""
+    def duration_minutes(self):
+        if self.duration_count is None:
+            return None
+        elif self.duration_type == duration_type_hours:
+            """Multiply count by 60 if unit is hours"""
+            return self.duration_count * 60
+        else:
+            return self.duration_count
+
+    def get_days_param(self):
+        duration = self.duration_minutes()
+        if duration is not None:
+            start_datetime_system = str(datetime.datetime.combine(
+                self.start_day,
+                self.start_time
+            ))
+            days = [{
+                'start_datetime_system': start_datetime_system,
+                'duration': self.duration_minutes()
+            }]
+            return days
+        else:
+            return []
+
     def save(self, *args, **kwargs):
 
         """Create or Update event"""
@@ -276,6 +296,7 @@ class BSDEvent(models.Model):
         Update Event in BSD
         https://github.com/bluestatedigital/bsd-api-python#raw-api-method
         '''
+
         api_call = '/event/update_event'
         api_params = {}
         request_type = bsdApi.POST
@@ -286,13 +307,7 @@ class BSDEvent(models.Model):
             'creator_name': self.host_name,
             'event_id_obfuscated': self.event_id_obfuscated,
             'event_type_id': self.event_type,
-            'days': [{
-                'start_datetime_system': str(datetime.datetime.combine(
-                    self.start_day,
-                    self.start_time
-                )),
-                'duration': self.duration_minutes()
-            }],
+            'days': self.get_days_param(),
             'description': self.description,
             'host_receive_rsvp_emails': self.host_receive_rsvp_emails,
             'local_timezone': self.start_time_zone,
