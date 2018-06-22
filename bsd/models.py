@@ -140,10 +140,8 @@ class BSDEvent(models.Model):
     host_name = models.CharField(max_length=255)
     name = models.CharField(max_length=128)
     description = models.TextField()
-    duration_count = models.IntegerField(
-        blank=True,
-        null=True,
-    )
+    """Duration is usually required but sometimes we don't have valid data"""
+    duration_count = models.IntegerField(null=True)
     duration_type = models.IntegerField(
         choices=duration_type_choices,
         default=1,  # default to minutes
