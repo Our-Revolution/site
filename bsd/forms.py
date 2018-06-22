@@ -15,6 +15,12 @@ class HTML5TimeInput(widgets.TimeInput):
 
 
 class BSDEventForm(forms.ModelForm):
+    capacity = forms.IntegerField(
+        help_text="Including guests. Leave 0 for unlimited.",
+        label="Capacity Limit",
+        min_value=0,
+    )
+    duration_count = forms.IntegerField(min_value=0)
     host_receive_rsvp_emails = forms.ChoiceField(
         choices=(
             (1, "YES, please email me when new people RSVP (recommended)"),

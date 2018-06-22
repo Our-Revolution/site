@@ -1,6 +1,6 @@
 {% extends "group_portal.html" %}
 
-{% load bootstrap3 local_groups_tags %}
+{% load bootstrap3 local_groups_tags organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Update Event{% endblock %}
 
@@ -20,7 +20,7 @@
 
         {% bootstrap_messages %}
 
-        {% include "partials/events_nav.html" %}
+        {% events_nav %}
 
         <h3 class="mb20 mt0">
           Update Event
@@ -39,8 +39,8 @@
 
       <div class="col-md-9">
 
-        <form action="{% url 'organizing-hub-event-update' object.event_id_obfuscated %}" method="post"
-        class="form mb20">
+        <form action="{% url 'organizing-hub-event-update' object.event_id_obfuscated %}"
+        method="post" class="form mb20">
           {% csrf_token %}
 
             <div class="clearfix mb20">

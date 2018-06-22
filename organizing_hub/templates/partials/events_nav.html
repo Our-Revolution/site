@@ -1,5 +1,6 @@
 <div id="events-nav" class="btn-toolbar pull-right" role="toolbar">
 
+  {% if show_promote_link %}
   {% with "https://events.ourrevolution.com/" as link_url %}
   <div class="btn-group" role="group">
     <a href="{{ link_url }}" class="btn btn-secondary" target="_blank">
@@ -7,6 +8,7 @@
     </a>
   </div>
   {% endwith %}
+  {% endif %}
 
   {% url 'organizing-hub-event-create' as link_url %}
   {% if link_url != request.path and '/update/' not in request.path %}
@@ -25,6 +27,5 @@
     </a>
   </div>
   {% endif %}
-
 
 </div>

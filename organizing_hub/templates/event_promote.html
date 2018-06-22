@@ -1,0 +1,90 @@
+{% extends "group_portal.html" %}
+
+{% load bootstrap3 local_groups_tags organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Promote Event{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}
+{% group_link %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+        {% events_nav %}
+
+        <h3 class="mb20 mt0">
+          Promote Event
+        </h3>
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% group_portal_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <form action="{% url 'organizing-hub-event-promote' event_id_obfuscated %}"
+        method="post" class="form mb20">
+
+          {% csrf_token %}
+
+          <div class="row">
+              <div class="col-xs-12">
+
+                <p>
+                  Invite nearby attendees to attend your group's event!
+                </p>
+
+                {% bootstrap_field form.subject %}
+
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-xs-12">
+
+                {% bootstrap_field form.message %}
+
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-6">
+
+                {% bootstrap_field form.max_recipients %}
+
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-xs-12">
+                <button type="submit"
+                class="btn btn-primary btn-block uppercase ls2">
+                  Submit for Approval
+                </button>
+              </div>
+          </div>
+
+        </form>
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

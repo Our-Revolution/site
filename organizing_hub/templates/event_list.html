@@ -20,7 +20,7 @@
 
         {% bootstrap_messages %}
 
-        {% include "partials/events_nav.html" %}
+        {% events_nav %}
 
         <h3 class="mb20 mt0">
           Events
@@ -46,7 +46,7 @@
             You do not have any upcoming events. Ready to host one?
           </p>
 
-          <a class="btn btn-block btn-primary"
+          <a class="btn btn-block btn-primary uppercase ls2"
           href="{% url 'organizing-hub-event-create' %}">
             Create a new event
           </a>
@@ -57,7 +57,8 @@
         {% if upcoming_events %}
 
         <section>
-          <h4>Upcoming Events</h4>
+
+          <h4 class="mt0">Upcoming Events</h4>
 
           <div class="panel panel-default">
 
@@ -77,8 +78,7 @@
                   <tr>
 
                     <td>
-                      <a href="{% event_url event.event_id_obfuscated %}"
-                      target="_blank">
+                      <a href="{{ event.absolute_url }}" target="_blank">
                         {{ event.name }}
                       </a>
                     </td>
@@ -96,6 +96,14 @@
                       href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">
                         Edit
                       </a>
+
+                      {% if show_event_promote_link %}
+                      <a class="btn btn-secondary btn-sm"
+                      href="{% url 'organizing-hub-event-promote' event.event_id_obfuscated %}">
+                        Promote
+                      </a>
+                      {% endif %}
+
                     </td>
 
                   </tr>
@@ -106,7 +114,7 @@
 
           </div>
 
-          <a class="btn btn-block btn-primary"
+          <a class="btn btn-block btn-primary uppercase ls2"
           href="{% url 'organizing-hub-event-create' %}">
             Create a new event
           </a>
@@ -139,8 +147,7 @@
                   <tr>
 
                     <td>
-                      <a href="{% event_url event.event_id_obfuscated %}"
-                      target="_blank">
+                      <a href="{{ event.absolute_url }}" target="_blank">
                         {{ event.name }}
                       </a>
                     </td>

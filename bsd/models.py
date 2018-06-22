@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsdApi = BSD().api
 
+BSD_BASE_URL = settings.BSD_BASE_URL
+
 
 class BSDProfile(models.Model):
     # 0 should only be used for legacy records that predate this field
@@ -33,8 +35,8 @@ class BSDEventManager(models.Manager):
 
         try:
             """Expected format for get_event_details"""
-            capacity = data["days"][0]["capacity"]
-            duration_count = data["days"][0]["duration"]
+            capacity = int(data["days"][0]["capacity"])
+            duration = data["days"][0]["duration"]
             start_datetime_utc = datetime.datetime.strptime(
                 data["days"][0]["start_dt"],
                 '%Y-%m-%d %H:%M:%S'
@@ -42,13 +44,16 @@ class BSDEventManager(models.Manager):
             venue_state_or_territory = data["venue_state_code"]
         except KeyError:
             """Expected format for get_events_for_cons"""
-            capacity = data["venue_capacity"]
-            duration_count = data["duration"]
+            capacity = int(data["venue_capacity"])
+            duration = data["duration"]
             start_datetime_utc = datetime.datetime.strptime(
                 data["start_datetime_system"],
                 '%Y-%m-%d %H:%M:%S'
             )
             venue_state_or_territory = data["venue_state_cd"]
+
+        """Fix duration format"""
+        duration_count = int(duration) if duration != '' else 0
 
         """Get Local Datetime"""
         utc_zone = tz.gettz('UTC')
@@ -61,15 +66,15 @@ class BSDEventManager(models.Manager):
             contact_phone=data["contact_phone"],
             creator_cons_id=data["creator_cons_id"],
             event_id_obfuscated=data["event_id_obfuscated"],
-            event_type=data["event_type_id"],
+            event_type=int(data["event_type_id"]),
             flag_approval=int(data["flag_approval"]),
             host_name=data["creator_name"],
             name=data["name"],
             description=data["description"],
             duration_count=duration_count,
             duration_type=duration_type,
-            host_receive_rsvp_emails=data["host_receive_rsvp_emails"],
-            public_phone=data["public_phone"],
+            host_receive_rsvp_emails=int(data["host_receive_rsvp_emails"]),
+            public_phone=int(data["public_phone"]),
             start_day=local_datetime.date(),
             start_time=local_datetime.time(),
             start_time_zone=data["local_timezone"],
@@ -179,6 +184,13 @@ class BSDEvent(models.Model):
         else:
             return 'Approved'
     status = property(_get_status)
+
+    def _get_absolute_url(self):
+        return "%s/page/event/detail/%s" % (
+            BSD_BASE_URL,
+            self.event_id_obfuscated
+        )
+    absolute_url = property(_get_absolute_url)
 
     # Duration in minutes
     def duration_minutes(self):
