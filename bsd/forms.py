@@ -20,7 +20,10 @@ class BSDEventForm(forms.ModelForm):
         label="Capacity Limit",
         min_value=0,
     )
-    duration_count = forms.IntegerField(min_value=0)
+    duration_count = forms.IntegerField(
+        min_value=0,
+        required=False,
+    )
     host_receive_rsvp_emails = forms.ChoiceField(
         choices=(
             (1, "YES, please email me when new people RSVP (recommended)"),
