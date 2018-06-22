@@ -31,6 +31,23 @@ EVENT_AUTO_APPROVAL = bool(int(os.environ.get(
     0
 )))
 
+EVENTS_DEFAULT_FROM_NAME = os.environ.get(
+    'EVENTS_DEFAULT_FROM_NAME',
+    'Our Revolution'
+)
+EVENTS_DEFAULT_SUBJECT = os.environ.get(
+    'EVENTS_DEFAULT_SUBJECT',
+    'Please come to our Volunteer event'
+)
+EVENTS_CAPACITY_RATIO = int(os.environ.get(
+    'EVENTS_CAPACITY_RATIO',
+    40
+))
+EVENTS_PROMOTE_MAX = int(os.environ.get(
+    'EVENTS_PROMOTE_MAX',
+    4000
+))
+
 """Local Groups Roles"""
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2
 LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
@@ -38,6 +55,11 @@ LOCAL_GROUPS_ROLE_GROUP_LEADER_ID = 1
 """Manage Group Admins"""
 ORGANIZING_HUB_ADMINS_ENABLED = bool(int(os.environ.get(
     'ORGANIZING_HUB_ADMINS_ENABLED',
+    0
+)))
+
+ORGANIZING_HUB_PROMOTE_ENABLED = bool(int(os.environ.get(
+    'ORGANIZING_HUB_PROMOTE_ENABLED',
     0
 )))
 
@@ -87,6 +109,7 @@ INSTALLED_APPS = [
 
     # OR apps
     'endorsements',
+    'events',
     'organizing_hub',
     'pages',
     'social_redirects',

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.template import Context, Template
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -11,6 +12,8 @@ from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
 from bsd.models import BSDEvent, BSDProfile
+from events.forms import EventPromotionForm
+from events.models import EventPromotion
 from local_groups.models import (
     Group as LocalGroup,
     LocalGroupAffiliation,
@@ -28,7 +31,12 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+BSD_BASE_URL = settings.BSD_BASE_URL
+EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
+EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
+EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
 
 def add_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -59,6 +67,35 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
+def get_event_from_bsd(event_id_obfuscated):
+
+    '''
+    Get Event from BSD
+    https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+    '''
+    api_call = '/event/get_event_details'
+    api_params = {}
+    request_type = bsd_api.POST
+    query = {
+        'event_id_obfuscated': event_id_obfuscated,
+    }
+    body = {
+        'event_api_version': '2',
+        'values': json.dumps(query)
+    }
+
+    api_result = bsd_api.doRequest(
+        api_call,
+        api_params,
+        request_type,
+        body
+    )
+    event_json = json.loads(api_result.body)
+    event = BSDEvent.objects.from_json(event_json)
+
+    return event
+
+
 def get_local_group_for_user(user):
 
     if hasattr(user, 'localgroupprofile'):
@@ -75,6 +112,20 @@ def get_local_group_for_user(user):
             return local_group
 
     return None
+
+
+def is_event_owner(user, event):
+    """Check if user cons_id matches event cons_id"""
+
+    if hasattr(user, 'bsdprofile'):
+        bsd_profile = user.bsdprofile
+        cons_id = bsd_profile.cons_id
+        has_valid_cons_id = cons_id != BSDProfile.cons_id_default
+        if has_valid_cons_id:
+            is_creator = cons_id == event.creator_cons_id
+            return is_creator
+
+    return False
 
 
 def remove_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -138,6 +189,7 @@ class EventCreateView(
 
     def get_initial(self, *args, **kwargs):
         initial = {
+            'capacity': 0,
             'start_day': datetime.date.today() + datetime.timedelta(days=4),
             'start_time': datetime.time(hour=17, minute=0, second=0),
             'host_receive_rsvp_emails': 1,
@@ -228,6 +280,10 @@ class EventListView(LoginRequiredMixin, TemplateView):
                     upcoming_events,
                     key=lambda x: x.start_day,
                 )
+
+                show_event_promote_link = ORGANIZING_HUB_PROMOTE_ENABLED
+                context['show_event_promote_link'] = show_event_promote_link
+
             except AssertionError:
                 messages.error(
                     self.request,
@@ -235,6 +291,153 @@ class EventListView(LoginRequiredMixin, TemplateView):
                 )
 
         return context
+
+
+class EventPromoteView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
+    event = None
+    form_class = EventPromotionForm
+    model = EventPromotion
+    permission_required = 'events.add_eventpromotion'
+    success_message = '''
+    Your event promotion request has been submitted and will be reviewed by our
+    team.
+    '''
+    template_name = "event_promote.html"
+
+    def can_access(self):
+        event = self.get_event()
+        user = self.request.user
+        is_owner = is_event_owner(user, event)
+        return is_owner
+
+    def get_context_data(self, **kwargs):
+        context = super(EventPromoteView, self).get_context_data(
+            **kwargs
+        )
+        context['event_id_obfuscated'] = self.kwargs['event_id_obfuscated']
+        return context
+
+    def get_initial(self, *args, **kwargs):
+        event = self.get_event()
+        max_recipients = EVENTS_PROMOTE_MAX if event.capacity == 0 else min(
+            EVENTS_PROMOTE_MAX,
+            event.capacity * EVENTS_CAPACITY_RATIO
+        )
+        message = Template("""Hello --
+
+We are hosting an event near you, {{ event_name }}! Can you make it? We're almost across the finish line and we need to keep up the momentum.
+
+{{ event_url }}
+
+Thanks!""").render(Context({
+            'event_name': event.name,
+            'event_url': event.absolute_url
+        }))
+        initial = {
+            'max_recipients': max_recipients,
+            'message': message,
+            'subject': EVENTS_DEFAULT_SUBJECT,
+        }
+        return initial
+
+    def get_local_group(self):
+        return get_local_group_for_user(self.request.user)
+
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+
+        """Set event external id & event name"""
+        event = self.get_event()
+        form.instance.event_external_id = event.event_id_obfuscated
+        form.instance.event_name = event.name
+
+        """Set user external id"""
+        form.instance.user_external_id = self.request.user.bsdprofile.cons_id
+
+        """Set cap on recipients"""
+        form.instance.max_recipients = min(
+            EVENTS_PROMOTE_MAX,
+            form.cleaned_data['max_recipients']
+        )
+
+        """Set message header/footer content"""
+        user_message = form.cleaned_data['message']
+        form.instance.message = Template("""Hi --
+
+One of your neighbors is hosting an organizing event in your area that you might be interested in -- are you able to attend?
+
+Learn more and RSVP here: {{ event_url }}
+
+You can read a message from the organizer below.
+
+Thanks!
+
+Our Revolution
+
+-------------------------------------
+
+{{ user_message }}
+
+----
+Paid for by Our Revolution
+(not the billionaires)
+
+PO BOX 66208 - WASHINGTON, DC 20035
+
+Email is one of the most important tools we have to reach supporters like you, but if you'd like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/
+"""
+        ).render(Context({
+            'bsd_base_url': BSD_BASE_URL,
+            'event_url': event.absolute_url,
+            'user_message': user_message,
+        }))
+
+        # Call save via super form_valid and handle BSD errors
+        try:
+            return super(EventPromoteView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error submitting your request. Please make sure
+                all fields are filled with valid data and try again.
+                '''
+            )
+            return redirect(
+                'organizing-hub-event-promote',
+                self.kwargs['event_id_obfuscated']
+            )
+
+    def get_event(self):
+
+        if self.event is not None:
+            return self.event
+
+        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
+        self.event = event
+
+        return self.event
+
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-event-list')
+
+    # Use default get logic but add custom access check
+    def get(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventPromoteView, self).get(request, *args, **kwargs)
+        else:
+            raise Http404
+
+    # Use default post logic but add custom access check
+    def post(self, request, *args, **kwargs):
+        if self.can_access():
+            return super(EventPromoteView, self).post(request, *args, **kwargs)
+        else:
+            raise Http404
 
 
 class EventUpdateView(
@@ -251,17 +454,10 @@ class EventUpdateView(
 
     """Check if user cons_id matches event cons_id"""
     def can_access(self):
+        event = self.object
         user = self.request.user
-
-        if hasattr(user, 'bsdprofile'):
-            bsd_profile = user.bsdprofile
-            cons_id = bsd_profile.cons_id
-            has_valid_cons_id = cons_id != BSDProfile.cons_id_default
-            if has_valid_cons_id:
-                is_creator = cons_id == self.object.creator_cons_id
-                return is_creator
-
-        return False
+        is_owner = is_event_owner(user, event)
+        return is_owner
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -293,29 +489,7 @@ class EventUpdateView(
         if self.object is not None:
             return self.object
 
-        '''
-        Get Event from BSD
-        https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-        '''
-        api_call = '/event/get_event_details'
-        api_params = {}
-        request_type = bsd_api.POST
-        query = {
-            'event_id_obfuscated': self.kwargs['event_id_obfuscated'],
-        }
-        body = {
-            'event_api_version': '2',
-            'values': json.dumps(query)
-        }
-
-        api_result = bsd_api.doRequest(
-            api_call,
-            api_params,
-            request_type,
-            body
-        )
-        event_json = json.loads(api_result.body)
-        event = BSDEvent.objects.from_json(event_json)
+        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
         self.object = event
 
         return self.object
