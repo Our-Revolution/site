@@ -41,7 +41,6 @@ import json
 import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
-from django.template import Context
 import logging
 
 logger = logging.getLogger(__name__)
@@ -290,12 +289,12 @@ class QuestionnaireIndexView(LoginRequiredMixin, FormView):
         plaintext = get_template('email/candidate_email.txt')
         htmly = get_template('email/candidate_email.html')
 
-        d = Context({
+        d = {
             'group': group,
             'candidate_name': candidate_name,
             'group_rep_email': rep_email,
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        })
+        }
 
         subject = "You're being nominated for endorsement by an official Our Revolution group!"
         from_email = 'Our Revolution <info@ourrevolution.com>'
@@ -401,9 +400,9 @@ class SubmitView(LoginRequiredMixin, FormView):
         Your nomination for %s has been submitted! Here are the next steps.
         """ % candidate_name
 
-        d = Context({
+        d = {
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        })
+        }
 
         html_template = get_template('email/application_submit_email.html')
         html_content = html_template.render(d)
@@ -622,12 +621,12 @@ class CandidateSubmitView(FormView):
         plaintext = get_template('email/group_email.txt')
         htmly     = get_template('email/group_email.html')
 
-        d = Context({
+        d = {
             'rep_name': rep_name,
             'candidate_name': candidate_name,
             'nominations_submit_url': nominations_submit_url,
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        })
+        }
 
         subject= candidate_name + " has completed your candidate questionnaire!"
         from_email='Our Revolution <info@ourrevolution.com>'

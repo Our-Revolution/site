@@ -5,7 +5,6 @@ from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
 from django.template.loader import get_template
-from django.template import Context
 from django.contrib import messages
 from django.db.models import Case, IntegerField, Q, Value, When
 from django.db.models.signals import pre_delete
@@ -1745,7 +1744,7 @@ class GroupPage(RoutablePageMixin, Page):
                 plaintext = get_template('pages/email/add_group_success.txt')
                 htmly     = get_template('pages/email/add_group_success.html')
 
-                d = Context({'group_id': group.group_id})
+                d = {'group_id': group.group_id}
 
                 subject="Let's get your group on the map!"
                 from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
