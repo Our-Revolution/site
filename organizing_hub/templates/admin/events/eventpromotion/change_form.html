@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify bsd_tags %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -33,11 +33,12 @@
         <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
     </li>
 
-    {% if 'nominations.export_pdf_application' in perms %}
     <li>
-      <a href="/admin/nominations/application/export/pdf?id={{original.pk}}">{% trans "Export Write-Up" %}</a>
+      <a href="{% bsd_event_url original.event_external_id %}"
+      class="viewsitelink" target="_blank">
+         View Event Page
+      </a>
     </li>
-    {% endif %}
 
     {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
     {% endblock %}

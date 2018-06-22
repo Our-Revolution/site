@@ -22,6 +22,13 @@ duration_type_minutes = 1
 duration_type_hours = 2
 
 
+def get_bsd_event_url(event_id_obfuscated):
+    return "%s/page/event/detail/%s" % (
+        BSD_BASE_URL,
+        event_id_obfuscated
+    )
+
+
 class BSDProfile(models.Model):
     # 0 should only be used for legacy records that predate this field
     cons_id_default = '0'
@@ -195,10 +202,7 @@ class BSDEvent(models.Model):
     status = property(_get_status)
 
     def _get_absolute_url(self):
-        return "%s/page/event/detail/%s" % (
-            BSD_BASE_URL,
-            self.event_id_obfuscated
-        )
+        return get_bsd_event_url(self.event_id_obfuscated)
     absolute_url = property(_get_absolute_url)
 
     # Custom logic to create event via BSD api

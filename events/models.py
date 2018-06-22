@@ -51,3 +51,8 @@ class EventPromotion(models.Model):
         return str(self.id) + " | Event: " + self.event_external_id + " | User: " + self.user_external_id + (
             " | " + self.event_name if self.event_name else ""
         )
+
+    class Meta:
+        ordering = [
+            "-date_submitted",
+        ]
