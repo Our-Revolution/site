@@ -55,11 +55,11 @@ class BSDEventManager(models.Manager):
             )
             venue_state_or_territory = data["venue_state_cd"]
 
-        """Set duration to a non-negative integer if possible"""
+        """Set duration to a positive integer if possible"""
         """TODO: support all day events (-1)?"""
         if duration != '':
             duration_int = int(duration)
-            duration_count = duration_int if duration_int >= 0 else None
+            duration_count = duration_int if duration_int > 0 else None
         else:
             duration_count = None
 
@@ -260,7 +260,7 @@ class BSDEvent(models.Model):
 
         return
 
-    # Duration in minutes
+    """Duration in minutes if available, otherwise None"""
     def duration_minutes(self):
         if self.duration_count is None:
             return None
@@ -271,18 +271,19 @@ class BSDEvent(models.Model):
             return self.duration_count
 
     def get_days_param(self):
-        start_datetime_system = str(datetime.datetime.combine(
-            self.start_day,
-            self.start_time
-        ))
         duration = self.duration_minutes()
-        days = [{
-            'start_datetime_system': start_datetime_system,
-            'duration': self.duration_minutes()
-        }] if duration is not None else [{
-            'start_datetime_system': start_datetime_system
-        }]
-        return days
+        if duration is not None:
+            start_datetime_system = str(datetime.datetime.combine(
+                self.start_day,
+                self.start_time
+            ))
+            days = [{
+                'start_datetime_system': start_datetime_system,
+                'duration': self.duration_minutes()
+            }]
+            return days
+        else:
+            return []
 
     def save(self, *args, **kwargs):
 
