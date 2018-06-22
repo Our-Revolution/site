@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
-from bsd.models import BSDEvent, BSDProfile
+from bsd.models import BSDEvent, BSDProfile, duration_type_hours
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
 from local_groups.models import (
@@ -188,8 +188,14 @@ class EventCreateView(
             return redirect('organizing-hub-event-create')
 
     def get_initial(self, *args, **kwargs):
+        """Set default duration to 1 hour"""
+        duration_count = 1
+        duration_type = duration_type_hours
+
         initial = {
             'capacity': 0,
+            'duration_count': duration_count,
+            'duration_type': duration_type,
             'start_day': datetime.date.today() + datetime.timedelta(days=4),
             'start_time': datetime.time(hour=17, minute=0, second=0),
             'host_receive_rsvp_emails': 1,
