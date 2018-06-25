@@ -32,9 +32,36 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
+
+event_promote_admin_message_template = Template("""Hi --
+
+One of your neighbors is hosting an organizing event in your area that you might be interested in -- are you able to attend?
+
+Learn more and RSVP here: {{ event_url }}
+
+You can read a message from the organizer below.
+
+Thanks!
+
+Our Revolution
+
+-------------------------------------
+
+""")
+event_promote_footer_template = Template("""
+
+----
+Paid for by Our Revolution
+(not the billionaires)
+
+PO BOX 66208 - WASHINGTON, DC 20035
+
+Email is one of the most important tools we have to reach supporters like you, but if you'd like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/
+""")
 EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
+
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
@@ -372,35 +399,12 @@ Thanks!""").render(Context({
 
         """Set message header/footer content"""
         user_message = form.cleaned_data['message']
-        form.instance.message = Template("""Hi --
-
-One of your neighbors is hosting an organizing event in your area that you might be interested in -- are you able to attend?
-
-Learn more and RSVP here: {{ event_url }}
-
-You can read a message from the organizer below.
-
-Thanks!
-
-Our Revolution
-
--------------------------------------
-
-{{ user_message }}
-
-----
-Paid for by Our Revolution
-(not the billionaires)
-
-PO BOX 66208 - WASHINGTON, DC 20035
-
-Email is one of the most important tools we have to reach supporters like you, but if you'd like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/
-"""
-        ).render(Context({
-            'bsd_base_url': BSD_BASE_URL,
-            'event_url': event.absolute_url,
-            'user_message': user_message,
-        }))
+        form.instance.message = event_promote_admin_message_template.render(
+            Context({
+                'event_url': event.absolute_url,
+            })) + user_message + event_promote_footer_template.render(Context({
+                'bsd_base_url': BSD_BASE_URL,
+            }))
 
         # Call save via super form_valid and handle BSD errors
         try:

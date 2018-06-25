@@ -25,3 +25,18 @@ class EventPromotionForm(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': '8'}),
         }
+
+
+class EventPromotionAdminForm(EventPromotionForm):
+    class Meta:
+        field_width = '640px'
+        fields = '__all__'
+        widgets = {
+            'subject': forms.TextInput(attrs={
+                'style': "width: %s" % field_width
+            }),
+            'message': forms.Textarea(attrs={
+                'rows': '20',
+                'style': "width: %s" % field_width
+            }),
+        }
