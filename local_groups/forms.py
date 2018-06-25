@@ -55,7 +55,7 @@ class GisForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         if args:    # If args exist
-            data = args[0]
+            data = args[0].copy()  # Copy to make it mutable
             if data['latitude'] and data['longitude']:    #If lat/lng exist
                 latitude = float(data['latitude'])
                 longitude = float(data['longitude'])
