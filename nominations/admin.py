@@ -587,8 +587,6 @@ class ApplicationAdmin(admin.ModelAdmin):
                 'candidate_last_name',
                 'candidate_city',
                 'candidate_state',
-                'get_general_election',
-                'get_primary_election',
                 'authorized_email'
             )
 
