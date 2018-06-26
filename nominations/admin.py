@@ -12,21 +12,6 @@ from django.http import HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 
 
-class ReadOnlyAdmin(admin.ModelAdmin):
-    readonly_fields = []
-
-    def get_readonly_fields(self, request, obj=None):
-        return list(self.readonly_fields) + \
-               [field.name for field in obj._meta.fields] + \
-               [field.name for field in obj._meta.many_to_many]
-
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
 class ReadOnlyStackedInline(admin.StackedInline):
     extra = 0
     can_delete = False
@@ -35,10 +20,13 @@ class ReadOnlyStackedInline(admin.StackedInline):
     exclude = []
 
     def get_readonly_fields(self, request, obj=None):
-        return list(self.readonly_fields) + \
-               [field.name for field in self.model._meta.fields
-                if field.name not in self.editable_fields and
-                   field.name not in self.exclude]
+        if request.user.has_perm('nominations.admin_application'):
+            return []
+        else:
+            return list(self.readonly_fields) + \
+                   [field.name for field in self.model._meta.fields
+                    if field.name not in self.editable_fields and
+                       field.name not in self.exclude]
 
     def has_add_permission(self, request):
         return False
@@ -49,18 +37,34 @@ class NominationResponseInline(ReadOnlyStackedInline):
 
 
 @admin.register(Nomination)
-class NominationAdmin(ReadOnlyAdmin):
+class NominationAdmin(admin.ModelAdmin):
     inlines = [NominationResponseInline,]
-    # list_display = ['id','candidate_last_name','candidate_first_name','group_name','group_id','candidate_office','candidate_state']
-    # list_display_links = list_display
-    # list_filter = ['group_name','candidate_state']
-    # search_fields = ['group_name','group_id','candidate_first_name','candidate_last_name']
+    readonly_fields = []
 
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Override hook for specifying custom readonly fields.
+        """
+
+        """For user with admin access return minimal list"""
+        if request.user.has_perm('nominations.admin_application'):
+            return ['id']
+        else:
+            return list(self.readonly_fields) + \
+                   [field.name for field in obj._meta.fields] + \
+                   [field.name for field in obj._meta.many_to_many]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Question)
@@ -125,33 +129,37 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         """
         return {}
 
-    inlines = [ResponseInline]
+    def get_readonly_fields(self, request, obj=None):
+        """For user with admin access return minimal list"""
+        if request.user.has_perm('nominations.admin_application'):
+            return ['id']
+        else:
+            """All except election dates"""
+            return (
+                'id',
+                'status',
+                'candidate_first_name',
+                'candidate_last_name',
+                'candidate_bio',
+                'candidate_email',
+                'candidate_phone',
+                'candidate_office',
+                'candidate_district',
+                'candidate_party',
+                'candidate_held_office',
+                'candidate_city',
+                'candidate_state',
+                'candidate_website_url',
+                'candidate_volunteer_url',
+                'candidate_donate_url',
+                'candidate_facebook_url',
+                'candidate_twitter_url',
+                'candidate_instagram_url',
+                'candidate_youtube_url',
+                'completed_by_candidate',
+            )
 
-    # all except general_election_date
-    readonly_fields = (
-        'id',
-        'status',
-        'candidate_first_name',
-        'candidate_last_name',
-        'candidate_bio',
-        'candidate_email',
-        'candidate_phone',
-        'candidate_office',
-        'candidate_district',
-        'candidate_party',
-        'candidate_held_office',
-        'candidate_city',
-        'candidate_state',
-        'primary_election_date',
-        'candidate_website_url',
-        'candidate_volunteer_url',
-        'candidate_donate_url',
-        'candidate_facebook_url',
-        'candidate_twitter_url',
-        'candidate_instagram_url',
-        'candidate_youtube_url',
-        'completed_by_candidate',
-    )
+    inlines = [ResponseInline]
 
 
 class ElectionMonthFilter(admin.SimpleListFilter):
@@ -560,7 +568,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         Override hook for specifying custom readonly fields.
         """
 
-        """For user with admin access return empty list"""
+        """For user with admin access return custom methods only"""
         readonly_methods = (
             'get_general_election',
             'get_primary_election',
