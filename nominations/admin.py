@@ -122,6 +122,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
         'candidate_youtube_url',
         'completed_by_candidate',
     )
+    inlines = [ResponseInline]
 
     def get_model_perms(self, request):
         """
@@ -158,8 +159,6 @@ class QuestionnaireAdmin(admin.ModelAdmin):
                 'candidate_youtube_url',
                 'completed_by_candidate',
             )
-
-    inlines = [ResponseInline]
 
 
 class ElectionMonthFilter(admin.SimpleListFilter):
