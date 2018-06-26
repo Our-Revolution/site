@@ -337,24 +337,6 @@ class ApplicationAdmin(admin.ModelAdmin):
         'candidate_state'
     )
 
-    readonly_fields = (
-        'submitted_dt',
-        'rep_email',
-        'group',
-        'rep_first_name',
-        'rep_last_name',
-        'rep_phone',
-        'candidate_first_name',
-        'candidate_last_name',
-        'candidate_office',
-        'candidate_district',
-        'candidate_city',
-        'candidate_state',
-        'get_general_election',
-        'get_primary_election',
-        'authorized_email'
-    )
-
     # list fields for csv export
     export_fields = (
         'id',
@@ -572,6 +554,37 @@ class ApplicationAdmin(admin.ModelAdmin):
             del actions['delete_selected']
 
             return actions
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Override hook for specifying custom readonly fields.
+        """
+
+        """For user with admin access return empty list"""
+        readonly_methods = (
+            'get_general_election',
+            'get_primary_election',
+        )
+        if request.user.has_perm('nominations.admin_application'):
+            return readonly_methods
+        else:
+            return readonly_methods + (
+                'submitted_dt',
+                'rep_email',
+                'group',
+                'rep_first_name',
+                'rep_last_name',
+                'rep_phone',
+                'candidate_first_name',
+                'candidate_last_name',
+                'candidate_office',
+                'candidate_district',
+                'candidate_city',
+                'candidate_state',
+                'get_general_election',
+                'get_primary_election',
+                'authorized_email'
+            )
 
     def has_delete_permission(self, request, obj=None):
         #Disable delete
