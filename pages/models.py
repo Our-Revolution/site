@@ -772,12 +772,12 @@ class CandidateEndorsementPage(Page):
             return None
     result = property(_get_result)
 
-    """Check if this is election has a result pending"""
+    """Check if there is a pending election result"""
     def _has_pending_result(self):
         """Set a cutoff date for 1 day after election date"""
         days_offset = 1
-        today = datetime.date.today()
         cutoff_date = self.election_date + datetime.timedelta(days=days_offset)
+        today = datetime.date.today()
         return today > cutoff_date
     has_pending_result = property(_has_pending_result)
 
