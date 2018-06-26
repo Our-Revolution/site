@@ -451,6 +451,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'get_primary_election',
                     'questionnaire',
                 ),
+                'description': "To edit election dates, visit the questionnaire."
             }),
             ('Volunteer Research', {
                 'fields': (
@@ -584,8 +585,6 @@ class ApplicationAdmin(admin.ModelAdmin):
                 'rep_phone',
                 'candidate_first_name',
                 'candidate_last_name',
-                'candidate_office',
-                'candidate_district',
                 'candidate_city',
                 'candidate_state',
                 'get_general_election',
