@@ -31,6 +31,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
 from random import randint
 import csv
+import datetime
 import json
 import logging
 
@@ -771,6 +772,15 @@ class CandidateEndorsementPage(Page):
             return None
     result = property(_get_result)
 
+    """Check if this is election has a result pending"""
+    def _has_pending_result(self):
+        """Set a cutoff date for 1 day after election date"""
+        days_offset = 1
+        today = datetime.date.today()
+        cutoff_date = self.election_date + datetime.timedelta(days=days_offset)
+        return today > cutoff_date
+    has_pending_result = property(_has_pending_result)
+
 
 '''
 Purge candidate endorsement index & results pages when endorsement changes
@@ -828,8 +838,7 @@ class CandidateEndorsementIndexPage(Page):
         )
 
         # Filter out legacy pages and past elections
-        context['candidates'] = self.get_children().live(
-        ).filter(
+        candidates = self.get_children().live().filter(
             candidateendorsementpage__candidate__isnull=True,
             candidateendorsementpage__general_election_result__isnull=True,
         ).exclude(
@@ -838,9 +847,14 @@ class CandidateEndorsementIndexPage(Page):
             'candidateendorsementpage',
         ).order_by(
             'candidateendorsementpage__state_or_territory',
-            'candidateendorsementpage__office',
             'candidateendorsementpage__title',
         )
+        candidates_sorted = sorted(
+            candidates,
+            key=lambda x: x.candidateendorsementpage.election_date,
+        )
+        context['candidates'] = candidates_sorted
+
         return context
 
     promote_panels = Page.promote_panels + [
