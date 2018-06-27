@@ -1,0 +1,47 @@
+{% load pages_tags static wagtailcore_tags wagtailimages_tags %}
+
+<li class="card clearfix">
+
+  <a href="{% pageurl candidateendorsementpage %}">
+
+    {% image candidateendorsementpage.photo original as photo_img %}
+    <div class="card__photo"
+    style="background-image: url('{{ photo_img.url }}')"></div>
+
+    <div class="card__content">
+
+      <span class="card__item name">
+        {{ candidateendorsementpage.title }}
+      </span>
+
+      <span class="card__item bold smaller state">
+        {{ candidateendorsementpage.get_state_or_territory_display }}
+      </span>
+
+      <span class="card__item bottom">
+
+        {% if candidateendorsementpage.election_date %}
+
+        <div class="card__item smaller bold">
+          Election:
+          <span class="date hidden">
+            {{ candidateendorsementpage.election_date|date:"U" }}
+          </span>
+          {{ candidateendorsementpage.election_date }}
+
+          {% if candidateendorsementpage.has_pending_result %}
+          (Pending)
+          {% endif %}
+
+        </div>
+
+        {% endif %}
+
+        {{ candidateendorsementpage.office }}
+
+      </span>
+    </div>
+
+  </a>
+
+</li>
