@@ -650,6 +650,10 @@ class Application(models.Model):
                 "export_pdf_application",
                 "Can export to pdf"
             ),
+            (
+                "admin_application",
+                "Can admin override application data"
+            ),
         )
         verbose_name = 'Candidate Application'
 
