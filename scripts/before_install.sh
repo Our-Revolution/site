@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Handle errors http://redsymbol.net/articles/unofficial-bash-strict-mode/
-# set -euo pipefail
-# IFS=$'\n\t'
+set -euo pipefail
+IFS=$'\n\t'
 
 # Test error - remove after done testing
 grep static lebowski
