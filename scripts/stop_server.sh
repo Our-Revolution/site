@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Handle errors http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -eo pipefail
-IFS=$'\n\t'
+# set -eo pipefail
+# IFS=$'\n\t'
 
 echo "Start script for stopping server"
 cd /home/ubuntu/ourrevolution
