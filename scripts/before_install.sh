@@ -4,9 +4,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Test error - remove after done testing
-grep static lebowski
-
 echo "Start before install script"
 cd /home/ubuntu/ourrevolution
 
