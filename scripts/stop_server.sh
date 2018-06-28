@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Handle errors http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -eo pipefail
 IFS=$'\n\t'
 
 echo "Start script for stopping server"
