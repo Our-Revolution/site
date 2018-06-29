@@ -64,7 +64,7 @@ unicodecsv==0.14.1
 virtualenv==15.0.3
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.2
-wagtail>=1.10,<1.11
+wagtail>=1.11,<1.12
 wcwidth==0.1.7
 webencodings==0.5
 whitenoise==3.2.2
