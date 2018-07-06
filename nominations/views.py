@@ -111,7 +111,7 @@ class ApplicationTypeView(LoginRequiredMixin, TemplateView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class CreateApplicationView(LoginRequiredMixin, CreateView):
+class CreateApplicationView(CreateView):
     form_class = ApplicationForm
     template_name = "application.html"
     success_url = '/groups/nominations/application'
@@ -124,7 +124,7 @@ class CreateApplicationView(LoginRequiredMixin, CreateView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class EditNominationView(LoginRequiredMixin, UpdateView):
+class EditNominationView(UpdateView):
     form_class = NominationForm
     template_name = "nomination.html"
 
@@ -169,7 +169,7 @@ class EditNominationView(LoginRequiredMixin, UpdateView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
+class EditQuestionnaireView(UpdateView):
     form_class = QuestionnaireForm
     template_name = "questionnaire.html"
     success_url = "/groups/nominations/submit"
@@ -216,7 +216,7 @@ class EditQuestionnaireView(LoginRequiredMixin, UpdateView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class DashboardView(LoginRequiredMixin, TemplateView):
+class DashboardView(TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -245,7 +245,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class ApplicationView(LoginRequiredMixin, DetailView):
+class ApplicationView(DetailView):
     template_name = 'application_status.html'
 
     def get_object(self):
@@ -266,7 +266,7 @@ class ApplicationView(LoginRequiredMixin, DetailView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class QuestionnaireIndexView(LoginRequiredMixin, FormView):
+class QuestionnaireIndexView(FormView):
     form_class = CandidateEmailForm
     template_name = 'questionnaire_index.html'
 
@@ -339,7 +339,7 @@ class QuestionnaireIndexView(LoginRequiredMixin, FormView):
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class SubmitView(LoginRequiredMixin, FormView):
+class SubmitView(FormView):
     template_name = 'submit.html'
     form_class = SubmitForm
     success_url = '/groups/nominations/success'
@@ -652,7 +652,7 @@ class CandidateSubmitView(FormView):
 
 # Ballot initiatives
 @method_decorator(verified_email_required, name='dispatch')
-class CreateInitiativeView(LoginRequiredMixin, CreateView):
+class CreateInitiativeView(CreateView):
     form_class = InitiativeApplicationForm
     template_name = "initiatives/application.html"
     success_url = '/groups/nominations/initiatives/success'
