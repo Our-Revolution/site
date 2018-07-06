@@ -329,6 +329,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         if not ORGANIZING_HUB_PROMOTE_ENABLED:
             return False
 
+        """TODO: make a template tag for local group perms?"""
         user = self.request.user
         local_group = get_local_group_for_user(user)
         permission = 'events.add_eventpromotion'
