@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.template import Context, Template
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
@@ -19,6 +20,7 @@ from local_groups.models import (
     LocalGroupAffiliation,
     LocalGroupProfile
 )
+from .decorators import verified_email_required
 from .forms import GroupAdminsForm
 from .mixins import LocalGroupPermissionRequiredMixin
 import datetime
@@ -169,14 +171,10 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             )
 
 
-class EventCreateView(
-    LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
-    CreateView
-):
+@method_decorator(verified_email_required, name='dispatch')
+class EventCreateView(SuccessMessageMixin, CreateView):
     form_class = BSDEventForm
     model = BSDEvent
-    permission_required = 'bsd.add_bsdevent'
     success_message = '''
     Your event was created successfully. Visit Promote Events tool to promote
     your events.
@@ -314,8 +312,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
                     key=lambda x: x.start_day,
                 )
 
-                show_event_promote_link = ORGANIZING_HUB_PROMOTE_ENABLED
-                context['show_event_promote_link'] = show_event_promote_link
+                """Check if we should show event promote link"""
+                context['show_event_promote_link'] = self.show_event_promote()
 
             except AssertionError:
                 messages.error(
@@ -324,6 +322,31 @@ class EventListView(LoginRequiredMixin, TemplateView):
                 )
 
         return context
+
+    def show_event_promote(self):
+
+        """Check feature flag and local group permissions"""
+        if not ORGANIZING_HUB_PROMOTE_ENABLED:
+            return False
+
+        """TODO: make a template tag for local group perms?"""
+        user = self.request.user
+        local_group = get_local_group_for_user(user)
+        permission = 'events.add_eventpromotion'
+
+        if local_group is None:
+            return False
+        elif local_group.status != 'approved':
+            return False
+        elif not hasattr(user, 'localgroupprofile'):
+            return False
+        else:
+            profile = user.localgroupprofile
+            has_permission = profile.has_permission_for_local_group(
+                local_group,
+                permission
+            )
+            return has_permission
 
 
 class EventPromoteView(
@@ -450,15 +473,11 @@ Thanks!""").render(Context({
             raise Http404
 
 
-class EventUpdateView(
-    LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
-    UpdateView
-):
+@method_decorator(verified_email_required, name='dispatch')
+class EventUpdateView(SuccessMessageMixin, UpdateView):
     form_class = BSDEventForm
     model = BSDEvent
     object = None
-    permission_required = 'bsd.change_bsdevent'
     success_message = 'Your event was updated successfully.'
     template_name = "event_update.html"
 
