@@ -31,30 +31,30 @@
       <div class="container">
         <div class="row">
         <ul class="nav-list uppercase" id="main-nav-list">
-          <li><a href="/about" class="{% if "/about" in request.path %}active{% endif %} about" id="about-nav-link">About</a></li>
+          <li><a href="/about" class="{% if "/about" in request_path %}active{% endif %} about" id="about-nav-link">About</a></li>
           {% with link_code="groups" link_text="Local Groups" link_url="/groups/"  %}
           <li>
             <a href="{{ link_url }}" id="{{ link_code }}-nav-link"
-            class="{% if link_url in request.path %}active {% endif %}{{ link_code }}">
+            class="{% if link_url in request_path %}active {% endif %}{{ link_code }}">
             {{ link_text }}
             </a>
           </li>
           {% endwith %}
-          <li><a href="/issues" class="{% if "/issues" in request.path %}active{% endif %} issues" id="issues-nav-link">Issues</a></li>
+          <li><a href="/issues" class="{% if "/issues" in request_path %}active{% endif %} issues" id="issues-nav-link">Issues</a></li>
 
           {% candidates_url as link_url %}
           <li>
             <a href="{{ link_url }}"
-            class="{% if link_url in request.path %}active{% endif %} candidates"
+            class="{% if link_url in request_path %}active{% endif %} candidates"
             id="candidates-nav-link">
             Endorsements
             </a>
           </li>
 
           {% if not shop_nav_enabled %}
-          <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request.path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
+          <li><a href="/ballot-initiatives" class="{% if "/ballot-initiatives" in request_path %}active{% endif %} initiatives" id="initiatives-nav-link">Initiatives</a></li>
           {% endif %}
-          <li><a href="/press" class="{% if "/press" in request.path %}active{% endif %} press">News</a></li>
+          <li><a href="/press" class="{% if "/press" in request_path %}active{% endif %} press">News</a></li>
           {% if shop_nav_enabled %}
           {% comment %} TODO: make nav link tag/template {% endcomment %}
           {% with link_code="shop" link_text="Shop" link_url="https://shop.ourrevolution.com" %}

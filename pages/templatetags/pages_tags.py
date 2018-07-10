@@ -4,6 +4,9 @@ from pages.models import *
 
 register = template.Library()
 
+BASE_URL = settings.BASE_URL
+OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
+
 
 @register.simple_tag
 def add_group_url():
@@ -12,7 +15,7 @@ def add_group_url():
 
 @register.simple_tag
 def base_url():
-    return settings.BASE_URL
+    return BASE_URL
 
 
 @register.simple_tag
@@ -57,17 +60,27 @@ def or_address_zip():
 
 @register.simple_tag(takes_context=True)
 def or_meta_image_url(context):
-    request = context['request']
-    absolute_url = request.build_absolute_uri(settings.OR_META_IMAGE_URL)
+    """If context request is not available use base url"""
+    try:
+        request = context['request']
+        absolute_url = request.build_absolute_uri(OR_META_IMAGE_URL)
+    except KeyError:
+        absolute_url = BASE_URL + OR_META_IMAGE_URL
     return absolute_url
 
 
 # Navigation menu
 @register.inclusion_tag('partials/nav.html', takes_context=True)
 def navigation_menu(context):
+    """If context request is not available use empty string for path"""
+    try:
+        request = context['request']
+        request_path = request.path
+    except KeyError:
+        request_path = ''
     return {
         'shop_nav_enabled': settings.SHOP_NAV_ENABLED,
-        'request': context['request'],
+        'request_path': request_path,
     }
 
 
@@ -75,8 +88,9 @@ def navigation_menu(context):
 @register.inclusion_tag('pages/tags/notification_banner.html', takes_context=True)
 def notification_banner(context):
     return {
-        'notification_banner': NotificationBanner.objects.filter(show=True).first(),
-        'request': context['request'],
+        'notification_banner': NotificationBanner.objects.filter(
+            show=True
+        ).first(),
     }
 
 
