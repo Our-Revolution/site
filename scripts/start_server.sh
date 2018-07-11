@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Handle errors http://redsymbol.net/articles/unofficial-bash-strict-mode/
-# set -eo pipefail
-# IFS=$'\n\t'
+set -eo pipefail
+IFS=$'\n\t'
 
 echo "Start script for starting server"
 cd /home/ubuntu/ourrevolution
 source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
-workon ourrevolution
+workon ourrevolution || true
 
 echo "Start server"
 supervisorctl start gunicorn

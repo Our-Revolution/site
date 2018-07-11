@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Handle errors http://redsymbol.net/articles/unofficial-bash-strict-mode/
-# set -eo pipefail
-# IFS=$'\n\t'
+set -eo pipefail
+IFS=$'\n\t'
 
 echo "Start installing packages"
 cd /home/ubuntu/ourrevolution
 source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
-workon ourrevolution
+workon ourrevolution || true
 
 echo "Update varnish file"
 sudo cp varnish.vcl /etc/varnish/default.vcl
