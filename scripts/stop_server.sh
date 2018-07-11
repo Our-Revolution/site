@@ -7,6 +7,7 @@ IFS=$'\n\t'
 echo "Start script for stopping server"
 cd /home/ubuntu/ourrevolution
 source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
+# TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
 if [ "$DEPLOYMENT_GROUP_NAME" == "Production" ]
