@@ -7,6 +7,7 @@ IFS=$'\n\t'
 echo "Start installing packages"
 cd /home/ubuntu/ourrevolution
 source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
+# TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
 echo "Update varnish file"
