@@ -46,10 +46,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-auth0_domain = os.environ['AUTH0_DOMAIN']
-auth0_client_id = os.environ['AUTH0_CLIENT_ID']
-auth0_client_secret = os.environ['AUTH0_CLIENT_SECRET']
-auth0_candidate_callback_url = os.environ['AUTH0_CANDIDATE_CALLBACK_URL']
+auth0_domain = settings.AUTH0_DOMAIN
+auth0_client_id = settings.AUTH0_CLIENT_ID
+auth0_client_secret = settings.AUTH0_CLIENT_SECRET
+auth0_candidate_callback_url = settings.AUTH0_CANDIDATE_CALLBACK_URL
 
 QUESTIONNAIRE_NOT_FOUND_ERROR = """
 We couldn't find that questionnaire. Make sure you're logged in

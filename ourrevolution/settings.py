@@ -16,6 +16,10 @@ import dj_database_url, mimetypes, os, re
 
 mimetypes.add_type('image/svg+xml', 'svg')
 
+AUTH0_CANDIDATE_CALLBACK_URL = os.environ.get('AUTH0_CANDIDATE_CALLBACK_URL', None)
+AUTH0_CLIENT_ID = os.environ.get('AUTH0_CLIENT_ID', None)
+AUTH0_CLIENT_SECRET = os.environ.get('AUTH0_CLIENT_SECRET', None)
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', None)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,7 +84,7 @@ BSD_CREATE_ACCOUNT_URL = os.environ.get(
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', None)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'lebowski')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', '1')))
@@ -96,6 +100,8 @@ ADMINS = [
 ]
 
 CANDIDATES_URL = '/candidates/'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 MANAGERS = ADMINS
 

@@ -23,6 +23,7 @@ from local_groups.models import (
 from .decorators import verified_email_required
 from .forms import GroupAdminsForm
 from .mixins import LocalGroupPermissionRequiredMixin
+from organizing_hub.tasks import lebowski
 import datetime
 import json
 import logging
@@ -590,6 +591,12 @@ class GroupAdminsView(
         return super(GroupAdminsView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
+
+        """test task"""
+        logger.debug('start test')
+        test = lebowski.delay(12, 23)
+        logger.debug('test: ' + str(test))
+
         context = super(GroupAdminsView, self).get_context_data(
             **kwargs
         )
