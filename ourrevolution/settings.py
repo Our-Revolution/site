@@ -128,11 +128,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
     'anymail',
-    'django.contrib.humanize',
+    'django_celery_results',
 
     # Django core
+    'django.contrib.humanize',
     'django.contrib.gis',
     'django.contrib.admin',
     'django.contrib.auth',
