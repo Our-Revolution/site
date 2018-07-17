@@ -595,7 +595,7 @@ class GroupAdminsView(
         """test task"""
         logger.debug('start test')
         # test = lebowski(11, 22)
-        test = lebowski.delay(12, 23)
+        test = lebowski.delay(11, 22)
         logger.debug('test: ' + str(test))
 
         context = super(GroupAdminsView, self).get_context_data(

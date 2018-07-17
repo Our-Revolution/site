@@ -102,6 +102,7 @@ ADMINS = [
 CANDIDATES_URL = '/candidates/'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
 
 MANAGERS = ADMINS
 
@@ -241,6 +242,8 @@ WSGI_APPLICATION = 'ourrevolution.wsgi.application'
 
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+"""Set NAME manually to avoid Celery Results error"""
+DATABASES['default']['NAME'] = 'ourrevolution'
 
 # BSD login urls
 AUTHENTICATION_BACKENDS = (
