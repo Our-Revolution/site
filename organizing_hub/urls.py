@@ -14,7 +14,8 @@ from .views import (
     EventListView,
     EventPromoteView,
     EventUpdateView,
-    GroupAdminsView
+    GroupAdminsView,
+    TaskTestView
 )
 
 urlpatterns = [
@@ -108,6 +109,10 @@ urlpatterns += [
                 GroupManageView.as_view(),
                 name='groups-manage'
             ),
-        ]))
+        ])),
+        url(
+            r'^task-test/',
+            TaskTestView.as_view(),
+        ),
     ]))
 ]

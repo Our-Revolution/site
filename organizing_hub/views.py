@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
+from django.views.generic.base import RedirectView
 from bsd.api import BSD
 from bsd.forms import BSDEventForm
 from bsd.models import BSDEvent, BSDProfile, duration_type_hours
@@ -591,13 +592,6 @@ class GroupAdminsView(
         return super(GroupAdminsView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-
-        """test task"""
-        logger.debug('start test')
-        # test = lebowski(11, 22)
-        test = lebowski.delay(11, 22)
-        logger.debug('test: ' + str(test))
-
         context = super(GroupAdminsView, self).get_context_data(
             **kwargs
         )
@@ -625,3 +619,16 @@ class GroupAdminsView(
             'organizing-hub-group-admins',
             kwargs={'slug': self.kwargs['slug']}
         )
+
+
+"""TODO: remove TaskTestView after done testing"""
+
+
+class TaskTestView(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        """test task"""
+        logger.debug('start test')
+        test = lebowski.delay(11, 22)
+        logger.debug('test: ' + str(test))
+        return settings.ORGANIZING_HUB_DASHBOARD_URL
