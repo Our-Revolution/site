@@ -3,7 +3,7 @@
 {% block content %}
     {% load static humanize %}
 
-    {# add ? to url to avoid UnicodeDecodeError https://ourrevolution.atlassian.net/browse/TECH-1202 #}    
+    {# add ? to url to avoid UnicodeDecodeError https://ourrevolution.atlassian.net/browse/TECH-1202 #}
     <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}?">
 
     <style>
@@ -211,8 +211,16 @@
             {% for party, candidates in app.candidates_by_party %}
             {% for candidate in candidates %}
             <tr>
-              <td>{{ candidate.name }}</td>
-              <td>{{ candidate.get_party_display }}</td>
+              <td>
+                {% if candidate.name %}
+                {{ candidate.name }}
+                {% endif %}
+              </td>
+              <td>
+                {% if candidate.party %}
+                {{ candidate.get_party_display }}
+                {% endif %}
+              </td>
               <td class="value">
                 {% if candidate.fundraising %}
                 ${{ candidate.fundraising|intcomma }}
