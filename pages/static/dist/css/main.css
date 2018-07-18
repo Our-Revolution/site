@@ -8853,7 +8853,7 @@ footer {
     background-position: center; }
   .card-list .card__item {
     display: block;
-    line-height: 1.25em; }
+    line-height: 1.1em; }
     .card-list .card__item.bold {
       font-weight: bolder; }
     .card-list .card__item.smaller {
@@ -8861,13 +8861,14 @@ footer {
       line-height: 12px; }
     .card-list .card__item.bottom {
       position: absolute;
-      left: 10px;
-      bottom: 10px; }
+      bottom: 0px;
+      left: 0px;
+      padding: 0 10px 10px 10px; }
       .card-list .card__item.bottom.large {
-        bottom: 15px;
+        bottom: 5px;
         font-size: 18px;
         font-weight: 700;
-        left: 20px; }
+        left: 10px; }
   .card-list .card__content {
     width: calc(100% - 100px);
     float: right;

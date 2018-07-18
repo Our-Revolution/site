@@ -10,7 +10,7 @@
 
     <div class="card__content">
 
-      <span class="card__item name">
+      <span class="card__item bold name">
         {{ candidateendorsementpage.title }}
       </span>
 
@@ -22,7 +22,7 @@
 
         {% if candidateendorsementpage.election_date %}
 
-        <div class="card__item smaller bold">
+        <div class="card__item bold smaller">
           Election:
           <span class="date hidden">
             {{ candidateendorsementpage.election_date|date:"U" }}
@@ -37,7 +37,9 @@
 
         {% endif %}
 
-        {{ candidateendorsementpage.office }}
+        <div class="card__item smaller">
+          {{ candidateendorsementpage.office }}
+        </div>
 
       </span>
     </div>
