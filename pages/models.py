@@ -1456,7 +1456,7 @@ class CandidateRaceSnippet(Orderable, models.Model):
     ]
 
     def __unicode__(self):
-        return unicode(self.canidate_race)
+        return unicode(self.candidate_race)
 
 
 

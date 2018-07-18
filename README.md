@@ -6,6 +6,7 @@
 2. Postgres — I recommend Homebrew: `brew install postgres` (see [http://brew.sh/](http://brew.sh/)) but [other options are available](https://www.postgresql.org/download/macosx/)
 3. [Node + NPM](https://nodejs.org/en/download/) for building front-end.
 4. [gulp-cli](https://gulpjs.com/) installed globally: `npm install gulp-cli -g`
+5. For features with asynchronous task handling, install [Redis](https://redis.io/) and start server `redis $ src/redis-server`
 
 ## Installation
 Because 'site' is not a descriptive project name ...
@@ -45,6 +46,8 @@ There is a known migration bug as of 2017-09-18.
 
 1. `workon ourrevolution` or `source ~/.virtualenvs/ourrevolution/bin/activate`
 2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
+3. For features with asynchronous task handling, start a [Celery](http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html#starting-the-worker-process) worker `(ourrevolution) $ celery -A ourrevolution worker -l info`
+
 
 If pages don't load correctly you may need to update the `django_site` table:
 ```
