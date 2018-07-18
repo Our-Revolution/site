@@ -10,7 +10,7 @@
 
     <div class="card__content">
 
-      <span class="card__item name">
+      <span class="card__item name bold tight">
         {{ candidateendorsementpage.title }}
       </span>
 
@@ -37,7 +37,9 @@
 
         {% endif %}
 
-        {{ candidateendorsementpage.office }}
+        <div class="card__item smaller">
+          {{ candidateendorsementpage.office }}
+        </div>
 
       </span>
     </div>

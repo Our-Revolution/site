@@ -14,7 +14,7 @@ faded
 
   <div class="card__content">
     <div class="candidate__info">
-      <span class="card__item name wins"
+      <span class="card__item name wins bold tight"
       sort-by="wins">{{ candidate_endorsement_page.title }}</span>
       <span class="card__item bold smaller"><span class="state">{{ candidate_endorsement_page.get_state_or_territory_display }}</span></span>
       <span class="card__item bottom">
@@ -33,7 +33,9 @@ faded
         </div>
         {% endif %}
 
-        {{ candidate_endorsement_page.office }}
+        <div class="card__item smaller">
+          {{ candidate_endorsement_page.office }}
+        </div>
 
       </span>
     </div>
