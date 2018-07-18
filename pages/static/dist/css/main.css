@@ -8853,22 +8853,23 @@ footer {
     background-position: center; }
   .card-list .card__item {
     display: block;
-    line-height: 1.1em; }
+    line-height: 1.25em; }
     .card-list .card__item.bold {
       font-weight: bolder; }
     .card-list .card__item.smaller {
       font-size: 12px;
       line-height: 12px; }
+    .card-list .card__item.tight {
+      line-height: 1.1em; }
     .card-list .card__item.bottom {
       position: absolute;
       bottom: 0px;
       left: 0px;
       padding: 0 10px 10px 10px; }
       .card-list .card__item.bottom.large {
-        bottom: 5px;
         font-size: 18px;
         font-weight: 700;
-        left: 10px; }
+        padding: 0 20px 15px 20px; }
   .card-list .card__content {
     width: calc(100% - 100px);
     float: right;

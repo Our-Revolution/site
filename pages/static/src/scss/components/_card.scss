@@ -117,7 +117,7 @@
 
   .card__item {
     display: block;
-    line-height: 1.1em;
+    line-height: 1.25em;
 
     &.bold {
       font-weight: bolder;
@@ -128,6 +128,10 @@
       line-height: 12px;
     }
 
+    &.tight {
+      line-height: 1.1em;
+    }
+
     &.bottom {
       position: absolute;
       bottom: 0px;
@@ -135,10 +139,9 @@
       padding: 0 10px 10px 10px;
 
       &.large {
-        bottom: 5px;
         font-size: 18px;
         font-weight: 700;
-        left: 10px;
+        padding: 0 20px 15px 20px;
       }
     }
   }
