@@ -711,11 +711,11 @@ class ApplicationCandidate(models.Model):
         elif self.last_name:
             return self.last_name
         else:
-            return ''
+            return None
     name = property(_name)
 
     def __unicode__(self):
-        return str(self.id) + ' ' + self.name
+        return str(self.id) + (' ' + self.name if self.name else '')
 
 
 class InitiativeApplication(models.Model):
