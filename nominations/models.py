@@ -704,11 +704,18 @@ class ApplicationCandidate(models.Model):
     )
 
     def _name(self):
-        return self.first_name + ' ' + self.last_name
+        if self.first_name and self.last_name:
+            return self.first_name + ' ' + self.last_name
+        elif self.first_name:
+            return self.first_name
+        elif self.last_name:
+            return self.last_name
+        else:
+            return None
     name = property(_name)
 
     def __unicode__(self):
-        return self.name
+        return str(self.id) + (' ' + self.name if self.name else '')
 
 
 class InitiativeApplication(models.Model):
