@@ -10,6 +10,14 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
+
+echo "Reindex Celery tasks"
+# TODO: reindex celery tasks
+# supervisorctl restart celeryd
+# ps aux | grep celery.*MainProcess | awk '{print $2}' | xargs kill -TERM
+# ps aux | grep *celery.*MainProcess | awk '{print $2}' | xargs kill -TERM
+
+
 echo "Start server"
 supervisorctl start gunicorn
 
