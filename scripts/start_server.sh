@@ -11,7 +11,6 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution || true
 
 echo "Restart Celery"
-ps aux | grep celery.*MainProcess | awk '{print $2}' | xargs kill -TERM
 supervisorctl restart celeryd
 
 echo "Start server"
