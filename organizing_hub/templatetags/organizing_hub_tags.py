@@ -1,7 +1,7 @@
 from django import template
 from django.conf import settings
+from local_groups.models import get_local_group_for_user
 from organizing_hub.models import OrganizingHubLoginAlert
-from organizing_hub.views import get_local_group_for_user
 
 register = template.Library()
 

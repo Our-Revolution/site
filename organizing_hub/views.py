@@ -17,6 +17,7 @@ from bsd.models import BSDEvent, BSDProfile, duration_type_hours
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
 from local_groups.models import (
+    get_local_group_for_user,
     Group as LocalGroup,
     LocalGroupAffiliation,
     LocalGroupProfile
@@ -125,24 +126,6 @@ def get_event_from_bsd(event_id_obfuscated):
     event = BSDEvent.objects.from_json(event_json)
 
     return event
-
-
-def get_local_group_for_user(user):
-
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-
-        # TODO: support multiple group affiliations?
-        # TODO: ignore groups with empty roles/affiliation?
-        local_group_affiliation = LocalGroupAffiliation.objects.filter(
-            local_group_profile=local_group_profile,
-            local_group__status__exact='approved',
-        ).first()
-        if local_group_affiliation:
-            local_group = local_group_affiliation.local_group
-            return local_group
-
-    return None
 
 
 def is_event_owner(user, event):

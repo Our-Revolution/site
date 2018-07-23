@@ -20,6 +20,24 @@ logger = logging.getLogger(__name__)
 bsdApi = BSD().api
 
 
+def get_local_group_for_user(user):
+
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+
+        # TODO: support multiple group affiliations?
+        # TODO: ignore groups with empty roles/affiliation?
+        local_group_affiliation = LocalGroupAffiliation.objects.filter(
+            local_group_profile=local_group_profile,
+            local_group__status__exact='approved',
+        ).first()
+        if local_group_affiliation:
+            local_group = local_group_affiliation.local_group
+            return local_group
+
+    return None
+
+
 class Group(models.Model):
     name = models.CharField(
         max_length=64,
