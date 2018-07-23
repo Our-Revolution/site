@@ -39,8 +39,8 @@ def group_link(context):
 
 
 # Organizing Hub Navigation menu
-@register.inclusion_tag('partials/group_portal_nav.html', takes_context=True)
-def group_portal_nav(context):
+@register.inclusion_tag('partials/organizing_hub_nav.html', takes_context=True)
+def organizing_hub_nav(context):
 
     group = get_local_group_for_user(context['request'].user)
 
