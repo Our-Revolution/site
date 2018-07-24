@@ -5,13 +5,17 @@
   {% organizing_hub_dashboard_url as link_url %}
   <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
   href="{{ link_url }}">
-    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+    <span class="inline-block mr5">
+      <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+    </span>
     Dashboard
   </a>
 
   <a class="list-group-item {% if organizing_guides_url == request.path %}active{% endif %}"
   href="{{ organizing_guides_url }}">
-    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+    <span class="inline-block mr5">
+      <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+    </span>
     Organizing Guides
   </a>
 
@@ -20,7 +24,9 @@
   {% url 'groups-manage' group.slug as link_url %}
   <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
   href="{{ link_url }}">
-    <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+    <span class="inline-block mr5">
+      <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+    </span>
     Update Group
   </a>
 
@@ -28,7 +34,9 @@
     {% url 'organizing-hub-group-admins' group.slug as link_url %}
     <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
     href="{{ link_url }}">
-      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+      <span class="inline-block mr5">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+      </span>
       Manage Users
     </a>
     {% endif %}
@@ -38,13 +46,17 @@
   {% url 'groups-password-change' as link_url %}
   <a class="list-group-item {% if link_url == request.path %}active{% endif %}"
   href="{{ link_url }}">
-    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    <span class="inline-block mr5">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </span>
     My Account
   </a>
 
   <a class="list-group-item {% if organizing_docs_url == request.path %}active{% endif %}"
   href="{{ organizing_docs_url }}">
-    <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+    <span class="inline-block mr5">
+      <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+    </span>
     Help
   </a>
 
