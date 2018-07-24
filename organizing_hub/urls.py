@@ -61,12 +61,12 @@ urlpatterns += [
             {'next_page': 'groups-login'},
             name='groups-logout'
         ),
+        url(
+            r'^account/',
+            GroupPasswordChangeView.as_view(),
+            name='groups-password-change',
+        ),
         url(r'^password/', include([
-            url(
-                r'^change/',
-                GroupPasswordChangeView.as_view(),
-                name='groups-password-change',
-            ),
             url(r'^reset/', include([
                 url(
                     r'^$',
@@ -100,12 +100,12 @@ urlpatterns += [
         ])),
         url(r'^(?P<slug>[\w-]+)/', include([
             url(
-                r'^admins/',
+                r'^users/',
                 GroupAdminsView.as_view(),
                 name='organizing-hub-group-admins'
             ),
             url(
-                r'^info/',
+                r'^update/',
                 GroupManageView.as_view(),
                 name='groups-manage'
             ),
