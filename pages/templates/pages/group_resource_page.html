@@ -1,6 +1,6 @@
-{% extends "group_portal.html" %}
+{% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 wagtailcore_tags local_groups_tags %}
+{% load bootstrap3 wagtailcore_tags organizing_hub_tags %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
 
     <div class="col-md-3 hidden" id="content-sidebar">
       {% if user.is_authenticated %}
-        {% group_portal_nav %}
+        {% organizing_hub_nav %}
       {% endif %}
 
       <div class="panel panel-default hidden" id="content-body-toc">

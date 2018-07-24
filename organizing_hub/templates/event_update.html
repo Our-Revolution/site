@@ -1,6 +1,6 @@
-{% extends "group_portal.html" %}
+{% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 local_groups_tags organizing_hub_tags %}
+{% load bootstrap3 organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Update Event{% endblock %}
 
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content_heading %}
-{% group_link %}
+Update Event
 {% endblock %}
 
 {% block content %}
@@ -22,9 +22,6 @@
 
         {% events_nav %}
 
-        <h3 class="mb20 mt0">
-          Update Event
-        </h3>
       </div>
   </div>
 </div>
@@ -34,7 +31,7 @@
   <div class="row">
 
       <div class="col-md-3">
-        {% group_portal_nav %}
+        {% organizing_hub_nav %}
       </div>
 
       <div class="col-md-9">

@@ -5838,6 +5838,9 @@ button.close {
 .block {
   display: block; }
 
+.inline-block {
+  display: inline-block; }
+
 .ma0 {
   margin: 0 0 0 0; }
 
@@ -5846,6 +5849,9 @@ button.close {
 
 .mt0 {
   margin-top: 0; }
+
+.mr5 {
+  margin-right: 5px; }
 
 .ma10 {
   margin: 10px; }

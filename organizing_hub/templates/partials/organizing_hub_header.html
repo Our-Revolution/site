@@ -14,10 +14,15 @@
 
               <div class="pull-right uppercase">
 
+                {% if not static_content and request.user.is_authenticated %}
+
+                {% group_link %}
+                | <a href="{% url 'groups-logout' %}">Logout</a>
+
+                {% else %}
+
                 <a href="{% organizing_hub_dashboard_url %}">Organizing Hub</a>
 
-                {% if not static_content and request.user.is_authenticated %}
-                | <a href="{% url 'groups-logout' %}">Logout</a>
                 {% endif %}
 
               </div>
