@@ -259,9 +259,10 @@
 
 
 {% block footer_scripts %}
-  <script src="{% static "dist/js/smooth-scroll.min.js" %}"></script>
   <script>
-    smoothScroll.init();
+    $(document).ready(function() {
+  		var scroll = new SmoothScroll('a[data-scroll]');
+  	});
   </script>
   <script>
   var numPrimaryShares = 0;
