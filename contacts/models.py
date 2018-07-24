@@ -14,7 +14,12 @@ class Contact(models.Model):
         max_length=255,
         null=True,
     )
-    external_id = models.CharField(max_length=128, unique=True)
+    external_id = models.CharField(
+        blank=True,
+        max_length=128,
+        null=True,
+        unique=True,
+    )
     first_name = models.CharField(
         blank=True,
         max_length=255,

@@ -1,1 +1,1 @@
-default_app_config = 'events.apps.ContactsConfig'
+default_app_config = 'contacts.apps.ContactsConfig'

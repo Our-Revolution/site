@@ -115,6 +115,7 @@ first in INSTALLED_APPS has precedence.
 INSTALLED_APPS = [
 
     # OR apps
+    'contacts',
     'endorsements',
     'events',
     'organizing_hub',
