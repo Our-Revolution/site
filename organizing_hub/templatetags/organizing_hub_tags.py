@@ -1,6 +1,6 @@
 from django import template
 from django.conf import settings
-from local_groups.models import get_local_group_for_user
+from local_groups.models import find_local_group_by_user
 from organizing_hub.models import OrganizingHubLoginAlert
 
 register = template.Library()
@@ -30,7 +30,7 @@ def events_nav(context):
 @register.inclusion_tag('partials/group_link.html', takes_context=True)
 def group_link(context):
 
-    group = get_local_group_for_user(context['request'].user)
+    group = find_local_group_by_user(context['request'].user)
 
     return {
         'group': group,
@@ -42,7 +42,7 @@ def group_link(context):
 @register.inclusion_tag('partials/organizing_hub_nav.html', takes_context=True)
 def organizing_hub_nav(context):
 
-    group = get_local_group_for_user(context['request'].user)
+    group = find_local_group_by_user(context['request'].user)
 
     show_admins_link = ORGANIZING_HUB_ADMINS_ENABLED
 

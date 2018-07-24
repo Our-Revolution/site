@@ -17,7 +17,7 @@ from bsd.models import BSDEvent, BSDProfile, duration_type_hours
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
 from local_groups.models import (
-    get_local_group_for_user,
+    find_local_group_by_user,
     Group as LocalGroup,
     LocalGroupAffiliation,
     LocalGroupProfile
@@ -169,7 +169,7 @@ class EventCreateView(SuccessMessageMixin, CreateView):
     template_name = "event_create.html"
 
     def get_local_group(self):
-        return get_local_group_for_user(self.request.user)
+        return find_local_group_by_user(self.request.user)
 
     # Check if user has a valid bsd cons_id
     def can_access(self):
@@ -316,7 +316,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
         """TODO: make a template tag for local group perms?"""
         user = self.request.user
-        local_group = get_local_group_for_user(user)
+        local_group = find_local_group_by_user(user)
         permission = 'events.add_eventpromotion'
 
         if local_group is None:
@@ -386,7 +386,7 @@ Thanks!""").render(Context({
         return initial
 
     def get_local_group(self):
-        return get_local_group_for_user(self.request.user)
+        return find_local_group_by_user(self.request.user)
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -496,7 +496,7 @@ class EventUpdateView(SuccessMessageMixin, UpdateView):
             )
 
     def get_local_group(self):
-        return get_local_group_for_user(self.request.user)
+        return find_local_group_by_user(self.request.user)
 
     def get_object(self):
 
