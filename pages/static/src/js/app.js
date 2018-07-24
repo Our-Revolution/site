@@ -1,6 +1,6 @@
 window.$ = window.jQuery = require('jquery');
 window.Cookies = window.Cookies = require('js-cookie');
-window.smoothScroll = require('smooth-scroll');
+window.SmoothScroll = require('smooth-scroll');
 window.Groups = require('./groups.js');
 
 var bootstrap = require('bootstrap-sass'),

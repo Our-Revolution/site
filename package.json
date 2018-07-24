@@ -27,7 +27,7 @@
     "lodash": "^4.17.4",
     "lodash.clonedeep": "^4.5.0",
     "node-sass": "^4.5.3",
-    "smooth-scroll": "github:cferdinandi/smooth-scroll",
+    "smooth-scroll": "^14.2.1",
     "update": "^0.7.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",

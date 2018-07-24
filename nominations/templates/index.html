@@ -114,6 +114,10 @@
   </div>
 </div>
 
-<script>smoothScroll.init()</script>
+<script>
+  $(document).ready(function() {
+    var scroll = new SmoothScroll('a[data-scroll]');
+  });
+</script>
 
 {% endblock %}
