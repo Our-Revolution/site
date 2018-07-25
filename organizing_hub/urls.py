@@ -3,11 +3,9 @@ from django.contrib.auth import views as auth_views
 from local_groups.forms import GroupLoginForm, GroupPasswordResetRequestForm
 from local_groups.views import (
     GroupManageView,
-    GroupPasswordChangeView,
-    GroupPasswordResetView,
     SlackInviteView,
     VerifyEmailRequestView,
-    VerifyEmailConfirmView
+    VerifyEmailConfirmView,
 )
 from .views import (
     EventCreateView,
@@ -15,7 +13,9 @@ from .views import (
     EventPromoteView,
     EventUpdateView,
     GroupAdminsView,
-    TaskTestView
+    GroupPasswordChangeView,
+    GroupPasswordResetView,
+    TaskTestView,
 )
 
 urlpatterns = [
@@ -61,11 +61,13 @@ urlpatterns += [
             {'next_page': 'groups-login'},
             name='groups-logout'
         ),
-        url(
-            r'^account/',
-            GroupPasswordChangeView.as_view(),
-            name='groups-password-change',
-        ),
+        url(r'^account/', include([
+            url(
+                r'^$',
+                GroupPasswordChangeView.as_view(),
+                name='groups-password-change',
+            ),
+        ])),
         url(r'^password/', include([
             url(r'^reset/', include([
                 url(
