@@ -207,7 +207,7 @@ class AccountCreateView(SuccessMessageMixin, FormView):
                 fields are filled with valid data and try again.
                 '''
             )
-            return redirect('groups-password-change')
+            return redirect('organizing-hub-account-create')
 
         return super(AccountCreateView, self).form_valid(form)
 
