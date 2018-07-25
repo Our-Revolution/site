@@ -8,6 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 class Contact(models.Model):
+    """
+    Contact Model
+
+    This is meant to be a basic flexible contact model with lots of optional
+    fields for use with CRM-like features
+    """
 
     email_address = models.EmailField(
         blank=True,
@@ -30,8 +36,8 @@ class Contact(models.Model):
         max_length=255,
         null=True,
     )
-    point = PointField(blank=True, null=True)
     phone_number = PhoneNumberField(blank=True, null=True)
+    point = PointField(blank=True, null=True)
 
     def _name(self):
         if self.first_name and self.last_name:
