@@ -1,6 +1,12 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+new_password_max_length = 100
+new_password_min_length = 8
+new_password_help_text = '''
+For strong password use at least 15 characters and multiple character types.
+'''
+
 
 class GroupAdminsForm(forms.Form):
     """
@@ -20,15 +26,10 @@ class PasswordResetForm(forms.Form):
         'password_mismatch': _("The two password fields didn't match."),
     }
     field_order = ['new_password1', 'new_password2']
-    new_password_max_length = 100
-    new_password_min_length = 8
 
     new_password1 = forms.CharField(
         label=_("New password"),
-        help_text='''
-        For strong password use at least 15 characters and multiple character
-        types.
-        ''',
+        help_text=new_password_help_text,
         max_length=new_password_max_length,
         min_length=new_password_min_length,
         widget=forms.PasswordInput,
@@ -58,6 +59,21 @@ class AccountCreateForm(PasswordResetForm):
     email_address = forms.EmailField(max_length=255)
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
+    new_password1 = forms.CharField(
+        label=_("Password"),
+        help_text=new_password_help_text,
+        max_length=new_password_max_length,
+        min_length=new_password_min_length,
+        widget=forms.PasswordInput,
+        strip=False,
+    )
+    new_password2 = forms.CharField(
+        label=_("Confirm password"),
+        max_length=new_password_max_length,
+        min_length=new_password_min_length,
+        strip=False,
+        widget=forms.PasswordInput,
+    )
     postal_code = forms.CharField(max_length=12)
 
 

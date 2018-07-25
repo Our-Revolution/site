@@ -36,22 +36,39 @@
       class="form form-uppercase">
 
           {% csrf_token %}
+          <div class="row">
 
-          {% bootstrap_field form.first_name %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.first_name placeholder="" %}
+            </div>
 
-          {% bootstrap_field form.last_name %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.last_name placeholder="" %}
+            </div>
 
-          {% bootstrap_field form.email_address placeholder="you@example.com" %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.email_address placeholder="" %}
+            </div>
 
-          {% bootstrap_field form.postal_code %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.postal_code placeholder="" %}
+            </div>
 
-          {% bootstrap_field form.new_password1 placeholder="" %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.new_password1 placeholder="" %}
+            </div>
 
-          {% bootstrap_field form.new_password2 placeholder="" %}
+            <div class="col-xs-12">
+              {% bootstrap_field form.new_password2 placeholder="" %}
+            </div>
 
-          {% buttons %}
-          {% bootstrap_button "Create Account" button_type="submit" button_class="btn-primary btn-block uppercase" %}
-          {% endbuttons %}
+            <div class="col-xs-12">
+              {% buttons %}
+              {% bootstrap_button "Create Account" button_type="submit" button_class="btn-primary btn-block uppercase" %}
+              {% endbuttons %}
+            </div>
+
+          </div>
 
         </form>
       </div>
