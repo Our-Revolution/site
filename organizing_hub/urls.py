@@ -8,6 +8,7 @@ from local_groups.views import (
     VerifyEmailConfirmView,
 )
 from .views import (
+    AccountCreateView,
     EventCreateView,
     EventListView,
     EventPromoteView,
@@ -66,6 +67,11 @@ urlpatterns += [
                 r'^$',
                 PasswordChangeView.as_view(),
                 name='groups-password-change',
+            ),
+            url(
+                r'^create/',
+                AccountCreateView.as_view(),
+                name='organizing-hub-account-create'
             ),
         ])),
         url(r'^password/', include([

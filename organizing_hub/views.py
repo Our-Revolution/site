@@ -171,16 +171,24 @@ class AccountCreateView(SuccessMessageMixin, FormView):
     form_class = AccountCreateForm
     # success_message = "Your password has been updated successfully."
     # success_url = ORGANIZING_HUB_DASHBOARD_URL
-    # template_name = "password_change.html"
+    template_name = "account_create.html"
 
     def create_account(self, form):
         """Create account in BSD"""
-        new_password = form.cleaned_data['new_password1']
-        api_result = bsd_api.account_setPassword(
-            new_password
+        email_address = form.cleaned_data['email_address']
+        password = form.cleaned_data['new_password1']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        postal_code = form.cleaned_data['postal_code']
+        api_result = bsd_api.account_createAccount(
+            email_address,
+            password,
+            first_name,
+            last_name,
+            postal_code
         )
         '''
-        Should get 204 response on success_url
+        Should get 204 response on success_url???
 
         https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
         '''
