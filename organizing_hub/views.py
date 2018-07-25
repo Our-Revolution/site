@@ -169,8 +169,8 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
 
 class AccountCreateView(SuccessMessageMixin, FormView):
     form_class = AccountCreateForm
-    # success_message = "Your password has been updated successfully."
-    # success_url = ORGANIZING_HUB_DASHBOARD_URL
+    success_message = "Your account was created successfully."
+    success_url = reverse_lazy('groups-login')
     template_name = "account_create.html"
 
     def create_account(self, form):
@@ -188,11 +188,11 @@ class AccountCreateView(SuccessMessageMixin, FormView):
             postal_code
         )
         '''
-        Should get 204 response on success_url???
+        Should get 200 response on success?
 
-        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+        https://cshift.cp.bsd.net/page/api/doc#-----------------create_account-------------
         '''
-        assert api_result.http_status is 204
+        assert api_result.http_status is 200
 
     def form_valid(self, form):
 
