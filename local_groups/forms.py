@@ -3,7 +3,7 @@ from django.conf import settings
 from .models import Group
 from django.contrib.auth.forms import (
     AuthenticationForm,
-    PasswordResetForm,
+    PasswordResetForm as AuthPasswordResetRequestForm,
     UsernameField,
 )
 from django.contrib.auth.models import User
@@ -177,7 +177,7 @@ class GroupManageForm(forms.ModelForm):
         }
 
 
-class GroupPasswordResetRequestForm(PasswordResetForm):
+class PasswordResetRequestForm(AuthPasswordResetRequestForm):
     email = forms.EmailField(
         label=_("Group Admin Email"),
         max_length=254

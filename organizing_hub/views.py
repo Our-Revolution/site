@@ -29,8 +29,8 @@ from local_groups.models import (
 from .decorators import verified_email_required
 from .forms import (
     GroupAdminsForm,
-    GroupPasswordChangeForm,
-    GroupPasswordResetForm,
+    PasswordChangeForm,
+    PasswordResetForm,
 )
 from .mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.tasks import lebowski
@@ -615,7 +615,7 @@ class GroupAdminsView(
 
 
 # class AccountCreateView(SuccessMessageMixin, FormView):
-#     form_class = GroupPasswordChangeForm
+#     form_class = PasswordChangeForm
 #     success_message = "Your password has been updated successfully."
 #     success_url = ORGANIZING_HUB_DASHBOARD_URL
 #     template_name = "password_change.html"
@@ -685,15 +685,15 @@ class GroupAdminsView(
 #             )
 #             return redirect('groups-password-change')
 #
-#         return super(GroupPasswordChangeView, self).form_valid(form)
+#         return super(PasswordChangeView, self).form_valid(form)
 
 
-class GroupPasswordChangeView(
+class PasswordChangeView(
     LoginRequiredMixin,
     SuccessMessageMixin,
     FormView
 ):
-    form_class = GroupPasswordChangeForm
+    form_class = PasswordChangeForm
     success_message = "Your password has been updated successfully."
     success_url = ORGANIZING_HUB_DASHBOARD_URL
     template_name = "password_change.html"
@@ -763,11 +763,11 @@ class GroupPasswordChangeView(
             )
             return redirect('groups-password-change')
 
-        return super(GroupPasswordChangeView, self).form_valid(form)
+        return super(PasswordChangeView, self).form_valid(form)
 
 
-class GroupPasswordResetView(SuccessMessageMixin, FormView):
-    form_class = GroupPasswordResetForm
+class PasswordResetView(SuccessMessageMixin, FormView):
+    form_class = PasswordResetForm
     success_message = "Your password has been reset successfully."
     success_url = reverse_lazy('groups-login')
     template_name = "registration/password_reset_confirm.html"
@@ -811,7 +811,7 @@ class GroupPasswordResetView(SuccessMessageMixin, FormView):
                 'uidb64': self.kwargs['uidb64'],
             }))
 
-        return super(GroupPasswordResetView, self).form_valid(form)
+        return super(PasswordResetView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
         """Get user if url is valid"""

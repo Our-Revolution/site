@@ -10,7 +10,7 @@ class GroupAdminsForm(forms.Form):
     is_admin = forms.BooleanField(required=False)
 
 
-class GroupPasswordResetForm(forms.Form):
+class PasswordResetForm(forms.Form):
     """
     Custom password reset form for Organizing Hub users
 
@@ -54,7 +54,7 @@ class GroupPasswordResetForm(forms.Form):
         return password2
 
 
-class GroupPasswordChangeForm(GroupPasswordResetForm):
+class PasswordChangeForm(PasswordResetForm):
     """
     Custom password change form for Organizing Hub users
 
@@ -68,7 +68,7 @@ class GroupPasswordChangeForm(GroupPasswordResetForm):
     )
 
 
-class AccountCreateForm(GroupPasswordResetForm):
+class AccountCreateForm(PasswordResetForm):
     email = forms.EmailField(
         label="Group Admin Email",
         max_length=254
