@@ -28,6 +28,7 @@ from local_groups.models import (
 )
 from .decorators import verified_email_required
 from .forms import (
+    AccountCreateForm,
     GroupAdminsForm,
     PasswordChangeForm,
     PasswordResetForm,
@@ -164,6 +165,43 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             local_group_affiliation.local_group_roles.remove(
                 local_group_role_id
             )
+
+
+class AccountCreateView(SuccessMessageMixin, FormView):
+    form_class = AccountCreateForm
+    # success_message = "Your password has been updated successfully."
+    # success_url = ORGANIZING_HUB_DASHBOARD_URL
+    # template_name = "password_change.html"
+
+    def create_account(self, form):
+        """Create account in BSD"""
+        new_password = form.cleaned_data['new_password1']
+        api_result = bsd_api.account_setPassword(
+            new_password
+        )
+        '''
+        Should get 204 response on success_url
+
+        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+        '''
+        assert api_result.http_status is 204
+
+    def form_valid(self, form):
+
+        """Create account"""
+        try:
+            self.create_account(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error creating your account. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        return super(AccountCreateView, self).form_valid(form)
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -612,80 +650,6 @@ class GroupAdminsView(
             'organizing-hub-group-admins',
             kwargs={'slug': self.kwargs['slug']}
         )
-
-
-# class AccountCreateView(SuccessMessageMixin, FormView):
-#     form_class = PasswordChangeForm
-#     success_message = "Your password has been updated successfully."
-#     success_url = ORGANIZING_HUB_DASHBOARD_URL
-#     template_name = "password_change.html"
-#
-#     def check_old_password(self, form):
-#         """Check if old password is valid in BSD"""
-#         username = self.request.user.email
-#         old_password = form.cleaned_data['old_password']
-#         checkCredentialsResult = bsd_api.account_checkCredentials(
-#             username,
-#             old_password
-#         )
-#
-#         '''
-#         Should get 200 response and constituent record
-#
-#         https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
-#         '''
-#         assert checkCredentialsResult.http_status is 200
-#         tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
-#         cons = tree.find('cons')
-#         assert cons is not None
-#         cons_id = cons.get('id')
-#         assert cons_id is not None
-#         assert cons.find('has_account').text == "1"
-#         assert cons.find('is_banned').text == "0"
-#
-#     def set_new_password(self, form):
-#         """Set new password in BSD"""
-#         username = self.request.user.email
-#         new_password = form.cleaned_data['new_password1']
-#         setPasswordResult = bsd_api.account_setPassword(
-#             username,
-#             new_password
-#         )
-#         '''
-#         Should get 204 response on success_url
-#
-#         https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
-#         '''
-#         assert setPasswordResult.http_status is 204
-#
-#     def form_valid(self, form):
-#         """Check old password"""
-#         try:
-#             self.check_old_password(form)
-#         except AssertionError:
-#             messages.error(
-#                 self.request,
-#                 '''
-#                 There was an error validating your old password. Please make
-#                 sure all fields are filled with correct data and try again.
-#                 '''
-#             )
-#             return redirect('groups-password-change')
-#
-#         """Set new password"""
-#         try:
-#             self.set_new_password(form)
-#         except AssertionError:
-#             messages.error(
-#                 self.request,
-#                 '''
-#                 There was an error setting your new password. Please make
-#                 sure all fields are filled with correct data and try again.
-#                 '''
-#             )
-#             return redirect('groups-password-change')
-#
-#         return super(PasswordChangeView, self).form_valid(form)
 
 
 class PasswordChangeView(

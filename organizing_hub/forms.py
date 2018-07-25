@@ -54,6 +54,13 @@ class PasswordResetForm(forms.Form):
         return password2
 
 
+class AccountCreateForm(PasswordResetForm):
+    email_address = forms.EmailField(max_length=255)
+    first_name = forms.CharField(max_length=255)
+    last_name = forms.CharField(max_length=255)
+    postal_code = forms.CharField(max_length=12)
+
+
 class PasswordChangeForm(PasswordResetForm):
     """
     Custom password change form for Organizing Hub users
@@ -65,11 +72,4 @@ class PasswordChangeForm(PasswordResetForm):
     old_password = forms.CharField(
         strip=False,
         widget=forms.PasswordInput(attrs={'autofocus': ''}),
-    )
-
-
-class AccountCreateForm(PasswordResetForm):
-    email = forms.EmailField(
-        label="Group Admin Email",
-        max_length=254
     )
