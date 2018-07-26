@@ -56,9 +56,13 @@ class PasswordResetForm(forms.Form):
 
 
 class AccountCreateForm(PasswordResetForm):
-    email_address = forms.EmailField(max_length=255)
-    first_name = forms.CharField(max_length=255)
-    last_name = forms.CharField(max_length=255)
+    """Max lengths based on bsd api"""
+    email_max_length = 128
+    name_max_length = 128
+    postal_code_max_length = 16
+    email_address = forms.EmailField(max_length=email_max_length)
+    first_name = forms.CharField(max_length=name_max_length)
+    last_name = forms.CharField(max_length=name_max_length)
     new_password1 = forms.CharField(
         label=_("Password"),
         help_text=new_password_help_text,
@@ -74,7 +78,7 @@ class AccountCreateForm(PasswordResetForm):
         strip=False,
         widget=forms.PasswordInput,
     )
-    postal_code = forms.CharField(max_length=12)
+    postal_code = forms.CharField(max_length=postal_code_max_length)
 
 
 class PasswordChangeForm(PasswordResetForm):
