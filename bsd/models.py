@@ -65,7 +65,7 @@ class Account(models.Model):
                 self.password,
                 self.first_name,
                 self.last_name,
-                self.postal_code
+                self.postal_code,
             )
             assert_valid_account(api_result)
         except AssertionError:

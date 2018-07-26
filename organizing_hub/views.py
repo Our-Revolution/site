@@ -175,7 +175,23 @@ class AccountCreateView(SuccessMessageMixin, CreateView):
     form_class = AccountForm
     model = Account
     success_message = "Your account was created successfully."
-    template_name = "account_create.html"
+
+    def form_valid(self, form):
+        """If the form is valid, set password on model."""
+        form.instance.password = form.cleaned_data['new_password1']
+
+        """Handle BSD errors"""
+        try:
+            return super(AccountCreateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error creating your account. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect('organizing-hub-account-create')
 
     def get_success_url(self):
         return reverse_lazy('organizing-hub-login')

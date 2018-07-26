@@ -123,7 +123,7 @@ class PasswordResetForm(forms.Form):
         return password2
 
 
-class AccountForm(PasswordResetForm, forms.ModelForm):
+class AccountForm(forms.ModelForm, PasswordResetForm):
     """Max lengths based on bsd api"""
     new_password1 = forms.CharField(
         label=_("Password"),
@@ -142,6 +142,14 @@ class AccountForm(PasswordResetForm, forms.ModelForm):
     )
 
     class Meta:
+        fields = [
+            'email_address',
+            'first_name',
+            'last_name',
+            'new_password1',
+            'new_password2',
+            'postal_code',
+        ]
         model = Account
 
 
