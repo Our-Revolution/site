@@ -54,12 +54,12 @@ urlpatterns += [
                 'authentication_form': GroupLoginForm,
                 'redirect_authenticated_user': True
             },
-            name='groups-login'
+            name='organizing-hub-login'
         ),
         url(
             r'^logout/',
             auth_views.logout,
-            {'next_page': 'groups-login'},
+            {'next_page': 'organizing-hub-login'},
             name='groups-logout'
         ),
         url(r'^account/', include([

@@ -253,7 +253,7 @@ AUTHENTICATION_BACKENDS = (
 BSD_API_HOST = os.environ.get('BSD_API_HOST')
 BSD_API_ID = os.environ.get('BSD_API_ID')
 BSD_API_SECRET = os.environ.get('BSD_API_SECRET')
-LOGIN_URL = 'groups-login'
+LOGIN_URL = 'organizing-hub-login'
 LOGIN_REDIRECT_URL = ORGANIZING_HUB_DASHBOARD_URL
 
 SHOP_NAV_ENABLED = bool(int(os.environ.get('SHOP_NAV_ENABLED', 0)))

@@ -1,11 +1,79 @@
 from django import forms
+from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
+from bsd.models import Account, BSDEvent
 
 new_password_max_length = 100
 new_password_min_length = 8
 new_password_help_text = '''
 For strong password use at least 15 characters and multiple character types.
 '''
+
+
+class HTML5DateInput(widgets.DateInput):
+    input_type = 'date'
+
+
+class HTML5TimeInput(widgets.TimeInput):
+    input_type = 'time'
+
+
+class EventForm(forms.ModelForm):
+    capacity = forms.IntegerField(
+        help_text="Including guests. Leave 0 for unlimited.",
+        label="Capacity Limit",
+        min_value=0,
+    )
+    """Duration form field should be required and positive"""
+    duration_count = forms.IntegerField(min_value=1)
+    host_receive_rsvp_emails = forms.ChoiceField(
+        choices=(
+            (1, "YES, please email me when new people RSVP (recommended)"),
+            (0, "No thanks")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
+    public_phone = forms.ChoiceField(
+        choices=(
+            (1, '''
+            YES, make my phone number visible to people viewing your event
+            (recommended)
+            '''),
+            (0, "Please keep my number private")
+        ),
+        widget=forms.widgets.RadioSelect
+    )
+
+    class Meta:
+        fields = [
+            'event_type',
+            'capacity',
+            'contact_phone',
+            'host_name',
+            'name',
+            'description',
+            'duration_count',
+            'duration_type',
+            'host_receive_rsvp_emails',
+            'public_phone',
+            'start_day',
+            'start_time',
+            'start_time_zone',
+            'venue_name',
+            'venue_addr1',
+            'venue_addr2',
+            'venue_city',
+            'venue_directions',
+            'venue_state_or_territory',
+            'venue_zip',
+        ]
+        model = BSDEvent
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': '2'}),
+            'start_day': HTML5DateInput(),
+            'start_time': HTML5TimeInput(),
+            'venue_directions': forms.Textarea(attrs={'rows': '2'}),
+        }
 
 
 class GroupAdminsForm(forms.Form):
@@ -55,14 +123,8 @@ class PasswordResetForm(forms.Form):
         return password2
 
 
-class AccountCreateForm(PasswordResetForm):
+class AccountForm(PasswordResetForm, forms.ModelForm):
     """Max lengths based on bsd api"""
-    email_max_length = 128
-    name_max_length = 128
-    postal_code_max_length = 16
-    email_address = forms.EmailField(max_length=email_max_length)
-    first_name = forms.CharField(max_length=name_max_length)
-    last_name = forms.CharField(max_length=name_max_length)
     new_password1 = forms.CharField(
         label=_("Password"),
         help_text=new_password_help_text,
@@ -78,7 +140,9 @@ class AccountCreateForm(PasswordResetForm):
         strip=False,
         widget=forms.PasswordInput,
     )
-    postal_code = forms.CharField(max_length=postal_code_max_length)
+
+    class Meta:
+        model = Account
 
 
 class PasswordChangeForm(PasswordResetForm):

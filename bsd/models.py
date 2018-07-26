@@ -5,16 +5,17 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from localflavor.us.models import USStateField
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
 from .api import BSD
 import datetime
 import logging
 import json
 
-
 logger = logging.getLogger(__name__)
 
 """Get BSD api"""
-bsdApi = BSD().api
+bsd_api = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
 
@@ -22,11 +23,58 @@ duration_type_minutes = 1
 duration_type_hours = 2
 
 
+def assert_valid_account(api_result):
+    """
+    Assert that api result from BSD has 200 response and contains a constituent
+    with valid account
+    """
+    assert api_result.http_status is 200
+    tree = ElementTree().parse(StringIO(api_result.body))
+    cons = tree.find('cons')
+    assert cons is not None
+    cons_id = cons.get('id')
+    assert cons_id is not None
+    assert cons.find('has_account').text == "1"
+    assert cons.find('is_banned').text == "0"
+
+
 def get_bsd_event_url(event_id_obfuscated):
     return "%s/page/event/detail/%s" % (
         BSD_BASE_URL,
         event_id_obfuscated
     )
+
+
+class Account(models.Model):
+    """BSD User Account"""
+    email_max_length = 128
+    name_max_length = 128
+    password_max_length = 100
+    postal_code_max_length = 16
+    email_address = models.EmailField(max_length=email_max_length)
+    first_name = models.CharField(max_length=name_max_length)
+    last_name = models.CharField(max_length=name_max_length)
+    password = models.CharField(max_length=password_max_length)
+    postal_code = models.CharField(max_length=postal_code_max_length)
+
+    def save(self, *args, **kwargs):
+        try:
+            """Create account in BSD"""
+            api_result = bsd_api.account_createAccount(
+                self.email_address,
+                self.password,
+                self.first_name,
+                self.last_name,
+                self.postal_code
+            )
+            assert_valid_account(api_result)
+        except AssertionError:
+            raise ValidationError('''
+                Account creation failed, please check data and try again.
+            ''')
+
+    class Meta:
+        managed = False
 
 
 class BSDProfile(models.Model):
@@ -221,7 +269,7 @@ class BSDEvent(models.Model):
         '''
         api_call = '/event/create_event'
         api_params = {}
-        request_type = bsdApi.POST
+        request_type = bsd_api.POST
         query = {
             'attendee_visibility': attendee_visibility,
             'capacity': self.capacity,
@@ -249,7 +297,7 @@ class BSDEvent(models.Model):
             'values': json.dumps(query)
         }
 
-        apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
+        apiResult = bsd_api.doRequest(api_call, api_params, request_type, body)
 
         try:
             # Parse and validate response
@@ -303,7 +351,7 @@ class BSDEvent(models.Model):
 
         api_call = '/event/update_event'
         api_params = {}
-        request_type = bsdApi.POST
+        request_type = bsd_api.POST
         query = {
             'capacity': self.capacity,
             'contact_phone': self.contact_phone,
@@ -330,7 +378,7 @@ class BSDEvent(models.Model):
             'values': json.dumps(query)
         }
 
-        apiResult = bsdApi.doRequest(api_call, api_params, request_type, body)
+        apiResult = bsd_api.doRequest(api_call, api_params, request_type, body)
 
         try:
             # Parse and validate response

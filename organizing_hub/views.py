@@ -16,8 +16,13 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from django.views.generic.base import RedirectView
 from bsd.api import BSD
-from bsd.forms import BSDEventForm
-from bsd.models import BSDEvent, BSDProfile, duration_type_hours
+from bsd.models import (
+    Account,
+    assert_valid_account,
+    BSDEvent,
+    BSDProfile,
+    duration_type_hours,
+)
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
 from local_groups.models import (
@@ -28,7 +33,8 @@ from local_groups.models import (
 )
 from .decorators import verified_email_required
 from .forms import (
-    AccountCreateForm,
+    AccountForm,
+    EventForm,
     GroupAdminsForm,
     PasswordChangeForm,
     PasswordResetForm,
@@ -38,8 +44,6 @@ from organizing_hub.tasks import lebowski
 import datetime
 import json
 import logging
-from xml.etree.ElementTree import ElementTree
-from StringIO import StringIO
 
 logger = logging.getLogger(__name__)
 
@@ -110,17 +114,6 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
-def assert_valid_account(api_result):
-    """Assert that api result from BSD contains a valid account"""
-    tree = ElementTree().parse(StringIO(api_result.body))
-    cons = tree.find('cons')
-    assert cons is not None
-    cons_id = cons.get('id')
-    assert cons_id is not None
-    assert cons.find('has_account').text == "1"
-    assert cons.find('is_banned').text == "0"
-
-
 def get_event_from_bsd(event_id_obfuscated):
 
     '''
@@ -178,55 +171,19 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             )
 
 
-class AccountCreateView(SuccessMessageMixin, FormView):
-    form_class = AccountCreateForm
+class AccountCreateView(SuccessMessageMixin, CreateView):
+    form_class = AccountForm
+    model = Account
     success_message = "Your account was created successfully."
-    success_url = reverse_lazy('groups-login')
     template_name = "account_create.html"
 
-    def create_account(self, form):
-        """Create account in BSD"""
-        email_address = form.cleaned_data['email_address']
-        password = form.cleaned_data['new_password1']
-        first_name = form.cleaned_data['first_name']
-        last_name = form.cleaned_data['last_name']
-        postal_code = form.cleaned_data['postal_code']
-        api_result = bsd_api.account_createAccount(
-            email_address,
-            password,
-            first_name,
-            last_name,
-            postal_code
-        )
-        '''
-        Should get 200 response and constituent record
-
-        https://cshift.cp.bsd.net/page/api/doc#-----------------create_account-------------
-        '''
-        assert api_result.http_status is 200
-        assert_valid_account(api_result)
-
-    def form_valid(self, form):
-
-        """Create account"""
-        try:
-            self.create_account(form)
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error creating your account. Please make sure all
-                fields are filled with valid data and try again.
-                '''
-            )
-            return redirect('organizing-hub-account-create')
-
-        return super(AccountCreateView, self).form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-login')
 
 
 @method_decorator(verified_email_required, name='dispatch')
 class EventCreateView(SuccessMessageMixin, CreateView):
-    form_class = BSDEventForm
+    form_class = EventForm
     model = BSDEvent
     success_message = '''
     Your event was created successfully. Visit Promote Events tool to promote
@@ -528,7 +485,7 @@ Thanks!""").render(Context({
 
 @method_decorator(verified_email_required, name='dispatch')
 class EventUpdateView(SuccessMessageMixin, UpdateView):
-    form_class = BSDEventForm
+    form_class = EventForm
     model = BSDEvent
     object = None
     success_message = 'Your event was updated successfully.'
@@ -690,13 +647,6 @@ class PasswordChangeView(
             username,
             old_password
         )
-
-        '''
-        Should get 200 response and constituent record
-
-        https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
-        '''
-        assert checkCredentialsResult.http_status is 200
         assert_valid_account(checkCredentialsResult)
 
     def set_new_password(self, form):
@@ -747,7 +697,7 @@ class PasswordChangeView(
 class PasswordResetView(SuccessMessageMixin, FormView):
     form_class = PasswordResetForm
     success_message = "Your password has been reset successfully."
-    success_url = reverse_lazy('groups-login')
+    success_url = reverse_lazy('organizing-hub-login')
     template_name = "registration/password_reset_confirm.html"
 
     def form_invalid(self, form, user):
