@@ -68,7 +68,7 @@ class AccountCreateForm(PasswordResetForm):
         strip=False,
     )
     new_password2 = forms.CharField(
-        label=_("Confirm password"),
+        label=_("Password confirmation"),
         max_length=new_password_max_length,
         min_length=new_password_min_length,
         strip=False,
