@@ -130,6 +130,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'anymail',
+    'django_bootstrap_breadcrumbs',
     'django_celery_results',
 
     # Django core
