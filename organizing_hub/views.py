@@ -110,6 +110,17 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
     local_group_affiliation.local_group_roles.add(local_group_role_id)
 
 
+def assert_valid_account(api_result):
+    """Assert that api result from BSD contains a valid account"""
+    tree = ElementTree().parse(StringIO(api_result.body))
+    cons = tree.find('cons')
+    assert cons is not None
+    cons_id = cons.get('id')
+    assert cons_id is not None
+    assert cons.find('has_account').text == "1"
+    assert cons.find('is_banned').text == "0"
+
+
 def get_event_from_bsd(event_id_obfuscated):
 
     '''
@@ -188,11 +199,12 @@ class AccountCreateView(SuccessMessageMixin, FormView):
             postal_code
         )
         '''
-        Should get 200 response on success?
+        Should get 200 response and constituent record
 
         https://cshift.cp.bsd.net/page/api/doc#-----------------create_account-------------
         '''
         assert api_result.http_status is 200
+        assert_valid_account(api_result)
 
     def form_valid(self, form):
 
@@ -685,13 +697,7 @@ class PasswordChangeView(
         https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
         '''
         assert checkCredentialsResult.http_status is 200
-        tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
-        cons = tree.find('cons')
-        assert cons is not None
-        cons_id = cons.get('id')
-        assert cons_id is not None
-        assert cons.find('has_account').text == "1"
-        assert cons.find('is_banned').text == "0"
+        assert_valid_account(checkCredentialsResult)
 
     def set_new_password(self, form):
         """Set new password in BSD"""
