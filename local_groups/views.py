@@ -1,35 +1,19 @@
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.views import ConfirmEmailView, EmailView
-from django.conf import settings
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
-from django.utils.encoding import force_text
-from django.utils.http import urlsafe_base64_decode
 from django.views.generic import FormView, UpdateView
-from StringIO import StringIO
-from xml.etree.ElementTree import ElementTree
-from bsd.api import BSD
-from .forms import (
-    GroupManageForm,
-    GroupPasswordChangeForm,
-    GroupPasswordResetForm,
-    SlackInviteForm,
-)
+from .forms import GroupManageForm, SlackInviteForm
 from .models import Group
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import os
 import requests
 import logging
-
-# Get bsd api
-bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
@@ -52,194 +36,6 @@ class GroupManageView(
     # Redirect to same page on success
     def get_success_url(self):
         return reverse_lazy('groups-manage', kwargs={'slug': self.object.slug})
-
-
-class GroupPasswordChangeView(
-    LoginRequiredMixin,
-    SuccessMessageMixin,
-    FormView
-):
-    form_class = GroupPasswordChangeForm
-    success_message = "Your password has been updated successfully."
-    success_url = settings.ORGANIZING_HUB_DASHBOARD_URL
-    template_name = "password_change.html"
-
-    def check_old_password(self, form):
-        """Check if old password is valid in BSD"""
-        username = self.request.user.email
-        old_password = form.cleaned_data['old_password']
-        checkCredentialsResult = bsdApi.account_checkCredentials(
-            username,
-            old_password
-        )
-
-        '''
-        Should get 200 response and constituent record
-
-        https://cshift.cp.bsd.net/page/api/doc#---------------------check_credentials-----------------
-        '''
-        assert checkCredentialsResult.http_status is 200
-        tree = ElementTree().parse(StringIO(checkCredentialsResult.body))
-        cons = tree.find('cons')
-        assert cons is not None
-        cons_id = cons.get('id')
-        assert cons_id is not None
-        assert cons.find('has_account').text == "1"
-        assert cons.find('is_banned').text == "0"
-
-    def set_new_password(self, form):
-        """Set new password in BSD"""
-        username = self.request.user.email
-        new_password = form.cleaned_data['new_password1']
-        setPasswordResult = bsdApi.account_setPassword(
-            username,
-            new_password
-        )
-        '''
-        Should get 204 response on success_url
-
-        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
-        '''
-        assert setPasswordResult.http_status is 204
-
-    def form_valid(self, form):
-        """Check old password"""
-        try:
-            self.check_old_password(form)
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error validating your old password. Please make
-                sure all fields are filled with correct data and try again.
-                '''
-            )
-            return redirect('groups-password-change')
-
-        """Set new password"""
-        try:
-            self.set_new_password(form)
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error setting your new password. Please make
-                sure all fields are filled with correct data and try again.
-                '''
-            )
-            return redirect('groups-password-change')
-
-        return super(GroupPasswordChangeView, self).form_valid(form)
-
-
-class GroupPasswordResetView(SuccessMessageMixin, FormView):
-    form_class = GroupPasswordResetForm
-    success_message = "Your password has been reset successfully."
-    success_url = reverse_lazy('groups-login')
-    template_name = "registration/password_reset_confirm.html"
-
-    def form_invalid(self, form, user):
-        """
-        If the form is invalid, re-render the context data with the
-        data-filled form and errors.
-        """
-        return self.render_to_response(self.get_context_data(
-            form=form,
-            email=user.email
-        ))
-
-    def form_valid(self, form, user):
-        try:
-            """Set new password in BSD"""
-            username = user.email
-            new_password = form.cleaned_data['new_password1']
-            setPasswordResult = bsdApi.account_setPassword(
-                username,
-                new_password
-            )
-            '''
-            Should get 204 response on success_url
-
-            https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
-            '''
-            assert setPasswordResult.http_status is 204
-
-        except AssertionError:
-            messages.error(
-                self.request,
-                '''
-                There was an error resetting your password. Please make
-                sure all fields are filled with correct data and try again.
-                '''
-            )
-            return redirect(reverse_lazy('password_reset_confirm', kwargs={
-                'token': self.kwargs['token'],
-                'uidb64': self.kwargs['uidb64'],
-            }))
-
-        return super(GroupPasswordResetView, self).form_valid(form)
-
-    def get(self, request, *args, **kwargs):
-        """Get user if url is valid"""
-        user = self.get_user_from_url(request)
-        if user:
-            return self.render_to_response(self.get_context_data(
-                email=user.email
-            ))
-        else:
-            return self.redirect_user()
-
-    """
-    Verify that the url is valid and return user.
-
-    Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/views.py#L236
-    """
-    def get_user_from_url(self, request, *args, **kwargs):
-        uidb64 = self.kwargs['uidb64']
-        token = self.kwargs['token']
-
-        """Check the hash in password reset link."""
-        UserModel = get_user_model()
-        assert uidb64 is not None and token is not None  # checked by URLconf
-
-        try:
-            # urlsafe_base64_decode() decodes to bytestring on Python 3
-            uid = force_text(urlsafe_base64_decode(uidb64))
-            user = UserModel._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
-            user = None
-
-        validlink = user is not None and default_token_generator.check_token(
-            user,
-            token
-        )
-
-        if validlink:
-            return user
-        else:
-            return None
-
-    def post(self, request, *args, **kwargs):
-        """Get user if url is valid"""
-        user = self.get_user_from_url(request)
-        if user:
-            form = self.get_form()
-            if form.is_valid():
-                return self.form_valid(form, user)
-            else:
-                return self.form_invalid(form, user)
-        else:
-            return self.redirect_user()
-
-    def redirect_user(self):
-        messages.error(
-            self.request,
-            '''
-            The password reset link was invalid, possibly because it has
-            already been used.  Please request a new password reset.
-            '''
-        )
-        return redirect('password_reset')
 
 
 class SlackInviteView(FormView):

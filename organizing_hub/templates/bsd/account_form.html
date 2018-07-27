@@ -1,0 +1,81 @@
+{% extends "organizing_hub_layout.html" %}
+
+{% load bootstrap3 organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Create Account{% endblock %}
+
+{% block nav %}
+    {% with center_header=True %}
+        {{ block.super }}
+    {% endwith%}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">Organizing Hub</span>
+{% endblock %}
+
+{% block content_heading %}Create Account{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row pt4 pb4">
+
+    <div class="col-md-6 col-md-offset-3">
+
+      {% bootstrap_messages %}
+
+      <p class="fs18">
+        Fill out the form below to create your Our Revolution account.
+      </p>
+
+      <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
+
+      <form action="{{ request.get_full_path }}" method="post"
+      class="form form-uppercase">
+
+          {% csrf_token %}
+
+          <div class="row">
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.first_name placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.last_name placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.email_address placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.postal_code placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.new_password1 placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.new_password2 placeholder="" %}
+            </div>
+
+            <div class="col-xs-12">
+              {% buttons %}
+              {% bootstrap_button "Create Account" button_type="submit" button_class="btn-primary btn-block uppercase" %}
+              {% endbuttons %}
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

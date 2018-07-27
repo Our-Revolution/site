@@ -1,21 +1,22 @@
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from local_groups.forms import GroupLoginForm, GroupPasswordResetRequestForm
+from local_groups.forms import GroupLoginForm, PasswordResetRequestForm
 from local_groups.views import (
     GroupManageView,
-    GroupPasswordChangeView,
-    GroupPasswordResetView,
     SlackInviteView,
     VerifyEmailRequestView,
-    VerifyEmailConfirmView
+    VerifyEmailConfirmView,
 )
 from .views import (
+    AccountCreateView,
     EventCreateView,
     EventListView,
     EventPromoteView,
     EventUpdateView,
     GroupAdminsView,
-    TaskTestView
+    PasswordChangeView,
+    PasswordResetView,
+    TaskTestView,
 )
 
 urlpatterns = [
@@ -53,30 +54,37 @@ urlpatterns += [
                 'authentication_form': GroupLoginForm,
                 'redirect_authenticated_user': True
             },
-            name='groups-login'
+            name='organizing-hub-login'
         ),
         url(
             r'^logout/',
             auth_views.logout,
-            {'next_page': 'groups-login'},
+            {'next_page': 'organizing-hub-login'},
             name='groups-logout'
         ),
-        url(
-            r'^account/',
-            GroupPasswordChangeView.as_view(),
-            name='groups-password-change',
-        ),
+        url(r'^account/', include([
+            url(
+                r'^$',
+                PasswordChangeView.as_view(),
+                name='groups-password-change',
+            ),
+            url(
+                r'^create/',
+                AccountCreateView.as_view(),
+                name='organizing-hub-account-create'
+            ),
+        ])),
         url(r'^password/', include([
             url(r'^reset/', include([
                 url(
                     r'^$',
                     auth_views.password_reset,
-                    {'password_reset_form': GroupPasswordResetRequestForm},
+                    {'password_reset_form': PasswordResetRequestForm},
                     name='password_reset',
                 ),
                 url(
                     r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-                    GroupPasswordResetView.as_view(),
+                    PasswordResetView.as_view(),
                     name='password_reset_confirm',
                 ),
                 url(
