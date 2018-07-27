@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Manage Users" "organizing-hub-group-admins" %}
+    {% breadcrumb "Manage Users" "organizing-hub-group-admins" local_group.slug %}
 {% endblock %}
 
 {% block content_pre_heading %}

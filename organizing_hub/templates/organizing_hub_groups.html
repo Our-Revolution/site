@@ -1,0 +1,17 @@
+{% extends "organizing_hub_layout.html" %}
+
+{% load django_bootstrap_breadcrumbs pages_tags %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% groups_url as link_url %}
+    {% breadcrumb "Local Groups" link_url %}
+{% endblock %}
+
+{% block content %}
+
+{% with header_only=True %}
+    {{ block.super }}
+{% endwith%}
+
+{% endblock %}

@@ -1,16 +1,10 @@
-{% extends "organizing_hub_layout.html" %}
+{% extends "organizing_hub_groups.html" %}
 
-{% load static django_bootstrap_breadcrumbs pages_tags wagtailcore_tags %}
-
-{% block breadcrumbs %}
-  {{ block.super }}
-  {% groups_url as link_url %}
-  {% breadcrumb "Local Groups" link_url %}
-{% endblock %}
+{% load static wagtailcore_tags %}
 
 {% block content %}
 
-{% with header_only=True static_content=True  %}
+{% with static_content=True %}
     {{ block.super }}
 {% endwith%}
 
