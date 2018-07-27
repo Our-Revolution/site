@@ -1,6 +1,12 @@
 {% extends "pages/base_page.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% organizing_hub_dashboard_url as link_url %}
+  {% breadcrumb "Organizing Hub" link_url %}
+{% endblock %}
 
 {% block nav %}
 
