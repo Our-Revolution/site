@@ -1,9 +1,13 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.template import Context, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ValidationError
@@ -12,8 +16,13 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 from django.views.generic.base import RedirectView
 from bsd.api import BSD
-from bsd.forms import BSDEventForm
-from bsd.models import BSDEvent, BSDProfile, duration_type_hours
+from bsd.models import (
+    Account,
+    assert_valid_account,
+    BSDEvent,
+    BSDProfile,
+    duration_type_hours,
+)
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
 from local_groups.models import (
@@ -23,13 +32,18 @@ from local_groups.models import (
     LocalGroupProfile
 )
 from .decorators import verified_email_required
-from .forms import GroupAdminsForm
+from .forms import (
+    AccountForm,
+    EventForm,
+    GroupAdminsForm,
+    PasswordChangeForm,
+    PasswordResetForm,
+)
 from .mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.tasks import lebowski
 import datetime
 import json
 import logging
-
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +82,7 @@ EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
 
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
+ORGANIZING_HUB_DASHBOARD_URL = settings.ORGANIZING_HUB_DASHBOARD_URL
 ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
 
@@ -156,9 +171,35 @@ def remove_local_group_role_for_user(user, local_group, local_group_role_id):
             )
 
 
+class AccountCreateView(SuccessMessageMixin, CreateView):
+    form_class = AccountForm
+    model = Account
+    success_message = "Your account was created successfully."
+
+    def form_valid(self, form):
+        """If the form is valid, set password on model."""
+        form.instance.password = form.cleaned_data['new_password1']
+
+        """Handle BSD errors"""
+        try:
+            return super(AccountCreateView, self).form_valid(form)
+        except ValidationError:
+            messages.error(
+                self.request,
+                '''
+                There was an error creating your account. Please make sure all
+                fields are filled with valid data and try again.
+                '''
+            )
+            return redirect('organizing-hub-account-create')
+
+    def get_success_url(self):
+        return reverse_lazy('organizing-hub-login')
+
+
 @method_decorator(verified_email_required, name='dispatch')
 class EventCreateView(SuccessMessageMixin, CreateView):
-    form_class = BSDEventForm
+    form_class = EventForm
     model = BSDEvent
     success_message = '''
     Your event was created successfully. Visit Promote Events tool to promote
@@ -226,7 +267,7 @@ class EventCreateView(SuccessMessageMixin, CreateView):
             this page.
             '''
         )
-        return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
+        return redirect(ORGANIZING_HUB_DASHBOARD_URL)
 
     # Use default get logic but add custom access check
     def get(self, request, *args, **kwargs):
@@ -460,7 +501,7 @@ Thanks!""").render(Context({
 
 @method_decorator(verified_email_required, name='dispatch')
 class EventUpdateView(SuccessMessageMixin, UpdateView):
-    form_class = BSDEventForm
+    form_class = EventForm
     model = BSDEvent
     object = None
     success_message = 'Your event was updated successfully.'
@@ -604,6 +645,181 @@ class GroupAdminsView(
         )
 
 
+class PasswordChangeView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    FormView
+):
+    form_class = PasswordChangeForm
+    success_message = "Your password has been updated successfully."
+    success_url = ORGANIZING_HUB_DASHBOARD_URL
+    template_name = "password_change.html"
+
+    def check_old_password(self, form):
+        """Check if old password is valid in BSD"""
+        username = self.request.user.email
+        old_password = form.cleaned_data['old_password']
+        checkCredentialsResult = bsd_api.account_checkCredentials(
+            username,
+            old_password
+        )
+        assert_valid_account(checkCredentialsResult)
+
+    def set_new_password(self, form):
+        """Set new password in BSD"""
+        username = self.request.user.email
+        new_password = form.cleaned_data['new_password1']
+        setPasswordResult = bsd_api.account_setPassword(
+            username,
+            new_password
+        )
+        '''
+        Should get 204 response on success_url
+
+        https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+        '''
+        assert setPasswordResult.http_status is 204
+
+    def form_valid(self, form):
+        """Check old password"""
+        try:
+            self.check_old_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error validating your old password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        """Set new password"""
+        try:
+            self.set_new_password(form)
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error setting your new password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect('groups-password-change')
+
+        return super(PasswordChangeView, self).form_valid(form)
+
+
+class PasswordResetView(SuccessMessageMixin, FormView):
+    form_class = PasswordResetForm
+    success_message = "Your password has been reset successfully."
+    success_url = reverse_lazy('organizing-hub-login')
+    template_name = "registration/password_reset_confirm.html"
+
+    def form_invalid(self, form, user):
+        """
+        If the form is invalid, re-render the context data with the
+        data-filled form and errors.
+        """
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            email=user.email
+        ))
+
+    def form_valid(self, form, user):
+        try:
+            """Set new password in BSD"""
+            username = user.email
+            new_password = form.cleaned_data['new_password1']
+            setPasswordResult = bsd_api.account_setPassword(
+                username,
+                new_password
+            )
+            '''
+            Should get 204 response on success_url
+
+            https://cshift.cp.bsd.net/page/api/doc#-----------------set_password-------------
+            '''
+            assert setPasswordResult.http_status is 204
+
+        except AssertionError:
+            messages.error(
+                self.request,
+                '''
+                There was an error resetting your password. Please make
+                sure all fields are filled with correct data and try again.
+                '''
+            )
+            return redirect(reverse_lazy('password_reset_confirm', kwargs={
+                'token': self.kwargs['token'],
+                'uidb64': self.kwargs['uidb64'],
+            }))
+
+        return super(PasswordResetView, self).form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        """Get user if url is valid"""
+        user = self.get_user_from_url(request)
+        if user:
+            return self.render_to_response(self.get_context_data(
+                email=user.email
+            ))
+        else:
+            return self.redirect_user()
+
+    """
+    Verify that the url is valid and return user.
+
+    Based on https://github.com/django/django/blob/stable/1.10.x/django/contrib/auth/views.py#L236
+    """
+    def get_user_from_url(self, request, *args, **kwargs):
+        uidb64 = self.kwargs['uidb64']
+        token = self.kwargs['token']
+
+        """Check the hash in password reset link."""
+        UserModel = get_user_model()
+        assert uidb64 is not None and token is not None  # checked by URLconf
+
+        try:
+            # urlsafe_base64_decode() decodes to bytestring on Python 3
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        validlink = user is not None and default_token_generator.check_token(
+            user,
+            token
+        )
+
+        if validlink:
+            return user
+        else:
+            return None
+
+    def post(self, request, *args, **kwargs):
+        """Get user if url is valid"""
+        user = self.get_user_from_url(request)
+        if user:
+            form = self.get_form()
+            if form.is_valid():
+                return self.form_valid(form, user)
+            else:
+                return self.form_invalid(form, user)
+        else:
+            return self.redirect_user()
+
+    def redirect_user(self):
+        messages.error(
+            self.request,
+            '''
+            The password reset link was invalid, possibly because it has
+            already been used.  Please request a new password reset.
+            '''
+        )
+        return redirect('password_reset')
+
+
 """TODO: remove TaskTestView after done testing"""
 
 
@@ -614,4 +830,4 @@ class TaskTestView(RedirectView):
         logger.debug('start test')
         test = lebowski.delay(11, 22)
         logger.debug('test: ' + str(test))
-        return settings.ORGANIZING_HUB_DASHBOARD_URL
+        return ORGANIZING_HUB_DASHBOARD_URL

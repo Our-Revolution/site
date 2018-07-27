@@ -1,17 +1,13 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
+from contacts.models import Contact
 import logging
 
 logger = logging.getLogger(__name__)
 
 EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
-
-
-class EventPromotionRecipient(models.Model):
-    """Assume unique external user id for Recipient"""
-    user_external_id = models.CharField(max_length=128, unique=True)
 
 
 class EventPromotion(models.Model):
@@ -35,7 +31,7 @@ class EventPromotion(models.Model):
     max_recipients = models.IntegerField()
     message = models.CharField(max_length=2048)
     recipients = models.ManyToManyField(
-        EventPromotionRecipient,
+        Contact,
         blank=True,
     )
     sender_display_name = models.CharField(

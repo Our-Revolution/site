@@ -26,17 +26,18 @@
 
       {% organizing_hub_login_alert %}
 
+      {% bootstrap_messages %}
+
+      {% bootstrap_form_errors form %}
+
       <p class="fs18">
         Log in with your Our Revolution account to manage your local
         group.
       </p>
 
-      {% bootstrap_messages %}
-      {% bootstrap_form_errors form %}
-
       <div class="mb20 mt20 pa20 br3 f5f5f5-bg">
 
-        <form action="{% url 'groups-login' %}{% if next %}?next={{ next }}{% endif %}"
+        <form action="{% url 'organizing-hub-login' %}{% if next %}?next={{ next }}{% endif %}"
         method="post" class="form form-uppercase">
 
           {% csrf_token %}
