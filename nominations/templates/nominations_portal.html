@@ -9,6 +9,8 @@
 
 {% block content %}
 
-{% include "partials/organizing_hub_header.html" %}
+{% with header_only=True %}
+    {{ block.super }}
+{% endwith%}
 
 {% endblock %}

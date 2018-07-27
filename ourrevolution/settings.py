@@ -316,12 +316,13 @@ MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 """ID of 'Briefly list important local issues...' Question"""
 NOMINATIONS_QUESTION_ISSUES_ID = 24
 
-ADD_GROUP_URL = '/groups/new/'
 ELECTORAL_COORDINATOR_EMAIL = str(os.environ.get(
     'ELECTORAL_COORDINATOR_EMAIL',
     'political@ourrevolution.com'
 ))
 ENDORSEMENT_PROCESS_URL = '/docs/our-revolution-endorsement-process/'
+GROUPS_ADD_URL = '/groups/new/'
+GROUPS_URL = '/groups/'
 OR_ADDRESS_CITY = 'Washington'
 OR_ADDRESS_STATE = 'DC'
 OR_ADDRESS_STREET = 'PO Box 66208'

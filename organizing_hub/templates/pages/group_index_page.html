@@ -1,18 +1,18 @@
-{% extends "pages/base_page.html" %}
+{% extends "organizing_hub_layout.html" %}
 
-{% load static wagtailcore_tags %}
+{% load static django_bootstrap_breadcrumbs pages_tags wagtailcore_tags %}
 
-{% block nav %}
-
-{{ block.super }}
-
-{% with static_content=True %}
-{% include "partials/organizing_hub_header.html" %}
-{% endwith%}
-
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% groups_url as link_url %}
+  {% breadcrumb "Local Groups" link_url %}
 {% endblock %}
 
 {% block content %}
+
+{% with header_only=True static_content=True  %}
+    {{ block.super }}
+{% endwith%}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="

@@ -12,37 +12,42 @@
 
 {% include "partials/organizing_hub_header.html" %}
 
-<div class="container-fluid">
+  {% if not header_only %}
 
-  <div class="row blue-bg white-text pb2">
+  <div class="container-fluid">
 
-    <div class="container {% if center_header %}pb2 pt4{% else %}pt6{% endif %}">
+    <div class="row blue-bg white-text pb2">
 
-      {% if center_header %}
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-      {% endif %}
+      <div class="container {% if center_header %}pb2 pt4{% else %}pt6{% endif %}">
 
-      {% block content_pre_heading %}{% endblock %}
+        {% if center_header %}
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+        {% endif %}
 
-      <h1 class="mt0 mb0">
-        {% block content_heading %}
-        {{ page.title }}
-        {% endblock %}
-      </h1>
+        {% block content_pre_heading %}{% endblock %}
 
-      {% if page.sub_heading %}
-        <p class="mt10 fs18">
-          {{ page.sub_heading }}
-        </p>
-      {% endif %}
+        <h1 class="mt0 mb0">
+          {% block content_heading %}
+          {{ page.title }}
+          {% endblock %}
+        </h1>
 
-      {% if center_header %}
+        {% if page.sub_heading %}
+          <p class="mt10 fs18">
+            {{ page.sub_heading }}
+          </p>
+        {% endif %}
+
+        {% if center_header %}
+          </div>
         </div>
-      </div>
-      {% endif %}
+        {% endif %}
 
+      </div>
     </div>
   </div>
-</div>
+
+  {% endif %}
+
 {% endblock %}
