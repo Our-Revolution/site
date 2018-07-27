@@ -1,12 +1,6 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
-
-
-{% block breadcrumbs %}
-  {{ block.super }}
-  {% breadcrumb "lebowski" "organizing-hub-event-create" %}
-{% endblock %}
+{% load bootstrap3 organizing_hub_tags %}
 
 {% block content_pre_heading %}
 <span class="article-type">Organizing Hub</span>
@@ -17,6 +11,8 @@
 {% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container pt4">
   <div class="row">

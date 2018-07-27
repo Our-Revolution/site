@@ -8592,6 +8592,9 @@ footer {
   background-position: center;
   background-size: cover; }
 
+.breadcrumb li.active {
+  display: none; }
+
 .btn, .form-wrapper #can_embed_form input[type=submit] {
   font-weight: 700;
   height: 40px;

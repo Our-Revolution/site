@@ -4,10 +4,9 @@
 
 {% block page_title %}Our Revolution - Create Event{% endblock %}
 
-
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "lebowski" "organizing_hub.views.EventCreateView" %}
+    {% breadcrumb "Create Event" "organizing-hub-event-create" %}
 {% endblock %}
 
 {% block content_pre_heading %}
@@ -20,13 +19,11 @@ Create Event
 
 {% block content %}
 
+{{ block.super }}
+
 <div class="container pt4">
   <div class="row">
       <div class="col-md-9 col-md-offset-3">
-
-        test
-        {% render_breadcrumbs %}
-        end test
 
         {% bootstrap_messages %}
 

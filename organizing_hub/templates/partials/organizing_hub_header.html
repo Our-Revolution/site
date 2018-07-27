@@ -12,6 +12,10 @@
           <div class="row ">
             <div class="col-xs-12">
 
+              <div class="pull-left uppercase">
+                {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
+              </div>
+
               <div class="pull-right uppercase">
 
                 {% if not static_content and request.user.is_authenticated %}
