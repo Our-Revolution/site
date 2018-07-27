@@ -1,8 +1,12 @@
 {% extends "nominations_portal.html" %}
 
-{% block page_title %}Our Revolution Nominations{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block page_title %}Our Revolution - Nominations{% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container-fluid">
   <div class="row blue-bg nina-bg white-text pb4">

@@ -1,13 +1,19 @@
 {% extends "nominations_portal.html" %}
 
-{% load bootstrap3 %}
-{% load bootstrap3 %}
-{% load crispy_forms_tags %}
+{% load bootstrap3 crispy_forms_tags django_bootstrap_breadcrumbs %}
+
 {% crispy form form.helper %}
 
-{% block page_title %}Our Revolution - Submit your nomination request{% endblock %}
+{% block page_title %}Our Revolution - Submit Nomination{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Submit" request.get_full_path %}
+{% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pb2">

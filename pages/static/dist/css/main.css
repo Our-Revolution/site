@@ -8592,7 +8592,7 @@ footer {
   background-position: center;
   background-size: cover; }
 
-.breadcrumb li.active {
+.breadcrumb-hide-active .breadcrumb li.active {
   display: none; }
 
 .btn, .form-wrapper #can_embed_form input[type=submit] {

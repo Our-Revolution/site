@@ -1,21 +1,22 @@
 {% extends "nominations_portal.html" %}
 
-{% load bootstrap3 nominations_tags %}
-{% load crispy_forms_tags %}
+{% load bootstrap3 crispy_forms_tags django_bootstrap_breadcrumbs nominations_tags %}
+
 {% crispy form form.helper %}
 
-{% block page_title %}Nominate a Candidate or Ballot Initiative{% endblock %}
+{% block page_title %}Our Revolution - Nominate a Candidate{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Start Application" "nominations-application-create" %}
+{% endblock %}
 
 {% block content %}
 
+{{ block.super }}
+
 <div class="container-fluid">
   <div class="row blue-bg white-text pb2">
-
-    <div class="back-bar--stacked clearfix">
-      <div class="container clearfix">
-        <a href="{% url 'nominations-dashboard' %}">&lsaquo; Dashboard</a>
-      </div>
-    </div>
 
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">

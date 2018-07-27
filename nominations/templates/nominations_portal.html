@@ -1,8 +1,13 @@
-{% extends "pages/base_page.html" %}
+{% extends "organizing_hub_layout.html" %}
 
-{% block nav %}
+{% load django_bootstrap_breadcrumbs %}
 
-{{ block.super }}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Nominations" "nominations-dashboard" %}
+{% endblock %}
+
+{% block content %}
 
 {% include "partials/organizing_hub_header.html" %}
 

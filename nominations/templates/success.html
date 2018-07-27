@@ -1,10 +1,17 @@
 {% extends "nominations_portal.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 django_bootstrap_breadcrumbs %}
 
 {% block page_title %}Our Revolution - You've submitted your nomination!{% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Submitted" "nominations-submit-success" %}
+{% endblock %}
+
 {% block content %}
+
+{{ block.super }}
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pt2 pb2">
