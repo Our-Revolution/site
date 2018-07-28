@@ -66,7 +66,7 @@ urlpatterns += [
             url(
                 r'^$',
                 PasswordChangeView.as_view(),
-                name='groups-password-change',
+                name='organizing-hub-account',
             ),
             url(
                 r'^create/',

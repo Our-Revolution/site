@@ -692,7 +692,7 @@ class PasswordChangeView(
                 sure all fields are filled with correct data and try again.
                 '''
             )
-            return redirect('groups-password-change')
+            return redirect('organizing-hub-account')
 
         """Set new password"""
         try:
@@ -705,7 +705,7 @@ class PasswordChangeView(
                 sure all fields are filled with correct data and try again.
                 '''
             )
-            return redirect('groups-password-change')
+            return redirect('organizing-hub-account')
 
         return super(PasswordChangeView, self).form_valid(form)
 
