@@ -14,7 +14,7 @@ class AccountAdapter(DefaultAccountAdapter):
         can be `None` here.
         """
         url = reverse(
-            "groups-verify-email-confirm",
+            "organizing-hub-verify-email-confirm",
             args=[emailconfirmation.key])
         ret = build_absolute_uri(
             request,

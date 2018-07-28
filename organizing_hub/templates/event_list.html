@@ -1,13 +1,8 @@
-{% extends "organizing_hub_layout.html" %}
+{% extends "organizing_hub_events.html" %}
 
-{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+{% load bootstrap3 organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Events{% endblock %}
-
-{% block breadcrumbs %}
-    {{ block.super }}
-    {% breadcrumb "Events" "organizing-hub-event-list" %}
-{% endblock %}
 
 {% block content_heading %}
 Events

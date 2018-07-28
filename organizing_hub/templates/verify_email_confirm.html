@@ -1,22 +1,21 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 organizing_hub_tags %}
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Confirm Email Verification{% endblock %}
 
-{% block nav %}
-    {% with center_header=True %}
-        {{ block.super }}
-    {% endwith%}
-{% endblock %}
-
-{% block content_pre_heading %}
-<span class="article-type">Organizing Hub</span>
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Confirm Email Verification" request.get_full_path %}
 {% endblock %}
 
 {% block content_heading %}Confirm Email Verification{% endblock %}
 
 {% block content %}
+
+{% with center_header=True %}
+    {{ block.super }}
+{% endwith%}
 
 <div class="container">
 
@@ -35,7 +34,7 @@
       </p>
 
       {% endwith %}
-      <form action="{% url 'groups-verify-email-confirm' confirmation.key %}"
+      <form action="{% url 'organizing-hub-verify-email-confirm' confirmation.key %}"
       method="post" >
 
         {% csrf_token %}
@@ -50,7 +49,7 @@
 
       <p class="fs18">
         This email confirmation link is expired or invalid. Please
-        <a href="{% url 'groups-verify-email-request' %}">
+        <a href="{% url 'organizing-hub-verify-email-request' %}">
           submit a new email verification request
         </a>.
       </p>

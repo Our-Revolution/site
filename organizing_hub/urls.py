@@ -98,12 +98,12 @@ urlpatterns += [
             url(
                 r"^confirm/(?P<key>[-:\w]+)/$",
                 VerifyEmailConfirmView.as_view(),
-                name="groups-verify-email-confirm"
+                name="organizing-hub-verify-email-confirm"
             ),
             url(
                 r'^request/',
                 VerifyEmailRequestView.as_view(),
-                name='groups-verify-email-request',
+                name='organizing-hub-verify-email-request',
             ),
         ])),
         url(r'^(?P<slug>[\w-]+)/', include([

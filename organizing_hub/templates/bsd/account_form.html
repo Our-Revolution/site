@@ -1,22 +1,21 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 organizing_hub_tags %}
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Create Account{% endblock %}
 
-{% block nav %}
-    {% with center_header=True %}
-        {{ block.super }}
-    {% endwith%}
-{% endblock %}
-
-{% block content_pre_heading %}
-<span class="article-type">Organizing Hub</span>
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Create Account" "organizing-hub-account-create" %}
 {% endblock %}
 
 {% block content_heading %}Create Account{% endblock %}
 
 {% block content %}
+
+{% with center_header=True %}
+    {{ block.super }}
+{% endwith%}
 
 <div class="container">
 
