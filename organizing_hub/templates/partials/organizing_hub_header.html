@@ -10,24 +10,32 @@
 
         <div class="container">
           <div class="row ">
-            <div class="col-xs-12">
 
-              <div class="pull-left uppercase breadcrumb-hide-active">
-                {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
-              </div>
+            <div class="col-md-6">
 
-              <div class="pull-right uppercase">
+              <div class="uppercase breadcrumb-hide-active">
 
-                {% if not static_content and request.user.is_authenticated %}
+                <div class="hidden-xs">
+                  {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
+                </div>
 
-                {% group_link %}
-                | <a href="{% url 'groups-logout' %}">Logout</a>
-
-                {% endif %}
+                <div class="visible-xs-block mb10">
+                  {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
+                </div>
 
               </div>
 
             </div>
+
+            {% if not static_content and request.user.is_authenticated %}
+            <div class="col-md-6">
+              <div class="uppercase text-right">
+                {% group_link %}
+                | <a href="{% url 'groups-logout' %}">Logout</a>
+              </div>
+            </div>
+            {% endif %}
+
           </div>
         </div>
 
