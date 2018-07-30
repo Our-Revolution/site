@@ -1,22 +1,21 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 organizing_hub_tags %}
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Email Verification{% endblock %}
 
-{% block nav %}
-    {% with center_header=True %}
-        {{ block.super }}
-    {% endwith%}
-{% endblock %}
-
-{% block content_pre_heading %}
-<span class="article-type">Organizing Hub</span>
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Email Verification" 'organizing-hub-verify-email-request' %}
 {% endblock %}
 
 {% block content_heading %}Email Verification{% endblock %}
 
 {% block content %}
+
+{% with center_header=True %}
+    {{ block.super }}
+{% endwith%}
 
 <div class="container">
 
@@ -31,7 +30,7 @@
         verify your email address and then try again.
       </p>
 
-      <form action="{% url 'groups-verify-email-request' %}" method="post">
+      <form action="{% url 'organizing-hub-verify-email-request' %}" method="post">
         {% csrf_token %}
 
         {% buttons %}

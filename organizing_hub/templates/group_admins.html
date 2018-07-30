@@ -1,11 +1,12 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 organizing_hub_tags %}
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - Manage Users{% endblock %}
 
-{% block content_pre_heading %}
-<span class="article-type">Organizing Hub</span>
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Manage Users" "organizing-hub-group-admins" local_group.slug %}
 {% endblock %}
 
 {% block content_heading %}
@@ -13,6 +14,8 @@ Manage Users
 {% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container pt4">
   <div class="row">

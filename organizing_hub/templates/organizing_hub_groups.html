@@ -1,15 +1,16 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load django_bootstrap_breadcrumbs %}
+{% load django_bootstrap_breadcrumbs pages_tags %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Nominations" "nominations-dashboard" %}
+    {% groups_url as link_url %}
+    {% breadcrumb "Local Groups" link_url %}
 {% endblock %}
 
 {% block content %}
 
-{% with header_only=True %}
+{% with header_only=True static_content=True %}
     {{ block.super }}
 {% endwith%}
 

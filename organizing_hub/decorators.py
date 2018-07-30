@@ -17,7 +17,7 @@ def verified_email_required(function=None,
                 user=request.user,
                 verified=True
             ).exists():
-                return redirect('groups-verify-email-request')
+                return redirect('organizing-hub-verify-email-request')
             return view_func(request, *args, **kwargs)
         return _wrapped_view
 

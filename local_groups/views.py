@@ -80,7 +80,7 @@ class VerifyEmailConfirmView(ConfirmEmailView):
 
 class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
     template_name = "verify_email_request.html"
-    success_url = reverse_lazy('groups-verify-email-request')
+    success_url = reverse_lazy('organizing-hub-verify-email-request')
 
     # Send email confirmation message on post
     def post(self, request, *args, **kwargs):
@@ -111,4 +111,4 @@ class VerifyEmailRequestView(LoginRequiredMixin, EmailView):
                 use a different email address for email verification.
                 '''
             )
-            return redirect('groups-verify-email-request')
+            return redirect('organizing-hub-verify-email-request')

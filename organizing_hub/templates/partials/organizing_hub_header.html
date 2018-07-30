@@ -1,6 +1,6 @@
 {# if static_content is true show only static content for cached pages #}
 
-{% load organizing_hub_tags %}
+{% load django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 <div id="organizing-hub-header" class="blue-bg white-text">
 
@@ -10,24 +10,32 @@
 
         <div class="container">
           <div class="row ">
-            <div class="col-xs-12">
 
-              <div class="pull-right uppercase">
+            <div class="col-md-6">
 
-                {% if not static_content and request.user.is_authenticated %}
+              <div class="uppercase breadcrumb-hide-active">
 
-                {% group_link %}
-                | <a href="{% url 'groups-logout' %}">Logout</a>
+                <div class="hidden-xs">
+                  {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
+                </div>
 
-                {% else %}
-
-                <a href="{% organizing_hub_dashboard_url %}">Organizing Hub</a>
-
-                {% endif %}
+                <div class="visible-xs-block mb10">
+                  {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
+                </div>
 
               </div>
 
             </div>
+
+            {% if not static_content and request.user.is_authenticated %}
+            <div class="col-md-6">
+              <div class="uppercase text-right">
+                {% group_link %}
+                | <a href="{% url 'groups-logout' %}">Logout</a>
+              </div>
+            </div>
+            {% endif %}
+
           </div>
         </div>
 

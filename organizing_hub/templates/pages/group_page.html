@@ -1,17 +1,19 @@
-{% extends "pages/base_page.html" %}
+{% extends "organizing_hub_groups.html" %}
 
-{% load static wagtailcore_tags %}
+{% load django_bootstrap_breadcrumbs static wagtailcore_tags %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb group.name request.get_full_path %}
+{% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container-fluid">
   <div class="row">
     <div class="blue-bg white-text">
-      <div class="back-bar">
-        <div class="container">
-          <a href="/groups" class="link dim white"><strong>< Browse All Groups</strong></a>
-        </div>
-      </div>
 
       <div class="container pt6">
         <p class="mb0">

@@ -19,13 +19,4 @@
   </div>
   {% endif %}
 
-  {% url 'organizing-hub-event-list' as link_url %}
-  {% if link_url != request.path %}
-  <div class="btn-group" role="group">
-    <a href="{{ link_url }}" class="btn btn-secondary">
-      My Events
-    </a>
-  </div>
-  {% endif %}
-
 </div>

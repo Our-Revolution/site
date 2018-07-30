@@ -1,8 +1,15 @@
 {% extends "organizing_hub_layout.html" %}
 
-{% load bootstrap3 wagtailcore_tags organizing_hub_tags %}
+{% load bootstrap3 django_bootstrap_breadcrumbs wagtailcore_tags organizing_hub_tags %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb page.title request.get_full_path %}
+{% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container">
 

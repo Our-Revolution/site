@@ -12,12 +12,20 @@ urlpatterns = [
             SubmitView.as_view(),
             name='nominations-submit',
         ),
-        url(r'^success/$', login_required(TemplateView.as_view(
-            template_name='success.html'
-        ))),
-        url(r'^email-success/$', login_required(TemplateView.as_view(
-            template_name='email-success.html'
-        ))),
+        url(
+            r'^success/$',
+            login_required(TemplateView.as_view(
+                template_name='success.html'
+            )),
+            name='nominations-submit-success',
+        ),
+        url(
+            r'^email-success/$',
+            login_required(TemplateView.as_view(
+                template_name='email-success.html'
+            )),
+            name='nominations-questionnaire-sent',
+        ),
         url(
             r'^dashboard/$',
             DashboardView.as_view(),
@@ -30,8 +38,16 @@ urlpatterns = [
             QuestionnaireIndexView.as_view(),
             name='nominations-questionnaire'
         ),
-        url(r'^new/$', CreateApplicationView.as_view()),
-        url(r'^application-type/$', ApplicationTypeView.as_view()),
+        url(
+            r'^new/$',
+            CreateApplicationView.as_view(),
+            name='nominations-application-create',
+        ),
+        url(
+            r'^application-type/$',
+            ApplicationTypeView.as_view(),
+            name='nominations-application-type',
+        ),
         url(r'^nomination/$', EditNominationView.as_view()),
         url(
             r'^questionnaire/edit$',
@@ -43,7 +59,11 @@ urlpatterns = [
             reset_questionnaire,
             name='nominations-questionnaire-reset'
         ),
-        url(r'^$', NominationsIndexView.as_view()),
+        url(
+            r'^$',
+            NominationsIndexView.as_view(),
+            name='nominations-index'
+        ),
     ])),
     url(r'^groups/nominations/candidate/', include([
         url(r'^login/$', candidate_login),
@@ -55,7 +75,11 @@ urlpatterns = [
         url(r'^success/$', is_authenticated_candidate(TemplateView.as_view(template_name='candidate/success.html'))),
     ])),
     url(r'^groups/nominations/initiatives/', include([
-        url(r'^new/$', CreateInitiativeView.as_view()),
+        url(
+            r'^new/$',
+            CreateInitiativeView.as_view(),
+            name='nominations-initiative-create'
+        ),
         url(r'^success/$', login_required(TemplateView.as_view(
             template_name='success.html'
         ))),

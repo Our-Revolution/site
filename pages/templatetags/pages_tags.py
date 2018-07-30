@@ -10,7 +10,7 @@ OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
 
 @register.simple_tag
 def add_group_url():
-    return settings.ADD_GROUP_URL
+    return settings.GROUPS_ADD_URL
 
 
 @register.simple_tag
@@ -26,6 +26,11 @@ def candidates_url():
 @register.simple_tag
 def endorsement_process_url():
     return settings.ENDORSEMENT_PROCESS_URL
+
+
+@register.simple_tag
+def groups_url():
+    return settings.GROUPS_URL
 
 
 @register.simple_tag

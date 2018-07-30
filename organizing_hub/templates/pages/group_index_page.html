@@ -1,18 +1,10 @@
-{% extends "pages/base_page.html" %}
+{% extends "organizing_hub_groups.html" %}
 
 {% load static wagtailcore_tags %}
 
-{% block nav %}
+{% block content %}
 
 {{ block.super }}
-
-{% with static_content=True %}
-{% include "partials/organizing_hub_header.html" %}
-{% endwith%}
-
-{% endblock %}
-
-{% block content %}
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
