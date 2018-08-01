@@ -11,6 +11,7 @@ class EventPromotionAdmin(admin.ModelAdmin):
         'user_external_id',
         'date_submitted',
         'date_sent',
+        'contact_list',
     ]
     fields = readonly_fields + [
         'status',

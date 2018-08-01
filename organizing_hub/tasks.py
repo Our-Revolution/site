@@ -239,6 +239,6 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Return size of list generated"""
-    contact_list_size = contact_list.contacts.count
+    contact_list_size = contact_list.contacts.count()
     logger.debug('task contact_list_size' + str(contact_list_size))
     return contact_list_size

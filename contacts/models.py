@@ -90,4 +90,4 @@ class ContactList(models.Model):
     )
 
     def __unicode__(self):
-        return self.name
+        return '%s: %s' % (self.id, self.name)

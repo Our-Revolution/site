@@ -103,7 +103,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
     if status == event_promotion_status_approved and contact_list is None:
 
         """Create new contact list and add to event promotion"""
-        list_name = 'Event Promotion: ' + str(instance)
+        list_name = 'List for Event Promotion: ' + str(instance)
         contact_list = ContactList.objects.create(name=list_name)
         instance.contact_list = contact_list
         instance.save()
