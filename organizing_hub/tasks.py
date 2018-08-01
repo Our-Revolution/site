@@ -5,7 +5,14 @@ from django.contrib.gis.geos import Point
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
-from contacts.models import Contact, ContactList
+from contacts.models import (
+    contact_list_status_new,
+    contact_list_status_in_progress,
+    contact_list_status_complete,
+    Contact,
+    # ContactList
+)
+from events.models import EventPromotion
 import logging
 import time
 
@@ -16,53 +23,22 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 
-# def add_bsd_constituents_to_contact_list(constituents, contact_list):
-#     """
-#     Take BSD constituents xml and add them to Contact List as Contacts
-#
-#     Parameters
-#     ----------
-#     constituents : xml
-#         List of constituents should be from BSD api in xml format
-#     contact_list : ContactList
-#         ContactList that we want constituents added to
-#
-#     Returns
-#         -------
-#         ContactList
-#             Returns updated ContactList
-#     """
-#
-#     for constituent in constituents:
-#
-#         """Get Contact for constituent if it exists"""
-#         try:
-#             constituent_id = constituent.get('id')
-#             contact = Contact.objects.get(external_id=constituent_id)
-#
-#         except Contact.DoesNotExist:
-#             contact = None
-#
-#         try:
-#
-#             '''
-#             If authentication passed in BSD and no db user exists, create new
-#             db user and bsd profile for this account
-#             '''
-#             # Create user and bsd profile but dont set db password
-#             if contact is None:
-#                 Contact.objects.create(external_id=cons_id, email_address=user)
-
-
 def find_bsd_constituents_by_state_cd(state_cd):
     """
     Find BSD constituents by state/territory and wait for deferred result
 
-    Returns list of constituents from BSD api in xml format
+    Parameters
+    ----------
+    state_cd : str
+        BSD field for state/territory code, 2 characters
+
+    Returns
+        -------
+        xml
+            Returns list of constituents from BSD api in xml format
     """
 
     # TODO: filter out unsubs etc.
-    # TODO: check about primary email/address/state etc.
 
     filter = {}
     filter['state_cd'] = str(state_cd)
@@ -100,18 +76,33 @@ def find_bsd_constituents_by_state_cd(state_cd):
         return None
 
 
-def create_contact_list_from_bsd_constituents(
+def get_buffer_width_from_miles(miles):
+    """
+    Convert miles to degrees for use as buffer width
+
+    https://stackoverflow.com/a/5217427
+    """
+
+    km = float(1.609344) * miles
+    degrees = km / 40000 * 360
+    return degrees
+
+
+def sync_contact_list_with_bsd_constituents(
+    contact_list,
     constituents,
     max_contacts=None,
     max_distance=None,
     point=None,
 ):
     """
-    Create Contact List from BSD constituents with options for max list size
+    Sync Contact List with BSD constituents, with options for max list size
     and contact distance from point
 
     Parameters
     ----------
+    contact_list : ContactList
+        ContactList that we want constituents synced with
     constituents : xml
         List of constituents should be from BSD api in xml format
     max_contacts : int
@@ -124,75 +115,124 @@ def create_contact_list_from_bsd_constituents(
     Returns
         -------
         ContactList
-            Returns ContactList that was created, or None
+            Returns updated ContactList
     """
 
-    """Construct shape based on max radius if list is not empty"""
+    """Create max distance geo area"""
     buffer_width = get_buffer_width_from_miles(max_distance)
-    max_distance_area = point.buffer(buffer_width)
+    max_distance_geos_area = point.buffer(buffer_width)
 
     for constituent in constituents:
-        """Save Contact to db if within max radius, otherwise do nothing"""
+
+        """Get constituent location data"""
         constituent_address = constituent.find('cons_addr')
-        latitude = float(constituent_address.find('latitude').text)
-        longitude = float(constituent_address.find('longitude').text)
-        constituent_point = Point(y=latitude, x=longitude)
-        if max_distance_area.contains(constituent_point):
-            logger.debug('inside constituent_address: %s, %s' % (str(latitude), str(longitude)))
+
+        # TODO: handle missing lat/long cases
+        constituent_latitude = float(constituent_address.find('latitude').text)
+        constituent_longitude = float(
+            constituent_address.find('longitude').text
+        )
+
+        constituent_point = Point(
+            y=constituent_latitude,
+            x=constituent_longitude
+        )
+
+        """Save contact to list if within max distance, otherwise do nothing"""
+        if max_distance_geos_area.contains(constituent_point):
+            logger.debug('inside constituent_address: %s, %s' % (
+                str(constituent_latitude), str(constituent_longitude))
+            )
 
             # TODO: filter out recent promo recipients etc.
 
-            # if inside of max radius then store contact in db and associate to contact list
+            """Add constituent to contact list"""
+            constituent_id = constituent.get('id')
+            contact, created = Contact.objects.update_or_create(
+                external_id=constituent_id,
+                defaults={
+                    'external_id': constituent_id,
+                    'email_address': constituent.find('cons_email').find(
+                        'email'
+                    ).text,
+                    'first_name': constituent.find('firstname').text,
+                    'last_name': constituent.find('lastname').text,
+                    'point': constituent_point,
+                },
+            )
+            contact_list.contacts.add(contact)
 
-            # sort contacts by distance to event and trim list to max recipients
+            # TODO: sort contacts by distance and trim list to max recipients
 
         else:
-            logger.debug('outside constituent_address: %s, %s' % (str(latitude), str(longitude)))
+            logger.debug('outside constituent_address: %s, %s' % (
+                str(constituent_latitude), str(constituent_longitude))
+            )
 
-    return "test success result"
+    return contact_list
 
 
 @shared_task
-def generate_contact_list_for_event_promotion(event_promotion_id):
-    logger.debug('task generate_contact_list_for_event_promotion')
+def build_contact_list_for_event_promotion(event_promotion_id):
+    """
+    Build contact list for event promotion
 
-    # if contact list already exists then do nothing
+    Assumes that event promotion has new contact list and needs to be built. If
+    contact list is not new then do nothing. Otherwise generate list and save.
 
-    # otherwise create new contact list and associate to event promotion
+    Parameters
+    ----------
+    event_promotion_id : int
+        EventPromotion id
 
-    # get event promotion by id
+    Returns
+        -------
+        int
+            Returns size of list that was generated
+    """
 
+    logger.debug('task build_contact_list_for_event_promotion')
+
+    """Get event promotion"""
+    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+
+    """If contact list is not New, then do nothing"""
+    contact_list = event_promotion.contact_list
+    if contact_list.status != contact_list_status_new:
+        return
+
+    """Update list status to build in progress"""
+    contact_list.status = contact_list_status_in_progress
+    contact_list.save()
+
+    """Get event location data"""
     # event = get_event_from_bsd()
     event_point = Point(y=37.835899, x=-122.284798)
     event_state_cd = 'CA'
+
+    """Get constitents by state first and we will filter it down later"""
     constituents = find_bsd_constituents_by_state_cd(event_state_cd)
 
     """Return 0 if we did not find constituents for some reason"""
     if constituents is None:
         return 0
 
-    # TODO: get from settings config
-    max_distance_miles = float(100)
+    """Add constituents to list if they are w/in max list size and area"""
 
-    create_contact_list_from_bsd_constituents(
+    # TODO: get from settings config
+    max_distance_miles = float(5)
+
+    contact_list = sync_contact_list_with_bsd_constituents(
+        contact_list,
         constituents,
-        max_contacts=10,
+        max_contacts=event_promotion.max_recipients,
         max_distance=max_distance_miles,
         point=event_point,
     )
 
-    # update contact list status and return size of list generated
+    """Update list status to complete"""
+    contact_list.status = contact_list_status_complete
+    contact_list.save()
 
-    return "test success result"
-
-
-def get_buffer_width_from_miles(miles):
-    """
-    Convert miles to degrees for use as buffer width
-
-    https://stackoverflow.com/a/5217427
-    """
-
-    km = float(1.609344) * miles
-    degrees = km / 40000 * 360
-    return degrees
+    """Return size of list generated"""
+    return contact_list.contacts.count

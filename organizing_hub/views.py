@@ -14,7 +14,6 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
-from django.views.generic.base import RedirectView
 from bsd.api import BSD
 from bsd.models import (
     Account,

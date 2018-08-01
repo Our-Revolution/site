@@ -6,6 +6,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+"""Contact List statuses"""
+contact_list_status_new = 1
+contact_list_status_in_progress = 10
+contact_list_status_complete = 20
+contact_list_status_choices = (
+    (contact_list_status_new, 'New'),
+    (contact_list_status_in_progress, 'In Progress (building list)'),
+    (contact_list_status_complete, 'Complete (ready to use)'),
+)
+
 name_max_length = 255
 
 
@@ -63,15 +73,17 @@ class ContactList(models.Model):
     List of Contacts plus information about the list itself
     """
     status_choices = (
-        (1, 'New'),
+        (contact_list_status_new, 'New'),
         (10, 'List build in progress'),
         (20, 'List complete'),
     )
-    status_new = 1
 
     contacts = models.ManyToManyField(Contact, blank=True)
     name = models.CharField(max_length=name_max_length)
-    status = models.IntegerField(choices=status_choices, default=status_new)
+    status = models.IntegerField(
+        choices=status_choices,
+        default=contact_list_status_new
+    )
 
     def __unicode__(self):
         return self.name

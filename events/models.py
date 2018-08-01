@@ -8,8 +8,10 @@ logger = logging.getLogger(__name__)
 
 EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
-event_promotion_status_approved = 10
+
+"""Event Promotion statuses"""
 event_promotion_status_new = 1
+event_promotion_status_approved = 10
 event_promotion_status_sent = 20
 event_promotion_status_skipped = 30
 event_promotion_status_choices = (
