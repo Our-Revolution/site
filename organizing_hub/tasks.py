@@ -124,7 +124,8 @@ def sync_contact_list_with_bsd_constituents(
 
     for constituent in constituents:
 
-        """Get constituent location data"""
+        """Get constituent data"""
+        constituent_id = constituent.get('id')
         constituent_address = constituent.find('cons_addr')
 
         # TODO: handle missing lat/long cases
@@ -140,14 +141,15 @@ def sync_contact_list_with_bsd_constituents(
 
         """Save contact to list if within max distance, otherwise do nothing"""
         if max_distance_geos_area.contains(constituent_point):
-            logger.debug('inside constituent_address: %s, %s' % (
-                str(constituent_latitude), str(constituent_longitude))
-            )
+            logger.debug('%s inside constituent_address: %s, %s' % (
+                constituent_id,
+                str(constituent_latitude),
+                str(constituent_longitude)
+            ))
 
             # TODO: filter out recent promo recipients etc.
 
             """Add constituent to contact list"""
-            constituent_id = constituent.get('id')
             contact, created = Contact.objects.update_or_create(
                 external_id=constituent_id,
                 defaults={
@@ -165,9 +167,11 @@ def sync_contact_list_with_bsd_constituents(
             # TODO: sort contacts by distance and trim list to max recipients
 
         else:
-            logger.debug('outside constituent_address: %s, %s' % (
-                str(constituent_latitude), str(constituent_longitude))
-            )
+            logger.debug('%s outside constituent_address: %s, %s' % (
+                constituent_id,
+                str(constituent_latitude),
+                str(constituent_longitude)
+            ))
 
     return contact_list
 
@@ -235,4 +239,6 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Return size of list generated"""
-    return contact_list.contacts.count
+    contact_list_size = contact_list.contacts.count
+    logger.debug('task contact_list_size' + str(contact_list_size))
+    return contact_list_size

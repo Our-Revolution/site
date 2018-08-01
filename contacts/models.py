@@ -27,6 +27,8 @@ class Contact(models.Model):
     fields for use with CRM-like features
     """
 
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     email_address = models.EmailField(
         blank=True,
         max_length=255,
@@ -79,6 +81,8 @@ class ContactList(models.Model):
     )
 
     contacts = models.ManyToManyField(Contact, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=name_max_length)
     status = models.IntegerField(
         choices=status_choices,
