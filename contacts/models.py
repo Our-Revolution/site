@@ -6,6 +6,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+name_max_length = 255
+
 
 class Contact(models.Model):
     """
@@ -28,12 +30,12 @@ class Contact(models.Model):
     )
     first_name = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=name_max_length,
         null=True,
     )
     last_name = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=name_max_length,
         null=True,
     )
     phone_number = PhoneNumberField(blank=True, null=True)
@@ -52,3 +54,24 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return str(self.id) + (' ' + self.name if self.name else '')
+
+
+class ContactList(models.Model):
+    """
+    Contact List Model
+
+    List of Contacts plus information about the list itself
+    """
+    status_choices = (
+        (1, 'New'),
+        (10, 'List build in progress'),
+        (20, 'List complete'),
+    )
+    status_new = 1
+
+    contacts = models.ManyToManyField(Contact, blank=True)
+    name = models.CharField(max_length=name_max_length)
+    status = models.IntegerField(choices=status_choices, default=status_new)
+
+    def __unicode__(self):
+        return self.name

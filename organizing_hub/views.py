@@ -40,7 +40,6 @@ from .forms import (
     PasswordResetForm,
 )
 from .mixins import LocalGroupPermissionRequiredMixin
-from organizing_hub.tasks import lebowski
 import datetime
 import json
 import logging
@@ -818,16 +817,3 @@ class PasswordResetView(SuccessMessageMixin, FormView):
             '''
         )
         return redirect('password_reset')
-
-
-"""TODO: remove TaskTestView after done testing"""
-
-
-class TaskTestView(RedirectView):
-
-    def get_redirect_url(self, *args, **kwargs):
-        """test task"""
-        logger.debug('start test')
-        test = lebowski.delay(11, 22)
-        logger.debug('test: ' + str(test))
-        return ORGANIZING_HUB_DASHBOARD_URL

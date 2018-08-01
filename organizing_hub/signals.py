@@ -3,7 +3,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from events.models import EventPromotion, event_promotion_status_approved
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
+from organizing_hub.tasks import generate_contact_list_for_event_promotion
 from .views import (
     add_local_group_role_for_user,
     remove_local_group_role_for_user
@@ -86,6 +88,21 @@ def sync_group_leader_affiliation_for_user(user):
             local_group_lead_by_user,
             LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         )
+
+
+@receiver(post_save, sender=EventPromotion)
+def event_promotion_post_save_handler(instance, **kwargs):
+    logger.debug('event_promotion_post_save_handler')
+    """
+    Generate contact list if event promotion is approved and does not have a
+    contact list yet
+    """
+    status = instance.status
+    contact_list = instance.contact_list
+    if status == event_promotion_status_approved and contact_list is None:
+        logger.debug('call generate_contact_list_for_event_promotion')
+        generate_contact_list_for_event_promotion(instance.id)
+        # generate_contact_list_for_event_promotion.delay(instance.id)
 
 
 @receiver(post_save, sender=LocalGroup)

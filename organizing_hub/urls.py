@@ -16,7 +16,6 @@ from .views import (
     GroupAdminsView,
     PasswordChangeView,
     PasswordResetView,
-    TaskTestView,
 )
 
 urlpatterns = [
@@ -118,9 +117,5 @@ urlpatterns += [
                 name='groups-manage'
             ),
         ])),
-        url(
-            r'^task-test/',
-            TaskTestView.as_view(),
-        ),
     ]))
 ]
