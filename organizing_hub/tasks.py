@@ -46,7 +46,7 @@ def find_bsd_constituents_by_state_cd(state_cd):
     assert constituents_result.http_status is 202
     constituents_deferred_id = constituents_result.body
 
-    # TODO: get from settings
+    # TODO: TECH-1332: get from settings
     max_retries = 100
     retry_interval_seconds = 15
 
@@ -126,7 +126,7 @@ def sync_contact_list_with_bsd_constituents(
         constituent_id = constituent.get('id')
         constituent_address = constituent.find('cons_addr')
 
-        # TODO: handle missing lat/long cases
+        # TODO: TECH-1332: handle missing lat/long cases
         constituent_latitude = float(constituent_address.find('latitude').text)
         constituent_longitude = float(
             constituent_address.find('longitude').text
@@ -145,7 +145,7 @@ def sync_contact_list_with_bsd_constituents(
                 str(constituent_longitude)
             ))
 
-            # TODO: filter out recent promo recipients etc.
+            # TODO: TECH-1332: filter out recent promo recipients etc.
 
             """Add constituent to contact list"""
             contact, created = Contact.objects.update_or_create(
@@ -182,6 +182,8 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     Assumes that event promotion has new contact list and needs to be built. If
     contact list is not new then do nothing. Otherwise generate list and save.
 
+    TODO: TECH-1331 better logging
+
     Parameters
     ----------
     event_promotion_id : int
@@ -206,7 +208,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Get event location data"""
-    # TODO: get real event data
+    # TODO: TECH-1332: get real event data
     # event = get_event_from_bsd()
     event_point = Point(y=37.835899, x=-122.284798)
     event_state_cd = 'CA'
@@ -220,7 +222,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """Add constituents to list if they are w/in max list size and area"""
 
-    # TODO: get from settings config
+    # TODO: TECH-1332: get from settings config
     max_distance_miles = float(100)
 
     contact_list = sync_contact_list_with_bsd_constituents(
