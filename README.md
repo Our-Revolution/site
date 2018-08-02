@@ -47,6 +47,7 @@ There is a known migration bug as of 2017-09-18.
 1. `workon ourrevolution` or `source ~/.virtualenvs/ourrevolution/bin/activate`
 2. `./manage.py runserver` then pull up http://localhost:8000/ and you're off to the races.
 3. For features with asynchronous task handling, start a [Celery](http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html#starting-the-worker-process) worker `(ourrevolution) $ celery -A ourrevolution worker -l info`
+ - Locally does not work well with `.env` config pattern, might need to export variables some other way. 
 
 
 If pages don't load correctly you may need to update the `django_site` table:

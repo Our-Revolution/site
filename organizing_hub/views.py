@@ -14,7 +14,6 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
-from django.views.generic.base import RedirectView
 from bsd.api import BSD
 from bsd.models import (
     Account,
@@ -40,7 +39,6 @@ from .forms import (
     PasswordResetForm,
 )
 from .mixins import LocalGroupPermissionRequiredMixin
-from organizing_hub.tasks import lebowski
 import datetime
 import json
 import logging
@@ -818,16 +816,3 @@ class PasswordResetView(SuccessMessageMixin, FormView):
             '''
         )
         return redirect('password_reset')
-
-
-"""TODO: remove TaskTestView after done testing"""
-
-
-class TaskTestView(RedirectView):
-
-    def get_redirect_url(self, *args, **kwargs):
-        """test task"""
-        logger.debug('start test')
-        test = lebowski.delay(11, 22)
-        logger.debug('test: ' + str(test))
-        return ORGANIZING_HUB_DASHBOARD_URL

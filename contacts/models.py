@@ -6,6 +6,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+"""Contact List statuses"""
+contact_list_status_new = 1
+contact_list_status_in_progress = 10
+contact_list_status_complete = 20
+contact_list_status_choices = (
+    (contact_list_status_new, 'New'),
+    (contact_list_status_in_progress, 'In Progress (building list)'),
+    (contact_list_status_complete, 'Complete (ready to use)'),
+)
+
+name_max_length = 255
+
 
 class Contact(models.Model):
     """
@@ -15,6 +27,8 @@ class Contact(models.Model):
     fields for use with CRM-like features
     """
 
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     email_address = models.EmailField(
         blank=True,
         max_length=255,
@@ -28,12 +42,12 @@ class Contact(models.Model):
     )
     first_name = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=name_max_length,
         null=True,
     )
     last_name = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=name_max_length,
         null=True,
     )
     phone_number = PhoneNumberField(blank=True, null=True)
@@ -52,3 +66,23 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return str(self.id) + (' ' + self.name if self.name else '')
+
+
+class ContactList(models.Model):
+    """
+    Contact List Model
+
+    List of Contacts plus information about the list itself
+    """
+
+    contacts = models.ManyToManyField(Contact, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=name_max_length)
+    status = models.IntegerField(
+        choices=contact_list_status_choices,
+        default=contact_list_status_new
+    )
+
+    def __unicode__(self):
+        return '%s: %s' % (self.id, self.name)
