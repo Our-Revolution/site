@@ -108,7 +108,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
         instance.save()
 
         """Call async task to build list"""
-        build_contact_list_for_event_promotion.delay(instance.id)
+        build_contact_list_for_event_promotion(instance.id)
 
 
 @receiver(post_save, sender=LocalGroup)

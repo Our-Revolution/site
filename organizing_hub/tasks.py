@@ -1,6 +1,7 @@
 # Create your tasks here
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
+from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
@@ -104,7 +105,7 @@ def sync_contact_list_with_bsd_constituents(
     constituents : xml
         List of constituents should be from BSD api in xml format
     max_contacts : int
-        Optional max # of contacts to limit list size
+        Optional max # of contacts to limit list size. 0 means unlimited.
     max_distance : float
         Optional max distance miles from point to limit list radius
     point : Point
@@ -139,7 +140,7 @@ def sync_contact_list_with_bsd_constituents(
 
         """Save contact to list if within max distance, otherwise do nothing"""
         if max_distance_geos_area.contains(constituent_point):
-            logger.debug('%s inside constituent_address: %s, %s' % (
+            logger.debug('%s in radius: %s, %s' % (
                 constituent_id,
                 str(constituent_latitude),
                 str(constituent_longitude)
@@ -161,15 +162,65 @@ def sync_contact_list_with_bsd_constituents(
                 },
             )
             contact_list.contacts.add(contact)
-
-            # TODO: TECH-1332: sort contacts by distance and trim list to max recipients
-
         else:
-            logger.debug('%s outside constituent_address: %s, %s' % (
+            logger.debug('%s out radius: %s, %s' % (
                 constituent_id,
                 str(constituent_latitude),
                 str(constituent_longitude)
             ))
+
+    """Get list limit from max contacts and point."""
+    if point is None or max_contacts is None or max_contacts == 0:
+        list_limit = None
+    else:
+        list_limit = max_contacts
+
+    """If list size is greater than limit, then trim it by distance"""
+    if list_limit is not None and (
+        contact_list.contacts.count() > list_limit
+    ):
+        contact_list = trim_contact_list_by_distance(
+            contact_list,
+            list_limit,
+            point
+        )
+
+    return contact_list
+
+
+def trim_contact_list_by_distance(contact_list, list_limit, point):
+    """
+    Trim contact list by distance
+
+    Parameters
+    ----------
+    contact_list : ContactList
+        ContactList to trim
+    list_limit : int
+        Size limit for list
+    point : Point
+        Point to use for distance sorting
+
+    Returns
+        -------
+        ContactList
+            Returns updated ContactList
+    """
+
+    """If list size is smaller than limit, then do nothing"""
+    if contact_list.contacts.count() < list_limit:
+        return contact_list
+
+    """Sort contacts by distance to point"""
+    contacts_sorted = contact_list.contacts.annotate(
+        distance=Distance('point', point)
+    ).order_by('distance')
+
+    """Slice sorted list to get extras above limit"""
+    contacts_extra = contacts_sorted[list_limit:]
+
+    """Remove extras from contact list"""
+    contact_list.contacts.remove(*contacts_extra)
 
     return contact_list
 
@@ -210,7 +261,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     """Get event location data"""
     # TODO: TECH-1332: get real event data
     # event = get_event_from_bsd()
-    event_point = Point(y=37.835899, x=-122.284798)
+    event_point = Point(y=37.835899, x=-122.284798, srid=4326)
     event_state_cd = 'CA'
 
     """Get constitents by state first and we will filter it down later"""
