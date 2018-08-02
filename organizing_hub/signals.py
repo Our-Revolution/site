@@ -93,7 +93,6 @@ def sync_group_leader_affiliation_for_user(user):
 
 @receiver(post_save, sender=EventPromotion)
 def event_promotion_post_save_handler(instance, **kwargs):
-    logger.debug('event_promotion_post_save_handler')
     """
     Generate contact list if event promotion is approved and does not have a
     contact list yet
@@ -109,9 +108,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
         instance.save()
 
         """Call async task to build list"""
-        logger.debug('call build_contact_list_for_event_promotion')
-        build_contact_list_for_event_promotion(instance.id)
-        # build_contact_list_for_event_promotion.delay(instance.id)
+        build_contact_list_for_event_promotion.delay(instance.id)
 
 
 @receiver(post_save, sender=LocalGroup)

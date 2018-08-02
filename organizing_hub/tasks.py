@@ -10,7 +10,6 @@ from contacts.models import (
     contact_list_status_in_progress,
     contact_list_status_complete,
     Contact,
-    # ContactList
 )
 from events.models import EventPromotion
 import logging
@@ -46,20 +45,19 @@ def find_bsd_constituents_by_state_cd(state_cd):
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202
     constituents_deferred_id = constituents_result.body
-    logger.debug('deferred_result_id: ' + constituents_deferred_id)
 
-    max_retries = 12
-    retry_interval = 5
+    # TODO: get from settings
+    max_retries = 100
+    retry_interval_seconds = 15
+
     i = 1
     while i <= max_retries:
         """Wait for retry if this is not first attempt"""
         if i > 1:
-            time.sleep(retry_interval)
+            time.sleep(retry_interval_seconds)
         constituents_deferred_result = bsd_api.getDeferredResults(
             constituents_deferred_id
         )
-        # logger.debug('constituents_deferred_result http_status: ' + str(constituents_deferred_result.http_status))
-        logger.debug('constituents_deferred_result: ' + str(constituents_deferred_result.body))
         if constituents_deferred_result.http_status == 202:
             """If result not ready yet then increment and retry"""
             i += 1
@@ -195,8 +193,6 @@ def build_contact_list_for_event_promotion(event_promotion_id):
             Returns size of list that was generated
     """
 
-    logger.debug('task build_contact_list_for_event_promotion')
-
     """Get event promotion"""
     event_promotion = EventPromotion.objects.get(id=event_promotion_id)
 
@@ -210,6 +206,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Get event location data"""
+    # TODO: get real event data
     # event = get_event_from_bsd()
     event_point = Point(y=37.835899, x=-122.284798)
     event_state_cd = 'CA'
@@ -224,7 +221,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     """Add constituents to list if they are w/in max list size and area"""
 
     # TODO: get from settings config
-    max_distance_miles = float(5)
+    max_distance_miles = float(100)
 
     contact_list = sync_contact_list_with_bsd_constituents(
         contact_list,
@@ -240,5 +237,4 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """Return size of list generated"""
     contact_list_size = contact_list.contacts.count()
-    logger.debug('task contact_list_size' + str(contact_list_size))
     return contact_list_size
