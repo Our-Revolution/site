@@ -37,7 +37,7 @@ def find_bsd_constituents_by_state_cd(state_cd):
             Returns list of constituents from BSD api in xml format
     """
 
-    # TODO: filter out unsubs etc.
+    # TODO: TECH-1332: filter out unsubs etc.
 
     filter = {}
     filter['state_cd'] = str(state_cd)
@@ -162,7 +162,7 @@ def sync_contact_list_with_bsd_constituents(
             )
             contact_list.contacts.add(contact)
 
-            # TODO: sort contacts by distance and trim list to max recipients
+            # TODO: TECH-1332: sort contacts by distance and trim list to max recipients
 
         else:
             logger.debug('%s outside constituent_address: %s, %s' % (
