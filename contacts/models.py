@@ -74,18 +74,13 @@ class ContactList(models.Model):
 
     List of Contacts plus information about the list itself
     """
-    status_choices = (
-        (contact_list_status_new, 'New'),
-        (10, 'List build in progress'),
-        (20, 'List complete'),
-    )
 
     contacts = models.ManyToManyField(Contact, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=name_max_length)
     status = models.IntegerField(
-        choices=status_choices,
+        choices=contact_list_status_choices,
         default=contact_list_status_new
     )
 
