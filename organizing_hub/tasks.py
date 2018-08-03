@@ -83,56 +83,45 @@ def sync_contact_list_with_bsd_constituents(
 
     for constituent in constituents:
 
-        """Get constituent data"""
-        constituent_id = constituent.get('id')
-        constituent_address = constituent.find('cons_addr')
+        """Check if unsubscribed, otherwise """
+        cons_email = constituent.find('cons_email')
+        if int(cons_email.find('is_subscribed').text) == 1:
 
-        # TODO: TECH-1332: handle missing lat/long cases
-        constituent_latitude = float(constituent_address.find('latitude').text)
-        constituent_longitude = float(
-            constituent_address.find('longitude').text
-        )
-
-        constituent_point = Point(
-            y=constituent_latitude,
-            x=constituent_longitude
-        )
-
-        """Save contact to list if within max distance, otherwise do nothing"""
-        if max_distance_geos_area.contains(constituent_point):
-            logger.debug('cons: %s in radius: %s, %s' % (
-                constituent_id,
-                str(constituent_latitude),
-                str(constituent_longitude)
-            ))
-
-            """Check if constituent has received a recent event promo"""
-            last_event_promo = find_last_event_promo_sent_to_contact(
-                constituent_id
+            """Get constituent data"""
+            constituent_address = constituent.find('cons_addr')
+            constituent_email = cons_email.find('email').text
+            constituent_id = constituent.get('id')
+            # TODO: TECH-1332: handle missing lat/long cases?
+            constituent_latitude = float(constituent_address.find('latitude').text)
+            constituent_longitude = float(
+                constituent_address.find('longitude').text
             )
-            if last_event_promo is None or (
-                last_event_promo.date_sent < date_cutoff
-            ):
+            constituent_point = Point(
+                y=constituent_latitude,
+                x=constituent_longitude
+            )
+
+            """Save contact to list if within max distance, otherwise do nothing"""
+            if max_distance_geos_area.contains(constituent_point):
+
                 """Add to contact list if they havent received recent promo"""
-                contact, created = Contact.objects.update_or_create(
-                    external_id=constituent_id,
-                    defaults={
-                        'external_id': constituent_id,
-                        'email_address': constituent.find('cons_email').find(
-                            'email'
-                        ).text,
-                        'first_name': constituent.find('firstname').text,
-                        'last_name': constituent.find('lastname').text,
-                        'point': constituent_point,
-                    },
+                last_event_promo = find_last_event_promo_sent_to_contact(
+                    constituent_id
                 )
-                contact_list.contacts.add(contact)
-        else:
-            logger.debug('cons: %s out radius: %s, %s' % (
-                constituent_id,
-                str(constituent_latitude),
-                str(constituent_longitude)
-            ))
+                if last_event_promo is None or (
+                    last_event_promo.date_sent < date_cutoff
+                ):
+                    contact, created = Contact.objects.update_or_create(
+                        external_id=constituent_id,
+                        defaults={
+                            'external_id': constituent_id,
+                            'email_address': constituent_email,
+                            'first_name': constituent.find('firstname').text,
+                            'last_name': constituent.find('lastname').text,
+                            'point': constituent_point,
+                        },
+                    )
+                    contact_list.contacts.add(contact)
 
     """Get list limit from max contacts and point."""
     if point is None or max_contacts is None or max_contacts == 0:
@@ -151,6 +140,9 @@ def sync_contact_list_with_bsd_constituents(
         )
 
     return contact_list
+
+
+"""Tasks"""
 
 
 @shared_task

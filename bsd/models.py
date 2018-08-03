@@ -58,10 +58,10 @@ def find_constituents_by_state_cd(state_cd):
             Returns list of constituents from BSD api in xml format
     """
 
-    # TODO: TECH-1332: filter out unsubs etc.
-
+    """Filter by state and is subscribed"""
     filter = {}
     filter['state_cd'] = str(state_cd)
+    filter['is_subscribed']
     bundles = ['primary_cons_addr', 'primary_cons_email']
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202
