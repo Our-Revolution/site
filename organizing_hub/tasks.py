@@ -2,7 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from django.conf import settings
-from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 from bsd.api import BSD
@@ -145,48 +144,11 @@ def sync_contact_list_with_bsd_constituents(
     if list_limit is not None and (
         contact_list.contacts.count() > list_limit
     ):
-        contact_list = trim_contact_list_by_distance(
+        contact_list.trim_list_by_distance(
             contact_list,
             list_limit,
             point
         )
-
-    return contact_list
-
-
-def trim_contact_list_by_distance(contact_list, list_limit, point):
-    """
-    Trim contact list by distance
-
-    Parameters
-    ----------
-    contact_list : ContactList
-        ContactList to trim
-    list_limit : int
-        Size limit for list
-    point : Point
-        Point to use for distance sorting
-
-    Returns
-        -------
-        ContactList
-            Returns updated ContactList
-    """
-
-    """If list size is smaller than limit, then do nothing"""
-    if contact_list.contacts.count() < list_limit:
-        return contact_list
-
-    """Sort contacts by distance to point"""
-    contacts_sorted = contact_list.contacts.annotate(
-        distance=Distance('point', point)
-    ).order_by('distance')
-
-    """Slice sorted list to get extras above limit"""
-    contacts_extra = contacts_sorted[list_limit:]
-
-    """Remove extras from contact list"""
-    contact_list.contacts.remove(*contacts_extra)
 
     return contact_list
 
