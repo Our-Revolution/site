@@ -51,6 +51,14 @@ EVENTS_PROMOTE_MAX = int(os.environ.get(
     'EVENTS_PROMOTE_MAX',
     4000
 ))
+EVENTS_PROMOTE_MAX_DISTANCE_MILES = int(os.environ.get(
+    'EVENTS_PROMOTE_MAX_DISTANCE_MILES',
+    100
+))
+EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = int(os.environ.get(
+    'EVENTS_PROMOTE_RECENT_CUTOFF_DAYS',
+    14
+))
 
 """Local Groups Roles"""
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = 2

@@ -1,21 +1,24 @@
 # Create your tasks here
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
+from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
-from StringIO import StringIO
-from xml.etree.ElementTree import ElementTree
+from django.utils import timezone
 from bsd.api import BSD
-from bsd.models import find_event_by_id_obfuscated
+from bsd.models import (
+    find_constituents_by_state_cd,
+    find_event_by_id_obfuscated,
+)
 from contacts.models import (
     contact_list_status_new,
     contact_list_status_in_progress,
     contact_list_status_complete,
     Contact,
 )
-from events.models import EventPromotion
+from events.models import EventPromotion, find_last_event_promo_sent_to_contact
+import datetime
 import logging
-import time
 
 
 logger = logging.getLogger(__name__)
@@ -23,57 +26,8 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
-
-def find_bsd_constituents_by_state_cd(state_cd):
-    """
-    Find BSD constituents by state/territory and wait for deferred result
-
-    Parameters
-    ----------
-    state_cd : str
-        BSD field for state/territory code, 2 characters
-
-    Returns
-        -------
-        xml
-            Returns list of constituents from BSD api in xml format
-    """
-
-    # TODO: TECH-1332: filter out unsubs etc.
-
-    filter = {}
-    filter['state_cd'] = str(state_cd)
-    bundles = ['primary_cons_addr', 'primary_cons_email']
-    constituents_result = bsd_api.cons_getConstituents(filter, bundles)
-    assert constituents_result.http_status is 202
-    constituents_deferred_id = constituents_result.body
-
-    # TODO: TECH-1332: get from settings
-    max_retries = 100
-    retry_interval_seconds = 15
-
-    i = 1
-    while i <= max_retries:
-        """Wait for retry if this is not first attempt"""
-        if i > 1:
-            time.sleep(retry_interval_seconds)
-        constituents_deferred_result = bsd_api.getDeferredResults(
-            constituents_deferred_id
-        )
-        if constituents_deferred_result.http_status == 202:
-            """If result not ready yet then increment and retry"""
-            i += 1
-        else:
-            break
-
-    if constituents_deferred_result.http_status == 200:
-        tree = ElementTree().parse(StringIO(
-            constituents_deferred_result.body
-        ))
-        constituents_xml = tree.findall('cons')
-        return constituents_xml
-    else:
-        return None
+EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
+EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 
 
 def get_buffer_width_from_miles(miles):
@@ -122,6 +76,12 @@ def sync_contact_list_with_bsd_constituents(
     buffer_width = get_buffer_width_from_miles(max_distance)
     max_distance_geos_area = point.buffer(buffer_width)
 
+    """Get cutoff date for filtering out recent event promo recipients"""
+    date_cutoff = timezone.now() - datetime.timedelta(
+        days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+    )
+    logger.debug('date_cutoff: ' + str(date_cutoff))
+
     for constituent in constituents:
 
         """Get constituent data"""
@@ -147,22 +107,27 @@ def sync_contact_list_with_bsd_constituents(
                 str(constituent_longitude)
             ))
 
-            # TODO: TECH-1332: filter out recent promo recipients etc.
-
-            """Add constituent to contact list"""
-            contact, created = Contact.objects.update_or_create(
-                external_id=constituent_id,
-                defaults={
-                    'external_id': constituent_id,
-                    'email_address': constituent.find('cons_email').find(
-                        'email'
-                    ).text,
-                    'first_name': constituent.find('firstname').text,
-                    'last_name': constituent.find('lastname').text,
-                    'point': constituent_point,
-                },
+            """Check if constituent has received a recent event promo"""
+            last_event_promo = find_last_event_promo_sent_to_contact(
+                constituent_id
             )
-            contact_list.contacts.add(contact)
+            if last_event_promo is None or (
+                last_event_promo.date_sent < date_cutoff
+            ):
+                """Add to contact list if they havent received recent promo"""
+                contact, created = Contact.objects.update_or_create(
+                    external_id=constituent_id,
+                    defaults={
+                        'external_id': constituent_id,
+                        'email_address': constituent.find('cons_email').find(
+                            'email'
+                        ).text,
+                        'first_name': constituent.find('firstname').text,
+                        'last_name': constituent.find('lastname').text,
+                        'point': constituent_point,
+                    },
+                )
+                contact_list.contacts.add(contact)
         else:
             logger.debug('cons: %s out radius: %s, %s' % (
                 constituent_id,
@@ -265,17 +230,14 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     event_state_cd = event.venue_state_or_territory
 
     """Get constitents by state first and we will filter it down later"""
-    constituents = find_bsd_constituents_by_state_cd(event_state_cd)
+    constituents = find_constituents_by_state_cd(event_state_cd)
 
     """Return 0 if we did not find constituents for some reason"""
     if constituents is None:
         return 0
 
     """Add constituents to list if they are w/in max list size and area"""
-
-    # TODO: TECH-1332: get from settings config
-    max_distance_miles = float(100)
-
+    max_distance_miles = float(EVENTS_PROMOTE_MAX_DISTANCE_MILES)
     contact_list = sync_contact_list_with_bsd_constituents(
         contact_list,
         constituents,
@@ -290,4 +252,5 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """Return size of list generated"""
     contact_list_size = contact_list.contacts.count()
+    logger.debug('contact_list_size: ' + str(contact_list_size))
     return contact_list_size

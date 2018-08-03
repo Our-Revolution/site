@@ -13,6 +13,7 @@ from .api import BSD
 import datetime
 import logging
 import json
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,60 @@ def assert_valid_account(api_result):
     assert cons_id is not None
     assert cons.find('has_account').text == "1"
     assert cons.find('is_banned').text == "0"
+
+
+def find_constituents_by_state_cd(state_cd):
+    """
+    Find BSD constituents by state/territory and wait for deferred result
+
+    TODO: make Constituent model and return that instead of xml
+
+    Parameters
+    ----------
+    state_cd : str
+        BSD field for state/territory code, 2 characters
+
+    Returns
+        -------
+        xml
+            Returns list of constituents from BSD api in xml format
+    """
+
+    # TODO: TECH-1332: filter out unsubs etc.
+
+    filter = {}
+    filter['state_cd'] = str(state_cd)
+    bundles = ['primary_cons_addr', 'primary_cons_email']
+    constituents_result = bsd_api.cons_getConstituents(filter, bundles)
+    assert constituents_result.http_status is 202
+    constituents_deferred_id = constituents_result.body
+
+    # TODO: TECH-1332: get from settings
+    max_retries = 100
+    retry_interval_seconds = 15
+
+    i = 1
+    while i <= max_retries:
+        """Wait for retry if this is not first attempt"""
+        if i > 1:
+            time.sleep(retry_interval_seconds)
+        constituents_deferred_result = bsd_api.getDeferredResults(
+            constituents_deferred_id
+        )
+        if constituents_deferred_result.http_status == 202:
+            """If result not ready yet then increment and retry"""
+            i += 1
+        else:
+            break
+
+    if constituents_deferred_result.http_status == 200:
+        tree = ElementTree().parse(StringIO(
+            constituents_deferred_result.body
+        ))
+        constituents_xml = tree.findall('cons')
+        return constituents_xml
+    else:
+        return None
 
 
 def find_event_by_id_obfuscated(event_id_obfuscated):
@@ -131,7 +186,6 @@ class BSDProfile(models.Model):
 class BSDEventManager(models.Manager):
 
     def from_json(self, data):
-        logger.debug("from_json: " + str(data))
 
         """Assume duration type = minutes for BSD data"""
         duration_type = duration_type_minutes
