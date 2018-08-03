@@ -6,6 +6,7 @@ from django.contrib.gis.geos import Point
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from bsd.api import BSD
+from bsd.models import find_event_by_id_obfuscated
 from contacts.models import (
     contact_list_status_new,
     contact_list_status_in_progress,
@@ -140,7 +141,7 @@ def sync_contact_list_with_bsd_constituents(
 
         """Save contact to list if within max distance, otherwise do nothing"""
         if max_distance_geos_area.contains(constituent_point):
-            logger.debug('%s in radius: %s, %s' % (
+            logger.debug('cons: %s in radius: %s, %s' % (
                 constituent_id,
                 str(constituent_latitude),
                 str(constituent_longitude)
@@ -163,7 +164,7 @@ def sync_contact_list_with_bsd_constituents(
             )
             contact_list.contacts.add(contact)
         else:
-            logger.debug('%s out radius: %s, %s' % (
+            logger.debug('cons: %s out radius: %s, %s' % (
                 constituent_id,
                 str(constituent_latitude),
                 str(constituent_longitude)
@@ -259,10 +260,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Get event location data"""
-    # TODO: TECH-1332: get real event data
-    # event = get_event_from_bsd()
-    event_point = Point(y=37.835899, x=-122.284798, srid=4326)
-    event_state_cd = 'CA'
+    event = find_event_by_id_obfuscated(event_promotion.event_external_id)
+    event_point = event.point
+    event_state_cd = event.venue_state_or_territory
 
     """Get constitents by state first and we will filter it down later"""
     constituents = find_bsd_constituents_by_state_cd(event_state_cd)
