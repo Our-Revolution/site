@@ -134,11 +134,7 @@ def sync_contact_list_with_bsd_constituents(
     if list_limit is not None and (
         contact_list.contacts.count() > list_limit
     ):
-        contact_list.trim_list_by_distance(
-            contact_list,
-            list_limit,
-            point
-        )
+        contact_list.trim_list_by_distance(list_limit, point)
 
     return contact_list
 
