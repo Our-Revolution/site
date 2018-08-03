@@ -21,6 +21,8 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
+BSD_API_DEFERRED_RETRY_ATTEMPTS = settings.BSD_API_DEFERRED_RETRY_ATTEMPTS
+BSD_API_DEFERRED_RETRY_SECONDS = settings.BSD_API_DEFERRED_RETRY_SECONDS
 
 duration_type_minutes = 1
 duration_type_hours = 2
@@ -67,15 +69,11 @@ def find_constituents_by_state_cd(state_cd):
     assert constituents_result.http_status is 202
     constituents_deferred_id = constituents_result.body
 
-    # TODO: TECH-1332: get from settings
-    max_retries = 100
-    retry_interval_seconds = 15
-
     i = 1
-    while i <= max_retries:
+    while i <= BSD_API_DEFERRED_RETRY_ATTEMPTS:
         """Wait for retry if this is not first attempt"""
         if i > 1:
-            time.sleep(retry_interval_seconds)
+            time.sleep(BSD_API_DEFERRED_RETRY_SECONDS)
         constituents_deferred_result = bsd_api.getDeferredResults(
             constituents_deferred_id
         )

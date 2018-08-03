@@ -90,8 +90,10 @@ def sync_contact_list_with_bsd_constituents(
             constituent_address = constituent.find('cons_addr')
             constituent_email = cons_email.find('email').text
             constituent_id = constituent.get('id')
-            # TODO: TECH-1332: handle missing lat/long cases?
-            constituent_latitude = float(constituent_address.find('latitude').text)
+            # TODO: TECH-1344: handle missing lat/long cases?
+            constituent_latitude = float(
+                constituent_address.find('latitude').text
+            )
             constituent_longitude = float(
                 constituent_address.find('longitude').text
             )
@@ -152,8 +154,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     Assumes that event promotion has new contact list and needs to be built. If
     contact list is not new then do nothing. Otherwise generate list and save.
 
-    TODO: TECH-1331 better logging
-    TODO: TECH-1343 SendableConsGroup
+    TODO: TECH-1331: better celery logging
+    TODO: TECH-1343: research SendableConsGroup
+    TODO: TECH-1344: better error/edge case handling
 
     Parameters
     ----------
