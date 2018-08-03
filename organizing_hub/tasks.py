@@ -79,7 +79,6 @@ def sync_contact_list_with_bsd_constituents(
     date_cutoff = timezone.now() - datetime.timedelta(
         days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
     )
-    logger.debug('date_cutoff: ' + str(date_cutoff))
 
     for constituent in constituents:
 
@@ -154,6 +153,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact list is not new then do nothing. Otherwise generate list and save.
 
     TODO: TECH-1331 better logging
+    TODO: TECH-1343 SendableConsGroup
 
     Parameters
     ----------

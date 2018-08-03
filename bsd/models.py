@@ -61,7 +61,7 @@ def find_constituents_by_state_cd(state_cd):
     """Filter by state and is subscribed"""
     filter = {}
     filter['state_cd'] = str(state_cd)
-    filter['is_subscribed']
+    filter['is_subscribed'] = True
     bundles = ['primary_cons_addr', 'primary_cons_email']
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202
