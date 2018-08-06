@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
+EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 
 
@@ -44,12 +45,12 @@ def get_buffer_width_from_miles(miles):
 def sync_contact_list_with_bsd_constituents(
     contact_list,
     constituents,
-    max_contacts=None,
-    max_distance=None,
-    point=None,
+    max_contacts,
+    max_distance,
+    point,
 ):
     """
-    Sync Contact List with BSD constituents, with options for max list size
+    Sync Contact List with BSD constituents, with params for max list size
     and contact distance from point
 
     Parameters
@@ -59,11 +60,11 @@ def sync_contact_list_with_bsd_constituents(
     constituents : xml
         List of constituents should be from BSD api in xml format
     max_contacts : int
-        Optional max # of contacts to limit list size. 0 means unlimited.
+        Max # of contacts to limit list size
     max_distance : float
-        Optional max distance miles from point to limit list radius
+        Max distance miles from point to limit list radius
     point : Point
-        Optional Point, only required for use with max_contacts or max_distance
+        Point for use with max_contacts or max_distance
 
     Returns
         -------
@@ -124,16 +125,14 @@ def sync_contact_list_with_bsd_constituents(
                     )
                     contact_list.contacts.add(contact)
 
-    """Get list limit from max contacts and point."""
-    if point is None or max_contacts is None or max_contacts == 0:
-        list_limit = None
-    else:
+    """Get list limit from max contacts if valid, otherwise default"""
+    if max_contacts > 0 and max_contacts < EVENTS_PROMOTE_MAX_LIST_SIZE:
         list_limit = max_contacts
+    else:
+        list_limit = EVENTS_PROMOTE_MAX_LIST_SIZE
 
     """If list size is greater than limit, then trim it by distance"""
-    if list_limit is not None and (
-        contact_list.contacts.count() > list_limit
-    ):
+    if contact_list.contacts.count() > list_limit:
         contact_list.trim_list_by_distance(list_limit, point)
 
     return contact_list

@@ -78,7 +78,7 @@ Email is one of the most important tools we have to reach supporters like you, b
 """)
 EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
-EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
+EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 ORGANIZING_HUB_DASHBOARD_URL = settings.ORGANIZING_HUB_DASHBOARD_URL
@@ -375,8 +375,8 @@ class EventPromoteView(
 
     def get_initial(self, *args, **kwargs):
         event = self.get_event()
-        max_recipients = EVENTS_PROMOTE_MAX if event.capacity == 0 else min(
-            EVENTS_PROMOTE_MAX,
+        max_recipients = EVENTS_PROMOTE_MAX_LIST_SIZE if event.capacity == 0 else min(
+            EVENTS_PROMOTE_MAX_LIST_SIZE,
             event.capacity * EVENTS_CAPACITY_RATIO
         )
         message = Template("""Hello --
@@ -412,7 +412,7 @@ Thanks!""").render(Context({
 
         """Set cap on recipients"""
         form.instance.max_recipients = min(
-            EVENTS_PROMOTE_MAX,
+            EVENTS_PROMOTE_MAX_LIST_SIZE,
             form.cleaned_data['max_recipients']
         )
 

@@ -3,11 +3,11 @@ from django.conf import settings
 from .models import EventPromotion
 
 
-EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
+EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 
 
 class EventPromotionForm(forms.ModelForm):
-    promote_max = EVENTS_PROMOTE_MAX
+    promote_max = EVENTS_PROMOTE_MAX_LIST_SIZE
     max_recipients = forms.IntegerField(
         label="Please send this to how many nearby supporters",
         max_value=promote_max,
