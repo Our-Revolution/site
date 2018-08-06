@@ -19,6 +19,14 @@ logger = logging.getLogger(__name__)
 # Get bsd api
 bsdApi = BSD().api
 
+group_rating_choices = (
+    (5, '5 - Strongly aligned with values and expectations'),
+    (4, '4 - Somewhat aligned with values and expectations'),
+    (3, '3 - Working toward alignment values and expectations'),
+    (2, '2 - Somewhat misaligned or resistant to values and expectations'),
+    (1, '1 - Group inactive or very misaligned with values and expectations'),
+)
+
 
 def find_local_group_by_user(user):
 
@@ -60,7 +68,11 @@ class Group(models.Model):
         blank=False,
         unique=True
     )
-
+    group_rating = models.IntegerField(
+        blank=True,
+        choices=group_rating_choices,
+        null=True,
+    )
     # Order by group priority
     GROUP_TYPES = (
         (1, 'State Organizing Committee'),

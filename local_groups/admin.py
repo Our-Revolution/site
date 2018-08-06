@@ -41,10 +41,25 @@ class LocalGroupRoleAdmin(admin.ModelAdmin):
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'state', 'city', 'postal_code', 'status', 'signup_date',
-        'group_id', 'organizer', 'signed_mou_version', 'group_type'
+        'name',
+        'state',
+        'city',
+        'postal_code',
+        'status',
+        'signup_date',
+        'group_id',
+        'organizer',
+        'signed_mou_version',
+        'group_type',
+        'group_rating',
     ]
-    list_filter = ['status', 'signed_mou_version', 'organizer', 'state']
+    list_filter = [
+        'status',
+        'signed_mou_version',
+        'organizer',
+        'group_rating',
+        'state',
+    ]
     search_fields = ['name', 'state', 'city', 'group_id']
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('issues',)
