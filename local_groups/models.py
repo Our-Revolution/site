@@ -68,11 +68,7 @@ class Group(models.Model):
         blank=False,
         unique=True
     )
-    group_rating = models.IntegerField(
-        blank=True,
-        choices=group_rating_choices,
-        null=True,
-    )
+
     # Order by group priority
     GROUP_TYPES = (
         (1, 'State Organizing Committee'),
@@ -306,7 +302,12 @@ class Group(models.Model):
         verbose_name="MOU URL",
         max_length=255
     )
-
+    """Admin Group Rating"""
+    group_rating = models.IntegerField(
+        blank=True,
+        choices=group_rating_choices,
+        null=True,
+    )
     # Notes field for internal OR staff use
     notes = models.TextField(
         blank=True,
