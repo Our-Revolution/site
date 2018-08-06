@@ -22,7 +22,7 @@ bsdApi = BSD().api
 group_rating_choices = (
     (5, '5 - Strongly aligned with values and expectations'),
     (4, '4 - Somewhat aligned with values and expectations'),
-    (3, '3 - Working toward alignment values and expectations'),
+    (3, '3 - Working toward alignment with values and expectations'),
     (2, '2 - Somewhat misaligned or resistant to values and expectations'),
     (1, '1 - Group inactive or very misaligned with values and expectations'),
 )
