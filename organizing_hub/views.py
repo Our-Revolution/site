@@ -21,6 +21,7 @@ from bsd.models import (
     BSDEvent,
     BSDProfile,
     duration_type_hours,
+    find_event_by_id_obfuscated,
 )
 from events.forms import EventPromotionForm
 from events.models import EventPromotion
@@ -77,7 +78,7 @@ Email is one of the most important tools we have to reach supporters like you, b
 """)
 EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
-EVENTS_PROMOTE_MAX = settings.EVENTS_PROMOTE_MAX
+EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 
 LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID = settings.LOCAL_GROUPS_ROLE_GROUP_ADMIN_ID
 ORGANIZING_HUB_DASHBOARD_URL = settings.ORGANIZING_HUB_DASHBOARD_URL
@@ -110,35 +111,6 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
 
     """Add Group Role to Affiliation"""
     local_group_affiliation.local_group_roles.add(local_group_role_id)
-
-
-def get_event_from_bsd(event_id_obfuscated):
-
-    '''
-    Get Event from BSD
-    https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-    '''
-    api_call = '/event/get_event_details'
-    api_params = {}
-    request_type = bsd_api.POST
-    query = {
-        'event_id_obfuscated': event_id_obfuscated,
-    }
-    body = {
-        'event_api_version': '2',
-        'values': json.dumps(query)
-    }
-
-    api_result = bsd_api.doRequest(
-        api_call,
-        api_params,
-        request_type,
-        body
-    )
-    event_json = json.loads(api_result.body)
-    event = BSDEvent.objects.from_json(event_json)
-
-    return event
 
 
 def is_event_owner(user, event):
@@ -403,8 +375,8 @@ class EventPromoteView(
 
     def get_initial(self, *args, **kwargs):
         event = self.get_event()
-        max_recipients = EVENTS_PROMOTE_MAX if event.capacity == 0 else min(
-            EVENTS_PROMOTE_MAX,
+        max_recipients = EVENTS_PROMOTE_MAX_LIST_SIZE if event.capacity == 0 else min(
+            EVENTS_PROMOTE_MAX_LIST_SIZE,
             event.capacity * EVENTS_CAPACITY_RATIO
         )
         message = Template("""Hello --
@@ -440,7 +412,7 @@ Thanks!""").render(Context({
 
         """Set cap on recipients"""
         form.instance.max_recipients = min(
-            EVENTS_PROMOTE_MAX,
+            EVENTS_PROMOTE_MAX_LIST_SIZE,
             form.cleaned_data['max_recipients']
         )
 
@@ -474,7 +446,7 @@ Thanks!""").render(Context({
         if self.event is not None:
             return self.event
 
-        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
+        event = find_event_by_id_obfuscated(self.kwargs['event_id_obfuscated'])
         self.event = event
 
         return self.event
@@ -542,7 +514,7 @@ class EventUpdateView(SuccessMessageMixin, UpdateView):
         if self.object is not None:
             return self.object
 
-        event = get_event_from_bsd(self.kwargs['event_id_obfuscated'])
+        event = find_event_by_id_obfuscated(self.kwargs['event_id_obfuscated'])
         self.object = event
 
         return self.object

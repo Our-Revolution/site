@@ -24,6 +24,19 @@ AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', None)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+BSD_BASE_URL = os.environ.get('BSD_BASE_URL', 'https://ourrevdev.cp.bsd.net')
+BSD_CREATE_ACCOUNT_URL = os.environ.get(
+    'BSD_CREATE_ACCOUNT_URL',
+    'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login'
+)
+"""Default to roughly 1 hr max retries"""
+BSD_API_DEFERRED_RETRY_ATTEMPTS = int(os.environ.get(
+    'BSD_API_DEFERRED_RETRY_ATTEMPTS', 120
+))
+BSD_API_DEFERRED_RETRY_SECONDS = int(os.environ.get(
+    'BSD_API_DEFERRED_RETRY_SECONDS', 30
+))
+
 """Fastly and Varnish caching"""
 CACHE_FRONTEND_ENABLED = bool(int(os.environ.get('CACHE_FRONTEND_ENABLED', 0)))
 
@@ -47,9 +60,17 @@ EVENTS_CAPACITY_RATIO = int(os.environ.get(
     'EVENTS_CAPACITY_RATIO',
     40
 ))
-EVENTS_PROMOTE_MAX = int(os.environ.get(
-    'EVENTS_PROMOTE_MAX',
+EVENTS_PROMOTE_MAX_DISTANCE_MILES = int(os.environ.get(
+    'EVENTS_PROMOTE_MAX_DISTANCE_MILES',
+    100
+))
+EVENTS_PROMOTE_MAX_LIST_SIZE = int(os.environ.get(
+    'EVENTS_PROMOTE_MAX_LIST_SIZE',
     4000
+))
+EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = int(os.environ.get(
+    'EVENTS_PROMOTE_RECENT_CUTOFF_DAYS',
+    14
 ))
 
 """Local Groups Roles"""
@@ -73,12 +94,6 @@ ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 
 SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
-
-BSD_BASE_URL = os.environ.get('BSD_BASE_URL', 'https://ourrevdev.cp.bsd.net')
-BSD_CREATE_ACCOUNT_URL = os.environ.get(
-    'BSD_CREATE_ACCOUNT_URL',
-    'https://ourrevdev.cp.bsd.net/ctl/Constituent/Login'
-)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -247,7 +262,6 @@ DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 """Set NAME manually to avoid Celery Results error"""
 DATABASES['default']['NAME'] = 'ourrevolution'
 
-# BSD login urls
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'bsd.backends.BSDAuthenticationBackend',

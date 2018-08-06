@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from dateutil import tz
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.db import models
 from localflavor.us.models import USStateField
@@ -11,6 +13,7 @@ from .api import BSD
 import datetime
 import logging
 import json
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +21,8 @@ logger = logging.getLogger(__name__)
 bsd_api = BSD().api
 
 BSD_BASE_URL = settings.BSD_BASE_URL
+BSD_API_DEFERRED_RETRY_ATTEMPTS = settings.BSD_API_DEFERRED_RETRY_ATTEMPTS
+BSD_API_DEFERRED_RETRY_SECONDS = settings.BSD_API_DEFERRED_RETRY_SECONDS
 
 duration_type_minutes = 1
 duration_type_hours = 2
@@ -36,6 +41,98 @@ def assert_valid_account(api_result):
     assert cons_id is not None
     assert cons.find('has_account').text == "1"
     assert cons.find('is_banned').text == "0"
+
+
+def find_constituents_by_state_cd(state_cd):
+    """
+    Find BSD constituents by state/territory and wait for deferred result
+
+    TODO: make Constituent model and return that instead of xml
+
+    Parameters
+    ----------
+    state_cd : str
+        BSD field for state/territory code, 2 characters
+
+    Returns
+        -------
+        xml
+            Returns list of constituents from BSD api in xml format
+    """
+
+    """Filter by state and is subscribed"""
+    filter = {}
+    filter['state_cd'] = str(state_cd)
+    filter['is_subscribed'] = True
+    bundles = ['primary_cons_addr', 'primary_cons_email']
+    constituents_result = bsd_api.cons_getConstituents(filter, bundles)
+    assert constituents_result.http_status is 202
+    constituents_deferred_id = constituents_result.body
+
+    i = 1
+    while i <= BSD_API_DEFERRED_RETRY_ATTEMPTS:
+        """Wait for retry if this is not first attempt"""
+        if i > 1:
+            time.sleep(BSD_API_DEFERRED_RETRY_SECONDS)
+        constituents_deferred_result = bsd_api.getDeferredResults(
+            constituents_deferred_id
+        )
+        if constituents_deferred_result.http_status == 202:
+            """If result not ready yet then increment and retry"""
+            i += 1
+        else:
+            break
+
+    if constituents_deferred_result.http_status == 200:
+        tree = ElementTree().parse(StringIO(
+            constituents_deferred_result.body
+        ))
+        constituents_xml = tree.findall('cons')
+        return constituents_xml
+    else:
+        return None
+
+
+def find_event_by_id_obfuscated(event_id_obfuscated):
+    """
+    Find event by event_id_obfuscated via BSD api and convert to Event model
+
+    Parameters
+    ----------
+    event_id_obfuscated : str
+        event_id_obfuscated field in BSD
+
+    Returns
+        -------
+        BSDEvent
+            Returns Event model that matches event id
+    """
+
+    '''
+    Get Event from BSD
+    https://github.com/bluestatedigital/bsd-api-python#raw-api-method
+    '''
+    api_call = '/event/get_event_details'
+    api_params = {}
+    request_type = bsd_api.POST
+    query = {
+        'event_id_obfuscated': event_id_obfuscated,
+    }
+    body = {
+        'event_api_version': '2',
+        'values': json.dumps(query)
+    }
+
+    api_result = bsd_api.doRequest(
+        api_call,
+        api_params,
+        request_type,
+        body
+    )
+    event_json = json.loads(api_result.body)
+    event = BSDEvent.objects.from_json(event_json)
+
+    return event
 
 
 def get_bsd_event_url(event_id_obfuscated):
@@ -124,6 +221,9 @@ class BSDEventManager(models.Manager):
         utc_datetime = start_datetime_utc.replace(tzinfo=utc_zone)
         local_datetime = utc_datetime.astimezone(local_zone)
 
+        """Get point from lat/long"""
+        point = Point(y=float(data["latitude"]), x=float(data["longitude"]))
+
         bsd_event = self.model(
             capacity=capacity,
             contact_phone=data["contact_phone"],
@@ -137,6 +237,7 @@ class BSDEventManager(models.Manager):
             duration_count=duration_count,
             duration_type=duration_type,
             host_receive_rsvp_emails=int(data["host_receive_rsvp_emails"]),
+            point=point,
             public_phone=int(data["public_phone"]),
             start_day=local_datetime.date(),
             start_time=local_datetime.time(),
@@ -205,6 +306,7 @@ class BSDEvent(models.Model):
         default=1,  # default to yes
         verbose_name='Notify me when new people RSVP'
     )
+    point = PointField(blank=True, null=True)
     public_phone = models.IntegerField(
         default=1,  # default to yes
         verbose_name='Make my phone number public to attendees'

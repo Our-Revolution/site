@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.contrib.gis.db.models import PointField
+from django.contrib.gis.db.models.functions import Distance
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 import logging
@@ -86,3 +87,38 @@ class ContactList(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.id, self.name)
+
+    def trim_list_by_distance(self, list_limit, point):
+        """
+        Trim contact list by distance
+
+        Parameters
+        ----------
+        self : ContactList
+            ContactList to trim
+        list_limit : int
+            Size limit for list
+        point : Point
+            Point to use for distance sorting
+
+        Returns
+            -------
+            ContactList
+                Returns updated ContactList
+        """
+
+        """If list size is greater than limit, then trim by distance"""
+        if self.contacts.count() > list_limit:
+
+            """Sort contacts by distance to point"""
+            contacts_sorted = self.contacts.annotate(
+                distance=Distance('point', point)
+            ).order_by('distance')
+
+            """Slice sorted list to get extras above limit"""
+            contacts_extra = contacts_sorted[list_limit:]
+
+            """Remove extras from contact list"""
+            self.contacts.remove(*contacts_extra)
+
+        return self
