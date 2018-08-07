@@ -15,6 +15,9 @@ class CallProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __unicode__(self):
+        return self.user.email + " [" + str(self.user.id) + "]"
+
 
 @unique
 class CallCampaignStatus(Enum):
@@ -59,6 +62,9 @@ class CallCampaign(models.Model):
     )
     title = models.CharField(max_length=128)
 
+    def __unicode__(self):
+        return '%s [%s]' % (self.title, self.id)
+
 
 class Call(models.Model):
     """
@@ -71,5 +77,5 @@ class Call(models.Model):
     contact = models.ForeignKey(Contact)
     date_created = models.DateTimeField(auto_now_add=True)
 
-    # def __unicode__(self):
-    #     return str(self.id) + (' ' + self.name if self.name else '')
+    def __unicode__(self):
+        return 'Call [%s] | %s' % (self.id, self.call_campaign)
