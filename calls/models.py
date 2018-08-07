@@ -79,3 +79,45 @@ class Call(models.Model):
 
     def __unicode__(self):
         return 'Call [%s] | %s' % (self.id, self.call_campaign)
+
+
+@unique
+class CallAnswer(Enum):
+    yes = (1, 'Yes')
+    no = (2, 'No')
+    maybe = (3, 'Maybe')
+
+
+@unique
+class CallQuestion(Enum):
+    opt_out = (1, 'Opt out of future calls?', (CallAnswer.yes, CallAnswer.no))
+    pick_up_phone = (2, 'Did the contact pick up the phone?', (
+        CallAnswer.yes,
+        CallAnswer.no
+    ))
+    take_action = (3, 'Does the contact want to take action with your group?', (
+        CallAnswer.yes,
+        CallAnswer.no,
+        CallAnswer.maybe,
+    ))
+
+
+class CallResponse(models.Model):
+    """
+    Call Response Model
+
+    This represents a response to a question during a Call
+    """
+
+    call = models.ForeignKey(Call)
+    date_created = models.DateTimeField(auto_now_add=True)
+    question = models.IntegerField(choices=[
+        (x.value[0], x.value[1]) for x in CallQuestion
+    ])
+    answer = models.IntegerField(choices=[x.value for x in CallAnswer])
+
+    def __unicode__(self):
+        return 'Response [%s] | %s' % (self.id, self.call)
+
+    class Meta:
+        unique_together = ["call", "question"]

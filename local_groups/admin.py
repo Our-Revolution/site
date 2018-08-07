@@ -34,7 +34,7 @@ class LocalGroupProfileAdmin(admin.ModelAdmin):
 
 @admin.register(LocalGroupRole)
 class LocalGroupRoleAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ['permissions']
 
 
 # Register your models here.
