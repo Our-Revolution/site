@@ -3,12 +3,12 @@ from .models import Call, CallCampaign, CallProfile, CallResponse
 
 
 class CallResponseInline(admin.StackedInline):
+    model = CallResponse
     readonly_fields = ['date_created', 'date_modified']
     fields = readonly_fields + [
         'question',
         'answer',
     ]
-    model = CallResponse
 
 
 @admin.register(Call)
@@ -26,6 +26,14 @@ class CallAdmin(admin.ModelAdmin):
 @admin.register(CallCampaign)
 class CallCampaignAdmin(admin.ModelAdmin):
     filter_horizontal = ['callers']
+    list_display = [
+        'title',
+        'date_created',
+        'status',
+        'postal_code',
+        'max_distance',
+        'max_recipients',
+    ]
     readonly_fields = [
         'owner',
         'local_group',
