@@ -44,8 +44,9 @@ class CallCampaign(models.Model):
         blank=True,
         related_name='campaigns_as_caller'
     )
-    contact_list = models.ForeignKey(
+    contact_list = models.OneToOneField(
         ContactList,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
@@ -84,6 +85,9 @@ class Call(models.Model):
 
     def __unicode__(self):
         return 'Call [%s] | %s' % (self.id, self.call_campaign)
+
+    class Meta:
+        unique_together = ["call_campaign", "contact"]
 
 
 @unique
