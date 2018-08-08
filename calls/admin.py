@@ -37,13 +37,13 @@ class CallCampaignAdmin(admin.ModelAdmin):
     readonly_fields = [
         'owner',
         'local_group',
-        'contact_list',
         'date_created',
         'date_modified',
     ]
     fields = readonly_fields + [
-        'status',
         'title',
+        'status',
+        'contact_list',
         'script',
         'postal_code',
         'max_distance',
