@@ -91,19 +91,37 @@ class CallAnswer(Enum):
     yes = (1, 'Yes')
     no = (2, 'No')
     maybe = (3, 'Maybe')
+    no_answer = (4, 'No answer')
+    wrong_number = (5, 'Wrong number')
+    busy = (6, 'Busy')
+    not_home = (7, 'Not Home')
+    do_not_call = (8, 'Do not call')
 
 
 @unique
 class CallQuestion(Enum):
-    opt_out = (1, 'Opt out of future calls?', (CallAnswer.yes, CallAnswer.no))
-    pick_up_phone = (2, 'Did the contact pick up the phone?', (
+    talk_to_contact = (1, 'Did you talk to the contact?', (
         CallAnswer.yes,
-        CallAnswer.no
+        CallAnswer.no,
+    ))
+    talk_to_contact_why_not = (2, 'Why not?', (
+        CallAnswer.no_answer,
+        CallAnswer.wrong_number,
+        CallAnswer.busy,
+        CallAnswer.not_home,
+        CallAnswer.do_not_call,
     ))
     take_action = (3, 'Does the contact want to take action with your group?', (
         CallAnswer.yes,
         CallAnswer.no,
-        CallAnswer.maybe,
+    ))
+    voice_message = (4, 'Did you leave a voicemail?', (
+        CallAnswer.yes,
+        CallAnswer.no,
+    ))
+    text_message = (5, 'Did you send a text message?', (
+        CallAnswer.yes,
+        CallAnswer.no,
     ))
 
 
