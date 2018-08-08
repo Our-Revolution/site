@@ -2,9 +2,25 @@ from django.contrib import admin
 from .models import Call, CallCampaign, CallProfile, CallResponse
 
 
+class CallResponseInline(admin.StackedInline):
+    readonly_fields = ['date_created', 'date_modified']
+    fields = readonly_fields + [
+        'question',
+        'answer',
+    ]
+    model = CallResponse
+
+
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
-    pass
+    inlines = [CallResponseInline]
+    readonly_fields = [
+        'call_campaign',
+        'caller',
+        'contact',
+        'date_created',
+        'date_modified',
+    ]
 
 
 @admin.register(CallCampaign)
@@ -14,6 +30,8 @@ class CallCampaignAdmin(admin.ModelAdmin):
         'owner',
         'local_group',
         'contact_list',
+        'date_created',
+        'date_modified',
     ]
     fields = readonly_fields + [
         'status',
@@ -28,13 +46,4 @@ class CallCampaignAdmin(admin.ModelAdmin):
 
 @admin.register(CallProfile)
 class CallProfileAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(CallResponse)
-class CallResponseAdmin(admin.ModelAdmin):
-    readonly_fields = ['call', 'date_created']
-    fields = readonly_fields + [
-        'question',
-        'answer',
-    ]
+    readonly_fields = ['user', 'date_created', 'date_modified']

@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 class CallProfile(models.Model):
     """Calls app related information for a user"""
 
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -47,6 +49,8 @@ class CallCampaign(models.Model):
         blank=True,
         null=True,
     )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     local_group = models.ForeignKey(LocalGroup)
     """Max distance in miles"""
     max_distance = models.IntegerField()
@@ -76,6 +80,7 @@ class Call(models.Model):
     caller = models.ForeignKey(CallProfile)
     contact = models.ForeignKey(Contact)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return 'Call [%s] | %s' % (self.id, self.call_campaign)
@@ -111,6 +116,7 @@ class CallResponse(models.Model):
 
     call = models.ForeignKey(Call)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     question = models.IntegerField(choices=[
         (x.value[0], x.value[1]) for x in CallQuestion
     ])
