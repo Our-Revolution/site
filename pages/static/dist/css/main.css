@@ -10766,6 +10766,12 @@ div.recurrence-widget {
   margin-bottom: 0;
   font-size: 12px; }
 
+.birthday-page-content #content-primary-content-body {
+  text-align: right; }
+  @media screen and (max-width: 991px) {
+    .birthday-page-content #content-primary-content-body {
+      text-align: center; } }
+
 @media (min-width: 1400px) {
   .birthday .container--lg {
     width: 1370px; } }

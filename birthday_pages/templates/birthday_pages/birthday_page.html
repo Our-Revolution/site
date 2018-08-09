@@ -1,0 +1,58 @@
+{% extends "pages/base_page.html" %}
+
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block page_title %}{% firstof page.seo_title page.title "Our Revolution" %}{% endblock %}
+
+{% block meta %}
+  {{ block.super }}
+
+  <style>
+
+    #primary_content {
+        {% if page.primary_content_background_color %}
+        background-color: #{{ page.primary_content_background_color }};
+      {% endif %}
+
+      {% if page.primary_content_background_image %}
+        {% image page.primary_content_background_image original as primary_img %}
+        background-image: url('{{ primary_img.url }}');
+      {% endif %}
+    }
+
+  </style>
+{% endblock %}
+
+
+{% block notification_banner %}
+<!-- TODO: conditional notification banner on page model -->
+{% endblock %}
+
+
+{% block content %}
+
+<div class="birthday-page-content">
+
+  <div id="primary_content" class="container-fluid bg-cover">
+
+    <div class="container pt4 pb4">
+
+      <div class="row">
+
+        <div id="content-primary-content-body" class="col-md-5">
+          {{ page.primary_content_body | richtext }}
+        </div>
+
+        <div class="col-md-7">
+          {{page.primary_content_embed_code | safe }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
