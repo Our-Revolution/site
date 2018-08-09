@@ -1475,7 +1475,6 @@ class InitiativeeRaceSnippet(Orderable, models.Model):
         return unicode(self.initiative_race)
 
 
-
 class ElectionTrackingPage(RoutablePageMixin, Page):
     abstract = RichTextField()
     body = RichTextField()

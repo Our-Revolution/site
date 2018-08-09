@@ -180,6 +180,9 @@ class BSDProfile(models.Model):
     cons_id = models.CharField(default=cons_id_default, max_length=128)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __unicode__(self):
+        return self.user.email + " [" + str(self.user.id) + "]"
+
 
 class BSDEventManager(models.Manager):
 
