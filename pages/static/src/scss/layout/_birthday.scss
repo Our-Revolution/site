@@ -13,6 +13,15 @@
       text-align: center;
     }
   }
+
+  .birthday-stat {
+    height: 250px;
+
+    @include until($medium) {
+      height: 200px;
+    }
+  }
+
 }
 
 .birthday {

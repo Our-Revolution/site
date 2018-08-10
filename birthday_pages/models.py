@@ -16,15 +16,15 @@ class BirthdayPage(Page):
     button_text_max = 128
 
     primary_content_background_color = models.CharField(
-        max_length=6,
         blank=True,
+        help_text=color_help_text,
+        max_length=6,
         null=True,
-        help_text=color_help_text
     )
     primary_content_background_image = models.ForeignKey(
         'wagtailimages.Image',
-        null=True,
         blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
@@ -33,36 +33,36 @@ class BirthdayPage(Page):
     primary_content_embed_code = models.TextField(help_text=embed_help_text)
     section_2_1_background_image = models.ForeignKey(
         'wagtailimages.Image',
-        null=True,
         blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    section_2_1_body = RichTextField()
+    section_2_1_body = RichTextField(blank=True, null=True)
     section_2_2_background_image = models.ForeignKey(
         'wagtailimages.Image',
-        null=True,
         blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    section_2_2_body = RichTextField()
+    section_2_2_body = RichTextField(blank=True, null=True)
     section_2_3_background_image = models.ForeignKey(
         'wagtailimages.Image',
-        null=True,
         blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    section_2_3_body = RichTextField()
+    section_2_3_body = RichTextField(blank=True, null=True)
     section_2_4_background_image = models.ForeignKey(
         'wagtailimages.Image',
-        null=True,
         blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    section_2_4_body = RichTextField()
+    section_2_4_body = RichTextField(blank=True, null=True)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
@@ -76,9 +76,21 @@ class BirthdayPage(Page):
             heading="Primary Content",
             classname="collapsible"
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('section_2_1_body'),
+                ImageChooserPanel('section_2_1_background_image'),
+                FieldPanel('section_2_2_body'),
+                ImageChooserPanel('section_2_2_background_image'),
+                FieldPanel('section_2_3_body'),
+                ImageChooserPanel('section_2_3_background_image'),
+                FieldPanel('section_2_4_body'),
+                ImageChooserPanel('section_2_4_background_image'),
+            ],
+            heading="Section 2",
+            classname="collapsible"
+        ),
     ]
-
-
 
     # facebook_url = models.URLField(null=True, blank=True)
     # primary_content = RichTextField()

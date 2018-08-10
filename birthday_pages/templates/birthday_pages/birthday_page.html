@@ -20,6 +20,36 @@
       {% endif %}
     }
 
+    .birthday-section-2-1-background-image {
+      {% if page.section_2_1_background_image %}
+        {% image page.section_2_1_background_image original as section_2_1_background_image %}
+        background-image: url('{{ section_2_1_background_image.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-2-2-background-image {
+      {% if page.section_2_2_background_image %}
+        {% image page.section_2_2_background_image original as section_2_2_background_image %}
+        background-image: url('{{ section_2_2_background_image.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-2-3-background-image {
+      {% if page.section_2_3_background_image %}
+        {% image page.section_2_3_background_image original as section_2_3_background_image %}
+        background-image: url('{{ section_2_3_background_image.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-2-4-background-image {
+      {% if page.section_2_4_background_image %}
+        {% image page.section_2_4_background_image original as section_2_4_background_image %}
+        background-image: url('{{ section_2_4_background_image.url }}');
+      {% endif %}
+    }
+
+
+
   </style>
 {% endblock %}
 
@@ -33,7 +63,7 @@
 
 <div class="birthday-page">
 
-  <section class="container-fluid bg-cover birthday-primary-content">
+  <section class="birthday-primary-content container-fluid bg-cover">
     <div class="row ">
       <div class="col-xs-12">
 
@@ -49,6 +79,61 @@
                 {{ page.primary_content_embed_code | safe }}
               </div>
             </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="birthday-section-2 container-fluid blue-bg white-text">
+    <div class="row ">
+      <div class="col-xs-12">
+
+        <div class="container">
+          <div class="row">
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="birthday-section-2-1-body col-xs-6 birthday-stat">
+                  {{ page.section_2_1_body | richtext }}
+                </div>
+
+                <div class="birthday-section-2-1-background-image col-xs-6 birthday-stat bg-cover">
+                </div>
+
+                <div class="birthday-section-2-2-background-image col-xs-6 birthday-stat bg-cover">
+                </div>
+
+                <div class="birthday-section-2-2-body col-xs-6 birthday-stat">
+                  {{ page.section_2_2_body | richtext }}
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="birthday-section-2-3-body col-xs-6 birthday-stat">
+                  {{ page.section_2_3_body | richtext }}
+                </div>
+
+                <div class="birthday-section-2-3-background-image col-xs-6 birthday-stat bg-cover">
+                </div>
+
+                <div class="birthday-section-2-4-background-image col-xs-6 birthday-stat bg-cover">
+                </div>
+
+                <div class="birthday-section-2-4-body col-xs-6 birthday-stat">
+                  {{ page.section_2_4_body | richtext }}
+                </div>
+
+              </div>
+            </div>
+
 
           </div>
         </div>
