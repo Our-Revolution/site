@@ -9,8 +9,8 @@
 
   <style>
 
-    #primary_content {
-        {% if page.primary_content_background_color %}
+    .birthday-primary-content {
+      {% if page.primary_content_background_color %}
         background-color: #{{ page.primary_content_background_color }};
       {% endif %}
 
@@ -31,27 +31,31 @@
 
 {% block content %}
 
-<div class="birthday-page-content">
+<div class="birthday-page">
 
-  <div id="primary_content" class="container-fluid bg-cover">
+  <section class="container-fluid bg-cover birthday-primary-content">
+    <div class="row ">
+      <div class="col-xs-12">
 
-    <div class="container pt4 pb4">
+        <div class="container pt4 pb4">
+          <div class="row">
 
-      <div class="row">
+            <div class="col-md-5 birthday-primary-content-body">
+              {{ page.primary_content_body | richtext }}
+            </div>
 
-        <div id="content-primary-content-body" class="col-md-5">
-          {{ page.primary_content_body | richtext }}
-        </div>
+            <div class="col-md-7 birthday-primary-content-embed">
+              <div class="embed-responsive embed-responsive-16by9">
+                {{ page.primary_content_embed_code | safe }}
+              </div>
+            </div>
 
-        <div id="content-primary-content-embed" class="col-md-7">
-          {{page.primary_content_embed_code | safe }}
+          </div>
         </div>
 
       </div>
-
     </div>
-
-  </div>
+  </section>
 
 </div>
 

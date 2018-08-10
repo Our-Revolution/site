@@ -10766,14 +10766,14 @@ div.recurrence-widget {
   margin-bottom: 0;
   font-size: 12px; }
 
-.birthday-page-content #content-primary-content-body {
+.birthday-page .birthday-primary-content-body {
   text-align: right; }
   @media screen and (max-width: 991px) {
-    .birthday-page-content #content-primary-content-body {
+    .birthday-page .birthday-primary-content-body {
       text-align: center; } }
 
 @media screen and (max-width: 991px) {
-  .birthday-page-content #content-primary-content-embed {
+  .birthday-page .birthday-primary-content-embed {
     text-align: center; } }
 
 @media (min-width: 1400px) {

@@ -31,6 +31,38 @@ class BirthdayPage(Page):
     primary_content_body = RichTextField()
     primary_content_button_text = models.CharField(max_length=button_text_max)
     primary_content_embed_code = models.TextField(help_text=embed_help_text)
+    section_2_1_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_2_1_body = RichTextField()
+    section_2_2_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_2_2_body = RichTextField()
+    section_2_3_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_2_3_body = RichTextField()
+    section_2_4_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_2_4_body = RichTextField()
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(

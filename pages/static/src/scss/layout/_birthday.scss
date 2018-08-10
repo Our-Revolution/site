@@ -1,6 +1,6 @@
-.birthday-page-content {
+.birthday-page {
 
-  #content-primary-content-body {
+  .birthday-primary-content-body {
     text-align: right;
 
     @include until($large) {
@@ -8,7 +8,7 @@
     }
   }
 
-  #content-primary-content-embed {
+  .birthday-primary-content-embed {
     @include until($large) {
       text-align: center;
     }
