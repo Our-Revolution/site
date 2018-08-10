@@ -2,8 +2,6 @@
 
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-{% block page_title %}{% firstof page.seo_title page.title "Our Revolution" %}{% endblock %}
-
 {% block meta %}
   {{ block.super }}
 
