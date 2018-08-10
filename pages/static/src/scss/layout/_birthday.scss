@@ -7,6 +7,12 @@
       text-align: center;
     }
   }
+
+  #content-primary-content-embed {
+    @include until($large) {
+      text-align: center;
+    }
+  }
 }
 
 .birthday {
