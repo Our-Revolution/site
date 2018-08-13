@@ -10766,21 +10766,19 @@ div.recurrence-widget {
   margin-bottom: 0;
   font-size: 12px; }
 
-.birthday-page .birthday-primary-content-body {
-  text-align: right; }
-  @media screen and (max-width: 991px) {
+.birthday-page {
+  text-align: center; }
+  @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-body {
-      text-align: center; } }
-
-@media screen and (max-width: 991px) {
-  .birthday-page .birthday-primary-content-embed {
-    text-align: center; } }
-
-.birthday-page .birthday-stat {
-  height: 250px; }
-  @media screen and (max-width: 767px) {
-    .birthday-page .birthday-stat {
-      height: 200px; } }
+      text-align: right; } }
+  @media screen and (min-width: 992px) {
+    .birthday-page .birthday-primary-content-embed {
+      text-align: left; } }
+  .birthday-page .birthday-stat {
+    height: 250px; }
+    @media screen and (max-width: 991px) {
+      .birthday-page .birthday-stat {
+        height: 200px; } }
 
 @media (min-width: 1400px) {
   .birthday .container--lg {

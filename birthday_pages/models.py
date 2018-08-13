@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from django.db import models
-# from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel, MultiFieldPanel
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Page
@@ -63,6 +62,7 @@ class BirthdayPage(Page):
         related_name='+'
     )
     section_2_4_body = RichTextField(blank=True, null=True)
+    section_3_body = RichTextField()
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
@@ -88,6 +88,13 @@ class BirthdayPage(Page):
                 ImageChooserPanel('section_2_4_background_image'),
             ],
             heading="Section 2",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('section_3_body'),
+            ],
+            heading="Section 3",
             classname="collapsible"
         ),
     ]

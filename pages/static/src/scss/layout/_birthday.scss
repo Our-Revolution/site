@@ -1,23 +1,22 @@
 .birthday-page {
+  text-align: center;
 
   .birthday-primary-content-body {
-    text-align: right;
-
-    @include until($large) {
-      text-align: center;
+    @include at-least($large) {
+      text-align: right;
     }
   }
 
   .birthday-primary-content-embed {
-    @include until($large) {
-      text-align: center;
+    @include at-least($large) {
+      text-align: left;
     }
   }
 
   .birthday-stat {
     height: 250px;
 
-    @include until($medium) {
+    @include until($large) {
       height: 200px;
     }
   }
