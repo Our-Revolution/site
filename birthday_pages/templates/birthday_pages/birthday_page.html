@@ -18,35 +18,96 @@
       {% endif %}
     }
 
-    .birthday-section-2-1-background-image {
-      {% if page.section_2_1_background_image %}
-        {% image page.section_2_1_background_image original as section_2_1_background_image %}
-        background-image: url('{{ section_2_1_background_image.url }}');
+    .birthday-section-2-1-image {
+      {% if page.section_2_1_image %}
+        {% image page.section_2_1_image original as section_2_1_image %}
+        background-image: url('{{ section_2_1_image.url }}');
       {% endif %}
     }
 
-    .birthday-section-2-2-background-image {
-      {% if page.section_2_2_background_image %}
-        {% image page.section_2_2_background_image original as section_2_2_background_image %}
-        background-image: url('{{ section_2_2_background_image.url }}');
+    .birthday-section-2-2-image {
+      {% if page.section_2_2_image %}
+        {% image page.section_2_2_image original as section_2_2_image %}
+        background-image: url('{{ section_2_2_image.url }}');
       {% endif %}
     }
 
-    .birthday-section-2-3-background-image {
-      {% if page.section_2_3_background_image %}
-        {% image page.section_2_3_background_image original as section_2_3_background_image %}
-        background-image: url('{{ section_2_3_background_image.url }}');
+    .birthday-section-2-3-image {
+      {% if page.section_2_3_image %}
+        {% image page.section_2_3_image original as section_2_3_image %}
+        background-image: url('{{ section_2_3_image.url }}');
       {% endif %}
     }
 
-    .birthday-section-2-4-background-image {
-      {% if page.section_2_4_background_image %}
-        {% image page.section_2_4_background_image original as section_2_4_background_image %}
-        background-image: url('{{ section_2_4_background_image.url }}');
+    .birthday-section-2-4-image {
+      {% if page.section_2_4_image %}
+        {% image page.section_2_4_image original as section_2_4_image %}
+        background-image: url('{{ section_2_4_image.url }}');
       {% endif %}
     }
 
+    .birthday-section-4 {
+      {% if page.section_4_background_image %}
+        {% image page.section_4_background_image original as section_4_bg_img %}
+        background-image: url('{{ section_4_bg_img.url }}');
+      {% endif %}
+    }
 
+    .birthday-section-4-1-icon {
+      {% if page.section_4_1_icon %}
+        {% image page.section_4_1_icon original as section_4_1_icon %}
+        background-image: url('{{ section_4_1_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-2-icon {
+      {% if page.section_4_2_icon %}
+        {% image page.section_4_2_icon original as section_4_2_icon %}
+        background-image: url('{{ section_4_2_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-3-icon {
+      {% if page.section_4_3_icon %}
+        {% image page.section_4_3_icon original as section_4_3_icon %}
+        background-image: url('{{ section_4_3_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-4-icon {
+      {% if page.section_4_4_icon %}
+        {% image page.section_4_4_icon original as section_4_4_icon %}
+        background-image: url('{{ section_4_4_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-5-icon {
+      {% if page.section_4_5_icon %}
+        {% image page.section_4_5_icon original as section_4_5_icon %}
+        background-image: url('{{ section_4_5_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-6-icon {
+      {% if page.section_4_6_icon %}
+        {% image page.section_4_6_icon original as section_4_6_icon %}
+        background-image: url('{{ section_4_6_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-7-icon {
+      {% if page.section_4_7_icon %}
+        {% image page.section_4_7_icon original as section_4_7_icon %}
+        background-image: url('{{ section_4_7_icon.url }}');
+      {% endif %}
+    }
+
+    .birthday-section-4-8-icon {
+      {% if page.section_4_8_icon %}
+        {% image page.section_4_8_icon original as section_4_8_icon %}
+        background-image: url('{{ section_4_8_icon.url }}');
+      {% endif %}
+    }
 
   </style>
 {% endblock %}
@@ -99,10 +160,10 @@
                   {{ page.section_2_1_body | richtext }}
                 </div>
 
-                <div class="birthday-section-2-1-background-image col-xs-6 birthday-stat bg-cover">
+                <div class="birthday-section-2-1-image col-xs-6 birthday-stat bg-cover">
                 </div>
 
-                <div class="birthday-section-2-2-background-image col-xs-6 birthday-stat bg-cover">
+                <div class="birthday-section-2-2-image col-xs-6 birthday-stat bg-cover">
                 </div>
 
                 <div class="birthday-section-2-2-body col-xs-6 birthday-stat">
@@ -119,10 +180,10 @@
                   {{ page.section_2_3_body | richtext }}
                 </div>
 
-                <div class="birthday-section-2-3-background-image col-xs-6 birthday-stat bg-cover">
+                <div class="birthday-section-2-3-image col-xs-6 birthday-stat bg-cover">
                 </div>
 
-                <div class="birthday-section-2-4-background-image col-xs-6 birthday-stat bg-cover">
+                <div class="birthday-section-2-4-image col-xs-6 birthday-stat bg-cover">
                 </div>
 
                 <div class="birthday-section-2-4-body col-xs-6 birthday-stat">
@@ -144,6 +205,14 @@
     <div class="row ">
       <div class="col-md-6 col-md-offset-3">
         {{ page.section_3_body | richtext }}
+      </div>
+    </div>
+  </section>
+
+  <section class="birthday-section-4 container bg-cover">
+    <div class="row ">
+      <div class="col-md-6 col-md-offset-3">
+        {{ page.section_4_body | richtext }}
       </div>
     </div>
   </section>
