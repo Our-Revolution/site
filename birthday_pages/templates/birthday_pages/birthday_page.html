@@ -2,6 +2,8 @@
 
 {% load static wagtailcore_tags wagtailimages_tags %}
 
+{% block body_classes %}{{ block.super }} v2{% endblock %}
+
 {% block meta %}
   {{ block.super }}
 
@@ -123,9 +125,13 @@
       {% endif %}
     }
 
-    .birthday-section-7-image {
-      {% if page.section_7_image %}
-        {% image page.section_7_image original as section_7_image %}
+    .birthday-section-7 {
+      {% if page.section_7_background_color %}
+        background-color: #{{ page.section_7_background_color }};
+      {% endif %}
+
+      {% if page.section_7_background_image %}
+        {% image page.section_7_background_image original as section_7_image %}
         background-image: url('{{ section_7_image.url }}');
       {% endif %}
     }
@@ -144,7 +150,7 @@
 <div class="birthday-page">
 
   <section class="birthday-primary-content container-fluid bg-cover">
-    <div class="row ">
+    <div class="row">
       <div class="col-xs-12">
 
         <div class="container pt4 pb4">
@@ -168,7 +174,7 @@
   </section>
 
   <section class="birthday-section-2 container-fluid blue-bg white-text">
-    <div class="row ">
+    <div class="row">
       <div class="col-xs-12">
 
         <div class="container">
@@ -235,7 +241,7 @@
   </section>
 
   <section class="birthday-section-3 container">
-    <div class="row ">
+    <div class="row">
       <div class="col-md-6 col-md-offset-3">
         {{ page.section_3_body | richtext }}
       </div>
@@ -350,7 +356,7 @@
     </div>
   </section>
 
-  <section class="birthday-section-6 container">
+  <section class="birthday-section-6 container blue-bg white-text">
     <div class="row">
 
       <div class="col-md-6">
@@ -363,6 +369,23 @@
     </div>
   </section>
 
+  <section class="bg-cover birthday-section-7 container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="container pt4 pb4">
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+              <div class="bg-white">
+                {{ page.section_7_body | richtext }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
 </div>
 

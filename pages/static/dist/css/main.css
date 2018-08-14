@@ -7054,6 +7054,9 @@ html {
   position: relative;
   min-height: 100%; }
 
+body.v2 {
+  font-family: 'Open Sans', sans-serif; }
+
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
@@ -7075,6 +7078,10 @@ input {
   border-radius: 3px;
   border: 1px solid #ccc;
   color: #333; }
+
+.v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
+.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
+  font-family: 'Poppins', sans-serif; }
 
 h1, h2, h3, h4 {
   font-weight: 700; }
@@ -8595,6 +8602,9 @@ footer {
 .bg-right {
   background-position: 90% 50%;
   background-repeat: no-repeat; }
+
+.bg-white {
+  background-color: #ffffff; }
 
 .breadcrumb-hide-active .breadcrumb li.active {
   display: none; }

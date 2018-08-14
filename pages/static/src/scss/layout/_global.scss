@@ -4,6 +4,11 @@ html {
   min-height: 100%;
 }
 
+// Styleguide v2
+body.v2 {
+  font-family: 'Open Sans', sans-serif;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;
@@ -30,6 +35,14 @@ input {
   border-radius: 3px;
   border: 1px solid #ccc;
   color: #333;
+}
+
+// Styleguide v2
+.v2 {
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'Poppins', sans-serif;
+  }
 }
 
 h1, h2, h3, h4 {
