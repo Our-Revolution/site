@@ -8915,6 +8915,17 @@ footer {
     padding: 15px;
     right: 0px; }
 
+.card-list-static .card {
+  background-color: #134d88;
+  background-position: 90% 50%;
+  background-repeat: no-repeat;
+  box-shadow: -10px 10px rgba(255, 255, 255, 0.7);
+  color: #FFFFFF;
+  height: 150px;
+  margin: 0 0 20px;
+  padding: 20px;
+  text-align: left; }
+
 ul.list-plain,
 .list-plain ul {
   list-style-type: none;
