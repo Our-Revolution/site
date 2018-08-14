@@ -48,11 +48,10 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}">
     <script src="{% static "dist/js/bundle.min.js" %}"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 
-    {# Styleguide v2 Fonts #}
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    {% block fonts %}
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    {% endblock %}
 
     <meta name="google-site-verification" content="devyaHsbJD6w8nNEWsAu3SsODhEfijQqCOhFbuXdpCc" />
     {% block favicon %}

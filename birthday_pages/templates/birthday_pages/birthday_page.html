@@ -1,8 +1,6 @@
-{% extends "pages/base_page.html" %}
+{% extends "pages/base_page_v2.html" %}
 
 {% load static wagtailcore_tags wagtailimages_tags %}
-
-{% block body_classes %}{{ block.super }} v2{% endblock %}
 
 {% block meta %}
   {{ block.super }}
@@ -157,17 +155,7 @@
           <div class="row">
 
             <div class="col-md-5 birthday-primary-content-body">
-
-              <h1>lebowski youre something to what you</h1>
-              <h2>lebowski youre something to what you</h2>
-              <h3>lebowski youre something to what you</h3>
-              <h4>lebowski youre something to what you</h4>
-              <h5>lebowski youre something to what you</h5>
-              <h6>lebowski youre something to what you</h6>
-
-
               {{ page.primary_content_body | richtext }}
-
             </div>
 
             <div class="col-md-7 birthday-primary-content-embed">

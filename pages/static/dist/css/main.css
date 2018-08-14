@@ -8950,8 +8950,7 @@ footer {
 
 .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
 .v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 900; }
+  font-family: 'Poppins', sans-serif; }
 
 .height-xl {
   height: 480px; }
@@ -10283,6 +10282,11 @@ div.recurrence-widget {
     .splash__close:hover {
       opacity: 0.5; }
 
+.text-white-red, .birthday-page .birthday-primary-content-body h2 i {
+  background-color: #ff3939;
+  color: #ffffff;
+  padding: 0 5px; }
+
 .election-tracker .page-heading--full {
   width: 100%;
   background: #218fff url("../img/bg_image.jpg") top no-repeat;
@@ -10818,6 +10822,8 @@ div.recurrence-widget {
 
 .birthday-page {
   text-align: center; }
+  .birthday-page .birthday-primary-content-body h2 i {
+    font-style: inherit; }
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-body {
       text-align: right; } }

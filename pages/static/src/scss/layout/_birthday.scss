@@ -2,6 +2,12 @@
   text-align: center;
 
   .birthday-primary-content-body {
+
+    h2 i {
+      @extend .text-white-red;
+      font-style: inherit;
+    }
+
     @include at-least($large) {
       text-align: right;
     }
