@@ -5,23 +5,23 @@
 
   h1, h2, h3, h4, h5, h6,
   .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: 'Poppins', sans-serif;
+    @extend .text-poppins;
   }
 
   h1, .h1 {
-    @extend .fs34;
+    @extend .fsxxl;
   }
 
   h2, .h2 {
-    @extend .fs28;
+    @extend .fsxl;
 }
 
   h3, .h3 {
-    @extend .fs24;
+    @extend .fslg;
 }
 
   h4, .h4 {
-    @extend .fs20;
+    @extend .fsmd;
   }
 
   h5, .h5 {

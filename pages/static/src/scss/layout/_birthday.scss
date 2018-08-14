@@ -18,6 +18,32 @@
       text-align: left;
     }
   }
+
+  .birthday-section-2 {
+    @extend .text-poppins;
+    text-align: left;
+
+    .rich-text {
+      bottom: 0px;
+      left: 0px;
+      padding: 0 10px;
+      position: absolute;
+      width: 100%;
+    }
+
+    &, p {
+      @extend .fsmd;
+    }
+
+    b {
+      @extend .fsxxxl;
+
+      @include until($medium) {
+        font-size: 34px;
+        line-height: 38px;
+      }
+    }
+  }
 }
 
 .birthday {

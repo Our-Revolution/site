@@ -8933,24 +8933,26 @@ footer {
   .fs18 p, .v2 h5 p, .v2 .h5 p {
     font-size: 18px; }
 
-.fs20, .v2 h4, .v2 .h4 {
-  font-size: 20px; }
+.fsmd, .v2 h4, .v2 .h4, .birthday-page .birthday-section-2, .birthday-page .birthday-section-2 p {
+  font-size: 20px;
+  line-height: 24px; }
 
-.fs24, .v2 h3, .v2 .h3 {
-  font-size: 24px; }
+.fslg, .v2 h3, .v2 .h3 {
+  font-size: 24px;
+  line-height: 28px; }
 
-.fs28, .v2 h2, .v2 .h2 {
-  font-size: 28px; }
+.fsxl, .v2 h2, .v2 .h2 {
+  font-size: 28px;
+  line-height: 32px; }
 
-.fs34, .v2 h1, .v2 .h1 {
-  font-size: 34px; }
+.fsxxl, .v2 h1, .v2 .h1 {
+  font-size: 34px;
+  line-height: 38px; }
 
-.fs62 {
-  font-size: 62px; }
-
-.v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
-.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
-  font-family: 'Poppins', sans-serif; }
+.fsxxxl, .birthday-page .birthday-section-2 b {
+  font-size: 48px;
+  letter-spacing: -1px;
+  line-height: 1.1; }
 
 .height-xl {
   height: 480px; }
@@ -10282,6 +10284,10 @@ div.recurrence-widget {
     .splash__close:hover {
       opacity: 0.5; }
 
+.text-poppins, .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
+.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6, .birthday-page .birthday-section-2 {
+  font-family: 'Poppins', sans-serif; }
+
 .text-white-red, .birthday-page .birthday-primary-content-body h2 i {
   background-color: #ff3939;
   color: #ffffff;
@@ -10830,6 +10836,18 @@ div.recurrence-widget {
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-embed {
       text-align: left; } }
+  .birthday-page .birthday-section-2 {
+    text-align: left; }
+    .birthday-page .birthday-section-2 .rich-text {
+      bottom: 0px;
+      left: 0px;
+      padding: 0 10px;
+      position: absolute;
+      width: 100%; }
+    @media screen and (max-width: 767px) {
+      .birthday-page .birthday-section-2 b {
+        font-size: 34px;
+        line-height: 38px; } }
 
 @media (min-width: 1400px) {
   .birthday .container--lg {
