@@ -8923,10 +8923,21 @@ footer {
   background-color: #134d88;
   box-shadow: -10px 10px rgba(255, 255, 255, 0.7);
   color: #FFFFFF;
-  height: 160px;
   margin: 0 0 20px;
   padding: 20px;
   text-align: left; }
+
+.height-xl {
+  height: 480px; }
+
+.height-lg {
+  height: 240px; }
+
+.height-md {
+  height: 160px; }
+
+.height-sm {
+  height: 80px; }
 
 ul.list-plain,
 .list-plain ul {
@@ -10787,11 +10798,6 @@ div.recurrence-widget {
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-embed {
       text-align: left; } }
-  .birthday-page .birthday-stat {
-    height: 250px; }
-    @media screen and (max-width: 991px) {
-      .birthday-page .birthday-stat {
-        height: 200px; } }
 
 @media (min-width: 1400px) {
   .birthday .container--lg {

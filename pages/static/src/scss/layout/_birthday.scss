@@ -12,15 +12,6 @@
       text-align: left;
     }
   }
-
-  .birthday-stat {
-    height: 250px;
-
-    @include until($large) {
-      height: 200px;
-    }
-  }
-
 }
 
 .birthday {

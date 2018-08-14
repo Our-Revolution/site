@@ -64,6 +64,12 @@ class BirthdayPage(Page):
         related_name='+'
     )
     section_3_body = RichTextField()
+    section_4_background_color = models.CharField(
+        blank=True,
+        help_text=color_help_text,
+        max_length=6,
+        null=True,
+    )
     section_4_background_image = models.ForeignKey(
         'wagtailimages.Image',
         blank=True,
@@ -136,6 +142,49 @@ class BirthdayPage(Page):
         related_name='+'
     )
     section_4_8_title = models.CharField(max_length=title_max_length)
+    section_5_body = RichTextField()
+    section_5_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_6_body = RichTextField()
+    section_6_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_7_background_color = models.CharField(
+        blank=True,
+        help_text=color_help_text,
+        max_length=6,
+        null=True,
+    )
+    section_7_background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    section_7_body = RichTextField()
+    section_7_button_new_window = models.BooleanField(
+        default=False,
+        help_text='Open link in new window?'
+    )
+    section_7_button_text = models.CharField(max_length=button_text_max)
+    section_7_button_url = models.URLField()
+    social_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
@@ -143,8 +192,8 @@ class BirthdayPage(Page):
                 FieldPanel('primary_content_body'),
                 FieldPanel('primary_content_embed_code'),
                 FieldPanel('primary_content_button_text'),
-                FieldPanel('primary_content_background_color'),
                 ImageChooserPanel('primary_content_background_image'),
+                FieldPanel('primary_content_background_color'),
             ],
             heading="Primary Content",
             classname="collapsible"
@@ -194,136 +243,36 @@ class BirthdayPage(Page):
             heading="Section 4",
             classname="collapsible"
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('section_5_body'),
+                ImageChooserPanel('section_5_image'),
+            ],
+            heading="Section 5",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('section_6_body'),
+                ImageChooserPanel('section_6_image'),
+            ],
+            heading="Section 6",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('section_7_body'),
+                FieldPanel('section_7_button_text'),
+                FieldPanel('section_7_button_url'),
+                FieldPanel('section_7_button_new_window'),
+                ImageChooserPanel('section_7_background_image'),
+                FieldPanel('section_7_background_color'),
+            ],
+            heading="Section 7",
+            classname="collapsible"
+        ),
     ]
 
-    # facebook_url = models.URLField(null=True, blank=True)
-    # primary_content = RichTextField()
-    # primary_content_background_color = models.CharField(
-    #     max_length=6,
-    #     blank=True,
-    #     null=True,
-    #     help_text=color_help_text
-    # )
-    # primary_content_background_image = models.ForeignKey(
-    #     'wagtailimages.Image',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name='+'
-    # )
-    # primary_content_embed_code = models.TextField(
-    #     blank=True,
-    #     null=True,
-    #     help_text='Raw HTML embed code for signup form, etc.'
-    # )
-    # primary_content_text_color = models.CharField(
-    #     max_length=6,
-    #     blank=True,
-    #     null=True,
-    #     help_text=color_help_text
-    # )
-    # secondary_content = RichTextField(null=True, blank=True)
-    # secondary_content_background_color = models.CharField(
-    #     max_length=6,
-    #     blank=True,
-    #     null=True,
-    #     help_text=color_help_text
-    # )
-    # secondary_content_background_image = models.ForeignKey(
-    #     'wagtailimages.Image',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name='+'
-    # )
-    # secondary_content_show = models.BooleanField(
-    #     default=False,
-    #     help_text='Show secondary content.'
-    # )
-    # secondary_content_text_color = models.CharField(
-    #     max_length=6,
-    #     blank=True,
-    #     null=True,
-    #     help_text=color_help_text
-    # )
-    # show_accent_border = models.BooleanField(
-    #     default=False,
-    #     help_text='Show solid accent border at top of page.'
-    # )
-    # social_image = models.ForeignKey(
-    #     'wagtailimages.Image',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name='+'
-    # )
-    # standard_header_show = models.BooleanField(
-    #     default=True,
-    #     help_text='Show standard global header at top of page.'
-    # )
-    # standard_footer_show = models.BooleanField(
-    #     default=True,
-    #     help_text='Show standard global footer at bottom of page.'
-    # )
-    # twitter_url = models.URLField(null=True, blank=True)
-
-    # content_panels = Page.content_panels + [
-    #     ImageChooserPanel('custom_favicon'),
-    #     MultiFieldPanel(
-    #         [
-    #             FieldPanel('show_accent_border'),
-    #             FieldPanel('accent_border_color'),
-    #             FieldPanel('standard_header_show'),
-    #             FieldPanel('custom_header_show'),
-    #             FieldPanel('custom_header_background_color'),
-    #             FieldPanel('twitter_url'),
-    #             FieldPanel('facebook_url'),
-    #             ImageChooserPanel('custom_header_image'),
-    #             FieldPanel('button_text'),
-    #             FieldPanel('button_url'),
-    #             FieldPanel('button_url_new_window'),
-    #             FieldPanel('button_background_color'),
-    #             FieldPanel('button_text_color'),
-    #         ],
-    #         heading="Header",
-    #         classname="collapsible"
-    #     ),
-    #     MultiFieldPanel(
-    #         [
-    #             FieldPanel('primary_content'),
-    #             FieldPanel('primary_content_embed_code'),
-    #             FieldPanel('primary_content_background_color'),
-    #             FieldPanel('primary_content_text_color'),
-    #             ImageChooserPanel('primary_content_background_image'),
-    #         ],
-    #         heading="Primary Content",
-    #         classname="collapsible"
-    #     ),
-    #     MultiFieldPanel(
-    #         [
-    #             FieldPanel('secondary_content_show'),
-    #             FieldPanel('secondary_content'),
-    #             FieldPanel('secondary_content_background_color'),
-    #             FieldPanel('secondary_content_text_color'),
-    #             ImageChooserPanel('secondary_content_background_image'),
-    #         ],
-    #         heading="Secondary Content",
-    #         classname="collapsible"
-    #     ),
-    #     MultiFieldPanel(
-    #         [
-    #             FieldPanel('standard_footer_show'),
-    #             FieldPanel('custom_footer_show'),
-    #             FieldPanel('custom_footer_content'),
-    #             FieldPanel('custom_footer_background_color'),
-    #             FieldPanel('custom_footer_text_color'),
-    #             ImageChooserPanel('custom_footer_background_image'),
-    #         ],
-    #         heading="Footer",
-    #         classname="collapsible"
-    #     )
-    # ]
-    #
-    # promote_panels = Page.promote_panels + [
-    #     ImageChooserPanel('social_image')
-    # ]
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel('social_image')
+    ]
