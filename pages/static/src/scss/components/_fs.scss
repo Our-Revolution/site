@@ -1,0 +1,73 @@
+// Font size elements
+
+.fs3 {
+  font-size: 3em;
+
+  @include until($medium) {
+    font-size: 2em;
+  };
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
+.fs14 {
+  font-size: 14px;
+
+  p {
+    font-size: 14px;
+  }
+
+  &--important {
+    font-size: 14px !important;
+
+    p {
+      font-size: 14px !important;
+    }
+  }
+}
+
+.fs16 {
+  font-size: 16px;
+
+  p {
+    font-size: 16px;
+  }
+
+  &--important {
+    font-size: 16px !important;
+
+    p {
+      font-size: 16px !important;
+    }
+  }
+}
+
+.fs18 {
+  font-size: 18px;
+
+  p {
+    font-size: 18px;
+  }
+}
+
+.fs20 {
+  font-size: 20px;
+}
+
+.fs24 {
+  font-size: 24px;
+}
+
+.fs28 {
+  font-size: 28px;
+}
+
+.fs34 {
+  font-size: 34px;
+}
+
+.fs62 {
+  font-size: 62px;
+}

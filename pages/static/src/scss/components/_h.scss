@@ -1,0 +1,35 @@
+// Header elements
+
+// Styleguide v2
+.v2 {
+
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+  }
+
+  h1, .h1 {
+    @extend .fs34;
+  }
+
+  h2, .h2 {
+    @extend .fs28;
+}
+
+  h3, .h3 {
+    @extend .fs24;
+}
+
+  h4, .h4 {
+    @extend .fs20;
+  }
+
+  h5, .h5 {
+    @extend .fs18;
+  }
+
+  h6, .h6 {
+    @extend .fs16;
+  }
+}
