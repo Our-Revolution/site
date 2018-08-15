@@ -8964,17 +8964,23 @@ footer {
   letter-spacing: -1px;
   line-height: 54px; }
 
-.height-xl {
-  height: 480px; }
-
-.height-lg {
-  height: 240px; }
-
-.height-md {
-  height: 160px; }
+.height-xs {
+  height: 50px; }
 
 .height-sm {
-  height: 80px; }
+  height: 100px; }
+
+.height-md {
+  height: 150px; }
+
+.height-lg {
+  height: 200px; }
+
+.height-xl {
+  height: 400px; }
+
+.height-xxl {
+  height: 600px; }
 
 ul.list-plain,
 .list-plain ul {
