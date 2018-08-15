@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 class BirthdayPage(Page):
     button_text_max = 128
     color_help_text = '6 digit CSS color code.'
+    color_max_length = 6
     embed_help_text = 'Raw HTML embed code for signup form, etc.'
     section_2_help_text = 'Use bold for large text.'
     title_max_length = 128
@@ -68,7 +69,7 @@ class BirthdayPage(Page):
     section_4_background_color = models.CharField(
         blank=True,
         help_text=color_help_text,
-        max_length=6,
+        max_length=color_max_length,
         null=True,
     )
     section_4_background_image = models.ForeignKey(
@@ -162,7 +163,7 @@ class BirthdayPage(Page):
     section_7_background_color = models.CharField(
         blank=True,
         help_text=color_help_text,
-        max_length=6,
+        max_length=color_max_length,
         null=True,
     )
     section_7_background_image = models.ForeignKey(
