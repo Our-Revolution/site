@@ -61,6 +61,19 @@
     }
   }
 
+  .birthday-section-7 {
+
+    // Scale down button for small screen
+    .btn-lg {
+      @include until($medium) {
+        font-size: 16px;
+        letter-spacing: 0px;
+        line-height: 20px;
+        padding: 15px 10px;
+      }
+    }
+  }
+
 }
 
 .birthday {

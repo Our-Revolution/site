@@ -157,7 +157,7 @@
             </div>
 
             <a href="#birthday-section-2" data-scroll
-            class="btn btn-secondary uppercase ls2 hidden-xs hidden-sm">
+            class="btn btn-secondary hidden-xs hidden-sm">
               {{ page.primary_content_button_text }}
               <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
@@ -401,9 +401,22 @@ class="birthday-section-2 container-fluid blue-bg white-text">
       <div class="container pt4 pb4">
         <div class="row">
           <div class="col-md-6 col-md-offset-3">
-            <div class="bg-white">
+
+            <div class="bg-white pa20">
+
               {{ page.section_7_body | richtext }}
+
+              <div class="mt20">
+                <a href="{{ page.section_7_button_url }}"
+                class="btn btn-block btn-lg btn-primary"
+                onclick="trackOutboundLink('{{ page.button_url }}', {{ page.section_7_button_new_window|yesno:'true,false'}});"
+                target="{{ page.section_7_button_new_window|yesno:'_blank,_self'}}">
+                  {{ page.section_7_button_text }}
+                </a>
+              </div>
+
             </div>
+
           </div>
         </div>
       </div>
