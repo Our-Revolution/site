@@ -11,20 +11,23 @@
     font-style: inherit;
   }
 
-  .birthday-primary-content-body {
-
-    h2 {
-      @extend .fsxxl;
-    }
-
+  .birthday-primary-content-body,
+  .birthday-section-6 {
     @include at-least($large) {
       text-align: right;
     }
   }
 
-  .birthday-primary-content-embed {
+  .birthday-primary-content-embed,
+  .birthday-section-5 {
     @include at-least($large) {
       text-align: left;
+    }
+  }
+
+  .birthday-primary-content-body {
+    h2 {
+      @extend .fs-xxl;
     }
   }
 
@@ -41,11 +44,11 @@
     }
 
     &, p {
-      @extend .fsmd;
+      @extend .fs-md;
     }
 
     b {
-      @extend .fsxxxl;
+      @extend .fs-xxxl;
 
       @include until($medium) {
         font-size: 34px;

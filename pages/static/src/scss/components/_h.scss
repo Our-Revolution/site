@@ -9,26 +9,26 @@
   }
 
   h1, .h1 {
-    @extend .fsxxl;
+    @extend .fs-xxl;
   }
 
   h2, .h2 {
-    @extend .fsxl;
+    @extend .fs-xl;
 }
 
   h3, .h3 {
-    @extend .fslg;
+    @extend .fs-lg;
 }
 
   h4, .h4 {
-    @extend .fsmd;
+    @extend .fs-md;
   }
 
   h5, .h5 {
-    @extend .fs18;
+    @extend .fs-sm;
   }
 
   h6, .h6 {
-    @extend .fs16;
+    @extend .fs-xs;
   }
 }

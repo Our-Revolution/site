@@ -152,7 +152,9 @@
 
           <div class="col-md-5 birthday-primary-content-body">
 
-            {{ page.primary_content_body | richtext }}
+            <div class="mb20">
+              {{ page.primary_content_body | richtext }}
+            </div>
 
             <a href="#birthday-section-2" data-scroll
             class="btn btn-secondary uppercase ls2 hidden-xs hidden-sm">
@@ -361,16 +363,26 @@ class="birthday-section-2 container-fluid blue-bg white-text">
   </div>
 </section>
 
-<section class="birthday-section-6 container blue-bg white-text">
+<section class="birthday-section-6 container-fluid blue-bg white-text">
   <div class="row">
+    <div class="col-xs-12">
 
-    <div class="col-md-6">
-      {{ page.section_6_body | richtext }}
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-6">
+            <div class="pa20">
+              {{ page.section_6_body | richtext }}
+            </div>
+          </div>
+
+          <div class="bg-cover height-xl birthday-section-6-image col-md-6">
+          </div>
+
+        </div>
+      </div>
+
     </div>
-
-    <div class="bg-cover height-xl birthday-section-6-image col-md-6">
-    </div>
-
   </div>
 </section>
 
