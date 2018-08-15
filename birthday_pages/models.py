@@ -275,7 +275,8 @@ class BirthdayPage(Page):
             classname="collapsible"
         ),
     ]
-
+    parent_page_types = ['pages.IndexPage']
     promote_panels = Page.promote_panels + [
         ImageChooserPanel('social_image')
     ]
+    subpage_types = []
