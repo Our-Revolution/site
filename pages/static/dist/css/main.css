@@ -5907,6 +5907,9 @@ button.close {
 .pa20 {
   padding: 20px; }
 
+.pa40 {
+  padding: 40px; }
+
 .pb20 {
   padding-bottom: 20px; }
 
@@ -8935,7 +8938,7 @@ footer {
   .fs18 p {
     font-size: 18px; }
 
-.fs-xs, body.v2 p, .v2 h6, .v2 .h6 {
+.fs-xs, body.v2, body.v2 p, .v2 h6, .v2 .h6 {
   font-size: 16px;
   line-height: 20px; }
 
@@ -8963,6 +8966,10 @@ footer {
   font-size: 48px;
   letter-spacing: -1px;
   line-height: 54px; }
+
+.h-mt0 h1, .h-mt0 h2, .h-mt0 h3, .h-mt0 h4, .h-mt0 h5, .h-mt0 h6,
+.h-mt0 .h1, .h-mt0 .h2, .h-mt0 .h3, .h-mt0 .h4, .h-mt0 .h5, .h-mt0 .h6 {
+  margin-top: 0; }
 
 .height-xs {
   height: 50px; }
@@ -9373,6 +9380,23 @@ ul.list-plain,
     display: block;
     right: 10px;
     top: 10px; } }
+
+.pos-bottom-left {
+  bottom: 0px;
+  left: 0px;
+  padding: 0 10px;
+  position: absolute;
+  width: 100%; }
+
+.text-highlight, .birthday-page h2 i {
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0 .4em; }
+
+.text-poppins, .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
+.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6, .birthday-page .birthday-section-2 {
+  font-family: 'Poppins', sans-serif; }
 
 .footer {
   position: absolute;
@@ -10300,16 +10324,6 @@ div.recurrence-widget {
     .splash__close:hover {
       opacity: 0.5; }
 
-.text-highlight, .birthday-page h2 i {
-  border-radius: 0;
-  font-size: inherit;
-  line-height: inherit;
-  padding: 0 .4em; }
-
-.text-poppins, .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
-.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6, .birthday-page .birthday-section-2 {
-  font-family: 'Poppins', sans-serif; }
-
 .election-tracker .page-heading--full {
   width: 100%;
   background: #0098ff url("../img/bg_image.jpg") top no-repeat;
@@ -10843,33 +10857,33 @@ div.recurrence-widget {
   margin-bottom: 0;
   font-size: 12px; }
 
-.birthday-page {
-  text-align: center; }
-  .birthday-page h1, .birthday-page h2, .birthday-page h3, .birthday-page h4, .birthday-page h5, .birthday-page h6,
-  .birthday-page .h1, .birthday-page .h2, .birthday-page .h3, .birthday-page .h4, .birthday-page .h5, .birthday-page .h6 {
-    margin-top: 0; }
-  .birthday-page h2 i {
-    font-style: inherit; }
-  @media screen and (min-width: 992px) {
-    .birthday-page .birthday-primary-content-body,
-    .birthday-page .birthday-section-6 {
-      text-align: right; } }
-  @media screen and (min-width: 992px) {
-    .birthday-page .birthday-primary-content-embed,
-    .birthday-page .birthday-section-5 {
-      text-align: left; } }
-  .birthday-page .birthday-section-2 {
-    text-align: left; }
-    .birthday-page .birthday-section-2 .rich-text {
-      bottom: 0px;
-      left: 0px;
-      padding: 0 10px;
-      position: absolute;
-      width: 100%; }
-    @media screen and (max-width: 767px) {
-      .birthday-page .birthday-section-2 b {
-        font-size: 34px;
-        line-height: 38px; } }
+.birthday-page h2 i {
+  font-style: inherit; }
+
+@media screen and (min-width: 992px) {
+  .birthday-page .birthday-primary-content-body,
+  .birthday-page .birthday-section-6 {
+    text-align: right; } }
+
+@media screen and (min-width: 992px) {
+  .birthday-page .birthday-primary-content-embed,
+  .birthday-page .birthday-section-5 {
+    text-align: left; } }
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .birthday-page .birthday-section-5 .pa40, .birthday-page .birthday-section-6 .pa40 {
+    padding: 20px; } }
+
+@media screen and (min-width: 1200px) {
+  .birthday-page .birthday-primary-content-body {
+    padding-top: 20px; } }
+
+.birthday-page .birthday-section-2 {
+  text-align: left; }
+  @media screen and (max-width: 767px) {
+    .birthday-page .birthday-section-2 b {
+      font-size: 34px;
+      line-height: 38px; } }
 
 @media (min-width: 1400px) {
   .birthday .container--lg {

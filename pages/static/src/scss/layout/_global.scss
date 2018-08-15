@@ -8,7 +8,7 @@ html {
 body.v2 {
   font-family: 'Open Sans', sans-serif;
 
-  p {
+  &, p {
     @extend .fs-xs;
   }
 }

@@ -1,11 +1,6 @@
 .birthday-page {
-  text-align: center;
 
-  h1, h2, h3, h4, h5, h6,
-  .h1, .h2, .h3, .h4, .h5, .h6 {
-    margin-top: 0;
-  }
-
+  // Due to rich text limitations, make this look like a text-highlight
   h2 i {
     @extend .text-highlight;
     font-style: inherit;
@@ -25,9 +20,24 @@
     }
   }
 
+  .birthday-section-5, .birthday-section-6 {
+    // Scale down padding for lg only
+    .pa40 {
+      @include range($large, $extra-large) {
+        padding: 20px;
+      }
+    }
+  }
+
   .birthday-primary-content-body {
+    // Make h2 look like h1 in primary content section
     h2 {
       @extend .fs-xxl;
+    }
+
+    // Add extra padding for xl
+    @include at-least($extra-large) {
+      padding-top: 20px;
     }
   }
 
@@ -35,18 +45,12 @@
     @extend .text-poppins;
     text-align: left;
 
-    .rich-text {
-      bottom: 0px;
-      left: 0px;
-      padding: 0 10px;
-      position: absolute;
-      width: 100%;
-    }
-
+    // Make regular elements look like fs-md
     &, p {
       @extend .fs-md;
     }
 
+    // Make bold elements look like fs-xxxl, and scale down for small screen
     b {
       @extend .fs-xxxl;
 
@@ -56,6 +60,7 @@
       }
     }
   }
+
 }
 
 .birthday {
