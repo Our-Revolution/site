@@ -47,6 +47,10 @@
     }
 
     .birthday-section-4 {
+      {% if page.section_4_background_color %}
+        background-color: #{{ page.section_4_background_color }} !important;
+      {% endif %}
+
       {% if page.section_4_background_image %}
         {% image page.section_4_background_image original as section_4_bg_img %}
         background-image: url('{{ section_4_bg_img.url }}');

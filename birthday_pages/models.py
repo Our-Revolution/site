@@ -20,7 +20,7 @@ class BirthdayPage(Page):
     primary_content_background_color = models.CharField(
         blank=True,
         help_text=color_help_text,
-        max_length=6,
+        max_length=color_max_length,
         null=True,
     )
     primary_content_background_image = models.ForeignKey(
@@ -225,6 +225,7 @@ class BirthdayPage(Page):
             [
                 FieldPanel('section_4_body'),
                 ImageChooserPanel('section_4_background_image'),
+                FieldPanel('section_4_background_color'),
                 FieldPanel('section_4_1_title'),
                 ImageChooserPanel('section_4_1_icon'),
                 FieldPanel('section_4_2_title'),
