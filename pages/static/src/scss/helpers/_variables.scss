@@ -1,18 +1,21 @@
 $green: #45d363;
 $purple: #9B267A;
-$blue: #218fff;
-$dark-blue: #134d88;
+$blue: #0098ff;
+$dark-blue: #0c56a0;
 $periwinkle: #6e91d4;
 $light-purple: #8880b6;
 $mauve: #a37098;
 $maroon: #bd5f79;
-$red: #d74e5b;
+$red: #ff3939;
 
 $extra-small: 320px;
 $small: 480px;
 $medium: 768px;
 $large: 992px;
 $extra-large: 1200px;
+
+// Brand colors
+$brand-danger: $red;
 
 // List Group
 $list-group-active-bg:          #fafafa;

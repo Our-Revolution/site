@@ -1,11 +1,20 @@
 .birthday-page {
   text-align: center;
 
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-top: 0;
+  }
+
+  h2 i {
+    @extend .text-highlight;
+    font-style: inherit;
+  }
+
   .birthday-primary-content-body {
 
-    h2 i {
-      @extend .text-white-red;
-      font-style: inherit;
+    h2 {
+      @extend .fsxxl;
     }
 
     @include at-least($large) {

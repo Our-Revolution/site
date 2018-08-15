@@ -1,13 +1,16 @@
 // Text elements
 
+// Highlighted text with red background
+.text-highlight {
+  @extend .label;
+  @extend .label-danger;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0 .4em;
+}
+
 // Poppins
 .text-poppins {
   font-family: 'Poppins', sans-serif;
-}
-
-// White text with red background
-.text-white-red {
-  background-color: #ff3939;
-  color: #ffffff;
-  padding: 0 5px;
 }
