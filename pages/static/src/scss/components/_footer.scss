@@ -1,4 +1,14 @@
 // Footer
+
+// Styleguide v2
+.v2 .footer {
+
+  &, p {
+    @extend .fs-xxs;
+  }
+}
+
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -7,7 +17,7 @@
   height: 400px;
   background: $blue;
   color: white;
-  
+
   a {
     color: white;
   }
@@ -32,7 +42,7 @@
 
   &__nav {
     margin-bottom: 0;
-    
+
     p {
       margin-bottom: 0;
       margin-top: 0;

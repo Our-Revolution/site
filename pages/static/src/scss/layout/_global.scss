@@ -4,6 +4,15 @@ html {
   min-height: 100%;
 }
 
+// Styleguide v2
+body.v2 {
+  font-family: 'Open Sans', sans-serif;
+
+  &, p {
+    @extend .fs-xs;
+  }
+}
+
 body {
   font-family: 'Lato', sans-serif;
   padding-top: 80px;

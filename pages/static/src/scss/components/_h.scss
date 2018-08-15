@@ -1,0 +1,41 @@
+// Header elements
+
+.h-mt0 {
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-top: 0;
+  }
+}
+
+// Styleguide v2
+.v2 {
+
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    @extend .text-poppins;
+  }
+
+  h1, .h1 {
+    @extend .fs-xxl;
+  }
+
+  h2, .h2 {
+    @extend .fs-xl;
+}
+
+  h3, .h3 {
+    @extend .fs-lg;
+}
+
+  h4, .h4 {
+    @extend .fs-md;
+  }
+
+  h5, .h5 {
+    @extend .fs-sm;
+  }
+
+  h6, .h6 {
+    @extend .fs-xs;
+  }
+}

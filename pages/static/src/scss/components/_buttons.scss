@@ -1,4 +1,24 @@
 // Buttons
+
+// Styleguide v2
+.v2 .btn {
+  @extend .text-poppins;
+  height: auto;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  &.btn-md {
+    @extend .fs-xs;
+    padding: 15px;
+  }
+
+  &.btn-lg {
+    @extend .fs-sm;
+    padding: 18px 30px;
+  }
+}
+
+
 .btn {
   font-weight: 700;
   height: 40px;
@@ -8,7 +28,7 @@
 
   &-sm {
     height: auto;
-    padding: 5px 10px;    
+    padding: 5px 10px;
   }
 }
 

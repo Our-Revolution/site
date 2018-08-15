@@ -48,13 +48,17 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "dist/css/main.min.css" %}">
     <script src="{% static "dist/js/bundle.min.js" %}"></script>
+
+    {% block fonts %}
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+    {% endblock %}
+
     <meta name="google-site-verification" content="devyaHsbJD6w8nNEWsAu3SsODhEfijQqCOhFbuXdpCc" />
     {% block favicon %}
       <link rel="icon" type="image/x-icon" href="{% static "dist/img/favicon.ico" %}" />
     {% endblock %}
 </head>
-<body class="no-padding">
+<body class="{% block body_classes %}no-padding{% endblock %}">
     <img height="1" width="1" style="border-style:none; display:none !important;" alt="" src="//insight.adsrvr.org/track/evnt/?adv=m2ywu23&ct=0:wfbkcfp&fmt=3"/>
 
     {% bootstrap_javascript jquery=1 %}

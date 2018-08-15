@@ -5,11 +5,18 @@
   }
 }
 
+@mixin range($min-width, $max-width) {
+  @media screen and (min-width: $min-width) and (max-width: $max-width - 1) {
+    @content;
+  }
+}
+
 @mixin until($device-width) {
   @media screen and (max-width: $device-width - 1) {
     @content;
   }
 }
+
 
 // Clearfix
 @mixin clearfix() {
