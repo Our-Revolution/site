@@ -58,6 +58,11 @@
         font-size: 34px;
         line-height: 38px;
       }
+
+      @include at-least($extra-large) {
+        font-size: 58px;
+        line-height: 64px;
+      }
     }
   }
 

@@ -1055,7 +1055,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857;
-  color: #333333;
+  color: #4d4c4c;
   background-color: #fff; }
 
 input,
@@ -2708,7 +2708,7 @@ select[multiple].input-lg,
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #737373; }
+  color: #8d8c8c; }
 
 @media (min-width: 768px) {
   .form-inline .form-group {
@@ -4371,7 +4371,7 @@ a.badge:hover, a.badge:focus {
     margin-right: auto; }
   .thumbnail .caption {
     padding: 9px;
-    color: #333333; }
+    color: #4d4c4c; }
 
 a.thumbnail:hover,
 a.thumbnail:focus,
@@ -8585,7 +8585,7 @@ footer {
   .v2 .btn.btn-md, .v2 .form-wrapper #can_embed_form input.btn-md[type=submit], .form-wrapper #can_embed_form .v2 input.btn-md[type=submit] {
     padding: 15px; }
   .v2 .btn.btn-lg, .v2 .btn-group-lg > .btn, .v2 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .v2 .btn-group-lg > input[type=submit], .v2 .form-wrapper #can_embed_form input.btn-lg[type=submit], .form-wrapper #can_embed_form .v2 input.btn-lg[type=submit] {
-    padding: 18px 25px; }
+    padding: 18px 30px; }
 
 .btn, .form-wrapper #can_embed_form input[type=submit] {
   font-weight: 700;
@@ -8979,6 +8979,11 @@ footer {
   font-size: 48px;
   letter-spacing: -1px;
   line-height: 54px; }
+
+.fs-xxxxl {
+  font-size: 58px;
+  letter-spacing: -1px;
+  line-height: 64px; }
 
 .h-mt0 h1, .h-mt0 h2, .h-mt0 h3, .h-mt0 h4, .h-mt0 h5, .h-mt0 h6,
 .h-mt0 .h1, .h-mt0 .h2, .h-mt0 .h3, .h-mt0 .h4, .h-mt0 .h5, .h-mt0 .h6 {
@@ -10897,6 +10902,10 @@ div.recurrence-widget {
     .birthday-page .birthday-section-2 b {
       font-size: 34px;
       line-height: 38px; } }
+  @media screen and (min-width: 1200px) {
+    .birthday-page .birthday-section-2 b {
+      font-size: 58px;
+      line-height: 64px; } }
 
 @media screen and (max-width: 767px) {
   .birthday-page .birthday-section-7 .btn-lg, .birthday-page .birthday-section-7 .btn-group-lg > .btn, .birthday-page .birthday-section-7 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .birthday-page .birthday-section-7 .btn-group-lg > input[type=submit] {
