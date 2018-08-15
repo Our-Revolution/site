@@ -8912,8 +8912,7 @@ footer {
   box-shadow: -10px 10px rgba(255, 255, 255, 0.7);
   color: #FFFFFF;
   margin: 0 0 25px;
-  padding: 15px;
-  text-align: left; }
+  padding: 15px; }
 
 .fs3 {
   font-size: 3em; }
@@ -9413,7 +9412,7 @@ ul.list-plain,
   padding: 0 .4em; }
 
 .text-poppins, .v2 .btn, .v2 .form-wrapper #can_embed_form input[type=submit], .form-wrapper #can_embed_form .v2 input[type=submit], .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
-.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6, .birthday-page .birthday-section-2 {
+.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
   font-family: 'Poppins', sans-serif; }
 
 .footer {
@@ -10896,16 +10895,15 @@ div.recurrence-widget {
   .birthday-page .birthday-primary-content-body {
     padding-top: 20px; } }
 
-.birthday-page .birthday-section-2 {
-  text-align: left; }
-  @media screen and (max-width: 767px) {
-    .birthday-page .birthday-section-2 b {
-      font-size: 34px;
-      line-height: 38px; } }
-  @media screen and (min-width: 1200px) {
-    .birthday-page .birthday-section-2 b {
-      font-size: 58px;
-      line-height: 64px; } }
+@media screen and (max-width: 767px) {
+  .birthday-page .birthday-section-2 b {
+    font-size: 34px;
+    line-height: 38px; } }
+
+@media screen and (min-width: 1200px) {
+  .birthday-page .birthday-section-2 b {
+    font-size: 58px;
+    line-height: 64px; } }
 
 @media screen and (max-width: 767px) {
   .birthday-page .birthday-section-7 .btn-lg, .birthday-page .birthday-section-7 .btn-group-lg > .btn, .birthday-page .birthday-section-7 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .birthday-page .birthday-section-7 .btn-group-lg > input[type=submit] {

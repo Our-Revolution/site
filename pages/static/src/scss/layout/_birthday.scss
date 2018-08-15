@@ -42,8 +42,6 @@
   }
 
   .birthday-section-2 {
-    @extend .text-poppins;
-    text-align: left;
 
     // Make regular elements look like fs-md
     &, p {
