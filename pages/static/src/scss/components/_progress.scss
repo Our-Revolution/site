@@ -21,13 +21,22 @@
 
     .progress-bar-content {
       left: 0;
-      padding: 7px 0 0 20px;
+      padding: 7px 20px 0;
       position: absolute;
+      text-align: left;
       top: 0;
+      width: 100%;
 
       // Scale down for sm-md screens
       @include range($small, $medium) {
         padding: 9px 0 0 10px;
+      }
+    }
+
+    // Hide text on smaller screens
+    .progress-bar-goal-met {
+      @include until($medium) {
+        display: none;
       }
     }
 

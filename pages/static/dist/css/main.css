@@ -8593,9 +8593,6 @@ footer {
   background-size: auto 70%;
   padding-right: 30% !important; }
 
-.bg-transparent {
-  background-color: transparent !important; }
-
 .bg-white {
   background-color: #ffffff; }
 
@@ -9381,12 +9378,17 @@ ul.list-plain,
       line-height: 20px; } }
   .progress.progress-lg .progress-bar-content {
     left: 0;
-    padding: 7px 0 0 20px;
+    padding: 7px 20px 0;
     position: absolute;
-    top: 0; }
+    text-align: left;
+    top: 0;
+    width: 100%; }
     @media screen and (min-width: 480px) and (max-width: 767px) {
       .progress.progress-lg .progress-bar-content {
         padding: 9px 0 0 10px; } }
+  @media screen and (max-width: 767px) {
+    .progress.progress-lg .progress-bar-goal-met {
+      display: none; } }
   @media screen and (max-width: 479px) {
     .progress.progress-lg .progress-bar-text {
       display: none; } }
