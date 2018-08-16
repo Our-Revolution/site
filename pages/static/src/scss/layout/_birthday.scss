@@ -1,5 +1,11 @@
 .birthday-page {
 
+  // Remove duplicate padding
+  .container-fluid > .row > .col-xs-12 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   // Due to rich text limitations, make this look like a text-highlight
   h2 i {
     @extend .text-highlight;
@@ -21,10 +27,17 @@
   }
 
   .birthday-section-5, .birthday-section-6 {
-    // Scale down padding for lg only
-    .pa40 {
+
+    // Scale down padding gradually
+    .rich-text {
+      padding: 40px 0;
+
       @include range($large, $extra-large) {
-        padding: 20px;
+        padding: 20px 20px 0;
+      }
+
+      @include at-least($extra-large) {
+        padding: 40px 40px 0;
       }
     }
   }
@@ -48,7 +61,7 @@
       @extend .fs-md;
     }
 
-    // Make bold elements look like fs-xxxl, and scale down for small screen
+    // Make bold elements look like fs-xxxl, and scale down for smaller screens
     b {
       @extend .fs-xxxl;
 
@@ -64,9 +77,32 @@
     }
   }
 
+  .birthday-section-4 {
+
+    // Scale down for smaller screens
+    h3 {
+      @include until($medium) {
+        font-size: 20px;
+        line-height: 24px;
+      }
+    }
+  }
+
   .birthday-section-7 {
 
-    // Scale down button for small screen
+    @include until($small) {
+      background-image: none;
+    }
+
+    .bg-white {
+      padding: 20px;
+
+      @include until($small) {
+        padding: 0px;
+      }
+    }
+
+    // Scale down button for smaller screens
     .btn-lg {
       @include until($medium) {
         font-size: 16px;
@@ -78,6 +114,8 @@
   }
 
 }
+
+// Legacy birthday styles from year one
 
 .birthday {
   .container--lg {
