@@ -141,305 +141,313 @@
   </style>
 {% endblock %}
 
-{% block body_classes %}{{ block.super }} birthday-page h-mt0 text-center{% endblock %}
+{% block body_classes %}{{ block.super }} birthday-page{% endblock %}
 
 {% block notification_banner %}{% endblock %}
 
+{% block nav %}
+{% include "partials/nav-birthday.html" %}
+{% endblock %}
+
 {% block content %}
 
-<section class="birthday-primary-content container-fluid bg-cover">
-  <div class="row">
-    <div class="col-xs-12">
+<div class="h-mt0 text-center">
 
-      <div class="container pt4 pb4">
-        <div class="row">
+  <section class="birthday-primary-content container-fluid bg-cover">
+    <div class="row">
+      <div class="col-xs-12">
 
-          <div class="col-md-5 birthday-primary-content-body">
+        <div class="container pt4 pb4">
+          <div class="row">
 
-            <div class="mb20">
-              {{ page.primary_content_body | richtext }}
+            <div class="col-md-5 birthday-primary-content-body">
+
+              <div class="mb20">
+                {{ page.primary_content_body | richtext }}
+              </div>
+
+              <a href="#birthday-section-2" data-scroll
+              class="btn btn-secondary hidden-xs hidden-sm">
+                {{ page.primary_content_button_text }}
+                <span class="glyphicon glyphicon-chevron-down"></span>
+              </a>
+
             </div>
 
-            <a href="#birthday-section-2" data-scroll
-            class="btn btn-secondary hidden-xs hidden-sm">
-              {{ page.primary_content_button_text }}
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </a>
-
-          </div>
-
-          <div class="col-md-7 birthday-primary-content-embed">
-            <div class="embed-responsive embed-responsive-16by9">
-              {{ page.primary_content_embed_code | safe }}
+            <div class="col-md-7 birthday-primary-content-embed">
+              <div class="embed-responsive embed-responsive-16by9">
+                {{ page.primary_content_embed_code | safe }}
+              </div>
             </div>
+
           </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="birthday-section-2"
-class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
-  <div class="row">
-    <div class="col-xs-12">
-
-      <div class="container">
-        <div class="row">
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6 height-lg">
-                <div class="pos-bottom-left">
-                  {{ page.section_2_1_body | richtext }}
-                </div>
-              </div>
-
-              <div class="birthday-section-2-1-image col-xs-6 height-lg bg-cover">
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6 height-lg col-xs-push-6 col-md-push-0">
-                <div class="pos-bottom-left">
-                  {{ page.section_2_2_body | richtext }}
-                </div>
-              </div>
-
-              <div class="birthday-section-2-2-image col-xs-6 col-xs-pull-6 col-md-pull-0 height-lg bg-cover">
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6 height-lg col-md-push-6">
-                <div class="pos-bottom-left">
-                  {{ page.section_2_3_body | richtext }}
-                </div>
-              </div>
-
-              <div class="bg-cover birthday-section-2-3-image col-xs-6 col-md-pull-6 height-lg">
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6 col-xs-push-6 height-lg ">
-                <div class="pos-bottom-left">
-                  {{ page.section_2_4_body | richtext }}
-                </div>
-              </div>
-
-              <div class="bg-cover birthday-section-2-4-image col-xs-6 col-xs-pull-6 height-lg">
-              </div>
-
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section class="birthday-section-3 container pb4 pt4">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      {{ page.section_3_body | richtext }}
-    </div>
-  </div>
-</section>
-
-<section class="birthday-section-4 container-fluid bg-cover blue-bg pb4 pt4 white-text">
-  <div class="row">
-    <div class="col-xs-12">
-
-      <div class="container">
-
-        <div class="row">
-          <div class="col-md-6 col-md-offset-3 pb2">
-            {{ page.section_4_body | richtext }}
-          </div>
-        </div>
-
-        <div class="row card-list-static h-mb0 text-left">
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-1-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_1_title }}
-                  </h3>
-                </div>
-              </div>
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-2-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_2_title }}
-                  </h3>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-3-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_3_title }}
-                  </h3>
-                </div>
-              </div>
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-4-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_4_title }}
-                  </h3>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-5-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_5_title }}
-                  </h3>
-                </div>
-              </div>
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-6-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_6_title }}
-                  </h3>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="row">
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-7-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_7_title }}
-                  </h3>
-                </div>
-              </div>
-
-              <div class="col-xs-6">
-                <div class="birthday-section-4-8-icon height-md bg-right card">
-                  <h3>
-                    {{ page.section_4_8_title }}
-                  </h3>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
         </div>
 
       </div>
-
     </div>
-  </div>
-</section>
+  </section>
+
+  <section id="birthday-section-2"
+  class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="container">
+          <div class="row">
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6 height-lg">
+                  <div class="pos-bottom-left">
+                    {{ page.section_2_1_body | richtext }}
+                  </div>
+                </div>
+
+                <div class="birthday-section-2-1-image col-xs-6 height-lg bg-cover">
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6 height-lg col-xs-push-6 col-md-push-0">
+                  <div class="pos-bottom-left">
+                    {{ page.section_2_2_body | richtext }}
+                  </div>
+                </div>
+
+                <div class="birthday-section-2-2-image col-xs-6 col-xs-pull-6 col-md-pull-0 height-lg bg-cover">
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6 height-lg col-md-push-6">
+                  <div class="pos-bottom-left">
+                    {{ page.section_2_3_body | richtext }}
+                  </div>
+                </div>
+
+                <div class="bg-cover birthday-section-2-3-image col-xs-6 col-md-pull-6 height-lg">
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6 col-xs-push-6 height-lg ">
+                  <div class="pos-bottom-left">
+                    {{ page.section_2_4_body | richtext }}
+                  </div>
+                </div>
+
+                <div class="bg-cover birthday-section-2-4-image col-xs-6 col-xs-pull-6 height-lg">
+                </div>
+
+              </div>
+            </div>
 
 
-<section class="birthday-section-5 container">
-  <div class="row">
+          </div>
+        </div>
 
-    <div class="col-md-6 col-md-push-6">
-      {{ page.section_5_body | richtext }}
+      </div>
     </div>
+  </section>
 
-    <div class="bg-cover height-xxl birthday-section-5-image col-md-6 col-md-pull-6">
+  <section class="birthday-section-3 container pb4 pt4">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        {{ page.section_3_body | richtext }}
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
+  <section class="birthday-section-4 container-fluid bg-cover blue-bg pb4 pt4 white-text">
+    <div class="row">
+      <div class="col-xs-12">
 
-<section class="birthday-section-6 container-fluid blue-bg white-text">
-  <div class="row">
-    <div class="col-xs-12">
+        <div class="container">
 
-      <div class="container">
-        <div class="row">
-
-          <div class="col-md-6">
-            {{ page.section_6_body | richtext }}
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3 pb2">
+              {{ page.section_4_body | richtext }}
+            </div>
           </div>
 
-          <div class="bg-cover height-xxl birthday-section-6-image col-md-6">
+          <div class="row card-list-static h-mb0 text-left">
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-1-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_1_title }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-2-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_2_title }}
+                    </h3>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-3-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_3_title }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-4-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_4_title }}
+                    </h3>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-5-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_5_title }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-6-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_6_title }}
+                    </h3>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row">
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-7-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_7_title }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="col-xs-6">
+                  <div class="birthday-section-4-8-icon height-md bg-right card">
+                    <h3>
+                      {{ page.section_4_8_title }}
+                    </h3>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </div>
 
         </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="birthday-section-5 container">
+    <div class="row">
+
+      <div class="col-md-6 col-md-push-6">
+        {{ page.section_5_body | richtext }}
+      </div>
+
+      <div class="bg-cover height-xxl birthday-section-5-image col-md-6 col-md-pull-6">
       </div>
 
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="bg-cover birthday-section-7 container-fluid">
-  <div class="row">
-    <div class="col-xs-12">
+  <section class="birthday-section-6 container-fluid blue-bg white-text">
+    <div class="row">
+      <div class="col-xs-12">
 
-      <div class="container pt4 pb4">
-        <div class="row">
-          <div class="col-md-6 col-md-offset-3">
+        <div class="container">
+          <div class="row">
 
-            <div class="bg-white">
+            <div class="col-md-6">
+              {{ page.section_6_body | richtext }}
+            </div>
 
-              {{ page.section_7_body | richtext }}
-
-              <div class="mt20">
-                <a href="{{ page.section_7_button_url }}"
-                class="btn btn-block btn-lg btn-primary"
-                onclick="trackOutboundLink('{{ page.button_url }}', {{ page.section_7_button_new_window|yesno:'true,false'}});"
-                target="{{ page.section_7_button_new_window|yesno:'_blank,_self'}}">
-                  {{ page.section_7_button_text }}
-                </a>
-              </div>
-
+            <div class="bg-cover height-xxl birthday-section-6-image col-md-6">
             </div>
 
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="bg-cover birthday-section-7 container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="container pt4 pb4">
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+
+              <div class="bg-white">
+
+                {{ page.section_7_body | richtext }}
+
+                <div class="mt20">
+                  <a href="{{ page.section_7_button_url }}"
+                  class="btn btn-block btn-lg btn-primary"
+                  onclick="trackOutboundLink('{{ page.button_url }}', {{ page.section_7_button_new_window|yesno:'true,false'}});"
+                  target="{{ page.section_7_button_new_window|yesno:'_blank,_self'}}">
+                    {{ page.section_7_button_text }}
+                  </a>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
 
 <script>
   $(document).ready(function() {

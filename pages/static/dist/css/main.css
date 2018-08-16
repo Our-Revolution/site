@@ -9014,6 +9014,14 @@ footer {
 .height-xxl {
   height: 600px; }
 
+.hover-zoom {
+  -webkit-transition: 0.25s;
+  transition: 0.25s; }
+  .hover-zoom:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1); }
+
 ul.list-plain,
 .list-plain ul {
   list-style-type: none;
@@ -9023,6 +9031,11 @@ ul.list-plain,
   border-left: 6px solid #0098ff;
   padding-left: 10px; }
 
+.logo-sm {
+  display: inline-block;
+  width: 47px;
+  height: 40px; }
+
 .navbar {
   border-radius: 0;
   width: 100%;
@@ -9031,7 +9044,7 @@ ul.list-plain,
   border-width: 0; }
   .navbar .navbar__logo {
     display: block;
-    background: url("../img/logo.svg?c=1") center no-repeat;
+    background: url("../img/logo.svg") center no-repeat;
     width: 47px;
     height: 40px;
     color: white;
