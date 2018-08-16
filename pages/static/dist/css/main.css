@@ -8899,7 +8899,7 @@ footer {
   font-size: 16px;
   line-height: 20px; }
 
-.fs-sm, .v2 .btn.btn-lg, .v2 .btn-group-lg > .btn, .v2 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .v2 .btn-group-lg > input[type=submit], .v2 .form-wrapper #can_embed_form input.btn-lg[type=submit], .form-wrapper #can_embed_form .v2 input.btn-lg[type=submit], .v2 h5, .v2 .h5 {
+.fs-sm, .v2 .btn.btn-lg, .v2 .btn-group-lg > .btn, .v2 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .v2 .btn-group-lg > input[type=submit], .v2 .form-wrapper #can_embed_form input.btn-lg[type=submit], .form-wrapper #can_embed_form .v2 input.btn-lg[type=submit], .v2 h5, .v2 .h5, .progress.progress-lg .progress-bar {
   font-size: 18px;
   line-height: 22px; }
 
@@ -9373,7 +9373,23 @@ ul.list-plain,
 .progress.progress-lg {
   border: 2px solid #0c56a0;
   border-radius: 20px;
-  height: 40px; }
+  height: 40px;
+  position: relative; }
+  @media screen and (min-width: 480px) and (max-width: 767px) {
+    .progress.progress-lg .progress-bar {
+      font-size: 16px;
+      line-height: 20px; } }
+  .progress.progress-lg .progress-bar-content {
+    left: 0;
+    padding: 7px 0 0 20px;
+    position: absolute;
+    top: 0; }
+    @media screen and (min-width: 480px) and (max-width: 767px) {
+      .progress.progress-lg .progress-bar-content {
+        padding: 9px 0 0 10px; } }
+  @media screen and (max-width: 479px) {
+    .progress.progress-lg .progress-bar-text {
+      display: none; } }
 
 .text-highlight, .birthday-page h2 i {
   border-radius: 0;
@@ -9382,7 +9398,7 @@ ul.list-plain,
   padding: 0 .4em; }
 
 .text-poppins, .v2 .btn, .v2 .form-wrapper #can_embed_form input[type=submit], .form-wrapper #can_embed_form .v2 input[type=submit], .v2 h1, .v2 h2, .v2 h3, .v2 h4, .v2 h5, .v2 h6,
-.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
+.v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6, .progress.progress-lg .progress-bar {
   font-family: 'Poppins', sans-serif; }
 
 .footer {
