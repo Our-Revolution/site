@@ -136,7 +136,7 @@ module.exports = function() {
 
       marker.properties = group.properties;
 
-      marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'/" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>');
+      marker.bindPopup('<h4>'+ group.properties.name + '</h1><a href="/groups/'+ group.properties.slug +'/" class="component__cta btn btn-block btn-success uppercase ls2">Get Involved</a>');
 
       marker.on('click touchstart', function() {
         updateInfo([this]);
@@ -210,7 +210,7 @@ module.exports = function() {
               <h4 class="component__name">' + groups[i].properties.name  + '</h4>\
             </div>\
             <div class="component__info">\
-              <a href="/groups/'+ groups[i].properties.slug + '/" class="component__cta btn btn-block btn-primary uppercase ls2">Get Involved</a>\
+              <a href="/groups/'+ groups[i].properties.slug + '/" class="component__cta btn btn-block btn-success uppercase ls2">Get Involved</a>\
             </div> \
           </div>\
         ');
@@ -220,8 +220,8 @@ module.exports = function() {
         <div class="groups-map__add relative">\
         <h4 class="mt0">We couldn\'t find any groups here.</h4>\
         <p class="mb20">Try searching for a different city, zooming out, or using the buttons below to start your own group.</p>\
-        <a href="https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit" class="btn btn-block btn-primary uppercase ls2" target="_blank" onclick="trackOutboundLink(\'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit\', true)">Start a group</a>\
-        <a href="/groups/new" class="btn btn-block btn-default uppercase ls2">Add your group</a>\
+        <a href="https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit" class="btn btn-block btn-success uppercase ls2" target="_blank" onclick="trackOutboundLink(\'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit\', true)">Start a group</a>\
+        <a href="/groups/new" class="btn btn-block btn-primary uppercase ls2">Add your group</a>\
       </div>');
     }
 

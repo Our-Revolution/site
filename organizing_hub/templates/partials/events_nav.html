@@ -3,7 +3,7 @@
   {% if show_promote_link %}
   {% with "https://events.ourrevolution.com/" as link_url %}
   <div class="btn-group" role="group">
-    <a href="{{ link_url }}" class="btn btn-default" target="_blank">
+    <a href="{{ link_url }}" class="btn btn-primary" target="_blank">
       Promote Events
     </a>
   </div>
@@ -13,7 +13,7 @@
   {% url 'organizing-hub-event-create' as link_url %}
   {% if link_url != request.path and '/update/' not in request.path %}
   <div class="btn-group" role="group">
-    <a href="{{ link_url }}" class="btn btn-default">
+    <a href="{{ link_url }}" class="btn btn-primary">
       Create Event
     </a>
   </div>

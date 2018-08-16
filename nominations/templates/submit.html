@@ -48,11 +48,11 @@
           {% if application.questionnaire.status == 'complete' and application.nomination.status == 'complete' %}
             {% crispy form %}
           {% else %}
-            <button class="btn btn-primary btn-block disabled uppercase ls2">Submit</button>
+            <button class="btn btn-success btn-block disabled uppercase ls2">Submit</button>
           {% endif %}
         {% else %}
           <p>You've already submitted this application - we'll review it and be in touch.</p>
-          <a href="/groups/nominations?id={{applicaiton.id}}" class="btn btn-primary btn-block uppercase ls2">Back to the Dashboard</a>
+          <a href="/groups/nominations?id={{applicaiton.id}}" class="btn btn-success btn-block uppercase ls2">Back to the Dashboard</a>
         {% endif %}
       </div>
     </div>

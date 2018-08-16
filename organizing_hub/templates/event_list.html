@@ -41,7 +41,7 @@ Events
             You do not have any upcoming events. Ready to host one?
           </p>
 
-          <a class="btn btn-block btn-primary uppercase ls2"
+          <a class="btn btn-block btn-success uppercase ls2"
           href="{% url 'organizing-hub-event-create' %}">
             Create a new event
           </a>
@@ -87,13 +87,13 @@ Events
                     </td>
 
                     <td class="text-right">
-                      <a class="btn btn-default0 btn-sm"
+                      <a class="btn btn-default btn-sm"
                       href="{% url 'organizing-hub-event-update' event.event_id_obfuscated %}">
                         Edit
                       </a>
 
                       {% if show_event_promote_link %}
-                      <a class="btn btn-default btn-sm"
+                      <a class="btn btn-primary btn-sm"
                       href="{% url 'organizing-hub-event-promote' event.event_id_obfuscated %}">
                         Promote
                       </a>
@@ -109,7 +109,7 @@ Events
 
           </div>
 
-          <a class="btn btn-block btn-primary uppercase ls2"
+          <a class="btn btn-block btn-success uppercase ls2"
           href="{% url 'organizing-hub-event-create' %}">
             Create a new event
           </a>
