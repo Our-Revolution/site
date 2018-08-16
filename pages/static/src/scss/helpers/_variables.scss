@@ -15,6 +15,11 @@ $medium: 768px;
 $large: 992px;
 $extra-large: 1200px;
 
+// Button Colors
+$btn-default-color:              #fff;
+$btn-default-bg:                 $blue;
+$btn-default-border:             darken($btn-default-bg, 5%);
+
 // Brand colors
 $brand-danger: $red;
 

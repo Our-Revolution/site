@@ -64,33 +64,6 @@
   outline: none;
 }
 
-.btn-secondary,
-.btn-secondary:visited {
-  background-color: $blue;
-  color: white;
-  border: none;
-  outline: none;
-}
-
-.btn-secondary:hover,
-.btn-secondary:active:hover,
-.btn-secondary.active:hover {
-  background-color: darken($blue, 10);
-  color: white;
-  border: none;
-  outline: none;
-}
-
-.btn-secondary:focus,
-.btn-secondary.focus,
-.btn-secondary:active,
-.btn-secondary.active {
-  background-color: darken($blue, 15);
-  color: white;
-  border: none;
-  outline: none;
-}
-
 .btn-dark, .btn-dark:visited {
   background-color: darken($blue, 20);
   color: white;

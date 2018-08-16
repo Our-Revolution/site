@@ -5,7 +5,7 @@
   {% candidates_url as link_url %}
   {% if link_url not in request.path %}
   <div class="btn-group" role="group">
-    <a href="{{ link_url }}" class="btn btn-secondary">
+    <a href="{{ link_url }}" class="btn btn-default">
       Candidates
     </a>
   </div>
@@ -14,7 +14,7 @@
   {% with "/ballot-initiatives/" as link_url %}
   {% if link_url not in request.path %}
   <div class="btn-group" role="group">
-    <a href="{{ link_url }}" class="btn btn-secondary">
+    <a href="{{ link_url }}" class="btn btn-default">
       Initiatives
     </a>
   </div>
@@ -22,7 +22,7 @@
   {% endwith %}
 
   <div class="btn-group" role="group">
-    <a href="{% results_url %}" class="btn btn-secondary">
+    <a href="{% results_url %}" class="btn btn-default">
       Results
     </a>
   </div>
