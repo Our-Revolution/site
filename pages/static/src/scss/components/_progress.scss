@@ -3,6 +3,7 @@
 .progress {
 
   &.progress-lg {
+    border: 2px solid $dark-blue;
     border-radius: 20px;
     height: 40px;
   }

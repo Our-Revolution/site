@@ -9371,6 +9371,7 @@ ul.list-plain,
   width: 100%; }
 
 .progress.progress-lg {
+  border: 2px solid #0c56a0;
   border-radius: 20px;
   height: 40px; }
 
@@ -10843,67 +10844,58 @@ div.recurrence-widget {
   margin-bottom: 0;
   font-size: 12px; }
 
-.birthday-page .container-fluid > .row > .col-xs-12 {
-  padding-left: 0;
-  padding-right: 0; }
-
-.birthday-page h2 i {
-  font-style: inherit; }
-
-@media screen and (min-width: 992px) {
-  .birthday-page .birthday-primary-content-body,
-  .birthday-page .birthday-section-6 {
-    text-align: right; } }
-
-@media screen and (min-width: 992px) {
-  .birthday-page .birthday-primary-content-embed,
-  .birthday-page .birthday-section-5 {
-    text-align: left; } }
-
-.birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
-  padding: 40px 0; }
-  @media screen and (min-width: 992px) and (max-width: 1199px) {
-    .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
-      padding: 20px 20px 0; } }
+.birthday-page {
+  padding-top: 60px !important; }
+  .birthday-page .container-fluid > .row > .col-xs-12 {
+    padding-left: 0;
+    padding-right: 0; }
+  .birthday-page h2 i {
+    font-style: inherit; }
+  @media screen and (min-width: 992px) {
+    .birthday-page .birthday-primary-content-body,
+    .birthday-page .birthday-section-6 {
+      text-align: right; } }
+  @media screen and (min-width: 992px) {
+    .birthday-page .birthday-primary-content-embed,
+    .birthday-page .birthday-section-5 {
+      text-align: left; } }
+  .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
+    padding: 40px 0; }
+    @media screen and (min-width: 992px) and (max-width: 1199px) {
+      .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
+        padding: 20px 20px 0; } }
+    @media screen and (min-width: 1200px) {
+      .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
+        padding: 40px 40px 0; } }
   @media screen and (min-width: 1200px) {
-    .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
-      padding: 40px 40px 0; } }
-
-@media screen and (min-width: 1200px) {
-  .birthday-page .birthday-primary-content-body {
-    padding-top: 20px; } }
-
-@media screen and (max-width: 767px) {
-  .birthday-page .birthday-section-2 b {
-    font-size: 34px;
-    line-height: 38px; } }
-
-@media screen and (min-width: 1200px) {
-  .birthday-page .birthday-section-2 b {
-    font-size: 58px;
-    line-height: 64px; } }
-
-@media screen and (max-width: 767px) {
-  .birthday-page .birthday-section-4 h3 {
-    font-size: 20px;
-    line-height: 24px; } }
-
-@media screen and (max-width: 479px) {
-  .birthday-page .birthday-section-7 {
-    background-image: none; } }
-
-.birthday-page .birthday-section-7 .bg-white {
-  padding: 20px; }
+    .birthday-page .birthday-primary-content-body {
+      padding-top: 20px; } }
+  @media screen and (max-width: 767px) {
+    .birthday-page .birthday-section-2 b {
+      font-size: 34px;
+      line-height: 38px; } }
+  @media screen and (min-width: 1200px) {
+    .birthday-page .birthday-section-2 b {
+      font-size: 58px;
+      line-height: 64px; } }
+  @media screen and (max-width: 767px) {
+    .birthday-page .birthday-section-4 h3 {
+      font-size: 20px;
+      line-height: 24px; } }
   @media screen and (max-width: 479px) {
-    .birthday-page .birthday-section-7 .bg-white {
-      padding: 0px; } }
-
-@media screen and (max-width: 767px) {
-  .birthday-page .birthday-section-7 .btn-lg, .birthday-page .birthday-section-7 .btn-group-lg > .btn, .birthday-page .birthday-section-7 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .birthday-page .birthday-section-7 .btn-group-lg > input[type=submit] {
-    font-size: 16px;
-    letter-spacing: 0px;
-    line-height: 20px;
-    padding: 15px 10px; } }
+    .birthday-page .birthday-section-7 {
+      background-image: none; } }
+  .birthday-page .birthday-section-7 .bg-white {
+    padding: 20px; }
+    @media screen and (max-width: 479px) {
+      .birthday-page .birthday-section-7 .bg-white {
+        padding: 0px; } }
+  @media screen and (max-width: 767px) {
+    .birthday-page .birthday-section-7 .btn-lg, .birthday-page .birthday-section-7 .btn-group-lg > .btn, .birthday-page .birthday-section-7 .form-wrapper #can_embed_form .btn-group-lg > input[type=submit], .form-wrapper #can_embed_form .birthday-page .birthday-section-7 .btn-group-lg > input[type=submit] {
+      font-size: 16px;
+      letter-spacing: 0px;
+      line-height: 20px;
+      padding: 15px 10px; } }
 
 @media (min-width: 1400px) {
   .birthday .container--lg {
