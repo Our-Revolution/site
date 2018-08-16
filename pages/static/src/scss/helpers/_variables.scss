@@ -17,17 +17,9 @@ $extra-large: 1200px;
 
 // Brand
 $brand-danger: $red;
-$brand-default: $blue;
 $brand-info: $dark-blue;
-$brand-primary: $green;
-
-// Button
-$btn-primary-color: #fff;
-$btn-primary-bg: $brand-default;
-$btn-primary-border: darken($btn-primary-bg, 5%);
-
-// Label
-$label-default-bg: $brand-default;
+$brand-primary: $blue;
+$brand-success: $green;
 
 // List Group
 $list-group-active-bg:          #fafafa;
@@ -37,7 +29,6 @@ $list-group-active-border:      $list-group-border;
 $list-group-active-color:       $list-group-link-color;
 
 // Progress bar
-$progress-bar-bg: $brand-default;
 $progress-bg: $brand-info;
 
 // Text
