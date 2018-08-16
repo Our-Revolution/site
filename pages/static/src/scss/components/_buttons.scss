@@ -117,33 +117,6 @@
   outline: none;
 }
 
-.btn-donate,
-.btn-donate:visited {
-  background-color: $red;
-  color: white;
-  border: none;
-  outline: none;
-}
-
-.btn-donate:hover,
-.btn-donate:active:hover,
-.btn-donate.active:hover {
-  background-color: darken($red, 10);
-  color: white;
-  border: none;
-  outline: none;
-}
-
-.btn-donate:focus,
-.btn-donate.focus,
-.btn-donate:active,
-.btn-donate.active {
-  background-color: darken($red, 15);
-  color: white;
-  border: none;
-  outline: none;
-}
-
 .btn-outline,
 .btn-outline:visited {
   background-color: transparent;

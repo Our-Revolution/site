@@ -39,7 +39,7 @@
             <div class="candidate-action-bar clearfix">
 
                 {% if page.candidate.primary_cta_enabled %}
-                    <a href="{{ page.candidate.primary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.primary_cta_link }}', true);" class="btn btn-donate" target="_blank">{{ page.candidate.primary_cta }}</a>
+                    <a href="{{ page.candidate.primary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.primary_cta_link }}', true);" class="btn btn-danger" target="_blank">{{ page.candidate.primary_cta }}</a>
                 {% endif %}
 
                 {% if page.candidate.secondary_cta %}

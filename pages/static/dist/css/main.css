@@ -8676,25 +8676,25 @@ footer {
   border: none;
   outline: none; }
 
-.btn-donate,
-.btn-donate:visited {
+.btn-danger,
+.btn-danger:visited {
   background-color: #ff3939;
   color: white;
   border: none;
   outline: none; }
 
-.btn-donate:hover,
-.btn-donate:active:hover,
-.btn-donate.active:hover {
+.btn-danger:hover,
+.btn-danger:active:hover,
+.btn-danger.active:hover {
   background-color: #ff0606;
   color: white;
   border: none;
   outline: none; }
 
-.btn-donate:focus,
-.btn-donate.focus,
-.btn-donate:active,
-.btn-donate.active {
+.btn-danger:focus,
+.btn-danger.focus,
+.btn-danger:active,
+.btn-danger.active {
   background-color: #ec0000;
   color: white;
   border: none;
