@@ -15,13 +15,19 @@ $medium: 768px;
 $large: 992px;
 $extra-large: 1200px;
 
-// Button Colors
-$btn-default-color:              #fff;
-$btn-default-bg:                 $blue;
-$btn-default-border:             darken($btn-default-bg, 5%);
-
-// Brand colors
+// Brand
 $brand-danger: $red;
+$brand-default: $blue;
+$brand-info: $dark-blue;
+$brand-primary: $green;
+
+// Button
+$btn-default-color: #fff;
+$btn-default-bg: $brand-default;
+$btn-default-border: darken($btn-default-bg, 5%);
+
+// Label
+$label-default-bg: $brand-default;
 
 // List Group
 $list-group-active-bg:          #fafafa;

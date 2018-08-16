@@ -36,34 +36,6 @@
   border-radius: 50px;
 }
 
-.btn-primary,
-.btn-primary:visited {
-  background-color: $green;
-  color: white;
-  border: 1px solid $green;
-  outline: none;
-}
-
-.btn-primary:hover,
-.btn-primary:active:hover,
-.btn-primary.active:hover {
-  background-color: darken($green, 8);
-  color: white;
-  border: 1px solid darken($green, 8);
-  outline: none;
-}
-
-.btn-primary:focus,
-.btn-primary.focus,
-.btn-primary:active,
-.btn-primary.active {
-  border: 1px solid darken($green, 15);
-  background-color: darken($green, 15);
-  color: white;
-  border: none;
-  outline: none;
-}
-
 .btn-dark, .btn-dark:visited {
   background-color: darken($blue, 20);
   color: white;
