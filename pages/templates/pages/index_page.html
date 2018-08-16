@@ -86,9 +86,9 @@
                 {% if page.block_1_button_color == 'green' %}
                 btn-primary
                 {% elif page.block_1_button_color == 'red' %}
-                btn-donate
+                btn-danger
                 {% else %}
-                btn-secondary
+                btn-default
                 {% endif %}"
                 {% if page.block_1_button_url_new_window %}
                 onclick="trackOutboundLink('{{ page.block_1_button_url }}',true)"
@@ -159,9 +159,9 @@
                   {% if page.block_2_button_color == 'green' %}
                   btn-primary
                   {% elif page.block_2_button_color == 'red' %}
-                  btn-donate
+                  btn-danger
                   {% else %}
-                  btn-secondary
+                  btn-default
                   {% endif %}"
                   {% if page.block_2_button_url_new_window %}
                   onclick="trackOutboundLink('{{ page.block_2_button_url }}',true)"
@@ -218,9 +218,9 @@
                 {% if page.block_3_button_color == 'green' %}
                 btn-primary
                 {% elif page.block_3_button_color == 'red' %}
-                btn-donate
+                btn-danger
                 {% else %}
-                btn-secondary
+                btn-default
                 {% endif %}"
                 {% if page.block_3_button_url_new_window %}
                 onclick="trackOutboundLink('{{ page.block_3_button_url }}',true)"
@@ -299,7 +299,7 @@
                   <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
                   <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
                   <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
-                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                  <a href="{% pageurl news_item %}" class="content__btn btn btn-default uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
               </div>
             {% endfor %}
@@ -346,7 +346,7 @@
           <button type="button" class="btn btn-default0 btn-amount" value="50">$50</button>
           <button type="button" class="btn btn-default0 btn-amount" value="100">$100</button>
           <input type="text" placeholder="$___" class="input-amount">
-          <button class="btn btn-continue btn-secondary uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
+          <button class="btn btn-continue btn-default uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
           <input type="hidden" name="amount" id="amount">
           <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
         </form>

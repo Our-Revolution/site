@@ -1,6 +1,9 @@
 .birthday-page {
 
-  // Remove duplicate padding
+  // Add padding for fixed navbar
+  padding-top: 60px !important;
+
+  // Remove duplicate padding for nested containers
   .container-fluid > .row > .col-xs-12 {
     padding-left: 0;
     padding-right: 0;

@@ -1,0 +1,39 @@
+{% load static %}
+
+<nav class="navbar navbar-default navbar-fixed-top pb10 pt10">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="container">
+          <div class="row">
+
+            <div class="col-xs-12">
+
+              <a href="/" class="logo-sm hover-zoom mr5 pull-left">
+                <img alt="Our Revolution logo"
+                src="{% static 'dist/img/logo.svg' %}"/>
+              </a>
+
+              <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00"
+              class="btn btn-danger ml5 pull-right"
+              onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav-upper&amount=27.00', true);"
+              target="_blank">
+                Donate
+              </a>
+
+              <div class="mb0 progress progress-lg">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                  <span class="sr-only">60% Complete</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>

@@ -3,7 +3,7 @@
 // Highlighted text with red background
 .text-highlight {
   @extend .label;
-  @extend .label-danger;
+  @extend .label-info;
   border-radius: 0;
   font-size: inherit;
   line-height: inherit;

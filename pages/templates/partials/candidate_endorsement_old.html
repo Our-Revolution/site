@@ -39,7 +39,7 @@
             <div class="candidate-action-bar clearfix">
 
                 {% if page.candidate.primary_cta_enabled %}
-                    <a href="{{ page.candidate.primary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.primary_cta_link }}', true);" class="btn btn-donate" target="_blank">{{ page.candidate.primary_cta }}</a>
+                    <a href="{{ page.candidate.primary_cta_link }}" onclick="trackOutboundLink('{{ page.candidate.primary_cta_link }}', true);" class="btn btn-danger" target="_blank">{{ page.candidate.primary_cta }}</a>
                 {% endif %}
 
                 {% if page.candidate.secondary_cta %}
@@ -47,7 +47,7 @@
                 {% endif %}
 
                 {% if page.candidate.website %}
-                    <a href="{{ page.candidate.website }}" onclick="trackOutboundLink('{{ page.candidate.website }}', true);" class="btn btn-secondary" target="_blank">Website</a>
+                    <a href="{{ page.candidate.website }}" onclick="trackOutboundLink('{{ page.candidate.website }}', true);" class="btn btn-default" target="_blank">Website</a>
                 {% endif %}
 
                 {% if page.candidate.facebook or page.candidate.twitter or page.candidate.instagram or page.candidate.youtube %}
