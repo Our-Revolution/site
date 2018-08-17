@@ -13,7 +13,7 @@
       @extend .text-poppins;
 
       // Scale down for smaller screens
-      @include until($medium) {
+      @include range($small, $medium) {
         font-size: 14px;
         line-height: 18px;
       }
@@ -28,7 +28,7 @@
       width: 100%;
 
       // Scale down for smaller screens
-      @include until($medium) {
+      @include range($small, $medium) {
         padding: 9px 10px 0;
       }
     }
