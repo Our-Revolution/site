@@ -6,7 +6,13 @@
   {{ block.super }}
 
   <style>
-
+  .canvas {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /* z-index: 9; */
+    /* z-index: -9; */
+  }
     .navbar-fixed-top {
       {% if page.header_border_color %}
         border-top: solid 5px #{{ page.header_border_color }} !important;
@@ -163,6 +169,9 @@
 
 {% block content %}
 
+<canvas id="birthday-canvas" class="canvas"></canvas>
+<!-- <canvas id="birthday-canvas" class="canvas score-graph" width="600" height="400"></canvas> -->
+
 <div class="h-mt0 text-center">
 
   <section class="birthday-primary-content container-fluid bg-cover">
@@ -174,7 +183,7 @@
 
             <div class="col-md-5 birthday-primary-content-body">
 
-              <div class="mb20">
+              <div class="mb20 pl20">
                 {{ page.primary_content_body | richtext }}
               </div>
 
@@ -203,8 +212,7 @@
     </div>
   </section>
 
-  <section id="birthday-section-2"
-  class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
+  <section class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
     <div class="row">
       <div class="col-xs-12">
 
@@ -466,9 +474,129 @@
 </div>
 
 <script>
+
   $(document).ready(function() {
+    console.log('ready');
+
     var scroll = new SmoothScroll('a[data-scroll]');
+
+
+
+    console.log('canvas');
+    var canvas = document.getElementById("birthday-canvas");
+    var body = document.body;
+    var html = document.body;
+    var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    console.log('ctx');
+    var ctx = canvas.getContext("2d");
+    // canvas.width = window.innerWidth;
+    canvas.width = body.width;
+    canvas.height = height;
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+
+    function handleResize() {
+      console.log('handleResize');
+      var body = document.body;
+      var w = window.innerWidth;
+      var h = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      canvas.width = w;
+      canvas.height = h;
+      drawPath();
+    }
+
+
+
+    function drawPath() {
+      var $logo = $('#logo');
+      var $bdayPrimaryContent = $('.birthday-primary-content');
+      var $bdaySection3 = $('.birthday-section-3');
+      var $btnExplore = $('.btn-primary', $bdayPrimaryContent);
+      var $btnCtaBottom = $('.birthday-section-7 .btn-success');
+      var points = [
+        [
+          Math.floor($logo.offset().left + $logo.width()/2),
+          0
+        ],
+        [
+          Math.floor($logo.offset().left + $logo.width()/2),
+          Math.floor($btnExplore.offset().top) - 73
+        ],
+        [
+          Math.floor(window.innerWidth/2) + 0.5,
+          Math.floor($btnExplore.offset().top) - 73
+        ],
+        [
+          Math.floor(window.innerWidth/2) + 0.5,
+          Math.floor($bdaySection3.offset().top) - 145
+        ],
+        [
+          Math.floor($bdaySection3.offset().left) + 150,
+          Math.floor($bdaySection3.offset().top) - 145
+        ],
+        [
+          Math.floor($bdaySection3.offset().left) + 150,
+          Math.floor($btnCtaBottom.offset().top) - 375
+        ],
+        [
+          Math.floor($btnCtaBottom.offset().left) + 100,
+          Math.floor($btnCtaBottom.offset().top) - 375
+        ],
+        // [
+        //   Math.floor($btnExplore.offset().left),
+        //   Math.floor($btnExplore.offset().top + $btnExplore.height())+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth - ($btnExplore.offset().left)+100)+0.5,
+        //   Math.floor($btnExplore.offset().top + $btnExplore.height())+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth - ($btnExplore.offset().left)+100)+0.5,
+        //   Math.floor($('.birthday-section-2').offset().top + $('.birthday-section-2').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth/2)+0.5,
+        //   Math.floor($('.birthday-section-2').position().top + $('.birthday-section-2').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth/2)+100,
+        //   Math.floor($('.birthday-section-3').position().top + $('.birthday-section-3').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth/2)-200,
+        //   Math.floor($('.birthday-section-4').position().top + $('.birthday-section-4').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth/2)-200,
+        //   Math.floor($('.birthday-section-5').position().top + $('.birthday-section-5').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth/2)-200,
+        //   Math.floor($('.birthday-section-6').position().top + $('.birthday-section-6').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth - ($('.birthday-section-7 .btn-success').position().left)-100)+0.5,
+        //   Math.floor($('.birthday-section-7 .btn-success').position().top + $('.birthday-section-7 .btn-success').height()/2)+0.5
+        // ],
+        // [
+        //   Math.floor(window.innerWidth - ($('.birthday-section-7 .btn-success').position().left)+100)+0.5,
+        //   Math.floor($('.birthday-section-7 .btn-success').position().top + $('.birthday-section-7 .btn-success').height()/2)+0.5
+        // ],
+      ]
+      ctx.lineWidth = 1;
+      ctx.setLineDash([6]);
+      ctx.beginPath();
+      ctx.strokeStyle="#0098ff";
+      // ctx.moveTo((points[0][0]),(points[0][1]));
+      for (var coords in points) {
+        ctx.lineTo(points[coords][0],points[coords][1])
+      }
+      ctx.stroke();
+    }
+
   });
+
 </script>
 
 {% endblock %}
