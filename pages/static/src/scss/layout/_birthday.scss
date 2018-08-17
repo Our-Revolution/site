@@ -47,7 +47,7 @@
     .bg-cover {
       @extend .height-xxl;
 
-      @include until($large) {
+      @include until($medium) {
         height: 400px;
       }
     }

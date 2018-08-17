@@ -10888,7 +10888,7 @@ div.recurrence-widget {
     @media screen and (min-width: 1200px) {
       .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
         padding: 40px 40px 0; } }
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 767px) {
     .birthday-page .birthday-section-5 .bg-cover, .birthday-page .birthday-section-5 .home-block, .birthday-page .birthday-section-6 .bg-cover, .birthday-page .birthday-section-6 .home-block {
       height: 400px; } }
   @media screen and (min-width: 1200px) {
