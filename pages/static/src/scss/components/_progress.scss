@@ -12,10 +12,10 @@
       @extend .fs-sm;
       @extend .text-poppins;
 
-      // Scale down for sm-md screens
-      @include range($small, $medium) {
-        font-size: 16px;
-        line-height: 20px;
+      // Scale down for smaller screens
+      @include until($medium) {
+        font-size: 14px;
+        line-height: 18px;
       }
     }
 
@@ -27,9 +27,9 @@
       top: 0;
       width: 100%;
 
-      // Scale down for sm-md screens
-      @include range($small, $medium) {
-        padding: 9px 0 0 10px;
+      // Scale down for smaller screens
+      @include until($medium) {
+        padding: 9px 10px 0;
       }
     }
 

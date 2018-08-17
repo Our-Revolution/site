@@ -39,7 +39,7 @@
 
                     {% if page.progress_bar_goal_name %}
                     <span class="progress-bar-text">
-                      {{ page.progress_bar_goal_name }}
+                      {{ page.progress_bar_goal_name }}{% if page.progress_bar_percent == 100 %}!{% endif %}
                     </span>
                     {% endif %}
 
