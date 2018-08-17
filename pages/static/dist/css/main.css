@@ -9379,21 +9379,21 @@ ul.list-plain,
     .progress.progress-lg .progress-bar {
       font-size: 14px;
       line-height: 18px; } }
+  @media screen and (max-width: 479px) {
+    .progress.progress-lg .progress-bar {
+      font-size: 12px;
+      line-height: 14px; } }
   .progress.progress-lg .progress-bar-content {
     left: 0;
     padding: 7px 20px 0;
     position: absolute;
-    text-align: left;
     top: 0;
     width: 100%; }
-    @media screen and (min-width: 480px) and (max-width: 767px) {
+    @media screen and (max-width: 767px) {
       .progress.progress-lg .progress-bar-content {
-        padding: 9px 10px 0; } }
+        padding: 8px 10px 0; } }
   @media screen and (max-width: 767px) {
     .progress.progress-lg .progress-bar-goal-met {
-      display: none; } }
-  @media screen and (max-width: 479px) {
-    .progress.progress-lg .progress-bar-text {
       display: none; } }
 
 .text-highlight, .birthday-page h2 i {
