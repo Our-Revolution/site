@@ -5035,10 +5035,10 @@ button.list-group-item-danger {
     width: 100%;
     border: 0; }
 
-.embed-responsive-16by9 {
+.embed-responsive-16by9, .birthday-page .embed-layout-1 .embed-responsive {
   padding-bottom: 56.25%; }
 
-.embed-responsive-4by3 {
+.embed-responsive-4by3, .birthday-page .embed-layout-2 .embed-responsive {
   padding-bottom: 75%; }
 
 .well {
@@ -8859,6 +8859,9 @@ footer {
   margin: 0 0 25px;
   padding: 15px; }
 
+.embed-responsive-square, .birthday-page .embed-layout-3 .embed-responsive {
+  padding-bottom: 100%; }
+
 .fs3 {
   font-size: 3em; }
   @media screen and (max-width: 767px) {
@@ -10870,6 +10873,12 @@ div.recurrence-widget {
   .birthday-page .container-fluid > .row > .col-xs-12 {
     padding-left: 0;
     padding-right: 0; }
+  @media screen and (min-width: 768px) {
+    .birthday-page .embed-layout-3 {
+      margin: 0 80px; } }
+  @media screen and (min-width: 480px) and (max-width: 767px) {
+    .birthday-page .embed-layout-3 {
+      margin: 0 40px; } }
   .birthday-page h2 i {
     font-style: inherit; }
   @media screen and (min-width: 992px) {
@@ -10894,6 +10903,8 @@ div.recurrence-widget {
   @media screen and (min-width: 1200px) {
     .birthday-page .birthday-primary-content-body {
       padding-top: 20px; } }
+  .birthday-page #birthday-explore {
+    height: 66px; }
   @media screen and (max-width: 767px) {
     .birthday-page .birthday-section-2 b {
       font-size: 34px;
