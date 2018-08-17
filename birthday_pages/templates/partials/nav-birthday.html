@@ -1,4 +1,4 @@
-{% load static %}
+{% load static humanize %}
 
 <nav class="navbar navbar-default navbar-fixed-top pb10 pt10">
   <div class="container-fluid">
@@ -15,32 +15,52 @@
                 src="{% static 'dist/img/logo.svg' %}"/>
               </a>
 
-              <a href="https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav&amount=27.00"
+              <a href="{{ page.header_button_url }}"
               class="btn btn-danger ml5 pull-right"
-              onclick="trackOutboundLink('https://secure.actblue.com/contribute/page/ourrevolution?refcode=main-nav-upper&amount=27.00', true);"
-              target="_blank">
-                Donate
+              onclick="trackOutboundLink('{{ page.header_button_url }}', {{ page.header_button_new_window|yesno:'true,false'}});"
+              target="{{ page.header_button_new_window|yesno:'_blank,_self'}}">
+                {{ page.header_button_text }}
               </a>
 
+              {% if page.progress_bar_display %}
               <div class="mb0 progress progress-lg">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;">
+                <div class="progress-bar{% if page.progress_bar_goal_met %} progress-bar-success{% endif %}"
+                role="progressbar"
+                aria-valuenow="{{ page.progress_bar_percent }}"
+                aria-valuemin="0" aria-valuemax="100"
+                style="width: {{ page.progress_bar_percent }}%;">
 
-                  <div class="progress-bar-content">
-                    <div class="pull-left">
-                      <span class="progress-bar-count">112</span>/<span
-                      class="progress-bar-goal">500</span>
-                      <span class="progress-bar-text">
-                        new monthly sustainers
-                      </span>
-                    </div>
+                <div class="progress-bar-content">
 
-                    <div class="progress-bar-goal-met pull-right">
-                      Goal reached!
-                    </div>
+                  {% if page.progress_bar_count and page.progress_bar_goal_current %}
+                  <div class="pull-left">
+                    <span class="progress-bar-count">{{ page.progress_bar_count|intcomma }}</span>/<span
+                    class="progress-bar-goal">{{ page.progress_bar_goal_current|intcomma }}</span>
+
+                    {% if page.progress_bar_goal_name %}
+                    <span class="progress-bar-text">
+                      {{ page.progress_bar_goal_name }}
+                    </span>
+                    {% endif %}
+
+                  </div>
+                  {% endif %}
+
+                  {% if page.progress_bar_goal_met %}
+                  <div class="progress-bar-goal-met pull-right">
+                    {% if page.progress_bar_goal_new and page.progress_bar_goal_new > page.progress_bar_count %}
+                    New goal!
+                    {% else %}
+                    Goal reached!
+                    {% endif %}
+                  </div>
+                  {% endif %}
+
                   </div>
 
                 </div>
               </div>
+              {% endif %}
 
             </div>
 

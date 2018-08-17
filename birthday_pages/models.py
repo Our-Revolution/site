@@ -210,33 +210,37 @@ class BirthdayPage(Page):
         related_name='+'
     )
 
+    def _get_progress_bar_goal_current(self):
+        if self.progress_bar_goal is None:
+            return None
+        elif self.progress_bar_goal_new is not None and (
+            self.progress_bar_count is not None
+        ) and self.progress_bar_count >= self.progress_bar_goal:
+            return self.progress_bar_goal_new
+        else:
+            return self.progress_bar_goal
+        return goal_current
+    progress_bar_goal_current = property(_get_progress_bar_goal_current)
 
-    # def _get_election_date(self):
-    #         return self.general_election_date
-    # election_date = property(_get_election_date)
-# header_background_image = models.ForeignKey(
-#     'wagtailimages.Image',
-#     blank=True,
-#     null=True,
-#     on_delete=models.SET_NULL,
-#     related_name='+'
-# )
-# header_button_new_window = models.BooleanField(
-#     default=False,
-#     help_text='Open link in new window?'
-# )
-# header_button_text = models.CharField(max_length=button_text_max)
-# header_button_url = models.URLField()
-# progress_bar_count = models.IntegerField(blank=True, null=True)
-# progress_bar_display = models.BooleanField(default=True)
-# progress_bar_goal = models.IntegerField(blank=True, null=True)
-# progress_bar_goal_name = models.CharField(
-#     blank=True,
-#     max_length=title_max_length,
-#     null=True,
-# )
-# progress_bar_goal_new
+    def _get_progress_bar_goal_met(self):
+        if self.progress_bar_count is not None and (
+            self.progress_bar_goal is not None
+        ):
+            return self.progress_bar_count >= self.progress_bar_goal
+        else:
+            return False
+    progress_bar_goal_met = property(_get_progress_bar_goal_met)
 
+    def _get_progress_bar_percent(self):
+        if self.progress_bar_count is not None and (
+            self.progress_bar_goal_current is not None
+        ):
+            return min(float(self.progress_bar_count) / float(
+                self.progress_bar_goal_current
+            ), 1)*100
+        else:
+            return None
+    progress_bar_percent = property(_get_progress_bar_percent)
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
