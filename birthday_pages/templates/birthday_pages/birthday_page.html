@@ -169,7 +169,7 @@
     <div class="row">
       <div class="col-xs-12">
 
-        <div class="container pt4 pb4">
+        <div class="container pt4">
           <div class="row">
 
             <div class="col-md-5 birthday-primary-content-body">
@@ -178,7 +178,7 @@
                 {{ page.primary_content_body | richtext }}
               </div>
 
-              <a href="#birthday-section-2" data-scroll
+              <a href="#birthday-explore" data-scroll
               class="btn btn-primary hidden-xs hidden-sm">
                 {{ page.primary_content_button_text }}
                 <span class="glyphicon glyphicon-chevron-down"></span>
@@ -187,13 +187,17 @@
             </div>
 
             <div class="col-md-7 birthday-primary-content-embed">
-              <div class="embed-responsive embed-responsive-16by9">
-                {{ page.primary_content_embed_code | safe }}
+              <div class="embed-layout-{{ page.primary_content_embed_layout }}">
+                <div class="embed-responsive">
+                  {{ page.primary_content_embed_code | safe }}
+                </div>
               </div>
             </div>
 
           </div>
         </div>
+
+        <div id="birthday-explore"></div>
 
       </div>
     </div>

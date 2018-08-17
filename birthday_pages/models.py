@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from enum import Enum, unique
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Page
@@ -7,6 +8,13 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@unique
+class EmbedLayout(Enum):
+    layout_16x9 = (1, '16x9')
+    layout_4x3 = (2, '4x3')
+    square = (3, 'Square')
 
 
 class BirthdayPage(Page):
@@ -61,6 +69,10 @@ class BirthdayPage(Page):
     primary_content_body = RichTextField()
     primary_content_button_text = models.CharField(max_length=button_text_max)
     primary_content_embed_code = models.TextField(help_text=embed_help_text)
+    primary_content_embed_layout = models.IntegerField(
+        choices=[x.value for x in EmbedLayout],
+        default=EmbedLayout.layout_16x9.value[0],
+    )
     section_2_1_body = RichTextField(help_text=section_2_help_text)
     section_2_1_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -274,8 +286,9 @@ class BirthdayPage(Page):
         MultiFieldPanel(
             [
                 FieldPanel('primary_content_body'),
-                FieldPanel('primary_content_embed_code'),
                 FieldPanel('primary_content_button_text'),
+                FieldPanel('primary_content_embed_code'),
+                FieldPanel('primary_content_embed_layout'),
                 ImageChooserPanel('primary_content_background_image'),
                 FieldPanel('primary_content_background_color'),
             ],
