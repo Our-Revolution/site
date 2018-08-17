@@ -9,29 +9,14 @@
     padding-right: 0;
   }
 
-  // Support multiple embed layouts
-  .embed-layout-1 {
-    .embed-responsive {
-      @extend .embed-responsive-16by9;
-    }
-  }
-
-  .embed-layout-2 {
-    .embed-responsive {
-      @extend .embed-responsive-4by3;
-    }
-  }
-
+  // Adjust design for square layout
   .embed-layout-3 {
-    .embed-responsive {
-      @extend .embed-responsive-square;
+    @include at-least($medium) {
+      padding: 0 80px;
     }
 
-    @include at-least($medium) {
-      margin: 0 80px;
-    }
     @include range($small, $medium) {
-      margin: 0 40px;
+      padding: 0 40px;
     }
   }
 

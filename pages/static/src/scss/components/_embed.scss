@@ -4,3 +4,22 @@
 .embed-responsive-square {
   padding-bottom: 100%;
 }
+
+// Support for Embed Layout Enum
+.embed-layout-1 {
+  .embed-responsive {
+    @extend .embed-responsive-16by9;
+  }
+}
+
+.embed-layout-2 {
+  .embed-responsive {
+    @extend .embed-responsive-4by3;
+  }
+}
+
+.embed-layout-3 {
+  .embed-responsive {
+    @extend .embed-responsive-square;
+  }
+}
