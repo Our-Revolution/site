@@ -28,7 +28,7 @@
       <div class="col-md-8 col-md-offset-2 fs18">
         {% if application.questionnaire.status == 'complete' %}
           <p>You've already submitted this application - we'll review it and be in touch.</p>
-          <a href="/groups/nominations?id={{applicaiton.id}}" class="btn btn-primary btn-block uppercase ls2">Back to the Dashboard</a>
+          <a href="/groups/nominations?id={{applicaiton.id}}" class="btn btn-success btn-block uppercase ls2">Back to the Dashboard</a>
         {% elif not application.questionnaire.status == 'sent'  %}
           <div class="alert alert-danger br3"><p>Please complete your candidate questionnaire before submitting.</p></div>
         {% else %}

@@ -17,6 +17,34 @@ class BirthdayPage(Page):
     section_2_help_text = 'Use bold for large text.'
     title_max_length = 128
 
+    header_border_color = models.CharField(
+        blank=True,
+        help_text=color_help_text,
+        max_length=color_max_length,
+        null=True,
+    )
+    header_border_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    header_button_new_window = models.BooleanField(
+        default=False,
+        help_text='Open link in new window?'
+    )
+    header_button_text = models.CharField(max_length=button_text_max)
+    header_button_url = models.URLField()
+    progress_bar_count = models.IntegerField(blank=True, null=True)
+    progress_bar_display = models.BooleanField(default=True)
+    progress_bar_goal = models.IntegerField(blank=True, null=True)
+    progress_bar_goal_name = models.CharField(
+        blank=True,
+        max_length=title_max_length,
+        null=True,
+    )
+    progress_bar_goal_new = models.IntegerField(blank=True, null=True)
     primary_content_background_color = models.CharField(
         blank=True,
         help_text=color_help_text,
@@ -188,7 +216,61 @@ class BirthdayPage(Page):
         related_name='+'
     )
 
+    def _get_progress_bar_goal_current(self):
+        if self.progress_bar_goal is None:
+            return None
+        elif self.progress_bar_goal_new is not None and (
+            self.progress_bar_count is not None
+        ) and self.progress_bar_count >= self.progress_bar_goal:
+            return self.progress_bar_goal_new
+        else:
+            return self.progress_bar_goal
+        return goal_current
+    progress_bar_goal_current = property(_get_progress_bar_goal_current)
+
+    def _get_progress_bar_goal_met(self):
+        if self.progress_bar_count is not None and (
+            self.progress_bar_goal is not None
+        ):
+            return self.progress_bar_count >= self.progress_bar_goal
+        else:
+            return False
+    progress_bar_goal_met = property(_get_progress_bar_goal_met)
+
+    def _get_progress_bar_percent(self):
+        if self.progress_bar_count is not None and (
+            self.progress_bar_goal_current is not None
+        ):
+            return min(float(self.progress_bar_count) / float(
+                self.progress_bar_goal_current
+            ), 1)*100
+        else:
+            return None
+    progress_bar_percent = property(_get_progress_bar_percent)
+
     content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel('progress_bar_display'),
+                FieldPanel('progress_bar_count'),
+                FieldPanel('progress_bar_goal'),
+                FieldPanel('progress_bar_goal_new'),
+                FieldPanel('progress_bar_goal_name'),
+            ],
+            heading="Progress Bar",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('header_button_text'),
+                FieldPanel('header_button_url'),
+                FieldPanel('header_button_new_window'),
+                ImageChooserPanel('header_border_image'),
+                FieldPanel('header_border_color'),
+            ],
+            heading="Header",
+            classname="collapsible"
+        ),
         MultiFieldPanel(
             [
                 FieldPanel('primary_content_body'),

@@ -35,15 +35,15 @@
         <div class="col-md-8 col-md-offset-2 clearfix">
           {% if application.is_editable %}
             {% if application.questionnaire.status == 'complete' %}
-              <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">View Questionnaire</a>
-              <a href="/groups/nominations/submit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Submit Your Application</a>
+              <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">View Questionnaire</a>
+              <a href="/groups/nominations/submit?id={{application.id}}" class="btn btn-success btn-block uppercase ls2">Submit Your Application</a>
             {% elif not application.questionnaire.status == 'sent' %}
               {% crispy form %}
 
               <h2 class="text-center mb20 mt20">- OR -</h2>
 
               <div class="col-md-12 text-center">
-                <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">Fill Out Questionnaire</a>
+                <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Fill Out Questionnaire</a>
                 <p class="mt20"><strong>Note:</strong> We strongly recommend having the candidate fill out this form because their level of alignment with our national platform is an important factor in our endorsement decision.</p>
               </div>
             {% else %}
@@ -52,14 +52,14 @@
 
                 <p>If your candidate is having trouble with the nominations platform, you can resend the questionnaire or fill it out yourself on behalf of your candidate using the buttons below.</p>
 
-                <a href="{% url 'nominations-questionnaire-reset' %}?id={{application.id}}&next={% url 'nominations-questionnaire' %}?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Resend questionnaire</a>
-                <a href="{% url 'nominations-questionnaire-reset' %}?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">Fill out manually</a>
+                <a href="{% url 'nominations-questionnaire-reset' %}?id={{application.id}}&next={% url 'nominations-questionnaire' %}?id={{application.id}}" class="btn btn-success btn-block uppercase ls2">Resend questionnaire</a>
+                <a href="{% url 'nominations-questionnaire-reset' %}?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">Fill out manually</a>
               </div>
 
               <p class="mt20 text-center"><strong>Having trouble?</strong> Contact us at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>.</p>
             {% endif %}
           {% else %}
-            <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-secondary btn-block uppercase ls2">View Questionnaire</a>
+            <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">View Questionnaire</a>
           {% endif %}
         </div>
       </div>

@@ -56,7 +56,7 @@ class ApplicationForm(forms.ModelForm):
                 Submit(
                     'submit',
                     'Start a Nomination',
-                    css_class='btn btn-primary btn-block uppercase ls2 disabled',
+                    css_class='btn btn-success btn-block uppercase ls2 disabled',
                     css_id='submit_button'
                 ),
                 css_class='col-md-12'
@@ -223,7 +223,7 @@ class CandidateLoginForm(forms.Form):
         self.helper.layout = Layout(
             Field('email', wrapper_class='col-md-12'),
             Div(
-                Submit('submit','Get Started',css_class='btn btn-block btn-primary uppercase ls2'),
+                Submit('submit','Get Started',css_class='btn btn-block btn-success uppercase ls2'),
                 css_class='col-md-12'
             )
         )
@@ -305,7 +305,7 @@ class InitiativeApplicationForm(forms.ModelForm):
                 Submit(
                     'submit',
                     'Submit Nomination',
-                    css_class='btn btn-primary btn-block uppercase ls2 disabled',
+                    css_class='btn btn-success btn-block uppercase ls2 disabled',
                     css_id='submit_button'
                 ),
                 css_class='col-md-12'

@@ -1,0 +1,73 @@
+{% load static humanize %}
+
+<nav class="navbar navbar-default navbar-fixed-top pb10 pt15">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="container">
+          <div class="row">
+
+            <div class="col-xs-12">
+
+              <a href="/" class="logo-sm hover-zoom mr5 pull-left">
+                <img alt="Our Revolution logo"
+                src="{% static 'dist/img/logo.svg' %}"/>
+              </a>
+
+              <a href="{{ page.header_button_url }}"
+              class="btn btn-danger ml5 pull-right"
+              onclick="trackOutboundLink('{{ page.header_button_url }}', {{ page.header_button_new_window|yesno:'true,false'}});"
+              target="{{ page.header_button_new_window|yesno:'_blank,_self'}}">
+                {{ page.header_button_text }}
+              </a>
+
+              {% if page.progress_bar_display %}
+              <div class="mb0 progress progress-lg">
+                <div class="progress-bar{% if page.progress_bar_goal_met %} progress-bar-success{% endif %}"
+                role="progressbar"
+                aria-valuenow="{{ page.progress_bar_percent }}"
+                aria-valuemin="0" aria-valuemax="100"
+                style="width: {{ page.progress_bar_percent }}%;">
+
+                <div class="progress-bar-content">
+
+                  {% if page.progress_bar_count is not None and page.progress_bar_goal_current %}
+                  <div class="pull-left">
+                    <span class="progress-bar-count">{{ page.progress_bar_count|intcomma }}</span>/<span
+                    class="progress-bar-goal">{{ page.progress_bar_goal_current|intcomma }}</span>
+
+                    {% if page.progress_bar_goal_name %}
+                    <span class="progress-bar-text">
+                      {{ page.progress_bar_goal_name }}{% if page.progress_bar_percent == 100 %}!{% endif %}
+                    </span>
+                    {% endif %}
+
+                  </div>
+                  {% endif %}
+
+                  {% if page.progress_bar_goal_met %}
+                  <div class="progress-bar-goal-met pull-right">
+                    {% if page.progress_bar_goal_new and page.progress_bar_goal_new > page.progress_bar_count %}
+                    New goal!
+                    {% else %}
+                    Goal reached!
+                    {% endif %}
+                  </div>
+                  {% endif %}
+
+                  </div>
+
+                </div>
+              </div>
+              {% endif %}
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>

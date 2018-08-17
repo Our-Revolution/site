@@ -84,11 +84,11 @@
                 <a href="{{ page.block_1_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_1_button_color == 'green' %}
-                btn-primary
+                btn-success
                 {% elif page.block_1_button_color == 'red' %}
-                btn-donate
+                btn-danger
                 {% else %}
-                btn-secondary
+                btn-primary
                 {% endif %}"
                 {% if page.block_1_button_url_new_window %}
                 onclick="trackOutboundLink('{{ page.block_1_button_url }}',true)"
@@ -157,11 +157,11 @@
                   <a href="{{ page.block_2_button_url }}"
                   class="btn btn-block ls2 uppercase
                   {% if page.block_2_button_color == 'green' %}
-                  btn-primary
+                  btn-success
                   {% elif page.block_2_button_color == 'red' %}
-                  btn-donate
+                  btn-danger
                   {% else %}
-                  btn-secondary
+                  btn-primary
                   {% endif %}"
                   {% if page.block_2_button_url_new_window %}
                   onclick="trackOutboundLink('{{ page.block_2_button_url }}',true)"
@@ -216,11 +216,11 @@
                 <a href="{{ page.block_3_button_url }}"
                 class="btn btn-block ls2 uppercase
                 {% if page.block_3_button_color == 'green' %}
-                btn-primary
+                btn-success
                 {% elif page.block_3_button_color == 'red' %}
-                btn-donate
+                btn-danger
                 {% else %}
-                btn-secondary
+                btn-primary
                 {% endif %}"
                 {% if page.block_3_button_url_new_window %}
                 onclick="trackOutboundLink('{{ page.block_3_button_url }}',true)"
@@ -299,12 +299,12 @@
                   <a href="{% pageurl news_item %}"><h4 class="content__heading">{{ news_item.title }}</h4></a>
                   <div class="attribution"><strong>{{ news_item.newspost.get_post_type_display }}</strong></div>
                   <p class="content__copy">{{ news_item.newspost.abstract | striptags }}</p>
-                  <a href="{% pageurl news_item %}" class="content__btn btn btn-secondary uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
+                  <a href="{% pageurl news_item %}" class="content__btn btn btn-primary uppercase ls2">Read <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
               </div>
             {% endfor %}
             <div class="col-xs-12 col-p10 mt10">
-              <a href="/press" class="btn btn-primary btn-block uppercase ls2">Read More News <span class="glyphicon glyphicon-chevron-right"></span></a>
+              <a href="/press" class="btn btn-success btn-block uppercase ls2">Read More News <span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
         </section>
       </div>
@@ -328,7 +328,7 @@
           </span>
 
           <span class="form-group submit">
-            <button class="btn btn-primary btn-block uppercase ls2">Join</button>
+            <button class="btn btn-success btn-block uppercase ls2">Join</button>
           </span>
         </form>
       </section>
@@ -342,11 +342,11 @@
         <p>Our Revolution is a non-profit that runs off of funds from contributors like you. Help us continue this movement.</p>
         <form id="quick-donate" class="quick-donate" action="https://secure.actblue.com/contribute/page/ourrevolution?amount=15" method="GET">
           <button type="button" class="btn btn-default btn-amount" value="15">$15</button>
-          <button type="button" class="btn btn-primary btn-amount" value="27">$27</button>
+          <button type="button" class="btn btn-success btn-amount" value="27">$27</button>
           <button type="button" class="btn btn-default btn-amount" value="50">$50</button>
           <button type="button" class="btn btn-default btn-amount" value="100">$100</button>
           <input type="text" placeholder="$___" class="input-amount">
-          <button class="btn btn-continue btn-secondary uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
+          <button class="btn btn-continue btn-primary uppercase ls2" id="donate-continue" type="submit">Continue <span class="glyphicon glyphicon-chevron-right"></span></button>
           <input type="hidden" name="amount" id="amount">
           <input type="hidden" name="refcode" id="refcode" value="home-bottom-donate">
         </form>

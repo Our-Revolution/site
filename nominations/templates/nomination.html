@@ -46,7 +46,7 @@
                 {% crispy form %}
               </div>
 
-              <button type='submit' value='submit' class="btn btn-block btn-primary uppercase ls2">Save</button>
+              <button type='submit' value='submit' class="btn btn-block btn-success uppercase ls2">Save</button>
             </form>
           {% else %}
             {{ formset.management_form|crispy }}
@@ -61,7 +61,7 @@
               <p class="pa20 br3 white-bg mt20">{{form.group_nomination_process.value}}</p>
             </div>
 
-            <a href="/groups/nominations/questionnaire?id={{application.id}}" class="btn btn-block btn-primary uppercase ls2">Next</a>
+            <a href="/groups/nominations/questionnaire?id={{application.id}}" class="btn btn-block btn-success uppercase ls2">Next</a>
           {% endif %}
         </div>
       </div>

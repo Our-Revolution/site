@@ -1,0 +1,50 @@
+// Progress bar elements
+
+.progress {
+
+  &.progress-lg {
+    border: 2px solid $dark-blue;
+    border-radius: 20px;
+    height: 40px;
+    position: relative;
+
+    .progress-bar {
+      @extend .fs-sm;
+      @extend .text-poppins;
+
+      // Scale down for smaller screens
+      @include until($medium) {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+
+    .progress-bar-content {
+      left: 0;
+      padding: 7px 20px 0;
+      position: absolute;
+      text-align: left;
+      top: 0;
+      width: 100%;
+
+      // Scale down for smaller screens
+      @include until($medium) {
+        padding: 9px 10px 0;
+      }
+    }
+
+    // Hide text on smaller screens
+    .progress-bar-goal-met {
+      @include until($medium) {
+        display: none;
+      }
+    }
+
+    // Hide text on smaller screens
+    .progress-bar-text {
+      @include until($small) {
+        display: none;
+      }
+    }
+  }
+}
