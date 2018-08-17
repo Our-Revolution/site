@@ -17,32 +17,29 @@
         font-size: 14px;
         line-height: 18px;
       }
+
+      @include until($small) {
+        font-size: 12px;
+        line-height: 14px;
+      }
     }
 
     .progress-bar-content {
       left: 0;
       padding: 7px 20px 0;
       position: absolute;
-      text-align: left;
       top: 0;
       width: 100%;
 
       // Scale down for smaller screens
-      @include range($small, $medium) {
-        padding: 9px 10px 0;
+      @include until($medium) {
+        padding: 8px 10px 0;
       }
     }
 
-    // Hide text on smaller screens
+    // Hide on smaller screens
     .progress-bar-goal-met {
       @include until($medium) {
-        display: none;
-      }
-    }
-
-    // Hide text on smaller screens
-    .progress-bar-text {
-      @include until($small) {
         display: none;
       }
     }
