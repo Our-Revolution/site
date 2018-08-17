@@ -8956,7 +8956,7 @@ footer {
 .height-xl {
   height: 400px; }
 
-.height-xxl {
+.height-xxl, .birthday-page .birthday-section-5 .bg-cover, .birthday-page .birthday-section-5 .home-block, .birthday-page .birthday-section-6 .bg-cover, .birthday-page .birthday-section-6 .home-block {
   height: 600px; }
 
 .hover-zoom {
@@ -10888,6 +10888,9 @@ div.recurrence-widget {
     @media screen and (min-width: 1200px) {
       .birthday-page .birthday-section-5 .rich-text, .birthday-page .birthday-section-6 .rich-text {
         padding: 40px 40px 0; } }
+  @media screen and (max-width: 991px) {
+    .birthday-page .birthday-section-5 .bg-cover, .birthday-page .birthday-section-5 .home-block, .birthday-page .birthday-section-6 .bg-cover, .birthday-page .birthday-section-6 .home-block {
+      height: 400px; } }
   @media screen and (min-width: 1200px) {
     .birthday-page .birthday-primary-content-body {
       padding-top: 20px; } }

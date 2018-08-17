@@ -43,6 +43,14 @@
         padding: 40px 40px 0;
       }
     }
+
+    .bg-cover {
+      @extend .height-xxl;
+
+      @include until($large) {
+        height: 400px;
+      }
+    }
   }
 
   .birthday-primary-content-body {
