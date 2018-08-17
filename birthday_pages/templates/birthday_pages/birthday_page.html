@@ -7,6 +7,18 @@
 
   <style>
 
+    .navbar-fixed-top {
+      {% if page.header_border_color %}
+        border-top: solid 5px #{{ page.header_border_color }} !important;
+      {% endif %}
+
+      {% if page.header_border_image %}
+        {% image page.header_border_image original as header_border_image %}
+        background-image: url('{{ header_border_image.url }}') !important;
+        background-repeat: repeat-x !important;
+      {% endif %}
+    }
+
     .birthday-primary-content {
       {% if page.primary_content_background_color %}
         background-color: #{{ page.primary_content_background_color }};

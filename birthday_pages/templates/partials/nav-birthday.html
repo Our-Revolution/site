@@ -1,6 +1,6 @@
 {% load static humanize %}
 
-<nav class="navbar navbar-default navbar-fixed-top pb10 pt10">
+<nav class="navbar navbar-default navbar-fixed-top pb10 pt15">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12">
@@ -32,7 +32,7 @@
 
                 <div class="progress-bar-content">
 
-                  {% if page.progress_bar_count and page.progress_bar_goal_current %}
+                  {% if page.progress_bar_count is not None and page.progress_bar_goal_current %}
                   <div class="pull-left">
                     <span class="progress-bar-count">{{ page.progress_bar_count|intcomma }}</span>/<span
                     class="progress-bar-goal">{{ page.progress_bar_goal_current|intcomma }}</span>

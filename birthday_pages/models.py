@@ -17,7 +17,13 @@ class BirthdayPage(Page):
     section_2_help_text = 'Use bold for large text.'
     title_max_length = 128
 
-    header_background_image = models.ForeignKey(
+    header_border_color = models.CharField(
+        blank=True,
+        help_text=color_help_text,
+        max_length=color_max_length,
+        null=True,
+    )
+    header_border_image = models.ForeignKey(
         'wagtailimages.Image',
         blank=True,
         null=True,
@@ -259,7 +265,8 @@ class BirthdayPage(Page):
                 FieldPanel('header_button_text'),
                 FieldPanel('header_button_url'),
                 FieldPanel('header_button_new_window'),
-                ImageChooserPanel('header_background_image'),
+                ImageChooserPanel('header_border_image'),
+                FieldPanel('header_border_color'),
             ],
             heading="Header",
             classname="collapsible"
