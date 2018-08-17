@@ -9375,7 +9375,7 @@ ul.list-plain,
   border-radius: 20px;
   height: 40px;
   position: relative; }
-  @media screen and (max-width: 767px) {
+  @media screen and (min-width: 480px) and (max-width: 767px) {
     .progress.progress-lg .progress-bar {
       font-size: 14px;
       line-height: 18px; } }
@@ -9386,7 +9386,7 @@ ul.list-plain,
     text-align: left;
     top: 0;
     width: 100%; }
-    @media screen and (max-width: 767px) {
+    @media screen and (min-width: 480px) and (max-width: 767px) {
       .progress.progress-lg .progress-bar-content {
         padding: 9px 10px 0; } }
   @media screen and (max-width: 767px) {
