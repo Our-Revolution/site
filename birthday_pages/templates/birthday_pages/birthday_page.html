@@ -468,6 +468,7 @@
 
     var scroll = new SmoothScroll('a[data-scroll]');
 
+    // Canvas based on https://github.com/cjmabry/PoliChart/blob/master/polichart/templates/layouts/bern-path.html#L750
     console.log('canvas');
     var canvas = document.getElementById("birthday-canvas");
     var body = document.body;
@@ -545,7 +546,6 @@
       ctx.setLineDash([6]);
       ctx.beginPath();
       ctx.strokeStyle="#0098ff";
-      // ctx.moveTo((points[0][0]),(points[0][1]));
       for (var coords in points) {
         ctx.lineTo(points[coords][0],points[coords][1])
       }
