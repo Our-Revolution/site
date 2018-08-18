@@ -163,6 +163,8 @@
 
 {% block content %}
 
+<canvas id="birthday-canvas" class="canvas"></canvas>
+
 <div class="h-mt0 text-center">
 
   <section class="birthday-primary-content container-fluid bg-cover">
@@ -203,8 +205,7 @@
     </div>
   </section>
 
-  <section id="birthday-section-2"
-  class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
+  <section class="birthday-section-2 container-fluid blue-bg text-left text-poppins white-text">
     <div class="row">
       <div class="col-xs-12">
 
@@ -441,19 +442,15 @@
             <div class="col-md-6 col-md-offset-3">
 
               <div class="bg-white">
-
                 {{ page.section_7_body | richtext }}
-
-                <div class="mt20">
-                  <a href="{{ page.section_7_button_url }}"
-                  class="btn btn-block btn-lg btn-success"
-                  onclick="trackOutboundLink('{{ page.button_url }}', {{ page.section_7_button_new_window|yesno:'true,false'}});"
-                  target="{{ page.section_7_button_new_window|yesno:'_blank,_self'}}">
-                    {{ page.section_7_button_text }}
-                  </a>
-                </div>
-
               </div>
+
+              <a href="{{ page.section_7_button_url }}"
+              class="btn btn-block btn-lg btn-success"
+              onclick="trackOutboundLink('{{ page.button_url }}', {{ page.section_7_button_new_window|yesno:'true,false'}});"
+              target="{{ page.section_7_button_new_window|yesno:'_blank,_self'}}">
+                {{ page.section_7_button_text }}
+              </a>
 
             </div>
           </div>
@@ -466,9 +463,97 @@
 </div>
 
 <script>
+
   $(document).ready(function() {
+
     var scroll = new SmoothScroll('a[data-scroll]');
+
+    // Canvas based on https://github.com/cjmabry/PoliChart/blob/master/polichart/templates/layouts/bern-path.html#L750
+    console.log('canvas');
+    var canvas = document.getElementById("birthday-canvas");
+    var body = document.body;
+    var html = document.body;
+    var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    var ctx = canvas.getContext("2d");
+    canvas.width = body.width;
+    canvas.height = height;
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    function handleResize() {
+      var body = document.body;
+      var w = window.innerWidth;
+      var h = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      canvas.width = w;
+      canvas.height = h;
+      drawPath();
+    }
+
+    function drawPath() {
+      var $logo = $('#logo');
+      var $btnDonate = $('.navbar .btn-danger');
+      var $bdayPrimaryContent = $('.birthday-primary-content');
+      var $btnExplore = $('.btn-primary', $bdayPrimaryContent);
+      var $bdaySection3 = $('.birthday-section-3');
+      var $bdaySection4 = $('.birthday-section-4');
+      var $bdaySection4Cards = $('.card-list-static', $bdaySection4);
+      var $bdaySection5 = $('.birthday-section-5');
+      var $bdaySection6 = $('.birthday-section-6');
+      var $bdaySection7 = $('.birthday-section-7');
+      var $bdaySection7Cta = $('.btn-success', $bdaySection7);
+
+      var logo_x = Math.floor($logo.offset().left + $logo.width()/2);
+      var left_x = Math.floor($bdaySection3.offset().left) + 150;
+      var bdaySection7Cta_x = Math.floor($bdaySection7Cta.offset().left) + 100;
+      var bdaySection7Cta_left_x = bdaySection7Cta_x - 150;
+      var middle_x = Math.floor(window.innerWidth/2) + 0.5
+      var right_x = Math.floor($btnDonate.offset().left) - 40;
+      var btnDonate_x = Math.floor(
+        $btnDonate.offset().left + $btnDonate.width()/2
+      ) + 20;
+
+      var logo_y = 0;
+      var btnExplore_y = Math.floor($btnExplore.offset().top) - 66;
+      var bdaySection3_y = Math.floor($bdaySection3.offset().top) - 145;
+      var bdaySection3_bottom_y = Math.floor($bdaySection4.offset().top) - 220;
+      var bdaySection4Cards_y = Math.floor($bdaySection4Cards.offset().top) - 210;
+      var bdaySection5_y = Math.floor($bdaySection5.offset().top) - 220;
+      var bdaySection5_bottom_y = Math.floor($bdaySection6.offset().top) - 320;
+      var bdaySection7_y = Math.floor($bdaySection7.offset().top) - 260;
+      var bdaySection7Cta_y = Math.floor($bdaySection7Cta.offset().top) - 310;
+
+      var points = [
+        [logo_x, logo_y],
+        [logo_x, btnExplore_y],
+        [middle_x, btnExplore_y],
+        [middle_x, bdaySection3_y],
+        [left_x, bdaySection3_y],
+        [left_x, bdaySection3_bottom_y],
+        [btnDonate_x, bdaySection3_bottom_y],
+        [btnDonate_x, bdaySection4Cards_y],
+        [left_x, bdaySection4Cards_y],
+        [left_x, bdaySection5_y],
+        [logo_x, bdaySection5_y],
+        [logo_x, bdaySection5_bottom_y],
+        [right_x, bdaySection5_bottom_y],
+        [right_x, bdaySection7_y],
+        [bdaySection7Cta_left_x, bdaySection7_y],
+        [bdaySection7Cta_left_x, bdaySection7Cta_y],
+        [bdaySection7Cta_x, bdaySection7Cta_y],
+      ]
+
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6]);
+      ctx.beginPath();
+      ctx.strokeStyle="#0098ff";
+      for (var coords in points) {
+        ctx.lineTo(points[coords][0],points[coords][1])
+      }
+      ctx.stroke();
+    }
+
   });
+
 </script>
 
 {% endblock %}
