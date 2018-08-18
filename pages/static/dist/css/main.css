@@ -9376,6 +9376,9 @@ ul.list-plain,
   position: absolute;
   width: 100%; }
 
+.pos-relative {
+  position: relative; }
+
 .progress.progress-lg {
   border: 2px solid #0c56a0;
   border-radius: 20px;
@@ -10875,7 +10878,9 @@ div.recurrence-widget {
   padding-top: 60px !important; }
   .birthday-page .canvas {
     position: absolute;
-    height: 98%;
+    height: 100%;
+    left: 0;
+    top: 0;
     width: 100%; }
     @media screen and (max-width: 991px) {
       .birthday-page .canvas {
