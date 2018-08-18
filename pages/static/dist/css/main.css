@@ -10873,6 +10873,16 @@ div.recurrence-widget {
 
 .birthday-page {
   padding-top: 60px !important; }
+  .birthday-page .canvas {
+    position: absolute;
+    height: 98%;
+    width: 100%; }
+    @media screen and (max-width: 991px) {
+      .birthday-page .canvas {
+        display: none; } }
+  @media screen and (min-width: 992px) {
+    .birthday-page .birthday-primary-content-body .rich-text {
+      padding-left: 20px; } }
   .birthday-page .container-fluid > .row > .col-xs-12 {
     padding-left: 0;
     padding-right: 0; }

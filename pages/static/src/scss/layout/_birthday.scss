@@ -3,6 +3,23 @@
   // Add padding for fixed navbar
   padding-top: 60px !important;
 
+  .canvas {
+    position: absolute;
+    height: 98%;
+    width: 100%;
+
+    @include until($large) {
+      display: none;
+    }
+  }
+
+  // extra padding to support canvas effect
+  .birthday-primary-content-body .rich-text {
+    @include at-least($large) {
+      padding-left: 20px;
+    }
+  }
+
   // Remove duplicate padding for nested containers
   .container-fluid > .row > .col-xs-12 {
     padding-left: 0;
