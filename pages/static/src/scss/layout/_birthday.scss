@@ -5,7 +5,9 @@
 
   .canvas {
     position: absolute;
-    height: 98%;
+    height: 100%;
+    left: 0;
+    top: 0;
     width: 100%;
 
     @include until($large) {
