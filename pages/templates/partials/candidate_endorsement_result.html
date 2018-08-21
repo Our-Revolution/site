@@ -8,9 +8,7 @@ faded
   <a href="{% pageurl candidate_endorsement_page %}">
 
   {% image candidate_endorsement_page.photo original as photo_img %}
-  <div class="card__photo"
-  style="background-image: url('{{ photo_img.url }}')">
-  </div>
+  <div class="card__photo lazy" data-src="{{ photo_img.url }}"></div>
 
   <div class="card__content">
     <div class="candidate__info">
