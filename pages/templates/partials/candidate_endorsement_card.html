@@ -5,8 +5,7 @@
   <a href="{% pageurl candidateendorsementpage %}">
 
     {% image candidateendorsementpage.photo original as photo_img %}
-    <div class="card__photo"
-    style="background-image: url('{{ photo_img.url }}')"></div>
+    <div class="card__photo lazy" data-src="{{ photo_img.url }}"></div>
 
     <div class="card__content">
 

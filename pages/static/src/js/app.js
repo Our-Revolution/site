@@ -1,5 +1,6 @@
 window.$ = window.jQuery = require('jquery');
 window.Cookies = window.Cookies = require('js-cookie');
+window.LazyLoad = require('vanilla-lazyload');
 window.SmoothScroll = require('smooth-scroll');
 window.Groups = require('./groups.js');
 
