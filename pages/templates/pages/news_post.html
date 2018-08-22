@@ -20,7 +20,10 @@
                         </span>
                     {% endif %}
                 {% endtimezone %}
-                <span class="attribution">{{ page.header_photo_byline }}</span>
+
+                {% if page.header_photo_byline %}
+                  <span class="attribution">{{ page.header_photo_byline }}</span>
+                {% endif %}
             </div>
 
             <section class="home-section">
