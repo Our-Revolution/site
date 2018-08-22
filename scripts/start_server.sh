@@ -20,6 +20,6 @@ echo "Start varnish"
 sudo service varnish start
 
 echo "Purge Fastly"
-curl -XPOST -H "Fastly-Key:$FASTLY_API_KEY" https://api.fastly.com/service/"$FASTLY_SERVICE_ID"/purge_all
+curl -XPOST -H "Fastly-Key:$FASTLY_API_KEY" https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all
 
 echo "Server started"
