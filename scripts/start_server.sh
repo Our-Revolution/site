@@ -16,16 +16,10 @@ supervisorctl restart celery
 echo "Start server"
 supervisorctl start gunicorn
 
-if [ "$DEPLOYMENT_GROUP_NAME" == "Production" ]
-then
-    echo "Start varnish"
-    sudo service varnish start
+echo "Start varnish"
+sudo service varnish start
 
-    echo "Purge Fastly"
-    curl -XPOST -H "Fastly-Key:$FASTLY_API_KEY" https://api.fastly.com/service/6N5tBMO9pCBuTauJDd7mkg/purge_all
-
-else
-    echo "Skip varnish"
-fi
+echo "Purge Fastly"
+curl -XPOST -H "Fastly-Key:$FASTLY_API_KEY" https://api.fastly.com/service/$FASTLY_SERVICE_ID/purge_all
 
 echo "Server started"
