@@ -390,10 +390,11 @@ WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 if CACHE_FRONTEND_ENABLED and not DEBUG:
 
-    # Get caching configs
+    """Get Fastly configs"""
     FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
     FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
 
+    """Configure Wagtail cache"""
     WAGTAILFRONTENDCACHE = {
         'fastly': {
             'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
