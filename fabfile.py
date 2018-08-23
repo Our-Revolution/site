@@ -49,15 +49,15 @@ def add_to_elbs():
 def elb_managed(func):
     @wraps(func)
     def decorated(*args, **kwargs):
-        
+
         if env.load_balancer_name:
             remove_from_elbs()
 
         func(*args, **kwargs)
-        
+
         if env.load_balancer_name:
             add_to_elbs()
-            
+
     return decorated
 
 
@@ -94,8 +94,6 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 run('git pull origin master')
 
                 if env.env_name == 'production':
-                    run('sudo service varnish stop')
-                    run('sudo cp /home/ubuntu/ourrevolution/varnish.vcl /etc/varnish/default.vcl')
                     run('supervisorctl stop gunicorn')
 
 
@@ -111,11 +109,9 @@ def deploy(pip_install=False, migrate=False, npm_install=False):
                 if str(migrate).lower() == 'true':
                     run('./manage.py migrate')
 
-                
+
                 if env.env_name != 'staging':
                     run('supervisorctl start gunicorn')
-                    run('sudo service varnish start')
-                    # run('sudo service varnish status')
 
 
 @elb_managed
@@ -124,10 +120,7 @@ def restart_gunicorn():
     with cd('ourrevolution'):
         with prefix('source $(which virtualenvwrapper.sh)'):
             with prefix('workon ourrevolution'):
-                run('sudo service varnish stop')
                 run('supervisorctl restart gunicorn')
-                run('sudo service varnish start')
-                # run('sudo service varnish status')
 
 @elb_managed
 def config_set(**kwargs):
@@ -146,9 +139,8 @@ def config_set(**kwargs):
             with prefix('workon ourrevolution'):
                 # manually stop gunicorn
 
-                run('sudo service varnish stop')
                 run('supervisorctl stop gunicorn')
-                
+
                 kill_the_cat = run('cat supervisord.pid | xargs kill', warn_only=True)
                 if kill_the_cat:
                     run('pkill supervisord', warn_only=True)
@@ -156,7 +148,5 @@ def config_set(**kwargs):
                 run('supervisord -c /home/ubuntu/ourrevolution/supervisord.conf')
                 time.sleep(2)
                 run('supervisorctl reload -c /home/ubuntu/ourrevolution/supervisord.conf')
-                
+
                 run('supervisorctl start gunicorn')
-                run('sudo service varnish start')
-                # run('sudo service varnish status')

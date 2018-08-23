@@ -10,9 +10,6 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
-echo "Update varnish file"
-sudo cp varnish.vcl /etc/varnish/default.vcl
-
 echo "Install front end packages"
 npm install
 

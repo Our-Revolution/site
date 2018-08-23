@@ -37,7 +37,7 @@ BSD_API_DEFERRED_RETRY_SECONDS = int(os.environ.get(
     'BSD_API_DEFERRED_RETRY_SECONDS', 30
 ))
 
-"""Fastly and Varnish caching"""
+"""Wagtail caching, to purge page cache after page update, etc."""
 CACHE_FRONTEND_ENABLED = bool(int(os.environ.get('CACHE_FRONTEND_ENABLED', 0)))
 
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
@@ -391,22 +391,11 @@ WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 if CACHE_FRONTEND_ENABLED and not DEBUG:
 
     WAGTAILFRONTENDCACHE = OrderedDict((
-
-        ('elb-varnish', {
-            'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
-            'LOAD_BALANCER_NAME': 'ourrevcms',
-            'PROFILE_NAME': 'ourrevcms',
-            'REGION': 'us-west-2',
-            'PORT': 8080,
-            'HOST_NAMES': ['ourrevolution.com', 'www.ourrevolution.com', 'ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
-        }),
-
         ('fastly', {
             'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
             'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
             'API_KEY': os.environ.get('FASTLY_API_KEY', None)
         })
-
     ))
 
 LOGGING = {
