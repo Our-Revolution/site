@@ -37,17 +37,17 @@ class ElasticLoadBalancedVarnishBackend(BaseBackend):
     def purge(self, url):
 
         for host in self.hosts:
-            req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path))
+            req = requests.request('PURGE', urlparse.urljoin('%s:%s' % (host, self.port), urlparse.urlparse(url).path))
             assert req.status_code == 200
 
             for host_name in self.host_names:
-                req = requests.request('PURGE', urlparse.urljoin('http://%s:%s' % (host, self.port), urlparse.urlparse(url).path), headers={'Host': host_name})
+                req = requests.request('PURGE', urlparse.urljoin('%s:%s' % (host, self.port), urlparse.urlparse(url).path), headers={'Host': host_name})
                 assert req.status_code == 200
 
 
 
 class FastlyBackend(HTTPBackend):
-    
+
     def __init__(self, params):
         self.api_key = params.pop('API_KEY')
         self.hosts = params.pop('HOSTS')
