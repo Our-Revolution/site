@@ -10,8 +10,13 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
-echo "Stop varnish"
-sudo service varnish stop
+if [ "$DEPLOYMENT_GROUP_NAME" == "Production" ]
+then
+    echo "Stop varnish"
+    sudo service varnish stop
+else
+    echo "Skip varnish"
+fi
 
 echo "Stop server"
 supervisorctl stop gunicorn
