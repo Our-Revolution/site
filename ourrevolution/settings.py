@@ -390,33 +390,21 @@ WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 if CACHE_FRONTEND_ENABLED and not DEBUG:
 
-    # Get caching configs
-    FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
-    FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
-    VARNISH_HOST_NAMES = os.environ.get('VARNISH_HOST_NAMES', None).split(",")
-    VARNISH_LOAD_BALANCER_NAME = os.environ.get(
-        'VARNISH_LOAD_BALANCER_NAME',
-        None
-    )
-    VARNISH_PORT = int(os.environ.get('VARNISH_PORT', None))
-    VARNISH_PROFILE_NAME = os.environ.get('VARNISH_PROFILE_NAME', None)
-    VARNISH_REGION = os.environ.get('VARNISH_REGION', None)
-
     WAGTAILFRONTENDCACHE = OrderedDict((
 
         ('elb-varnish', {
             'BACKEND': 'pages.frontendcache.backends.ElasticLoadBalancedVarnishBackend',
-            'LOAD_BALANCER_NAME': VARNISH_LOAD_BALANCER_NAME,
-            'PROFILE_NAME': VARNISH_PROFILE_NAME,
-            'REGION': VARNISH_REGION,
-            'PORT': VARNISH_PORT,
-            'HOST_NAMES': VARNISH_HOST_NAMES,
+            'LOAD_BALANCER_NAME': 'ourrevcms',
+            'PROFILE_NAME': 'ourrevcms',
+            'REGION': 'us-west-2',
+            'PORT': 8080,
+            'HOST_NAMES': ['ourrevolution.com', 'www.ourrevolution.com', 'ourrevcms-17735885.us-west-2.elb.amazonaws.com'],
         }),
 
         ('fastly', {
             'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-            'HOSTS': FASTLY_HOSTS,
-            'API_KEY': FASTLY_API_KEY
+            'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
+            'API_KEY': os.environ.get('FASTLY_API_KEY', None)
         })
 
     ))
