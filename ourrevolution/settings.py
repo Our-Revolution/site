@@ -390,11 +390,15 @@ WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
 if CACHE_FRONTEND_ENABLED and not DEBUG:
 
+    # Get caching configs
+    FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
+    FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
+
     WAGTAILFRONTENDCACHE = OrderedDict((
         ('fastly', {
             'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
-            'HOSTS': ['http://ourrevolution.com', 'https://ourrevolution.com', 'http://www.ourrevolution.com', 'https://www.ourrevolution.com'],
-            'API_KEY': os.environ.get('FASTLY_API_KEY', None)
+            'HOSTS': FASTLY_HOSTS,
+            'API_KEY': FASTLY_API_KEY
         })
     ))
 
