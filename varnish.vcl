@@ -11,7 +11,6 @@ acl purge {
     "172.31.14.44"/32;
     "172.31.14.43"/32;
     "172.31.14.46"/32;
-    "172.31.13.186"/32;
 }
 
 
@@ -35,8 +34,8 @@ sub vcl_recv {
         unset req.http.Cookie;
         unset req.http.Cache-Control;
     }
-
-    # don't cache the following
+    
+    # don't cache the following 
     if( req.url ~ "^/admin" || req.url ~ "^/cms" || req.url ~ "^/docs" || req.url ~ "^/groups/nominations" || req.url ~ "^/groups/new" || req.url ~ "^/organizing-hub" || req.url ~ "^/join-us-on-slack" ) {
         return(pass);
     }
