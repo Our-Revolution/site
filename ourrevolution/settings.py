@@ -394,13 +394,13 @@ if CACHE_FRONTEND_ENABLED and not DEBUG:
     FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
     FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
 
-    WAGTAILFRONTENDCACHE = OrderedDict((
-        ('fastly', {
+    WAGTAILFRONTENDCACHE = {
+        'fastly': {
             'BACKEND': 'pages.frontendcache.backends.FastlyBackend',
             'HOSTS': FASTLY_HOSTS,
             'API_KEY': FASTLY_API_KEY
-        })
-    ))
+        },
+    }
 
 LOGGING = {
     'version': 1,

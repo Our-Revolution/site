@@ -1,6 +1,9 @@
 from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
 import requests
 import urlparse
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FastlyBackend(HTTPBackend):
