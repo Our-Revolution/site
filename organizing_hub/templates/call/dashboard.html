@@ -48,9 +48,25 @@ Calling Campaigns
 
               <tbody>
 
-                {% for campaign in campaign_list %}
+                {% for campaign in campaigns_as_caller %}
                   <tr>
-                    <td>{{ campaign.title }}</td>
+                    <td>caller {{ campaign.title }}</td>
+                    <td>{{ campaign.get_status_display }}</td>
+                    <td>
+                      {{ campaign.calls_made }}/{{ campaign.calls_total }}
+                    </td>
+                    <td class="text-right">
+                      <a class="btn btn-default btn-sm"
+                      href="lebowski">
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+
+                {% for campaign in campaigns_as_editor %}
+                  <tr>
+                    <td>editor {{ campaign.title }}</td>
                     <td>{{ campaign.get_status_display }}</td>
                     <td>
                       {{ campaign.calls_made }}/{{ campaign.calls_total }}

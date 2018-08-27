@@ -4,21 +4,10 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 from enum import Enum, unique
 from contacts.models import Contact, ContactList
-from local_groups.models import Group as LocalGroup
+from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import logging
 
 logger = logging.getLogger(__name__)
-
-
-class CallProfile(models.Model):
-    """Calls app related information for a user"""
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __unicode__(self):
-        return self.user.email + " [" + str(self.user.id) + "]"
 
 
 @unique
@@ -30,6 +19,84 @@ class CallCampaignStatus(Enum):
     complete = (40, 'Complete')
     declined = (50, 'Declined')
     suspended = (60, 'Suspended')
+
+
+"""Statuses for Caller display"""
+call_campaign_statuses_for_caller = [
+    CallCampaignStatus.approved,
+    CallCampaignStatus.in_progress,
+    CallCampaignStatus.paused,
+    CallCampaignStatus.complete,
+]
+
+
+def find_campaigns_as_caller(call_profile):
+    """
+    Find public Call Campaigns that match Call Profile for Caller
+
+    Only return campaigns with statuses that are meant for display to callers
+
+    Parameters
+    ----------
+    call_profile : CallProfile
+        CallProfile for caller
+
+    Returns
+        -------
+        CallCampaign list
+            Returns public matching CallCampaign list
+    """
+
+    return call_profile.campaigns_as_caller.filter(
+        status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
+    )
+
+
+def find_campaigns_as_editor(call_profile):
+    """
+    Find Call Campaigns that match Local Group edit access for Call Profile
+
+    Return campaigns where profile has edit access via local group
+
+    Parameters
+    ----------
+    call_profile : CallProfile
+        CallProfile for local group affiliation
+
+    Returns
+        -------
+        CallCampaign list
+            Returns matching CallCampaign list
+    """
+
+    """Check local group permissions for edit access"""
+    user = call_profile.user
+    if hasattr(user, 'localgroupprofile'):
+        local_group = find_local_group_by_user(user)
+        local_group_profile = user.localgroupprofile
+        permission = 'calls.change_callcampaign'
+        has_permission = local_group_profile.has_permission_for_local_group(
+            local_group,
+            permission
+        )
+    else:
+        has_permission = False
+
+    if has_permission:
+        return local_group.callcampaign_set.all()
+    else:
+        return CallCampaign.objects.none()
+
+
+class CallProfile(models.Model):
+    """Calls app related information for a user"""
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return self.user.email + " [" + str(self.user.id) + "]"
 
 
 class CallCampaign(models.Model):

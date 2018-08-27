@@ -1,32 +1,38 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
-from calls.models import CallCampaign, CallCampaignStatus
+from calls.models import (
+    CallCampaign,
+    CallCampaignStatus,
+    find_campaigns_as_caller,
+    find_campaigns_as_editor
+)
+from local_groups.models import find_local_group_by_user
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-"""Statuses for Caller display"""
-call_campaign_statuses_for_caller = [
-    CallCampaignStatus.approved,
-    CallCampaignStatus.in_progress,
-    CallCampaignStatus.paused,
-    CallCampaignStatus.complete,
-]
-
-
-class CallDashboardView(LoginRequiredMixin, ListView):
-    context_object_name = 'campaign_list'
+class CallDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "call/dashboard.html"
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super(CallDashboardView, self).get_context_data(**kwargs)
+
         user = self.request.user
         if hasattr(user, 'callprofile'):
-            queryset = CallCampaign.objects.filter(
-                owner=user.callprofile,
-                status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
+            call_profile = user.callprofile
+            context['campaigns_as_caller'] = find_campaigns_as_caller(
+                call_profile
             )
-        else:
-            queryset = CallCampaign.objects.none()
-        return queryset
+            context['campaigns_as_editor'] = find_campaigns_as_editor(
+                call_profile
+            )
+
+        # context['campaign_list'] = sorted(
+        #     past_events,
+        #     key=lambda x: x.start_day,
+        #     reverse=True,
+        # )
+
+        return context
