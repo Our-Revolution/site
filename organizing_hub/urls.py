@@ -9,6 +9,7 @@ from local_groups.views import (
 )
 from .views import (
     AccountCreateView,
+    CallDashboardView,
     EventCreateView,
     EventListView,
     EventPromoteView,
@@ -24,6 +25,13 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^organizing-hub/', include([
+        url(r'^call/', include([
+            url(
+                r'^$',
+                CallDashboardView.as_view(),
+                name='organizing-hub-call-dashboard'
+            ),
+        ])),
         url(r'^event/', include([
             url(
                 r'^$',
