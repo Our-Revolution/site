@@ -70,6 +70,21 @@ class CallCampaign(models.Model):
     def __unicode__(self):
         return '%s [%s]' % (self.title, self.id)
 
+    def _calls_made(self):
+        """Count how many calls have been made for this campaign"""
+        calls = self.call_set.all()
+        calls_with_responses = [x for x in calls if x.has_response]
+        return len(calls_with_responses)
+    calls_made = property(_calls_made)
+
+    def _calls_total(self):
+        """Count how many total calls can be made for this campaign"""
+        if self.contact_list:
+            return self.contact_list.contacts.count()
+        else:
+            return None
+    calls_total = property(_calls_total)
+
 
 class Call(models.Model):
     """
@@ -85,6 +100,11 @@ class Call(models.Model):
 
     def __unicode__(self):
         return 'Call [%s] | %s' % (self.id, self.call_campaign)
+
+    def _has_response(self):
+        """Check if any Responses have been saved for this Call"""
+        return self.callresponse_set.count() > 0
+    has_response = property(_has_response)
 
     class Meta:
         unique_together = ["call_campaign", "contact"]
