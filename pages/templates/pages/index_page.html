@@ -12,6 +12,7 @@
     #home-block-1 {
       background-color: #{{ page.block_1_background_color }};
       {% if page.block_1_background_image %}
+        {# max width for block 1 is 600 width, 600 height (1200 by 1200 for retina) #}
         {% image page.block_1_background_image min-1200x1200 as block_1_background_image %}
         background-image: url('{{ block_1_background_image.url }}');
       {% endif %}
@@ -20,6 +21,7 @@
     #home-block-2 {
       background-color: #{{ page.block_2_background_color }};
       {% if page.block_2_background_image %}
+        {# max width for block 2 is 600 width, 600 height (1200 by 1200 for retina) #}
         {% image page.block_2_background_image min-1200x1200 as block_2_background_image %}
         background-image: url('{{ block_2_background_image.url }}');
       {% endif %}
@@ -28,6 +30,7 @@
     #home-block-3 {
       background-color: #{{ page.block_3_background_color }};
       {% if page.block_3_background_image %}
+        {# max width for block 3 is 600 width, 240 height (1200 by 480 for retina) #}
         {% image page.block_3_background_image min-1200x480 as block_3_background_image %}
         background-image: url('{{ block_3_background_image.url }}');
       {% endif %}
