@@ -29,6 +29,14 @@ call_campaign_statuses_for_caller = [
     CallCampaignStatus.complete,
 ]
 
+"""Active Campaign Statuses"""
+call_campaign_statuses_active = [
+    CallCampaignStatus.new,
+    CallCampaignStatus.approved,
+    CallCampaignStatus.in_progress,
+    CallCampaignStatus.paused,
+]
+
 
 def find_campaigns_as_caller(call_profile):
     """
@@ -52,7 +60,7 @@ def find_campaigns_as_caller(call_profile):
     )
 
 
-def find_campaigns_as_editor(call_profile):
+def find_campaigns_as_admin(call_profile):
     """
     Find Call Campaigns that match Local Group edit access for Call Profile
 

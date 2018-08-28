@@ -32,7 +32,7 @@ Calling Campaigns
 
         <section>
 
-          <h4 class="mt0">Upcoming Calling Campaigns</h4>
+          <h4 class="mt0">Active Calling Campaigns</h4>
 
           <div class="panel panel-default">
 
@@ -48,36 +48,14 @@ Calling Campaigns
 
               <tbody>
 
-                {% for campaign in campaigns_as_caller %}
-                  <tr>
-                    <td>caller {{ campaign.title }}</td>
-                    <td>{{ campaign.get_status_display }}</td>
-                    <td>
-                      {{ campaign.calls_made }}/{{ campaign.calls_total }}
-                    </td>
-                    <td class="text-right">
-                      <a class="btn btn-default btn-sm"
-                      href="lebowski">
-                        View
-                      </a>
-                    </td>
-                  </tr>
+                {% for campaign in campaigns_as_admin_active %}
+                {% include "partials/call_campaign_row.html" %}
                 {% endfor %}
 
-                {% for campaign in campaigns_as_editor %}
-                  <tr>
-                    <td>editor {{ campaign.title }}</td>
-                    <td>{{ campaign.get_status_display }}</td>
-                    <td>
-                      {{ campaign.calls_made }}/{{ campaign.calls_total }}
-                    </td>
-                    <td class="text-right">
-                      <a class="btn btn-default btn-sm"
-                      href="lebowski">
-                        View
-                      </a>
-                    </td>
-                  </tr>
+                {% for campaign in campaigns_as_caller_active %}
+                  {% if campaign not in campaigns_as_admin_active %}
+                  {% include "partials/call_campaign_row.html" %}
+                  {% endif %}
                 {% endfor %}
 
               </tbody>
@@ -91,6 +69,45 @@ Calling Campaigns
           </a>
 
         </section>
+
+        <hr />
+
+        <section>
+
+          <h4 class="mt0">Inactive Calling Campaigns</h4>
+
+          <div class="panel panel-default">
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Calls Made</th>
+                  <th class="text-right">Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {% for campaign in campaigns_as_admin_inactive %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endfor %}
+
+                {% for campaign in campaigns_as_caller_inactive %}
+                  {% if campaign not in campaigns_as_admin_inactive %}
+                  {% include "partials/call_campaign_row.html" %}
+                  {% endif %}
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+
+        </section>
+
+
 
       </div>
   </div>

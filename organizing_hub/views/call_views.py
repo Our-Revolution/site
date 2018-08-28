@@ -5,7 +5,8 @@ from calls.models import (
     CallCampaign,
     CallCampaignStatus,
     find_campaigns_as_caller,
-    find_campaigns_as_editor
+    find_campaigns_as_admin,
+    call_campaign_statuses_active
 )
 from local_groups.models import find_local_group_by_user
 import logging
@@ -22,11 +23,22 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         if hasattr(user, 'callprofile'):
             call_profile = user.callprofile
-            context['campaigns_as_caller'] = find_campaigns_as_caller(
-                call_profile
+            campaigns_as_admin = find_campaigns_as_admin(call_profile)
+            campaigns_as_caller = find_campaigns_as_caller(call_profile)
+            active_status_ids = [
+                x.value[0] for x in call_campaign_statuses_active
+            ]
+            context['campaigns_as_admin_active'] = campaigns_as_admin.filter(
+                status__in=active_status_ids,
             )
-            context['campaigns_as_editor'] = find_campaigns_as_editor(
-                call_profile
+            context['campaigns_as_admin_inactive'] = campaigns_as_admin.exclude(
+                status__in=active_status_ids,
+            )
+            context['campaigns_as_caller_active'] = campaigns_as_caller.filter(
+                status__in=active_status_ids,
+            )
+            context['campaigns_as_caller_inactive'] = campaigns_as_caller.exclude(
+                status__in=active_status_ids,
             )
 
         # context['campaign_list'] = sorted(
