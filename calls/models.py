@@ -160,6 +160,13 @@ class CallCampaign(models.Model):
             return None
     calls_total = property(_calls_total)
 
+    def _is_active(self):
+        """Check if status is in list of active statuses"""
+        return self.status in [
+            x.value[0] for x in call_campaign_statuses_active
+        ]
+    is_active = property(_is_active)
+
 
 class Call(models.Model):
     """
