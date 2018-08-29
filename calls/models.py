@@ -74,9 +74,7 @@ def find_calls_made_by_campaign_and_caller(call_campaign, call_profile):
             Returns matching Call list for campaign and caller
     """
     calls_made = find_calls_made_by_campaign(call_campaign)
-    logger.debug('calls_made: ' + str(calls_made))
     calls_made_by_caller = [x for x in calls_made if x.caller == call_profile]
-    logger.debug('calls_made_by_caller: ' + str(calls_made_by_caller))
     return calls_made_by_caller
 
 
@@ -98,7 +96,7 @@ def find_campaigns_as_caller(call_profile):
     """
     campaigns_as_caller = call_profile.campaigns_as_caller.filter(
         status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
-    )
+    ).order_by('-date_created')
     return campaigns_as_caller
 
 
@@ -119,23 +117,23 @@ def find_campaigns_as_admin(call_profile):
             Returns matching CallCampaign list
     """
 
-    """Check local group permissions for edit access"""
+    """Check local group permissions and find matching campaigns"""
     user = call_profile.user
     if hasattr(user, 'localgroupprofile'):
-        local_group = find_local_group_by_user(user)
         local_group_profile = user.localgroupprofile
-        permission = 'calls.change_callcampaign'
-        has_permission = local_group_profile.has_permission_for_local_group(
-            local_group,
-            permission
-        )
-    else:
-        has_permission = False
+        local_group = find_local_group_by_user(user)
+        if local_group is not None:
+            permission = 'calls.change_callcampaign'
+            if local_group_profile.has_permission_for_local_group(
+                local_group,
+                permission
+            ):
+                return local_group.callcampaign_set.all().order_by(
+                    '-date_created'
+                )
 
-    if has_permission:
-        return local_group.callcampaign_set.all()
-    else:
-        return CallCampaign.objects.none()
+    """Otherwise return empty list"""
+    return CallCampaign.objects.none()
 
 
 class CallProfile(models.Model):

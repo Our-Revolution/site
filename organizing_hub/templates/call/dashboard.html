@@ -48,14 +48,16 @@ Calling Campaigns
 
               <tbody>
 
-                {% for campaign in campaigns_as_admin_active %}
+                {% for campaign in campaigns_as_admin %}
+                {% if campaign.is_active %}
                 {% include "partials/call_campaign_row.html" %}
+                {% endif %}
                 {% endfor %}
 
-                {% for campaign in campaigns_as_caller_active %}
-                  {% if campaign not in campaigns_as_admin_active %}
-                  {% include "partials/call_campaign_row.html" %}
-                  {% endif %}
+                {% for campaign in campaigns_as_caller %}
+                {% if campaign.is_active and campaign not in campaigns_as_admin %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endif %}
                 {% endfor %}
 
               </tbody>
@@ -90,14 +92,16 @@ Calling Campaigns
 
               <tbody>
 
-                {% for campaign in campaigns_as_admin_inactive %}
+                {% for campaign in campaigns_as_admin %}
+                {% if not campaign.is_active %}
                 {% include "partials/call_campaign_row.html" %}
+                {% endif %}
                 {% endfor %}
 
-                {% for campaign in campaigns_as_caller_inactive %}
-                  {% if campaign not in campaigns_as_admin_inactive %}
-                  {% include "partials/call_campaign_row.html" %}
-                  {% endif %}
+                {% for campaign in campaigns_as_caller %}
+                {% if not campaign.is_active and campaign not in campaigns_as_admin %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endif %}
                 {% endfor %}
 
               </tbody>
