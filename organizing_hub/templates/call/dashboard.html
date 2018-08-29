@@ -1,0 +1,113 @@
+{% extends "organizing_hub_events.html" %}
+
+{% load bootstrap3 organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Calling Campaigns{% endblock %}
+
+{% block content_heading %}
+Calling Campaigns
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        {% bootstrap_messages %}
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% organizing_hub_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <section>
+
+          <h4 class="mt0">Active Calling Campaigns</h4>
+
+          {% if campaigns_as_admin_active or campaigns_as_caller_active  %}
+
+          <div class="panel panel-default">
+
+            <table class="table table-striped table-hover">
+
+              {% include "partials/call_campaign_table_head.html" %}
+
+              <tbody>
+
+                {% for campaign in campaigns_as_admin_active %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endfor %}
+
+                {% for campaign in campaigns_as_caller_active %}
+                {% if campaign not in campaigns_as_admin_active %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endif %}
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+
+          {% else %}
+
+          <p>
+            You do not currently have any active calling campaigns.
+          </p>
+
+          {% endif %}
+
+          {% local_group as local_group %}
+          {% has_local_group_permission local_group "calls.add_callcampaign" as can_create_campaign %}
+          {% if can_create_campaign %}
+          <a class="btn btn-block btn-success uppercase ls2" href="todo">
+            Create Calling Campaign
+          </a>
+          {% endif %}
+
+        </section>
+
+        {% if campaigns_as_admin_inactive %}
+
+        <hr />
+
+        <section>
+
+          <h4 class="mt0">Inactive Calling Campaigns</h4>
+
+          <div class="panel panel-default">
+
+            <table class="table table-striped table-hover">
+
+              {% include "partials/call_campaign_table_head.html" %}
+
+              <tbody>
+
+                {% for campaign in campaigns_as_admin_inactive %}
+                {% include "partials/call_campaign_row.html" %}
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+
+        </section>
+
+        {% endif %}
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -40,6 +40,12 @@ BSD_API_DEFERRED_RETRY_SECONDS = int(os.environ.get(
 """Wagtail caching, to purge page cache after page update, etc."""
 CACHE_FRONTEND_ENABLED = bool(int(os.environ.get('CACHE_FRONTEND_ENABLED', 0)))
 
+"""Calls app enabled"""
+CALLS_ENABLED = bool(int(os.environ.get(
+    'CALLS_ENABLED',
+    0
+)))
+
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
 
 """Auto approve events created by Group Leaders"""
