@@ -45,13 +45,11 @@ Calling Campaigns
               <tbody>
 
                 {% for campaign in campaigns_as_admin_active %}
-                {% if campaign.is_active %}
                 {% include "partials/call_campaign_row.html" %}
-                {% endif %}
                 {% endfor %}
 
                 {% for campaign in campaigns_as_caller_active %}
-                {% if campaign.is_active and campaign not in campaigns_as_admin_active %}
+                {% if campaign not in campaigns_as_admin_active %}
                 {% include "partials/call_campaign_row.html" %}
                 {% endif %}
                 {% endfor %}
@@ -96,9 +94,7 @@ Calling Campaigns
               <tbody>
 
                 {% for campaign in campaigns_as_admin_inactive %}
-                {% if not campaign.is_active %}
                 {% include "partials/call_campaign_row.html" %}
-                {% endif %}
                 {% endfor %}
 
               </tbody>
