@@ -38,6 +38,48 @@ call_campaign_statuses_active = [
 ]
 
 
+def find_calls_made_by_campaign(call_campaign):
+    """
+    Find all calls for this campaign that have a response
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+
+    Returns
+        -------
+        Call list
+            Returns matching Call list for campaign
+    """
+    calls = call_campaign.call_set.all()
+    calls_with_responses = [x for x in calls if x.has_response]
+    return calls_with_responses
+
+
+def find_calls_made_by_campaign_and_caller(call_campaign, call_profile):
+    """
+    Find calls made for this campaign by this caller
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+    call_profile : CallProfile
+        Call Profile for caller
+
+    Returns
+        -------
+        Call list
+            Returns matching Call list for campaign and caller
+    """
+    calls_made = find_calls_made_by_campaign(call_campaign)
+    logger.debug('calls_made: ' + str(calls_made))
+    calls_made_by_caller = [x for x in calls_made if x.caller == call_profile]
+    logger.debug('calls_made_by_caller: ' + str(calls_made_by_caller))
+    return calls_made_by_caller
+
+
 def find_campaigns_as_caller(call_profile):
     """
     Find public Call Campaigns that match Call Profile for Caller
@@ -54,10 +96,10 @@ def find_campaigns_as_caller(call_profile):
         CallCampaign list
             Returns public matching CallCampaign list
     """
-
-    return call_profile.campaigns_as_caller.filter(
+    campaigns_as_caller = call_profile.campaigns_as_caller.filter(
         status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
     )
+    return campaigns_as_caller
 
 
 def find_campaigns_as_admin(call_profile):
@@ -145,20 +187,19 @@ class CallCampaign(models.Model):
     def __unicode__(self):
         return '%s [%s]' % (self.title, self.id)
 
-    def _calls_made(self):
+    def _calls_made_count(self):
         """Count how many calls have been made for this campaign"""
-        calls = self.call_set.all()
-        calls_with_responses = [x for x in calls if x.has_response]
+        calls_with_responses = find_calls_made_by_campaign(self)
         return len(calls_with_responses)
-    calls_made = property(_calls_made)
+    calls_made_count = property(_calls_made_count)
 
-    def _calls_total(self):
+    def _contacts_total_count(self):
         """Count how many total calls can be made for this campaign"""
         if self.contact_list:
             return self.contact_list.contacts.count()
         else:
             return None
-    calls_total = property(_calls_total)
+    contacts_total_count = property(_contacts_total_count)
 
     def _is_active(self):
         """Check if status is in list of active statuses"""

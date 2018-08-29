@@ -1,4 +1,4 @@
-{% load organizing_hub_tags %}
+{% load calls_tags organizing_hub_tags %}
 
 {% has_local_group_permission campaign.local_group "calls.change_callcampaign" as can_manage %}
 
@@ -15,9 +15,9 @@
 
   <td>
     {% if can_manage %}
-    {{ campaign.calls_made }}/{{ campaign.calls_total }}
+    {{ campaign.calls_made_count }}/{{ campaign.contacts_total_count }}
     {% else %}
-
+    {% calls_made_count campaign user.callprofile %}
     {% endif %}
   </td>
 
