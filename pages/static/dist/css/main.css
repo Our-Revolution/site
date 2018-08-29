@@ -8862,6 +8862,27 @@ footer {
   margin: 0 0 25px;
   padding: 15px; }
 
+.dot {
+  height: 14px;
+  width: 14px;
+  background-color: #0098ff;
+  border-radius: 50%;
+  display: inline-block; }
+  .dot.dot-sm {
+    height: 10px;
+    width: 10px; }
+  .dot.dot-lg {
+    height: 20px;
+    width: 20px; }
+  .dot.dot-success {
+    background-color: #45d363; }
+  .dot.dot-info {
+    background-color: #0c56a0; }
+  .dot.dot-warning {
+    background-color: #f0ad4e; }
+  .dot.dot-danger {
+    background-color: #ff3939; }
+
 .embed-responsive-square, .embed-layout-3 .embed-responsive {
   padding-bottom: 100%; }
 
