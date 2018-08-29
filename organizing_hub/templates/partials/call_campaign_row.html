@@ -1,33 +1,44 @@
 {% load organizing_hub_tags %}
 
+{% has_local_group_permission campaign.local_group "calls.change_callcampaign" as can_manage %}
+
 <tr>
+
   <td>{{ campaign.title }}</td>
-  <td>{{ campaign.get_status_display }}</td>
+
   <td>
-    {{ campaign.calls_made }}/{{ campaign.calls_total }}
+    {% if campaign.is_in_progress %}
+    <span class="dot dot-success dot-sm"></span>
+    {% endif %}
+    {{ campaign.get_status_display }}
   </td>
+
+  <td>
+    {% if can_manage %}
+    {{ campaign.calls_made }}/{{ campaign.calls_total }}
+    {% else %}
+
+    {% endif %}
+  </td>
+
   <td class="text-right">
 
-    {% if campaign.is_active %}
-
+    {% if campaign.is_in_progress %}
     <a class="btn btn-success btn-sm" href="lebowski">
       Make Calls
     </a>
+    {% endif %}
 
-    {% has_local_group_permission campaign.local_group "calls.change_callcampaign" as can_manage %}
-    {% if can_manage %}
+    {% if can_manage and campaign.is_active %}
     <a class="btn btn-primary btn-sm" href="lebowski">
       Manage
     </a>
-    {% endif %}
-
-    {% else %}
-
-    <a class="btn btn-primary btn-sm" href="lebowski">
+    {% elif can_manage %}
+    <a class="btn btn-default btn-sm" href="lebowski">
       View
     </a>
-
     {% endif %}
 
   </td>
+
 </tr>

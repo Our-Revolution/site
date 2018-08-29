@@ -29,7 +29,7 @@ call_campaign_statuses_for_caller = [
     CallCampaignStatus.complete,
 ]
 
-"""Active Campaign Statuses"""
+"""Active Campaign Statuses - not in final/end state yet"""
 call_campaign_statuses_active = [
     CallCampaignStatus.new,
     CallCampaignStatus.approved,
@@ -166,6 +166,11 @@ class CallCampaign(models.Model):
             x.value[0] for x in call_campaign_statuses_active
         ]
     is_active = property(_is_active)
+
+    def _is_in_progress(self):
+        """Check if status is in progress"""
+        return self.status == CallCampaignStatus.in_progress.value[0]
+    is_in_progress = property(_is_in_progress)
 
 
 class Call(models.Model):
