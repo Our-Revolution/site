@@ -8,8 +8,6 @@ from calls.models import (
     find_campaigns_as_admin,
     call_campaign_statuses_active
 )
-#  todo permission on view?
-# from local_groups.models import find_local_group_by_user
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,8 +24,29 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
         if hasattr(user, 'callprofile'):
             call_profile = user.callprofile
             campaigns_as_admin = find_campaigns_as_admin(call_profile)
+            campaigns_as_admin_sorted = sorted(
+                campaigns_as_admin,
+                key=lambda x: x.is_in_progress,
+                reverse=True,
+            )
+            campaigns_as_admin_active = [
+                x for x in campaigns_as_admin_sorted if x.is_active
+            ]
+            campaigns_as_admin_inactive = [
+                x for x in campaigns_as_admin_sorted if not x.is_active
+            ]
             campaigns_as_caller = find_campaigns_as_caller(call_profile)
-            context['campaigns_as_admin'] = campaigns_as_admin
-            context['campaigns_as_caller'] = campaigns_as_caller
+            campaigns_as_caller_sorted = sorted(
+                campaigns_as_caller,
+                key=lambda x: x.is_in_progress,
+                reverse=True,
+            )
+            campaigns_as_caller_active = [
+                x for x in campaigns_as_caller_sorted if x.is_active
+            ]
+
+            context['campaigns_as_admin_active'] = campaigns_as_admin_active
+            context['campaigns_as_admin_inactive'] = campaigns_as_admin_inactive
+            context['campaigns_as_caller_active'] = campaigns_as_caller_active
 
         return context

@@ -34,28 +34,24 @@ Calling Campaigns
 
           <h4 class="mt0">Active Calling Campaigns</h4>
 
+          {% if campaigns_as_admin_active or campaigns_as_caller_active  %}
+
           <div class="panel panel-default">
 
             <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Calls Made</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
+
+              {% include "partials/call_campaign_table_head.html" %}
 
               <tbody>
 
-                {% for campaign in campaigns_as_admin %}
+                {% for campaign in campaigns_as_admin_active %}
                 {% if campaign.is_active %}
                 {% include "partials/call_campaign_row.html" %}
                 {% endif %}
                 {% endfor %}
 
-                {% for campaign in campaigns_as_caller %}
-                {% if campaign.is_active and campaign not in campaigns_as_admin %}
+                {% for campaign in campaigns_as_caller_active %}
+                {% if campaign.is_active and campaign not in campaigns_as_admin_active %}
                 {% include "partials/call_campaign_row.html" %}
                 {% endif %}
                 {% endfor %}
@@ -65,12 +61,25 @@ Calling Campaigns
 
           </div>
 
-          <a class="btn btn-block btn-success uppercase ls2"
-          href="{% url 'organizing-hub-event-create' %}">
+          {% else %}
+
+          <p>
+            You do not currently have any active calling campaigns.
+          </p>
+
+          {% endif %}
+
+          {% local_group as local_group %}
+          {% has_local_group_permission local_group "calls.add_callcampaign" as can_create_campaign %}
+          {% if can_create_campaign %}
+          <a class="btn btn-block btn-success uppercase ls2" href="todo">
             Create Calling Campaign
           </a>
+          {% endif %}
 
         </section>
+
+        {% if campaigns_as_admin_inactive %}
 
         <hr />
 
@@ -81,25 +90,13 @@ Calling Campaigns
           <div class="panel panel-default">
 
             <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Calls Made</th>
-                  <th class="text-right">Action</th>
-                </tr>
-              </thead>
+
+              {% include "partials/call_campaign_table_head.html" %}
 
               <tbody>
 
-                {% for campaign in campaigns_as_admin %}
+                {% for campaign in campaigns_as_admin_inactive %}
                 {% if not campaign.is_active %}
-                {% include "partials/call_campaign_row.html" %}
-                {% endif %}
-                {% endfor %}
-
-                {% for campaign in campaigns_as_caller %}
-                {% if not campaign.is_active and campaign not in campaigns_as_admin %}
                 {% include "partials/call_campaign_row.html" %}
                 {% endif %}
                 {% endfor %}
@@ -111,7 +108,7 @@ Calling Campaigns
 
         </section>
 
-
+        {% endif %}
 
       </div>
   </div>

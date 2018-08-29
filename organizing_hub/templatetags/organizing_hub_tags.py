@@ -67,6 +67,12 @@ def has_local_group_permission(context, local_group, permission):
     return has_permission
 
 
+@register.simple_tag(takes_context=True)
+def local_group(context):
+    """TODO move to local groups template tags"""
+    return find_local_group_by_user(context['request'].user)
+
+
 # Organizing Hub Navigation menu
 @register.inclusion_tag('partials/organizing_hub_nav.html', takes_context=True)
 def organizing_hub_nav(context):

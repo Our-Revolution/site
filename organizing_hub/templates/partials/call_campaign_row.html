@@ -24,17 +24,17 @@
   <td class="text-right">
 
     {% if campaign.is_in_progress %}
-    <a class="btn btn-success btn-sm" href="lebowski">
+    <a class="btn btn-success btn-sm" href="todo">
       Make Calls
     </a>
     {% endif %}
 
     {% if can_manage and campaign.is_active %}
-    <a class="btn btn-primary btn-sm" href="lebowski">
+    <a class="btn btn-primary btn-sm" href="todo">
       Manage
     </a>
     {% elif can_manage %}
-    <a class="btn btn-default btn-sm" href="lebowski">
+    <a class="btn btn-default btn-sm" href="todo">
       View
     </a>
     {% endif %}
