@@ -2,6 +2,7 @@ from django import forms
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from bsd.models import Account, BSDEvent
+from calls.models import CallCampaign
 
 new_password_max_length = 100
 new_password_min_length = 8
@@ -16,6 +17,35 @@ class HTML5DateInput(widgets.DateInput):
 
 class HTML5TimeInput(widgets.TimeInput):
     input_type = 'time'
+
+
+class CallCampaignForm(forms.ModelForm):
+    # """Max lengths based on bsd api"""
+    # new_password1 = forms.CharField(
+    #     label=_("Password"),
+    #     help_text=new_password_help_text,
+    #     max_length=new_password_max_length,
+    #     min_length=new_password_min_length,
+    #     widget=forms.PasswordInput,
+    #     strip=False,
+    # )
+    # new_password2 = forms.CharField(
+    #     label=_("Password confirmation"),
+    #     max_length=new_password_max_length,
+    #     min_length=new_password_min_length,
+    #     strip=False,
+    #     widget=forms.PasswordInput,
+    # )
+
+    class Meta:
+        fields = [
+            'max_distance',
+            'max_recipients',
+            'postal_code',
+            'script',
+            'title',
+        ]
+        model = CallCampaign
 
 
 class EventForm(forms.ModelForm):

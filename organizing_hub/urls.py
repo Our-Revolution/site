@@ -10,6 +10,7 @@ from local_groups.views import (
 )
 from .views import (
     AccountCreateView,
+    CallCampaignCreateView,
     CallDashboardView,
     EventCreateView,
     EventListView,
@@ -132,6 +133,11 @@ if CALLS_ENABLED:
                     r'^$',
                     CallDashboardView.as_view(),
                     name='organizing-hub-call-dashboard'
+                ),
+                url(
+                    r'^create/',
+                    CallCampaignCreateView.as_view(),
+                    name='organizing-hub-call-campaign-create'
                 ),
             ]))
         ]))

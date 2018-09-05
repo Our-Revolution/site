@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import CreateView, TemplateView
 from django.views.generic.list import ListView
 from calls.models import (
     CallCampaign,
@@ -8,13 +9,34 @@ from calls.models import (
     find_campaigns_as_admin,
     call_campaign_statuses_active
 )
+from local_groups.models import find_local_group_by_user
+from organizing_hub.forms import CallCampaignForm
+from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import logging
 
 logger = logging.getLogger(__name__)
 
 
+class CallCampaignCreateView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
+    form_class = CallCampaignForm
+    model = CallCampaign
+    permission_required = 'calls.add_callcampaign'
+    success_message = '''
+    Your call campaign request has been submitted and will be reviewed by our
+    team.
+    '''
+    # template_name = "event_promote.html"
+
+    def get_local_group(self):
+        return find_local_group_by_user(self.request.user)
+
+
 class CallDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "call/dashboard.html"
+    template_name = "calls/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context = super(CallDashboardView, self).get_context_data(**kwargs)
