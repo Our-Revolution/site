@@ -1,8 +1,12 @@
 from django import forms
+from django.conf import settings
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from bsd.models import Account, BSDEvent
 from calls.models import CallCampaign
+
+CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
+CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
 new_password_max_length = 100
 new_password_min_length = 8
@@ -20,22 +24,18 @@ class HTML5TimeInput(widgets.TimeInput):
 
 
 class CallCampaignForm(forms.ModelForm):
-    # """Max lengths based on bsd api"""
-    # new_password1 = forms.CharField(
-    #     label=_("Password"),
-    #     help_text=new_password_help_text,
-    #     max_length=new_password_max_length,
-    #     min_length=new_password_min_length,
-    #     widget=forms.PasswordInput,
-    #     strip=False,
-    # )
-    # new_password2 = forms.CharField(
-    #     label=_("Password confirmation"),
-    #     max_length=new_password_max_length,
-    #     min_length=new_password_min_length,
-    #     strip=False,
-    #     widget=forms.PasswordInput,
-    # )
+    max_distance = forms.IntegerField(
+        help_text="Max: %s miles" % CALLS_MAX_DISTANCE_MILES,
+        label="Radius (Miles)",
+        max_value=CALLS_MAX_DISTANCE_MILES,
+        min_value=1
+    )
+    max_recipients = forms.IntegerField(
+        help_text="Max: %s contacts" % CALLS_MAX_LIST_SIZE,
+        label="Max Number of Contacts",
+        max_value=CALLS_MAX_LIST_SIZE,
+        min_value=1
+    )
 
     class Meta:
         fields = [

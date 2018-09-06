@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, TemplateView
@@ -16,6 +17,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
+CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
+
 
 class CallCampaignCreateView(
     LocalGroupPermissionRequiredMixin,
@@ -29,10 +33,16 @@ class CallCampaignCreateView(
     Your call campaign request has been submitted and will be reviewed by our
     team.
     '''
-    # template_name = "event_promote.html"
 
     def get_local_group(self):
         return find_local_group_by_user(self.request.user)
+
+    def get_initial(self, *args, **kwargs):
+        initial = {
+            'max_distance': min(25, CALLS_MAX_DISTANCE_MILES),
+            'max_recipients': min(50, CALLS_MAX_LIST_SIZE),
+        }
+        return initial
 
 
 class CallDashboardView(LoginRequiredMixin, TemplateView):

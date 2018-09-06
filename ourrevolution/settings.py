@@ -45,7 +45,14 @@ CALLS_ENABLED = bool(int(os.environ.get(
     'CALLS_ENABLED',
     0
 )))
-
+CALLS_MAX_DISTANCE_MILES = int(os.environ.get(
+    'CALLS_MAX_DISTANCE_MILES',
+    50
+))
+CALLS_MAX_LIST_SIZE = int(os.environ.get(
+    'CALLS_MAX_LIST_SIZE',
+    100
+))
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
 
 """Auto approve events created by Group Leaders"""

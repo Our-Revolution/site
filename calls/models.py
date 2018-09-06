@@ -174,7 +174,7 @@ class CallCampaign(models.Model):
     """User who initiated the campaign"""
     owner = models.ForeignKey(CallProfile, related_name='campaigns_as_owner')
     point = PointField(blank=True, null=True)
-    postal_code = models.CharField(max_length=12)
+    postal_code = models.CharField(max_length=12, verbose_name="Zip Code")
     script = models.TextField(max_length=2000)
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
