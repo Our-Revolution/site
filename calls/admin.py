@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .forms import CallCampaignAdminForm
 from .models import Call, CallCampaign, CallProfile, CallResponse
 
 
@@ -26,6 +27,7 @@ class CallAdmin(admin.ModelAdmin):
 @admin.register(CallCampaign)
 class CallCampaignAdmin(admin.ModelAdmin):
     filter_horizontal = ['callers']
+    form = CallCampaignAdminForm
     list_display = [
         'title',
         'date_created',

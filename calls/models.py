@@ -178,7 +178,7 @@ class CallCampaign(models.Model):
     script = models.TextField(max_length=2000)
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
-        default=CallCampaignStatus.new
+        default=CallCampaignStatus.new.value[0],
     )
     title = models.CharField(max_length=128)
 
@@ -196,7 +196,7 @@ class CallCampaign(models.Model):
         if self.contact_list:
             return self.contact_list.contacts.count()
         else:
-            return None
+            return 0
     contacts_total_count = property(_contacts_total_count)
 
     def _is_active(self):
