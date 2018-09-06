@@ -47,11 +47,11 @@ CALLS_ENABLED = bool(int(os.environ.get(
 )))
 CALLS_MAX_DISTANCE_MILES = int(os.environ.get(
     'CALLS_MAX_DISTANCE_MILES',
-    50
+    100
 ))
 CALLS_MAX_LIST_SIZE = int(os.environ.get(
     'CALLS_MAX_LIST_SIZE',
-    100
+    1000
 ))
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
 

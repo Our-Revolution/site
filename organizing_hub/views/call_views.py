@@ -40,7 +40,7 @@ class CallCampaignCreateView(
     def get_initial(self, *args, **kwargs):
         initial = {
             'max_distance': min(25, CALLS_MAX_DISTANCE_MILES),
-            'max_recipients': min(50, CALLS_MAX_LIST_SIZE),
+            'max_recipients': min(100, CALLS_MAX_LIST_SIZE),
         }
         return initial
 
