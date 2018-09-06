@@ -1,0 +1,44 @@
+{% load calls_tags organizing_hub_tags %}
+
+{% has_local_group_permission campaign.local_group "calls.change_callcampaign" as can_manage %}
+
+<tr>
+
+  <td>{{ campaign.title }}</td>
+
+  <td>
+    {% if campaign.is_in_progress %}
+    <span class="dot dot-success dot-sm"></span>
+    {% endif %}
+    {{ campaign.get_status_display }}
+  </td>
+
+  <td>
+    {% if can_manage %}
+    {{ campaign.calls_made_count }}/{{ campaign.contacts_total_count }}
+    {% else %}
+    {% calls_made_count campaign user.callprofile %}
+    {% endif %}
+  </td>
+
+  <td class="text-right">
+
+    {% if campaign.is_in_progress %}
+    <a class="btn btn-success btn-sm" href="todo">
+      Make Calls
+    </a>
+    {% endif %}
+
+    {% if can_manage and campaign.is_active %}
+    <a class="btn btn-primary btn-sm" href="todo">
+      Manage
+    </a>
+    {% elif can_manage %}
+    <a class="btn btn-default btn-sm" href="todo">
+      View
+    </a>
+    {% endif %}
+
+  </td>
+
+</tr>

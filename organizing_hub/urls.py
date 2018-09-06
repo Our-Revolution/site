@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from local_groups.forms import GroupLoginForm, PasswordResetRequestForm
@@ -9,6 +10,8 @@ from local_groups.views import (
 )
 from .views import (
     AccountCreateView,
+    CallCampaignCreateView,
+    CallDashboardView,
     EventCreateView,
     EventListView,
     EventPromoteView,
@@ -17,6 +20,8 @@ from .views import (
     PasswordChangeView,
     PasswordResetView,
 )
+
+CALLS_ENABLED = settings.CALLS_ENABLED
 
 urlpatterns = [
     url(r'^join-us-on-slack', SlackInviteView.as_view())
@@ -119,3 +124,23 @@ urlpatterns += [
         ])),
     ]))
 ]
+
+if CALLS_ENABLED:
+    urlpatterns += [
+        url(r'^organizing-hub/', include([
+            url(r'^call/', include([
+                url(
+                    r'^$',
+                    CallDashboardView.as_view(),
+                    name='organizing-hub-call-dashboard'
+                ),
+                url(r'^campaign/', include([
+                    url(
+                        r'^create/',
+                        CallCampaignCreateView.as_view(),
+                        name='organizing-hub-call-campaign-create'
+                    ),
+                ])),
+            ])),
+        ])),
+    ]

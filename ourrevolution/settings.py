@@ -40,6 +40,19 @@ BSD_API_DEFERRED_RETRY_SECONDS = int(os.environ.get(
 """Wagtail caching, to purge page cache after page update, etc."""
 CACHE_FRONTEND_ENABLED = bool(int(os.environ.get('CACHE_FRONTEND_ENABLED', 0)))
 
+"""Calls app enabled"""
+CALLS_ENABLED = bool(int(os.environ.get(
+    'CALLS_ENABLED',
+    0
+)))
+CALLS_MAX_DISTANCE_MILES = int(os.environ.get(
+    'CALLS_MAX_DISTANCE_MILES',
+    100
+))
+CALLS_MAX_LIST_SIZE = int(os.environ.get(
+    'CALLS_MAX_LIST_SIZE',
+    1000
+))
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
 
 """Auto approve events created by Group Leaders"""
@@ -89,6 +102,7 @@ ORGANIZING_HUB_PROMOTE_ENABLED = bool(int(os.environ.get(
 )))
 
 # Organizing Hub Urls
+ORGANIZING_HUB_CALL_SCRIPT_URL = '/docs/calling-script/'
 ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'

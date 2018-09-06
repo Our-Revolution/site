@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('point', django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326)),
                 ('postal_code', models.CharField(max_length=12)),
                 ('script', models.TextField(max_length=2000)),
-                ('status', models.IntegerField(choices=[(1, 'New'), (10, 'Approved'), (20, 'In Progress'), (30, 'Paused'), (40, 'Complete'), (50, 'Declined'), (60, 'Suspended')], default=calls.models.CallCampaignStatus((1, 'New')))),
+                ('status', models.IntegerField(choices=[(1, 'New'), (10, 'Approved'), (20, 'In Progress'), (30, 'Paused'), (40, 'Complete'), (50, 'Declined'), (60, 'Suspended')], default=1)),
                 ('title', models.CharField(max_length=128)),
             ],
         ),

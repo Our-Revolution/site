@@ -1,0 +1,35 @@
+// Dot elements
+
+.dot {
+  height: 14px;
+  width: 14px;
+  background-color: $brand-primary;
+  border-radius: 50%;
+  display: inline-block;
+
+  &.dot-sm {
+    height: 10px;
+    width: 10px;
+  }
+
+  &.dot-lg {
+    height: 20px;
+    width: 20px;
+  }
+
+  &.dot-success {
+    background-color: $brand-success;
+  }
+
+  &.dot-info {
+    background-color: $brand-info;
+  }
+
+  &.dot-warning {
+    background-color: $brand-warning;
+  }
+
+  &.dot-danger {
+    background-color: $brand-danger;
+  }
+}

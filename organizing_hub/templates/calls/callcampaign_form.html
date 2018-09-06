@@ -1,0 +1,110 @@
+{% extends "calls/organizing_hub_calls.html" %}
+
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Create Campaign{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Create Campaign" "organizing-hub-call-campaign-create" %}
+{% endblock %}
+
+{% block content_heading %}
+Create Campaign
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% organizing_hub_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+        <form action="{% url 'organizing-hub-call-campaign-create' %}"
+        method="post" class="form mb20">
+
+          {% csrf_token %}
+
+          <div class="row">
+
+            <div class="col-md-12">
+              {% bootstrap_field form.title placeholder="General Member Outreach" %}
+            </div>
+
+            <div class="col-md-12">
+              <h3>Contact Info</h3>
+              <p>
+                A contact list will be built by gathering contacts within the
+                zip code radius, or when the maximum number of contacts has been
+                reached, whichever comes first.
+              </p>
+            </div>
+
+            <div class="col-md-4">
+              {% bootstrap_field form.postal_code placeholder="05401" %}
+            </div>
+
+            <div class="col-md-4">
+              {% bootstrap_field form.max_distance addon_after='Miles' %}
+            </div>
+
+            <div class="col-md-4">
+              {% bootstrap_field form.max_recipients %}
+            </div>
+
+            <div class="col-md-12">
+
+              <h3>Calling Script</h3>
+
+              <p>
+                This script is what your callers will read to contacts. Make
+                sure you're asking one YES or NO question in it so that your
+                callers can record a simple YES or NO result. You can edit this
+                after creation.
+              </p>
+
+              <p>
+                <a href="{% organizing_hub_call_script_url %}" target="_blank">
+                  For more help writing a script, click here.
+                </a>
+              </p>
+
+              {% bootstrap_field form.script %}
+
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <button type="submit"
+              class="btn btn-success btn-block uppercase ls2">
+                Create Calling Campaign
+              </button>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}
