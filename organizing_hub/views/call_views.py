@@ -67,6 +67,7 @@ class CallCampaignCreateView(
         return initial
 
     def get_success_url(self):
+        """TODO: send user to individual call campaign management page"""
         return reverse_lazy('organizing-hub-call-dashboard')
 
 

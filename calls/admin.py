@@ -30,12 +30,14 @@ class CallCampaignAdmin(admin.ModelAdmin):
     form = CallCampaignAdminForm
     list_display = [
         'title',
+        'local_group',
         'date_created',
         'status',
+        'max_recipients',
         'postal_code',
         'max_distance',
-        'max_recipients',
     ]
+    list_filter = ['status']
     readonly_fields = [
         'owner',
         'local_group',
