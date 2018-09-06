@@ -134,11 +134,13 @@ if CALLS_ENABLED:
                     CallDashboardView.as_view(),
                     name='organizing-hub-call-dashboard'
                 ),
-                url(
-                    r'^create/',
-                    CallCampaignCreateView.as_view(),
-                    name='organizing-hub-call-campaign-create'
-                ),
-            ]))
-        ]))
+                url(r'^campaign/', include([
+                    url(
+                        r'^create/',
+                        CallCampaignCreateView.as_view(),
+                        name='organizing-hub-call-campaign-create'
+                    ),
+                ])),
+            ])),
+        ])),
     ]

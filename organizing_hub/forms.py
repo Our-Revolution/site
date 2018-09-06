@@ -46,7 +46,9 @@ class CallCampaignForm(forms.ModelForm):
             'title',
         ]
         model = CallCampaign
-
+        widgets = {
+            'script': forms.Textarea(attrs={'rows': '14'}),
+        }
 
 class EventForm(forms.ModelForm):
     capacity = forms.IntegerField(

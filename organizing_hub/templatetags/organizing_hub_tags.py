@@ -5,13 +5,19 @@ from organizing_hub.models import OrganizingHubLoginAlert
 
 register = template.Library()
 
-ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
+BSD_CREATE_ACCOUNT_URL = settings.BSD_CREATE_ACCOUNT_URL
+ORGANIZING_DOCS_URL = settings.ORGANIZING_DOCS_URL
+ORGANIZING_EMAIL = settings.ORGANIZING_EMAIL
+ORGANIZING_GUIDES_URL = settings.ORGANIZING_GUIDES_URL
 ORGANIZING_HUB_ADMINS_ENABLED = settings.ORGANIZING_HUB_ADMINS_ENABLED
+ORGANIZING_HUB_CALL_SCRIPT_URL = settings.ORGANIZING_HUB_CALL_SCRIPT_URL
+ORGANIZING_HUB_DASHBOARD_URL = settings.ORGANIZING_HUB_DASHBOARD_URL
+ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 
 
 @register.simple_tag
 def bsd_create_account_url():
-    return settings.BSD_CREATE_ACCOUNT_URL
+    return BSD_CREATE_ACCOUNT_URL
 
 
 @register.inclusion_tag('partials/events_nav.html', takes_context=True)
@@ -83,8 +89,8 @@ def organizing_hub_nav(context):
 
     return {
         'group': group,
-        'organizing_guides_url': settings.ORGANIZING_GUIDES_URL,
-        'organizing_docs_url': settings.ORGANIZING_DOCS_URL,
+        'organizing_guides_url': ORGANIZING_GUIDES_URL,
+        'organizing_docs_url': ORGANIZING_DOCS_URL,
         'show_admins_link': show_admins_link,
         'request': context['request'],
     }
@@ -92,12 +98,17 @@ def organizing_hub_nav(context):
 
 @register.simple_tag
 def organizing_email():
-    return settings.ORGANIZING_EMAIL
+    return ORGANIZING_EMAIL
+
+
+@register.simple_tag
+def organizing_hub_call_script_url():
+    return ORGANIZING_HUB_CALL_SCRIPT_URL
 
 
 @register.simple_tag
 def organizing_hub_dashboard_url():
-    return settings.ORGANIZING_HUB_DASHBOARD_URL
+    return ORGANIZING_HUB_DASHBOARD_URL
 
 
 @register.inclusion_tag(

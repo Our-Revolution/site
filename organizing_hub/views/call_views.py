@@ -20,6 +20,17 @@ logger = logging.getLogger(__name__)
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
+campaign_script_template = """Hi, my name is (your name), I'm a volunteer for (your group), is (first name) available?
+
+(After confirming that you've reached the right person)
+
+How are you today?
+
+(your group) is holding our monthly membership meeting on (event date) at (event location). We'll be talking about (event topic).
+
+Would you be able to attend?
+"""
+
 
 class CallCampaignCreateView(
     LocalGroupPermissionRequiredMixin,
@@ -41,6 +52,7 @@ class CallCampaignCreateView(
         initial = {
             'max_distance': min(25, CALLS_MAX_DISTANCE_MILES),
             'max_recipients': min(100, CALLS_MAX_LIST_SIZE),
+            'script': campaign_script_template,
         }
         return initial
 
