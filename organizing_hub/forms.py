@@ -26,7 +26,7 @@ class HTML5TimeInput(widgets.TimeInput):
 class CallCampaignForm(forms.ModelForm):
     max_distance = forms.IntegerField(
         help_text="Max: %s miles" % CALLS_MAX_DISTANCE_MILES,
-        label="Radius (Miles)",
+        label="Radius",
         max_value=CALLS_MAX_DISTANCE_MILES,
         min_value=1
     )
