@@ -8,6 +8,7 @@ from calls.forms import CallCampaignForm
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
+    CallProfile,
     find_campaigns_as_caller,
     find_campaigns_as_admin,
     call_campaign_statuses_active
@@ -114,5 +115,8 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
             context['campaigns_as_admin_active'] = campaigns_as_admin_active
             context['campaigns_as_admin_inactive'] = campaigns_as_admin_inactive
             context['campaigns_as_caller_active'] = campaigns_as_caller_active
+        else:
+            """Create call profile if doesn't exist"""
+            CallProfile.objects.create(user=user)
 
         return context
