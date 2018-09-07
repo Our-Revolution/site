@@ -73,6 +73,7 @@ class CallCampaignCreateView(
 
 
 class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
+    context_object_name = 'campaign'
     model = CallCampaign
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'

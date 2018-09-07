@@ -38,6 +38,13 @@ call_campaign_statuses_active = [
     CallCampaignStatus.paused,
 ]
 
+"""Campaign Statuses with data download available"""
+call_campaign_statuses_with_data_download = [
+    CallCampaignStatus.in_progress,
+    CallCampaignStatus.paused,
+    CallCampaignStatus.complete,
+]
+
 
 def find_calls_made_by_campaign(call_campaign):
     """
@@ -201,6 +208,13 @@ class CallCampaign(models.Model):
             return 0
     contacts_total_count = property(_contacts_total_count)
 
+    def _has_data_download(self):
+        """Check if status is in list of statuses with data download"""
+        return self.status in [
+            x.value[0] for x in call_campaign_statuses_with_data_download
+        ]
+    has_data_download = property(_has_data_download)
+
     def _is_active(self):
         """Check if status is in list of active statuses"""
         return self.status in [
@@ -208,10 +222,20 @@ class CallCampaign(models.Model):
         ]
     is_active = property(_is_active)
 
+    def _is_approved(self):
+        """Check if status is approved"""
+        return self.status == CallCampaignStatus.approved.value[0]
+    is_approved = property(_is_approved)
+
     def _is_in_progress(self):
         """Check if status is in progress"""
         return self.status == CallCampaignStatus.in_progress.value[0]
     is_in_progress = property(_is_in_progress)
+
+    def _is_paused(self):
+        """Check if status is paused"""
+        return self.status == CallCampaignStatus.paused.value[0]
+    is_paused = property(_is_paused)
 
 
 class Call(models.Model):
