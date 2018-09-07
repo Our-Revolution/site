@@ -2,11 +2,11 @@
 
 {% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
-{% block page_title %}Our Revolution - Detail Campaign{% endblock %}
+{% block page_title %}Our Revolution - {{ campaign.title }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Detail Campaign" "organizing-hub-call-campaign-create" %}
+    {% breadcrumb campaign.title "organizing-hub-call-campaign-create" %}
 {% endblock %}
 
 {% block content_pre_heading %}
@@ -88,21 +88,21 @@
           </div>
 
           <div class="col-md-4">
-            <p><strong>Zip Code</strong></p>
+            <div class="mb5"><strong>Zip Code</strong></div>
             <div class="well well-sm">
               {{ campaign.postal_code }}
             </div>
           </div>
 
           <div class="col-md-4">
-            <p><strong>Radius</strong></p>
+            <div class="mb5"><strong>Radius</strong></div>
             <div class="well well-sm">
-              {{ campaign.max_distance }}
+              {{ campaign.max_distance }} Miles
             </div>
           </div>
 
           <div class="col-md-4">
-            <p><strong>Max Number of Contacts</strong></p>
+            <div class="mb5"><strong>Max Number of Contacts</strong></div>
             <div class="well well-sm">
               {{ campaign.max_recipients }}
             </div>
@@ -112,7 +112,7 @@
             <a class="pull-right" href="todo">
               Edit
             </a>
-            <p><strong>Script</strong></p>
+            <div class="mb5"><strong>Script</strong></div>
             <div class="well well-sm">
               {{ campaign.script|linebreaks }}
             </div>
