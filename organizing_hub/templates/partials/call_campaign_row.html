@@ -30,11 +30,13 @@
     {% endif %}
 
     {% if can_manage and campaign.is_active %}
-    <a class="btn btn-primary btn-sm" href="todo">
+    <a class="btn btn-primary btn-sm"
+    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
       Manage
     </a>
     {% elif can_manage %}
-    <a class="btn btn-default btn-sm" href="todo">
+    <a class="btn btn-default btn-sm"
+    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
       View
     </a>
     {% endif %}

@@ -142,7 +142,7 @@ if CALLS_ENABLED:
                         name='organizing-hub-call-campaign-create'
                     ),
                     url(
-                        r'^(?P<pk>\d+)/$',
+                        r'^(?P<uuid>[0-9a-f-]+)/$',
                         CallCampaignDetailView.as_view(),
                         name='organizing-hub-call-campaign-detail'
                     ),

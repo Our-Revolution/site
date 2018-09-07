@@ -75,6 +75,8 @@ class CallCampaignCreateView(
 class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
     model = CallCampaign
     permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
 
     def get_local_group(self):
         return find_local_group_by_user(self.request.user)

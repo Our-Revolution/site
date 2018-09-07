@@ -1,0 +1,46 @@
+{% extends "calls/organizing_hub_calls.html" %}
+
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - Detail Campaign{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Detail Campaign" "organizing-hub-call-campaign-create" %}
+{% endblock %}
+
+{% block content_heading %}
+{{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pt4">
+  <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+
+        {% bootstrap_messages %}
+
+      </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+      <div class="col-md-3">
+        {% organizing_hub_nav %}
+      </div>
+
+      <div class="col-md-9">
+
+
+
+      </div>
+  </div>
+</div>
+
+{% endblock %}
