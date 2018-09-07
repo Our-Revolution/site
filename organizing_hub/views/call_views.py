@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, DetailView, TemplateView
 from django.views.generic.list import ListView
 from calls.forms import CallCampaignForm
 from calls.models import (
@@ -69,6 +69,14 @@ class CallCampaignCreateView(
     def get_success_url(self):
         """TODO: send user to individual call campaign management page"""
         return reverse_lazy('organizing-hub-call-dashboard')
+
+
+class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
+    model = CallCampaign
+    permission_required = 'calls.change_callcampaign'
+
+    def get_local_group(self):
+        return find_local_group_by_user(self.request.user)
 
 
 class CallDashboardView(LoginRequiredMixin, TemplateView):

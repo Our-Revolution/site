@@ -6,6 +6,7 @@ from enum import Enum, unique
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -181,6 +182,7 @@ class CallCampaign(models.Model):
         default=CallCampaignStatus.new.value[0],
     )
     title = models.CharField(max_length=128)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     def __unicode__(self):
         return '%s [%s]' % (self.title, self.id)

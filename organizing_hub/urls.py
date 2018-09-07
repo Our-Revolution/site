@@ -11,6 +11,7 @@ from local_groups.views import (
 from .views import (
     AccountCreateView,
     CallCampaignCreateView,
+    CallCampaignDetailView,
     CallDashboardView,
     EventCreateView,
     EventListView,
@@ -139,6 +140,11 @@ if CALLS_ENABLED:
                         r'^create/',
                         CallCampaignCreateView.as_view(),
                         name='organizing-hub-call-campaign-create'
+                    ),
+                    url(
+                        r'^(?P<pk>\d+)/$',
+                        CallCampaignDetailView.as_view(),
+                        name='organizing-hub-call-campaign-detail'
                     ),
                 ])),
             ])),
