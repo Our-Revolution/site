@@ -68,8 +68,10 @@ class CallCampaignCreateView(
         return initial
 
     def get_success_url(self):
-        """TODO: send user to individual call campaign management page"""
-        return reverse_lazy('organizing-hub-call-dashboard')
+        return reverse_lazy(
+            'organizing-hub-call-campaign-detail',
+            kwargs={'uuid': self.object.uuid}
+        )
 
 
 class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
