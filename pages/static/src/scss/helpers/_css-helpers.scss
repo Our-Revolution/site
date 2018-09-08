@@ -14,12 +14,22 @@
   margin-bottom: 0;
 }
 
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb5-xs {
+  @include until($small) {
+    margin-bottom: 5px;
+  }
+}
+
 .mt0 {
   margin-top: 0;
 }
 
-.mb5 {
-  margin-bottom: 5px;
+.mt5 {
+  margin-top: 5px;
 }
 
 .mr5 {
@@ -40,6 +50,12 @@
 
 .mb10 {
   margin-bottom: 10px;
+}
+
+.mb10-xs {
+  @include until($small) {
+    margin-bottom: 10px;
+  }
 }
 
 .mt20 {

@@ -5847,11 +5847,18 @@ button.close {
 .mb0 {
   margin-bottom: 0; }
 
+.mb5 {
+  margin-bottom: 5px; }
+
+@media screen and (max-width: 479px) {
+  .mb5-xs {
+    margin-bottom: 5px; } }
+
 .mt0 {
   margin-top: 0; }
 
-.mb5 {
-  margin-bottom: 5px; }
+.mt5 {
+  margin-top: 5px; }
 
 .mr5 {
   margin-right: 5px; }
@@ -5867,6 +5874,10 @@ button.close {
 
 .mb10 {
   margin-bottom: 10px; }
+
+@media screen and (max-width: 479px) {
+  .mb10-xs {
+    margin-bottom: 10px; } }
 
 .mt20 {
   margin-top: 20px; }

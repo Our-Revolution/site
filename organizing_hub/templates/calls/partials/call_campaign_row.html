@@ -23,22 +23,25 @@
 
   <td class="text-right">
 
+
     {% if campaign.is_in_progress %}
-    <a class="btn btn-success btn-sm" href="todo">
+    <a class="btn btn-success btn-sm mb5-xs" href="todo">
       Make Calls
     </a>
     {% endif %}
 
-    {% if can_manage and campaign.is_active %}
-    <a class="btn btn-primary btn-sm"
+    {% if can_manage %}
+    {% if campaign.is_active %}
+    <a class="btn btn-primary btn-sm mb5-xs"
     href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
       Manage
     </a>
-    {% elif can_manage %}
-    <a class="btn btn-default btn-sm"
+    {% else %}
+    <a class="btn btn-default btn-sm mb5-xs"
     href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
       View
     </a>
+    {% endif %}
     {% endif %}
 
   </td>

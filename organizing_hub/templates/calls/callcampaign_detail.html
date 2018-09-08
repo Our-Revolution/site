@@ -24,129 +24,115 @@
 
 {{ block.super }}
 
-<div class="container pt4">
+<div class="container pb4 pt4">
+
   <div class="row">
-      <div class="col-md-9 col-md-offset-3">
-
-        {% bootstrap_messages %}
-
-      </div>
+    <div class="col-md-9 col-md-offset-3">
+      {% bootstrap_messages %}
+    </div>
   </div>
-</div>
-
-<div class="container pb4">
 
   <div class="row">
 
-      <div class="col-md-3">
-        {% organizing_hub_nav %}
-      </div>
+    <div class="col-md-3">
+      {% organizing_hub_nav %}
+    </div>
 
-      <div class="col-md-9">
+    <div class="col-md-9">
 
-        {# Show action buttons for certain statuses #}
-        {% if campaign.is_approved or campaign.is_in_progress or campaign.is_paused or campaign.has_data_download %}
-        <div class="row">
-          <div class="col-md-12">
+      {# Show action buttons for certain statuses #}
+      {% if campaign.is_approved or campaign.is_in_progress or campaign.is_paused or campaign.has_data_download %}
+      <div class="btn-toolbar mb10" role="toolbar" aria-label="Actions">
 
-            <div class="btn-group mb20" role="group" aria-label="Actions">
-              {% if campaign.is_approved %}
-              <button type="button" class="btn btn-primary">
-                Start Campaign
-              </button>
-              {% elif campaign.is_in_progress %}
-              <button type="button" class="btn btn-primary">
-                Pause Campaign
-              </button>
-              {% elif campaign.is_paused %}
-              <button type="button" class="btn btn-primary">
-                Resume Campaign
-              </button>
-              {% endif %}
+        <div class="btn-group mb10" role="group"
+        aria-label="Primary Actions">
+          {% if campaign.is_approved %}
+          <button type="button" class="btn btn-primary">
+            Start Campaign
+          </button>
+          {% elif campaign.is_in_progress %}
+          <button type="button" class="btn btn-primary">
+            Pause Campaign
+          </button>
+          {% elif campaign.is_paused %}
+          <button type="button" class="btn btn-primary">
+            Resume Campaign
+          </button>
+          {% endif %}
 
-              {% if campaign.is_in_progress or campaign.is_paused %}
-              <button type="button" class="btn btn-primary">
-                Complete Campaign
-              </button>
-              {% endif %}
-
-              {% if campaign.has_data_download %}
-              <button type="button" class="btn btn-primary">
-                Download Data
-              </button>
-              {% endif %}
-            </div>
-
-          </div>
-        </div>
-        {% endif %}
-
-        <div class="row">
-
-          <div class="col-md-12">
-            <h3 class="mt0">Campaign Info</h3>
-          </div>
-
-          <div class="col-md-4">
-            <div class="mb5"><strong>Zip Code</strong></div>
-            <div class="well well-sm">
-              {{ campaign.postal_code }}
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="mb5"><strong>Radius</strong></div>
-            <div class="well well-sm">
-              {{ campaign.max_distance }} Miles
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="mb5"><strong>Max Number of Contacts</strong></div>
-            <div class="well well-sm">
-              {{ campaign.max_recipients }}
-            </div>
-          </div>
-
-          <div class="col-md-12">
-            <a class="pull-right" href="todo">
-              Edit
-            </a>
-            <div class="mb5"><strong>Script</strong></div>
-            <div class="well well-sm">
-              {{ campaign.script|linebreaks }}
-            </div>
-          </div>
-
+          {% if campaign.is_in_progress or campaign.is_paused %}
+          <button type="button" class="btn btn-primary">
+            Complete Campaign
+          </button>
+          {% endif %}
         </div>
 
-        <div class="row">
-          <div class="col-md-12">
-            <h3>Callers</h3>
-            <p>
-              <strong>{{ campaign.callers.all|length }}</strong>
-              callers on this campaign.
-              <a href="todo">
-                View
-              </a>
-            </p>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <h3>Contacts</h3>
-            <p>
-              <strong>{{ campaign.calls_made_count }}</strong> of
-              {{ campaign.contacts_total_count }} contacts called.
-              <a href="todo">
-                View
-              </a>
-            </p>
-          </div>
+        <div class="btn-group mb10" role="group"
+        aria-label="Secondary Actions">
+          {% if campaign.has_data_download %}
+          <button type="button" class="btn btn-default">
+            Download Data
+          </button>
+          {% endif %}
         </div>
 
       </div>
+      {% endif %}
+
+      <h3 class="mt0">Campaign Info</h3>
+
+      <div class="row">
+
+        <div class="col-md-4">
+          <div class="mb5"><strong>Zip Code</strong></div>
+          <div class="mb10 well well-sm">
+            {{ campaign.postal_code }}
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb5"><strong>Radius</strong></div>
+          <div class="mb10 well well-sm">
+            {{ campaign.max_distance }} Miles
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="mb5"><strong>Max Number of Contacts</strong></div>
+          <div class="mb10 well well-sm">
+            {{ campaign.max_recipients }}
+          </div>
+        </div>
+      </div>
+
+      <a class="pull-right" href="todo">
+        Edit
+      </a>
+      <div class="mb5"><strong>Script</strong></div>
+      <div class="mb10 well well-sm">
+        {{ campaign.script|linebreaks }}
+      </div>
+
+      <h3>Callers</h3>
+      <p>
+        <strong>{{ campaign.callers.all|length }}</strong>
+        callers on this campaign.
+        <a href="todo">
+          View
+        </a>
+      </p>
+
+      <h3>Contacts</h3>
+      <p>
+        <strong>{{ campaign.calls_made_count }}</strong> of
+        {{ campaign.contacts_total_count }} contacts called.
+        <a href="todo">
+          View
+        </a>
+      </p>
+
+    </div>
+
   </div>
 </div>
 
