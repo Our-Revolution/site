@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from contacts.models import ContactList
-from events.models import EventPromotion, event_promotion_status_approved
+from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import build_contact_list_for_event_promotion
 from .views import (
@@ -99,7 +99,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
     """
     status = instance.status
     contact_list = instance.contact_list
-    if status == event_promotion_status_approved and contact_list is None:
+    if status == EventPromotionStatus.approved.value[0] and contact_list is None:
 
         """Create new contact list and add to event promotion"""
         list_name = 'List for Event Promotion: ' + str(instance)
