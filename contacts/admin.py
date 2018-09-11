@@ -21,6 +21,15 @@ class ContactAdmin(admin.ModelAdmin):
 @admin.register(ContactList)
 class ContactListAdmin(admin.ModelAdmin):
     filter_horizontal = ['contacts']
+    list_display = [
+        'id',
+        'name',
+        'status',
+        'date_created',
+        'date_modified',
+    ]
+    list_display_links = list_display
+    list_filter = ['status']
     readonly_fields = [
         'date_created',
         'date_modified',

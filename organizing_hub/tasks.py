@@ -9,13 +9,12 @@ from bsd.models import (
     find_constituents_by_state_cd,
     find_event_by_id_obfuscated,
 )
-from contacts.models import (
-    contact_list_status_new,
-    contact_list_status_in_progress,
-    contact_list_status_complete,
-    Contact,
+from contacts.models import Contact, ContactListStatus
+from events.models import (
+    EventPromotion,
+    EventPromotionStatus,
+    find_last_event_promo_sent_to_contact
 )
-from events.models import EventPromotion, find_last_event_promo_sent_to_contact
 import datetime
 import logging
 
@@ -146,7 +145,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     """
     Build contact list for event promotion
 
-    Assumes that event promotion has new contact list and needs to be built. If
+    Meant for event promotion with new contact list that needs to be built. If
     contact list is not new then do nothing. Otherwise generate list and save.
 
     TODO: TECH-1331: better celery logging
@@ -169,11 +168,11 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """If contact list is not New, then do nothing"""
     contact_list = event_promotion.contact_list
-    if contact_list.status != contact_list_status_new:
+    if contact_list.status != ContactListStatus.new.value[0]:
         return
 
     """Update list status to build in progress"""
-    contact_list.status = contact_list_status_in_progress
+    contact_list.status = ContactListStatus.in_progress.value[0]
     contact_list.save()
 
     """Get event location data"""
@@ -199,10 +198,56 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     )
 
     """Update list status to complete"""
-    contact_list.status = contact_list_status_complete
+    contact_list.status = ContactListStatus.complete.value[0]
     contact_list.save()
 
     """Return size of list generated"""
     contact_list_size = contact_list.contacts.count()
     logger.debug('contact_list_size: ' + str(contact_list_size))
     return contact_list_size
+
+
+@shared_task
+def send_event_promotion(event_promotion_id):
+    """
+    Send event promotion via BSD triggered emails
+
+    Requires that event promotion is approved and list is complete. Otherwise
+    do nothing.
+
+    Parameters
+    ----------
+    event_promotion_id : int
+        EventPromotion id
+
+    Returns
+        -------
+        int
+            Returns count of promotion emails sent
+    """
+
+    """Get event promotion"""
+    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+
+    """If event promotion is not approved, then do nothing"""
+    if event_promotion.status != EventPromotionStatus.approved.value[0]:
+        return
+
+    """If contact list is not complete, then do nothing"""
+    contact_list = event_promotion.contact_list
+    if contact_list.status != ContactListStatus.complete.value[0]:
+        return
+
+    """Update promotion status to in progress"""
+    event_promotion.status = EventPromotionStatus.in_progress.value[0]
+    event_promotion.save()
+
+    """Send promotion email to each contact in list"""
+
+    """Update promotion status to sent"""
+    # TODO date sent field
+    event_promotion.status = EventPromotionStatus.sent.value[0]
+    event_promotion.save()
+
+    """Return count of sent emails"""
+    return 200

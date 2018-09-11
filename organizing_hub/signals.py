@@ -3,10 +3,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from contacts.models import ContactList
+from contacts.models import ContactList, ContactListStatus
 from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
-from organizing_hub.tasks import build_contact_list_for_event_promotion
+from organizing_hub.tasks import (
+    build_contact_list_for_event_promotion,
+    send_event_promotion,
+)
 from .views import (
     add_local_group_role_for_user,
     remove_local_group_role_for_user
@@ -89,6 +92,25 @@ def sync_group_leader_affiliation_for_user(user):
             local_group_lead_by_user,
             LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         )
+
+
+@receiver(post_save, sender=ContactList)
+def contact_list_post_save_handler(instance, **kwargs):
+    """
+    Contact List post-save handler
+
+    Start task to send approved event promotion if contact list is complete
+    """
+
+    contact_list = instance
+    if contact_list.status == ContactListStatus.complete.value[0]:
+
+        """Check if contact list is attached to approved event promotion"""
+        if hasattr(contact_list, 'eventpromotion'):
+            event_promotion = contact_list.eventpromotion
+
+            """Call async task to send event promotion"""
+            send_event_promotion.delay(event_promotion.id)
 
 
 @receiver(post_save, sender=EventPromotion)

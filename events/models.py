@@ -51,8 +51,9 @@ class EventPromotionStatus(Enum):
 
 class EventPromotion(models.Model):
 
-    contact_list = models.ForeignKey(
+    contact_list = models.OneToOneField(
         ContactList,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
