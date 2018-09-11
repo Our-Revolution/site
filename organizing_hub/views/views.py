@@ -31,15 +31,15 @@ from local_groups.models import (
     LocalGroupAffiliation,
     LocalGroupProfile
 )
-from .decorators import verified_email_required
-from .forms import (
+from organizing_hub.decorators import verified_email_required
+from organizing_hub.forms import (
     AccountForm,
     EventForm,
     GroupAdminsForm,
     PasswordChangeForm,
     PasswordResetForm,
 )
-from .mixins import LocalGroupPermissionRequiredMixin
+from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import datetime
 import json
 import logging
