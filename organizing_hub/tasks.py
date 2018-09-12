@@ -17,6 +17,7 @@ from events.models import (
 )
 import datetime
 import logging
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,42 @@ EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+
+
+def send_triggered_email(mailing_id, email, trigger_values):
+    """
+    Send a triggered email with trigger_values
+
+    bsd_api has a mailer_sendTriggeredEmail method but it does not support
+    trigger_values
+
+    Parameters
+    ----------
+    mailing_id : str
+        The obfuscated id of the triggered mailing
+    email : str
+        Recipient's valid email address
+    trigger_values : int
+        Arbitrary url encoded json string for custom trigger values templates
+
+    Returns
+        -------
+        str
+            Returns an HTTP status code indicating success or failure. If
+            successful, an obfuscated mailing_triggered_id will also be
+            returned.
+    """
+
+    query = {
+        'mailing_id': mailing_id,
+        'email': email,
+        'trigger_values': trigger_values
+    }
+    url_secure = bsd_api._generateRequest(
+        '/mailer/send_triggered_email',
+        query
+    )
+    return bsd_api._makeGETRequest(url_secure)
 
 
 def get_buffer_width_from_miles(miles):
@@ -246,11 +283,15 @@ def send_event_promotion(event_promotion_id):
     event_promotion.save()
 
     """Send promotion email to each contact in list"""
-    for contact in contact_list.contacts:
-        bsd_api.mailer_sendTriggeredEmail(
+    trigger_values = '%7B%22name%22+%3A+%22John+Doe%22%7D'
+    for contact in contact_list.contacts.all():
+        send_triggered_email(
             EVENTS_PROMOTE_MAILING_ID,
-            contact.email_address
+            contact.email_address,
+            trigger_values
         )
+        """Wait a second before next one for rate limiting"""
+        time.sleep(1)
 
     """Update promotion status and date sent"""
     event_promotion.status = EventPromotionStatus.sent.value[0]
