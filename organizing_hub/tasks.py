@@ -292,19 +292,26 @@ def send_event_promotion(event_promotion_id):
     }
     trigger_values_json = json.dumps(trigger_values)
     trigger_values_encoded = urlquote_plus(trigger_values_json)
+    sent_count = 0
     for contact in contact_list.contacts.all():
-        send_triggered_email(
+        send_triggered_email_result = send_triggered_email(
             EVENTS_PROMOTE_MAILING_ID,
             contact.email_address,
             trigger_values_encoded
         )
-        """Wait a second before next one for rate limiting"""
+
+        """Check result status and increment on success"""
+        if send_triggered_email_result.http_status == 202:
+            sent_count += 1
+
+        """Wait one second before next one for rate limiting"""
         time.sleep(1)
 
-    """Update promotion status and date sent"""
-    event_promotion.status = EventPromotionStatus.sent.value[0]
-    event_promotion.date_sent = timezone.now()
-    event_promotion.save()
+    """Update promotion status and date sent if emails were sent"""
+    if sent_count > 0:
+        event_promotion.status = EventPromotionStatus.sent.value[0]
+        event_promotion.date_sent = timezone.now()
+        event_promotion.save()
 
     """Return count of sent emails"""
-    return 200
+    return sent_count
