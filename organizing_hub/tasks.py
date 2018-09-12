@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
@@ -226,10 +227,12 @@ def send_event_promotion(event_promotion_id):
             Returns count of promotion emails sent
     """
 
-    """Get event promotion"""
-    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+    """If there is no promotion mailing id, then do nothing"""
+    if EVENTS_PROMOTE_MAILING_ID is None:
+        return
 
     """If event promotion is not approved, then do nothing"""
+    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
     if event_promotion.status != EventPromotionStatus.approved.value[0]:
         return
 
@@ -243,10 +246,15 @@ def send_event_promotion(event_promotion_id):
     event_promotion.save()
 
     """Send promotion email to each contact in list"""
+    for contact in contact_list.contacts:
+        bsd_api.mailer_sendTriggeredEmail(
+            EVENTS_PROMOTE_MAILING_ID,
+            contact.email_address
+        )
 
-    """Update promotion status to sent"""
-    # TODO date sent field
+    """Update promotion status and date sent"""
     event_promotion.status = EventPromotionStatus.sent.value[0]
+    event_promotion.date_sent = timezone.now()
     event_promotion.save()
 
     """Return count of sent emails"""
