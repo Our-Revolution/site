@@ -3,7 +3,9 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.template.defaultfilters import linebreaks_filter
 from django.utils import timezone
+from django.utils.http import urlquote_plus
 from bsd.api import BSD
 from bsd.models import (
     find_constituents_by_state_cd,
@@ -17,8 +19,8 @@ from events.models import (
 )
 import datetime
 import logging
+import json
 import time
-
 
 logger = logging.getLogger(__name__)
 
@@ -283,12 +285,18 @@ def send_event_promotion(event_promotion_id):
     event_promotion.save()
 
     """Send promotion email to each contact in list"""
-    trigger_values = '%7B%22name%22+%3A+%22John+Doe%22%7D'
+    trigger_values = {
+        'subject': event_promotion.subject,
+        'email_body_html': linebreaks_filter(event_promotion.message),
+        'email_body_text': event_promotion.message,
+    }
+    trigger_values_json = json.dumps(trigger_values)
+    trigger_values_encoded = urlquote_plus(trigger_values_json)
     for contact in contact_list.contacts.all():
         send_triggered_email(
             EVENTS_PROMOTE_MAILING_ID,
             contact.email_address,
-            trigger_values
+            trigger_values_encoded
         )
         """Wait a second before next one for rate limiting"""
         time.sleep(1)
