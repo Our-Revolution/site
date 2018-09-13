@@ -83,8 +83,12 @@ def sync_contact_list_with_bsd_constituents(
 
     for constituent in constituents:
 
-        """Check if unsubscribed, otherwise """
+        """Check if unsubscribed and member of sendable cons group, otherwise """
         cons_email = constituent.find('cons_email')
+        cons_groups = constituent.find('cons_group')
+
+        logger.debug('cons_groups: ' + str(cons_groups))
+
         if int(cons_email.find('is_subscribed').text) == 1:
 
             """Get constituent data"""
@@ -150,7 +154,6 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact list is not new then do nothing. Otherwise generate list and save.
 
     TODO: TECH-1331: better celery logging
-    TODO: TECH-1343: research SendableConsGroup
     TODO: TECH-1344: better error/edge case handling
 
     Parameters
