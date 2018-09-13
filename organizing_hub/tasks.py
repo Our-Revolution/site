@@ -203,13 +203,15 @@ def build_contact_list_for_event_promotion(event_promotion_id):
             Returns size of list that was generated
     """
 
+    list_size = 0
+
     """Get event promotion"""
     event_promotion = EventPromotion.objects.get(id=event_promotion_id)
 
     """If contact list is not New, then do nothing"""
     contact_list = event_promotion.contact_list
     if contact_list.status != ContactListStatus.new.value[0]:
-        return
+        return list_size
 
     """Update list status to build in progress"""
     contact_list.status = ContactListStatus.in_progress.value[0]
@@ -223,9 +225,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     """Get constitents by state first and we will filter it down later"""
     constituents = find_constituents_by_state_cd(event_state_cd)
 
-    """Return 0 if we did not find constituents for some reason"""
+    """Stop if we did not find constituents for some reason"""
     if constituents is None:
-        return 0
+        return list_size
 
     """Add constituents to list if they are w/in max list size and area"""
     max_distance_miles = float(EVENTS_PROMOTE_MAX_DISTANCE_MILES)
@@ -242,9 +244,8 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.save()
 
     """Return size of list generated"""
-    contact_list_size = contact_list.contacts.count()
-    logger.debug('contact_list_size: ' + str(contact_list_size))
-    return contact_list_size
+    list_size = contact_list.contacts.count()
+    return list_size
 
 
 @shared_task
@@ -266,19 +267,21 @@ def send_event_promotion(event_promotion_id):
             Returns count of promotion emails sent
     """
 
+    sent_count = 0
+
     """If there is no promotion mailing id, then do nothing"""
     if EVENTS_PROMOTE_MAILING_ID is None:
-        return
+        return sent_count
 
     """If event promotion is not approved, then do nothing"""
     event_promotion = EventPromotion.objects.get(id=event_promotion_id)
     if event_promotion.status != EventPromotionStatus.approved.value[0]:
-        return
+        return sent_count
 
     """If contact list is not complete, then do nothing"""
     contact_list = event_promotion.contact_list
     if contact_list.status != ContactListStatus.complete.value[0]:
-        return
+        return sent_count
 
     """Update promotion status to in progress"""
     event_promotion.status = EventPromotionStatus.in_progress.value[0]
@@ -292,7 +295,6 @@ def send_event_promotion(event_promotion_id):
     }
     trigger_values_json = json.dumps(trigger_values)
     trigger_values_encoded = urlquote_plus(trigger_values_json)
-    sent_count = 0
     for contact in contact_list.contacts.all():
         send_triggered_email_result = send_triggered_email(
             EVENTS_PROMOTE_MAILING_ID,
