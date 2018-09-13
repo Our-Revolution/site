@@ -99,11 +99,14 @@ def contact_list_post_save_handler(instance, **kwargs):
     """
     Contact List post-save handler
 
-    Start task to send approved event promotion if contact list is complete
+    Start task to send approved event promotion if contact list is complete and
+    list is not empty
     """
 
     contact_list = instance
-    if contact_list.status == ContactListStatus.complete.value[0]:
+    if contact_list.status == ContactListStatus.complete.value[0] and (
+        contact_list.contacts.count() > 0
+    ):
 
         """Check if contact list is attached to approved event promotion"""
         if hasattr(contact_list, 'eventpromotion'):
