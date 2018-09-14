@@ -67,16 +67,7 @@ Our Revolution
 -------------------------------------
 
 """)
-event_promote_footer_template = Template("""
 
-----
-Paid for by Our Revolution
-(not the billionaires)
-
-PO BOX 66208 - WASHINGTON, DC 20035
-
-Email is one of the most important tools we have to reach supporters like you, but if you'd like to, click here to unsubscribe: {{ bsd_base_url }}/page/unsubscribe/
-""")
 EVENTS_CAPACITY_RATIO = settings.EVENTS_CAPACITY_RATIO
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
@@ -417,14 +408,13 @@ Thanks!""").render(Context({
             form.cleaned_data['max_recipients']
         )
 
-        """Set message header/footer content"""
+        """Add message header content"""
         user_message = form.cleaned_data['message']
         form.instance.message = event_promote_admin_message_template.render(
             Context({
                 'event_url': event.absolute_url,
-            })) + user_message + event_promote_footer_template.render(Context({
-                'bsd_base_url': BSD_BASE_URL,
-            }))
+            })
+        ) + user_message
 
         # Call save via super form_valid and handle BSD errors
         try:

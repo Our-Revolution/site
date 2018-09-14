@@ -22,6 +22,7 @@ class EventPromotionAdmin(admin.ModelAdmin):
     ]
     form = EventPromotionAdminForm
     list_display = [
+        'id',
         'event_name',
         'event_external_id',
         'user_external_id',
