@@ -35,6 +35,7 @@ from organizing_hub.decorators import verified_email_required
 from organizing_hub.forms import (
     AccountForm,
     EventForm,
+    EventUpdateForm,
     GroupAdminsForm,
     PasswordChangeForm,
     PasswordResetForm,
@@ -471,7 +472,7 @@ Thanks!""").render(Context({
 
 @method_decorator(verified_email_required, name='dispatch')
 class EventUpdateView(SuccessMessageMixin, UpdateView):
-    form_class = EventForm
+    form_class = EventUpdateForm
     model = BSDEvent
     object = None
     success_message = 'Your event was updated successfully.'
