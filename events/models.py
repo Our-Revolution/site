@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
+from enum import Enum, unique
 from contacts.models import Contact, ContactList
 import logging
 
@@ -8,18 +9,6 @@ logger = logging.getLogger(__name__)
 
 EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
-
-"""Event Promotion statuses"""
-event_promotion_status_new = 1
-event_promotion_status_approved = 10
-event_promotion_status_sent = 20
-event_promotion_status_skipped = 30
-event_promotion_status_choices = (
-    (event_promotion_status_new, 'New'),
-    (event_promotion_status_approved, 'Approved'),
-    (event_promotion_status_sent, 'Sent'),
-    (event_promotion_status_skipped, 'Skipped'),
-)
 
 
 def find_last_event_promo_sent_to_contact(contact_external_id):
@@ -44,17 +33,27 @@ def find_last_event_promo_sent_to_contact(contact_external_id):
 
     """Find last event promo sent to contact"""
     last_event_promo_sent = EventPromotion.objects.filter(
-        status=event_promotion_status_sent,
+        status=EventPromotionStatus.sent.value[0],
         contact_list__contacts=contact
     ).order_by('-date_sent').first()
 
     return last_event_promo_sent
 
 
+@unique
+class EventPromotionStatus(Enum):
+    new = (1, 'New')
+    approved = (10, 'Approved')
+    in_progress = (20, 'In Progress')
+    sent = (30, 'Sent')
+    skipped = (40, 'Skipped')
+
+
 class EventPromotion(models.Model):
 
-    contact_list = models.ForeignKey(
+    contact_list = models.OneToOneField(
         ContactList,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
@@ -75,8 +74,8 @@ class EventPromotion(models.Model):
         max_length=128
     )
     status = models.IntegerField(
-        choices=event_promotion_status_choices,
-        default=event_promotion_status_new
+        choices=[x.value for x in EventPromotionStatus],
+        default=EventPromotionStatus.new.value[0]
     )
     subject = models.CharField(default=EVENTS_DEFAULT_SUBJECT, max_length=128)
     """Assume generic external user id for event owner/host"""
