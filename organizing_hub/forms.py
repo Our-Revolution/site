@@ -1,7 +1,10 @@
 from django import forms
+from django.conf import settings
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from bsd.models import Account, BSDEvent
+
+ORGANIZING_EMAIL = settings.ORGANIZING_EMAIL
 
 new_password_max_length = 100
 new_password_min_length = 8
@@ -74,6 +77,19 @@ class EventForm(forms.ModelForm):
             'start_time': HTML5TimeInput(),
             'venue_directions': forms.Textarea(attrs={'rows': '2'}),
         }
+
+
+class EventUpdateForm(EventForm):
+    start_day = forms.DateField(
+        disabled=True,
+        label="Date",
+        help_text='To change Date, contact %s' % ORGANIZING_EMAIL,
+    )
+    start_time = forms.TimeField(
+        disabled=True,
+        label="Start Time",
+        help_text='To change Start Time, contact %s' % ORGANIZING_EMAIL,
+    )
 
 
 class GroupAdminsForm(forms.Form):
