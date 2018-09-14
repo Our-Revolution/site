@@ -33,3 +33,4 @@ class EventPromotionAdmin(admin.ModelAdmin):
     ]
     list_display_links = list_display
     list_filter = ['status']
+    raw_id_fields = ['contact_list']

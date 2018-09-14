@@ -10,6 +10,9 @@ logger = logging.getLogger(__name__)
 EVENTS_DEFAULT_FROM_NAME = settings.EVENTS_DEFAULT_FROM_NAME
 EVENTS_DEFAULT_SUBJECT = settings.EVENTS_DEFAULT_SUBJECT
 
+"""Keep message short or else it will break call to BSD api"""
+message_max_length = 2048
+
 
 def find_last_event_promo_sent_to_contact(contact_external_id):
     """
@@ -68,7 +71,7 @@ class EventPromotion(models.Model):
         null=True,
     )
     max_recipients = models.IntegerField()
-    message = models.CharField(max_length=2048)
+    message = models.CharField(max_length=message_max_length)
     sender_display_name = models.CharField(
         default=EVENTS_DEFAULT_FROM_NAME,
         max_length=128

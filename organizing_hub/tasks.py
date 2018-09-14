@@ -35,7 +35,7 @@ EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 
 def send_triggered_email(mailing_id, email, trigger_values):
     """
-    Send a triggered email with trigger_values
+    Send a triggered email with trigger_values and POST method
 
     bsd_api has a mailer_sendTriggeredEmail method but it does not support
     trigger_values
@@ -62,11 +62,8 @@ def send_triggered_email(mailing_id, email, trigger_values):
         'email': email,
         'trigger_values': trigger_values
     }
-    url_secure = bsd_api._generateRequest(
-        '/mailer/send_triggered_email',
-        query
-    )
-    return bsd_api._makeGETRequest(url_secure)
+    url_secure = bsd_api._generateRequest('/mailer/send_triggered_email')
+    return bsd_api._makePOSTRequest(url_secure, query)
 
 
 def get_buffer_width_from_miles(miles):
@@ -210,7 +207,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """If contact list is not New, then do nothing"""
     contact_list = event_promotion.contact_list
-    if contact_list.status != ContactListStatus.new.value[0]:
+    if contact_list is None or (
+        contact_list.status != ContactListStatus.new.value[0]
+    ):
         return list_size
 
     """Update list status to build in progress"""
@@ -303,6 +302,8 @@ def send_event_promotion(event_promotion_id):
         )
 
         """Check result status and increment on success"""
+        logger.debug('result status: ' + str(send_triggered_email_result.http_status))
+        logger.debug('result body: ' + str(send_triggered_email_result.body))
         if send_triggered_email_result.http_status == 202:
             sent_count += 1
 
