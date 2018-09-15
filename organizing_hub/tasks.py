@@ -119,6 +119,7 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
 
     """Get constituent location"""
+    logger.debug('get location')
     constituent_address = constituent.find('cons_addr')
     if constituent_address is None:
         return contact_list
@@ -132,10 +133,13 @@ def sync_contact_list_with_bsd_constituent(
     )
 
     """Check if contact is within max radius"""
+    logger.debug('check radius')
+    logger.debug('constituent_point: ' + str(constituent_point))
     if not max_distance_geos_area.contains(constituent_point):
         return contact_list
 
     """Check if contact has received recent event promo"""
+    logger.debug('check recent')
     last_event_promo = find_last_event_promo_sent_to_contact(constituent_id)
     if last_event_promo is not None and (
         last_event_promo.date_sent > recent_date_cutoff
@@ -143,6 +147,7 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
 
     """Create or update contact and add to list"""
+    logger.debug('add to list')
     contact, created = Contact.objects.update_or_create(
         external_id=constituent_id,
         defaults={
@@ -232,7 +237,6 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     TODO: TECH-1331: better celery logging
     TODO: TECH-1343: research SendableConsGroup
-    TODO: TECH-1344: better error/edge case handling
 
     Parameters
     ----------
@@ -347,8 +351,6 @@ def send_event_promotion(event_promotion_id):
         )
 
         """Check result status and increment on success"""
-        logger.debug('result status: ' + str(send_triggered_email_result.http_status))
-        logger.debug('result body: ' + str(send_triggered_email_result.body))
         if send_triggered_email_result.http_status == 202:
             sent_count += 1
 

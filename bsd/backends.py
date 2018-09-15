@@ -50,8 +50,8 @@ class BSDAuthenticationBackend:
             assert cons is not None
             cons_id = cons.get('id')
             assert cons_id is not None
-            assert cons.find('has_account').text == "1"
-            assert cons.find('is_banned').text == "0"
+            assert cons.findtext('has_account') == "1"
+            assert cons.findtext('is_banned') == "0"
 
             '''
             If authentication passed in BSD and no db user exists, create new
