@@ -78,6 +78,86 @@ def get_buffer_width_from_miles(miles):
     return degrees
 
 
+def sync_contact_list_with_bsd_constituent(
+    contact_list,
+    constituent,
+    max_distance_geos_area,
+    recent_date_cutoff,
+):
+    """
+    Sync Contact List with BSD constituent, with param for max distance from
+    point
+
+    Parameters
+    ----------
+    contact_list : ContactList
+        ContactList that we want constituent synced with
+    constituent : xml
+        Constituent should be from BSD api in xml format
+    max_distance_geos_area : GEOSGeometry
+        Max distance GEOSGeometry to limit list radius
+    recent_date_cutoff : datetime
+        Date cutoff for contacts who received event promo recently
+
+    Returns
+        -------
+        ContactList
+            Returns updated ContactList
+    """
+
+    """Get constituent id"""
+    constituent_id = constituent.get('id')
+
+    """Check if constituent email is subscribed"""
+    cons_email = constituent.find('cons_email')
+    if cons_email is None:
+        return contact_list
+    is_subscribed = False
+    email_address = cons_email.findtext('email')
+    is_subscribed = cons_email.findtext('is_subscribed') == '1'
+    if email_address is None or not is_subscribed:
+        return contact_list
+
+    """Get constituent location"""
+    constituent_address = constituent.find('cons_addr')
+    if constituent_address is None:
+        return contact_list
+    constituent_latitude = constituent_address.findtext('latitude')
+    constituent_longitude = constituent_address.findtext('longitude')
+    if constituent_latitude is None or constituent_longitude is None:
+        return contact_list
+    constituent_point = Point(
+        y=float(constituent_latitude),
+        x=float(constituent_longitude)
+    )
+
+    """Check if contact is within max radius"""
+    if not max_distance_geos_area.contains(constituent_point):
+        return contact_list
+
+    """Check if contact has received recent event promo"""
+    last_event_promo = find_last_event_promo_sent_to_contact(constituent_id)
+    if last_event_promo is not None and (
+        last_event_promo.date_sent > recent_date_cutoff
+    ):
+        return contact_list
+
+    """Create or update contact and add to list"""
+    contact, created = Contact.objects.update_or_create(
+        external_id=constituent_id,
+        defaults={
+            'external_id': constituent_id,
+            'email_address': email_address,
+            'first_name': constituent.findtext('firstname'),
+            'last_name': constituent.findtext('lastname'),
+            'point': constituent_point,
+        },
+    )
+    contact_list.contacts.add(contact)
+
+    return contact_list
+
+
 def sync_contact_list_with_bsd_constituents(
     contact_list,
     constituents,
@@ -117,51 +197,16 @@ def sync_contact_list_with_bsd_constituents(
         days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
     )
 
+    """Loop through constituents and sync each to list"""
     for constituent in constituents:
+        sync_contact_list_with_bsd_constituent(
+            contact_list,
+            constituent,
+            max_distance_geos_area,
+            date_cutoff
+        )
 
-        """Check if unsubscribed, otherwise """
-        cons_email = constituent.find('cons_email')
-        if int(cons_email.find('is_subscribed').text) == 1:
-
-            """Get constituent data"""
-            constituent_address = constituent.find('cons_addr')
-            constituent_email = cons_email.find('email').text
-            constituent_id = constituent.get('id')
-            # TODO: TECH-1344: handle missing lat/long cases?
-            constituent_latitude = float(
-                constituent_address.find('latitude').text
-            )
-            constituent_longitude = float(
-                constituent_address.find('longitude').text
-            )
-            constituent_point = Point(
-                y=constituent_latitude,
-                x=constituent_longitude
-            )
-
-            """Save contact to list if within max distance, otherwise do nothing"""
-            if max_distance_geos_area.contains(constituent_point):
-
-                """Add to contact list if they havent received recent promo"""
-                last_event_promo = find_last_event_promo_sent_to_contact(
-                    constituent_id
-                )
-                if last_event_promo is None or (
-                    last_event_promo.date_sent < date_cutoff
-                ):
-                    contact, created = Contact.objects.update_or_create(
-                        external_id=constituent_id,
-                        defaults={
-                            'external_id': constituent_id,
-                            'email_address': constituent_email,
-                            'first_name': constituent.find('firstname').text,
-                            'last_name': constituent.find('lastname').text,
-                            'point': constituent_point,
-                        },
-                    )
-                    contact_list.contacts.add(contact)
-
-    """Get list limit from max contacts if valid, otherwise default"""
+    """Get list limit from max contacts if valid, otherwise use default"""
     if max_contacts > 0 and max_contacts < EVENTS_PROMOTE_MAX_LIST_SIZE:
         list_limit = max_contacts
     else:
