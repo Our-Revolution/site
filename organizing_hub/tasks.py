@@ -119,7 +119,6 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
 
     """Get constituent location"""
-    logger.debug('get location')
     constituent_address = constituent.find('cons_addr')
     if constituent_address is None:
         return contact_list
@@ -133,13 +132,10 @@ def sync_contact_list_with_bsd_constituent(
     )
 
     """Check if contact is within max radius"""
-    logger.debug('check radius')
-    logger.debug('constituent_point: ' + str(constituent_point))
     if not max_distance_geos_area.contains(constituent_point):
         return contact_list
 
     """Check if contact has received recent event promo"""
-    logger.debug('check recent')
     last_event_promo = find_last_event_promo_sent_to_contact(constituent_id)
     if last_event_promo is not None and (
         last_event_promo.date_sent > recent_date_cutoff
@@ -147,7 +143,6 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
 
     """Create or update contact and add to list"""
-    logger.debug('add to list')
     contact, created = Contact.objects.update_or_create(
         external_id=constituent_id,
         defaults={
