@@ -105,8 +105,10 @@ def find_event_by_id_obfuscated(event_id_obfuscated):
     Returns
         -------
         BSDEvent
-            Returns Event model that matches event id
+            Returns Event model that matches event id, or None
     """
+
+    event = None
 
     '''
     Get Event from BSD
@@ -132,8 +134,15 @@ def find_event_by_id_obfuscated(event_id_obfuscated):
         request_type,
         body
     )
-    event_json = json.loads(api_result.body)
-    event = BSDEvent.objects.from_json(event_json)
+    logger.debug(
+        'BSD get_event_details result status: ' + str(api_result.http_status)
+    )
+    """BSD api returns 200 even when there is no event"""
+    if api_result.http_status == 200:
+        event_json = json.loads(api_result.body)
+        logger.debug('Event JSON from BSD api: ' + str(event_json))
+        if event_json != "The event_id_obfuscated '%s' does not exist in the system." % event_id_obfuscated:
+            event = BSDEvent.objects.from_json(event_json)
 
     return event
 
@@ -190,6 +199,21 @@ class BSDProfile(models.Model):
 class BSDEventManager(models.Manager):
 
     def from_json(self, data):
+        """
+        Get BSD Event from JSON data
+
+        Parameters
+        ----------
+        data : str
+            JSON data for event
+
+        Returns
+            -------
+            BSDEvent
+                Returns BSD Event based on JSON data, or None for invalid data
+        """
+
+        logger.debug('Get BSD Event from json data: ' + str(data))
 
         """Assume duration type = minutes for BSD data"""
         duration_type = duration_type_minutes
@@ -212,6 +236,9 @@ class BSDEventManager(models.Manager):
                 '%Y-%m-%d %H:%M:%S'
             )
             venue_state_or_territory = data["venue_state_cd"]
+        except TypeError:
+            """This usually means data is invalid"""
+            return None
 
         """Set duration to a positive integer if possible"""
         """TODO: support all day events (-1)?"""

@@ -35,6 +35,7 @@ from organizing_hub.decorators import verified_email_required
 from organizing_hub.forms import (
     AccountForm,
     EventForm,
+    EventUpdateForm,
     GroupAdminsForm,
     PasswordChangeForm,
     PasswordResetForm,
@@ -115,16 +116,16 @@ def add_local_group_role_for_user(user, local_group, local_group_role_id):
 
 def is_event_owner(user, event):
     """Check if user cons_id matches event cons_id"""
+    is_creator = False
 
-    if hasattr(user, 'bsdprofile'):
+    if hasattr(user, 'bsdprofile') and event is not None:
         bsd_profile = user.bsdprofile
         cons_id = bsd_profile.cons_id
         has_valid_cons_id = cons_id != BSDProfile.cons_id_default
         if has_valid_cons_id:
             is_creator = cons_id == event.creator_cons_id
-            return is_creator
 
-    return False
+    return is_creator
 
 
 def remove_local_group_role_for_user(user, local_group, local_group_role_id):
@@ -471,7 +472,7 @@ Thanks!""").render(Context({
 
 @method_decorator(verified_email_required, name='dispatch')
 class EventUpdateView(SuccessMessageMixin, UpdateView):
-    form_class = EventForm
+    form_class = EventUpdateForm
     model = BSDEvent
     object = None
     success_message = 'Your event was updated successfully.'
@@ -479,9 +480,11 @@ class EventUpdateView(SuccessMessageMixin, UpdateView):
 
     """Check if user cons_id matches event cons_id"""
     def can_access(self):
+        is_owner = False
         event = self.object
-        user = self.request.user
-        is_owner = is_event_owner(user, event)
+        if event is not None:
+            user = self.request.user
+            is_owner = is_event_owner(user, event)
         return is_owner
 
     def form_valid(self, form):
