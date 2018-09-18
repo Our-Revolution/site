@@ -9335,9 +9335,6 @@ ul.list-plain,
         top: 5px;
         left: auto;
         display: block; } }
-  @media screen and (max-width: 479px) {
-    .navbar .navbar__join {
-      display: none; } }
   .navbar__sub ul {
     margin: 0; }
   .navbar__sub .nav > li > a {

@@ -464,12 +464,6 @@
 
   }
 
-  @include until($small) {
-    .navbar__join {
-      display: none;
-    }
-  }
-
   &__sub {
 
     ul {

@@ -22,6 +22,7 @@ class EventPromotionAdmin(admin.ModelAdmin):
     ]
     form = EventPromotionAdminForm
     list_display = [
+        'id',
         'event_name',
         'event_external_id',
         'user_external_id',
@@ -32,3 +33,4 @@ class EventPromotionAdmin(admin.ModelAdmin):
     ]
     list_display_links = list_display
     list_filter = ['status']
+    raw_id_fields = ['contact_list']

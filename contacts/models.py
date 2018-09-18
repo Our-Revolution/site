@@ -2,20 +2,11 @@ from __future__ import unicode_literals
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.db.models.functions import Distance
 from django.db import models
+from enum import Enum, unique
 from phonenumber_field.modelfields import PhoneNumberField
 import logging
 
 logger = logging.getLogger(__name__)
-
-"""Contact List statuses"""
-contact_list_status_new = 1
-contact_list_status_in_progress = 10
-contact_list_status_complete = 20
-contact_list_status_choices = (
-    (contact_list_status_new, 'New'),
-    (contact_list_status_in_progress, 'In Progress (building list)'),
-    (contact_list_status_complete, 'Complete (ready to use)'),
-)
 
 name_max_length = 255
 
@@ -69,6 +60,13 @@ class Contact(models.Model):
         return str(self.id) + (' ' + self.name if self.name else '')
 
 
+@unique
+class ContactListStatus(Enum):
+    new = (1, 'New')
+    in_progress = (10, 'In Progress (building list)')
+    complete = (20, 'Complete (ready to use)')
+
+
 class ContactList(models.Model):
     """
     Contact List Model
@@ -81,8 +79,8 @@ class ContactList(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=name_max_length)
     status = models.IntegerField(
-        choices=contact_list_status_choices,
-        default=contact_list_status_new
+        choices=[x.value for x in ContactListStatus],
+        default=ContactListStatus.new.value[0]
     )
 
     def __unicode__(self):

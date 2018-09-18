@@ -211,8 +211,8 @@ class PasswordResetRequestForm(AuthPasswordResetRequestForm):
                 assert cons is not None
                 cons_id = cons.get('id')
                 assert cons_id is not None
-                assert cons.find('has_account').text == "1"
-                assert cons.find('is_banned').text == "0"
+                assert cons.findtext('has_account') == "1"
+                assert cons.findtext('is_banned') == "0"
 
                 """Create user in db for valid BSD account"""
                 user = User.objects.create_user(

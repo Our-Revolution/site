@@ -3,10 +3,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from contacts.models import ContactList
-from events.models import EventPromotion, event_promotion_status_approved
+from contacts.models import ContactList, ContactListStatus
+from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
-from organizing_hub.tasks import build_contact_list_for_event_promotion
+from organizing_hub.tasks import (
+    build_contact_list_for_event_promotion,
+    send_event_promotion,
+)
 from .views import (
     add_local_group_role_for_user,
     remove_local_group_role_for_user
@@ -91,24 +94,50 @@ def sync_group_leader_affiliation_for_user(user):
         )
 
 
+@receiver(post_save, sender=ContactList)
+def contact_list_post_save_handler(instance, **kwargs):
+    """
+    Contact List post-save handler
+
+    Start task to send approved event promotion if contact list is complete and
+    list is not empty
+    """
+
+    contact_list = instance
+    if contact_list.status == ContactListStatus.complete.value[0] and (
+        contact_list.contacts.count() > 0
+    ):
+
+        """Check if contact list is attached to approved event promotion"""
+        if hasattr(contact_list, 'eventpromotion'):
+            event_promotion = contact_list.eventpromotion
+
+            """TODO: debug why this condition is not working as expected"""
+            if event_promotion.status == EventPromotionStatus.approved.value[0]:
+
+                """Call async task to send event promotion"""
+                send_event_promotion.delay(event_promotion.id)
+
+
 @receiver(post_save, sender=EventPromotion)
 def event_promotion_post_save_handler(instance, **kwargs):
     """
     Generate contact list if event promotion is approved and does not have a
     contact list yet
     """
-    status = instance.status
-    contact_list = instance.contact_list
-    if status == event_promotion_status_approved and contact_list is None:
+    event_promotion = instance
+    status = event_promotion.status
+    contact_list = event_promotion.contact_list
+    if status == EventPromotionStatus.approved.value[0] and contact_list is None:
 
         """Create new contact list and add to event promotion"""
-        list_name = 'List for Event Promotion: ' + str(instance)
+        list_name = 'List for Event Promotion: ' + str(event_promotion)
         contact_list = ContactList.objects.create(name=list_name)
-        instance.contact_list = contact_list
-        instance.save()
+        event_promotion.contact_list = contact_list
+        event_promotion.save()
 
         """Call async task to build list"""
-        build_contact_list_for_event_promotion.delay(instance.id)
+        build_contact_list_for_event_promotion.delay(event_promotion.id)
 
 
 @receiver(post_save, sender=LocalGroup)
