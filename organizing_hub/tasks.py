@@ -200,7 +200,7 @@ def sync_contact_list_with_bsd_constituents(
 
     """Loop through constituents and sync each to list"""
     for constituent in constituents:
-        """Check if subscribed and member of sendable cons group, otherwise """
+        """Check if unsubscribed and member of sendable cons group, otherwise """
         is_sendable = False
         cons_email = constituent.find('cons_email')
         cons_groups = constituent.findall('cons_group')

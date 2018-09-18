@@ -126,6 +126,9 @@ def find_event_by_id_obfuscated(event_id_obfuscated):
         'values': json.dumps(query)
     }
 
+    logger.debug('query: ' + str(query))
+    logger.debug('body: ' + str(body))
+
     api_result = bsd_api.doRequest(
         api_call,
         api_params,
