@@ -11,7 +11,7 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution || true
 
 echo "Restart celery"
-# Stop main process with graceful shutdown, then auto-restart with new code
+# Stop celery main process gracefully and auto-restart
 celery -A ourrevolution inspect stats | grep '"pid": ' | awk '{print $2}' | awk -F, '{print $1}' | xargs kill -TERM
 
 echo "Start server"

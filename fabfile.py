@@ -149,4 +149,7 @@ def config_set(**kwargs):
                 time.sleep(2)
                 run('supervisorctl reload -c /home/ubuntu/ourrevolution/supervisord.conf')
 
+                # Stop celery main process gracefully and auto-restart
+                run('celery -A ourrevolution inspect stats | grep \'"pid": \' | awk \'{print $2}\' | awk -F, \'{print $1}\' | xargs kill -TERM')
+
                 run('supervisorctl start gunicorn')
