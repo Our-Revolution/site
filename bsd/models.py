@@ -65,6 +65,11 @@ def find_constituents_by_state_cd(state_cd):
     filter = {}
     filter['state_cd'] = str(state_cd)
     filter['is_subscribed'] = True
+
+    """Check if member of sendable cons group"""
+    if EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
+        filter['cons_group'] = EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
+
     bundles = ['primary_cons_addr', 'primary_cons_email','cons_group']
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202

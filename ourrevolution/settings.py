@@ -86,15 +86,9 @@ EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = int(os.environ.get(
     'EVENTS_PROMOTE_RECENT_CUTOFF_DAYS',
     14
 ))
-EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ENABLED = bool(int(os.environ.get(
-    'EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ENABLED',
-    0
-)))
-"""Default to -1 so we make sure we don't pull a real cons group if
-config isn't set, since cons groups start at 1"""
-EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = int(os.environ.get(
+EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = str(os.environ.get(
     'EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID',
-    -1
+    None
 ))
 
 """Local Groups Roles"""
