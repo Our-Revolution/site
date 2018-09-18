@@ -114,7 +114,6 @@ def sync_contact_list_with_bsd_constituent(
     is_subscribed = False
     email_address = cons_email.findtext('email')
     is_subscribed = cons_email.findtext('is_subscribed') == '1'
-
     if email_address is None or not is_subscribed:
         return contact_list
 
