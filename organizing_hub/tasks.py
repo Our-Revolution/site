@@ -126,6 +126,7 @@ def sync_contact_list_with_bsd_constituent(
             is_sendable = True
 
     if email_address is None or not is_subscribed or not is_sendable:
+        print 'exiting'
         return contact_list
 
     """Get constituent location"""
