@@ -31,6 +31,7 @@ EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ENABLED = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ENABLED
 EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
 
 
@@ -117,13 +118,16 @@ def sync_contact_list_with_bsd_constituent(
     email_address = cons_email.findtext('email')
     is_subscribed = cons_email.findtext('is_subscribed') == '1'
 
-    """Check if member of sendable cons group"""
-    cons_groups = constituent.findall('cons_group')
-    is_sendable = False
+    """Check if member of sendable cons group if enabled"""
+    if EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ENABLED:
+        cons_groups = constituent.findall('cons_group')
+        is_sendable = False
 
-    for cons_group in cons_groups:
-        if int(cons_group.get('id')) == EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
-            is_sendable = True
+        for cons_group in cons_groups:
+            if int(cons_group.get('id')) == EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
+                is_sendable = True
+    else:
+        is_sendable = True
 
     if email_address is None or not is_subscribed or not is_sendable:
         return contact_list
