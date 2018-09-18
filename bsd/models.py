@@ -45,7 +45,8 @@ def assert_valid_account(api_result):
 
 def find_constituents_by_state_cd(state_cd):
     """
-    Find BSD constituents by state/territory and wait for deferred result
+    Find BSD constituents by state/territory with primary email address,
+    primary address and constituent groups bundled and wait for deferred result
 
     TODO: make Constituent model and return that instead of xml
 

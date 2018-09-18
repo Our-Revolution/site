@@ -28,6 +28,7 @@ bsd_api = BSD().api
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
 
 
 def get_buffer_width_from_miles(miles):
@@ -82,15 +83,16 @@ def sync_contact_list_with_bsd_constituents(
     )
 
     for constituent in constituents:
-
         """Check if unsubscribed and member of sendable cons group, otherwise """
+        is_sendable = False
         cons_email = constituent.find('cons_email')
-        cons_groups = constituent.find('cons_group')
+        cons_groups = constituent.findall('cons_group')
 
-        logger.debug('cons_groups: ' + str(cons_groups))
+        for cons_group in cons_groups:
+            if int(cons_group.get('id')) == EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
+                is_sendable = True
 
-        if int(cons_email.find('is_subscribed').text) == 1:
-
+        if int(cons_email.find('is_subscribed').text) == 1 and is_sendable:
             """Get constituent data"""
             constituent_address = constituent.find('cons_addr')
             constituent_email = cons_email.find('email').text
