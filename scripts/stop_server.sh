@@ -10,7 +10,7 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
-echo "Stop Celery"
+echo "Stop celery"
 # Stop main process only with graceful shutdown so worker tasks can finish
 celery -A ourrevolution inspect stats | grep '"pid": ' | awk '{print $2}' | awk -F, '{print $1}' | xargs kill -TERM
 
