@@ -141,7 +141,7 @@ def config_set(**kwargs):
 
                 run('supervisorctl stop gunicorn')
 
-                # TODO: need better graceful shutdown for celery tasks
+                # TODO: TECH-1402: need better graceful shutdown for celery tasks
                 # Wait for celery tasks in progress to finish
                 time.sleep(600)
 
