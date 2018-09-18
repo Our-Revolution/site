@@ -10,8 +10,8 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
-echo "Restart Celery"
-supervisorctl restart celery
+echo "Start Celery"
+supervisorctl start celery
 
 echo "Start server"
 supervisorctl start gunicorn
