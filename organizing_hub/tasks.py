@@ -116,7 +116,16 @@ def sync_contact_list_with_bsd_constituent(
     is_subscribed = False
     email_address = cons_email.findtext('email')
     is_subscribed = cons_email.findtext('is_subscribed') == '1'
-    if email_address is None or not is_subscribed:
+
+    """Check if member of sendable cons group"""
+    cons_groups = constituent.findall('cons_group')
+    is_sendable = False
+
+    for cons_group in cons_groups:
+        if int(cons_group.get('id')) == EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
+            is_sendable = True
+
+    if email_address is None or not is_subscribed or not is_sendable:
         return contact_list
 
     """Get constituent location"""
@@ -200,55 +209,14 @@ def sync_contact_list_with_bsd_constituents(
 
     """Loop through constituents and sync each to list"""
     for constituent in constituents:
-        """Check if unsubscribed and member of sendable cons group, otherwise """
-        is_sendable = False
-        cons_email = constituent.find('cons_email')
-        cons_groups = constituent.findall('cons_group')
+        sync_contact_list_with_bsd_constituent(
+            contact_list,
+            constituent,
+            max_distance_geos_area,
+            date_cutoff
+        )
 
-        for cons_group in cons_groups:
-            if int(cons_group.get('id')) == EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
-                is_sendable = True
-
-        if int(cons_email.find('is_subscribed').text) == 1 and is_sendable:
-            """Get constituent data"""
-            constituent_address = constituent.find('cons_addr')
-            constituent_email = cons_email.find('email').text
-            constituent_id = constituent.get('id')
-            # TODO: TECH-1344: handle missing lat/long cases?
-            constituent_latitude = float(
-                constituent_address.find('latitude').text
-            )
-            constituent_longitude = float(
-                constituent_address.find('longitude').text
-            )
-            constituent_point = Point(
-                y=constituent_latitude,
-                x=constituent_longitude
-            )
-
-            """Save contact to list if within max distance, otherwise do nothing"""
-            if max_distance_geos_area.contains(constituent_point):
-
-                """Add to contact list if they havent received recent promo"""
-                last_event_promo = find_last_event_promo_sent_to_contact(
-                    constituent_id
-                )
-                if last_event_promo is None or (
-                    last_event_promo.date_sent < date_cutoff
-                ):
-                    contact, created = Contact.objects.update_or_create(
-                        external_id=constituent_id,
-                        defaults={
-                            'external_id': constituent_id,
-                            'email_address': constituent_email,
-                            'first_name': constituent.find('firstname').text,
-                            'last_name': constituent.find('lastname').text,
-                            'point': constituent_point,
-                        },
-                    )
-                    contact_list.contacts.add(contact)
-
-    """Get list limit from max contacts if valid, otherwise default"""
+    """Get list limit from max contacts if valid, otherwise use default"""
     if max_contacts > 0 and max_contacts < EVENTS_PROMOTE_MAX_LIST_SIZE:
         list_limit = max_contacts
     else:
@@ -273,7 +241,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact list is not new then do nothing. Otherwise generate list and save.
 
     TODO: TECH-1331: better celery logging
-    TODO: TECH-1344: better error/edge case handling
+    TODO: TECH-1343: research SendableConsGroup
 
     Parameters
     ----------
