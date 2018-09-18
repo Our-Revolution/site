@@ -50,6 +50,8 @@ class EventPromotionStatus(Enum):
     in_progress = (20, 'In Progress')
     sent = (30, 'Sent')
     skipped = (40, 'Skipped')
+    event_not_approved = (50, 'Event Not Approved')
+    expired = (60, 'Expired')
 
 
 class EventPromotion(models.Model):

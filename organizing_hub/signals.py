@@ -112,11 +112,8 @@ def contact_list_post_save_handler(instance, **kwargs):
         if hasattr(contact_list, 'eventpromotion'):
             event_promotion = contact_list.eventpromotion
 
-            """TODO: debug why this condition is not working as expected"""
-            if event_promotion.status == EventPromotionStatus.approved.value[0]:
-
-                """Call async task to send event promotion"""
-                send_event_promotion.delay(event_promotion.id)
+            """Call async task to send event promotion"""
+            send_event_promotion(event_promotion.id)
 
 
 @receiver(post_save, sender=EventPromotion)
@@ -128,17 +125,19 @@ def event_promotion_post_save_handler(instance, **kwargs):
     event_promotion = instance
     status = event_promotion.status
     contact_list = event_promotion.contact_list
-    if status == EventPromotionStatus.approved.value[0] and contact_list is None:
+    if status == EventPromotionStatus.approved.value[0]:
+        if contact_list is None:
+            """Create new contact list and add to event promotion"""
+            list_name = 'List for Event Promotion: ' + str(event_promotion)
+            contact_list = ContactList.objects.create(name=list_name)
+            event_promotion.contact_list = contact_list
+            event_promotion.save()
 
-        """Create new contact list and add to event promotion"""
-        list_name = 'List for Event Promotion: ' + str(event_promotion)
-        contact_list = ContactList.objects.create(name=list_name)
-        event_promotion.contact_list = contact_list
-        event_promotion.save()
-
-        """Call async task to build list"""
-        build_contact_list_for_event_promotion.delay(event_promotion.id)
-
+            """Call async task to build list"""
+            build_contact_list_for_event_promotion(event_promotion.id)
+        else:
+            """Resave contact list to trigger post_save logic"""
+            contact_list.save()
 
 @receiver(post_save, sender=LocalGroup)
 def local_group_post_save_handler(instance, **kwargs):
