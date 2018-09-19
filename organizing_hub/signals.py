@@ -129,17 +129,17 @@ def event_promotion_post_save_handler(instance, **kwargs):
     status = event_promotion.status
     contact_list = event_promotion.contact_list
     if status == EventPromotionStatus.approved.value[0] and contact_list is None:
-            """Create new contact list and add to event promotion"""
-            list_name = 'List for Event Promotion: ' + str(event_promotion)
-            contact_list = ContactList.objects.create(name=list_name)
-            event_promotion.contact_list = contact_list
-            event_promotion.save()
+        """Create new contact list and add to event promotion"""
+        list_name = 'List for Event Promotion: ' + str(event_promotion)
+        contact_list = ContactList.objects.create(name=list_name)
+        event_promotion.contact_list = contact_list
+        event_promotion.save()
 
-            """Call async task to build list"""
-            build_contact_list_for_event_promotion.delay(event_promotion.id)
+        """Call async task to build list"""
+        build_contact_list_for_event_promotion.delay(event_promotion.id)
 
     """Clear the contact list if it requires clearing"""
-    if event_promotion.requires_list_clear and contact_list is not None:
+    elif event_promotion.requires_list_clear and contact_list is not None:
         event_promotion.contact_list = None
         event_promotion.save()
 
