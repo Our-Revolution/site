@@ -141,6 +141,10 @@ def config_set(**kwargs):
 
                 run('supervisorctl stop gunicorn')
 
+                # TODO: TECH-1402: need better graceful shutdown for celery tasks
+                # Wait for celery tasks in progress to finish
+                time.sleep(600)
+
                 kill_the_cat = run('cat supervisord.pid | xargs kill', warn_only=True)
                 if kill_the_cat:
                     run('pkill supervisord', warn_only=True)
