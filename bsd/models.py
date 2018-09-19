@@ -398,8 +398,7 @@ class BSDEvent(models.Model):
     start_datetime_utc = property(_get_start_datetime_utc)
 
     def _is_approved(self):
-        if not self.flag_approval == 1:
-            return True
+        return self.flag_approval != 1
     is_approved = property(_is_approved)
 
     # Custom logic to create event via BSD api
