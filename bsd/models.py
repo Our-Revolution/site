@@ -14,6 +14,7 @@ import datetime
 import logging
 import json
 import time
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -393,6 +394,21 @@ class BSDEvent(models.Model):
     def _get_absolute_url(self):
         return get_bsd_event_url(self.event_id_obfuscated)
     absolute_url = property(_get_absolute_url)
+
+    def _get_start_datetime_utc(self):
+        event_time_zone = pytz.timezone(self.start_time_zone)
+        naive_datetime = datetime.datetime.strptime(
+            str(self.start_day) + ' ' + str(self.start_time),
+            '%Y-%m-%d %H:%M:%S'
+        )
+        local_datetime = event_time_zone.localize(naive_datetime)
+        utc_datetime = local_datetime.astimezone(pytz.utc)
+        return utc_datetime
+    start_datetime_utc = property(_get_start_datetime_utc)
+
+    def _is_approved(self):
+        return self.flag_approval != 1
+    is_approved = property(_is_approved)
 
     # Custom logic to create event via BSD api
     def create_event(self, *args, **kwargs):

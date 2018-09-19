@@ -50,7 +50,15 @@ class EventPromotionStatus(Enum):
     in_progress = (20, 'In Progress')
     sent = (30, 'Sent')
     skipped = (40, 'Skipped')
+    event_not_approved = (50, 'Event Not Approved')
+    expired = (60, 'Expired')
 
+"""Statuses that require clearing of the contact list"""
+event_promotion_statuses_for_list_clear = [
+    EventPromotionStatus.skipped,
+    EventPromotionStatus.event_not_approved,
+    EventPromotionStatus.expired
+]
 
 class EventPromotion(models.Model):
 
@@ -83,6 +91,13 @@ class EventPromotion(models.Model):
     subject = models.CharField(default=EVENTS_DEFAULT_SUBJECT, max_length=128)
     """Assume generic external user id for event owner/host"""
     user_external_id = models.CharField(db_index=True, max_length=128)
+
+    def _requires_list_clear(self):
+        """Check if status is in list of statuses that requires a list clear"""
+        return self.status in [
+            x.value[0] for x in event_promotion_statuses_for_list_clear
+        ]
+    requires_list_clear = property(_requires_list_clear)
 
     def __unicode__(self):
         return str(self.id) + " | Event: " + self.event_external_id + " | User: " + self.user_external_id + (

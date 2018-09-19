@@ -299,8 +299,8 @@ def send_event_promotion(event_promotion_id):
     """
     Send event promotion via BSD triggered emails
 
-    Requires that event promotion is approved and list is complete. Otherwise
-    do nothing.
+    Requires that event and event promotion are approved and list is complete.
+    Otherwise do nothing.
 
     Parameters
     ----------
@@ -322,6 +322,24 @@ def send_event_promotion(event_promotion_id):
     """If event promotion is not approved, then do nothing"""
     event_promotion = EventPromotion.objects.get(id=event_promotion_id)
     if event_promotion.status != EventPromotionStatus.approved.value[0]:
+        return sent_count
+
+    event = find_event_by_id_obfuscated(event_promotion.event_external_id)
+
+    if event:
+        """If event is not approved, then do nothing"""
+        if not event.is_approved:
+            event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
+            event_promotion.save()
+            return sent_count
+
+        """If event is in past, then do nothing"""
+        if event.start_datetime_utc <= timezone.now():
+            event_promotion.status = EventPromotionStatus.expired.value[0]
+            event_promotion.save()
+            return sent_count
+    else:
+        """If no event, do nothing"""
         return sent_count
 
     """If contact list is not complete, then do nothing"""
