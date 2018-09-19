@@ -55,7 +55,7 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     state_cd : str
         BSD field for state/territory code, 2 characters
 
-    cons_group : int
+    cons_group : str or list of str
         BSD constituent group id
 
     Returns
