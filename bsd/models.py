@@ -382,11 +382,6 @@ class BSDEvent(models.Model):
             return 'Approved'
     status = property(_get_status)
 
-    def _is_approved(self):
-        if not self.flag_approval == 1:
-            return True
-    is_approved = property(_is_approved)
-
     def _get_absolute_url(self):
         return get_bsd_event_url(self.event_id_obfuscated)
     absolute_url = property(_get_absolute_url)
@@ -401,6 +396,11 @@ class BSDEvent(models.Model):
         utc_datetime = local_datetime.astimezone(pytz.utc)
         return utc_datetime
     start_datetime_utc = property(_get_start_datetime_utc)
+
+    def _is_approved(self):
+        if not self.flag_approval == 1:
+            return True
+    is_approved = property(_is_approved)
 
     # Custom logic to create event via BSD api
     def create_event(self, *args, **kwargs):
