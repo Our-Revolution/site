@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from allauth.account.models import EmailAddress
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required

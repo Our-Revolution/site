@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 from bsd.models import get_bsd_event_url
 
