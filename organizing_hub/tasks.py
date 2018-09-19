@@ -31,6 +31,7 @@ EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
 
 
 def send_triggered_email(mailing_id, email, trigger_values):
@@ -266,7 +267,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     event_state_cd = event.venue_state_or_territory
 
     """Get constitents by state first and we will filter it down later"""
-    constituents = find_constituents_by_state_cd(event_state_cd)
+    constituents = find_constituents_by_state_cd(
+        event_state_cd, EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
+    )
 
     """Stop if we did not find constituents for some reason"""
     if constituents is None:

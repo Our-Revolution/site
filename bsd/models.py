@@ -43,7 +43,7 @@ def assert_valid_account(api_result):
     assert cons.findtext('is_banned') == "0"
 
 
-def find_constituents_by_state_cd(state_cd):
+def find_constituents_by_state_cd(state_cd, cons_group=None):
     """
     Find BSD constituents by state/territory with primary email address,
     primary address and constituent groups bundled and wait for deferred result
@@ -67,10 +67,10 @@ def find_constituents_by_state_cd(state_cd):
     filter['is_subscribed'] = True
 
     """Check if member of sendable cons group"""
-    if EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID:
-        filter['cons_group'] = EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
+    if cons_group:
+        filter['cons_group'] = cons_group
 
-    bundles = ['primary_cons_addr', 'primary_cons_email','cons_group']
+    bundles = ['primary_cons_addr', 'primary_cons_email']
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202
     constituents_deferred_id = constituents_result.body
