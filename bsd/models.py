@@ -55,6 +55,9 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     state_cd : str
         BSD field for state/territory code, 2 characters
 
+    cons_group : int
+        BSD constituent group id
+
     Returns
         -------
         xml
@@ -66,7 +69,7 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     filter['state_cd'] = str(state_cd)
     filter['is_subscribed'] = True
 
-    """Check if member of sendable cons group"""
+    """Filter by cons_group if param is present"""
     if cons_group:
         filter['cons_group'] = cons_group
 
