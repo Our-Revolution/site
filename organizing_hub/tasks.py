@@ -321,18 +321,22 @@ def send_event_promotion(event_promotion_id):
     if event_promotion.status != EventPromotionStatus.approved.value[0]:
         return sent_count
 
-    """If event is not approved, then do nothing"""
     event = find_event_by_id_obfuscated(event_promotion.event_external_id)
 
-    if event.status != 'Approved':
-        event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
-        event_promotion.save()
-        return sent_count
+    if event:
+        """If event is not approved, then do nothing"""
+        if not event.is_approved:
+            event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
+            event_promotion.save()
+            return sent_count
 
-    """If event is in past, then do nothing"""
-    if event.start_datetime_utc <= timezone.now():
-        event_promotion.status = EventPromotionStatus.expired.value[0]
-        event_promotion.save()
+        """If event is in past, then do nothing"""
+        if event.start_datetime_utc <= timezone.now():
+            event_promotion.status = EventPromotionStatus.expired.value[0]
+            event_promotion.save()
+            return sent_count
+    else:
+        """If no event, do nothing"""
         return sent_count
 
     """If contact list is not complete, then do nothing"""
