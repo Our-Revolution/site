@@ -239,6 +239,9 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     event_promotion_id : int
         EventPromotion id
 
+    cons_group : int
+        BSD constituent group id
+
     Returns
         -------
         int
