@@ -112,8 +112,11 @@ def contact_list_post_save_handler(instance, **kwargs):
         if hasattr(contact_list, 'eventpromotion'):
             event_promotion = contact_list.eventpromotion
 
-            """Call async task to send event promotion"""
-            send_event_promotion(event_promotion.id)
+            """TODO: debug why this condition is not working as expected"""
+            if event_promotion.status == EventPromotionStatus.approved.value[0]:
+
+                """Call async task to send event promotion"""
+                send_event_promotion.delay(event_promotion.id)
 
 
 @receiver(post_save, sender=EventPromotion)
@@ -134,7 +137,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
             event_promotion.save()
 
             """Call async task to build list"""
-            build_contact_list_for_event_promotion(event_promotion.id)
+            build_contact_list_for_event_promotion.delay(event_promotion.id)
         else:
             """Resave contact list to trigger post_save logic"""
             contact_list.save()
