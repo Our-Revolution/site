@@ -12,7 +12,8 @@ workon ourrevolution || true
 
 echo "Restart celery"
 # Stop celery main process gracefully and auto-restart
-celery -A ourrevolution inspect stats | grep '"pid": ' | awk '{print $2}' | awk -F, '{print $1}' | xargs kill -TERM
+# TODO: TECH-1294 debug error code
+celery -A ourrevolution inspect stats | grep '"pid": ' | awk '{print $2}' | awk -F, '{print $1}' | xargs kill -TERM || true
 
 echo "Start server"
 supervisorctl start gunicorn
