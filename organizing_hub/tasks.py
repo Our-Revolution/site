@@ -21,6 +21,9 @@ import datetime
 import logging
 import json
 import time
+import pytz
+
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -323,12 +326,31 @@ def send_event_promotion(event_promotion_id):
 
     """If event is not approved, then do nothing"""
     event = find_event_by_id_obfuscated(event_promotion.event_external_id)
-    logger.debug('Event status: ' + str(event.status))
 
     if event.status != 'Approved':
         event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
         event_promotion.save()
         return sent_count
+
+    """If event is in past, then do nothing"""
+
+    # event_start_time = datetime.time(int(event.start_time), tzinfo=str(event.start_time_zone))
+    # event_start_datetime = datetime.datetime.combine(event.start_day,event_start_time)
+
+    logger.debug('Event start day: ' + str(event.start_day))
+    logger.debug('Event start time: ' + str(event.start_time))
+    logger.debug('Event start time zone: ' + str(pytz.timezone(event.start_time_zone)))
+    combined = str(str(event.start_day) + ' ' + str(event.start_time) + ' ' + str(event.start_time_zone))
+
+    logger.debug('combined: ' + combined)
+
+    # combine_datetime = datetime.strptime(combined, )
+    logger.debug('Server time: ' + str(timezone.now()))
+
+    # if event.start_datetime < timezone.now():
+    #     event_promotion.status = EventPromotionStatus.expired.value[0]
+    #     event_promotion.save()
+    #     return sent_count
 
     """If contact list is not complete, then do nothing"""
     contact_list = event_promotion.contact_list
