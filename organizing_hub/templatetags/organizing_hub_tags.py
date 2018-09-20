@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from django import template
 from django.conf import settings
 from local_groups.models import find_local_group_by_user

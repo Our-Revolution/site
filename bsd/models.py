@@ -95,9 +95,8 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
             break
 
     if constituents_deferred_result.http_status == 200:
-        tree = ElementTree().parse(StringIO(
-            constituents_deferred_result.body
-        ))
+        result_body = constituents_deferred_result.body.encode('utf-8')
+        tree = ElementTree().parse(StringIO(result_body))
         constituents_xml = tree.findall('cons')
         return constituents_xml
     else:
