@@ -83,10 +83,6 @@ class ContactList(models.Model):
         default=ContactListStatus.new.value[0]
     )
 
-    def _list_size(self):
-        return self.contacts.count()
-    list_size = property(_list_size)
-
     def __unicode__(self):
         return '%s: %s' % (self.id, self.name)
 
