@@ -8,7 +8,7 @@ from contacts.models import ContactList, ContactListStatus
 from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import (
-    build_contact_list_for_event_promotion,
+    build_and_send_event_promotion,
     send_event_promotion,
 )
 from .views import (
@@ -95,31 +95,6 @@ def sync_group_leader_affiliation_for_user(user):
         )
 
 
-@receiver(post_save, sender=ContactList)
-def contact_list_post_save_handler(instance, **kwargs):
-    """
-    Contact List post-save handler
-
-    Start task to send approved event promotion if contact list is complete and
-    list is not empty
-    """
-
-    contact_list = instance
-    if contact_list.status == ContactListStatus.complete.value[0] and (
-        contact_list.contacts.count() > 0
-    ):
-
-        """Check if contact list is attached to approved event promotion"""
-        if hasattr(contact_list, 'eventpromotion'):
-            event_promotion = contact_list.eventpromotion
-
-            """TODO: debug why this condition is not working as expected"""
-            if event_promotion.status == EventPromotionStatus.approved.value[0]:
-
-                """Call async task to send event promotion"""
-                send_event_promotion.delay(event_promotion.id)
-
-
 @receiver(post_save, sender=EventPromotion)
 def event_promotion_post_save_handler(instance, **kwargs):
     """
@@ -136,13 +111,14 @@ def event_promotion_post_save_handler(instance, **kwargs):
         event_promotion.contact_list = contact_list
         event_promotion.save()
 
-        """Call async task to build list"""
-        build_contact_list_for_event_promotion.delay(event_promotion.id)
+        """Call async task to build and send event promotion"""
+        build_and_send_event_promotion.delay(event_promotion.id)
 
     """Clear the contact list if it requires clearing"""
     if event_promotion.requires_list_clear and contact_list is not None:
         event_promotion.contact_list = None
         event_promotion.save()
+
 
 @receiver(post_save, sender=LocalGroup)
 def local_group_post_save_handler(instance, **kwargs):
