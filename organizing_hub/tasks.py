@@ -34,6 +34,106 @@ EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
 
 
+def get_buffer_width_from_miles(miles):
+    """
+    Convert miles to degrees for use as buffer width
+
+    https://stackoverflow.com/a/5217427
+    """
+
+    km = float(1.609344) * miles
+    degrees = km / 40000 * 360
+    return degrees
+
+
+def send_event_promotion(event_promotion_id):
+    """
+    Send event promotion via BSD triggered emails
+
+    Requires that event and event promotion are approved and list is complete.
+    Otherwise do nothing.
+
+    Parameters
+    ----------
+    event_promotion_id : int
+        EventPromotion id
+
+    Returns
+        -------
+        int
+            Returns count of promotion emails sent
+    """
+
+    sent_count = 0
+
+    """If there is no promotion mailing id, then do nothing"""
+    if EVENTS_PROMOTE_MAILING_ID is None:
+        return sent_count
+
+    """If event promotion is not approved, then do nothing"""
+    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+    if event_promotion.status != EventPromotionStatus.approved.value[0]:
+        return sent_count
+
+    event = find_event_by_id_obfuscated(event_promotion.event_external_id)
+
+    if event:
+        """If event is not approved, then do nothing"""
+        if not event.is_approved:
+            event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
+            event_promotion.save()
+            return sent_count
+
+        """If event is in past, then do nothing"""
+        if event.start_datetime_utc <= timezone.now():
+            event_promotion.status = EventPromotionStatus.expired.value[0]
+            event_promotion.save()
+            return sent_count
+    else:
+        """If no event, do nothing"""
+        return sent_count
+
+    """If contact list is not complete, then do nothing"""
+    contact_list = event_promotion.contact_list
+    if contact_list.status != ContactListStatus.complete.value[0]:
+        return sent_count
+
+    """Update promotion status to in progress"""
+    event_promotion.status = EventPromotionStatus.in_progress.value[0]
+    event_promotion.save()
+
+    """Send promotion email to each contact in list"""
+    trigger_values = {
+        'subject': event_promotion.subject,
+        'email_body_html': linebreaks_filter(event_promotion.message),
+        'email_body_text': event_promotion.message,
+    }
+    trigger_values_json = json.dumps(trigger_values)
+    trigger_values_encoded = urlquote_plus(trigger_values_json)
+    for contact in contact_list.contacts.all():
+        send_triggered_email_result = send_triggered_email(
+            EVENTS_PROMOTE_MAILING_ID,
+            contact.email_address,
+            trigger_values_encoded
+        )
+
+        """Check result status and increment on success"""
+        if send_triggered_email_result.http_status == 202:
+            sent_count += 1
+
+        """Wait one second before next one for rate limiting"""
+        time.sleep(1)
+
+    """Update promotion status and date sent if emails were sent"""
+    if sent_count > 0:
+        event_promotion.status = EventPromotionStatus.sent.value[0]
+        event_promotion.date_sent = timezone.now()
+        event_promotion.save()
+
+    """Return count of sent emails"""
+    return sent_count
+
+
 def send_triggered_email(mailing_id, email, trigger_values):
     """
     Send a triggered email with trigger_values and POST method
@@ -65,18 +165,6 @@ def send_triggered_email(mailing_id, email, trigger_values):
     }
     url_secure = bsd_api._generateRequest('/mailer/send_triggered_email')
     return bsd_api._makePOSTRequest(url_secure, query)
-
-
-def get_buffer_width_from_miles(miles):
-    """
-    Convert miles to degrees for use as buffer width
-
-    https://stackoverflow.com/a/5217427
-    """
-
-    km = float(1.609344) * miles
-    degrees = km / 40000 * 360
-    return degrees
 
 
 def sync_contact_list_with_bsd_constituent(
@@ -224,15 +312,14 @@ def sync_contact_list_with_bsd_constituents(
 
 
 @shared_task
-def build_contact_list_for_event_promotion(event_promotion_id):
+def build_and_send_event_promotion(event_promotion_id):
     """
-    Build contact list for event promotion
+    Build contact list for event promotion and then send it
 
     Meant for event promotion with new contact list that needs to be built. If
     contact list is not new then do nothing. Otherwise generate list and save.
 
     TODO: TECH-1331: better celery logging
-    TODO: TECH-1343: research SendableConsGroup
 
     Parameters
     ----------
@@ -242,10 +329,10 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     Returns
         -------
         int
-            Returns size of list that was generated
+            Returns count of sent emails
     """
 
-    list_size = 0
+    sent_count = 0
 
     """Get event promotion"""
     event_promotion = EventPromotion.objects.get(id=event_promotion_id)
@@ -255,7 +342,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     if contact_list is None or (
         contact_list.status != ContactListStatus.new.value[0]
     ):
-        return list_size
+        return sent_count
 
     """Update list status to build in progress"""
     contact_list.status = ContactListStatus.in_progress.value[0]
@@ -273,7 +360,7 @@ def build_contact_list_for_event_promotion(event_promotion_id):
 
     """Stop if we did not find constituents for some reason"""
     if constituents is None:
-        return list_size
+        return sent_count
 
     """Add constituents to list if they are w/in max list size and area"""
     max_distance_miles = float(EVENTS_PROMOTE_MAX_DISTANCE_MILES)
@@ -289,95 +376,13 @@ def build_contact_list_for_event_promotion(event_promotion_id):
     contact_list.status = ContactListStatus.complete.value[0]
     contact_list.save()
 
-    """Return size of list generated"""
-    list_size = contact_list.contacts.count()
-    return list_size
+    """Check if event promotion is approved and list is not empty"""
+    """TODO: status for empty list?"""
+    if contact_list.contacts.count() > 0 and (
+        event_promotion.status == EventPromotionStatus.approved.value[0]
+    ):
+        """Send event promotion"""
+        sent_count = send_event_promotion(event_promotion.id)
 
-
-@shared_task
-def send_event_promotion(event_promotion_id):
-    """
-    Send event promotion via BSD triggered emails
-
-    Requires that event and event promotion are approved and list is complete.
-    Otherwise do nothing.
-
-    Parameters
-    ----------
-    event_promotion_id : int
-        EventPromotion id
-
-    Returns
-        -------
-        int
-            Returns count of promotion emails sent
-    """
-
-    sent_count = 0
-
-    """If there is no promotion mailing id, then do nothing"""
-    if EVENTS_PROMOTE_MAILING_ID is None:
-        return sent_count
-
-    """If event promotion is not approved, then do nothing"""
-    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
-    if event_promotion.status != EventPromotionStatus.approved.value[0]:
-        return sent_count
-
-    event = find_event_by_id_obfuscated(event_promotion.event_external_id)
-
-    if event:
-        """If event is not approved, then do nothing"""
-        if not event.is_approved:
-            event_promotion.status = EventPromotionStatus.event_not_approved.value[0]
-            event_promotion.save()
-            return sent_count
-
-        """If event is in past, then do nothing"""
-        if event.start_datetime_utc <= timezone.now():
-            event_promotion.status = EventPromotionStatus.expired.value[0]
-            event_promotion.save()
-            return sent_count
-    else:
-        """If no event, do nothing"""
-        return sent_count
-
-    """If contact list is not complete, then do nothing"""
-    contact_list = event_promotion.contact_list
-    if contact_list.status != ContactListStatus.complete.value[0]:
-        return sent_count
-
-    """Update promotion status to in progress"""
-    event_promotion.status = EventPromotionStatus.in_progress.value[0]
-    event_promotion.save()
-
-    """Send promotion email to each contact in list"""
-    trigger_values = {
-        'subject': event_promotion.subject,
-        'email_body_html': linebreaks_filter(event_promotion.message),
-        'email_body_text': event_promotion.message,
-    }
-    trigger_values_json = json.dumps(trigger_values)
-    trigger_values_encoded = urlquote_plus(trigger_values_json)
-    for contact in contact_list.contacts.all():
-        send_triggered_email_result = send_triggered_email(
-            EVENTS_PROMOTE_MAILING_ID,
-            contact.email_address,
-            trigger_values_encoded
-        )
-
-        """Check result status and increment on success"""
-        if send_triggered_email_result.http_status == 202:
-            sent_count += 1
-
-        """Wait one second before next one for rate limiting"""
-        time.sleep(1)
-
-    """Update promotion status and date sent if emails were sent"""
-    if sent_count > 0:
-        event_promotion.status = EventPromotionStatus.sent.value[0]
-        event_promotion.date_sent = timezone.now()
-        event_promotion.save()
-
-    """Return count of sent emails"""
+    """Return sent count"""
     return sent_count

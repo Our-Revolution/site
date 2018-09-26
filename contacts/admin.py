@@ -27,15 +27,22 @@ class ContactListAdmin(admin.ModelAdmin):
         'status',
         'date_created',
         'date_modified',
+        'get_list_size',
     ]
     list_display_links = list_display
     list_filter = ['status']
     readonly_fields = [
         'date_created',
         'date_modified',
+        'get_list_size',
     ]
     fields = readonly_fields + [
         'name',
         'status',
         'contacts',
     ]
+
+    def get_list_size(self, obj):
+        return obj.contacts.count()
+
+    get_list_size.short_description = 'List Size'
