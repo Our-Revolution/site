@@ -1,14 +1,55 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from django.db import models
 from enum import Enum, unique
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
+import googlemaps
 import logging
 import uuid
 
 logger = logging.getLogger(__name__)
+
+GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
+
+
+def update_point_for_call_campaign(call_campaign):
+    """
+    Update point field on Call Campaign based on campaign zip code
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign to update
+
+    Returns
+        -------
+        call_campaign
+            Updated Call Campaign
+    """
+
+    """Get lat/long for zip from google maps api"""
+    try:
+        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
+        components = {"postal_code": call_campaign.postal_code}
+        geocoded_address = geolocator.geocode(components=components)
+        location = geocoded_address[0]['geometry']['location']
+        call_campaign.point = Point(
+            location['lng'],
+            location['lat'],
+            srid=4326
+        )
+        call_campaign.save()
+    except IndexError:
+        """Set point to None if can't find lat/long"""
+        if call_campaign.point is not None:
+            call_campaign.point = None
+            call_campaign.save()
+
+    return call_campaign
 
 
 @unique
@@ -236,6 +277,15 @@ class CallCampaign(models.Model):
         """Check if status is paused"""
         return self.status == CallCampaignStatus.paused.value[0]
     is_paused = property(_is_paused)
+
+    def save(self, *args, **kw):
+        old = CallCampaign.objects.get(pk=self.pk) if self.pk else None
+        super(CallCampaign, self).save(*args, **kw)
+        """Update point if point is None or postal code field changed"""
+        if self.point is None or (
+            old is not None and old.postal_code != self.postal_code
+        ):
+            update_point_for_call_campaign(self)
 
 
 class Call(models.Model):

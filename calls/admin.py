@@ -41,6 +41,7 @@ class CallCampaignAdmin(admin.ModelAdmin):
     readonly_fields = [
         'owner',
         'local_group',
+        'point',
         'date_created',
         'date_modified',
     ]

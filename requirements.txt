@@ -41,7 +41,7 @@ djangorestframework==3.5.1
 enum34==1.1.6
 env-tools==2.0.0
 futures==3.0.5
-googlemaps==2.5.1
+googlemaps>=2.5,<2.6
 gunicorn==19.6.0
 html5lib==1.0b10
 ipdb==0.10.1
