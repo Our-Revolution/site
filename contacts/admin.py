@@ -5,6 +5,7 @@ from .models import Contact, ContactList
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     readonly_fields = [
+        'point',
         'date_created',
         'date_modified',
     ]
@@ -14,7 +15,6 @@ class ContactAdmin(admin.ModelAdmin):
         'last_name',
         'email_address',
         'phone_number',
-        'point',
     ]
 
 
