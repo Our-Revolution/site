@@ -56,17 +56,6 @@
           </div>
         {% endif %}
 
-        {% if similar_initiatives.exists %}
-          <div class="col-md-10 col-md-offset-1">
-            <h2>Similar Initiatives</h2>
-            <ul class="card-list third list">
-              {% for initiative_page in similar_initiatives %}
-                {% include "partials/initiative_card.html" %}
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
-
       </div>
 
       {% include "partials/sign-up.html" %}
