@@ -25,7 +25,7 @@ bsd_api = BSD().api
 @shared_task
 def update_geo_target_result(geo_target_id):
     """
-    Update GeoTarget with result from BSD
+    Update in progress GeoTarget with result from BSD set as complete
 
 
     Parameters
@@ -42,13 +42,9 @@ def update_geo_target_result(geo_target_id):
     """Get GeoTarget"""
     geo_target = GeoTarget.objects.get(id=geo_target_id)
 
-    """If GeoTarget is not New, then do nothing"""
-    if geo_target.status != GeoTargetStatus.new.value[0]:
+    """GeoTarget should be set to in progress, otherwise do nothing"""
+    if geo_target.status != GeoTargetStatus.in_progress.value[0]:
         return geo_target.status
-
-    """Update status to in progress"""
-    geo_target.status = GeoTargetStatus.in_progress.value[0]
-    geo_target.save()
 
     """Get constitents by state first and we will filter it down later"""
     constituents = find_constituents_by_state_cd(geo_target.state_or_territory)
@@ -60,6 +56,7 @@ def update_geo_target_result(geo_target_id):
         return geo_target.status
 
     """Trim list by geo json shape"""
+
     """Logic copied over from hydra app"""
     gjson = json.loads(geo_target.geo_json)
     if gjson['type'] == 'FeatureCollection':
