@@ -1,12 +1,9 @@
 from django.contrib import admin
-# from .forms import CallCampaignAdminForm
 from .models import GeoTarget
 
 
 @admin.register(GeoTarget)
 class GeoTargetAdmin(admin.ModelAdmin):
-    # filter_horizontal = ['callers']
-    # form = CallCampaignAdminForm
     list_display = [
         'id',
         'title',
@@ -30,4 +27,3 @@ class GeoTargetAdmin(admin.ModelAdmin):
         'state_or_territory',
         'geo_json',
     ]
-    # raw_id_fields = ['contact_list']

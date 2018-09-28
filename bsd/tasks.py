@@ -25,7 +25,7 @@ bsd_api = BSD().api
 @shared_task
 def update_geo_target_result(geo_target_id):
     """
-    Update in progress GeoTarget with result from BSD set as complete
+    Update in progress GeoTarget with result from BSD and set as complete
 
 
     Parameters
