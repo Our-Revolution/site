@@ -167,6 +167,7 @@ class GeoTargetStatus(Enum):
     new = (1, 'New')
     in_progress = (10, 'In Progress')
     complete = (20, 'Complete')
+    no_results = (30, 'No Results')
 
 
 class Account(models.Model):
@@ -565,6 +566,7 @@ class GeoTarget(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     geo_json = models.TextField()
     result = models.TextField(blank=True, null=True)
+    result_count = models.IntegerField(default=0)
     state_or_territory = USStateField()
     status = models.IntegerField(
         choices=[x.value for x in GeoTargetStatus],

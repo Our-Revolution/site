@@ -35,8 +35,8 @@ def update_geo_target_result(geo_target_id):
 
     Returns
         -------
-        GeoTarget
-            Returns updated GeoTarget with result from BSD
+        int
+            Returns updated GeoTarget status
     """
 
     """Get GeoTarget"""
@@ -44,7 +44,7 @@ def update_geo_target_result(geo_target_id):
 
     """If GeoTarget is not New, then do nothing"""
     if geo_target.status != GeoTargetStatus.new.value[0]:
-        return
+        return geo_target.status
 
     """Update status to in progress"""
     geo_target.status = GeoTargetStatus.in_progress.value[0]
@@ -53,24 +53,24 @@ def update_geo_target_result(geo_target_id):
     """Get constitents by state first and we will filter it down later"""
     constituents = find_constituents_by_state_cd(geo_target.state_or_territory)
 
-    """Stop if we did not find constituents for some reason"""
+    """Update status and exit if we did not find any constituents"""
     if constituents is None:
-        return
+        geo_target.status = GeoTargetStatus.no_results.value[0]
+        geo_target.save()
+        return geo_target.status
 
     """Trim list by geo json shape"""
-
+    """Logic copied over from hydra app"""
     gjson = json.loads(geo_target.geo_json)
-
     if gjson['type'] == 'FeatureCollection':
         # todo: fetch number, but stick to 1st for now
-        logger.debug('is FeatureCollection')
         gjson = gjson['features'][0]['geometry']
-
     geo_shape = GEOSGeometry(json.dumps(gjson))
-    result = ""
 
+    """Loop through constituents and update result"""
+    result = ""
+    result_count = 0
     for constituent in constituents:
-        """Get constituent id"""
         constituent_id = constituent.get('id')
 
         """Get constituent location"""
@@ -88,11 +88,13 @@ def update_geo_target_result(geo_target_id):
                 """Add to result if point is in shape"""
                 if geo_shape.contains(constituent_point):
                     result += "%s," % constituent_id
+                    result_count += 1
 
     """Update result and status"""
     geo_target.result = result
+    geo_target.result_count = result_count
     geo_target.status = GeoTargetStatus.complete.value[0]
     geo_target.save()
 
-    """Return updated GeoTarget"""
-    return geo_target
+    """Return updated GeoTarget status"""
+    return geo_target.status
