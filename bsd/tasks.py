@@ -84,7 +84,7 @@ def update_geo_target_result(geo_target_id):
                 )
                 """Add to result if point is in shape"""
                 if geo_shape.contains(constituent_point):
-                    result += "%s," % constituent_id
+                    result += "%s, " % constituent_id
                     result_count += 1
 
     """Update result and status"""
