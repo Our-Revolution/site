@@ -226,7 +226,7 @@ class CallCampaign(models.Model):
     point = PointField(blank=True, null=True)
     postal_code = models.CharField(max_length=12, verbose_name="Zip Code")
     script = models.TextField(max_length=2000)
-    state_or_territory = USStateField()
+    state_or_territory = USStateField(verbose_name="State or Territory")
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
         default=CallCampaignStatus.new.value[0],
