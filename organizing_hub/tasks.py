@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
@@ -386,3 +387,68 @@ def build_and_send_event_promotion(event_promotion_id):
 
     """Return sent count"""
     return sent_count
+
+
+@shared_task
+def build_list_for_call_campaign(call_campaign_id):
+    """
+    Build Contact List for Call Campaign
+
+    Meant for Call Campaign with new Contact List that needs to be built. If
+    Contact List is not new then do nothing. Otherwise generate list and save.
+
+    Parameters
+    ----------
+    call_campaign_id : int
+        CallCampaign id
+
+    Returns
+        -------
+        int
+            Return updated Contact List status, or None for no list
+    """
+
+    """Get Call Campaign"""
+    call_campaign = CallCampaign.objects.get(id=call_campaign_id)
+
+    """If Contact List is None, return None"""
+    contact_list = call_campaign.contact_list
+    if contact_list is None:
+        return None
+
+    """If Contact List is not New, return list status"""
+    if contact_list.status != ContactListStatus.new.value[0]:
+        return contact_list.status
+
+    """Update list status to build in progress"""
+    contact_list.status = ContactListStatus.in_progress.value[0]
+    contact_list.save()
+
+    """Get constitents by state first and we will filter it down later"""
+    constituents = find_constituents_by_state_cd(
+        call_campaign.state_or_territory
+    )
+
+    """Stop if we did not find constituents for some reason"""
+    if constituents is None:
+        return contact_list.status
+
+    """Add constituents to list if they are w/in max list size and area"""
+    max_distance_miles = float(min(
+        call_campaign.max_distance,
+        CALLS_MAX_DISTANCE_MILES
+    ))
+    contact_list = sync_contact_list_with_bsd_constituents(
+        contact_list,
+        constituents,
+        max_contacts=call_campaign.max_recipients,
+        max_distance=max_distance_miles,
+        point=call_campaign.point,
+    )
+
+    """Update list status to complete"""
+    contact_list.status = ContactListStatus.complete.value[0]
+    contact_list.save()
+
+    """Return list status"""
+    return contact_list.status

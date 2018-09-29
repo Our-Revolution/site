@@ -9,7 +9,7 @@ from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import (
     build_and_send_event_promotion,
-    send_event_promotion,
+    build_list_for_call_campaign,
 )
 from .views import (
     add_local_group_role_for_user,
@@ -93,6 +93,42 @@ def sync_group_leader_affiliation_for_user(user):
             local_group_lead_by_user,
             LOCAL_GROUPS_ROLE_GROUP_LEADER_ID
         )
+
+
+"""Signals"""
+
+
+@receiver(post_save, sender=CallCampaign)
+def call_campaign_post_save_handler(instance, **kwargs):
+    """
+    Call Campaign post-save handler
+
+    Parameters
+    ----------
+    instance : CallCampaign
+        Call Campaign
+    """
+
+    call_campaign = instance
+
+    """Check if Call Campaign is New and Contact List is None"""
+    status = call_campaign.status
+    contact_list = call_campaign.contact_list
+    if status == CallCampaignStatus.new.value[0] and contact_list is None:
+
+        """Create New Contact List and add to Call Campaign"""
+        list_name = 'List for Call Campaign: ' + str(call_campaign)
+        contact_list = ContactList.objects.create(name=list_name)
+        call_campaign.contact_list = contact_list
+        call_campaign.save()
+
+        """Call async task to build Contact List for Call Campaign"""
+        build_list_for_call_campaign.delay(call_campaign.id)
+
+    # """Clear the contact list if it requires clearing"""
+    # if event_promotion.requires_list_clear and contact_list is not None:
+    #     event_promotion.contact_list = None
+    #     event_promotion.save()
 
 
 @receiver(post_save, sender=EventPromotion)
