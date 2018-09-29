@@ -27,6 +27,7 @@ class CallCampaignForm(forms.ModelForm):
             'max_recipients',
             'postal_code',
             'script',
+            'state_or_territory',
             'title',
         ]
         model = CallCampaign
