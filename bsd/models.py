@@ -69,12 +69,14 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     """Filter by state and is subscribed"""
     filter = {}
     filter['state_cd'] = str(state_cd)
+    # TODO: make configurable by param
     filter['is_subscribed'] = True
 
     """Filter by cons_group if param is present"""
     if cons_group:
         filter['cons_group'] = cons_group
 
+    # TODO: make configurable by param
     bundles = ['primary_cons_addr', 'primary_cons_email']
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202

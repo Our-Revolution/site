@@ -11,6 +11,7 @@ from bsd.models import (
     find_constituents_by_state_cd,
     find_event_by_id_obfuscated,
 )
+from calls.models import CallCampaign
 from contacts.models import Contact, ContactListStatus
 from events.models import (
     EventPromotion,
@@ -204,6 +205,7 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
     is_subscribed = False
     email_address = cons_email.findtext('email')
+    # TODO: make configurable by param
     is_subscribed = cons_email.findtext('is_subscribed') == '1'
     if email_address is None or not is_subscribed:
         return contact_list
@@ -225,6 +227,7 @@ def sync_contact_list_with_bsd_constituent(
     if not max_distance_geos_area.contains(constituent_point):
         return contact_list
 
+    # TODO: make configurable by param
     """Check if contact has received recent event promo"""
     last_event_promo = find_last_event_promo_sent_to_contact(constituent_id)
     if last_event_promo is not None and (
@@ -232,6 +235,7 @@ def sync_contact_list_with_bsd_constituent(
     ):
         return contact_list
 
+    # TODO: save phone number
     """Create or update contact and add to list"""
     contact, created = Contact.objects.update_or_create(
         external_id=constituent_id,
@@ -282,6 +286,7 @@ def sync_contact_list_with_bsd_constituents(
     buffer_width = get_buffer_width_from_miles(max_distance)
     max_distance_geos_area = point.buffer(buffer_width)
 
+    # TODO: make configurable by param
     """Get cutoff date for filtering out recent event promo recipients"""
     date_cutoff = timezone.now() - datetime.timedelta(
         days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
@@ -296,6 +301,7 @@ def sync_contact_list_with_bsd_constituents(
             date_cutoff
         )
 
+    # TODO: make configurable by param
     """Get list limit from max contacts if valid, otherwise use default"""
     if max_contacts > 0 and max_contacts < EVENTS_PROMOTE_MAX_LIST_SIZE:
         list_limit = max_contacts
@@ -425,6 +431,7 @@ def build_list_for_call_campaign(call_campaign_id):
     contact_list.save()
 
     """Get constitents by state first and we will filter it down later"""
+    # TODO: make configurable by param
     constituents = find_constituents_by_state_cd(
         call_campaign.state_or_territory
     )

@@ -5,6 +5,7 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.db import models
 from enum import Enum, unique
+from localflavor.us.models import USStateField
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import googlemaps
@@ -225,6 +226,7 @@ class CallCampaign(models.Model):
     point = PointField(blank=True, null=True)
     postal_code = models.CharField(max_length=12, verbose_name="Zip Code")
     script = models.TextField(max_length=2000)
+    state_or_territory = USStateField()
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
         default=CallCampaignStatus.new.value[0],
