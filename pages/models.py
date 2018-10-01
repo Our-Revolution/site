@@ -958,7 +958,6 @@ class InitiativeEndorsementPage(Page):
                 FieldPanel('how_to_vote'),
                 FieldPanel('body', classname="full"),
                 FieldPanel('website_url'),
-                FieldPanel('category'),
                 FieldPanel('featured'),
             ],
             heading="Initiative",
@@ -978,6 +977,7 @@ class InitiativeEndorsementPage(Page):
             [
                 FieldPanel('initiative'),
                 FieldPanel('signup_tagline'),
+                FieldPanel('category'),
             ],
             heading="Legacy fields",
             classname="collapsible collapsed"
@@ -992,10 +992,8 @@ class InitiativeEndorsementPage(Page):
 
         """Support legacy pages too"""
         if self.initiative:
-            category = self.initiative.category
             state_or_territory = self.initiative.state_initials
         else:
-            category = self.category
             state_or_territory = self.state_or_territory
         state_initiatives = InitiativeEndorsementPage.objects.live().filter(
             initiative__isnull=True,
@@ -1005,21 +1003,11 @@ class InitiativeEndorsementPage(Page):
             '-featured',
             'initiative_title',
         ).exclude(id=self.id)
-        similar_initiatives = InitiativeEndorsementPage.objects.live().filter(
-            initiative__isnull=True,
-            election_result__isnull=True,
-            category=category
-        ).order_by(
-            '-featured',
-            'state_or_territory',
-            'initiative_title',
-        ).exclude(id=self.id)
         context = super(InitiativeEndorsementPage, self).get_context(
             *args,
             **kwargs
         )
         context['state_initiatives'] = state_initiatives
-        context['similar_initiatives'] = similar_initiatives
         return context
 
 
