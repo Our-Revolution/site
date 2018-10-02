@@ -17,6 +17,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# TODO: move to enum, global config, or something else where display values are better?
+ALERT_LEVELS = (
+    (1,'success'),
+    (2,'info'),
+    (3,'warning'),
+    (4,'danger'),
+)
 
 class Nomination(models.Model):
     """
@@ -90,9 +97,23 @@ class NominationsPlatformAlert(models.Model):
         help_text='Show alert on nominations platform pages.'
     )
 
+    # TODO: Enum? Global config?
+    alert_level = models.IntegerField(
+        choices=ALERT_LEVELS,
+        default=3,
+        blank=False,
+        null=False,
+        help_text="""
+        Set the alert style corresponding to Bootstrap 3 alert levels.
+
+        See: https://getbootstrap.com/docs/3.3/components/#alerts-dismissible
+        """
+    )
+
     panels = [
         FieldPanel('content'),
         FieldPanel('show'),
+        FieldPanel('alert_level')
     ]
 
     def __str__(self):

@@ -37,7 +37,7 @@ class OrganizingHubDashboardPage(Page):
             **kwargs
         )
 
-
+# TODO: implement alert levels
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
 class OrganizingHubLoginAlert(models.Model):

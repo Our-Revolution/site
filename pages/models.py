@@ -818,9 +818,27 @@ def candidate_endorsement_unpublished_handler(instance, **kwargs):
 class CandidateEndorsementIndexPage(Page):
     body = RichTextField(blank=True, null=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
+    secondary_copy = RichTextField(
+        blank=True,
+        null=True,
+        help_text='Copy to go below Past Election Results section.'
+    )
+    button_show = models.BooleanField(
+        default=False,
+        help_text="""Show nominations platform Get Started button. Will only
+        display if secondary copy is present."""
+    )
     content_panels = Page.content_panels + [
         FieldPanel('content_heading'),
         FieldPanel('body'),
+        MultiFieldPanel(
+            [
+                FieldPanel('secondary_copy'),
+                FieldPanel('button_show'),
+            ],
+            heading="Secondary Content"
+        ),
+
     ]
     social_image = models.ForeignKey(
         'wagtailimages.Image',
