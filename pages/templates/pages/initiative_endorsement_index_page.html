@@ -8,11 +8,7 @@
     <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Our Revolution" />
-    {% if request.GET.category and request.GET.category != 'all' %}
-        {% with "dist/img/meta/"|add:request.GET.category|add:".png" as social_image %}
-            <meta property="og:image" content="{% base_url %}{% static social_image %}" />
-        {% endwith %}
-    {% elif page.social_image %}
+    {% if page.social_image %}
         {% image page.social_image original as social_image_url %}
         <meta property="og:image" content="{{ social_image_url.url }}" />
     {% else %}
@@ -25,11 +21,7 @@
     <meta name="twitter:title" content="{% firstof page.seo_title page.title "Our Revolution" %}"/>
     <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta name="twitter:site" content="@OurRevolution"/>
-    {% if request.GET.category and request.GET.category != 'all' %}
-        {% with "dist/img/meta/"|add:request.GET.category|add:".png" as social_image %}
-            <meta name="twitter:image" content="{% base_url %}{% static social_image %}" />
-        {% endwith %}
-    {% elif page.social_image %}
+    {% if page.social_image %}
         {% image page.social_image original as social_image_url %}
         <meta name="twitter:image" content="{{ social_image_url.url }}" />
     {% else %}
@@ -50,81 +42,40 @@
 </div>
 
 <div class="container">
+  <div class="row">
 
-  <div class="clearfix">
-    <div class="mt10 pull-right">
-      {% include "partials/endorsements-nav.html" %}
-    </div>
-  </div>
+    <div class="col-xs-12">
 
-  <div class="page-sub-nav filter clearfix">
-				<div class="form-inline pull-left">
-					<div class="form-group">
-						<label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
-					</div>
-				</div>
+      <div class="clearfix">
+        <div class="mt10 pull-right">
+          {% include "partials/endorsements-nav.html" %}
+        </div>
+      </div>
 
-				<div class="filter__sort pull-right">
-					Sort By:
-					<div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
-						<button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
-						<button type="button" class="btn btn-default" sort-by="category">Category <span class="caret"></span></button>
-					</div>
-				</div>
-  </div>
+      <div class="page-sub-nav filter clearfix">
+  			<div class="form-inline pull-left">
+  				<div class="form-group">
+  					<label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
+  				</div>
+  			</div>
 
-			<div class="col-md-3">
-				<div class="toggle-nav hidden-md hidden-lg" id="toggle-nav">Ballot Initiatives <i class="glyphicon glyphicon-menu-hamburger toggle-nav__icon"></i></div>
-				<ul class="nav nav-pills nav-stacked issues__nav" id="initiatives-nav">
-					<li role="presentation" category="all" class="active">
-						<a href="#"><span class="icon labor-2"></span>All Initiatives</span></a>
-					</li>
+  			<div class="filter__sort pull-right">
+  				Sort By:
+  				<div class="btn-group sort-buttons" role="group" aria-label="Sort By:">
+  					<button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
+  				</div>
+  			</div>
+      </div>
 
-          {% comment "Leave out animal rights category" %}
-					<li role="presentation" category="animal-rights">
-						<a href="#">
-              <span class="icon animal-rights"></span>Animal Rights
-            </a>
-					</li>
-          {% endcomment %}
+			<div id="initiatives-list">
 
-					<li role="presentation" category="corporate-tax">
-						<a href="#"><span class="icon corporate-tax"></span>Corporate Tax</span></a>
-					</li>
-					<li role="presentation" category="death-penalty">
-						<a href="#"><span class="icon death-penalty"></span>Death Penalty</span></a>
-					</li>
-					<li role="presentation" category="education">
-						<a href="#"><span class="icon education"></span>Education</span></a>
-					</li>
-					<li role="presentation" category="election-reform">
-						<a href="#"><span class="icon election-reform"></span>Election Reform</span></a>
-					</li>
-					<li role="presentation" category="environment">
-						<a href="#"><span class="icon environment"></span>Environment</span></a>
-					</li>
-					<li role="presentation" category="health-care">
-						<a href="#"><span class="icon health-care"></span>Health Care</span></a>
-					</li>
-					<li role="presentation" category="labor">
-						<a href="#"><span class="icon labor"></span>Labor</span></a>
-					</li>
-					<li role="presentation" category="marijuana">
-						<a href="#"><span class="icon marijuana"></span>Marijuana</span></a>
-					</li>
-					<li role="presentation" category="minimum-wage">
-						<a href="#"><span class="icon minimum-wage"></span>Minimum Wage</span></a>
-					</li>
-					<li role="presentation" category="money-in-politics">
-						<a href="#"><span class="icon money-in-politics"></span>Money in Politics</span></a>
-					</li>
-				</ul>
-			</div>
+				<div class="no-result text-center pa20 br3 f5f5f5-bg">
+          <h3 class="mt0 mb0">
+            No Matching Initiatives Found
+          </h3>
+        </div>
 
-			<div class="col-md-9" id="initiatives-list">
-				<div class="no-result text-center pa20 br3 f5f5f5-bg"><h3 class="mt0 mb0">No Matching Initiatives Found</h3></div>
-
-				<ul class="card-list third list">
+				<ul class="card-list list">
 
           {% for initiative in initiatives %}
           {% with initiative.initiativeendorsementpage as initiative_page %}
@@ -134,32 +85,40 @@
 
 				</ul>
 
-        <p>Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our complete new slate of ballot initiatives.</p>
+      </div>
 
-        {% endorsement_process_url as link_url %}
-        <p>
-          <strong>To learn more about Our Revolution's endorsement process,
-          <a href="{{link_url}}">click here</a>.</strong>
-        </p>
+    </div>
 
-        <div class="mb20 mt20">
-          <a href="{% results_url %}"
-          class="btn btn-block btn-success ls2 uppercase">
-            View 2018 Election Results
-          </a>
+    <div class="col-md-6 col-md-offset-3">
 
-          <a href="{% results_2017_url %}"
-          class="btn btn-block btn-primary ls2 uppercase">
-            View 2017 Election Results
-          </a>
+      <p>Our team is working hard to fully research the upcoming elections and find the best progressive causes for us to support. Please check back soon to see our complete new slate of ballot initiatives.</p>
 
-          <a href="{% results_2016_url %}"
-          class="btn btn-block btn-primary ls2 uppercase">
-            View 2016 Election Results
-          </a>
-        </div>
+      {% endorsement_process_url as link_url %}
+      <p>
+        <strong>To learn more about Our Revolution's endorsement process,
+        <a href="{{link_url}}">click here</a>.</strong>
+      </p>
 
-			</div>
+      <div class="mb20 mt20">
+        <a href="{% results_url %}"
+        class="btn btn-block btn-success ls2 uppercase">
+          View 2018 Election Results
+        </a>
+
+        <a href="{% results_2017_url %}"
+        class="btn btn-block btn-primary ls2 uppercase">
+          View 2017 Election Results
+        </a>
+
+        <a href="{% results_2016_url %}"
+        class="btn btn-block btn-primary ls2 uppercase">
+          View 2016 Election Results
+        </a>
+      </div>
+
+		</div>
+
+  </div>
 </div>
 
 {% endblock %}
@@ -196,21 +155,6 @@
   	sortingBy = sortBy;
   }
 
-  function filter(category) {
-  	if (category && category != 'all') {
-  	  initiativesList.filter(function (item) {
-
-  		if(category == item._values.category.trim())
-  		  return true;
-  		else
-  		  return false;
-  	  });
-
-  	} else {
-  	  initiativesList.filter();
-  	}
-  }
-
   function getParameterByName(name, url) {
   	if (!url) {
   	  url = window.location.href;
@@ -223,72 +167,17 @@
   	return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
-  function isCategory(category) {
-  	var nav = $('.issues__nav');
-  	if (nav.find("[category='" + category + "']").length > 0)
-  	  return true;
-  	else
-  	  return false;
-  }
-
-  function setActive(category) {
-  	var nav = $('.issues__nav');
-  	// set active state
-  	nav.find('li').each(function () {
-  	  $(this).removeClass("active");
-  	});
-  	nav.find("[category='" + category + "']").toggleClass("active");
-  	updateUrl(category);
-  }
-
-  function updateUrl(category) {
-  	if (category)
-  	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives?category=' + category);
-  	else
-  	  window.history.pushState('ballot-initiatives', 'Our Revolution - Initiatives', '/ballot-initiatives');
-  }
-
   var options = {
 	  valueNames: [
   		'state',
   		'name',
   		'title',
   		'vote',
-  		'category',
   		{ name: 'featured', data: 'is-featured' }
 	  ]
   };
   var initiativesList = new List('initiatives-list', options);
   var self = this;
-
-  // Filter list by URL category
-  if (getParameterByName('category')) {
-  	var category = getParameterByName('category');
-  	if (isCategory(category)) {
-  	  setActive(category);
-  	  self.filter(category);
-  	}
-  }
-
-  $("#initiatives-nav").on("click", function(e) {
-  	e.preventDefault();
-
-  	if($("#initiatives-nav").hasClass("expanded")) {
-  	  $("#initiatives-nav").removeClass("expanded");
-  	  $('.toggle-nav__icon').removeClass('glyphicon-remove');
-  	  $('.toggle-nav__icon').addClass('glyphicon-menu-hamburger');
-  	}
-
-  	$("#fuzzy-search").val("");
-  	initiativesList.search();
-  	var category = $(e.target).closest("li").attr("category") || false;
-
-  	if (category) {
-  	  setActive(category);
-  	  self.filter(category);
-  	}
-
-  });
 
   initiativesList.on("updated", function(list) {
   	if (list.matchingItems.length > 0) {
