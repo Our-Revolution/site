@@ -1330,7 +1330,10 @@ class CandidateRace(models.Model):
     def _get_state_or_territory(self):
         # Support legacy candidate model
         if self.candidate:
-            return self.candidate.state + ' ' + self.candidate.district
+            state_or_territory = self.candidate.state
+            if self.candidate.district is not None:
+                state_or_territory += ' ' + self.candidate.district
+            return state_or_territory
         # Return page state or territory
         elif self.candidate_endorsement_page:
             return self.candidate_endorsement_page.get_state_or_territory_display
