@@ -17,42 +17,6 @@ logger = logging.getLogger(__name__)
 GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
 
 
-def update_point_for_call_campaign(call_campaign):
-    """
-    Update point field on Call Campaign based on campaign zip code
-
-    Parameters
-    ----------
-    call_campaign : CallCampaign
-        Call Campaign to update
-
-    Returns
-        -------
-        call_campaign
-            Updated Call Campaign
-    """
-
-    """Get lat/long for zip from google maps api"""
-    try:
-        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
-        components = {"postal_code": call_campaign.postal_code}
-        geocoded_address = geolocator.geocode(components=components)
-        location = geocoded_address[0]['geometry']['location']
-        call_campaign.point = Point(
-            location['lng'],
-            location['lat'],
-            srid=4326
-        )
-        call_campaign.save()
-    except IndexError:
-        """Set point to None if can't find lat/long"""
-        if call_campaign.point is not None:
-            call_campaign.point = None
-            call_campaign.save()
-
-    return call_campaign
-
-
 @unique
 class CallCampaignStatus(Enum):
     new = (1, 'New')
@@ -184,6 +148,70 @@ def find_campaigns_as_admin(call_profile):
 
     """Otherwise return empty list"""
     return CallCampaign.objects.none()
+
+
+def find_last_call_to_contact(contact_external_id):
+    """
+    Find most recent Call created for Contact based on external id
+
+    Parameters
+    ----------
+    contact_external_id : str
+        Contact external_id field
+
+    Returns
+        -------
+        Call
+            Returns matching Call, or None
+    """
+
+    """See if there is a matching contact"""
+    contact = Contact.objects.filter(external_id=contact_external_id).first()
+    if contact is None:
+        return None
+
+    """Find last Call created for contact"""
+    last_call_created = Call.objects.filter(contact=contact).order_by(
+        '-date_created'
+    ).first()
+
+    return last_call_created
+
+
+def update_point_for_call_campaign(call_campaign):
+    """
+    Update point field on Call Campaign based on campaign zip code
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign to update
+
+    Returns
+        -------
+        call_campaign
+            Updated Call Campaign
+    """
+
+    """Get lat/long for zip from google maps api"""
+    try:
+        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
+        components = {"postal_code": call_campaign.postal_code}
+        geocoded_address = geolocator.geocode(components=components)
+        location = geocoded_address[0]['geometry']['location']
+        call_campaign.point = Point(
+            location['lng'],
+            location['lat'],
+            srid=4326
+        )
+        call_campaign.save()
+    except IndexError:
+        """Set point to None if can't find lat/long"""
+        if call_campaign.point is not None:
+            call_campaign.point = None
+            call_campaign.save()
+
+    return call_campaign
 
 
 class CallProfile(models.Model):

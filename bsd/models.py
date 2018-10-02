@@ -45,10 +45,14 @@ def assert_valid_account(api_result):
     assert cons.findtext('is_banned') == "0"
 
 
-def find_constituents_by_state_cd(state_cd, cons_group=None):
+def find_constituents_by_state_cd(
+    state_cd,
+    cons_group=None,
+    subscribers_only=True,
+):
     """
-    Find BSD constituents by state/territory with primary email address,
-    primary address and constituent groups bundled and wait for deferred result
+    Find BSD constituents by state/territory with primary email address and
+    primary address bundled, and wait for deferred result
 
     TODO: make Constituent model and return that instead of xml
 
@@ -56,9 +60,10 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     ----------
     state_cd : str
         BSD field for state/territory code, 2 characters
-
     cons_group : str or list of str
         BSD constituent group id
+    subscribers_only : bool
+        Filter by subscribers only if True
 
     Returns
         -------
@@ -69,8 +74,10 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     """Filter by state and is subscribed"""
     filter = {}
     filter['state_cd'] = str(state_cd)
-    # TODO: make configurable by param
-    filter['is_subscribed'] = True
+
+    """Filter by subscribers only if param is true"""
+    if subscribers_only:
+        filter['is_subscribed'] = True
 
     """Filter by cons_group if param is present"""
     if cons_group:
