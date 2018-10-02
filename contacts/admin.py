@@ -31,6 +31,7 @@ class ContactListAdmin(admin.ModelAdmin):
     ]
     list_display_links = list_display
     list_filter = ['status']
+    raw_id_fields = ['contacts']
     readonly_fields = [
         'date_created',
         'date_modified',
