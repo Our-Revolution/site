@@ -71,7 +71,9 @@ def send_event_promotion(event_promotion_id):
         return sent_count
 
     """If event promotion is not approved, then do nothing"""
-    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+    event_promotion = EventPromotion.objects.select_related(
+        'contact_list'
+    ).get(id=event_promotion_id)
     if event_promotion.status != EventPromotionStatus.approved.value[0]:
         return sent_count
 
@@ -335,7 +337,9 @@ def build_and_send_event_promotion(event_promotion_id):
     sent_count = 0
 
     """Get event promotion"""
-    event_promotion = EventPromotion.objects.get(id=event_promotion_id)
+    event_promotion = EventPromotion.objects.select_related(
+        'contact_list'
+    ).get(id=event_promotion_id)
 
     """If contact list is not New, then do nothing"""
     contact_list = event_promotion.contact_list
@@ -382,7 +386,8 @@ def build_and_send_event_promotion(event_promotion_id):
         event_promotion.status == EventPromotionStatus.approved.value[0]
     ):
         """Send event promotion"""
-        sent_count = send_event_promotion(event_promotion.id)
+        # sent_count = send_event_promotion(event_promotion.id)
+        sent_count = 555
 
     """Return sent count"""
     return sent_count
