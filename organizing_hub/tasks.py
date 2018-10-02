@@ -386,8 +386,7 @@ def build_and_send_event_promotion(event_promotion_id):
         event_promotion.status == EventPromotionStatus.approved.value[0]
     ):
         """Send event promotion"""
-        # sent_count = send_event_promotion(event_promotion.id)
-        sent_count = 555
+        sent_count = send_event_promotion(event_promotion.id)
 
     """Return sent count"""
     return sent_count
