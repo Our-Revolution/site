@@ -3,7 +3,7 @@
 {% if nominations_platform_alert %}
 <!-- nominations_platform_alert -->
 
-<div class="alert alert-{{nominations_platform_alert.get_alert_level_display}} br3">
+<div class="alert alert-{{nominations_platform_alert.alert_level}} br3">
   {{ nominations_platform_alert.content | richtext }}
 </div>
 

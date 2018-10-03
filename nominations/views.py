@@ -278,7 +278,7 @@ class QuestionnaireIndexView(FormView):
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
-        group = application.group
+        group_name = application.group
         rep_email = application.rep_email
 
         application.authorized_email = candidate_email
@@ -290,7 +290,7 @@ class QuestionnaireIndexView(FormView):
         htmly = get_template('email/candidate_email.html')
 
         d = {
-            'group': group,
+            'group_name': group_name,
             'candidate_name': candidate_name,
             'group_rep_email': rep_email,
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
@@ -300,7 +300,7 @@ class QuestionnaireIndexView(FormView):
         from_email = 'Our Revolution <info@ourrevolution.com>'
         to_email = ["%s <%s>" % (candidate_name, candidate_email)]
         cc_emails = [
-            "%s <%s>" % (group, rep_email),
+            "%s <%s>" % (group_name, rep_email),
             "%s <%s>" % (
                 'Our Revolution National',
                 settings.ELECTORAL_COORDINATOR_EMAIL
@@ -402,7 +402,7 @@ class SubmitView(FormView):
 
         d = {
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-            'group': group_name,
+            'group_name': group_name,
             'candidate_name': candidate_name
         }
 

@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
+from ckeditor.fields import RichTextField
 from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField
-from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
-from ckeditor.fields import RichTextField
+from organizing_hub.models import AlertLevels
+from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField
 from wagtail.wagtailsnippets.models import register_snippet
@@ -17,7 +18,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-ALERT_LEVELS = settings.ALERT_LEVELS
 
 class Nomination(models.Model):
     """
@@ -91,9 +91,10 @@ class NominationsPlatformAlert(models.Model):
         help_text='Show alert on nominations platform pages.'
     )
 
-    alert_level = models.IntegerField(
-        choices=ALERT_LEVELS,
-        default=3,
+    alert_level = models.CharField(
+        max_length=16,
+        choices=[x.value for x in AlertLevels],
+        default=AlertLevels.warning.value[0],
         blank=False,
         null=False,
         help_text="""

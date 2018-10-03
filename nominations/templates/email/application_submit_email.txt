@@ -1,7 +1,7 @@
 ** [OUR REVOLUTION]
 ------------------------------------------------------------
 
-Hi {{group}},
+Hi {{group_name}},
 
 Thank you for making a nomination of {{candidate_name}}.
 
