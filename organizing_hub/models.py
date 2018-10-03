@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils.decorators import method_decorator
