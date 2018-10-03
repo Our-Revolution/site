@@ -8,6 +8,7 @@ class GeoTargetAdmin(admin.ModelAdmin):
         'id',
         'title',
         'state_or_territory',
+        'primary_address_only',
         'status',
         'result_count',
         'date_created',
