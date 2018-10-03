@@ -838,7 +838,6 @@ class CandidateEndorsementIndexPage(Page):
             ],
             heading="Secondary Content"
         ),
-
     ]
     social_image = models.ForeignKey(
         'wagtailimages.Image',
