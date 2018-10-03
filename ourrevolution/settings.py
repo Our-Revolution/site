@@ -16,7 +16,6 @@ import dj_database_url, mimetypes, os, re
 
 mimetypes.add_type('image/svg+xml', 'svg')
 
-# TODO: move to enum, global config, or something else where display values are better?
 ALERT_LEVELS = (
     (1,'success'),
     (2,'info'),
