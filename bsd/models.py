@@ -54,8 +54,7 @@ def find_constituents_by_state_cd(
     with_email=False,
 ):
     """
-    Find BSD constituents by state/territory with primary email address and
-    primary address bundled, and wait for deferred result
+    Find BSD constituents by state/territory and wait for deferred result
 
     TODO: make Constituent model and return that instead of xml
 
@@ -75,7 +74,8 @@ def find_constituents_by_state_cd(
     Returns
         -------
         xml
-            Returns list of constituents from BSD api in xml format
+            Returns list of constituents from BSD api in xml format, with
+            relevant data bundles included
     """
 
     """Filter by state and is subscribed"""
