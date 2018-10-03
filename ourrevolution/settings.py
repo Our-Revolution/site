@@ -16,6 +16,13 @@ import dj_database_url, mimetypes, os, re
 
 mimetypes.add_type('image/svg+xml', 'svg')
 
+# TODO: move to enum, global config, or something else where display values are better?
+ALERT_LEVELS = (
+    (1,'success'),
+    (2,'info'),
+    (3,'warning'),
+    (4,'danger'),
+)
 AUTH0_CANDIDATE_CALLBACK_URL = os.environ.get('AUTH0_CANDIDATE_CALLBACK_URL', None)
 AUTH0_CLIENT_ID = os.environ.get('AUTH0_CLIENT_ID', None)
 AUTH0_CLIENT_SECRET = os.environ.get('AUTH0_CLIENT_SECRET', None)

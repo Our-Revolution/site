@@ -1,6 +1,6 @@
 {% extends "nominations_portal.html" %}
 
-{% load django_bootstrap_breadcrumbs %}
+{% load django_bootstrap_breadcrumbs nominations_tags %}
 
 {% block page_title %}Our Revolution - Nominations{% endblock %}
 
@@ -8,12 +8,12 @@
 
 {{ block.super }}
 
-<!-- TODO: implement nominations platform alert here -->
-
 <div class="container-fluid">
   <div class="row blue-bg nina-bg white-text pb4">
 
     <div class="container pt2">
+      {% nominations_platform_alert %}
+
       <div class="col-md-6">
         <h1 class="mb0">Nominate a Candidate or Ballot Initiative</h1>
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils.decorators import method_decorator
@@ -16,6 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+ALERT_LEVELS = settings.ALERT_LEVELS
 
 class OrganizingHubDashboardPage(Page):
     body = StreamField([
@@ -37,7 +39,6 @@ class OrganizingHubDashboardPage(Page):
             **kwargs
         )
 
-# TODO: implement alert levels
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
 class OrganizingHubLoginAlert(models.Model):
@@ -47,9 +48,22 @@ class OrganizingHubLoginAlert(models.Model):
         help_text='Show alert on organizing hub login page.'
     )
 
+    alert_level = models.IntegerField(
+        choices=ALERT_LEVELS,
+        default=3,
+        blank=False,
+        null=False,
+        help_text="""
+        Set the alert style corresponding to Bootstrap 3 alert levels.
+
+        See: https://getbootstrap.com/docs/3.3/components/#alerts-dismissible
+        """
+    )
+
     panels = [
         FieldPanel('content'),
         FieldPanel('show'),
+        FieldPanel('alert_level')
     ]
 
     def __str__(self):

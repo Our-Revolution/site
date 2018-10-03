@@ -3,7 +3,7 @@
 {% if organizing_hub_login_alert %}
 <!-- organizing_hub_login_alert -->
 
-<div class="alert alert-info br3">
+<div class="alert alert-{{organizing_hub_login_alert.get_alert_level_display}} br3">
   {{ organizing_hub_login_alert.content | richtext }}
 </div>
 

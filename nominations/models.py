@@ -17,13 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# TODO: move to enum, global config, or something else where display values are better?
-ALERT_LEVELS = (
-    (1,'success'),
-    (2,'info'),
-    (3,'warning'),
-    (4,'danger'),
-)
+ALERT_LEVELS = settings.ALERT_LEVELS
 
 class Nomination(models.Model):
     """
@@ -97,7 +91,6 @@ class NominationsPlatformAlert(models.Model):
         help_text='Show alert on nominations platform pages.'
     )
 
-    # TODO: Enum? Global config?
     alert_level = models.IntegerField(
         choices=ALERT_LEVELS,
         default=3,
