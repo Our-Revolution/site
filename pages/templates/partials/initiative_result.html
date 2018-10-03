@@ -9,9 +9,7 @@
       <div>
 
         <span class="card__item name bold tight">
-          {{ initiative_endorsement_page.how_to_vote|yesno|title }} on
-          {{ initiative_endorsement_page.initiative_title }}:
-          {{ initiative_endorsement_page.initiative_name }}
+          {{ initiative_endorsement_page.get_initiative_title }}
         </span>
 
       </div>

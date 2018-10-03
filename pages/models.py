@@ -912,7 +912,7 @@ class InitiativeEndorsementPage(Page):
     )
     how_to_vote = models.BooleanField(
         default=True,
-        help_text='Check box for Vote Yes, uncheck for Vote No.',
+        help_text='Ignore - legacy field for old pages.',
         verbose_name="Vote Yes?",
     )
     initiative = models.ForeignKey(
@@ -924,13 +924,13 @@ class InitiativeEndorsementPage(Page):
     )
     initiative_name = models.CharField(
         blank=True,
-        help_text='Secondary name/subtitle of initiative.',
+        help_text='Ignore - legacy field for old pages.',
         null=True,
         max_length=initiative_name_max_length,
     )
     initiative_title = models.CharField(
         blank=True,
-        help_text='Primary title of initiative.',
+        help_text='Ignore - legacy field for old pages.',
         null=True,
         max_length=initiative_title_max_length,
     )
@@ -953,9 +953,6 @@ class InitiativeEndorsementPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
-                FieldPanel('initiative_title'),
-                FieldPanel('initiative_name'),
-                FieldPanel('how_to_vote'),
                 FieldPanel('body', classname="full"),
                 FieldPanel('website_url'),
                 FieldPanel('featured'),
@@ -975,9 +972,12 @@ class InitiativeEndorsementPage(Page):
         ),
         MultiFieldPanel(
             [
+                FieldPanel('initiative_title'),
+                FieldPanel('initiative_name'),
                 FieldPanel('initiative'),
                 FieldPanel('signup_tagline'),
                 FieldPanel('category'),
+                FieldPanel('how_to_vote'),
             ],
             heading="Legacy fields",
             classname="collapsible collapsed"
@@ -987,6 +987,19 @@ class InitiativeEndorsementPage(Page):
     promote_panels = Page.promote_panels + [
         ImageChooserPanel('social_image')
     ]
+
+    def _get_initiative_title(self):
+        """Build title for initiative and support legacy pages"""
+        if self.initiative_title and self.initiative_name:
+            initiative_title = (
+                str("Yes" if self.how_to_vote else "No") + ' on ' + self.initiative_title
+                + ': ' + self.initiative_name
+            )
+        else:
+            initiative_title = self.title
+
+        return initiative_title
+    get_initiative_title = property(_get_initiative_title)
 
     def get_context(self, *args, **kwargs):
 

@@ -11,18 +11,10 @@
 
         <span class="card__item bold">
 
-          <span class="uppercase vote">
-            {{ initiative_page.how_to_vote|yesno }}
-          </span> on
-
           <span class="title">
-            {{ initiative_page.initiative_title }}
+            {{ initiative_page.get_initiative_title }}
           </span>
 
-        </span>
-
-        <span class="card__item name">
-          {{ initiative_page.initiative_name }}
         </span>
 
       </div>
