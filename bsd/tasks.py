@@ -46,8 +46,15 @@ def update_geo_target_result(geo_target_id):
     if geo_target.status != GeoTargetStatus.in_progress.value[0]:
         return geo_target.status
 
-    """Get constitents by state first and we will filter it down later"""
-    constituents = find_constituents_by_state_cd(geo_target.state_or_territory)
+    """
+    Get constitents by state first and we will trim it down later. Don't
+    filter by subscribers only.
+    """
+    constituents = find_constituents_by_state_cd(
+        geo_target.state_or_territory,
+        subscribers_only=False,
+        primary_address_only=geo_target.primary_address_only,
+    )
 
     """Update status and exit if we did not find any constituents"""
     if constituents is None:
@@ -71,6 +78,7 @@ def update_geo_target_result(geo_target_id):
         constituent_id = constituent.get('id')
 
         """Get constituent location"""
+        # TODO: check all addresses
         constituent_address = constituent.find('cons_addr')
         if constituent_address is not None:
             constituent_latitude = constituent_address.findtext('latitude')

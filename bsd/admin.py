@@ -25,5 +25,6 @@ class GeoTargetAdmin(admin.ModelAdmin):
     fields = readonly_fields + [
         'title',
         'state_or_territory',
+        'primary_address_only',
         'geo_json',
     ]
