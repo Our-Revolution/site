@@ -402,6 +402,8 @@ class SubmitView(FormView):
 
         d = {
             'or_logo_secondary': settings.OR_LOGO_SECONDARY,
+            'group': group_name,
+            'candidate_name': candidate_name
         }
 
         html_template = get_template('email/application_submit_email.html')

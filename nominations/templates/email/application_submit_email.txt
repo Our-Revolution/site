@@ -3,7 +3,7 @@
 
 Hi {{group}},
 
-Thank you for making a nomination of {{candidate}}.
+Thank you for making a nomination of {{candidate_name}}.
 
 We have closed nominations for the 2018 election season. If this nomination for an endorsement is for 2019, we will work on getting back to you in the new year, if not sooner.
 
