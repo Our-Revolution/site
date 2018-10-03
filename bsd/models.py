@@ -7,6 +7,7 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.db import models
+from enum import Enum, unique
 from localflavor.us.models import USStateField
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
@@ -159,6 +160,14 @@ def get_bsd_event_url(event_id_obfuscated):
         BSD_BASE_URL,
         event_id_obfuscated
     )
+
+
+@unique
+class GeoTargetStatus(Enum):
+    new = (1, 'New')
+    in_progress = (10, 'In Progress')
+    complete = (20, 'Complete')
+    no_results = (30, 'No Results')
 
 
 class Account(models.Model):
@@ -550,3 +559,20 @@ class BSDEvent(models.Model):
 
     class Meta:
         managed = False
+
+
+class GeoTarget(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    geo_json = models.TextField()
+    result = models.TextField(blank=True, null=True)
+    result_count = models.IntegerField(default=0)
+    state_or_territory = USStateField()
+    status = models.IntegerField(
+        choices=[x.value for x in GeoTargetStatus],
+        default=GeoTargetStatus.new.value[0],
+    )
+    title = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return "[%s] %s" % (str(self.id), self.title)
