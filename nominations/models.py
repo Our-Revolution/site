@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField
 from local_groups.models import Group
-from organizing_hub.models import AlertLevels
+from pages.models import AlertLevels
 from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField

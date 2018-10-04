@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils.decorators import method_decorator
 from django.utils.encoding import python_2_unicode_compatible
-from enum import Enum, unique
+from pages.models import AlertLevels
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import (
@@ -36,13 +36,6 @@ class OrganizingHubDashboardPage(Page):
             *args,
             **kwargs
         )
-
-@unique
-class AlertLevels(Enum):
-    success = (1, 'Success (Green)')
-    info = (2, 'Info (Blue)')
-    warning = (3, 'Warning (Yellow)')
-    danger = (4, 'Danger (Red)')
 
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
