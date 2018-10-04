@@ -7,6 +7,7 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.db import models
+from enum import Enum, unique
 from localflavor.us.models import USStateField
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
@@ -45,10 +46,15 @@ def assert_valid_account(api_result):
     assert cons.findtext('is_banned') == "0"
 
 
-def find_constituents_by_state_cd(state_cd, cons_group=None):
+def find_constituents_by_state_cd(
+    state_cd,
+    cons_group=None,
+    subscribers_only=True,
+    primary_address_only=True,
+    with_email=False,
+):
     """
-    Find BSD constituents by state/territory with primary email address,
-    primary address and constituent groups bundled and wait for deferred result
+    Find BSD constituents by state/territory and wait for deferred result
 
     TODO: make Constituent model and return that instead of xml
 
@@ -56,26 +62,47 @@ def find_constituents_by_state_cd(state_cd, cons_group=None):
     ----------
     state_cd : str
         BSD field for state/territory code, 2 characters
-
     cons_group : str or list of str
-        BSD constituent group id
+        BSD constituent group id(s)
+    subscribers_only : bool
+        Filter by subscribers only if True
+    primary_address_only : bool
+        Filter by primary addresses only if True
+    with_email : bool
+        Include email bundle in results
 
     Returns
         -------
         xml
-            Returns list of constituents from BSD api in xml format
+            Returns list of constituents from BSD api in xml format, with
+            relevant data bundles included
     """
 
     """Filter by state and is subscribed"""
     filter = {}
-    filter['state_cd'] = str(state_cd)
-    filter['is_subscribed'] = True
+    bundles = []
+
+    """Check if we want primary address only or all addresses"""
+    if primary_address_only:
+        filter['primary_state_cd'] = str(state_cd)
+        bundles.append('primary_cons_addr')
+    else:
+        filter['state_cd'] = str(state_cd)
+        bundles.append('cons_addr')
+
+    """Filter by subscribers only if param is true"""
+    if subscribers_only:
+        filter['is_subscribed'] = True
 
     """Filter by cons_group if param is present"""
     if cons_group:
         filter['cons_group'] = cons_group
 
-    bundles = ['primary_cons_addr', 'primary_cons_email']
+    """Check if we need to return emails"""
+    if with_email:
+        bundles.append('primary_cons_email')
+
+    """Get constituents from BSD"""
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)
     assert constituents_result.http_status is 202
     constituents_deferred_id = constituents_result.body
@@ -159,6 +186,15 @@ def get_bsd_event_url(event_id_obfuscated):
         BSD_BASE_URL,
         event_id_obfuscated
     )
+
+
+@unique
+class GeoTargetStatus(Enum):
+    new = (1, 'New')
+    in_queue = (10, 'In Queue')
+    in_progress = (20, 'Build In Progress')
+    complete = (30, 'Complete')
+    no_results = (40, 'No Results')
 
 
 class Account(models.Model):
@@ -550,3 +586,26 @@ class BSDEvent(models.Model):
 
     class Meta:
         managed = False
+
+
+class GeoTarget(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    geo_json = models.TextField(
+        help_text="Get this from census.gov or web search, or ask Organizing."
+    )
+    primary_address_only = models.BooleanField(
+        default=True,
+        help_text="Recommended",
+    )
+    result = models.TextField(blank=True, null=True)
+    result_count = models.IntegerField(default=0)
+    state_or_territory = USStateField()
+    status = models.IntegerField(
+        choices=[x.value for x in GeoTargetStatus],
+        default=GeoTargetStatus.new.value[0],
+    )
+    title = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return "[%s] %s" % (str(self.id), self.title)

@@ -359,7 +359,9 @@ def build_and_send_event_promotion(event_promotion_id):
 
     """Get constitents by state first and we will filter it down later"""
     constituents = find_constituents_by_state_cd(
-        event_state_cd, EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
+        event_state_cd,
+        EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID,
+        with_email=True,
     )
 
     """Stop if we did not find constituents for some reason"""
