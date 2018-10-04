@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="container">
                     <div class="page-sub-nav">
-                        <a href="{% pageurl page.get_parent %}"><span class="glyphicon glyphicon-chevron-left"></span></a> Our Initiatives / {{ initiative.state }} / {{ initiative.title }}: {{ initiative.name }}
+                        <a href="{% pageurl page.get_parent %}"><span class="glyphicon glyphicon-chevron-left"></span></a> Our Initiatives / {{ initiative.state }} / {{ page.get_display_title }}
                     </div>
 
                     <div class="page-heading">
                         <div>
-                            <h1>{{ initiative.vote | yesno | title }} on {{ initiative.title }}: {{ initiative.name }}</h1>
+                            <h1>{{ page.get_display_title }}</h1>
                             <span>{{ initiative.state }}</span>
                         </div>
                     </div>

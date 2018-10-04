@@ -13,16 +13,13 @@
           class="glyphicon glyphicon-chevron-left"></span></a>
           Our Initiatives
           / {{ page.get_state_or_territory_display }}
-          / {{ page.initiative_title }}:
-          {{ page.initiative_name }}
+          / {{ page.get_display_title }}
       </div>
 
       <div class="page-heading">
         <div>
           <h1>
-            {{ page.how_to_vote | yesno | title }} on
-            {{ page.initiative_title }}:
-            {{ page.initiative_name }}
+            {{ page.get_display_title }}
           </h1>
           <span>
             {{ page.get_state_or_territory_display }}

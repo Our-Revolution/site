@@ -13,9 +13,7 @@
             {# Use automated tagline for new initiative model, not legacy #}
             {% elif page.initiativeendorsementpage and not page.initiativeendorsementpage.initiative %}
               Join the fight for
-              {{ page.how_to_vote | yesno | title }} on
-              {{ page.initiative_title }}:
-              {{ page.initiative_name }}.
+              {{ page.get_display_title }}.
 
             {% else %}
                 {{ tagline }}
