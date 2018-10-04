@@ -39,10 +39,10 @@ class OrganizingHubDashboardPage(Page):
 
 @unique
 class AlertLevels(Enum):
-    success = ('success', 'Success (Green)')
-    info = ('info', 'Info (Blue)')
-    warning = ('warning', 'Warning (Yellow)')
-    danger = ('danger', 'Danger (Red)')
+    success = (1, 'Success (Green)')
+    info = (2, 'Info (Blue)')
+    warning = (3, 'Warning (Yellow)')
+    danger = (4, 'Danger (Red)')
 
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
@@ -53,8 +53,7 @@ class OrganizingHubLoginAlert(models.Model):
         help_text='Show alert on organizing hub login page.'
     )
 
-    alert_level = models.CharField(
-        max_length=16,
+    alert_level = models.IntegerField(
         choices=[x.value for x in AlertLevels],
         default=AlertLevels.warning.value[0],
         blank=False,

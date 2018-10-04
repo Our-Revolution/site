@@ -1,9 +1,11 @@
-{% load wagtailcore_tags %}
+{% load pages_tags wagtailcore_tags %}
 
 {% if nominations_platform_alert %}
 <!-- nominations_platform_alert -->
 
-<div class="alert alert-{{nominations_platform_alert.alert_level}} br3">
+{% get_alert_level_class nominations_platform_alert.alert_level as alert_level %}
+
+<div class="alert alert-{{alert_level}} br3">
   {{ nominations_platform_alert.content | richtext }}
 </div>
 

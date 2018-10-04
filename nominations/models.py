@@ -91,8 +91,7 @@ class NominationsPlatformAlert(models.Model):
         help_text='Show alert on nominations platform pages.'
     )
 
-    alert_level = models.CharField(
-        max_length=16,
+    alert_level = models.IntegerField(
         choices=[x.value for x in AlertLevels],
         default=AlertLevels.warning.value[0],
         blank=False,

@@ -278,7 +278,7 @@ class QuestionnaireIndexView(FormView):
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
-        group_name = application.group
+        group_name = application.group.name
         rep_email = application.rep_email
 
         application.authorized_email = candidate_email
