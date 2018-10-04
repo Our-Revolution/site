@@ -100,7 +100,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
 
     event_promotion = instance
 
-    """Check if Event Promotion is approved Contact List is None"""
+    """Check if Event Promotion is approved and Contact List is None"""
     if event_promotion.status == EventPromotionStatus.approved.value[0] and (
         event_promotion.contact_list is None
     ):
