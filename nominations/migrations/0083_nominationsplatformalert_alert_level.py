@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='nominationsplatformalert',
             name='alert_level',
-            field=models.IntegerField(blank=True, choices=[(1, 'success'), (2, 'info'), (3, 'warning'), (4, 'danger')], default=2),
+            field=models.IntegerField(blank=True, choices=[(1, 'success'), (2, 'info'), (3, 'warning'), (4, 'danger')], default=3),
         ),
     ]

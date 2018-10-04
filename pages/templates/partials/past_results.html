@@ -36,15 +36,17 @@
           </a>
           {% endif %}
 
-          {% comment %}Wagtail places HTML tags in blank RichTextFields, so a
-          blank RichTextField evaluates as a string instead of None. We need
-          to strip tags to make sure they properly evaluate as None and so we
-          don't put linebreaks on the page when empty. This is fixed in Wagtail
-          2.2.2.
+          {% comment %}Wagtail places HTML tags in RichTextFields that have
+          been edited, even if they're empty. A RichTextField that is blank
+          and has not been edited will evaluate to None, but one that is blank
+          and has been edited will evaluate as a string. We need to strip tags
+          to make sure they properly evaluate as None and so we
+          don't put linebreaks on the page when empty, and we also need to check
+          if the field is None. This is fixed in Wagtail 2.2.2.
 
           See: https://github.com/wagtail/wagtail/issues/2336
           {% endcomment %}
-          {% if page.secondary_copy|striptags %}
+          {% if page.secondary_copy|striptags and page.secondary_copy is not None %}
           <hr>
           {{ page.secondary_copy|richtext }}
 

@@ -12,28 +12,32 @@
   <div class="row blue-bg nina-bg white-text pb4">
 
     <div class="container pt2">
-      <div class="col-md-12">
-        {% nominations_platform_alert %}
+      <div class="row">
+        <div class="col-md-6">
+          {% nominations_platform_alert %}
+        </div>
       </div>
 
-      <div class="col-md-6">
-        <h1 class="mb0">Nominate a Candidate or Ballot Initiative</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <h1 class="mb0">Nominate a Candidate or Ballot Initiative</h1>
 
-        <div class="fs18">
-          <p>Our Revolution is made up of hundreds of local groups all across the world, and all of our endorsements must first originate with a nomination from an official group.</p>
+          <div class="fs18">
+            <p>Our Revolution is made up of hundreds of local groups all across the world, and all of our endorsements must first originate with a nomination from an official group.</p>
 
-          <p>Get started submitting your group’s nomination now, or learn more about our nomination process below.</p>
+            <p>Get started submitting your group’s nomination now, or learn more about our nomination process below.</p>
+          </div>
+
+          <div class="mt20 mb20">
+            <a class="btn btn-success ls2 uppercase"
+            href="{% url 'nominations-dashboard' %}">
+              Get Started
+            </a>
+            <a class="btn btn-dark ls2 uppercase" href="#learn-more" data-scroll>Learn More <span class="glyphicon glyphicon-chevron-down"></span></a>
+          </div>
+
+          <p><small>Not part of a group? <a href="/groups"><strong>Find or form one today.</strong></a></small></p>
         </div>
-
-        <div class="mt20 mb20">
-          <a class="btn btn-success ls2 uppercase"
-          href="{% url 'nominations-dashboard' %}">
-            Get Started
-          </a>
-          <a class="btn btn-dark ls2 uppercase" href="#learn-more" data-scroll>Learn More <span class="glyphicon glyphicon-chevron-down"></span></a>
-        </div>
-
-        <p><small>Not part of a group? <a href="/groups"><strong>Find or form one today.</strong></a></small></p>
       </div>
     </div>
   </div>
