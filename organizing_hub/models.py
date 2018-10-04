@@ -17,6 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class OrganizingHubDashboardPage(Page):
     body = StreamField([
         ('link_block', blocks.StructBlock([
@@ -36,6 +37,7 @@ class OrganizingHubDashboardPage(Page):
             *args,
             **kwargs
         )
+
 
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
