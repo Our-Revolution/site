@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.conf import settings
+from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from bsd.models import GeoTarget, GeoTargetStatus
@@ -27,7 +28,7 @@ def geo_target_post_save_handler(instance, **kwargs):
     """Check if status is new"""
     if geo_target.status == GeoTargetStatus.new.value[0]:
 
-        """Set to in queue and update result with async task"""
-        geo_target.status = GeoTargetStatus.in_queue.value[0]
-        geo_target.save()
-        update_geo_target_result.delay(geo_target.id)
+        """Call async task to update result after commit"""
+        transaction.on_commit(
+            lambda: update_geo_target_result.delay(geo_target.id)
+        )

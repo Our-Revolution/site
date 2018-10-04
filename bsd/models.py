@@ -191,10 +191,9 @@ def get_bsd_event_url(event_id_obfuscated):
 @unique
 class GeoTargetStatus(Enum):
     new = (1, 'New')
-    in_queue = (10, 'In Queue')
-    in_progress = (20, 'Build In Progress')
-    complete = (30, 'Complete')
-    no_results = (40, 'No Results')
+    in_progress = (10, 'In Progress')
+    complete = (20, 'Complete')
+    no_results = (30, 'No Results')
 
 
 class Account(models.Model):
