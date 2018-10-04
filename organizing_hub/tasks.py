@@ -11,7 +11,7 @@ from bsd.models import (
     find_constituents_by_state_cd,
     find_event_by_id_obfuscated,
 )
-from contacts.models import Contact, ContactListStatus
+from contacts.models import Contact, ContactList, ContactListStatus
 from events.models import (
     EventPromotion,
     EventPromotionStatus,
@@ -341,16 +341,19 @@ def build_and_send_event_promotion(event_promotion_id):
         'contact_list'
     ).get(id=event_promotion_id)
 
-    """If contact list is not New, then do nothing"""
-    contact_list = event_promotion.contact_list
-    if contact_list is None or (
-        contact_list.status != ContactListStatus.new.value[0]
+    """
+    Do nothing if Event Promotion is not approved or Contact List is not None
+    """
+    if event_promotion.status != EventPromotionStatus.approved.value[0] or (
+        event_promotion.contact_list is not None
     ):
         return sent_count
 
-    """Update list status to build in progress"""
-    contact_list.status = ContactListStatus.in_progress.value[0]
-    contact_list.save()
+    """Create new contact list and add to event promotion"""
+    list_name = 'List for Event Promotion: ' + str(event_promotion)
+    contact_list = ContactList.objects.create(name=list_name)
+    event_promotion.contact_list = contact_list
+    event_promotion.save()
 
     """Get event location data"""
     event = find_event_by_id_obfuscated(event_promotion.event_external_id)
@@ -368,6 +371,10 @@ def build_and_send_event_promotion(event_promotion_id):
     if constituents is None:
         return sent_count
 
+    """Update contact list status to build in progress"""
+    contact_list.status = ContactListStatus.in_progress.value[0]
+    contact_list.save()
+
     """Add constituents to list if they are w/in max list size and area"""
     max_distance_miles = float(EVENTS_PROMOTE_MAX_DISTANCE_MILES)
     contact_list = sync_contact_list_with_bsd_constituents(
@@ -382,11 +389,9 @@ def build_and_send_event_promotion(event_promotion_id):
     contact_list.status = ContactListStatus.complete.value[0]
     contact_list.save()
 
-    """Check if event promotion is approved and list is not empty"""
+    """Check if list is not empty"""
     """TODO: status for empty list?"""
-    if contact_list.contacts.count() > 0 and (
-        event_promotion.status == EventPromotionStatus.approved.value[0]
-    ):
+    if contact_list.contacts.count() > 0:
         """Send event promotion"""
         sent_count = send_event_promotion(event_promotion.id)
 

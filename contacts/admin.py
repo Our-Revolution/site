@@ -16,6 +16,7 @@ class ContactAdmin(admin.ModelAdmin):
         'email_address',
         'phone_number',
     ]
+    search_fields = ['first_name', 'last_name', 'email_address']
 
 
 @admin.register(ContactList)

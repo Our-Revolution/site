@@ -43,8 +43,8 @@ def update_geo_target_result(geo_target_id):
     """Get GeoTarget"""
     geo_target = GeoTarget.objects.get(id=geo_target_id)
 
-    """Status should be in queue, otherwise do nothing"""
-    if geo_target.status != GeoTargetStatus.in_queue.value[0]:
+    """Status should be new, otherwise do nothing"""
+    if geo_target.status != GeoTargetStatus.new.value[0]:
         return geo_target.status
 
     """Set to in progress and start building result"""

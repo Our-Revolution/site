@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from contacts.models import ContactList, ContactListStatus
 from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import (
@@ -97,22 +97,17 @@ def sync_group_leader_affiliation_for_user(user):
 
 @receiver(post_save, sender=EventPromotion)
 def event_promotion_post_save_handler(instance, **kwargs):
-    """
-    Generate contact list if event promotion is approved and does not have a
-    contact list yet
-    """
-    event_promotion = instance
-    status = event_promotion.status
-    contact_list = event_promotion.contact_list
-    if status == EventPromotionStatus.approved.value[0] and contact_list is None:
-        """Create new contact list and add to event promotion"""
-        list_name = 'List for Event Promotion: ' + str(event_promotion)
-        contact_list = ContactList.objects.create(name=list_name)
-        event_promotion.contact_list = contact_list
-        event_promotion.save()
 
-        """Call async task to build and send event promotion"""
-        build_and_send_event_promotion.delay(event_promotion.id)
+    event_promotion = instance
+
+    """Check if Event Promotion is approved and Contact List is None"""
+    if event_promotion.status == EventPromotionStatus.approved.value[0] and (
+        event_promotion.contact_list is None
+    ):
+        """Call async task to build and send event promotion after commit"""
+        transaction.on_commit(
+            lambda: build_and_send_event_promotion.delay(event_promotion.id)
+        )
 
     """Clear the contact list if it requires clearing"""
     if event_promotion.requires_list_clear and contact_list is not None:
