@@ -90,7 +90,6 @@ def update_geo_target_result(geo_target_id):
         constituent_id = constituent.get('id')
 
         """Get constituent location"""
-        # TODO: check all addresses
         constituent_addresses = constituent.findall('cons_addr')
         for constituent_address in constituent_addresses:
             constituent_latitude = constituent_address.findtext('latitude')
