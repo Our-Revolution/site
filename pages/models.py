@@ -988,7 +988,7 @@ class InitiativeEndorsementPage(Page):
         ImageChooserPanel('social_image')
     ]
 
-    def _get_initiative_title(self):
+    def _get_display_title(self):
         """Build title for initiative and support legacy pages"""
         if self.initiative_title and self.initiative_name:
             initiative_title = (
@@ -999,7 +999,7 @@ class InitiativeEndorsementPage(Page):
             initiative_title = self.title
 
         return initiative_title
-    get_initiative_title = property(_get_initiative_title)
+    get_display_title = property(_get_display_title)
 
     def get_context(self, *args, **kwargs):
 
