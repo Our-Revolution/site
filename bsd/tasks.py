@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.gdal import GDALException
-from django.contrib.gis.geos import GEOSGeometry, Point
+from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
 from bsd.api import BSD
 from bsd.models import (
     find_constituents_by_state_cd,
@@ -59,7 +59,7 @@ def update_geo_target_result(geo_target_id):
             # todo: fetch number, but stick to 1st for now
             gjson = gjson['features'][0]['geometry']
         geo_shape = GEOSGeometry(json.dumps(gjson))
-    except (GDALException, ValueError):
+    except (GEOSException, GDALException, ValueError):
         geo_target.result = '''The geo json is invalid. Please double check the
         geo json and try again with a new geo target request.
         '''.replace('\n', '')
