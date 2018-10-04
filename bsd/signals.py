@@ -27,7 +27,7 @@ def geo_target_post_save_handler(instance, **kwargs):
     """Check if status is new"""
     if geo_target.status == GeoTargetStatus.new.value[0]:
 
-        """Set to in progress and update result with async task"""
-        geo_target.status = GeoTargetStatus.in_progress.value[0]
+        """Set to in queue and update result with async task"""
+        geo_target.status = GeoTargetStatus.in_queue.value[0]
         geo_target.save()
         update_geo_target_result.delay(geo_target.id)

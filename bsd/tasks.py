@@ -43,9 +43,13 @@ def update_geo_target_result(geo_target_id):
     """Get GeoTarget"""
     geo_target = GeoTarget.objects.get(id=geo_target_id)
 
-    """GeoTarget should be set to in progress, otherwise do nothing"""
-    if geo_target.status != GeoTargetStatus.in_progress.value[0]:
+    """Status should be in queue, otherwise do nothing"""
+    if geo_target.status != GeoTargetStatus.in_queue.value[0]:
         return geo_target.status
+
+    """Set to in progress and start building result"""
+    geo_target.status = GeoTargetStatus.in_progress.value[0]
+    geo_target.save()
 
     try:
         """Get shape from geo json"""
@@ -84,17 +88,13 @@ def update_geo_target_result(geo_target_id):
     result_count = 0
     for constituent in constituents:
         constituent_id = constituent.get('id')
-        logger.debug('constituent_id: %s' % constituent_id)
 
         """Get constituent location"""
         # TODO: check all addresses
         constituent_addresses = constituent.findall('cons_addr')
         for constituent_address in constituent_addresses:
-            logger.debug('constituent_address: %s' % constituent_address.get('id'))
             constituent_latitude = constituent_address.findtext('latitude')
             constituent_longitude = constituent_address.findtext('longitude')
-            logger.debug('constituent_latitude: %s' % constituent_latitude)
-            logger.debug('constituent_longitude: %s' % constituent_longitude)
             if constituent_latitude is not None and (
                 constituent_longitude is not None
             ):
