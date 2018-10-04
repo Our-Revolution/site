@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
+from ckeditor.fields import RichTextField
 from collections import defaultdict
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from localflavor.us.models import USStateField
-from phonenumber_field.modelfields import PhoneNumberField
 from local_groups.models import Group
-from ckeditor.fields import RichTextField
+from pages.models import AlertLevels
+from phonenumber_field.modelfields import PhoneNumberField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField as WagtailRichTextField
 from wagtail.wagtailsnippets.models import register_snippet
@@ -90,9 +91,22 @@ class NominationsPlatformAlert(models.Model):
         help_text='Show alert on nominations platform pages.'
     )
 
+    alert_level = models.IntegerField(
+        choices=[x.value for x in AlertLevels],
+        default=AlertLevels.warning.value[0],
+        blank=False,
+        null=False,
+        help_text="""
+        Set the alert style corresponding to Bootstrap 3 alert levels.
+
+        See: https://getbootstrap.com/docs/3.3/components/#alerts-dismissible
+        """
+    )
+
     panels = [
         FieldPanel('content'),
         FieldPanel('show'),
+        FieldPanel('alert_level')
     ]
 
     def __str__(self):

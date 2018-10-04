@@ -29,6 +29,18 @@ def endorsement_process_url():
 
 
 @register.simple_tag
+def get_alert_level_class(value):
+    """Pass in alert level value and get back approporiate CSS class."""
+    classes_dict = {
+        AlertLevels.success.value[0]: 'success',
+        AlertLevels.info.value[0]: 'info',
+        AlertLevels.warning.value[0]: 'warning',
+        AlertLevels.danger.value[0]: 'danger'
+    }
+    return classes_dict[value]
+
+
+@register.simple_tag
 def groups_url():
     return settings.GROUPS_URL
 

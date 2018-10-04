@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils.decorators import method_decorator
 from django.utils.encoding import python_2_unicode_compatible
+from pages.models import AlertLevels
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import (
@@ -47,9 +48,22 @@ class OrganizingHubLoginAlert(models.Model):
         help_text='Show alert on organizing hub login page.'
     )
 
+    alert_level = models.IntegerField(
+        choices=[x.value for x in AlertLevels],
+        default=AlertLevels.warning.value[0],
+        blank=False,
+        null=False,
+        help_text="""
+        Set the alert style corresponding to Bootstrap 3 alert levels.
+
+        See: https://getbootstrap.com/docs/3.3/components/#alerts-dismissible
+        """
+    )
+
     panels = [
         FieldPanel('content'),
         FieldPanel('show'),
+        FieldPanel('alert_level')
     ]
 
     def __str__(self):

@@ -1,4 +1,4 @@
-{% load pages_tags %}
+{% load pages_tags wagtailcore_tags %}
 
 <div class="container-fluid pt4 pb4 fafafa-bg">
   <div class="row">
@@ -36,31 +36,25 @@
           </a>
           {% endif %}
 
+          {% comment %}Wagtail places HTML tags in blank RichTextFields, so a
+          blank RichTextField evaluates as a string instead of None. We need
+          to strip tags to make sure they properly evaluate as None and so we
+          don't put linebreaks on the page when empty. This is fixed in Wagtail
+          2.2.2.
+
+          See: https://github.com/wagtail/wagtail/issues/2336
+          {% endcomment %}
+          {% if page.secondary_copy|striptags %}
           <hr>
+          {{ page.secondary_copy|richtext }}
 
-          <h2>Nominate a Candidate</h2>
-          <p class="fs18">
-            Our Revolution is made up of hundreds of local groups all across the world,
-            and all of our endorsements must first originate with a nomination from an
-            official group. <strong>Get started submitting your group’s nomination now.
-            </strong>
-          </p>
-
+          {% if page.button_show %}
           <a href="/groups/nominations"
           class="btn btn-success btn-block ls2 uppercase mt20">
             Get Started
           </a>
-
-          <p class="mt20">
-              Endorsement requests must be submitted at least 30 days before the
-              candidate's election in order to be eligible for an endorsement.
-          </p>
-
-          {% endorsement_process_url as link_url %}
-          <p>
-            <strong>To learn more about Our Revolution's endorsement process,
-            <a href="{{link_url}}">click here</a>.</strong>
-          </p>
+          {% endif %}
+          {% endif %}
         </div>
 
       </div>

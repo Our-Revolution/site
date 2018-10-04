@@ -11,6 +11,7 @@ from django.db.models.signals import pre_delete
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from enum import Enum, unique
 from localflavor.us.models import USStateField
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
@@ -37,6 +38,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+@unique
+class AlertLevels(Enum):
+    success = (1, 'Success (Green)')
+    info = (2, 'Info (Blue)')
+    warning = (3, 'Warning (Yellow)')
+    danger = (4, 'Danger (Red)')
 
 class AboutPage(Page):
     board_description = RichTextField()
@@ -818,9 +825,26 @@ def candidate_endorsement_unpublished_handler(instance, **kwargs):
 class CandidateEndorsementIndexPage(Page):
     body = RichTextField(blank=True, null=True)
     content_heading = models.CharField(max_length=128, blank=True, null=True)
+    secondary_copy = RichTextField(
+        blank=True,
+        null=True,
+        help_text='Copy to go below Past Election Results section.'
+    )
+    button_show = models.BooleanField(
+        default=False,
+        help_text="""Show nominations platform Get Started button. Will only
+        display if secondary copy is present."""
+    )
     content_panels = Page.content_panels + [
         FieldPanel('content_heading'),
         FieldPanel('body'),
+        MultiFieldPanel(
+            [
+                FieldPanel('secondary_copy'),
+                FieldPanel('button_show'),
+            ],
+            heading="Secondary Content"
+        ),
     ]
     social_image = models.ForeignKey(
         'wagtailimages.Image',

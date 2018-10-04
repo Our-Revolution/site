@@ -1,9 +1,11 @@
-{% load wagtailcore_tags %}
+{% load pages_tags wagtailcore_tags %}
 
 {% if organizing_hub_login_alert %}
 <!-- organizing_hub_login_alert -->
 
-<div class="alert alert-info br3">
+{% get_alert_level_class organizing_hub_login_alert.alert_level as alert_level %}
+
+<div class="alert alert-{{alert_level}} br3">
   {{ organizing_hub_login_alert.content | richtext }}
 </div>
 
