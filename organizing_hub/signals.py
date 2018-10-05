@@ -110,7 +110,9 @@ def event_promotion_post_save_handler(instance, **kwargs):
         )
 
     """Clear the contact list if it requires clearing"""
-    if event_promotion.requires_list_clear and contact_list is not None:
+    if event_promotion.requires_list_clear and (
+        event_promotion.contact_list is not None
+    ):
         event_promotion.contact_list = None
         event_promotion.save()
 
