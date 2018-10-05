@@ -53,12 +53,14 @@ class EventPromotionStatus(Enum):
     event_not_approved = (50, 'Event Not Approved')
     expired = (60, 'Expired')
 
+
 """Statuses that require clearing of the contact list"""
 event_promotion_statuses_for_list_clear = [
     EventPromotionStatus.skipped,
     EventPromotionStatus.event_not_approved,
     EventPromotionStatus.expired
 ]
+
 
 class EventPromotion(models.Model):
 
