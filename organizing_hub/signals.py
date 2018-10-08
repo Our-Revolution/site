@@ -6,7 +6,6 @@ from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from calls.models import CallCampaign, CallCampaignStatus
-from contacts.models import ContactList
 from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import (
@@ -114,18 +113,13 @@ def call_campaign_post_save_handler(instance, **kwargs):
     call_campaign = instance
 
     """Check if Call Campaign is New and Contact List is None"""
-    status = call_campaign.status
-    contact_list = call_campaign.contact_list
-    if status == CallCampaignStatus.new.value[0] and contact_list is None:
-
-        """Create New Contact List and add to Call Campaign"""
-        list_name = 'List for Call Campaign: ' + str(call_campaign)
-        contact_list = ContactList.objects.create(name=list_name)
-        call_campaign.contact_list = contact_list
-        call_campaign.save()
-
-        """Call async task to build Contact List for Call Campaign"""
-        build_list_for_call_campaign.delay(call_campaign.id)
+    if call_campaign.status == CallCampaignStatus.new.value[0] and (
+        call_campaign.contact_list is None
+    ):
+        """Call async task to build list after commit"""
+        transaction.on_commit(
+            lambda: build_list_for_call_campaign.delay(call_campaign.id)
+        )
 
     # """Clear the contact list if it requires clearing"""
     # if event_promotion.requires_list_clear and contact_list is not None:
