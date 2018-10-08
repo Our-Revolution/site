@@ -112,10 +112,13 @@ def call_campaign_post_save_handler(instance, **kwargs):
 
     call_campaign = instance
 
-    """Check if Call Campaign is New and Contact List is None"""
+    """
+    Check if Call Campaign is New and point location is not None and Contact
+    List is None
+    """
     if call_campaign.status == CallCampaignStatus.new.value[0] and (
-        call_campaign.contact_list is None
-    ):
+        call_campaign.point is not None
+    ) and call_campaign.contact_list is None:
         """Call async task to build list after commit"""
         transaction.on_commit(
             lambda: build_list_for_call_campaign.delay(call_campaign.id)

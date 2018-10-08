@@ -73,8 +73,11 @@ def update_geo_target_result(geo_target_id):
     """
     constituents = find_constituents_by_state_cd(
         geo_target.state_or_territory,
+        cons_group=None,
         subscribers_only=False,
         primary_address_only=geo_target.primary_address_only,
+        with_email=False,
+        with_phone=False,
     )
 
     """Update status and exit if we did not find any constituents"""
