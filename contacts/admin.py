@@ -26,17 +26,17 @@ class ContactListAdmin(admin.ModelAdmin):
         'id',
         'name',
         'status',
+        'get_list_size',
         'date_created',
         'date_modified',
-        'get_list_size',
     ]
     list_display_links = list_display
     list_filter = ['status']
     raw_id_fields = ['contacts']
     readonly_fields = [
+        'get_list_size',
         'date_created',
         'date_modified',
-        'get_list_size',
     ]
     fields = readonly_fields + [
         'name',
