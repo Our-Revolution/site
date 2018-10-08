@@ -338,10 +338,10 @@ def sync_contact_list_with_bsd_constituents(
 @shared_task
 def build_and_send_event_promotion(event_promotion_id):
     """
-    Build contact list for event promotion and then send it
+    Build Contact List for Event Promotion and then send it
 
-    Meant for event promotion with new contact list that needs to be built. If
-    contact list is not new then do nothing. Otherwise generate list and save.
+    Meant for approved Event Promotion with missing Contact List that needs to
+    be built. Generate list, save to db, then send promo emails.
 
     TODO: TECH-1331: better celery logging
 
@@ -432,8 +432,8 @@ def build_list_for_call_campaign(call_campaign_id):
     """
     Build Contact List for Call Campaign
 
-    Meant for Call Campaign with new Contact List that needs to be built. If
-    Contact List is not new then do nothing. Otherwise generate list and save.
+    Meant for Call Campaign with missing Contact List that needs to be built.
+    Generate list and save to db.
 
     Parameters
     ----------
@@ -443,7 +443,7 @@ def build_list_for_call_campaign(call_campaign_id):
     Returns
         -------
         int
-            Return updated Contact List status, or None for no list
+            Return Contact List status
     """
 
     """Get Call Campaign"""
@@ -451,18 +451,17 @@ def build_list_for_call_campaign(call_campaign_id):
         'contact_list'
     ).get(id=call_campaign_id)
 
-    """If Contact List is None, return None"""
-    contact_list = call_campaign.contact_list
-    if contact_list is None:
-        return None
+    """
+    Do nothing if Contact List is not None
+    """
+    if call_campaign.contact_list is not None:
+        return call_campaign.contact_list.status
 
-    """If Contact List is not New, return list status"""
-    if contact_list.status != ContactListStatus.new.value[0]:
-        return contact_list.status
-
-    """Update list status to build in progress"""
-    contact_list.status = ContactListStatus.in_progress.value[0]
-    contact_list.save()
+    """Create New Contact List and add to Call Campaign"""
+    list_name = 'List for Call Campaign: ' + str(call_campaign)
+    contact_list = ContactList.objects.create(name=list_name)
+    call_campaign.contact_list = contact_list
+    call_campaign.save()
 
     """
     Get constituents by state first and we will filter it down later. Don't
@@ -476,6 +475,10 @@ def build_list_for_call_campaign(call_campaign_id):
     """Stop if we did not find constituents for some reason"""
     if constituents is None:
         return contact_list.status
+
+    """Update list status to build in progress"""
+    contact_list.status = ContactListStatus.in_progress.value[0]
+    contact_list.save()
 
     """Get cutoff date for filtering out recent call campaign calls"""
     recent_call_cutoff = timezone.now() - datetime.timedelta(
