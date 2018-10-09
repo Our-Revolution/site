@@ -83,21 +83,28 @@
 
       <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-6">
+          <div class="mb5"><strong>State or Territory</strong></div>
+          <div class="mb10 well well-sm">
+            {{ campaign.get_state_or_territory_display }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
           <div class="mb5"><strong>Zip Code</strong></div>
           <div class="mb10 well well-sm">
             {{ campaign.postal_code }}
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="mb5"><strong>Radius</strong></div>
           <div class="mb10 well well-sm">
             {{ campaign.max_distance }} Miles
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="mb5"><strong>Max Number of Contacts</strong></div>
           <div class="mb10 well well-sm">
             {{ campaign.max_recipients }}

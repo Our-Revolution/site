@@ -53,6 +53,11 @@ CALLS_MAX_LIST_SIZE = int(os.environ.get(
     'CALLS_MAX_LIST_SIZE',
     1000
 ))
+CALLS_RECENT_CUTOFF_DAYS = int(os.environ.get(
+    'CALLS_RECENT_CUTOFF_DAYS',
+    14
+))
+
 CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', 0)))
 
 """Auto approve events created by Group Leaders"""

@@ -34,6 +34,7 @@ class CallCampaignAdmin(admin.ModelAdmin):
         'date_created',
         'status',
         'max_recipients',
+        'state_or_territory',
         'postal_code',
         'max_distance',
     ]
@@ -50,12 +51,13 @@ class CallCampaignAdmin(admin.ModelAdmin):
         'status',
         'contact_list',
         'script',
+        'state_or_territory',
         'postal_code',
         'max_distance',
         'max_recipients',
         'callers',
     ]
-    raw_id_fields = ['contact_list']
+    raw_id_fields = ['callers', 'contact_list']
 
 
 @admin.register(CallProfile)

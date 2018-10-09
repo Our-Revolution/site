@@ -52,6 +52,7 @@ def find_constituents_by_state_cd(
     subscribers_only=True,
     primary_address_only=True,
     with_email=False,
+    with_phone=False,
 ):
     """
     Find BSD constituents by state/territory and wait for deferred result
@@ -65,11 +66,13 @@ def find_constituents_by_state_cd(
     cons_group : str or list of str
         BSD constituent group id(s)
     subscribers_only : bool
-        Filter by subscribers only if True
+        Filter by constituent has at least one email address that is subscribed
     primary_address_only : bool
-        Filter by primary addresses only if True
+        Filter by primary address only
     with_email : bool
-        Include email bundle in results
+        Include primary email bundle in results
+    with_phone : bool
+        Include primary phone bundle in results
 
     Returns
         -------
@@ -98,9 +101,13 @@ def find_constituents_by_state_cd(
     if cons_group:
         filter['cons_group'] = cons_group
 
-    """Check if we need to return emails"""
+    """Check if we need to return email address"""
     if with_email:
         bundles.append('primary_cons_email')
+
+    """Check if we need to return phone number"""
+    if with_phone:
+        bundles.append('primary_cons_phone')
 
     """Get constituents from BSD"""
     constituents_result = bsd_api.cons_getConstituents(filter, bundles)

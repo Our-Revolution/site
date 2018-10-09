@@ -5,6 +5,7 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.db import models
 from enum import Enum, unique
+from localflavor.us.models import USStateField
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import googlemaps
@@ -14,42 +15,6 @@ import uuid
 logger = logging.getLogger(__name__)
 
 GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
-
-
-def update_point_for_call_campaign(call_campaign):
-    """
-    Update point field on Call Campaign based on campaign zip code
-
-    Parameters
-    ----------
-    call_campaign : CallCampaign
-        Call Campaign to update
-
-    Returns
-        -------
-        call_campaign
-            Updated Call Campaign
-    """
-
-    """Get lat/long for zip from google maps api"""
-    try:
-        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
-        components = {"postal_code": call_campaign.postal_code}
-        geocoded_address = geolocator.geocode(components=components)
-        location = geocoded_address[0]['geometry']['location']
-        call_campaign.point = Point(
-            location['lng'],
-            location['lat'],
-            srid=4326
-        )
-        call_campaign.save()
-    except IndexError:
-        """Set point to None if can't find lat/long"""
-        if call_campaign.point is not None:
-            call_campaign.point = None
-            call_campaign.save()
-
-    return call_campaign
 
 
 @unique
@@ -63,6 +28,14 @@ class CallCampaignStatus(Enum):
     suspended = (60, 'Suspended')
 
 
+"""Active Campaign Statuses - not in final/end state yet"""
+call_campaign_statuses_active = [
+    CallCampaignStatus.new,
+    CallCampaignStatus.approved,
+    CallCampaignStatus.in_progress,
+    CallCampaignStatus.paused,
+]
+
 """Statuses for Caller display"""
 call_campaign_statuses_for_caller = [
     CallCampaignStatus.approved,
@@ -71,12 +44,12 @@ call_campaign_statuses_for_caller = [
     CallCampaignStatus.complete,
 ]
 
-"""Active Campaign Statuses - not in final/end state yet"""
-call_campaign_statuses_active = [
-    CallCampaignStatus.new,
-    CallCampaignStatus.approved,
-    CallCampaignStatus.in_progress,
-    CallCampaignStatus.paused,
+"""
+Statuses that require clearing the Contact List. If we want to retry then we
+should generate new list.
+"""
+call_campaign_statuses_for_list_clear = [
+    CallCampaignStatus.declined,
 ]
 
 """Campaign Statuses with data download available"""
@@ -185,6 +158,68 @@ def find_campaigns_as_admin(call_profile):
     return CallCampaign.objects.none()
 
 
+def find_last_call_to_contact(contact_external_id):
+    """
+    Find most recent Call created for Contact based on external id
+
+    Parameters
+    ----------
+    contact_external_id : str
+        Contact external_id field
+
+    Returns
+        -------
+        Call
+            Returns matching Call, or None
+    """
+
+    """See if there is a matching contact"""
+    contact = Contact.objects.filter(external_id=contact_external_id).first()
+    if contact is None:
+        return None
+
+    """Find last Call created for contact"""
+    last_call_created = Call.objects.filter(contact=contact).order_by(
+        '-date_created'
+    ).first()
+
+    return last_call_created
+
+
+def set_point_for_call_campaign(call_campaign):
+    """
+    Set point field on Call Campaign based on campaign zip code but don't save
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign to update
+
+    Returns
+        -------
+        call_campaign
+            Updated Call Campaign
+    """
+
+    """Get lat/long for zip from google maps api"""
+    try:
+        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
+        components = {"postal_code": call_campaign.postal_code}
+        geocoded_address = geolocator.geocode(components=components)
+        location = geocoded_address[0]['geometry']['location']
+        call_campaign.point = Point(
+            location['lng'],
+            location['lat'],
+            srid=4326
+        )
+    except IndexError:
+        """Set point to None if can't find lat/long"""
+        if call_campaign.point is not None:
+            call_campaign.point = None
+
+    return call_campaign
+
+
 class CallProfile(models.Model):
     """Calls app related information for a user"""
 
@@ -225,6 +260,7 @@ class CallCampaign(models.Model):
     point = PointField(blank=True, null=True)
     postal_code = models.CharField(max_length=12, verbose_name="Zip Code")
     script = models.TextField(max_length=2000)
+    state_or_territory = USStateField(verbose_name="State or Territory")
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
         default=CallCampaignStatus.new.value[0],
@@ -279,13 +315,15 @@ class CallCampaign(models.Model):
     is_paused = property(_is_paused)
 
     def save(self, *args, **kw):
-        old = CallCampaign.objects.get(pk=self.pk) if self.pk else None
-        super(CallCampaign, self).save(*args, **kw)
         """Update point if point is None or postal code field changed"""
-        if self.point is None or (
-            old is not None and old.postal_code != self.postal_code
-        ):
-            update_point_for_call_campaign(self)
+        new = self
+        if new.point is None:
+            new = set_point_for_call_campaign(new)
+        elif new.pk:
+            old = CallCampaign.objects.get(pk=new.pk)
+            if old.postal_code != new.postal_code:
+                new = set_point_for_call_campaign(new)
+        super(CallCampaign, new).save(*args, **kw)
 
 
 class Call(models.Model):

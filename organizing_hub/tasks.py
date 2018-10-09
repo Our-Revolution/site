@@ -11,6 +11,11 @@ from bsd.models import (
     find_constituents_by_state_cd,
     find_event_by_id_obfuscated,
 )
+from calls.models import (
+    CallCampaign,
+    CallCampaignStatus,
+    find_last_call_to_contact,
+)
 from contacts.models import Contact, ContactList, ContactListStatus
 from events.models import (
     EventPromotion,
@@ -27,6 +32,9 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
+CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
+CALLS_RECENT_CUTOFF_DAYS = settings.CALLS_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
@@ -173,7 +181,10 @@ def sync_contact_list_with_bsd_constituent(
     contact_list,
     constituent,
     max_distance_geos_area,
-    recent_date_cutoff,
+    recent_promo_cutoff=None,
+    recent_call_cutoff=None,
+    require_email=False,
+    require_phone=False,
 ):
     """
     Sync Contact List with BSD constituent, with param for max distance from
@@ -187,8 +198,14 @@ def sync_contact_list_with_bsd_constituent(
         Constituent should be from BSD api in xml format
     max_distance_geos_area : GEOSGeometry
         Max distance GEOSGeometry to limit list radius
-    recent_date_cutoff : datetime
+    recent_promo_cutoff : datetime
         Date cutoff for contacts who received event promo recently
+    recent_call_cutoff : datetime
+        Date cutoff for contacts who received call campaign call recently
+    require_email : bool
+        Require subscribed email address before adding constituent to list
+    require_phone : bool
+        Require phone number before adding constituent to list
 
     Returns
         -------
@@ -199,15 +216,37 @@ def sync_contact_list_with_bsd_constituent(
     """Get constituent id"""
     constituent_id = constituent.get('id')
 
-    """Check if constituent email is subscribed"""
+    """Get constituent email and check if it's subscribed and required"""
+    email_address = None
     cons_email = constituent.find('cons_email')
-    if cons_email is None:
+    if require_email and cons_email is None:
         return contact_list
-    is_subscribed = False
-    email_address = cons_email.findtext('email')
-    is_subscribed = cons_email.findtext('is_subscribed') == '1'
-    if email_address is None or not is_subscribed:
+    elif cons_email is not None:
+        """Check if subscribed"""
+        is_subscribed = cons_email.findtext('is_subscribed') == '1'
+        if require_email and not is_subscribed:
+            return contact_list
+        elif is_subscribed:
+            """Check if email address exists"""
+            email_address = cons_email.findtext('email')
+            if require_email and email_address is None:
+                return contact_list
+
+    """Get constituent phone and check if it's required"""
+    phone_number = None
+    cons_phone = constituent.find('cons_phone')
+    if require_phone and cons_phone is None:
         return contact_list
+    elif cons_phone is not None:
+        """TODO: TECH-1286: Check if subscribed?"""
+        # is_subscribed = cons_phone.findtext('is_subscribed') == '1'
+        # if require_phone and not is_subscribed:
+        #     return contact_list
+
+        """Check if phone number exists"""
+        phone_number = cons_phone.findtext('phone')
+        if require_phone and phone_number is None:
+            return contact_list
 
     """Get constituent location"""
     constituent_address = constituent.find('cons_addr')
@@ -227,11 +266,26 @@ def sync_contact_list_with_bsd_constituent(
         return contact_list
 
     """Check if contact has received recent event promo"""
-    last_event_promo = find_last_event_promo_sent_to_contact(constituent_id)
-    if last_event_promo is not None and (
-        last_event_promo.date_sent > recent_date_cutoff
-    ):
-        return contact_list
+    if recent_promo_cutoff is not None:
+        last_event_promo = find_last_event_promo_sent_to_contact(
+            constituent_id
+        )
+        if last_event_promo is not None and (
+            last_event_promo.date_sent > recent_promo_cutoff
+        ):
+            return contact_list
+
+    """Check if contact has received recent call campaign call"""
+    if recent_call_cutoff is not None:
+        last_call_to_contact = find_last_call_to_contact(constituent_id)
+        if last_call_to_contact is not None and (
+            last_call_to_contact.date_created > recent_call_cutoff
+        ):
+            return contact_list
+
+    """Get first and last name"""
+    first_name = constituent.findtext('firstname')
+    last_name = constituent.findtext('lastname')
 
     """Create or update contact and add to list"""
     contact, created = Contact.objects.update_or_create(
@@ -239,9 +293,10 @@ def sync_contact_list_with_bsd_constituent(
         defaults={
             'external_id': constituent_id,
             'email_address': email_address,
-            'first_name': constituent.findtext('firstname'),
-            'last_name': constituent.findtext('lastname'),
+            'first_name': first_name,
+            'last_name': last_name,
             'point': constituent_point,
+            'phone_number': phone_number,
         },
     )
     contact_list.contacts.add(contact)
@@ -255,6 +310,10 @@ def sync_contact_list_with_bsd_constituents(
     max_contacts,
     max_distance,
     point,
+    recent_promo_cutoff=None,
+    recent_call_cutoff=None,
+    require_email=False,
+    require_phone=False,
 ):
     """
     Sync Contact List with BSD constituents, with params for max list size
@@ -272,6 +331,14 @@ def sync_contact_list_with_bsd_constituents(
         Max distance miles from point to limit list radius
     point : Point
         Point for use with max_contacts or max_distance
+    recent_promo_cutoff : datetime
+        Date cutoff for contacts who received event promo recently
+    recent_call_cutoff : datetime
+        Date cutoff for contacts who received call campaign call recently
+    require_email : bool
+        Require subscribed email address before adding constituent to list
+    require_phone : bool
+        Require phone number before adding constituent to list
 
     Returns
         -------
@@ -283,29 +350,21 @@ def sync_contact_list_with_bsd_constituents(
     buffer_width = get_buffer_width_from_miles(max_distance)
     max_distance_geos_area = point.buffer(buffer_width)
 
-    """Get cutoff date for filtering out recent event promo recipients"""
-    date_cutoff = timezone.now() - datetime.timedelta(
-        days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
-    )
-
     """Loop through constituents and sync each to list"""
     for constituent in constituents:
         sync_contact_list_with_bsd_constituent(
             contact_list,
             constituent,
             max_distance_geos_area,
-            date_cutoff
+            recent_promo_cutoff=recent_promo_cutoff,
+            recent_call_cutoff=recent_call_cutoff,
+            require_email=require_email,
+            require_phone=require_phone,
         )
 
-    """Get list limit from max contacts if valid, otherwise use default"""
-    if max_contacts > 0 and max_contacts < EVENTS_PROMOTE_MAX_LIST_SIZE:
-        list_limit = max_contacts
-    else:
-        list_limit = EVENTS_PROMOTE_MAX_LIST_SIZE
-
     """If list size is greater than limit, then trim it by distance"""
-    if contact_list.contacts.count() > list_limit:
-        contact_list.trim_list_by_distance(list_limit, point)
+    if contact_list.contacts.count() > max_contacts:
+        contact_list.trim_list_by_distance(max_contacts, point)
 
     return contact_list
 
@@ -316,10 +375,10 @@ def sync_contact_list_with_bsd_constituents(
 @shared_task
 def build_and_send_event_promotion(event_promotion_id):
     """
-    Build contact list for event promotion and then send it
+    Build Contact List for Event Promotion and then send it
 
-    Meant for event promotion with new contact list that needs to be built. If
-    contact list is not new then do nothing. Otherwise generate list and save.
+    Meant for approved Event Promotion with missing Contact List that needs to
+    be built. Generate list, save to db, then send promo emails.
 
     TODO: TECH-1331: better celery logging
 
@@ -357,32 +416,59 @@ def build_and_send_event_promotion(event_promotion_id):
 
     """Get event location data"""
     event = find_event_by_id_obfuscated(event_promotion.event_external_id)
-    event_point = event.point
-    event_state_cd = event.venue_state_or_territory
 
-    """Get constitents by state first and we will filter it down later"""
+    """Stop if we did not find event or event location"""
+    if event is None or event.point is None:
+        return sent_count
+
+    """
+    Get constituents by state first and we will filter it down later. Filter by
+    sendable cons group, subscribers only, primary address only.
+    """
     constituents = find_constituents_by_state_cd(
-        event_state_cd,
-        EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID,
+        event.venue_state_or_territory,
+        cons_group=EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID,
+        subscribers_only=True,
+        primary_address_only=True,
         with_email=True,
+        with_phone=False,
     )
 
     """Stop if we did not find constituents for some reason"""
     if constituents is None:
         return sent_count
 
-    """Update contact list status to build in progress"""
+    """Update list status to build in progress"""
     contact_list.status = ContactListStatus.in_progress.value[0]
     contact_list.save()
 
-    """Add constituents to list if they are w/in max list size and area"""
+    """Get cutoff date for filtering out recent event promo recipients"""
+    recent_promo_cutoff = timezone.now() - datetime.timedelta(
+        days=EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
+    )
+
+    """Get max distance miles based on app config"""
     max_distance_miles = float(EVENTS_PROMOTE_MAX_DISTANCE_MILES)
+
+    """Get list size limit based on model and app config"""
+    if event_promotion.max_recipients > 0 and (
+        event_promotion.max_recipients < EVENTS_PROMOTE_MAX_LIST_SIZE
+    ):
+        list_limit = event_promotion.max_recipients
+    else:
+        list_limit = EVENTS_PROMOTE_MAX_LIST_SIZE
+
+    """Add constituents to list if they are w/in max list size and area"""
     contact_list = sync_contact_list_with_bsd_constituents(
         contact_list,
         constituents,
-        max_contacts=event_promotion.max_recipients,
+        max_contacts=list_limit,
         max_distance=max_distance_miles,
-        point=event_point,
+        point=event.point,
+        recent_promo_cutoff=recent_promo_cutoff,
+        recent_call_cutoff=None,
+        require_email=True,
+        require_phone=False,
     )
 
     """Update list status to complete"""
@@ -397,3 +483,107 @@ def build_and_send_event_promotion(event_promotion_id):
 
     """Return sent count"""
     return sent_count
+
+
+@shared_task
+def build_list_for_call_campaign(call_campaign_id):
+    """
+    Build Contact List for Call Campaign
+
+    Meant for New Call Campaign with point location and missing Contact List
+    that needs to be built. Generate list and save to db.
+
+    Parameters
+    ----------
+    call_campaign_id : int
+        CallCampaign id
+
+    Returns
+        -------
+        int
+            Return Contact List status
+    """
+
+    """Get Call Campaign"""
+    call_campaign = CallCampaign.objects.select_related(
+        'contact_list'
+    ).get(id=call_campaign_id)
+
+    """
+    Do nothing if Call Campaign is not New, or point location is None, or
+    Contact List is not None
+    """
+    if call_campaign.status != CallCampaignStatus.new.value[0] or (
+        call_campaign.point is None
+    ) or call_campaign.contact_list is not None:
+        if call_campaign.contact_list is not None:
+            return call_campaign.contact_list.status
+        else:
+            return 0
+
+    """Create New Contact List and add to Call Campaign"""
+    list_name = 'List for Call Campaign: ' + str(call_campaign)
+    contact_list = ContactList.objects.create(name=list_name)
+    call_campaign.contact_list = contact_list
+    call_campaign.save()
+
+    """
+    Get constituents by state first and we will filter it down later. Filter by
+    primary address only, but not by cons group or subscribers only. Get phone,
+    and get email in case we need it.
+    """
+    constituents = find_constituents_by_state_cd(
+        call_campaign.state_or_territory,
+        cons_group=None,
+        subscribers_only=False,
+        primary_address_only=True,
+        with_email=True,
+        with_phone=True,
+    )
+
+    """Stop if we did not find constituents for some reason"""
+    if constituents is None:
+        return contact_list.status
+
+    """Update list status to build in progress"""
+    contact_list.status = ContactListStatus.in_progress.value[0]
+    contact_list.save()
+
+    """Get cutoff date for filtering out recent call campaign calls"""
+    recent_call_cutoff = timezone.now() - datetime.timedelta(
+        days=CALLS_RECENT_CUTOFF_DAYS
+    )
+
+    """Get max distance miles based on model and app config"""
+    max_distance_miles = float(min(
+        call_campaign.max_distance,
+        CALLS_MAX_DISTANCE_MILES
+    ))
+
+    """Get list size limit based on model and app config"""
+    if call_campaign.max_recipients > 0 and (
+        call_campaign.max_recipients < CALLS_MAX_LIST_SIZE
+    ):
+        list_limit = call_campaign.max_recipients
+    else:
+        list_limit = CALLS_MAX_LIST_SIZE
+
+    """Add constituents to list if they are w/in max list size and area"""
+    contact_list = sync_contact_list_with_bsd_constituents(
+        contact_list,
+        constituents,
+        max_contacts=list_limit,
+        max_distance=max_distance_miles,
+        point=call_campaign.point,
+        recent_promo_cutoff=None,
+        recent_call_cutoff=recent_call_cutoff,
+        require_email=False,
+        require_phone=True,
+    )
+
+    """Update list status to complete"""
+    contact_list.status = ContactListStatus.complete.value[0]
+    contact_list.save()
+
+    """Return list status"""
+    return contact_list.status

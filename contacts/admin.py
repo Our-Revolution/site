@@ -16,7 +16,13 @@ class ContactAdmin(admin.ModelAdmin):
         'email_address',
         'phone_number',
     ]
-    search_fields = ['first_name', 'last_name', 'email_address']
+    search_fields = [
+        'email_address',
+        'external_id',
+        'first_name',
+        'id',
+        'last_name'
+    ]
 
 
 @admin.register(ContactList)
@@ -26,17 +32,17 @@ class ContactListAdmin(admin.ModelAdmin):
         'id',
         'name',
         'status',
+        'get_list_size',
         'date_created',
         'date_modified',
-        'get_list_size',
     ]
     list_display_links = list_display
     list_filter = ['status']
     raw_id_fields = ['contacts']
     readonly_fields = [
+        'get_list_size',
         'date_created',
         'date_modified',
-        'get_list_size',
     ]
     fields = readonly_fields + [
         'name',
