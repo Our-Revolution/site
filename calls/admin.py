@@ -57,7 +57,7 @@ class CallCampaignAdmin(admin.ModelAdmin):
         'max_recipients',
         'callers',
     ]
-    raw_id_fields = ['contact_list']
+    raw_id_fields = ['callers', 'contact_list']
 
 
 @admin.register(CallProfile)
