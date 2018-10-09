@@ -216,7 +216,7 @@ def sync_contact_list_with_bsd_constituent(
     """Get constituent id"""
     constituent_id = constituent.get('id')
 
-    """Get constituent email and check if it's subscribed"""
+    """Get constituent email and check if it's subscribed and required"""
     email_address = None
     cons_email = constituent.find('cons_email')
     if require_email and cons_email is None:
@@ -226,13 +226,13 @@ def sync_contact_list_with_bsd_constituent(
         is_subscribed = cons_email.findtext('is_subscribed') == '1'
         if require_email and not is_subscribed:
             return contact_list
+        elif is_subscribed:
+            """Check if email address exists"""
+            email_address = cons_email.findtext('email')
+            if require_email and email_address is None:
+                return contact_list
 
-        """Check if email address exists"""
-        email_address = cons_email.findtext('email')
-        if require_email and email_address is None:
-            return contact_list
-
-    """Get constituent phone and check if it's subscribed"""
+    """Get constituent phone and check if it's required"""
     phone_number = None
     cons_phone = constituent.find('cons_phone')
     if require_phone and cons_phone is None:
