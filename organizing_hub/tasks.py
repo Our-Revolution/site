@@ -238,10 +238,10 @@ def sync_contact_list_with_bsd_constituent(
     if require_phone and cons_phone is None:
         return contact_list
     elif cons_phone is not None:
-        """Check if subscribed"""
-        is_subscribed = cons_phone.findtext('is_subscribed') == '1'
-        if require_phone and not is_subscribed:
-            return contact_list
+        """TODO: TECH-1286: Check if subscribed?"""
+        # is_subscribed = cons_phone.findtext('is_subscribed') == '1'
+        # if require_phone and not is_subscribed:
+        #     return contact_list
 
         """Check if phone number exists"""
         phone_number = cons_phone.findtext('phone')
