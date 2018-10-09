@@ -186,9 +186,9 @@ def find_last_call_to_contact(contact_external_id):
     return last_call_created
 
 
-def update_point_for_call_campaign(call_campaign):
+def set_point_for_call_campaign(call_campaign):
     """
-    Update point field on Call Campaign based on campaign zip code
+    Set point field on Call Campaign based on campaign zip code but don't save
 
     Parameters
     ----------
@@ -212,12 +212,10 @@ def update_point_for_call_campaign(call_campaign):
             location['lat'],
             srid=4326
         )
-        call_campaign.save()
     except IndexError:
         """Set point to None if can't find lat/long"""
         if call_campaign.point is not None:
             call_campaign.point = None
-            call_campaign.save()
 
     return call_campaign
 
@@ -317,13 +315,15 @@ class CallCampaign(models.Model):
     is_paused = property(_is_paused)
 
     def save(self, *args, **kw):
-        old = CallCampaign.objects.get(pk=self.pk) if self.pk else None
-        super(CallCampaign, self).save(*args, **kw)
         """Update point if point is None or postal code field changed"""
-        if self.point is None or (
-            old is not None and old.postal_code != self.postal_code
-        ):
-            update_point_for_call_campaign(self)
+        new = self
+        if new.point is None:
+            new = set_point_for_call_campaign(new)
+        elif new.pk:
+            old = CallCampaign.objects.get(pk=new.pk)
+            if old.postal_code != new.postal_code:
+                new = set_point_for_call_campaign(new)
+        super(CallCampaign, new).save(*args, **kw)
 
 
 class Call(models.Model):
