@@ -516,7 +516,10 @@ def build_list_for_call_campaign(call_campaign_id):
     if call_campaign.status != CallCampaignStatus.new.value[0] or (
         call_campaign.point is None
     ) or call_campaign.contact_list is not None:
-        return call_campaign.contact_list.status
+        if call_campaign.contact_list is not None:
+            return call_campaign.contact_list.status
+        else:
+            return 0
 
     """Create New Contact List and add to Call Campaign"""
     list_name = 'List for Call Campaign: ' + str(call_campaign)
