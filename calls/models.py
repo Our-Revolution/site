@@ -28,6 +28,14 @@ class CallCampaignStatus(Enum):
     suspended = (60, 'Suspended')
 
 
+"""Active Campaign Statuses - not in final/end state yet"""
+call_campaign_statuses_active = [
+    CallCampaignStatus.new,
+    CallCampaignStatus.approved,
+    CallCampaignStatus.in_progress,
+    CallCampaignStatus.paused,
+]
+
 """Statuses for Caller display"""
 call_campaign_statuses_for_caller = [
     CallCampaignStatus.approved,
@@ -36,12 +44,12 @@ call_campaign_statuses_for_caller = [
     CallCampaignStatus.complete,
 ]
 
-"""Active Campaign Statuses - not in final/end state yet"""
-call_campaign_statuses_active = [
-    CallCampaignStatus.new,
-    CallCampaignStatus.approved,
-    CallCampaignStatus.in_progress,
-    CallCampaignStatus.paused,
+"""
+Statuses that require clearing the Contact List. If we want to retry then we
+should generate new list.
+"""
+call_campaign_statuses_for_list_clear = [
+    CallCampaignStatus.declined,
 ]
 
 """Campaign Statuses with data download available"""

@@ -54,7 +54,10 @@ class EventPromotionStatus(Enum):
     expired = (60, 'Expired')
 
 
-"""Statuses that require clearing of the contact list"""
+"""
+Statuses that require clearing the Contact List. If we want to retry then we
+should generate new list.
+"""
 event_promotion_statuses_for_list_clear = [
     EventPromotionStatus.skipped,
     EventPromotionStatus.event_not_approved,

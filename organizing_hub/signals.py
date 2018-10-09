@@ -5,7 +5,11 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from calls.models import CallCampaign, CallCampaignStatus
+from calls.models import (
+    call_campaign_statuses_for_list_clear,
+    CallCampaign,
+    CallCampaignStatus,
+)
 from events.models import EventPromotion, EventPromotionStatus
 from local_groups.models import (Group as LocalGroup, LocalGroupAffiliation)
 from organizing_hub.tasks import (
@@ -124,10 +128,12 @@ def call_campaign_post_save_handler(instance, **kwargs):
             lambda: build_list_for_call_campaign.delay(call_campaign.id)
         )
 
-    # """Clear the contact list if it requires clearing"""
-    # if event_promotion.requires_list_clear and contact_list is not None:
-    #     event_promotion.contact_list = None
-    #     event_promotion.save()
+    """Clear the Contact List if necessary"""
+    if call_campaign.status in [
+        x.value[0] for x in call_campaign_statuses_for_list_clear
+    ] and call_campaign.contact_list is not None:
+        call_campaign.contact_list = None
+        call_campaign.save()
 
 
 @receiver(post_save, sender=EventPromotion)
@@ -144,7 +150,7 @@ def event_promotion_post_save_handler(instance, **kwargs):
             lambda: build_and_send_event_promotion.delay(event_promotion.id)
         )
 
-    """Clear the contact list if it requires clearing"""
+    """Clear the Contact List if necessary"""
     if event_promotion.requires_list_clear and (
         event_promotion.contact_list is not None
     ):
