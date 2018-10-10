@@ -53,9 +53,14 @@
       </div>
 
       <div class="page-sub-nav filter clearfix">
+
   			<div class="form-inline pull-left">
   				<div class="form-group">
-  					<label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
+  					<label for="fuzzy-search" class="sr-only">
+              Filter By:
+            </label>
+            <input type="search" class="filter__search fuzzy-search"
+            id="fuzzy-search" placeholder="Search by Name or State...">
   				</div>
   			</div>
 
@@ -65,6 +70,7 @@
   					<button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
   				</div>
   			</div>
+
       </div>
 
 			<div id="initiatives-list">
@@ -126,6 +132,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
 <script>
+
   var sortingBy = "featured";
   var sortingAsc = true;
 
@@ -167,14 +174,16 @@
   var options = {
 	  valueNames: [
   		'state',
-  		'name',
   		'title',
-  		'vote',
   		{ name: 'featured', data: 'is-featured' }
 	  ]
   };
   var initiativesList = new List('initiatives-list', options);
   var self = this;
+
+  $('#fuzzy-search').on('keyup', function() {
+    fuzzySearch(this);
+  });
 
   initiativesList.on("updated", function(list) {
   	if (list.matchingItems.length > 0) {
