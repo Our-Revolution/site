@@ -101,73 +101,78 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
 <script>
-  var sortingBy = "state";
-  var sortingAsc = true;
 
-  // Functions
+  $(document).ready(function() {
 
-  function fuzzySearch(e) {
-    candidatesList.search(e.value);
-  }
+    var sortingBy = "state";
+    var sortingAsc = true;
 
-  function sort(sortBy) {
-    if (sortingBy === sortBy) {
-      if (sortingAsc) {
-        candidatesList.sort(sortBy, { order: 'desc'});
-        sortingAsc = false;
-      }
-      else {
+    // Functions
+
+    function fuzzySearch(e) {
+      candidatesList.search(e.value);
+    }
+
+    function sort(sortBy) {
+      if (sortingBy === sortBy) {
+        if (sortingAsc) {
+          candidatesList.sort(sortBy, { order: 'desc'});
+          sortingAsc = false;
+        }
+        else {
+          candidatesList.sort(sortBy, { order: 'asc'});
+          sortingAsc = true;
+        }
+      } else {
         candidatesList.sort(sortBy, { order: 'asc'});
         sortingAsc = true;
       }
-    } else {
-      candidatesList.sort(sortBy, { order: 'asc'});
-      sortingAsc = true;
+      sortingBy = sortBy;
     }
-    sortingBy = sortBy;
-  }
 
-  var options = {
-    valueNames: [
-      'date',
-      'state',
-      'name'
-    ]
-  };
-  var candidatesList = new List('candidates-list', options);
-  var self = this;
+    var options = {
+      valueNames: [
+        'date',
+        'state',
+        'name'
+      ]
+    };
+    var candidatesList = new List('candidates-list', options);
+    var self = this;
 
-  $('#fuzzy-search').on('keyup', function() {
-    fuzzySearch(this);
-  });
+    $('#fuzzy-search').on('keyup', function() {
+      fuzzySearch(this);
+    });
 
-  candidatesList.on("updated", function(list) {
-    if (list.matchingItems.length > 0) {
-      $('.no-result').hide()
-    } else {
-      $('.no-result').show()
-    }
-  });
-
-  $(".sort-buttons").on("click", function(e) {
-    var btn = $(e.target).closest(".btn");
-    var sortByData = btn.attr("sort-by");
-    sort(sortByData);
-    if (sortingBy == sortByData) {
-      $(".sort-buttons .btn").each(function(e) {
-        $(this).removeClass("active");
-        $(this).removeClass("asc");
-        $(this).removeClass("desc");
-      });
-      btn.toggleClass("active");
-      if (sortingAsc) {
-        btn.addClass("asc");
-        btn.removeClass("desc");
+    candidatesList.on("updated", function(list) {
+      if (list.matchingItems.length > 0) {
+        $('.no-result').hide();
       } else {
-        btn.addClass("desc");
-        btn.removeClass("asc");
+        $('.no-result').show();
       }
-    }
+    });
+
+    $(".sort-buttons").on("click", function(e) {
+      var btn = $(e.target).closest(".btn");
+      var sortByData = btn.attr("sort-by");
+      sort(sortByData);
+      if (sortingBy == sortByData) {
+        $(".sort-buttons .btn").each(function(e) {
+          $(this).removeClass("active");
+          $(this).removeClass("asc");
+          $(this).removeClass("desc");
+        });
+        btn.toggleClass("active");
+        if (sortingAsc) {
+          btn.addClass("asc");
+          btn.removeClass("desc");
+        } else {
+          btn.addClass("desc");
+          btn.removeClass("asc");
+        }
+      }
+    });
+
   });
 
 </script>

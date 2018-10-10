@@ -139,90 +139,94 @@
 
 <script>
 
-  var sortingBy = "featured";
-  var sortingAsc = true;
+  $(document).ready(function() {
 
-  // Functions
+    var sortingBy = "featured";
+    var sortingAsc = true;
 
-  function fuzzySearch(e) {
-    initiativesList.search(e.value);
-  }
+    // Functions
 
-  function sort(sortBy) {
-  	if (sortingBy === sortBy) {
-  	  if (sortingAsc) {
-  		initiativesList.sort(sortBy, { order: 'desc'});
-  		sortingAsc = false;
-  	  }
-  	  else {
-  		initiativesList.sort(sortBy, { order: 'asc'});
-  		sortingAsc = true;
-  	  }
-  	} else {
-  	  initiativesList.sort(sortBy, { order: 'asc'});
-  	  sortingAsc = true;
-  	}
-  	sortingBy = sortBy;
-  }
+    function fuzzySearch(e) {
+      initiativesList.search(e.value);
+    }
 
-  function getParameterByName(name, url) {
-  	if (!url) {
-  	  url = window.location.href;
-  	}
-  	name = name.replace(/[\[\]]/g, "\\$&");
-  	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-  		results = regex.exec(url);
-  	if (!results) return null;
-  	if (!results[2]) return '';
-  	return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
+    function sort(sortBy) {
+    	if (sortingBy === sortBy) {
+    	  if (sortingAsc) {
+      		initiativesList.sort(sortBy, { order: 'desc'});
+      		sortingAsc = false;
+    	  }
+    	  else {
+      		initiativesList.sort(sortBy, { order: 'asc'});
+      		sortingAsc = true;
+    	  }
+    	} else {
+    	  initiativesList.sort(sortBy, { order: 'asc'});
+    	  sortingAsc = true;
+    	}
+    	sortingBy = sortBy;
+    }
 
-  var options = {
-	  valueNames: [
-  		'state',
-  		'title',
-  		{ name: 'featured', data: 'is-featured' }
-	  ]
-  };
-  var initiativesList = new List('initiatives-list', options);
-  var self = this;
+    function getParameterByName(name, url) {
+    	if (!url) {
+    	  url = window.location.href;
+    	}
+    	name = name.replace(/[\[\]]/g, "\\$&");
+    	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    		results = regex.exec(url);
+    	if (!results) return null;
+    	if (!results[2]) return '';
+    	return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
-  $('#fuzzy-search').on('keyup', function() {
-    fuzzySearch(this);
-  });
+    var options = {
+  	  valueNames: [
+    		'state',
+    		'title',
+    		{ name: 'featured', data: 'is-featured' }
+  	  ]
+    };
+    var initiativesList = new List('initiatives-list', options);
+    var self = this;
 
-  initiativesList.on("updated", function(list) {
-  	if (list.matchingItems.length > 0) {
-  	  $('.no-result').hide();
-  	} else {
-  	  $('.no-result').show();
-  	}
-  });
+    $('#fuzzy-search').on('keyup', function() {
+      fuzzySearch(this);
+    });
 
-  $(".sort-buttons").on("click", function(e) {
-  	var btn = $(e.target).closest(".btn");
-  	var sortByData = btn.attr("sort-by");
-  	sort(sortByData);
+    initiativesList.on("updated", function(list) {
+    	if (list.matchingItems.length > 0) {
+    	  $('.no-result').hide();
+    	} else {
+    	  $('.no-result').show();
+    	}
+    });
 
-  	if (sortingBy == sortByData) {
+    $(".sort-buttons").on("click", function(e) {
+    	var btn = $(e.target).closest(".btn");
+    	var sortByData = btn.attr("sort-by");
+    	sort(sortByData);
 
-  	  $(".sort-buttons .btn").each(function(e) {
-    		$(this).removeClass("active");
-    		$(this).removeClass("asc");
-    		$(this).removeClass("desc");
-  	  });
+    	if (sortingBy == sortByData) {
 
-  	  btn.toggleClass("active");
+    	  $(".sort-buttons .btn").each(function(e) {
+      		$(this).removeClass("active");
+      		$(this).removeClass("asc");
+      		$(this).removeClass("desc");
+    	  });
 
-  	  if (sortingAsc) {
-    		btn.addClass("asc");
-    		btn.removeClass("desc");
-  	  } else {
-    		btn.addClass("desc");
-    		btn.removeClass("asc");
-  	  }
+    	  btn.toggleClass("active");
 
-  	}
+    	  if (sortingAsc) {
+      		btn.addClass("asc");
+      		btn.removeClass("desc");
+    	  } else {
+      		btn.addClass("desc");
+      		btn.removeClass("asc");
+    	  }
+
+    	}
+
+    });
 
   });
 

@@ -14,7 +14,11 @@ faded
     <div class="candidate__info">
       <span class="card__item name wins bold tight"
       sort-by="wins">{{ candidate_endorsement_page.title }}</span>
-      <span class="card__item bold smaller"><span class="state">{{ candidate_endorsement_page.get_state_or_territory_display }}</span></span>
+
+      <span class="card__item bold smaller state">
+        {{ candidate_endorsement_page.get_state_or_territory_display }}
+      </span>
+
       <span class="card__item bottom">
 
         {% if candidate_endorsement_page.election_date %}

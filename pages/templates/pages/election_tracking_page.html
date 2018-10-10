@@ -167,10 +167,11 @@
 
   $(document).ready(function() {
 
+    var sortingBy = "state";
+    var sortingAsc = true;
+
     $('.results-selector a').on('click', function() {
       var show = $(this).attr('data-show');
-      var sortingBy = "state";
-      var sortingAsc = true;
 
       $(".sort-buttons .btn").each(function(e) {
         $(this).removeClass("active");
@@ -197,15 +198,12 @@
       });
     });
 
-    var sortingBy = "state";
-    var sortingAsc = true;
-
     var options = {
-        valueNames: [
-          'name',
-          'state',
-          { attr: 'sort-by', data: 'wins' }
-        ]
+      valueNames: [
+        'name',
+        'state',
+        { attr: 'sort-by', data: 'wins' }
+      ]
     };
 
     var list = new List('results-list', options);
@@ -266,12 +264,14 @@
 
     list.on("updated", function(list) {
       if (list.matchingItems.length > 0) {
-        $('.no-result').hide()
+        $('.no-result').hide();
       } else {
-        $('.no-result').show()
+        $('.no-result').show();
       }
     });
+
   });
+
 </script>
 
 {% endblock %}
