@@ -33,15 +33,16 @@
 
 <div class="container-fluid">
   <div class="row">
-	<div class="page-heading page-heading--full clearfix">
-	  <div class="container">
-		<h1>Our Initiatives</h1>
-	  </div>
-	</div>
+  	<div class="page-heading page-heading--full clearfix">
+  	  <div class="container">
+  	    <h1>Our Initiatives</h1>
+  	  </div>
+  	</div>
   </div>
 </div>
 
 <div class="container">
+
   <div class="row">
 
     <div class="col-xs-12">
@@ -53,9 +54,14 @@
       </div>
 
       <div class="page-sub-nav filter clearfix">
+
   			<div class="form-inline pull-left">
   				<div class="form-group">
-  					<label for="fuzzy-search" class="sr-only">Filter By:</label><input type="search" class="filter__search fuzzy-search" id="fuzzy-search" onkeyup="fuzzySearch(this);" placeholder="Search by Name or State...">
+  					<label for="fuzzy-search" class="sr-only">
+              Filter By:
+            </label>
+            <input type="search" class="filter__search fuzzy-search"
+            id="fuzzy-search" placeholder="Search by Name or State...">
   				</div>
   			</div>
 
@@ -65,6 +71,7 @@
   					<button type="button" class="btn btn-default" sort-by="state">State <span class="caret"></span></button>
   				</div>
   			</div>
+
       </div>
 
 			<div id="initiatives-list">
@@ -88,6 +95,10 @@
       </div>
 
     </div>
+
+  </div>
+
+  <div class="row">
 
     <div class="col-md-6 col-md-offset-3">
       {% endorsement_process_url as link_url %}
@@ -116,6 +127,7 @@
 		</div>
 
   </div>
+
 </div>
 
 {% endblock %}
@@ -126,88 +138,95 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
 <script>
-  var sortingBy = "featured";
-  var sortingAsc = true;
 
-  // Functions
+  $(document).ready(function() {
 
-  function fuzzySearch(e) {
-    initiativesList.search(e.value);
-  }
+    var sortingBy = "featured";
+    var sortingAsc = true;
 
-  function sort(sortBy) {
-  	if (sortingBy === sortBy) {
-  	  if (sortingAsc) {
-  		initiativesList.sort(sortBy, { order: 'desc'});
-  		sortingAsc = false;
-  	  }
-  	  else {
-  		initiativesList.sort(sortBy, { order: 'asc'});
-  		sortingAsc = true;
-  	  }
-  	} else {
-  	  initiativesList.sort(sortBy, { order: 'asc'});
-  	  sortingAsc = true;
-  	}
-  	sortingBy = sortBy;
-  }
+    // Functions
 
-  function getParameterByName(name, url) {
-  	if (!url) {
-  	  url = window.location.href;
-  	}
-  	name = name.replace(/[\[\]]/g, "\\$&");
-  	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-  		results = regex.exec(url);
-  	if (!results) return null;
-  	if (!results[2]) return '';
-  	return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
+    function fuzzySearch(e) {
+      initiativesList.search(e.value);
+    }
 
-  var options = {
-	  valueNames: [
-  		'state',
-  		'name',
-  		'title',
-  		'vote',
-  		{ name: 'featured', data: 'is-featured' }
-	  ]
-  };
-  var initiativesList = new List('initiatives-list', options);
-  var self = this;
+    function sort(sortBy) {
+    	if (sortingBy === sortBy) {
+    	  if (sortingAsc) {
+      		initiativesList.sort(sortBy, { order: 'desc'});
+      		sortingAsc = false;
+    	  }
+    	  else {
+      		initiativesList.sort(sortBy, { order: 'asc'});
+      		sortingAsc = true;
+    	  }
+    	} else {
+    	  initiativesList.sort(sortBy, { order: 'asc'});
+    	  sortingAsc = true;
+    	}
+    	sortingBy = sortBy;
+    }
 
-  initiativesList.on("updated", function(list) {
-  	if (list.matchingItems.length > 0) {
-  	  $('.no-result').hide();
-  	} else {
-  	  $('.no-result').show();
-  	}
-  });
+    function getParameterByName(name, url) {
+    	if (!url) {
+    	  url = window.location.href;
+    	}
+    	name = name.replace(/[\[\]]/g, "\\$&");
+    	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    		results = regex.exec(url);
+    	if (!results) return null;
+    	if (!results[2]) return '';
+    	return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
-  $(".sort-buttons").on("click", function(e) {
-  	var btn = $(e.target).closest(".btn");
-  	var sortByData = btn.attr("sort-by");
-  	sort(sortByData);
+    var options = {
+  	  valueNames: [
+    		'state',
+    		'title',
+    		{ name: 'featured', data: 'is-featured' }
+  	  ]
+    };
+    var initiativesList = new List('initiatives-list', options);
+    var self = this;
 
-  	if (sortingBy == sortByData) {
+    $('#fuzzy-search').on('keyup', function() {
+      fuzzySearch(this);
+    });
 
-  	  $(".sort-buttons .btn").each(function(e) {
-    		$(this).removeClass("active");
-    		$(this).removeClass("asc");
-    		$(this).removeClass("desc");
-  	  });
+    initiativesList.on("updated", function(list) {
+    	if (list.matchingItems.length > 0) {
+    	  $('.no-result').hide();
+    	} else {
+    	  $('.no-result').show();
+    	}
+    });
 
-  	  btn.toggleClass("active");
+    $(".sort-buttons").on("click", function(e) {
+    	var btn = $(e.target).closest(".btn");
+    	var sortByData = btn.attr("sort-by");
+    	sort(sortByData);
 
-  	  if (sortingAsc) {
-    		btn.addClass("asc");
-    		btn.removeClass("desc");
-  	  } else {
-    		btn.addClass("desc");
-    		btn.removeClass("asc");
-  	  }
+    	if (sortingBy == sortByData) {
 
-  	}
+    	  $(".sort-buttons .btn").each(function(e) {
+      		$(this).removeClass("active");
+      		$(this).removeClass("asc");
+      		$(this).removeClass("desc");
+    	  });
+
+    	  btn.toggleClass("active");
+
+    	  if (sortingAsc) {
+      		btn.addClass("asc");
+      		btn.removeClass("desc");
+    	  } else {
+      		btn.addClass("desc");
+      		btn.removeClass("asc");
+    	  }
+
+    	}
+
+    });
 
   });
 

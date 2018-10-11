@@ -36,243 +36,242 @@
 
 {% block content %}
 
-        <div class="container-fluid election-tracker">
+<div class="container-fluid election-tracker">
 
-          <div class="row blue-bg white-text pb2">
+  <div class="row blue-bg white-text pb2">
 
-                <div class="back-bar clearfix">
-                  <div class="container clearfix">
-                    <span class="pull-left">
-                      <a href="{% candidates_url %}">
-                        &lsaquo; Back to Candidates
-                      </a>
-                    </span>
-                  </div>
-                </div>
+    <div class="back-bar clearfix">
+      <div class="container clearfix">
+        <span class="pull-left">
+          <a href="{% candidates_url %}">
+            &lsaquo; Back to Candidates
+          </a>
+        </span>
+      </div>
+    </div>
 
-                <div class="container pt6">
-                    <h1 class="mt0 mb0">
-                      {{ page.title }}
-                    </h1>
-                </div>
+    <div class="container pt6">
+      <h1 class="mt0 mb0">
+        {{ page.title }}
+      </h1>
+    </div>
 
-            </div>
+  </div>
 
-            <div class="row">
-                <div class="container">
+  <div class="row">
+    <div class="container">
 
-                    <div class="page-sub-nav filter clearfix">
+      <div class="page-sub-nav filter clearfix">
 
-                      <div class="form-inline pull-left">
-                        <div class="form-group">
-                          <label for="fuzzy-search" class="sr-only">
-                            Filter By:</label>
-                            <input type="search"
-                            class="filter__search fuzzy-search"
-                            id="fuzzy-search"
-                            placeholder="Filter by Name or State...">
-                        </div>
-                      </div>
-
-                      <div class="filter__sort pull-right">
-                        Sort By:
-                        <div class="btn-group sort-buttons" role="group"
-                        aria-label="Sort By:">
-                          <button type="button" class="btn btn-default"
-                          sort-by="state">
-                            State <span class="caret"></span>
-                          </button>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div>
-
-                        <hr>
-
-                            <div id="results-list">
-
-                              <div class="no-result text-center">
-                                <h3>No Matching Results Found</h3>
-                              </div>
-
-                              <ul class="card-list list card-list--results">
-
-                                {% for candidate_endorsement_page in candidate_endorsement_pages %}
-                                {% if 'win' in candidate_endorsement_page.result %}
-                                {% include "partials/candidate_endorsement_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for candidate_race_snippet in candidate_race_snippets %}
-                                {% if 'win' in candidate_race_snippet.candidate_race.result %}
-                                {% include "partials/candidate_snippet_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for initiative_endorsement_page in initiative_endorsement_pages %}
-                                {% if 'win' in initiative_endorsement_page.election_result %}
-                                {% include "partials/initiative_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for initiative_race_snippet in initiative_race_snippets %}
-                                {% if 'win' in initiative_race_snippet.initiative_race.result %}
-                                {% include "partials/initiative_snippet_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for candidate_endorsement_page in primary_pages %}
-                                {% include "partials/candidate_endorsement_result.html" %}
-                                {% endfor %}
-
-                                {% for candidate_endorsement_page in candidate_endorsement_pages %}
-                                {% if 'win' not in candidate_endorsement_page.result %}
-                                {% include "partials/candidate_endorsement_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for candidate_race_snippet in candidate_race_snippets %}
-                                {% if 'win' not in candidate_race_snippet.candidate_race.result %}
-                                {% include "partials/candidate_snippet_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for initiative_endorsement_page in initiative_endorsement_pages %}
-                                {% if 'win' not in initiative_endorsement_page.election_result %}
-                                {% include "partials/initiative_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {% for initiative_race_snippet in initiative_race_snippets %}
-                                {% if 'win' not in initiative_race_snippet.initiative_race.result %}
-                                {% include "partials/initiative_snippet_result.html" %}
-                                {% endif %}
-                                {% endfor %}
-
-                              </ul>
-                            </div>
-
-                    </div>
-                </div>
-            </div>
+        <div class="form-inline pull-left">
+          <div class="form-group">
+            <label for="fuzzy-search" class="sr-only">
+              Filter By:
+            </label>
+            <input type="search" class="filter__search fuzzy-search"
+            id="fuzzy-search" placeholder="Filter by Name or State...">
+          </div>
         </div>
 
-        {% include "partials/past_results.html" %}
+        <div class="filter__sort pull-right">
+          Sort By:
+          <div class="btn-group sort-buttons" role="group"
+          aria-label="Sort By:">
+            <button type="button" class="btn btn-default"
+            sort-by="state">
+              State <span class="caret"></span>
+            </button>
+          </div>
+        </div>
 
-        {# TODO: remove vendor folder from js #}
-        <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+      </div>
 
-        <script>
+      <div>
 
-          $(document).ready(function() {
+        <hr>
 
-            $('.results-selector a').on('click', function() {
-              var show = $(this).attr('data-show');
-              var sortingBy = "state";
-              var sortingAsc = true;
+        <div id="results-list">
 
-              $(".sort-buttons .btn").each(function(e) {
-                $(this).removeClass("active");
-                $(this).removeClass("asc");
-                $(this).removeClass("desc");
-              });
+          <div class="no-result text-center">
+            <h3>No Matching Results Found</h3>
+          </div>
 
-              $('.no-result').hide();
+          <ul class="card-list list card-list--results">
 
-              $('.results-selector a').removeClass('active');
+            {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% if 'win' in candidate_endorsement_page.result %}
+            {% include "partials/candidate_endorsement_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-              $(this).addClass('active');
+            {% for candidate_race_snippet in candidate_race_snippets %}
+            {% if 'win' in candidate_race_snippet.candidate_race.result %}
+            {% include "partials/candidate_snippet_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-              list = new List(show + '-list', options);
+            {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% if 'win' in initiative_endorsement_page.election_result %}
+            {% include "partials/initiative_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-              $('#' + show).show();
+            {% for initiative_race_snippet in initiative_race_snippets %}
+            {% if 'win' in initiative_race_snippet.initiative_race.result %}
+            {% include "partials/initiative_snippet_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-              list.on("updated", function(list) {
-                if (list.matchingItems.length > 0) {
-                  $('.no-result').hide();
-                } else {
-                  $('.no-result').show();
-                }
-              });
-            });
+            {% for candidate_endorsement_page in primary_pages %}
+            {% include "partials/candidate_endorsement_result.html" %}
+            {% endfor %}
 
-            var sortingBy = "state";
-            var sortingAsc = true;
+            {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% if 'win' not in candidate_endorsement_page.result %}
+            {% include "partials/candidate_endorsement_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-            var options = {
-                valueNames: [
-                  'name',
-                  'state',
-                  { attr: 'sort-by', data: 'wins' }
-                ]
-            };
+            {% for candidate_race_snippet in candidate_race_snippets %}
+            {% if 'win' not in candidate_race_snippet.candidate_race.result %}
+            {% include "partials/candidate_snippet_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-            var list = new List('results-list', options);
+            {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% if 'win' not in initiative_endorsement_page.election_result %}
+            {% include "partials/initiative_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-            var self = this;
+            {% for initiative_race_snippet in initiative_race_snippets %}
+            {% if 'win' not in initiative_race_snippet.initiative_race.result %}
+            {% include "partials/initiative_snippet_result.html" %}
+            {% endif %}
+            {% endfor %}
 
-            // sorting
-            // Functions
-            function fuzzySearch(e) {
-              list.search(e.value);
-            }
+          </ul>
+        </div>
 
-            function sort(sortBy) {
-            if (sortingBy === sortBy) {
-              if (sortingAsc) {
-                list.sort(sortBy, { order: 'desc'});
-                sortingAsc = false;
-              }
-              else {
-                list.sort(sortBy, { order: 'asc'});
-                sortingAsc = true;
-              }
-            } else {
-              list.sort(sortBy, { order: 'asc'});
-              sortingAsc = true;
-            }
+      </div>
+    </div>
+  </div>
+</div>
 
-            sortingBy = sortBy;
-            }
+{% include "partials/past_results.html" %}
 
-            $(".sort-buttons").on("click", function(e) {
-              var btn = $(e.target).closest(".btn");
-              var sortByData = btn.attr("sort-by");
+{# TODO: remove vendor folder from js #}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
-              sort(sortByData);
+<script>
 
-              if (sortingBy == sortByData) {
-                $(".sort-buttons .btn").each(function(e) {
-                  $(this).removeClass("active");
-                  $(this).removeClass("asc");
-                  $(this).removeClass("desc");
-                });
-                btn.toggleClass("active");
+  $(document).ready(function() {
 
-                if (sortingAsc) {
-                  btn.addClass("asc");
-                  btn.removeClass("desc");
-                } else {
-                  btn.addClass("desc");
-                  btn.removeClass("asc");
-                }
-              }
-            });
+    var sortingBy = "state";
+    var sortingAsc = true;
 
-            $('#fuzzy-search').on('keyup', function() {
-              fuzzySearch(this);
-            });
-            //
-            list.on("updated", function(list) {
-              if (list.matchingItems.length > 0) {
-                $('.no-result').hide()
-              } else {
-                $('.no-result').show()
-              }
-            });
-          });
-        </script>
+    $('.results-selector a').on('click', function() {
+      var show = $(this).attr('data-show');
+
+      $(".sort-buttons .btn").each(function(e) {
+        $(this).removeClass("active");
+        $(this).removeClass("asc");
+        $(this).removeClass("desc");
+      });
+
+      $('.no-result').hide();
+
+      $('.results-selector a').removeClass('active');
+
+      $(this).addClass('active');
+
+      list = new List(show + '-list', options);
+
+      $('#' + show).show();
+
+      list.on("updated", function(list) {
+        if (list.matchingItems.length > 0) {
+          $('.no-result').hide();
+        } else {
+          $('.no-result').show();
+        }
+      });
+    });
+
+    var options = {
+      valueNames: [
+        'name',
+        'state',
+        { attr: 'sort-by', data: 'wins' }
+      ]
+    };
+
+    var list = new List('results-list', options);
+
+    var self = this;
+
+    // sorting
+    // Functions
+    function fuzzySearch(e) {
+      list.search(e.value);
+    }
+
+    function sort(sortBy) {
+      if (sortingBy === sortBy) {
+        if (sortingAsc) {
+          list.sort(sortBy, { order: 'desc'});
+          sortingAsc = false;
+        }
+        else {
+          list.sort(sortBy, { order: 'asc'});
+          sortingAsc = true;
+        }
+      } else {
+        list.sort(sortBy, { order: 'asc'});
+        sortingAsc = true;
+      }
+
+      sortingBy = sortBy;
+    }
+
+    $(".sort-buttons").on("click", function(e) {
+      var btn = $(e.target).closest(".btn");
+      var sortByData = btn.attr("sort-by");
+
+      sort(sortByData);
+
+      if (sortingBy == sortByData) {
+        $(".sort-buttons .btn").each(function(e) {
+          $(this).removeClass("active");
+          $(this).removeClass("asc");
+          $(this).removeClass("desc");
+        });
+        btn.toggleClass("active");
+
+        if (sortingAsc) {
+          btn.addClass("asc");
+          btn.removeClass("desc");
+        } else {
+          btn.addClass("desc");
+          btn.removeClass("asc");
+        }
+      }
+    });
+
+    $('#fuzzy-search').on('keyup', function() {
+      fuzzySearch(this);
+    });
+
+    list.on("updated", function(list) {
+      if (list.matchingItems.length > 0) {
+        $('.no-result').hide();
+      } else {
+        $('.no-result').show();
+      }
+    });
+
+  });
+
+</script>
 
 {% endblock %}
