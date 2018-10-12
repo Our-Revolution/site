@@ -24,7 +24,16 @@
   <td class="text-right">
 
     {% if call_campaign.is_in_progress %}
-    {% bootstrap_form call_form %}
+    <form action="{% url 'organizing-hub-call' call_campaign.uuid %}"
+    class="form form-inline inline-block" method="post">
+
+      {% csrf_token %}
+
+      <button class="btn btn-success btn-sm mb5-xs" type="submit">
+        Make Calls
+      </button>
+
+    </form>
     {% endif %}
 
     {% if can_manage %}
