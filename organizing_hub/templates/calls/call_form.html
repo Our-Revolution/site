@@ -2,16 +2,23 @@
 
 {% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
-{% block page_title %}Our Revolution - Create Campaign{% endblock %}
+{% block page_title %}Our Revolution - {{ call_campaign.title }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Create Campaign" "organizing-hub-call-campaign-create" %}
+    {% breadcrumb call_campaign.title "organizing-hub-call" call_campaign.uuid %}
 {% endblock %}
 
-{% block content_heading %}
-Create Campaign
+{% block content_pre_heading %}
+<span class="article-type">
+  {% if call_campaign.is_in_progress %}
+  <span class="dot dot-success dot-sm"></span>
+  {% endif %}
+  {{ call_campaign.get_status_display }} Campaign
+</span>
 {% endblock %}
+
+{% block content_heading %}{{ call_campaign.title }}{% endblock %}
 
 {% block content %}
 
@@ -32,15 +39,12 @@ Create Campaign
     </div>
 
     <div class="col-md-9">
-
-      <form action="{% url 'organizing-hub-call-campaign-create' %}"
-      method="post" class="form mb20">
+      <form action="{% url 'organizing-hub-call' call_campaign.uuid %}"
+      class="form" method="post">
 
         {% csrf_token %}
 
-
-        <button type="submit"
-        class="btn btn-success btn-block uppercase ls2">
+        <button class="btn btn-success btn-sm mb5-xs" type="submit">
           Save Call
         </button>
 

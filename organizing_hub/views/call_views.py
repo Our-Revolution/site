@@ -38,51 +38,22 @@ Would you be able to attend?
 
 
 class CallView(
-    # LocalGroupPermissionRequiredMixin,
-    # SuccessMessageMixin,
-    FormView
+    # DetailView,
+    FormView,
 ):
     form_class = CallForm
     template_name = 'calls/call_form.html'
-    # local_group = None
-    # permission_required = 'calls.add_callcampaign'
-    # success_message = '''
-    # Your calling campaign request has been submitted and will be reviewed by
-    # our team.
-    # '''
-
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        # form.send_email()
-        return super(CallView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
-    # def form_valid(self, form):
-    #     """Set local group and owner before save"""
-    #     form.instance.local_group = self.get_local_group()
-    #     form.instance.owner = self.request.user.callprofile
-    #     return super(CallCampaignCreateView, self).form_valid(form)
-    #
-    # def get_local_group(self):
-    #     if self.local_group is None:
-    #         self.local_group = find_local_group_by_user(self.request.user)
-    #     return self.local_group
-    #
-    # def get_initial(self, *args, **kwargs):
-    #     initial = {
-    #         'max_distance': min(25, CALLS_MAX_DISTANCE_MILES),
-    #         'max_recipients': min(100, CALLS_MAX_LIST_SIZE),
-    #         'script': campaign_script_template,
-    #     }
-    #     return initial
-    #
-    # def get_success_url(self):
-    #     return reverse_lazy(
-    #         'organizing-hub-call-campaign-detail',
-    #         kwargs={'uuid': self.object.uuid}
-    #     )
+
+    def get_context_data(self, **kwargs):
+        context = super(CallView, self).get_context_data(**kwargs)
+        campaign_uuid = self.kwargs['uuid']
+        call_campaign = CallCampaign.objects.get(uuid=campaign_uuid)
+        context['call_campaign'] = call_campaign
+        logger.debug('uuid' + str(context['call_campaign'].uuid))
+        return context
 
 
 class CallCampaignCreateView(
