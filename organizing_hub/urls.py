@@ -12,6 +12,7 @@ from local_groups.views import (
 )
 from .views import (
     AccountCreateView,
+    CallView,
     CallCampaignCreateView,
     CallCampaignDetailView,
     CallDashboardView,
@@ -143,11 +144,18 @@ if CALLS_ENABLED:
                         CallCampaignCreateView.as_view(),
                         name='organizing-hub-call-campaign-create'
                     ),
-                    url(
-                        r'^(?P<uuid>[0-9a-f-]+)/$',
-                        CallCampaignDetailView.as_view(),
-                        name='organizing-hub-call-campaign-detail'
-                    ),
+                    url(r'^(?P<uuid>[0-9a-f-]+)/', include([
+                        url(
+                            r'^$',
+                            CallCampaignDetailView.as_view(),
+                            name='organizing-hub-call-campaign-detail'
+                        ),
+                        url(
+                            r'^call/',
+                            CallView.as_view(),
+                            name='organizing-hub-call'
+                        ),
+                    ])),
                 ])),
             ])),
         ])),

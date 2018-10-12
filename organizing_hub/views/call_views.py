@@ -4,9 +4,9 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
-from calls.forms import CallCampaignForm
+from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
@@ -34,6 +34,52 @@ How are you today?
 
 Would you be able to attend?
 """
+
+
+class CallView(
+    # LocalGroupPermissionRequiredMixin,
+    # SuccessMessageMixin,
+    FormView
+):
+    form_class = CallForm
+    # template_name = 'contact.html'
+    # local_group = None
+    # permission_required = 'calls.add_callcampaign'
+    # success_message = '''
+    # Your calling campaign request has been submitted and will be reviewed by
+    # our team.
+    # '''
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        # form.send_email()
+        return super(CallView, self).form_valid(form)
+
+    # def form_valid(self, form):
+    #     """Set local group and owner before save"""
+    #     form.instance.local_group = self.get_local_group()
+    #     form.instance.owner = self.request.user.callprofile
+    #     return super(CallCampaignCreateView, self).form_valid(form)
+    #
+    # def get_local_group(self):
+    #     if self.local_group is None:
+    #         self.local_group = find_local_group_by_user(self.request.user)
+    #     return self.local_group
+    #
+    # def get_initial(self, *args, **kwargs):
+    #     initial = {
+    #         'max_distance': min(25, CALLS_MAX_DISTANCE_MILES),
+    #         'max_recipients': min(100, CALLS_MAX_LIST_SIZE),
+    #         'script': campaign_script_template,
+    #     }
+    #     return initial
+    #
+    # def get_success_url(self):
+    #     return reverse_lazy(
+    #         'organizing-hub-call-campaign-detail',
+    #         kwargs={'uuid': self.object.uuid}
+    #     )
 
 
 class CallCampaignCreateView(
@@ -104,10 +150,14 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
                 reverse=True,
             )
             campaigns_as_admin_active = [
-                x for x in campaigns_as_admin_sorted if x.is_active
+                (x, CallForm(initial={
+                    'campaign_uuid': x.uuid
+                })) for x in campaigns_as_admin_sorted if x.is_active
             ]
             campaigns_as_admin_inactive = [
-                x for x in campaigns_as_admin_sorted if not x.is_active
+                (x, CallForm(initial={
+                    'campaign_uuid': x.uuid
+                })) for x in campaigns_as_admin_sorted if not x.is_active
             ]
             campaigns_as_caller = find_campaigns_as_caller(call_profile)
             campaigns_as_caller_sorted = sorted(
@@ -116,12 +166,27 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
                 reverse=True,
             )
             campaigns_as_caller_active = [
-                x for x in campaigns_as_caller_sorted if x.is_active
+                (x, CallForm(initial={
+                    'campaign_uuid': x.uuid
+                })) for x in campaigns_as_caller_sorted if x.is_active
             ]
+
+            # """Get Make Calls form for all in progress campaigns"""
+            # call_forms = {}
+            # for campaign in (
+            #     campaigns_as_admin_active + campaigns_as_caller_active
+            # ):
+            #     if campaign.is_in_progress:
+            #         call_form = CallForm(initial={
+            #             'campaign_uuid': campaign.uuid
+            #         })
+            #         call_forms[str(campaign.uuid)] = call_form
 
             context['campaigns_as_admin_active'] = campaigns_as_admin_active
             context['campaigns_as_admin_inactive'] = campaigns_as_admin_inactive
             context['campaigns_as_caller_active'] = campaigns_as_caller_active
+            # context['call_forms'] = call_forms
+            logger.debug(context['campaigns_as_admin_active'])
         else:
             """Create call profile if doesn't exist"""
             CallProfile.objects.create(user=user)

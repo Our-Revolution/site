@@ -1,21 +1,21 @@
-{% load calls_tags organizing_hub_tags %}
+{% load bootstrap3 calls_tags organizing_hub_tags %}
 
-{% has_local_group_permission campaign.local_group "calls.change_callcampaign" as can_manage %}
+{% has_local_group_permission call_campaign.local_group "calls.change_callcampaign" as can_manage %}
 
 <tr>
 
-  <td>{{ campaign.title }}</td>
+  <td>{{ call_campaign.title }}</td>
 
   <td>
-    {% if campaign.is_in_progress %}
+    {% if call_campaign.is_in_progress %}
     <span class="dot dot-success dot-sm"></span>
     {% endif %}
-    {{ campaign.get_status_display }}
+    {{ call_campaign.get_status_display }}
   </td>
 
   <td>
     {% if can_manage %}
-    {{ campaign.calls_made_count }}/{{ campaign.contacts_total_count }}
+    {{ call_campaign.calls_made_count }}/{{ call_campaign.contacts_total_count }}
     {% else %}
     {% calls_made_count campaign user.callprofile %}
     {% endif %}
@@ -23,22 +23,19 @@
 
   <td class="text-right">
 
-
-    {% if campaign.is_in_progress %}
-    <a class="btn btn-success btn-sm mb5-xs" href="todo">
-      Make Calls
-    </a>
+    {% if call_campaign.is_in_progress %}
+    {% bootstrap_form call_form %}
     {% endif %}
 
     {% if can_manage %}
-    {% if campaign.is_active %}
+    {% if call_campaign.is_active %}
     <a class="btn btn-primary btn-sm mb5-xs"
-    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
+    href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
       Manage
     </a>
     {% else %}
     <a class="btn btn-default btn-sm mb5-xs"
-    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
+    href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
       View
     </a>
     {% endif %}
