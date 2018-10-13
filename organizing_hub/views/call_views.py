@@ -44,6 +44,10 @@ class CallView(
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
+    # def form_valid(self, form):
+    #     new_form = CallForm()
+    #     return self.render_to_response(self.get_context_data(form=new_form))
+
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
 
@@ -52,7 +56,7 @@ class CallView(
         campaign_uuid = self.kwargs['uuid']
         call_campaign = CallCampaign.objects.get(uuid=campaign_uuid)
         context['call_campaign'] = call_campaign
-        logger.debug('uuid' + str(context['call_campaign'].uuid))
+        context['form'] = CallForm()
         return context
 
 

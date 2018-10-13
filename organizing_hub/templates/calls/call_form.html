@@ -39,13 +39,49 @@
     </div>
 
     <div class="col-md-9">
+
+      <h2 class="mt0">Calling Info</h2>
+
+      <div class="mb5"><strong>Contact</strong></div>
+
+      <div class="mb5"><strong>Script</strong></div>
+      <div class="well well-sm">
+        {{ call_campaign.script|linebreaks }}
+      </div>
+
+      <h2>Response</h2>
+
       <form action="{% url 'organizing-hub-call' call_campaign.uuid %}"
       class="form" method="post">
 
         {% csrf_token %}
 
-        <button class="btn btn-success btn-sm mb5-xs" type="submit">
-          Save Call
+        <div class="row">
+          <div class="col-md-6">
+            {% bootstrap_field form.talk_to_contact %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.take_action %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            {% bootstrap_field form.talk_to_contact_why_not %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.voice_message %}
+          </div>
+        </div>
+
+        <button class="btn btn-success mb10 mr5 uppercase" name="exit_after_call"
+        type="submit" value="False">
+          Save & Continue
+        </button>
+
+        <button class="btn btn-primary mb10 uppercase"
+        name="exit_after_call" type="submit" value="True">
+          Exit after Saving
         </button>
 
       </form>

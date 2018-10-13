@@ -10,26 +10,40 @@ CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 class CallForm(forms.Form):
     campaign_uuid = forms.UUIDField()
     exit_after_call = forms.BooleanField(required=False)
-    take_action = forms.ChoiceField(
-        choices=[x.value for x in CallQuestion.take_action.value[2]],
+    take_action = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.take_action.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label='Did the contact want to take action?',
         required=False,
     )
-    talk_to_contact = forms.ChoiceField(
-        choices=[x.value for x in CallQuestion.talk_to_contact.value[2]],
+    talk_to_contact = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.talk_to_contact.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label='Did you talk to the contact?',
         required=False,
     )
-    talk_to_contact_why_not = forms.ChoiceField(
-        choices=[
+    talk_to_contact_why_not = forms.TypedChoiceField(
+        choices=[(None, '')] + [
             x.value for x in CallQuestion.talk_to_contact_why_not.value[2]
         ],
+        coerce=int,
+        empty_value=None,
+        label='If you did not talk to the contact, why not?',
         required=False,
     )
-    text_message = forms.ChoiceField(
-        choices=[x.value for x in CallQuestion.text_message.value[2]],
-        required=False,
-    )
-    voice_message = forms.ChoiceField(
-        choices=[x.value for x in CallQuestion.voice_message.value[2]],
+    voice_message = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.voice_message.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label='If you did not talk to the contact, did you leave a voice message?',
         required=False,
     )
 
