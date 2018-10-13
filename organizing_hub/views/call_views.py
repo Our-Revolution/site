@@ -9,12 +9,13 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
+    call_campaign_statuses_active,
+    find_campaigns_as_caller,
+    find_campaigns_as_admin,
+    find_or_create_active_call_for_campaign_and_caller,
     CallCampaign,
     CallCampaignStatus,
     CallProfile,
-    find_campaigns_as_caller,
-    find_campaigns_as_admin,
-    call_campaign_statuses_active
 )
 from local_groups.models import find_local_group_by_user
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
@@ -53,9 +54,25 @@ class CallView(
 
     def get_context_data(self, **kwargs):
         context = super(CallView, self).get_context_data(**kwargs)
+
+        """Get Call Campaign"""
         campaign_uuid = self.kwargs['uuid']
         call_campaign = CallCampaign.objects.get(uuid=campaign_uuid)
         context['call_campaign'] = call_campaign
+
+        """Find active Call"""
+        user = self.request.user
+        caller = user.callprofile
+        call = find_or_create_active_call_for_campaign_and_caller(
+            call_campaign,
+            caller,
+        )
+        if call is None:
+            return redirect('organizing-hub-call-dashboard')
+        else:
+            context['call'] = call
+
+        """Get Call Form"""
         context['form'] = CallForm()
         return context
 

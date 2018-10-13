@@ -60,6 +60,33 @@ call_campaign_statuses_with_data_download = [
 ]
 
 
+def find_active_call_by_campaign_and_caller(call_campaign, caller):
+    """
+    Find active Call for Call Campaign and Caller
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+    caller : CallProfile
+        Call Profile for caller
+
+    Returns
+        -------
+        Call
+            Returns active Call, or None
+    """
+    calls = call_campaign.call_set.filter(caller=caller).all()
+
+    """Find and return Call without a response"""
+    for call in calls:
+        if not call.has_response:
+            return call
+
+    """Otherwise return None"""
+    return None
+
+
 def find_calls_made_by_campaign(call_campaign):
     """
     Find all calls for this campaign that have a response
@@ -184,6 +211,48 @@ def find_last_call_to_contact(contact_external_id):
     ).first()
 
     return last_call_created
+
+
+def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
+    """
+    Find or Create Call for Call Campaign and Caller
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+    caller : CallProfile
+        Call Profile for caller
+
+    Returns
+        -------
+        Call
+            Returns existing or new active Call, or None
+    """
+
+    """Check if there is an existing active Call"""
+    call_existing = find_active_call_by_campaign_and_caller(
+        call_campaign,
+        caller,
+    )
+    if call_existing is not None:
+        return call_existing
+
+    """Find a Contact that hasn't been called and create a new Call"""
+    for contact in call_campaign.contact_list.contacts.all():
+        if Call.objects.filter(
+            call_campaign=call_campaign,
+            contact=contact
+        ).first() is None:
+            call = Call.objects.create(
+                call_campaign=call_campaign,
+                contact=contact,
+                caller=caller,
+            )
+            return call
+
+    """Otherwise return None"""
+    return None
 
 
 def set_point_for_call_campaign(call_campaign):
