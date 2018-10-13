@@ -43,6 +43,10 @@
       <h2 class="mt0">Calling Info</h2>
 
       <div class="mb5"><strong>Contact</strong></div>
+      <div class="well well-sm">
+        <strong>{{ call.contact.name }}</strong><br />
+        {{ call.contact.phone_number.as_international }}
+      </div>
 
       <div class="mb5"><strong>Script</strong></div>
       <div class="well well-sm">
