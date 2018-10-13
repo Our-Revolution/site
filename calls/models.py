@@ -408,7 +408,11 @@ class Call(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return 'Call [%s] | %s' % (self.id, self.call_campaign)
+        return 'Call [%s] | %s | %s' % (
+            self.id,
+            self.call_campaign,
+            self.contact,
+        )
 
     def _has_response(self):
         """Check if any Responses have been saved for this Call"""

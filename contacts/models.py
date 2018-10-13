@@ -57,7 +57,10 @@ class Contact(models.Model):
     name = property(_name)
 
     def __unicode__(self):
-        return str(self.id) + (' ' + self.name if self.name else '')
+        return '%s[%s]' % (
+            (self.name + ' ' if self.name is not None else ''),
+            str(self.id),
+        )
 
 
 @unique
