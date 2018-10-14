@@ -185,6 +185,33 @@ def find_campaigns_as_admin(call_profile):
     return CallCampaign.objects.none()
 
 
+def find_contact_to_call_for_campaign(call_campaign):
+    """
+    Find Contact to call for Call Campaign
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for Contact
+
+    Returns
+        -------
+        Contact
+            Return available Contact or None
+    """
+
+    """Find a Contact that hasn't been called"""
+    for contact in call_campaign.contact_list.contacts.all():
+        if Call.objects.filter(
+            call_campaign=call_campaign,
+            contact=contact,
+        ).first() is None:
+            return contact
+
+    """Otherwise return None"""
+    return None
+
+
 def find_last_call_to_contact(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
@@ -239,17 +266,14 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
         return call_existing
 
     """Find a Contact that hasn't been called and create a new Call"""
-    for contact in call_campaign.contact_list.contacts.all():
-        if Call.objects.filter(
-            call_campaign=call_campaign,
-            contact=contact
-        ).first() is None:
-            call = Call.objects.create(
-                call_campaign=call_campaign,
-                contact=contact,
-                caller=caller,
-            )
-            return call
+    """TODO: handle race condition error. find new contact and retry."""
+    contact = find_contact_to_call_for_campaign(call_campaign)
+    call_new = Call.objects.create(
+        call_campaign=call_campaign,
+        contact=contact,
+        caller=caller,
+    )
+    return call_new
 
     """Otherwise return None"""
     return None

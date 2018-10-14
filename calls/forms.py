@@ -43,7 +43,7 @@ class CallForm(forms.Form):
         ],
         coerce=int,
         empty_value=None,
-        label='If you did not talk to the contact, did you leave a voice message?',
+        label='Did you leave a voice message?',
         required=False,
     )
 
