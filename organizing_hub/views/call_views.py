@@ -61,6 +61,7 @@ def can_change_call_campaign(user, call_campaign):
     """
 
     """Check local group permissions and find matching campaigns"""
+    # TODO: use role based feature flag?
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
         local_group = find_local_group_by_user(user)
@@ -106,16 +107,20 @@ def can_make_call_for_campaign(user, call_campaign):
         return can_change_call_campaign(user, call_campaign)
 
 
-class CallView(
-    # DetailView,
-    FormView,
-):
+class CallView(FormView):
+    """
+    Call View
+
+    Allow access if User should be able to make a Call For Campaign, or is the
+    Caller for a specific Call.
+    """
+
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
     def form_invalid(self, form):
 
-        """Return Call page"""
+        """Return Call page with new Form if there is a Call"""
         context = self.get_context_data()
         if context['call'] is None:
             return redirect('organizing-hub-call-dashboard')
@@ -123,11 +128,14 @@ class CallView(
         return self.render_to_response(context)
 
     def form_valid(self, form):
+
+        """Get Call if it exists"""
         call_uuid = form.cleaned_data['call_uuid']
         call = None if call_uuid is None else Call.objects.filter(
             uuid=call_uuid
         ).first()
 
+        """Handle Call Response"""
         if call is not None:
 
             """Check user access to call"""
@@ -171,6 +179,7 @@ class CallView(
         return self.render_to_response(context)
 
     def get(self, request, *args, **kwargs):
+        """Only accept POST requests, otherwise redirect"""
         return redirect('organizing-hub-call-dashboard')
 
     def get_context_data(self, **kwargs):
@@ -178,7 +187,9 @@ class CallView(
 
         """Get Call Campaign"""
         campaign_uuid = self.kwargs['uuid']
-        call_campaign = CallCampaign.objects.get(uuid=campaign_uuid)
+        call_campaign = CallCampaign.objects.filter(uuid=campaign_uuid).first()
+        if call_campaign is None:
+            raise Http404
 
         """Check user access to campaign"""
         user = self.request.user

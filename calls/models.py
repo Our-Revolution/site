@@ -281,7 +281,7 @@ def find_last_call_to_contact(contact):
 
 def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     """
-    Find or Create Call for Call Campaign and Caller
+    Find or Create active Call for Call Campaign and Caller
 
     Parameters
     ----------
@@ -317,9 +317,6 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
         caller=caller,
     )
     return call_new
-
-    """Otherwise return None"""
-    return None
 
 
 def get_recent_call_cutoff():
