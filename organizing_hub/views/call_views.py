@@ -51,10 +51,10 @@ class CallView(
 
     def form_valid(self, form):
         logger.debug('form_valid: ')
-        user = self.request.user
-        caller = user.callprofile
-        call_id = form.cleaned_data['call_id']
-        call = None if call_id is None else Call.objects.get(id=call_id)
+        # user = self.request.user
+        # caller = user.callprofile
+        call_uuid = form.cleaned_data['call_uuid']
+        call = None if call_uuid is None else Call.objects.get(uuid=call_uuid)
 
         """TODO: check user access to call"""
 
@@ -97,7 +97,17 @@ class CallView(
 
     def form_invalid(self, form):
         logger.debug('form_invalid: ')
-        return self.render_to_response(self.get_context_data())
+        # return self.render_to_response(self.get_context_data())
+        """Return Call page"""
+        context = self.get_context_data()
+        logger.debug('call: ' + str(context['call']))
+
+        if context['call'] is None:
+            return redirect('organizing-hub-call-dashboard')
+
+        return self.render_to_response(context)
+
+
 
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
@@ -122,10 +132,7 @@ class CallView(
 
         if call is not None:
             """Get Call Form"""
-            context['form'] = CallForm(initial={
-                # 'campaign_uuid': str(call_campaign.uuid),
-                'call_id': str(call.id),
-            })
+            context['form'] = CallForm(initial={'call_uuid': call.uuid})
 
         return context
 

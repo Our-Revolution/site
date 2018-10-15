@@ -8,12 +8,7 @@ CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
 
 class CallForm(forms.Form):
-    call_id = forms.IntegerField(
-        min_value=1,
-        required=False,
-        widget=forms.HiddenInput,
-    )
-    # campaign_uuid = forms.UUIDField(widget=forms.HiddenInput)
+    call_uuid = forms.UUIDField(required=False, widget=forms.HiddenInput)
     exit_after_call = forms.BooleanField(required=False)
     take_action = forms.TypedChoiceField(
         choices=[(None, '')] + [
