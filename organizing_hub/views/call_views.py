@@ -13,9 +13,13 @@ from calls.models import (
     find_campaigns_as_caller,
     find_campaigns_as_admin,
     find_or_create_active_call_for_campaign_and_caller,
+    save_call_response,
+    Call,
+    CallAnswer,
     CallCampaign,
     CallCampaignStatus,
     CallProfile,
+    CallQuestion,
 )
 from local_groups.models import find_local_group_by_user
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
@@ -45,9 +49,44 @@ class CallView(
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
-    # def form_valid(self, form):
-    #     new_form = CallForm()
-    #     return self.render_to_response(self.get_context_data(form=new_form))
+    def form_valid(self, form):
+        user = self.request.user
+        caller = user.callprofile
+        call_id = form.cleaned_data['call_id']
+        call = None if call_id is None else Call.objects.get(id=call_id)
+
+        """TODO: check user access to call"""
+
+        if call is not None:
+
+            """Save Call Responses"""
+            save_call_response(
+                call,
+                CallQuestion.talk_to_contact.value[0],
+                form.cleaned_data['talk_to_contact'],
+            )
+            save_call_response(
+                call,
+                CallQuestion.take_action.value[0],
+                form.cleaned_data['take_action'],
+            )
+            save_call_response(
+                call,
+                CallQuestion.talk_to_contact_why_not.value[0],
+                form.cleaned_data['talk_to_contact_why_not'],
+            )
+            save_call_response(
+                call,
+                CallQuestion.voice_message.value[0],
+                form.cleaned_data['voice_message'],
+            )
+
+            """Redirect to Dashboard if exit flag is True"""
+            if form.cleaned_data['exit_after_call'] is True:
+                return redirect('organizing-hub-call-dashboard')
+
+        """Return Call page"""
+        return self.render_to_response(self.get_context_data())
 
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
@@ -73,7 +112,10 @@ class CallView(
             context['call'] = call
 
         """Get Call Form"""
-        context['form'] = CallForm()
+        context['form'] = CallForm(initial={
+            'campaign_uuid': str(call_campaign.uuid),
+            'call_id': str(call.id),
+        })
         return context
 
 

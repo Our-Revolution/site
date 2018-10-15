@@ -8,7 +8,12 @@ CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
 
 class CallForm(forms.Form):
-    campaign_uuid = forms.UUIDField()
+    call_id = forms.IntegerField(
+        min_value=1,
+        required=False,
+        widget=forms.HiddenInput,
+    )
+    campaign_uuid = forms.UUIDField(widget=forms.HiddenInput)
     exit_after_call = forms.BooleanField(required=False)
     take_action = forms.TypedChoiceField(
         choices=[(None, '')] + [
@@ -46,6 +51,15 @@ class CallForm(forms.Form):
         label='Did you leave a voice message?',
         required=False,
     )
+
+    def has_response(self):
+        return self.cleaned_data['talk_to_contact'] is not None or (
+            self.cleaned_data['take_action'] is not None
+        ) or (
+            self.cleaned_data['talk_to_contact_why_not'] is not None
+        ) or (
+            self.cleaned_data['voice_message'] is not None
+        )
 
 
 class CallCampaignForm(forms.ModelForm):

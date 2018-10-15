@@ -279,6 +279,18 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     return None
 
 
+def save_call_response(call, question, answer):
+    CallResponse.objects.update_or_create(
+        call=call,
+        question=question,
+        defaults={
+            'call': call,
+            'question': question,
+            'answer': answer,
+        },
+    )
+
+
 def set_point_for_call_campaign(call_campaign):
     """
     Set point field on Call Campaign based on campaign zip code but don't save
@@ -499,7 +511,11 @@ class CallResponse(models.Model):
     question = models.IntegerField(choices=[
         (x.value[0], x.value[1]) for x in CallQuestion
     ])
-    answer = models.IntegerField(choices=[x.value for x in CallAnswer])
+    answer = models.IntegerField(
+        blank=True,
+        choices=[x.value for x in CallAnswer],
+        null=True,
+    )
 
     def __unicode__(self):
         return 'Response [%s] | %s' % (self.id, self.call)

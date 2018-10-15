@@ -60,6 +60,10 @@
 
         {% csrf_token %}
 
+        {% bootstrap_field form.call_id %}
+
+        {% bootstrap_field form.campaign_uuid %}
+
         <div class="row">
           <div class="col-md-6">
             {% bootstrap_field form.talk_to_contact %}
