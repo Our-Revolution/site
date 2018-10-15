@@ -50,6 +50,7 @@ class CallView(
     template_name = 'calls/call_form.html'
 
     def form_valid(self, form):
+        logger.debug('form_valid: ')
         user = self.request.user
         caller = user.callprofile
         call_id = form.cleaned_data['call_id']
@@ -86,12 +87,22 @@ class CallView(
                 return redirect('organizing-hub-call-dashboard')
 
         """Return Call page"""
+        context = self.get_context_data()
+        logger.debug('call: ' + str(context['call']))
+
+        if context['call'] is None:
+            return redirect('organizing-hub-call-dashboard')
+
+        return self.render_to_response(context)
+
+    def form_invalid(self, form):
         return self.render_to_response(self.get_context_data())
 
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
 
     def get_context_data(self, **kwargs):
+        logger.debug('get_context_data: ')
         context = super(CallView, self).get_context_data(**kwargs)
 
         """Get Call Campaign"""
@@ -106,16 +117,15 @@ class CallView(
             call_campaign,
             caller,
         )
-        if call is None:
-            return redirect('organizing-hub-call-dashboard')
-        else:
-            context['call'] = call
+        context['call'] = call
 
-        """Get Call Form"""
-        context['form'] = CallForm(initial={
-            'campaign_uuid': str(call_campaign.uuid),
-            'call_id': str(call.id),
-        })
+        if call is not None:
+            """Get Call Form"""
+            context['form'] = CallForm(initial={
+                'campaign_uuid': str(call_campaign.uuid),
+                'call_id': str(call.id),
+            })
+
         return context
 
 

@@ -268,6 +268,10 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     """Find a Contact that hasn't been called and create a new Call"""
     """TODO: handle race condition error. find new contact and retry."""
     contact = find_contact_to_call_for_campaign(call_campaign)
+
+    if contact is None:
+        return None
+
     call_new = Call.objects.create(
         call_campaign=call_campaign,
         contact=contact,
@@ -452,7 +456,7 @@ class Call(models.Model):
 
     def _has_response(self):
         """Check if any Responses have been saved for this Call"""
-        return self.callresponse_set.count() > 0
+        return self.callresponse_set.filter(answer__isnull=False).count() > 0
     has_response = property(_has_response)
 
     class Meta:
