@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
@@ -42,6 +43,69 @@ Would you be able to attend?
 """
 
 
+def can_change_call_campaign(user, call_campaign):
+    """
+    Check if User has change access for Call Campaign
+
+    Parameters
+    ----------
+    user : User
+        User to check for access
+    call_campaign : CallCampaign
+        Call Campaign to check for access
+
+    Returns
+        -------
+        bool
+            Returns True if User can change Call Campaign, otherwise False
+    """
+
+    """Check local group permissions and find matching campaigns"""
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        local_group = find_local_group_by_user(user)
+        if local_group is not None and (
+            local_group == call_campaign.local_group
+        ):
+            permission = 'calls.change_callcampaign'
+            return local_group_profile.has_permission_for_local_group(
+                local_group,
+                permission
+            )
+
+    """Otherwise return False"""
+    return False
+
+
+def can_make_call_for_campaign(user, call_campaign):
+    """
+    Check if User has access to make a Call for Campaign
+
+    Should have access if User has general permissions for Local Group or is
+    listed as a Caller for the Campaign.
+
+    Parameters
+    ----------
+    user : User
+        User to check for access
+    call_campaign : CallCampaign
+        Call Campaign to check for access
+
+    Returns
+        -------
+        bool
+            Return True if User can Call for Campaign, otherwise False
+    """
+
+    """Check user access to campaign"""
+    if hasattr(user, 'callprofile') and (
+        user.callprofile in call_campaign.callers.all()
+    ):
+        return True
+    else:
+        return can_change_call_campaign(user, call_campaign)
+
+
 class CallView(
     # DetailView,
     FormView,
@@ -49,16 +113,29 @@ class CallView(
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
-    def form_valid(self, form):
-        logger.debug('form_valid: ')
-        # user = self.request.user
-        # caller = user.callprofile
-        call_uuid = form.cleaned_data['call_uuid']
-        call = None if call_uuid is None else Call.objects.get(uuid=call_uuid)
+    def form_invalid(self, form):
 
-        """TODO: check user access to call"""
+        """Return Call page"""
+        context = self.get_context_data()
+        if context['call'] is None:
+            return redirect('organizing-hub-call-dashboard')
+
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        call_uuid = form.cleaned_data['call_uuid']
+        call = None if call_uuid is None else Call.objects.filter(
+            uuid=call_uuid
+        ).first()
 
         if call is not None:
+
+            """Check user access to call"""
+            user = self.request.user
+            if not hasattr(user, 'callprofile') or (
+                call.caller != user.callprofile
+            ):
+                raise Http404
 
             """Save Call Responses"""
             save_call_response(
@@ -88,41 +165,30 @@ class CallView(
 
         """Return Call page"""
         context = self.get_context_data()
-        logger.debug('call: ' + str(context['call']))
-
         if context['call'] is None:
             return redirect('organizing-hub-call-dashboard')
 
         return self.render_to_response(context)
-
-    def form_invalid(self, form):
-        logger.debug('form_invalid: ')
-        # return self.render_to_response(self.get_context_data())
-        """Return Call page"""
-        context = self.get_context_data()
-        logger.debug('call: ' + str(context['call']))
-
-        if context['call'] is None:
-            return redirect('organizing-hub-call-dashboard')
-
-        return self.render_to_response(context)
-
-
 
     def get(self, request, *args, **kwargs):
         return redirect('organizing-hub-call-dashboard')
 
     def get_context_data(self, **kwargs):
-        logger.debug('get_context_data: ')
         context = super(CallView, self).get_context_data(**kwargs)
 
         """Get Call Campaign"""
         campaign_uuid = self.kwargs['uuid']
         call_campaign = CallCampaign.objects.get(uuid=campaign_uuid)
+
+        """Check user access to campaign"""
+        user = self.request.user
+        if not can_make_call_for_campaign(user, call_campaign):
+            raise Http404
         context['call_campaign'] = call_campaign
 
         """Find active Call"""
-        user = self.request.user
+        if not hasattr(user, 'callprofile'):
+            raise Http404
         caller = user.callprofile
         call = find_or_create_active_call_for_campaign_and_caller(
             call_campaign,
@@ -212,9 +278,11 @@ class CallDashboardView(LoginRequiredMixin, TemplateView):
             x,
             CallForm() if x.is_in_progress else None
         ) for x in campaigns_as_admin_sorted if x.is_active]
+
         campaigns_as_admin_inactive = [
             (x, None) for x in campaigns_as_admin_sorted if not x.is_active
         ]
+
         campaigns_as_caller = find_campaigns_as_caller(call_profile)
         campaigns_as_caller_sorted = sorted(
             campaigns_as_caller,
