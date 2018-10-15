@@ -17,7 +17,7 @@
     {% if can_manage %}
     {{ call_campaign.calls_made_count }}/{{ call_campaign.contacts_total_count }}
     {% else %}
-    {% calls_made_count campaign user.callprofile %}
+    {% calls_made_count call_campaign user.callprofile %}
     {% endif %}
   </td>
 

@@ -14,14 +14,14 @@ from bsd.models import (
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
-    find_last_call_to_contact,
+    find_last_call_by_external_id,
     get_recent_call_cutoff,
 )
 from contacts.models import Contact, ContactList, ContactListStatus
 from events.models import (
     EventPromotion,
     EventPromotionStatus,
-    find_last_event_promo_sent_to_contact
+    find_last_event_promo_sent_to_contact,
 )
 import datetime
 import logging

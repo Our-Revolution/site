@@ -6,6 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
@@ -23,6 +24,7 @@ from calls.models import (
     CallQuestion,
 )
 from local_groups.models import find_local_group_by_user
+from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 import logging
 
@@ -107,6 +109,7 @@ def can_make_call_for_campaign(user, call_campaign):
         return can_change_call_campaign(user, call_campaign)
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CallView(FormView):
     """
     Call View
@@ -265,7 +268,8 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
         return find_local_group_by_user(self.request.user)
 
 
-class CallDashboardView(LoginRequiredMixin, TemplateView):
+@method_decorator(verified_email_required, name='dispatch')
+class CallDashboardView(TemplateView):
     template_name = "calls/dashboard.html"
 
     def get_context_data(self, **kwargs):
