@@ -1,6 +1,6 @@
 {% extends "calls/organizing_hub_calls.html" %}
 
-{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+{% load bootstrap3 calls_tags django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - {{ call_campaign.title }}{% endblock %}
 
@@ -39,6 +39,23 @@
     </div>
 
     <div class="col-md-9">
+
+      {% has_local_group_permission call_campaign.local_group "calls.change_callcampaign" as can_manage %}
+
+      <p>
+        {% if can_manage %}
+
+        <strong>{{ call_campaign.calls_made_count }}</strong> of
+        {{ call_campaign.contacts_total_count }} contacts called.
+
+        {% else %}
+
+        <strong>{% calls_made_count call_campaign user.callprofile %}</strong>
+        contacts called.
+
+        {% endif %}
+      </p>
+
 
       <h2 class="mt0">Calling Info</h2>
 
@@ -81,6 +98,8 @@
             {% bootstrap_field form.voice_message %}
           </div>
         </div>
+
+        <hr />
 
         <button class="btn btn-success mb10 mr5 uppercase" name="exit_after_call"
         type="submit" value="False">
