@@ -124,20 +124,23 @@ class CallView(FormView):
 
     def can_access(self, call_campaign, call):
 
-        """Check if User or Call Campaign is None"""
+        """Check if User and Call Campaign are not None"""
         user = self.request.user
-        if user is None or call_campaign is None:
-            return False
+        if user is not None and call_campaign is not None:
 
-        """Check if User can make call for Campaign"""
-        if not can_make_call_for_campaign(user, call_campaign):
-            return False
+            """Check if User can make call for Campaign"""
+            if can_make_call_for_campaign(user, call_campaign):
 
-        """If Call is not None then check if User is Caller"""
-        if call is not None:
-            return hasattr(user, 'callprofile') and (
-                call.caller == user.callprofile
-            )
+                """If Call is not None then check if User is Caller"""
+                if call is not None:
+                    return hasattr(user, 'callprofile') and (
+                        call.caller == user.callprofile
+                    )
+                else:
+                    return True
+
+        """Otherwise return False"""
+        return False
 
     def form_invalid(self, form):
 
@@ -148,7 +151,7 @@ class CallView(FormView):
             context['call_campaign'],
             context['call'],
         ):
-                raise Http404
+            raise Http404
 
         if context['call'] is None:
             messages.info(
