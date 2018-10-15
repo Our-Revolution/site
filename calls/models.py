@@ -4,16 +4,19 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.db import models
+from django.utils import timezone
 from enum import Enum, unique
 from localflavor.us.models import USStateField
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
+import datetime
 import googlemaps
 import logging
 import uuid
 
 logger = logging.getLogger(__name__)
 
+CALLS_RECENT_CUTOFF_DAYS = settings.CALLS_RECENT_CUTOFF_DAYS
 GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
 
 
@@ -189,6 +192,10 @@ def find_contact_to_call_for_campaign(call_campaign):
     """
     Find Contact to call for Call Campaign
 
+
+    Find a Contact that hasn't been called yet for this Campaign, or recently
+    for another Campaign.
+
     Parameters
     ----------
     call_campaign : CallCampaign
@@ -200,19 +207,29 @@ def find_contact_to_call_for_campaign(call_campaign):
             Return available Contact or None
     """
 
-    """Find a Contact that hasn't been called"""
+    recent_call_cutoff = get_recent_call_cutoff()
     for contact in call_campaign.contact_list.contacts.all():
         if Call.objects.filter(
             call_campaign=call_campaign,
             contact=contact,
         ).first() is None:
-            return contact
+
+            """Check if Contact has received recent Call for any Campaign"""
+            last_call_to_contact = find_last_call_to_contact(contact)
+            if last_call_to_contact is not None and (
+                last_call_to_contact.date_created > recent_call_cutoff
+            ):
+                """Remove from contact list"""
+                call_campaign.contact_list.contacts.remove(contact)
+            else:
+                """Return Contact"""
+                return contact
 
     """Otherwise return None"""
     return None
 
 
-def find_last_call_to_contact(contact_external_id):
+def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
 
@@ -232,7 +249,29 @@ def find_last_call_to_contact(contact_external_id):
     if contact is None:
         return None
 
-    """Find last Call created for contact"""
+    return find_last_call_to_contact(contact)
+
+
+def find_last_call_to_contact(contact):
+    """
+    Find most recent Call created for Contact
+
+    Parameters
+    ----------
+    contact : Contact
+        Contact to check for
+
+    Returns
+        -------
+        Call
+            Returns matching Call, or None
+    """
+
+    """Check if Contact is None"""
+    if contact is None:
+        return None
+
+    """Find last Call created for Contact"""
     last_call_created = Call.objects.filter(contact=contact).order_by(
         '-date_created'
     ).first()
@@ -281,6 +320,21 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
 
     """Otherwise return None"""
     return None
+
+
+def get_recent_call_cutoff():
+    """
+    Get recent Call cutoff datetime for excluding Contacts from Calls
+
+    Returns
+        -------
+        datetime
+            Return recent Call cutoff datetime
+    """
+    recent_call_cutoff = timezone.now() - datetime.timedelta(
+        days=CALLS_RECENT_CUTOFF_DAYS
+    )
+    return recent_call_cutoff
 
 
 def save_call_response(call, question, answer):
