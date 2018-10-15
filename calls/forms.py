@@ -47,15 +47,6 @@ class CallForm(forms.Form):
         required=False,
     )
 
-    def has_response(self):
-        return self.cleaned_data['talk_to_contact'] is not None or (
-            self.cleaned_data['take_action'] is not None
-        ) or (
-            self.cleaned_data['talk_to_contact_why_not'] is not None
-        ) or (
-            self.cleaned_data['voice_message'] is not None
-        )
-
 
 class CallCampaignForm(forms.ModelForm):
     max_distance = forms.IntegerField(
