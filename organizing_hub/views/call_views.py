@@ -122,10 +122,34 @@ class CallView(FormView):
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
+    def can_access(self, call_campaign, call):
+
+        """Check if User or Call Campaign is None"""
+        user = self.request.user
+        if user is None or call_campaign is None:
+            return False
+
+        """Check if User can make call for Campaign"""
+        if not can_make_call_for_campaign(user, call_campaign):
+            return False
+
+        """If Call is not None then check if User is Caller"""
+        if call is not None:
+            return hasattr(user, 'callprofile') and (
+                call.caller == user.callprofile
+            )
+
     def form_invalid(self, form):
 
         """Return Call page with new Form if there is a Call"""
         context = self.get_context_data()
+
+        if not self.can_access(
+            context['call_campaign'],
+            context['call'],
+        ):
+                raise Http404
+
         if context['call'] is None:
             messages.info(
                 self.request,
@@ -139,17 +163,16 @@ class CallView(FormView):
 
         """Get Call if it exists"""
         call_uuid = form.cleaned_data['call_uuid']
-        call = None if call_uuid is None else Call.objects.filter(
-            uuid=call_uuid
-        ).first()
+        call = None if call_uuid is None else Call.objects.select_related(
+            'call_campaign'
+        ).filter(uuid=call_uuid).first()
 
         """Handle Call Response"""
         if call is not None:
 
-            """Check user access to call"""
-            user = self.request.user
-            if not hasattr(user, 'callprofile') or (
-                call.caller != user.callprofile
+            if not self.can_access(
+                call.call_campaign,
+                call,
             ):
                 raise Http404
 
@@ -181,6 +204,13 @@ class CallView(FormView):
 
         """Return Call page"""
         context = self.get_context_data()
+
+        if not self.can_access(
+            context['call_campaign'],
+            context['call'],
+        ):
+            raise Http404
+
         if context['call'] is None:
             messages.info(
                 self.request,
@@ -200,23 +230,18 @@ class CallView(FormView):
         """Get Call Campaign"""
         campaign_uuid = self.kwargs['uuid']
         call_campaign = CallCampaign.objects.filter(uuid=campaign_uuid).first()
-        if call_campaign is None:
-            raise Http404
-
-        """Check user access to campaign"""
-        user = self.request.user
-        if not can_make_call_for_campaign(user, call_campaign):
-            raise Http404
         context['call_campaign'] = call_campaign
 
-        """Find active Call"""
-        if not hasattr(user, 'callprofile'):
-            raise Http404
-        caller = user.callprofile
-        call = find_or_create_active_call_for_campaign_and_caller(
-            call_campaign,
-            caller,
-        )
+        """Find or create active Call for caller"""
+        user = self.request.user
+        if hasattr(user, 'callprofile'):
+            caller = user.callprofile
+            call = find_or_create_active_call_for_campaign_and_caller(
+                call_campaign,
+                caller,
+            )
+        else:
+            call = None
         context['call'] = call
 
         if call is not None:
