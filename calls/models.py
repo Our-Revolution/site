@@ -446,6 +446,7 @@ class Call(models.Model):
     contact = models.ForeignKey(Contact)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     def __unicode__(self):
         return 'Call [%s] | %s | %s' % (
