@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.shortcuts import redirect
@@ -126,6 +127,10 @@ class CallView(FormView):
         """Return Call page with new Form if there is a Call"""
         context = self.get_context_data()
         if context['call'] is None:
+            messages.info(
+                self.request,
+                "No more contacts left to call for this campaign."
+            )
             return redirect('organizing-hub-call-dashboard')
 
         return self.render_to_response(context)
@@ -177,6 +182,10 @@ class CallView(FormView):
         """Return Call page"""
         context = self.get_context_data()
         if context['call'] is None:
+            messages.info(
+                self.request,
+                "No more contacts left to call for this campaign."
+            )
             return redirect('organizing-hub-call-dashboard')
 
         return self.render_to_response(context)
