@@ -115,8 +115,7 @@ class CallView(FormView):
     """
     Call View
 
-    Allow access if User should be able to make a Call For Campaign, or is the
-    Caller for a specific Call.
+    Handle submit request for Make Call and also Call Responses
     """
 
     form_class = CallForm
@@ -199,6 +198,11 @@ class CallView(FormView):
                 call,
                 CallQuestion.voice_message.value[0],
                 form.cleaned_data['voice_message'],
+            )
+
+            messages.success(
+                self.request,
+                "Call response saved successfully."
             )
 
             """Redirect to Dashboard if exit flag is True"""
