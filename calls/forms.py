@@ -13,7 +13,7 @@ class CallForm(forms.Form):
         required=False,
         widget=forms.HiddenInput,
     )
-    campaign_uuid = forms.UUIDField(widget=forms.HiddenInput)
+    # campaign_uuid = forms.UUIDField(widget=forms.HiddenInput)
     exit_after_call = forms.BooleanField(required=False)
     take_action = forms.TypedChoiceField(
         choices=[(None, '')] + [

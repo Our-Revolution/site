@@ -96,6 +96,7 @@ class CallView(
         return self.render_to_response(context)
 
     def form_invalid(self, form):
+        logger.debug('form_invalid: ')
         return self.render_to_response(self.get_context_data())
 
     def get(self, request, *args, **kwargs):
@@ -122,7 +123,7 @@ class CallView(
         if call is not None:
             """Get Call Form"""
             context['form'] = CallForm(initial={
-                'campaign_uuid': str(call_campaign.uuid),
+                # 'campaign_uuid': str(call_campaign.uuid),
                 'call_id': str(call.id),
             })
 
