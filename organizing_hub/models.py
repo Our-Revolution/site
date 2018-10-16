@@ -46,8 +46,8 @@ class OrganizingHubFeatureAccess(models.Model):
 
     def __unicode__(self):
         return '%s | %s' % (
-            str(self.organizing_hub_access),
             self.get_feature_display(),
+            str(self.organizing_hub_access),
         )
 
     class Meta:

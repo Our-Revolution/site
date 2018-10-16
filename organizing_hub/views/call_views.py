@@ -17,6 +17,7 @@ from calls.models import (
 )
 from local_groups.models import find_local_group_by_user
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
+from organizing_hub.models import OrganizingHubFeature
 import logging
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,7 @@ class CallCampaignCreateView(
     form_class = CallCampaignForm
     local_group = None
     model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
     permission_required = 'calls.add_callcampaign'
     success_message = '''
     Your calling campaign request has been submitted and will be reviewed by
@@ -79,6 +81,7 @@ class CallCampaignCreateView(
 class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
     context_object_name = 'campaign'
     model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
