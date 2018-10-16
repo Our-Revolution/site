@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.decorators import login_required
-from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.utils.decorators import method_decorator
 from django.utils.encoding import python_2_unicode_compatible
