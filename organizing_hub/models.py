@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils.decorators import method_decorator
 from django.utils.encoding import python_2_unicode_compatible
+from enum import Enum, unique
 from pages.models import AlertLevels
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
@@ -13,9 +14,44 @@ from wagtail.wagtailcore.fields import (
 )
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
+from local_groups.models import Group as LocalGroup
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@unique
+class OrganizingHubFeature(Enum):
+    calling_tool = (1, 'Calling Tool')
+
+
+class OrganizingHubAccess(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    local_group = models.OneToOneField(LocalGroup)
+
+    def __unicode__(self):
+        return '%s [%s] Access [%s]' % (
+            self.local_group.name,
+            self.local_group.slug,
+            str(self.id),
+        )
+
+
+class OrganizingHubFeatureAccess(models.Model):
+    feature = models.IntegerField(
+        choices=[x.value for x in OrganizingHubFeature],
+    )
+    organizing_hub_access = models.ForeignKey(OrganizingHubAccess)
+
+    def __unicode__(self):
+        return '%s | %s' % (
+            self.get_feature_display(),
+            str(self.organizing_hub_access),
+        )
+
+    class Meta:
+        unique_together = ["feature", "organizing_hub_access"]
 
 
 class OrganizingHubDashboardPage(Page):

@@ -69,7 +69,11 @@ class GroupAdmin(admin.ModelAdmin):
     def get_actions(self, request):
         #Disable delete
         actions = super(GroupAdmin, self).get_actions(request)
-        del actions['delete_selected']
+        try:
+            del actions['delete_selected']
+        except KeyError:
+            pass
+
         return actions
 
     def has_delete_permission(self, request, obj=None):
