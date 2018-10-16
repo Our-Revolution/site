@@ -5,6 +5,7 @@ from django.conf import settings
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from bsd.models import Account, BSDEvent
+from .models import OrganizingHubAccess, OrganizingHubFeature
 
 ORGANIZING_EMAIL = settings.ORGANIZING_EMAIL
 
