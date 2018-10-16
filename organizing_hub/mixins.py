@@ -58,10 +58,8 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
         local_group = self.get_local_group()
         if hasattr(local_group, 'organizinghubaccess'):
             access = local_group.organizinghubaccess
-            feature = self.organizing_hub_feature
-            for feature_access in access.organizinghubfeatureaccess_set.all():
-                if feature_access.feature == feature.value[0]:
-                    return True
+            if access.has_feature_access(self.organizing_hub_feature):
+                return True
 
         """Otherwise return False"""
         return False
