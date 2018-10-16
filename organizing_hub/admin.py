@@ -15,4 +15,4 @@ class OrganizingHubAccessAdmin(admin.ModelAdmin):
         'date_modified',
     ]
     fields = readonly_fields + ['local_group']
-    # raw_id_fields = ['local_group']
+    raw_id_fields = ['local_group']
