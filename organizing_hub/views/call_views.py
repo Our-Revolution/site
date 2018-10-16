@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -101,13 +100,20 @@ def can_make_call_for_campaign(user, call_campaign):
             Return True if User can Call for Campaign, otherwise False
     """
 
-    """Check user access to campaign"""
-    if hasattr(user, 'callprofile') and (
-        user.callprofile in call_campaign.callers.all()
-    ):
-        return True
-    else:
-        return can_change_call_campaign(user, call_campaign)
+    """Check Campaign status"""
+    if call_campaign.is_in_progress:
+
+        """Check if User is Caller on Campaign"""
+        if hasattr(user, 'callprofile') and (
+            user.callprofile in call_campaign.callers.all()
+        ):
+            return True
+        else:
+            """Check if User has change level access on Campaign"""
+            return can_change_call_campaign(user, call_campaign)
+
+    """Otherwise return False"""
+    return False
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -150,7 +156,7 @@ class CallView(FormView):
             context['call_campaign'],
             context['call'],
         ):
-            raise Http404
+            return redirect('organizing-hub-call-dashboard')
 
         if context['call'] is None:
             messages.info(
@@ -176,7 +182,7 @@ class CallView(FormView):
                 call.call_campaign,
                 call,
             ):
-                raise Http404
+                return redirect('organizing-hub-call-dashboard')
 
             """Save Call Responses"""
             save_call_response(
@@ -216,7 +222,7 @@ class CallView(FormView):
             context['call_campaign'],
             context['call'],
         ):
-            raise Http404
+            return redirect('organizing-hub-call-dashboard')
 
         if context['call'] is None:
             messages.info(
