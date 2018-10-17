@@ -1,0 +1,119 @@
+{% extends "calls/organizing_hub_calls.html" %}
+
+{% load bootstrap3 calls_tags django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - {{ call_campaign.title }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb call_campaign.title "organizing-hub-call" call_campaign.uuid %}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">
+  {% if call_campaign.is_in_progress %}
+  <span class="dot dot-success dot-sm"></span>
+  {% endif %}
+  {{ call_campaign.get_status_display }} Campaign
+</span>
+{% endblock %}
+
+{% block content_heading %}{{ call_campaign.title }}{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pb4 pt4">
+
+  <div class="row">
+    <div class="col-md-9 col-md-offset-3">
+      {% bootstrap_messages %}
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3">
+      {% organizing_hub_nav %}
+    </div>
+
+    <div class="col-md-9">
+
+      {% has_local_group_permission call_campaign.local_group "calls.change_callcampaign" as can_manage %}
+
+      <p>
+        {% if can_manage %}
+
+        <strong>{{ call_campaign.calls_made_count }}</strong> of
+        {{ call_campaign.contacts_total_count }} contacts called.
+
+        {% else %}
+
+        <strong>{% calls_made_count call_campaign user.callprofile %}</strong>
+        contacts called.
+
+        {% endif %}
+      </p>
+
+
+      <h2 class="mt0">Calling Info</h2>
+
+      <div class="mb5"><strong>Contact</strong></div>
+      <div class="well well-sm">
+        <strong>{{ call.contact.name }}</strong><br />
+        {{ call.contact.phone_number.as_international }}
+      </div>
+
+      <div class="mb5"><strong>Script</strong></div>
+      <div class="well well-sm">
+        {{ call_campaign.script|linebreaks }}
+      </div>
+
+      <h2>Response</h2>
+
+      <form action="{% url 'organizing-hub-call' call_campaign.uuid %}"
+      class="form" method="post">
+
+        {% csrf_token %}
+
+        {% bootstrap_field form.call_uuid %}
+
+        <div class="row">
+          <div class="col-md-6">
+            {% bootstrap_field form.talk_to_contact %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.take_action %}
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+          <div class="col-md-6">
+            {% bootstrap_field form.talk_to_contact_why_not %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.voice_message %}
+          </div>
+        </div>
+
+        <hr />
+
+        <button class="btn btn-success mb10 mr5 uppercase" name="exit_after_call"
+        type="submit" value="False">
+          Save & Continue
+        </button>
+
+        <button class="btn btn-primary mb10 uppercase"
+        name="exit_after_call" type="submit" value="True">
+          Exit after Saving
+        </button>
+
+      </form>
+
+  </div>
+</div>
+
+{% endblock %}

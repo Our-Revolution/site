@@ -14,13 +14,14 @@ from bsd.models import (
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
-    find_last_call_to_contact,
+    find_last_call_by_external_id,
+    get_recent_call_cutoff,
 )
 from contacts.models import Contact, ContactList, ContactListStatus
 from events.models import (
     EventPromotion,
     EventPromotionStatus,
-    find_last_event_promo_sent_to_contact
+    find_last_event_promo_sent_to_contact,
 )
 import datetime
 import logging
@@ -34,7 +35,6 @@ bsd_api = BSD().api
 
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
-CALLS_RECENT_CUTOFF_DAYS = settings.CALLS_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
@@ -188,7 +188,10 @@ def sync_contact_list_with_bsd_constituent(
 ):
     """
     Sync Contact List with BSD constituent, with param for max distance from
-    point
+    point.
+
+    Update or Create Contact in db with constituent data from BSD before adding
+    to List.
 
     Parameters
     ----------
@@ -216,8 +219,14 @@ def sync_contact_list_with_bsd_constituent(
     """Get constituent id"""
     constituent_id = constituent.get('id')
 
-    """Get constituent email and check if it's subscribed and required"""
-    email_address = None
+    """Start a data dictionary for saving Contact info to db"""
+    contact_data = {'external_id': constituent_id}
+
+    """
+    Get constituent email and check if it's subscribed and required. If email
+    is required and missing then don't add constituent to List. If email is
+    missing but not required then just skip email field and continue.
+    """
     cons_email = constituent.find('cons_email')
     if require_email and cons_email is None:
         return contact_list
@@ -231,9 +240,14 @@ def sync_contact_list_with_bsd_constituent(
             email_address = cons_email.findtext('email')
             if require_email and email_address is None:
                 return contact_list
+            elif email_address is not None:
+                contact_data['email_address'] = email_address
 
-    """Get constituent phone and check if it's required"""
-    phone_number = None
+    """
+    Get constituent phone and check if it's required. If phone is required and
+    missing then don't add constituent to List. If phone is missing but not
+    required then just skip phone field and continue.
+    """
     cons_phone = constituent.find('cons_phone')
     if require_phone and cons_phone is None:
         return contact_list
@@ -247,6 +261,8 @@ def sync_contact_list_with_bsd_constituent(
         phone_number = cons_phone.findtext('phone')
         if require_phone and phone_number is None:
             return contact_list
+        elif phone_number is not None:
+            contact_data['phone_number'] = phone_number
 
     """Get constituent location"""
     constituent_address = constituent.find('cons_addr')
@@ -260,6 +276,7 @@ def sync_contact_list_with_bsd_constituent(
         y=float(constituent_latitude),
         x=float(constituent_longitude)
     )
+    contact_data['point'] = constituent_point
 
     """Check if contact is within max radius"""
     if not max_distance_geos_area.contains(constituent_point):
@@ -277,7 +294,7 @@ def sync_contact_list_with_bsd_constituent(
 
     """Check if contact has received recent call campaign call"""
     if recent_call_cutoff is not None:
-        last_call_to_contact = find_last_call_to_contact(constituent_id)
+        last_call_to_contact = find_last_call_by_external_id(constituent_id)
         if last_call_to_contact is not None and (
             last_call_to_contact.date_created > recent_call_cutoff
         ):
@@ -285,19 +302,16 @@ def sync_contact_list_with_bsd_constituent(
 
     """Get first and last name"""
     first_name = constituent.findtext('firstname')
+    if first_name is not None:
+        contact_data['first_name'] = first_name
     last_name = constituent.findtext('lastname')
+    if last_name is not None:
+        contact_data['last_name'] = last_name
 
-    """Create or update contact and add to list"""
+    """Create or update Contact and add to List."""
     contact, created = Contact.objects.update_or_create(
         external_id=constituent_id,
-        defaults={
-            'external_id': constituent_id,
-            'email_address': email_address,
-            'first_name': first_name,
-            'last_name': last_name,
-            'point': constituent_point,
-            'phone_number': phone_number,
-        },
+        defaults=contact_data,
     )
     contact_list.contacts.add(contact)
 
@@ -550,9 +564,7 @@ def build_list_for_call_campaign(call_campaign_id):
     contact_list.save()
 
     """Get cutoff date for filtering out recent call campaign calls"""
-    recent_call_cutoff = timezone.now() - datetime.timedelta(
-        days=CALLS_RECENT_CUTOFF_DAYS
-    )
+    recent_call_cutoff = get_recent_call_cutoff()
 
     """Get max distance miles based on model and app config"""
     max_distance_miles = float(min(

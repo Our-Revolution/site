@@ -1,45 +1,53 @@
-{% load calls_tags organizing_hub_tags %}
+{% load bootstrap3 calls_tags organizing_hub_tags %}
 
 <tr>
 
-  <td>{{ campaign.title }}</td>
+  <td>{{ call_campaign.title }}</td>
 
   <td>
-    {% if campaign.is_in_progress %}
+    {% if call_campaign.is_in_progress %}
     <span class="dot dot-success dot-sm"></span>
     {% endif %}
-    {{ campaign.get_status_display }}
+    {{ call_campaign.get_status_display }}
   </td>
 
   <td>
     {% if can_manage_campaign %}
-    {{ campaign.calls_made_count }}/{{ campaign.contacts_total_count }}
+    {{ call_campaign.calls_made_count }}/{{ call_campaign.contacts_total_count }}
     {% else %}
-    {% calls_made_count campaign user.callprofile %}
+    {% calls_made_count call_campaign user.callprofile %}
     {% endif %}
   </td>
 
   <td class="text-right">
 
+    {% if call_campaign.is_in_progress and call_campaign.calls_made_count < call_campaign.contacts_total_count %}
+    <form action="{% url 'organizing-hub-call' call_campaign.uuid %}"
+    class="form form-inline inline-block" method="post">
 
-    {% if campaign.is_in_progress %}
-    <a class="btn btn-success btn-sm mb5-xs" href="todo">
-      Make Calls
-    </a>
+      {% csrf_token %}
+
+      <button class="btn btn-success btn-sm mb5-xs" type="submit">
+        Make Calls
+      </button>
+
+    </form>
     {% endif %}
 
     {% if can_manage_campaign %}
-    {% if campaign.is_active %}
+
+    {% if call_campaign.is_active %}
     <a class="btn btn-primary btn-sm mb5-xs"
-    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
+    href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
       Manage
     </a>
     {% else %}
     <a class="btn btn-default btn-sm mb5-xs"
-    href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
+    href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
       View
     </a>
     {% endif %}
+
     {% endif %}
 
   </td>
