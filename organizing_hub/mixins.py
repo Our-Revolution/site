@@ -43,11 +43,11 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
         return redirect(settings.ORGANIZING_HUB_DASHBOARD_URL)
 
     def has_feature_access(self):
-        """Return True if we are skiping feature check"""
+        """Return True if we are skipping feature check"""
         if self.skip_feature_check:
             return True
 
-        """Throw error is feature is missing"""
+        """Throw error if feature is missing"""
         if self.organizing_hub_feature is None:
             raise ImproperlyConfigured(
                 '{0} is missing the organizing_hub_feature attribute. Define {0}.organizing_hub_feature, or override '
