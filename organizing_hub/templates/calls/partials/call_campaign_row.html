@@ -12,7 +12,7 @@
   </td>
 
   <td>
-    {% if can_manage_campaign %}
+    {% if can_manage_campaign and local_group == call_campaign.local_group %}
     {{ call_campaign.calls_made_count }}/{{ call_campaign.contacts_total_count }}
     {% else %}
     {% calls_made_count call_campaign user.callprofile %}
