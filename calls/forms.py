@@ -1,7 +1,15 @@
 from django import forms
 from django.conf import settings
 from django.forms import widgets
-from .models import CallCampaign, CallQuestion
+from contacts.models import ContactListStatus
+from .models import (
+    call_campaign_statuses_dont_require_valid_list,
+    CallCampaign,
+    CallQuestion,
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
@@ -78,6 +86,22 @@ class CallCampaignForm(forms.ModelForm):
 
 
 class CallCampaignAdminForm(CallCampaignForm):
+
+    def clean_status(self):
+        """Check if status requires a valid Contact List attached"""
+        status = self.cleaned_data['status']
+        if status not in [
+            x.value[0] for x in call_campaign_statuses_dont_require_valid_list
+        ]:
+            contact_list = self.instance.contact_list
+            if contact_list is None or not (
+                contact_list.status == ContactListStatus.complete
+            ) or not (
+                contact_list.contacts.count() > 0
+            ):
+                raise forms.ValidationError(self.fields['status'].help_text)
+        return status
+
     class Meta:
         field_width = '640px'
         widgets = {

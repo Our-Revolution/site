@@ -55,6 +55,13 @@ call_campaign_statuses_for_list_clear = [
     CallCampaignStatus.declined,
 ]
 
+"""Statuses that don't require a valid Contact List attached"""
+call_campaign_statuses_dont_require_valid_list = [
+    CallCampaignStatus.new,
+    CallCampaignStatus.declined,
+    CallCampaignStatus.suspended,
+]
+
 """Campaign Statuses with data download available"""
 call_campaign_statuses_with_data_download = [
     CallCampaignStatus.in_progress,
@@ -424,6 +431,10 @@ class CallCampaign(models.Model):
     status = models.IntegerField(
         choices=[x.value for x in CallCampaignStatus],
         default=CallCampaignStatus.new.value[0],
+        help_text="""
+        Contact List is required to be complete and non-empty for certain
+        Campaign statuses.
+        """,
     )
     title = models.CharField(max_length=128)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
