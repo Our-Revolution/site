@@ -56,7 +56,10 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
 
         """Check if Local Group has access to Feature"""
         local_group = self.get_local_group()
-        if hasattr(local_group, 'organizinghubaccess'):
+        if local_group is not None and hasattr(
+            local_group,
+            'organizinghubaccess',
+        ):
             access = local_group.organizinghubaccess
             if access.has_feature_access(self.organizing_hub_feature):
                 return True
