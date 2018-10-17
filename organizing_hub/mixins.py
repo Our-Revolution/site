@@ -71,8 +71,8 @@ class LocalGroupPermissionRequiredMixin(PermissionRequiredMixin):
         local_group = self.get_local_group()
         permissions = self.get_permission_required()
 
-        """Return False for non-approved local group"""
-        if local_group.status != 'approved':
+        """Return False for missing or non-approved local group"""
+        if local_group is None or local_group.status != 'approved':
             return False
 
         """Return False for missing feature access"""
