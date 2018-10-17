@@ -3,7 +3,7 @@ from django.conf import settings
 from django.forms import widgets
 from contacts.models import ContactListStatus
 from .models import (
-    call_campaign_statuses_dont_require_valid_list,
+    call_campaign_statuses_skip_list_validation,
     CallCampaign,
     CallQuestion,
 )
@@ -91,7 +91,7 @@ class CallCampaignAdminForm(CallCampaignForm):
         """Check if status requires a valid Contact List attached"""
         status = self.cleaned_data['status']
         if status not in [
-            x.value[0] for x in call_campaign_statuses_dont_require_valid_list
+            x.value[0] for x in call_campaign_statuses_skip_list_validation
         ]:
             contact_list = self.instance.contact_list
             if contact_list is None or not (

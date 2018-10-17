@@ -55,8 +55,8 @@ call_campaign_statuses_for_list_clear = [
     CallCampaignStatus.declined,
 ]
 
-"""Statuses that don't require a valid Contact List attached"""
-call_campaign_statuses_dont_require_valid_list = [
+"""Statuses that should skip Contact List validation"""
+call_campaign_statuses_skip_list_validation = [
     CallCampaignStatus.new,
     CallCampaignStatus.declined,
     CallCampaignStatus.suspended,
