@@ -34,7 +34,7 @@
     </form>
     {% endif %}
 
-    {% if can_manage_campaign %}
+    {% if can_manage_campaign and local_group == call_campaign.local_group %}
 
     {% if call_campaign.is_active %}
     <a class="btn btn-primary btn-sm mb5-xs"

@@ -271,7 +271,6 @@ class CallCampaignCreateView(
     CreateView
 ):
     form_class = CallCampaignForm
-    local_group = None
     model = CallCampaign
     organizing_hub_feature = OrganizingHubFeature.calling_tool
     permission_required = 'calls.add_callcampaign'
@@ -315,7 +314,11 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
     slug_url_kwarg = 'uuid'
 
     def get_local_group(self):
-        return find_local_group_by_user(self.request.user)
+        """Get Local Group attached to Call Campaign"""
+        if self.local_group is None:
+            call_campaign = self.get_object()
+            self.local_group = call_campaign.local_group
+        return self.local_group
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -357,7 +360,9 @@ class CallDashboardView(TemplateView):
         campaigns_as_caller_active = [(
             x,
             CallForm() if x.is_in_progress else None
-        ) for x in campaigns_as_caller_sorted if x.is_active]
+        ) for x in campaigns_as_caller_sorted if (
+            x.is_active and x not in campaigns_as_admin
+        )]
 
         context['campaigns_as_admin_active'] = campaigns_as_admin_active
         context['campaigns_as_admin_inactive'] = campaigns_as_admin_inactive
@@ -371,14 +376,19 @@ class CallDashboardView(TemplateView):
             access = local_group.organizinghubaccess
             if access.has_feature_access(OrganizingHubFeature.calling_tool):
 
+                """Add Local Group to context to help with access logic"""
+                context['local_group'] = local_group
+
                 """Check permissions against Local Group Profile"""
                 if hasattr(user, 'localgroupprofile'):
                     profile = user.localgroupprofile
+
                     if profile.has_permissions_for_local_group(
                         local_group,
                         ['calls.add_callcampaign']
                     ):
                         context['can_add_campaign'] = True
+
                     if profile.has_permissions_for_local_group(
                         local_group,
                         ['calls.change_callcampaign']
