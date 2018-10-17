@@ -14,19 +14,16 @@ CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 class CommaSeparatedTextArea(Widget):
     def render(self, name, value, attrs=None, renderer=None):
         final_attrs = self.build_attrs(attrs, {'type':'text', 'name':name})
-        objects = []
+        caller_emails = []
 
         if value is not None:
             for caller_id in value:
                 callprofile = CallProfile.objects.get(pk=caller_id)
                 user = callprofile.user
-                objects.append(user.email)
+                caller_emails.append(str(user.email))
 
-            values = []
-            for each in objects:
-                values.append(str(each))
-            value = ', '.join(values)
-            if value: # only add 'value' if it's nonempty
+            value = ', '.join(caller_emails)
+            if value:
                 final_attrs['value'] = str(value)
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
