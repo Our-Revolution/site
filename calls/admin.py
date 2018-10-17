@@ -46,6 +46,7 @@ class CallCampaignAdmin(admin.ModelAdmin):
     readonly_fields = [
         'owner',
         'local_group',
+        'contact_list',
         'get_list_status',
         'get_list_size',
         'point',
@@ -55,7 +56,6 @@ class CallCampaignAdmin(admin.ModelAdmin):
     fields = readonly_fields + [
         'title',
         'status',
-        'contact_list',
         'script',
         'state_or_territory',
         'postal_code',
