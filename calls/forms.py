@@ -96,10 +96,6 @@ class CallCampaignForm(forms.ModelForm):
         }
 
 class CallCampaignUpdate(CallCampaignForm):
-    callers = ModelCommaSeparatedChoiceField(
-        queryset=CallProfile.objects.all(),
-        required=False
-    )
     max_distance = forms.IntegerField(
         disabled=True
     )
