@@ -1,7 +1,5 @@
 {% load bootstrap3 calls_tags organizing_hub_tags %}
 
-{% has_local_group_permission call_campaign.local_group "calls.change_callcampaign" as can_manage %}
-
 <tr>
 
   <td>{{ call_campaign.title }}</td>
@@ -14,7 +12,7 @@
   </td>
 
   <td>
-    {% if can_manage %}
+    {% if can_manage_campaign and local_group == call_campaign.local_group %}
     {{ call_campaign.calls_made_count }}/{{ call_campaign.contacts_total_count }}
     {% else %}
     {% calls_made_count call_campaign user.callprofile %}
@@ -36,7 +34,8 @@
     </form>
     {% endif %}
 
-    {% if can_manage %}
+    {% if can_manage_campaign and local_group == call_campaign.local_group %}
+
     {% if call_campaign.is_active %}
     <a class="btn btn-primary btn-sm mb5-xs"
     href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
@@ -48,6 +47,7 @@
       View
     </a>
     {% endif %}
+
     {% endif %}
 
   </td>

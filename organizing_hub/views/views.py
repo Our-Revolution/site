@@ -352,6 +352,7 @@ class EventPromoteView(
     Your event promotion request has been submitted and will be reviewed by our
     team.
     '''
+    skip_feature_check = True
     template_name = "event_promote.html"
 
     def can_access(self):
@@ -542,6 +543,7 @@ class GroupAdminsView(
     form_class = GroupAdminsForm
     model = LocalGroup
     permission_required = 'local_groups.add_localgroupaffiliation'
+    skip_feature_check = True
     success_message = "The group admins have been updated successfully."
     template_name = "group_admins.html"
 
