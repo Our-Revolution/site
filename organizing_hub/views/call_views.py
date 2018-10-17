@@ -111,16 +111,8 @@ class CallCampaignUpdateView(
         context['update_view'] = True
         return context
 
-    def form_valid(self, form):
-        """Set local group and owner before save"""
-        form.instance.local_group = self.get_local_group()
-        form.instance.owner = self.request.user.callprofile
-        return super(CallCampaignUpdateView, self).form_valid(form)
-
     def get_local_group(self):
-        if self.local_group is None:
-            self.local_group = find_local_group_by_user(self.request.user)
-        return self.local_group
+        return find_local_group_by_user(self.request.user)
 
     def get_success_url(self):
         return reverse_lazy(
