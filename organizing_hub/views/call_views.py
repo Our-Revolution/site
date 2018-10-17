@@ -11,7 +11,7 @@ from django.views.generic import (
     UpdateView
 )
 from django.views.generic.list import ListView
-from calls.forms import CallCampaignForm, CallCampaignUpdate
+from calls.forms import CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
@@ -97,7 +97,7 @@ class CallCampaignUpdateView(
     UpdateView
 ):
     template_name = "calls/callcampaign_form.html"
-    form_class = CallCampaignUpdate
+    form_class = CallCampaignUpdateForm
     model = CallCampaign
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
@@ -112,7 +112,8 @@ class CallCampaignUpdateView(
         return context
 
     def get_local_group(self):
-        return find_local_group_by_user(self.request.user)
+        campaign = self.get_object()
+        return campaign.local_group
 
     def get_success_url(self):
         return reverse_lazy(

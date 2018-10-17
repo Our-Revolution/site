@@ -95,7 +95,7 @@ class CallCampaignForm(forms.ModelForm):
             'script': forms.Textarea(attrs={'rows': '14'})
         }
 
-class CallCampaignUpdate(CallCampaignForm):
+class CallCampaignUpdateForm(CallCampaignForm):
     max_distance = forms.IntegerField(disabled=True)
     max_recipients = forms.IntegerField(disabled=True)
     postal_code = forms.CharField(disabled=True)
