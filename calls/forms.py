@@ -11,7 +11,7 @@ from .models import CallCampaign, CallProfile
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
-class CommaSeparatedTextArea(Widget):
+class CommaSeparatedCallersTextArea(Widget):
     def render(self, name, value, attrs=None, renderer=None):
         final_attrs = self.build_attrs(attrs, {'type':'text', 'name':name})
         caller_emails = []
@@ -28,7 +28,7 @@ class CommaSeparatedTextArea(Widget):
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
 class ModelCommaSeparatedChoiceField(forms.ModelMultipleChoiceField):
-    widget = CommaSeparatedTextArea(
+    widget = CommaSeparatedCallersTextArea(
         attrs={
             'rows': '5',
             'placeholder': 'bob@example.com, sally@example.comm, tom@example.com'
