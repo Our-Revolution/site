@@ -14,13 +14,14 @@ from bsd.models import (
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
-    find_last_call_to_contact,
+    find_last_call_by_external_id,
+    get_recent_call_cutoff,
 )
 from contacts.models import Contact, ContactList, ContactListStatus
 from events.models import (
     EventPromotion,
     EventPromotionStatus,
-    find_last_event_promo_sent_to_contact
+    find_last_event_promo_sent_to_contact,
 )
 import datetime
 import logging
@@ -34,7 +35,6 @@ bsd_api = BSD().api
 
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
-CALLS_RECENT_CUTOFF_DAYS = settings.CALLS_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
@@ -277,7 +277,7 @@ def sync_contact_list_with_bsd_constituent(
 
     """Check if contact has received recent call campaign call"""
     if recent_call_cutoff is not None:
-        last_call_to_contact = find_last_call_to_contact(constituent_id)
+        last_call_to_contact = find_last_call_by_external_id(constituent_id)
         if last_call_to_contact is not None and (
             last_call_to_contact.date_created > recent_call_cutoff
         ):
@@ -550,9 +550,7 @@ def build_list_for_call_campaign(call_campaign_id):
     contact_list.save()
 
     """Get cutoff date for filtering out recent call campaign calls"""
-    recent_call_cutoff = timezone.now() - datetime.timedelta(
-        days=CALLS_RECENT_CUTOFF_DAYS
-    )
+    recent_call_cutoff = get_recent_call_cutoff()
 
     """Get max distance miles based on model and app config"""
     max_distance_miles = float(min(

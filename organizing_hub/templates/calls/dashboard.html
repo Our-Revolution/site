@@ -42,11 +42,11 @@ Calling Dashboard
 
             <tbody>
 
-              {% for campaign in campaigns_as_admin_active %}
+              {% for call_campaign, call_form in campaigns_as_admin_active %}
               {% include "calls/partials/call_campaign_row.html" %}
               {% endfor %}
 
-              {% for campaign in campaigns_as_caller_active %}
+              {% for call_campaign, call_form in campaigns_as_caller_active %}
               {% if campaign not in campaigns_as_admin_active %}
               {% include "calls/partials/call_campaign_row.html" %}
               {% endif %}
@@ -92,7 +92,7 @@ Calling Dashboard
 
             <tbody>
 
-              {% for campaign in campaigns_as_admin_inactive %}
+              {% for call_campaign, call_form in campaigns_as_admin_inactive %}
               {% include "calls/partials/call_campaign_row.html" %}
               {% endfor %}
 

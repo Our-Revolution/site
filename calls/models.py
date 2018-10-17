@@ -4,16 +4,19 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from django.db import models
+from django.utils import timezone
 from enum import Enum, unique
 from localflavor.us.models import USStateField
 from contacts.models import Contact, ContactList
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
+import datetime
 import googlemaps
 import logging
 import uuid
 
 logger = logging.getLogger(__name__)
 
+CALLS_RECENT_CUTOFF_DAYS = settings.CALLS_RECENT_CUTOFF_DAYS
 GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
 
 
@@ -58,6 +61,33 @@ call_campaign_statuses_with_data_download = [
     CallCampaignStatus.paused,
     CallCampaignStatus.complete,
 ]
+
+
+def find_active_call_by_campaign_and_caller(call_campaign, caller):
+    """
+    Find active Call for Call Campaign and Caller
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+    caller : CallProfile
+        Call Profile for caller
+
+    Returns
+        -------
+        Call
+            Returns active Call, or None
+    """
+    calls = call_campaign.call_set.filter(caller=caller).all()
+
+    """Find and return Call without a response"""
+    for call in calls:
+        if not call.has_response:
+            return call
+
+    """Otherwise return None"""
+    return None
 
 
 def find_calls_made_by_campaign(call_campaign):
@@ -158,7 +188,48 @@ def find_campaigns_as_admin(call_profile):
     return CallCampaign.objects.none()
 
 
-def find_last_call_to_contact(contact_external_id):
+def find_contact_to_call_for_campaign(call_campaign):
+    """
+    Find Contact to call for Call Campaign
+
+
+    Find a Contact that hasn't been called yet for this Campaign, or recently
+    for another Campaign.
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for Contact
+
+    Returns
+        -------
+        Contact
+            Return available Contact or None
+    """
+
+    recent_call_cutoff = get_recent_call_cutoff()
+    for contact in call_campaign.contact_list.contacts.all():
+        if Call.objects.filter(
+            call_campaign=call_campaign,
+            contact=contact,
+        ).first() is None:
+
+            """Check if Contact has received recent Call for any Campaign"""
+            last_call_to_contact = find_last_call_to_contact(contact)
+            if last_call_to_contact is not None and (
+                last_call_to_contact.date_created > recent_call_cutoff
+            ):
+                """Remove from contact list"""
+                call_campaign.contact_list.contacts.remove(contact)
+            else:
+                """Return Contact"""
+                return contact
+
+    """Otherwise return None"""
+    return None
+
+
+def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
 
@@ -178,12 +249,101 @@ def find_last_call_to_contact(contact_external_id):
     if contact is None:
         return None
 
-    """Find last Call created for contact"""
+    return find_last_call_to_contact(contact)
+
+
+def find_last_call_to_contact(contact):
+    """
+    Find most recent Call created for Contact
+
+    Parameters
+    ----------
+    contact : Contact
+        Contact to check for
+
+    Returns
+        -------
+        Call
+            Returns matching Call, or None
+    """
+
+    """Check if Contact is None"""
+    if contact is None:
+        return None
+
+    """Find last Call created for Contact"""
     last_call_created = Call.objects.filter(contact=contact).order_by(
         '-date_created'
     ).first()
 
     return last_call_created
+
+
+def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
+    """
+    Find or Create active Call for Call Campaign and Caller
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+    caller : CallProfile
+        Call Profile for caller
+
+    Returns
+        -------
+        Call
+            Returns existing or new active Call, or None
+    """
+
+    """Check if there is an existing active Call"""
+    call_existing = find_active_call_by_campaign_and_caller(
+        call_campaign,
+        caller,
+    )
+    if call_existing is not None:
+        return call_existing
+
+    """Find a Contact that hasn't been called and create a new Call"""
+    """TODO: handle race condition error. find new contact and retry."""
+    contact = find_contact_to_call_for_campaign(call_campaign)
+
+    if contact is None:
+        return None
+
+    call_new = Call.objects.create(
+        call_campaign=call_campaign,
+        contact=contact,
+        caller=caller,
+    )
+    return call_new
+
+
+def get_recent_call_cutoff():
+    """
+    Get recent Call cutoff datetime for excluding Contacts from Calls
+
+    Returns
+        -------
+        datetime
+            Return recent Call cutoff datetime
+    """
+    recent_call_cutoff = timezone.now() - datetime.timedelta(
+        days=CALLS_RECENT_CUTOFF_DAYS
+    )
+    return recent_call_cutoff
+
+
+def save_call_response(call, question, answer):
+    CallResponse.objects.update_or_create(
+        call=call,
+        question=question,
+        defaults={
+            'call': call,
+            'question': question,
+            'answer': answer,
+        },
+    )
 
 
 def set_point_for_call_campaign(call_campaign):
@@ -337,13 +497,18 @@ class Call(models.Model):
     contact = models.ForeignKey(Contact)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     def __unicode__(self):
-        return 'Call [%s] | %s' % (self.id, self.call_campaign)
+        return 'Call [%s] | %s | %s' % (
+            self.id,
+            self.call_campaign,
+            self.contact,
+        )
 
     def _has_response(self):
         """Check if any Responses have been saved for this Call"""
-        return self.callresponse_set.count() > 0
+        return self.callresponse_set.filter(answer__isnull=False).count() > 0
     has_response = property(_has_response)
 
     class Meta:
@@ -402,7 +567,11 @@ class CallResponse(models.Model):
     question = models.IntegerField(choices=[
         (x.value[0], x.value[1]) for x in CallQuestion
     ])
-    answer = models.IntegerField(choices=[x.value for x in CallAnswer])
+    answer = models.IntegerField(
+        blank=True,
+        choices=[x.value for x in CallAnswer],
+        null=True,
+    )
 
     def __unicode__(self):
         return 'Response [%s] | %s' % (self.id, self.call)

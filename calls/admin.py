@@ -19,6 +19,7 @@ class CallAdmin(admin.ModelAdmin):
         'call_campaign',
         'caller',
         'contact',
+        'uuid',
         'date_created',
         'date_modified',
     ]
