@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content_heading %}
-Create Campaign
+{% if update_view %}Update{% else %}Create{% endif %} Campaign
 {% endblock %}
 
 {% block content %}
@@ -33,9 +33,12 @@ Create Campaign
 
     <div class="col-md-9">
 
-      <form action="{% url 'organizing-hub-call-campaign-create' %}"
-      method="post" class="form mb20">
-
+      {% if update_view %}
+      {% url 'organizing-hub-call-campaign-update' object.uuid as action_url %}
+      {% else %}
+      {% url 'organizing-hub-call-campaign-create' as action_url %}
+      {% endif %}
+      <form action="{{ action_url }}" method="post" class="form mb20">
         {% csrf_token %}
 
         {% bootstrap_field form.title placeholder="General Member Outreach" %}
@@ -71,7 +74,7 @@ Create Campaign
         <p>
           Add callers to your calling campaign. These users will be able to
           login and make calls using the email address listed after creating an
-          account.
+          account. You may add or remove callers after campaign creation.
         </p>
 
         <p>
@@ -99,7 +102,7 @@ Create Campaign
 
         <button type="submit"
         class="btn btn-success btn-block uppercase ls2">
-          Create Calling Campaign
+          {% if update_view %}Save{% else %}Create{% endif %} Calling Campaign
         </button>
 
       </form>

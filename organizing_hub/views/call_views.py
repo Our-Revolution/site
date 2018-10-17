@@ -4,9 +4,14 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    TemplateView,
+    UpdateView
+)
 from django.views.generic.list import ListView
-from calls.forms import CallCampaignForm
+from calls.forms import CallCampaignForm, CallCampaignUpdate
 from calls.models import (
     CallCampaign,
     CallCampaignStatus,
@@ -86,6 +91,42 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
     def get_local_group(self):
         return find_local_group_by_user(self.request.user)
 
+class CallCampaignUpdateView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
+    template_name = "calls/callcampaign_form.html"
+    form_class = CallCampaignUpdate
+    model = CallCampaign
+    permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+    success_message = '''
+    Your calling campaign has been edited succesfully.
+    '''
+
+    def get_context_data(self, **kwargs):
+        context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
+        context['update_view'] = True
+        return context
+
+    def form_valid(self, form):
+        """Set local group and owner before save"""
+        form.instance.local_group = self.get_local_group()
+        form.instance.owner = self.request.user.callprofile
+        return super(CallCampaignUpdateView, self).form_valid(form)
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'organizing-hub-call-campaign-detail',
+            kwargs={'uuid': self.object.uuid}
+        )
 
 class CallDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "calls/dashboard.html"

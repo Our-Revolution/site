@@ -14,6 +14,7 @@ from .views import (
     AccountCreateView,
     CallCampaignCreateView,
     CallCampaignDetailView,
+    CallCampaignUpdateView,
     CallDashboardView,
     EventCreateView,
     EventListView,
@@ -147,6 +148,11 @@ if CALLS_ENABLED:
                         r'^(?P<uuid>[0-9a-f-]+)/$',
                         CallCampaignDetailView.as_view(),
                         name='organizing-hub-call-campaign-detail'
+                    ),
+                    url(
+                        r'^(?P<uuid>[0-9a-f-]+)/update/',
+                        CallCampaignUpdateView.as_view(),
+                        name='organizing-hub-call-campaign-update'
                     ),
                 ])),
             ])),
