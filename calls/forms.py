@@ -96,15 +96,10 @@ class CallCampaignForm(forms.ModelForm):
         }
 
 class CallCampaignUpdate(CallCampaignForm):
-    max_distance = forms.IntegerField(
-        disabled=True
-    )
-    max_recipients = forms.IntegerField(
-        disabled=True
-    )
+    max_distance = forms.IntegerField(disabled=True)
+    max_recipients = forms.IntegerField(disabled=True)
     postal_code = forms.CharField(disabled=True)
     state_or_territory = forms.CharField(disabled=True)
-
 
 class CallCampaignAdminForm(CallCampaignForm):
     class Meta:
