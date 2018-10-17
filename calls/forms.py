@@ -95,7 +95,7 @@ class CallCampaignAdminForm(CallCampaignForm):
         ]:
             contact_list = self.instance.contact_list
             if contact_list is None or not (
-                contact_list.status == ContactListStatus.complete
+                contact_list.status == ContactListStatus.complete.value[0]
             ) or not (
                 contact_list.contacts.count() > 0
             ):
