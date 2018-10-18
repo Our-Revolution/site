@@ -47,9 +47,10 @@
         <div class="btn-group mb10" role="group"
         aria-label="Primary Actions">
           {% if campaign.is_approved %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_start_url campaign %}">
             Start Campaign
-          </button>
+          </a>
           {% elif campaign.is_in_progress %}
           <button type="button" class="btn btn-primary">
             Pause Campaign

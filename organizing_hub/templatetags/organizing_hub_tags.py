@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django import template
 from django.conf import settings
+from django.urls import reverse_lazy
+from calls.models import CallCampaignStatus
 from local_groups.models import find_local_group_by_user
 from organizing_hub.models import OrganizingHubLoginAlert
 
@@ -125,3 +127,27 @@ def organizing_hub_login_alert(context):
         ).first(),
         'request': context['request'],
     }
+
+
+@register.simple_tag
+def call_campaign_start_url(call_campaign):
+    """
+    url
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for calls
+
+    Returns
+        -------
+        str
+            Returns url for start campaign
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.in_progress.value[0],
+        }
+    )
