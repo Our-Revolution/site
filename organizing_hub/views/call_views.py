@@ -347,8 +347,16 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         return self.local_group
 
     def post(self, request, *args, **kwargs):
-        """Get Calls made for Campaign so we can generate CSV data"""
+
+        """Redirect if Call Campaign does not have data download"""
         call_campaign = self.get_object()
+        if not call_campaign.has_data_download:
+            return redirect(
+                'organizing-hub-call-campaign-detail',
+                self.kwargs['uuid']
+            )
+
+        """Get Calls made for Campaign so we can generate CSV data"""
         calls_made = find_calls_made_by_campaign(call_campaign)
 
         """Start CSV file"""
