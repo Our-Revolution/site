@@ -361,7 +361,9 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
 
         """Start CSV file"""
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=%s.csv' % str(timezone.now())
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+        filename = 'call-campaign-%s-%s.csv' % (call_campaign.uuid, timestamp)
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
         writer = unicodecsv.writer(response, encoding='utf-8')
 
         """Add header row to CSV"""
