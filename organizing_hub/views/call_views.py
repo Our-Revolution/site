@@ -334,10 +334,9 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         """Only accept POST requests, otherwise redirect"""
-        call_campaign = self.get_object()
         return redirect(
             'organizing-hub-call-campaign-detail',
-            call_campaign.uuid
+            self.kwargs['uuid']
         )
 
     def get_local_group(self):
@@ -348,43 +347,44 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         return self.local_group
 
     def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form instance with the passed
-        POST variables and then checked for validity.
-        """
+        """Get Calls made for Campaign so we can generate CSV data"""
         call_campaign = self.get_object()
         calls_made = find_calls_made_by_campaign(call_campaign)
 
+        """Start CSV file"""
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s.csv' % str(timezone.now())
         writer = unicodecsv.writer(response, encoding='utf-8')
-        #         first name
-        # last name
-        # response (YES or NO or Blank)
-        # phone (if responded YES)
-        # email (if responded YES)
-        # only if subscribed
+
+        """Add header row to CSV"""
         header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
         writer.writerow(header_row)
 
+        """Loop through Calls made and add relevant data to CSV"""
         for call in calls_made:
             call_row = []
             contact = call.contact
+
+            """Always add First and Last Name"""
             call_row.append(contact.first_name)
             call_row.append(contact.last_name)
+
+            """Find response to Take Action question and add Answer to CSV"""
             take_action_response = call.callresponse_set.filter(
                 question=CallQuestion.take_action.value[0]
             ).first()
+            if take_action_response:
+                call_row.append(take_action_response.get_answer_display())
 
-            if take_action_response is not None and take_action_response.answer is not None:
-                call_row.append(take_action_response.answer)
-
+                """If Answer is Yes, then add Phone and Email"""
                 if take_action_response.answer == CallAnswer.yes.value[0]:
                     call_row.append(contact.phone_number)
                     call_row.append(contact.email_address)
 
+            """Write Call data to CSV"""
             writer.writerow(call_row)
 
+        """Return CSV"""
         return response
 
 
