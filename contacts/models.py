@@ -9,6 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 name_max_length = 255
+source_max_length = 255
 
 
 class Contact(models.Model):
@@ -145,6 +146,11 @@ class PhoneOptOut(models.Model):
         default=OptOutType.calling.value[0]
     )
     phone_number = PhoneNumberField(db_index=True)
+    source = models.CharField(
+        blank=True,
+        max_length=source_max_length,
+        null=True,
+    )
 
     def __unicode__(self):
         return '%s %s [%s]' % (
