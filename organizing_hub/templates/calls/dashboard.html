@@ -47,9 +47,7 @@ Calling Dashboard
               {% endfor %}
 
               {% for call_campaign, call_form in campaigns_as_caller_active %}
-              {% if campaign not in campaigns_as_admin_active %}
               {% include "calls/partials/call_campaign_row.html" %}
-              {% endif %}
               {% endfor %}
 
             </tbody>
