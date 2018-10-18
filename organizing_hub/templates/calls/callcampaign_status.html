@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Create Campaign" "organizing-hub-call-campaign-create" %}
+    {% breadcrumb call_campaign.title 'organizing-hub-call-campaign-detail' call_campaign.uuid %}
 {% endblock %}
 
 {% block content_pre_heading %}
@@ -41,14 +41,25 @@
     <div class="col-md-9">
 
       <p>
-        Are you sure that you want to: <strong>{{ action }}</strong>?
+        Are you sure that you want to <strong>{{ action }}</strong>?
       </p>
 
-      <ul>
-        <li>Start Campaign: change status to In Progress</li>
-        <li>Pause Campaign: change status to Paused</li>
-        <li>Resume Campaign: change status to In Progress</li>
-        <li>Complete Campaign: change status to Complete</li>
+      <ul class="mb20">
+        <li>
+            Start Campaign: change status to In Progress, callers can make
+            calls
+        </li>
+        <li>
+          Pause Campaign: change status to Paused, disable calls temporarily
+        </li>
+        <li>
+          Resume Campaign: change status from Paused to In Progress, callers
+          can make calls
+        </li>
+        <li>
+          Complete Campaign: change status to Complete, disable calls
+          permanently, archive Campaign
+        </li>
       </ul>
 
       <form action="{{ request.get_full_path }}" class="form mb20"
@@ -61,6 +72,14 @@
         </button>
 
       </form>
+
+      <hr />
+
+      <p>
+        <a href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Back
+        </a>
+      </p>
 
   </div>
 </div>

@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb campaign.title "organizing-hub-call-campaign-create" %}
+    {% breadcrumb campaign.title 'organizing-hub-call-campaign-detail' campaign.uuid %}
 {% endblock %}
 
 {% block content_pre_heading %}
@@ -139,6 +139,15 @@
         {{ campaign.contacts_total_count }} contacts called.
         <a href="todo">
           View
+        </a>
+      </p>
+
+      <hr />
+
+      <p>
+        <a href="{% url 'organizing-hub-call-dashboard' %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Calling Dashboard
+
         </a>
       </p>
 
