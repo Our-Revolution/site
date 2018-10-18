@@ -414,13 +414,55 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         """Redirect if Call Campaign does not have data download"""
         # call_campaign = self.get_object()
-        logger.debug('status_id: %s' % status_id)
-        # return super(CallCampaignStatusView, self).form_valid(form)
+        call_campaign = self.get_object()
+
+        """Get status id"""
+        status_id = int(self.kwargs['status_id'])
+
+        if call_campaign.status == CallCampaignStatus.approved.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status == CallCampaignStatus.in_progress.value[0] and (
+            status_id == CallCampaignStatus.paused.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status == CallCampaignStatus.paused.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status in [
+            CallCampaignStatus.in_progress.value[0],
+            CallCampaignStatus.paused.value[0],
+        ] and (
+            status_id == CallCampaignStatus.complete.value[0]
+        ):
+            valid_change = True
+        else:
+            valid_change = False
+
+        if valid_change:
+            call_campaign.status = status_id
+            call_campaign.save()
+            messages.success(
+                self.request,
+                "Status saved successfully."
+            )
+
+        return redirect(
+            'organizing-hub-call-campaign-detail',
+            self.kwargs['uuid']
+        )
 
     def get_context_data(self, **kwargs):
         context = super(CallCampaignStatusView, self).get_context_data(**kwargs)
-        status_id = int(self.kwargs['status_id'])
         call_campaign = self.get_object()
+
+        """Get status id"""
+        status_id = int(self.kwargs['status_id'])
+        context['status_id'] = status_id
+
+        """Get action"""
         if call_campaign.status == CallCampaignStatus.approved.value[0] and (
             status_id == CallCampaignStatus.in_progress.value[0]
         ):
@@ -440,20 +482,6 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
             status_id == CallCampaignStatus.complete.value[0]
         ):
             context['action'] = "Complete Campaign"
-        # else:
-        #     """Otherwise redirect"""
-        #     return redirect(
-        #         'organizing-hub-call-campaign-detail',
-        #         self.kwargs['uuid']
-        #     )
-        # status = None
-        # for x in CallCampaignStatus:
-            # if x.value[0] == status_id:
-                # context['action'] = x.value[1]
-                # status = x.value[1]
-
-        # if status is not None:
-            # context['status'] = x.value[1]
 
         return context
 

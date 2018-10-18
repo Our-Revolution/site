@@ -51,14 +51,13 @@
         <li>Complete Campaign: change status to Complete</li>
       </ul>
 
-      <form action="{% url 'organizing-hub-call-campaign-create' %}"
-      method="post" class="form mb20">
+      <form action="{{ request.get_full_path }}" class="form mb20"
+      method="post">
 
         {% csrf_token %}
 
-        <button type="submit"
-        class="btn btn-success btn-block uppercase ls2">
-          Update Campaign Status
+        <button class="btn btn-success btn-block uppercase ls2" type="submit">
+          {{ action }}
         </button>
 
       </form>
