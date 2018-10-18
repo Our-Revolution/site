@@ -399,6 +399,7 @@ class CallDashboardView(TemplateView):
 
 
 class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
+    context_object_name = 'call_campaign'
     template_name = "calls/callcampaign_status.html"
     # form_class = CallCampaignUpdateForm
     model = CallCampaign
@@ -418,17 +419,42 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CallCampaignStatusView, self).get_context_data(**kwargs)
-        # context['update_view'] = True
         status_id = int(self.kwargs['status_id'])
-        for x in CallCampaignStatus:
-            # logger.debug('x: %s' % x)
-            logger.debug('x.value[0]: %s' % x.value[0])
-            logger.debug('x.value[1]: %s' % x.value[1])
-            if x.value[0] == status_id:
-                context['status'] = x.value[1]
-                logger.debug('set context')
-        logger.debug('status_id: %s' % status_id)
-        # logger.debug('status: %s' % context['status'])
+        call_campaign = self.get_object()
+        if call_campaign.status == CallCampaignStatus.approved.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            context['action'] = "Start Campaign"
+        elif call_campaign.status == CallCampaignStatus.in_progress.value[0] and (
+            status_id == CallCampaignStatus.paused.value[0]
+        ):
+            context['action'] = "Pause Campaign"
+        elif call_campaign.status == CallCampaignStatus.paused.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            context['action'] = "Resume Campaign"
+        elif call_campaign.status in [
+            CallCampaignStatus.in_progress.value[0],
+            CallCampaignStatus.paused.value[0],
+        ] and (
+            status_id == CallCampaignStatus.complete.value[0]
+        ):
+            context['action'] = "Complete Campaign"
+        # else:
+        #     """Otherwise redirect"""
+        #     return redirect(
+        #         'organizing-hub-call-campaign-detail',
+        #         self.kwargs['uuid']
+        #     )
+        # status = None
+        # for x in CallCampaignStatus:
+            # if x.value[0] == status_id:
+                # context['action'] = x.value[1]
+                # status = x.value[1]
+
+        # if status is not None:
+            # context['status'] = x.value[1]
+
         return context
 
     def get_local_group(self):

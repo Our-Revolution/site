@@ -9,9 +9,16 @@
     {% breadcrumb "Create Campaign" "organizing-hub-call-campaign-create" %}
 {% endblock %}
 
-{% block content_heading %}
-Update Campaign Status
+{% block content_pre_heading %}
+<span class="article-type">
+  {% if call_campaign.is_in_progress %}
+  <span class="dot dot-success dot-sm"></span>
+  {% endif %}
+  {{ call_campaign.get_status_display }} Campaign
+</span>
 {% endblock %}
+
+{% block content_heading %}{{ call_campaign.title }}{% endblock %}
 
 {% block content %}
 
@@ -33,8 +40,16 @@ Update Campaign Status
 
     <div class="col-md-9">
 
-      status{{ status }}
-      status_id{{ status_id }}
+      <p>
+        Are you sure that you want to: <strong>{{ action }}</strong>?
+      </p>
+
+      <ul>
+        <li>Start Campaign: change status to In Progress</li>
+        <li>Pause Campaign: change status to Paused</li>
+        <li>Resume Campaign: change status to In Progress</li>
+        <li>Complete Campaign: change status to Complete</li>
+      </ul>
 
       <form action="{% url 'organizing-hub-call-campaign-create' %}"
       method="post" class="form mb20">
@@ -43,7 +58,7 @@ Update Campaign Status
 
         <button type="submit"
         class="btn btn-success btn-block uppercase ls2">
-          Update Calling Campaign Status
+          Update Campaign Status
         </button>
 
       </form>
