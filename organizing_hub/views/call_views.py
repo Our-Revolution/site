@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
-from calls.forms import CallForm, CallCampaignForm
+from calls.forms import CallForm, CallCampaignForm, CallCampaignStatusForm
 from calls.models import (
     call_campaign_statuses_active,
     find_campaigns_as_caller,
@@ -396,3 +396,42 @@ class CallDashboardView(TemplateView):
                         context['can_manage_campaign'] = True
 
         return context
+
+
+class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
+    # template_name = "calls/callcampaign_form.html"
+    # form_class = CallCampaignUpdateForm
+    model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+    # success_message = '''
+    # Your calling campaign has been edited succesfully.
+    # '''
+
+    def post(self, request, *args, **kwargs):
+        """Redirect if Call Campaign does not have data download"""
+        # call_campaign = self.get_object()
+        logger.debug('status_id: %s' % status_id)
+        # return super(CallCampaignStatusView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CallCampaignStatusView, self).get_context_data(**kwargs)
+        # context['update_view'] = True
+        status_id = self.kwargs['status_id']
+        logger.debug('status_id: %s' % status_id)
+        return context
+
+    def get_local_group(self):
+        """Get Local Group attached to Call Campaign"""
+        if self.local_group is None:
+            call_campaign = self.get_object()
+            self.local_group = call_campaign.local_group
+        return self.local_group
+
+    # def get_success_url(self):
+    #     return reverse_lazy(
+    #         'organizing-hub-call-campaign-detail',
+    #         self.kwargs['uuid']
+    #     )
