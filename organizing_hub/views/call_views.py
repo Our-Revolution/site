@@ -481,7 +481,7 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
         )
 
     def is_valid_change(self, request, *args, **kwargs):
-        """Redirect if Call Campaign does not have data download"""
+        """Check if old and new statuses represent a valid status transition"""
         call_campaign = self.get_object()
 
         """Get status id"""
