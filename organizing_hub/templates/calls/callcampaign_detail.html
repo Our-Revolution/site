@@ -52,19 +52,22 @@
             Start Campaign
           </a>
           {% elif campaign.is_in_progress %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_pause_url campaign %}">
             Pause Campaign
-          </button>
+          </a>
           {% elif campaign.is_paused %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_resume_url campaign %}">
             Resume Campaign
-          </button>
+          </a>
           {% endif %}
 
           {% if campaign.is_in_progress or campaign.is_paused %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_complete_url campaign %}">
             Complete Campaign
-          </button>
+          </a>
           {% endif %}
         </div>
 

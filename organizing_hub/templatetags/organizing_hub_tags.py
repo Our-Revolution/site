@@ -24,6 +24,102 @@ def bsd_create_account_url():
     return BSD_CREATE_ACCOUNT_URL
 
 
+@register.simple_tag
+def call_campaign_complete_url(call_campaign):
+    """
+    URL for Complete Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Complete Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.complete.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_pause_url(call_campaign):
+    """
+    URL for Pause Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Pause Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.paused.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_resume_url(call_campaign):
+    """
+    URL for Resume Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Resume Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.in_progress.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_start_url(call_campaign):
+    """
+    URL for Start Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Start Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.in_progress.value[0],
+        }
+    )
+
+
 @register.inclusion_tag('partials/events_nav.html', takes_context=True)
 def events_nav(context):
 
@@ -127,27 +223,3 @@ def organizing_hub_login_alert(context):
         ).first(),
         'request': context['request'],
     }
-
-
-@register.simple_tag
-def call_campaign_start_url(call_campaign):
-    """
-    url
-
-    Parameters
-    ----------
-    call_campaign : CallCampaign
-        Call Campaign for calls
-
-    Returns
-        -------
-        str
-            Returns url for start campaign
-    """
-    return reverse_lazy(
-        'organizing-hub-call-campaign-status',
-        kwargs={
-            'uuid': call_campaign.uuid,
-            'status_id': CallCampaignStatus.in_progress.value[0],
-        }
-    )
