@@ -123,3 +123,35 @@ class ContactList(models.Model):
             self.contacts.remove(*contacts_extra)
 
         return self
+
+
+@unique
+class OptOutType(Enum):
+    calling = (1, 'Calling')
+
+
+class PhoneOptOut(models.Model):
+    """
+    Phone Opt Out Model
+
+    Data for a specific Opt Out Type for a specific Phone Number
+    """
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    opt_out_type = models.IntegerField(
+        choices=[x.value for x in OptOutType],
+        db_index=True,
+        default=OptOutType.calling.value[0]
+    )
+    phone_number = PhoneNumberField(db_index=True)
+
+    def __unicode__(self):
+        return '%s %s [%s]' % (
+            self.phone_number,
+            self.get_opt_out_type_display(),
+            str(self.id)
+        )
+
+    class Meta:
+        unique_together = ["opt_out_type", "phone_number"]

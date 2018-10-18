@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contact, ContactList
+from .models import Contact, ContactList, PhoneOptOut
 
 
 @admin.register(Contact)
@@ -54,3 +54,9 @@ class ContactListAdmin(admin.ModelAdmin):
         return obj.contacts.count()
 
     get_list_size.short_description = 'List Size'
+
+
+@admin.register(PhoneOptOut)
+class PhoneOptOutAdmin(admin.ModelAdmin):
+    readonly_fields = ['date_created', 'date_modified']
+    fields = readonly_fields + ['opt_out_type', 'phone_number']
