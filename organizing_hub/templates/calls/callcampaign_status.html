@@ -2,7 +2,7 @@
 
 {% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
-{% block page_title %}Our Revolution - Create Campaign{% endblock %}
+{% block page_title %}Our Revolution - {{ campaign.title }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
@@ -46,8 +46,7 @@
 
       <ul class="mb20">
         <li>
-            Start Campaign: change status to In Progress, callers can make
-            calls
+          Start Campaign: change status to In Progress, callers can make calls
         </li>
         <li>
           Pause Campaign: change status to Paused, disable calls temporarily

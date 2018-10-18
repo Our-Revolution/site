@@ -401,19 +401,14 @@ class CallDashboardView(TemplateView):
 class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
     context_object_name = 'call_campaign'
     template_name = "calls/callcampaign_status.html"
-    # form_class = CallCampaignUpdateForm
     model = CallCampaign
     organizing_hub_feature = OrganizingHubFeature.calling_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
-    # success_message = '''
-    # Your calling campaign has been edited succesfully.
-    # '''
 
     def post(self, request, *args, **kwargs):
         """Redirect if Call Campaign does not have data download"""
-        # call_campaign = self.get_object()
         call_campaign = self.get_object()
 
         """Get status id"""
@@ -491,9 +486,3 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
             call_campaign = self.get_object()
             self.local_group = call_campaign.local_group
         return self.local_group
-
-    # def get_success_url(self):
-    #     return reverse_lazy(
-    #         'organizing-hub-call-campaign-detail',
-    #         self.kwargs['uuid']
-    #     )
