@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
-from calls.forms import CallForm, CallCampaignForm, CallCampaignStatusForm
+from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
     call_campaign_statuses_active,
     find_campaigns_as_caller,
@@ -399,7 +399,7 @@ class CallDashboardView(TemplateView):
 
 
 class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
-    # template_name = "calls/callcampaign_form.html"
+    template_name = "calls/callcampaign_status.html"
     # form_class = CallCampaignUpdateForm
     model = CallCampaign
     organizing_hub_feature = OrganizingHubFeature.calling_tool
@@ -419,8 +419,16 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(CallCampaignStatusView, self).get_context_data(**kwargs)
         # context['update_view'] = True
-        status_id = self.kwargs['status_id']
+        status_id = int(self.kwargs['status_id'])
+        for x in CallCampaignStatus:
+            # logger.debug('x: %s' % x)
+            logger.debug('x.value[0]: %s' % x.value[0])
+            logger.debug('x.value[1]: %s' % x.value[1])
+            if x.value[0] == status_id:
+                context['status'] = x.value[1]
+                logger.debug('set context')
         logger.debug('status_id: %s' % status_id)
+        # logger.debug('status: %s' % context['status'])
         return context
 
     def get_local_group(self):
