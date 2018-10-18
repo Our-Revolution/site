@@ -44,8 +44,10 @@
       {% if campaign.is_approved or campaign.is_in_progress or campaign.is_paused or campaign.has_data_download %}
       <div class="btn-toolbar mb10" role="toolbar" aria-label="Actions">
 
+        {% if campaign.is_approved or campaign.is_in_progress or campaign.is_paused %}
         <div class="btn-group mb10" role="group"
         aria-label="Primary Actions">
+
           {% if campaign.is_approved %}
           <button type="button" class="btn btn-primary">
             Start Campaign
@@ -65,16 +67,27 @@
             Complete Campaign
           </button>
           {% endif %}
-        </div>
 
+        </div>
+        {% endif %}
+
+        {% if campaign.has_data_download %}
         <div class="btn-group mb10" role="group"
         aria-label="Secondary Actions">
-          {% if campaign.has_data_download %}
-          <button type="button" class="btn btn-default">
-            Download Data
-          </button>
-          {% endif %}
+
+          <form action="{% url 'organizing-hub-call-campaign-download' campaign.uuid %}"
+          class="form form-inline inline-block" method="post">
+
+            {% csrf_token %}
+
+            <button class="btn btn-default" type="submit">
+              Download Data
+            </button>
+
+          </form>
+
         </div>
+        {% endif %}
 
       </div>
       {% endif %}

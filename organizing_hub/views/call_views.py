@@ -4,14 +4,17 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
     call_campaign_statuses_active,
+    find_calls_made_by_campaign,
     find_campaigns_as_caller,
     find_campaigns_as_admin,
     find_or_create_active_call_for_campaign_and_caller,
@@ -28,6 +31,7 @@ from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.models import OrganizingHubFeature
 import logging
+import unicodecsv
 
 logger = logging.getLogger(__name__)
 
@@ -319,6 +323,69 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
             call_campaign = self.get_object()
             self.local_group = call_campaign.local_group
         return self.local_group
+
+
+class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
+    model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+
+    def get(self, request, *args, **kwargs):
+        """Only accept POST requests, otherwise redirect"""
+        call_campaign = self.get_object()
+        return redirect(
+            'organizing-hub-call-campaign-detail',
+            call_campaign.uuid
+        )
+
+    def get_local_group(self):
+        """Get Local Group attached to Call Campaign"""
+        if self.local_group is None:
+            call_campaign = self.get_object()
+            self.local_group = call_campaign.local_group
+        return self.local_group
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+        call_campaign = self.get_object()
+        calls_made = find_calls_made_by_campaign(call_campaign)
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s.csv' % str(timezone.now())
+        writer = unicodecsv.writer(response, encoding='utf-8')
+        #         first name
+        # last name
+        # response (YES or NO or Blank)
+        # phone (if responded YES)
+        # email (if responded YES)
+        # only if subscribed
+        header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
+        writer.writerow(header_row)
+
+        for call in calls_made:
+            call_row = []
+            contact = call.contact
+            call_row.append(contact.first_name)
+            call_row.append(contact.last_name)
+            take_action_response = call.callresponse_set.filter(
+                question=CallQuestion.take_action.value[0]
+            ).first()
+
+            if take_action_response is not None and take_action_response.answer is not None:
+                call_row.append(take_action_response.answer)
+
+                if take_action_response.answer == CallAnswer.yes.value[0]:
+                    call_row.append(contact.phone_number)
+                    call_row.append(contact.email_address)
+
+            writer.writerow(call_row)
+
+        return response
 
 
 @method_decorator(verified_email_required, name='dispatch')
