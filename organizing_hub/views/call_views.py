@@ -407,47 +407,19 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
 
-    def post(self, request, *args, **kwargs):
-        """Redirect if Call Campaign does not have data download"""
-        call_campaign = self.get_object()
-
-        """Get status id"""
-        status_id = int(self.kwargs['status_id'])
-
-        if call_campaign.status == CallCampaignStatus.approved.value[0] and (
-            status_id == CallCampaignStatus.in_progress.value[0]
-        ):
-            valid_change = True
-        elif call_campaign.status == CallCampaignStatus.in_progress.value[0] and (
-            status_id == CallCampaignStatus.paused.value[0]
-        ):
-            valid_change = True
-        elif call_campaign.status == CallCampaignStatus.paused.value[0] and (
-            status_id == CallCampaignStatus.in_progress.value[0]
-        ):
-            valid_change = True
-        elif call_campaign.status in [
-            CallCampaignStatus.in_progress.value[0],
-            CallCampaignStatus.paused.value[0],
-        ] and (
-            status_id == CallCampaignStatus.complete.value[0]
-        ):
-            valid_change = True
-        else:
-            valid_change = False
-
-        if valid_change:
-            call_campaign.status = status_id
-            call_campaign.save()
-            messages.success(
-                self.request,
-                "Status saved successfully."
+    def get(self, request, *args, **kwargs):
+        """Check if there is a valid action, otherwise redirect"""
+        if self.is_valid_change(request, *args, **kwargs):
+            return super(CallCampaignStatusView, self).get(
+                request,
+                *args,
+                **kwargs
             )
-
-        return redirect(
-            'organizing-hub-call-campaign-detail',
-            self.kwargs['uuid']
-        )
+        else:
+            return redirect(
+                'organizing-hub-call-campaign-detail',
+                self.kwargs['uuid']
+            )
 
     def get_context_data(self, **kwargs):
         context = super(CallCampaignStatusView, self).get_context_data(**kwargs)
@@ -455,7 +427,6 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
 
         """Get status id"""
         status_id = int(self.kwargs['status_id'])
-        context['status_id'] = status_id
 
         """Get action"""
         if call_campaign.status == CallCampaignStatus.approved.value[0] and (
@@ -486,3 +457,56 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
             call_campaign = self.get_object()
             self.local_group = call_campaign.local_group
         return self.local_group
+
+    def post(self, request, *args, **kwargs):
+
+        """Check if change is valid"""
+        if self.is_valid_change(request, *args, **kwargs):
+
+            call_campaign = self.get_object()
+
+            """Get status id"""
+            status_id = int(self.kwargs['status_id'])
+
+            call_campaign.status = status_id
+            call_campaign.save()
+            messages.success(
+                self.request,
+                "Status saved successfully."
+            )
+
+        return redirect(
+            'organizing-hub-call-campaign-detail',
+            self.kwargs['uuid']
+        )
+
+    def is_valid_change(self, request, *args, **kwargs):
+        """Redirect if Call Campaign does not have data download"""
+        call_campaign = self.get_object()
+
+        """Get status id"""
+        status_id = int(self.kwargs['status_id'])
+
+        if call_campaign.status == CallCampaignStatus.approved.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status == CallCampaignStatus.in_progress.value[0] and (
+            status_id == CallCampaignStatus.paused.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status == CallCampaignStatus.paused.value[0] and (
+            status_id == CallCampaignStatus.in_progress.value[0]
+        ):
+            valid_change = True
+        elif call_campaign.status in [
+            CallCampaignStatus.in_progress.value[0],
+            CallCampaignStatus.paused.value[0],
+        ] and (
+            status_id == CallCampaignStatus.complete.value[0]
+        ):
+            valid_change = True
+        else:
+            valid_change = False
+
+        return valid_change
