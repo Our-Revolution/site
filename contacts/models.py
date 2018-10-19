@@ -224,7 +224,6 @@ class PhoneOptOut(models.Model):
         )
 
     def _treat_as_none(self):
-        """Treat as None. If this record is returned from search it is likely a false match."""
         """
         Treat as None. If this record is returned from search it is likely a
         false match.
@@ -242,7 +241,7 @@ class PhoneOptOut(models.Model):
             '+',
             'None',
             '+None',
-            'NoneNone',  # This occurs for a lot of invalid numbers
+            'NoneNone',
             '+NoneNone',  # This occurs for a lot of invalid numbers
         ]
         if str(self.phone_number) in none_list:
