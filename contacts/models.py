@@ -12,6 +12,31 @@ name_max_length = 255
 source_max_length = 255
 
 
+def find_phone_opt_out(phone_number, opt_out_type):
+    """
+    Find Phone Opt Out for phone number string. Supports various standard
+    phone number formats.
+
+    Parameters
+    ----------
+    phone_number : str
+        Phone number string to search for
+    opt_out_type : OptOutType
+        Opt Out Type to search for
+
+    Returns
+        -------
+        PhoneOptOut
+            Returns matching Phone Opt Out, or None
+    """
+
+    opt_out = PhoneOptOut.objects.filter(
+        phone_number=phone_number,
+        opt_out_type=opt_out_type.value[0],
+    ).first()
+    return opt_out
+
+
 class Contact(models.Model):
     """
     Contact Model
