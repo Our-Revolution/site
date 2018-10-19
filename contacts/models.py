@@ -12,7 +12,7 @@ name_max_length = 255
 source_max_length = 255
 
 
-def add_phone_opt_out(phone_number, opt_out_type):
+def add_phone_opt_out(phone_number, opt_out_type, source):
     """
     Add Phone Opt Out for phone number string. Supports various standard
     phone number formats.
@@ -23,6 +23,8 @@ def add_phone_opt_out(phone_number, opt_out_type):
         Phone number string to add to Opt Out list
     opt_out_type : OptOutType
         Opt Out Type to add
+    source : str
+        Source code for Opt Out
 
     Returns
         -------
@@ -199,11 +201,7 @@ class PhoneOptOut(models.Model):
         default=OptOutType.calling.value[0]
     )
     phone_number = PhoneNumberField(db_index=True)
-    source = models.CharField(
-        blank=True,
-        max_length=source_max_length,
-        null=True,
-    )
+    source = models.CharField(max_length=source_max_length)
 
     def __unicode__(self):
         return '%s %s [%s]' % (

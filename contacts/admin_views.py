@@ -34,14 +34,15 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
 
     def form_valid(self, form):
         """Handle file upload"""
-        logger.debug('form_valid')
-        logger.debug('FILES: %s' % str(self.request.FILES))
         csv_file = self.request.FILES['csv_file']
-        logger.debug('csv_file: %s' % str(csv_file))
         reader = csv.DictReader(csv_file, fieldnames=['phone'])
+
+        """Set source code"""
+        user = self.request.user
+        source = 'Admin Upload by %s [%s]' % (user.email, str(user.id))
+
         for row in reader:
             phone = row['phone']
-            logger.debug('phone: %s' % phone)
             result = add_phone_opt_out(phone, OptOutType.calling)
             logger.debug('result: %s' % str(result))
 

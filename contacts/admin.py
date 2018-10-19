@@ -64,8 +64,8 @@ class PhoneOptOutAdmin(admin.ModelAdmin):
         'id',
         'phone_number',
         'opt_out_type',
+        'source',
         'date_created',
-        'date_modified',
     ]
     list_display_links = list_display
 
