@@ -165,6 +165,8 @@ def find_campaigns_as_admin(call_profile):
 
     Return campaigns where profile has edit access via local group
 
+    TODO: TECH-1480: feature flag check
+
     Parameters
     ----------
     call_profile : CallProfile
