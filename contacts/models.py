@@ -14,7 +14,8 @@ source_max_length = 255
 
 def find_phone_opt_out(phone_number, opt_out_type):
     """
-    Find Phone Opt Out for phone number string
+    Find Phone Opt Out for phone number string. Supports various standard
+    phone number formats.
 
     Parameters
     ----------
@@ -28,8 +29,6 @@ def find_phone_opt_out(phone_number, opt_out_type):
         PhoneOptOut
             Returns matching Phone Opt Out, or None
     """
-
-    # TODO: match for various phone number formats
 
     opt_out = PhoneOptOut.objects.filter(
         phone_number=phone_number,
