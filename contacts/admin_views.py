@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from .forms import PhoneOptOutUploadForm
+from .models import add_phone_opt_out, OptOutType
 import csv
 import logging
 
@@ -39,7 +40,10 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
         logger.debug('csv_file: %s' % str(csv_file))
         reader = csv.DictReader(csv_file, fieldnames=['phone'])
         for row in reader:
-            logger.debug('phone: %s' % row['phone'])
+            phone = row['phone']
+            logger.debug('phone: %s' % phone)
+            result = add_phone_opt_out(phone, OptOutType.calling)
+            logger.debug('result: %s' % str(result))
 
         # logger.debug('reader: %s' % str(reader))
         # reader.next()

@@ -12,6 +12,34 @@ name_max_length = 255
 source_max_length = 255
 
 
+def add_phone_opt_out(phone_number, opt_out_type):
+    """
+    Add Phone Opt Out for phone number string. Supports various standard
+    phone number formats.
+
+    Parameters
+    ----------
+    phone_number : str
+        Phone number string to add to Opt Out list
+    opt_out_type : OptOutType
+        Opt Out Type to add
+
+    Returns
+        -------
+        (PhoneOptOut, bool)
+            Returns obj, created from get_or_create method
+            https://docs.djangoproject.com/en/1.11/ref/models/querysets/#get-or-create
+    """
+    return PhoneOptOut.objects.get_or_create(
+        phone_number=phone_number,
+        opt_out_type=opt_out_type.value[0],
+        defaults={
+            'phone_number': phone_number,
+            'opt_out_type': opt_out_type.value[0],
+        },
+    )
+
+
 def find_phone_opt_out(phone_number, opt_out_type):
     """
     Find Phone Opt Out for phone number string. Supports various standard

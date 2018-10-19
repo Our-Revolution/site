@@ -60,6 +60,15 @@ class ContactListAdmin(admin.ModelAdmin):
 
 @admin.register(PhoneOptOut)
 class PhoneOptOutAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'phone_number',
+        'opt_out_type',
+        'date_created',
+        'date_modified',
+    ]
+    list_display_links = list_display
+
     readonly_fields = ['date_created', 'date_modified']
     fields = readonly_fields + ['phone_number', 'opt_out_type', 'source']
 
