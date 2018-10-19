@@ -15,8 +15,10 @@ source_max_length = 255
 
 def add_phone_opt_out(phone_number, opt_out_type, source):
     """
-    Add Phone Opt Out for phone number string. Supports various standard
-    phone number formats.
+    Add Phone Opt Out for phone number string.
+
+    Supports various standard phone number formats. Returns None if
+    treat_as_none is True.
 
     Parameters
     ----------
@@ -30,10 +32,10 @@ def add_phone_opt_out(phone_number, opt_out_type, source):
     Returns
         -------
         (PhoneOptOut, bool)
-            Returns obj, created from get_or_create method
+            Returns (Phone Opt Out, created) from get_or_create, or (None, False)
             https://docs.djangoproject.com/en/1.11/ref/models/querysets/#get-or-create
     """
-    return PhoneOptOut.objects.get_or_create(
+    phone_opt_out, created = PhoneOptOut.objects.get_or_create(
         phone_number=phone_number,
         opt_out_type=opt_out_type.value[0],
         defaults={
@@ -42,12 +44,18 @@ def add_phone_opt_out(phone_number, opt_out_type, source):
             'source': source,
         },
     )
+    if phone_opt_out is None or phone_opt_out.treat_as_none:
+        return (None, False)
+    else:
+        return (phone_opt_out, created)
 
 
 def find_phone_opt_out(phone_number, opt_out_type):
     """
-    Find Phone Opt Out for phone number string. Supports various standard
-    phone number formats.
+    Find Phone Opt Out for phone number string
+
+    Supports various standard phone number formats. Ignores match if
+    treat_as_none is True.
 
     Parameters
     ----------
@@ -62,11 +70,14 @@ def find_phone_opt_out(phone_number, opt_out_type):
             Returns matching Phone Opt Out, or None
     """
 
-    opt_out = PhoneOptOut.objects.filter(
+    phone_opt_out = PhoneOptOut.objects.filter(
         phone_number=phone_number,
         opt_out_type=opt_out_type.value[0],
     ).first()
-    return opt_out
+    if phone_opt_out is None or phone_opt_out.treat_as_none:
+        return None
+    else:
+        return phone_opt_out
 
 
 class Contact(models.Model):
@@ -211,6 +222,34 @@ class PhoneOptOut(models.Model):
             self.get_opt_out_type_display(),
             str(self.id)
         )
+
+    def _treat_as_none(self):
+        """Treat as None. If this record is returned from search it is likelyf a false match."""
+        """
+        Treat as None. If this record is returned from search it is likely a
+        false match.
+
+        Returns
+            -------
+            bool
+                Returns True if should treat as None, otherwise False
+        """
+
+        """Set list of None-like value"""
+        none_list = [
+            '',
+            ' ',
+            '+',
+            'None',
+            '+None',
+            'NoneNone',  # This occurs for a lot of invalid numbers
+            '+NoneNone',  # This occurs for a lot of invalid numbers
+        ]
+        if str(self.phone_number) in none_list:
+            return True
+        else:
+            return False
+    treat_as_none = property(_treat_as_none)
 
     class Meta:
         unique_together = ["opt_out_type", "phone_number"]

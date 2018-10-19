@@ -46,6 +46,7 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
 
         """Go through each row and add opt out for phone"""
         add_count = 0
+        invalid_count = 0
         total_count = 0
         for row in reader:
             phone = row['phone']
@@ -54,15 +55,23 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
                 OptOutType.calling,
                 source,
             )
+
+            """Update counts"""
+            total_count += 1
             if created:
                 add_count += 1
-            total_count += 1
+            if phone_opt_out is None:
+                invalid_count += 1
 
         messages.success(
             self.request,
-            "Upload successful. Added %s new opt outs out of %s total records." % (
+            """
+            Upload successful. Added %s new opt outs out of %s total records.
+            %s records were considered invalid.
+            """ % (
                 add_count,
                 total_count,
+                invalid_count,
             )
         )
 
