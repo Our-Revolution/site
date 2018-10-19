@@ -44,12 +44,26 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
         user = self.request.user
         source = 'Admin Upload by %s [%s]' % (user.email, str(user.id))
 
+        """Go through each row and add opt out for phone"""
+        add_count = 0
+        total_count = 0
         for row in reader:
             phone = row['phone']
-            result = add_phone_opt_out(phone, OptOutType.calling, source)
-            messages.success(
-                self.request,
-                "Call response saved successfully."
+            (phone_opt_out, created) = add_phone_opt_out(
+                phone,
+                OptOutType.calling,
+                source,
             )
+            if created:
+                add_count += 1
+            total_count += 1
+
+        messages.success(
+            self.request,
+            "Upload successful. Added %s new opt outs out of %s total records." % (
+                add_count,
+                total_count,
+            )
+        )
 
         return HttpResponseRedirect(self.get_success_url())
