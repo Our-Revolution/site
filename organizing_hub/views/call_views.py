@@ -210,6 +210,11 @@ class CallView(FormView):
                 CallQuestion.voice_message.value[0],
                 form.cleaned_data['voice_message'],
             )
+            save_call_response(
+                call,
+                CallQuestion.opt_out.value[0],
+                form.cleaned_data['opt_out'],
+            )
 
             messages.success(
                 self.request,

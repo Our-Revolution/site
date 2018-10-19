@@ -101,6 +101,25 @@
 
         <hr />
 
+        <div class="row">
+
+          <div class="col-md-6">
+            <p class="fs-xxs">
+              This will opt-out the contact from receiving any future phone
+              calls from Our Revolution. Only select this option if the contact
+              has explicitly requested to be opted out. This does not opt the
+              user out of texting, email, or other forms of communication.
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field form.opt_out %}
+          </div>
+
+        </div>
+
+        <hr />
+
         <button class="btn btn-success mb10 mr5 uppercase" name="exit_after_call"
         type="submit" value="False">
           Save & Continue

@@ -544,22 +544,30 @@ class CallQuestion(Enum):
         CallAnswer.yes,
         CallAnswer.no,
     ))
-    talk_to_contact_why_not = (2, 'Why not?', (
-        CallAnswer.no_answer,
-        CallAnswer.wrong_number,
-        CallAnswer.busy,
-        CallAnswer.not_home,
-        CallAnswer.do_not_call,
-    ))
-    take_action = (3, 'Does the contact want to take action with your group?', (
+    talk_to_contact_why_not = (
+        2,
+        'If you did not talk to the contact, why not?',
+        (
+            CallAnswer.no_answer,
+            CallAnswer.wrong_number,
+            CallAnswer.busy,
+            CallAnswer.not_home,
+            CallAnswer.do_not_call,
+        )
+    )
+    take_action = (3, 'Did the contact want to take action?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
-    voice_message = (4, 'Did you leave a voicemail?', (
+    voice_message = (4, 'Did you leave a voice message?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
     text_message = (5, 'Did you send a text message?', (
+        CallAnswer.yes,
+        CallAnswer.no,
+    ))
+    opt_out = (6, 'Does the contact want to opt out?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
