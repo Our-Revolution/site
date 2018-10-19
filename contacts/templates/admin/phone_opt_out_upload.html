@@ -6,19 +6,23 @@
 <div id="content-main">
 
   <h2>
-    Group Leader Sync
+    Phone Opt Out Upload
   </h2>
 
   <p>
-    Are you sure you want to sync Group Leader Affiliation
-    <strong>for all users</strong>?
+    Upload CSV file with phone numbers that you want to
+    <strong>add to Calling Opt Out List</strong>.
   </p>
 
-  <form action="{{ request.get_full_path }}" method="post">
+  <form action="{{ request.get_full_path }}" enctype="multipart/form-data"
+  method="post">
+
     {% csrf_token %}
-    <input type="hidden" name="confirm" id="confirm" value="true">
+
+    {{ form.as_p }}
+
     <div class="submit-row">
-      <input type="submit" value="Save" class="default">
+      <input type="submit" value="Upload" class="default">
     </div>
   </form>
 

@@ -1,23 +1,27 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from .forms import GroupLeaderSyncForm
+from .forms import PhoneOptOutUploadForm
+import csv
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
-    """Sync all Users to update their Group Leader affiliations"""
+    """
+    Upload CSV of Phone Opt Outs for Calling and save any new ones to db
+
+    Always assumes Opt Out Type = Calling. Do not upload other types.
+
+    TODO: need to set request.current_app to self.admin_site.name?
+    https://docs.djangoproject.com/en/1.11/ref/contrib/admin/#adding-views-to-admin-sites
+    """
 
     '''
-    TODO: need to set request.current_app to self.admin_site.name?
-    https://docs.djangoproject.com/en/1.10/ref/contrib/admin/#adding-views-to-admin-sites
     '''
-    form_class = GroupLeaderSyncForm
+    form_class = PhoneOptOutUploadForm
     login_url = reverse_lazy(
         'admin:contacts_phoneoptout_changelist'
     )
@@ -28,9 +32,18 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
     template_name = 'admin/phone_opt_out_upload.html'
 
     def form_valid(self, form):
-        """Trigger post-save signal for all users to sync group leader roles"""
-        users = User.objects.all()
-        for user in users:
-            post_save.send(User, instance=user)
+        """Handle file upload"""
+        logger.debug('form_valid')
+        logger.debug('FILES: %s' % str(self.request.FILES))
+        csv_file = self.request.FILES['csv_file']
+        logger.debug('csv_file: %s' % str(csv_file))
+        reader = csv.DictReader(csv_file, fieldnames=['phone'])
+        for row in reader:
+            logger.debug('phone: %s' % row['phone'])
+
+        # logger.debug('reader: %s' % str(reader))
+        # reader.next()
+        # logger.debug('next: %s' % str(reader))
+        # context['donations'] = list(reader)
 
         return HttpResponseRedirect(self.get_success_url())
