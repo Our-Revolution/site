@@ -26,6 +26,7 @@ from calls.models import (
     CallProfile,
     CallQuestion,
 )
+from contacts.models import find_phone_opt_out, OptOutType
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
@@ -403,6 +404,11 @@ class CallDashboardView(TemplateView):
     template_name = "calls/dashboard.html"
 
     def get_context_data(self, **kwargs):
+        phone = self.request.GET.get('phone')
+        logger.debug('phone: %s' % phone)
+        opt_out = find_phone_opt_out(phone, OptOutType.calling)
+        logger.debug('opt_out: %s' % str(opt_out))
+
         context = super(CallDashboardView, self).get_context_data(**kwargs)
 
         """Find campaigns as admin or caller"""
