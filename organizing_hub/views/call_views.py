@@ -4,14 +4,17 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, FormView, TemplateView
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
     call_campaign_statuses_active,
+    find_calls_made_by_campaign,
     find_campaigns_as_caller,
     find_campaigns_as_admin,
     find_or_create_active_call_for_campaign_and_caller,
@@ -28,6 +31,7 @@ from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.models import OrganizingHubFeature
 import logging
+import unicodecsv
 
 logger = logging.getLogger(__name__)
 
@@ -319,6 +323,79 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
             call_campaign = self.get_object()
             self.local_group = call_campaign.local_group
         return self.local_group
+
+
+class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
+    model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+
+    def get(self, request, *args, **kwargs):
+        """Only accept POST requests, otherwise redirect"""
+        return redirect(
+            'organizing-hub-call-campaign-detail',
+            self.kwargs['uuid']
+        )
+
+    def get_local_group(self):
+        """Get Local Group attached to Call Campaign"""
+        if self.local_group is None:
+            call_campaign = self.get_object()
+            self.local_group = call_campaign.local_group
+        return self.local_group
+
+    def post(self, request, *args, **kwargs):
+
+        """Redirect if Call Campaign does not have data download"""
+        call_campaign = self.get_object()
+        if not call_campaign.has_data_download:
+            return redirect(
+                'organizing-hub-call-campaign-detail',
+                self.kwargs['uuid']
+            )
+
+        """Get Calls made for Campaign so we can generate CSV data"""
+        calls_made = find_calls_made_by_campaign(call_campaign)
+
+        """Start CSV file"""
+        response = HttpResponse(content_type='text/csv')
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+        filename = 'call-campaign-%s-%s.csv' % (call_campaign.uuid, timestamp)
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        writer = unicodecsv.writer(response, encoding='utf-8')
+
+        """Add header row to CSV"""
+        header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
+        writer.writerow(header_row)
+
+        """Loop through Calls made and add relevant data to CSV"""
+        for call in calls_made:
+            call_row = []
+            contact = call.contact
+
+            """Always add First and Last Name"""
+            call_row.append(contact.first_name)
+            call_row.append(contact.last_name)
+
+            """Find response to Take Action question and add Answer to CSV"""
+            take_action_response = call.callresponse_set.filter(
+                question=CallQuestion.take_action.value[0]
+            ).first()
+            if take_action_response:
+                call_row.append(take_action_response.get_answer_display())
+
+                """If Answer is Yes, then add Phone and Email"""
+                if take_action_response.answer == CallAnswer.yes.value[0]:
+                    call_row.append(contact.phone_number)
+                    call_row.append(contact.email_address)
+
+            """Write Call data to CSV"""
+            writer.writerow(call_row)
+
+        """Return CSV"""
+        return response
 
 
 @method_decorator(verified_email_required, name='dispatch')

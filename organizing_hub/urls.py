@@ -15,6 +15,7 @@ from .views import (
     CallView,
     CallCampaignCreateView,
     CallCampaignDetailView,
+    CallCampaignDownloadView,
     CallCampaignStatusView,
     CallDashboardView,
     EventCreateView,
@@ -155,6 +156,11 @@ if CALLS_ENABLED:
                             r'^call/',
                             CallView.as_view(),
                             name='organizing-hub-call'
+                        ),
+                        url(
+                            r'^download/',
+                            CallCampaignDownloadView.as_view(),
+                            name='organizing-hub-call-campaign-download'
                         ),
                         url(
                             r'^status/(?P<status_id>\d+)/',
