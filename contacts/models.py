@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.db.models.functions import Distance
@@ -38,6 +39,7 @@ def add_phone_opt_out(phone_number, opt_out_type, source):
         defaults={
             'phone_number': phone_number,
             'opt_out_type': opt_out_type.value[0],
+            'source': source,
         },
     )
 

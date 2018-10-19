@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -43,12 +46,10 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
 
         for row in reader:
             phone = row['phone']
-            result = add_phone_opt_out(phone, OptOutType.calling)
-            logger.debug('result: %s' % str(result))
-
-        # logger.debug('reader: %s' % str(reader))
-        # reader.next()
-        # logger.debug('next: %s' % str(reader))
-        # context['donations'] = list(reader)
+            result = add_phone_opt_out(phone, OptOutType.calling, source)
+            messages.success(
+                self.request,
+                "Call response saved successfully."
+            )
 
         return HttpResponseRedirect(self.get_success_url())
