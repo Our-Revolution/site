@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb campaign.title "organizing-hub-call-campaign-create" %}
+    {% breadcrumb campaign.title 'organizing-hub-call-campaign-detail' campaign.uuid %}
 {% endblock %}
 
 {% block content_pre_heading %}
@@ -49,23 +49,27 @@
         aria-label="Primary Actions">
 
           {% if campaign.is_approved %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_start_url campaign %}">
             Start Campaign
-          </button>
+          </a>
           {% elif campaign.is_in_progress %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_pause_url campaign %}">
             Pause Campaign
-          </button>
+          </a>
           {% elif campaign.is_paused %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_resume_url campaign %}">
             Resume Campaign
-          </button>
+          </a>
           {% endif %}
 
           {% if campaign.is_in_progress or campaign.is_paused %}
-          <button type="button" class="btn btn-primary">
+          <a class="btn btn-primary"
+          href="{% call_campaign_complete_url campaign %}">
             Complete Campaign
-          </button>
+          </a>
           {% endif %}
 
         </div>
@@ -146,6 +150,15 @@
       <p>
         <strong>{{ campaign.calls_made_count }}</strong> of
         {{ campaign.contacts_total_count }} contacts called.
+      </p>
+
+      <hr />
+
+      <p>
+        <a href="{% url 'organizing-hub-call-dashboard' %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Calling
+          Dashboard
+        </a>
       </p>
 
     </div>

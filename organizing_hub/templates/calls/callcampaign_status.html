@@ -1,0 +1,86 @@
+{% extends "calls/organizing_hub_calls.html" %}
+
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - {{ campaign.title }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb call_campaign.title 'organizing-hub-call-campaign-detail' call_campaign.uuid %}
+{% endblock %}
+
+{% block content_pre_heading %}
+<span class="article-type">
+  {% if call_campaign.is_in_progress %}
+  <span class="dot dot-success dot-sm"></span>
+  {% endif %}
+  {{ call_campaign.get_status_display }} Campaign
+</span>
+{% endblock %}
+
+{% block content_heading %}{{ call_campaign.title }}{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pb4 pt4">
+
+  <div class="row">
+    <div class="col-md-9 col-md-offset-3">
+      {% bootstrap_messages %}
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3">
+      {% organizing_hub_nav %}
+    </div>
+
+    <div class="col-md-9">
+
+      <p>
+        Are you sure that you want to <strong>{{ action }}</strong>?
+      </p>
+
+      <ul class="mb20">
+        <li>
+          Start Campaign: change status to In Progress, callers can make calls
+        </li>
+        <li>
+          Pause Campaign: change status to Paused, disable calls temporarily
+        </li>
+        <li>
+          Resume Campaign: change status from Paused to In Progress, callers
+          can make calls
+        </li>
+        <li>
+          Complete Campaign: change status to Complete, disable calls
+          permanently, archive Campaign
+        </li>
+      </ul>
+
+      <form action="{{ request.get_full_path }}" class="form mb20"
+      method="post">
+
+        {% csrf_token %}
+
+        <button class="btn btn-success btn-block uppercase ls2" type="submit">
+          {{ action }}
+        </button>
+
+      </form>
+
+      <hr />
+
+      <p>
+        <a href="{% url 'organizing-hub-call-campaign-detail' call_campaign.uuid %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Back
+        </a>
+      </p>
+
+  </div>
+</div>
+
+{% endblock %}
