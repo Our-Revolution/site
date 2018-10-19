@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import FormView
 from .forms import PhoneOptOutUploadForm
 from .models import add_phone_opt_out, OptOutType
@@ -42,7 +43,12 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
 
         """Set source code"""
         user = self.request.user
-        source = 'Admin Upload by %s [%s]' % (user.email, str(user.id))
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+        source = 'Admin Upload by %s [%s] %s' % (
+            user.email,
+            str(user.id),
+            timestamp,
+        )
 
         """Go through each row and add opt out for phone"""
         add_count = 0

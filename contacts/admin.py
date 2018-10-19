@@ -70,9 +70,13 @@ class PhoneOptOutAdmin(admin.ModelAdmin):
         'date_created',
     ]
     list_display_links = list_display
-
     readonly_fields = ['date_created', 'date_modified']
     fields = readonly_fields + ['phone_number', 'opt_out_type', 'source']
+    search_fields = [
+        'id',
+        'phone_number',
+        'source',
+    ]
 
     def get_urls(self):
         urls = super(PhoneOptOutAdmin, self).get_urls()
