@@ -224,7 +224,7 @@ class PhoneOptOut(models.Model):
         )
 
     def _treat_as_none(self):
-        """Treat as None. If this record is returned from search it is likelyf a false match."""
+        """Treat as None. If this record is returned from search it is likely a false match."""
         """
         Treat as None. If this record is returned from search it is likely a
         false match.
