@@ -30,7 +30,7 @@ class PhoneOptOutUploadView(PermissionRequiredMixin, FormView):
     login_url = reverse_lazy(
         'admin:contacts_phoneoptout_changelist'
     )
-    permission_required = 'contacts.add_phoneoptout'
+    permission_required = 'contacts.change_phoneoptout'
     success_url = reverse_lazy(
         'admin:contacts_phoneoptout_changelist'
     )
