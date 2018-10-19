@@ -567,7 +567,7 @@ class CallQuestion(Enum):
         CallAnswer.yes,
         CallAnswer.no,
     ))
-    opt_out = (6, 'Does the contact want to opt out?', (
+    opt_out = (6, 'Did the contact want to opt out?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
