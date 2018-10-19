@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .admin_views import PhoneOptOutUploadView
 from .models import Contact, ContactList, PhoneOptOut
 
 
@@ -60,3 +61,13 @@ class ContactListAdmin(admin.ModelAdmin):
 class PhoneOptOutAdmin(admin.ModelAdmin):
     readonly_fields = ['date_created', 'date_modified']
     fields = readonly_fields + ['phone_number', 'opt_out_type', 'source']
+
+    def get_urls(self):
+        urls = super(PhoneOptOutAdmin, self).get_urls()
+        my_urls = [
+            url(
+                r'^upload/',
+                PhoneOptOutUploadView.as_view(),
+            ),
+        ]
+        return my_urls + urls
