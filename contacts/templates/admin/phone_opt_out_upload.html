@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block content %}
+
+<div id="content-main">
+
+  <h2>
+    Phone Opt Out Upload
+  </h2>
+
+  <p>
+    Upload CSV file with phone numbers that you want to
+    <strong>add to Calling Opt Out List</strong>. Should have only one column
+    of data for phone numbers, and no header rows.
+  </p>
+
+  <form action="{{ request.get_full_path }}" enctype="multipart/form-data"
+  method="post">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <div class="submit-row">
+      <input type="submit" value="Upload" class="default">
+    </div>
+  </form>
+
+</div>
+
+{% endblock %}
