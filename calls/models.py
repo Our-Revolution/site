@@ -344,7 +344,25 @@ def get_recent_call_cutoff():
 
 
 def save_call_response(call, question, answer):
-    CallResponse.objects.update_or_create(
+    """
+    Save Call Response for Call Question and Answer
+
+    Parameters
+    ----------
+    call : Call
+        Call
+    question : int
+        Call Question id
+    answer : int
+        Call Answer id
+
+    Returns
+        -------
+        (CallResponse, bool)
+            Returns (Call Response, created) from update_or_create
+            https://docs.djangoproject.com/en/1.11/ref/models/querysets/#update-or-create
+    """
+    return CallResponse.objects.update_or_create(
         call=call,
         question=question,
         defaults={
