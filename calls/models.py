@@ -165,6 +165,8 @@ def find_campaigns_as_admin(call_profile):
 
     Return campaigns where profile has edit access via local group
 
+    TODO: TECH-1480: feature flag check
+
     Parameters
     ----------
     call_profile : CallProfile
@@ -342,7 +344,25 @@ def get_recent_call_cutoff():
 
 
 def save_call_response(call, question, answer):
-    CallResponse.objects.update_or_create(
+    """
+    Save Call Response for Call Question and Answer
+
+    Parameters
+    ----------
+    call : Call
+        Call
+    question : int
+        Call Question id
+    answer : int
+        Call Answer id
+
+    Returns
+        -------
+        (CallResponse, bool)
+            Returns (Call Response, created) from update_or_create
+            https://docs.djangoproject.com/en/1.11/ref/models/querysets/#update-or-create
+    """
+    return CallResponse.objects.update_or_create(
         call=call,
         question=question,
         defaults={
@@ -544,22 +564,30 @@ class CallQuestion(Enum):
         CallAnswer.yes,
         CallAnswer.no,
     ))
-    talk_to_contact_why_not = (2, 'Why not?', (
-        CallAnswer.no_answer,
-        CallAnswer.wrong_number,
-        CallAnswer.busy,
-        CallAnswer.not_home,
-        CallAnswer.do_not_call,
-    ))
-    take_action = (3, 'Does the contact want to take action with your group?', (
+    talk_to_contact_why_not = (
+        2,
+        'If you did not talk to the contact, why not?',
+        (
+            CallAnswer.no_answer,
+            CallAnswer.wrong_number,
+            CallAnswer.busy,
+            CallAnswer.not_home,
+            CallAnswer.do_not_call,
+        )
+    )
+    take_action = (3, 'Did the contact want to take action?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
-    voice_message = (4, 'Did you leave a voicemail?', (
+    voice_message = (4, 'Did you leave a voice message?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))
     text_message = (5, 'Did you send a text message?', (
+        CallAnswer.yes,
+        CallAnswer.no,
+    ))
+    opt_out = (6, 'Did the contact want to opt out?', (
         CallAnswer.yes,
         CallAnswer.no,
     ))

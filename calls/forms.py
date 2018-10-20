@@ -18,13 +18,22 @@ CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 class CallForm(forms.Form):
     call_uuid = forms.UUIDField(required=False, widget=forms.HiddenInput)
     exit_after_call = forms.BooleanField(required=False)
+    opt_out = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.opt_out.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.opt_out.value[1],
+        required=False,
+    )
     take_action = forms.TypedChoiceField(
         choices=[(None, '')] + [
             x.value for x in CallQuestion.take_action.value[2]
         ],
         coerce=int,
         empty_value=None,
-        label='Did the contact want to take action?',
+        label=CallQuestion.take_action.value[1],
         required=False,
     )
     talk_to_contact = forms.TypedChoiceField(
@@ -33,7 +42,7 @@ class CallForm(forms.Form):
         ],
         coerce=int,
         empty_value=None,
-        label='Did you talk to the contact?',
+        label=CallQuestion.talk_to_contact.value[1],
         required=False,
     )
     talk_to_contact_why_not = forms.TypedChoiceField(
@@ -42,7 +51,7 @@ class CallForm(forms.Form):
         ],
         coerce=int,
         empty_value=None,
-        label='If you did not talk to the contact, why not?',
+        label=CallQuestion.talk_to_contact_why_not.value[1],
         required=False,
     )
     voice_message = forms.TypedChoiceField(
@@ -51,7 +60,7 @@ class CallForm(forms.Form):
         ],
         coerce=int,
         empty_value=None,
-        label='Did you leave a voice message?',
+        label=CallQuestion.voice_message.value[1],
         required=False,
     )
 
