@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.db.models.functions import Distance
@@ -9,6 +10,74 @@ import logging
 logger = logging.getLogger(__name__)
 
 name_max_length = 255
+source_max_length = 255
+
+
+def add_phone_opt_out(phone_number, opt_out_type, source):
+    """
+    Add Phone Opt Out for phone number string.
+
+    Supports various standard phone number formats. Returns None if
+    treat_as_none is True.
+
+    Parameters
+    ----------
+    phone_number : str
+        Phone number string to add to Opt Out list
+    opt_out_type : OptOutType
+        Opt Out Type to add
+    source : str
+        Source code for Opt Out
+
+    Returns
+        -------
+        (PhoneOptOut, bool)
+            Returns (Phone Opt Out, created) from get_or_create, or (None, False)
+            https://docs.djangoproject.com/en/1.11/ref/models/querysets/#get-or-create
+    """
+    phone_opt_out, created = PhoneOptOut.objects.get_or_create(
+        phone_number=phone_number,
+        opt_out_type=opt_out_type.value[0],
+        defaults={
+            'phone_number': phone_number,
+            'opt_out_type': opt_out_type.value[0],
+            'source': source,
+        },
+    )
+    if phone_opt_out is None or phone_opt_out.treat_as_none:
+        return (None, False)
+    else:
+        return (phone_opt_out, created)
+
+
+def find_phone_opt_out(phone_number, opt_out_type):
+    """
+    Find Phone Opt Out for phone number string
+
+    Supports various standard phone number formats. Ignores match if
+    treat_as_none is True.
+
+    Parameters
+    ----------
+    phone_number : str
+        Phone number string to search for
+    opt_out_type : OptOutType
+        Opt Out Type to search for
+
+    Returns
+        -------
+        PhoneOptOut
+            Returns matching Phone Opt Out, or None
+    """
+
+    phone_opt_out = PhoneOptOut.objects.filter(
+        phone_number=phone_number,
+        opt_out_type=opt_out_type.value[0],
+    ).first()
+    if phone_opt_out is None or phone_opt_out.treat_as_none:
+        return None
+    else:
+        return phone_opt_out
 
 
 class Contact(models.Model):
@@ -57,7 +126,10 @@ class Contact(models.Model):
     name = property(_name)
 
     def __unicode__(self):
-        return str(self.id) + (' ' + self.name if self.name else '')
+        return '%s[%s]' % (
+            (self.name + ' ' if self.name is not None else ''),
+            str(self.id),
+        )
 
 
 @unique
@@ -120,3 +192,63 @@ class ContactList(models.Model):
             self.contacts.remove(*contacts_extra)
 
         return self
+
+
+@unique
+class OptOutType(Enum):
+    calling = (1, 'Calling')
+
+
+class PhoneOptOut(models.Model):
+    """
+    Phone Opt Out Model
+
+    Data for a specific Opt Out Type for a specific Phone Number
+    """
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    opt_out_type = models.IntegerField(
+        choices=[x.value for x in OptOutType],
+        db_index=True,
+        default=OptOutType.calling.value[0]
+    )
+    phone_number = PhoneNumberField(db_index=True)
+    source = models.CharField(max_length=source_max_length)
+
+    def __unicode__(self):
+        return '%s %s [%s]' % (
+            self.phone_number,
+            self.get_opt_out_type_display(),
+            str(self.id)
+        )
+
+    def _treat_as_none(self):
+        """
+        Treat as None. If this record is returned from search it is likely a
+        false match.
+
+        Returns
+            -------
+            bool
+                Returns True if should treat as None, otherwise False
+        """
+
+        """Set list of None-like value"""
+        none_list = [
+            '',
+            ' ',
+            '+',
+            'None',
+            '+None',
+            'NoneNone',
+            '+NoneNone',  # This occurs for a lot of invalid numbers
+        ]
+        if str(self.phone_number) in none_list:
+            return True
+        else:
+            return False
+    treat_as_none = property(_treat_as_none)
+
+    class Meta:
+        unique_together = ["opt_out_type", "phone_number"]

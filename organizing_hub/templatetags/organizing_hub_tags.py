@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django import template
 from django.conf import settings
+from django.urls import reverse_lazy
+from calls.models import CallCampaignStatus
 from local_groups.models import find_local_group_by_user
 from organizing_hub.models import OrganizingHubLoginAlert
 
@@ -20,6 +22,102 @@ ORGANIZING_HUB_PROMOTE_ENABLED = settings.ORGANIZING_HUB_PROMOTE_ENABLED
 @register.simple_tag
 def bsd_create_account_url():
     return BSD_CREATE_ACCOUNT_URL
+
+
+@register.simple_tag
+def call_campaign_complete_url(call_campaign):
+    """
+    URL for Complete Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Complete Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.complete.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_pause_url(call_campaign):
+    """
+    URL for Pause Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Pause Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.paused.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_resume_url(call_campaign):
+    """
+    URL for Resume Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Resume Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.in_progress.value[0],
+        }
+    )
+
+
+@register.simple_tag
+def call_campaign_start_url(call_campaign):
+    """
+    URL for Start Call Campaign page
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign
+
+    Returns
+        -------
+        str
+            Return url for Start Call Campaign page
+    """
+    return reverse_lazy(
+        'organizing-hub-call-campaign-status',
+        kwargs={
+            'uuid': call_campaign.uuid,
+            'status_id': CallCampaignStatus.in_progress.value[0],
+        }
+    )
 
 
 @register.inclusion_tag('partials/events_nav.html', takes_context=True)

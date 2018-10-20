@@ -12,8 +12,11 @@ from local_groups.views import (
 )
 from .views import (
     AccountCreateView,
+    CallView,
     CallCampaignCreateView,
     CallCampaignDetailView,
+    CallCampaignDownloadView,
+    CallCampaignStatusView,
     CallCampaignUpdateView,
     CallDashboardView,
     EventCreateView,
@@ -144,6 +147,7 @@ if CALLS_ENABLED:
                         CallCampaignCreateView.as_view(),
                         name='organizing-hub-call-campaign-create'
                     ),
+<<<<<<< HEAD
                     url(
                         r'^(?P<uuid>[0-9a-f-]+)/$',
                         CallCampaignDetailView.as_view(),
@@ -154,6 +158,30 @@ if CALLS_ENABLED:
                         CallCampaignUpdateView.as_view(),
                         name='organizing-hub-call-campaign-update'
                     ),
+=======
+                    url(r'^(?P<uuid>[0-9a-f-]+)/', include([
+                        url(
+                            r'^$',
+                            CallCampaignDetailView.as_view(),
+                            name='organizing-hub-call-campaign-detail'
+                        ),
+                        url(
+                            r'^call/',
+                            CallView.as_view(),
+                            name='organizing-hub-call'
+                        ),
+                        url(
+                            r'^download/',
+                            CallCampaignDownloadView.as_view(),
+                            name='organizing-hub-call-campaign-download'
+                        ),
+                        url(
+                            r'^status/(?P<status_id>\d+)/',
+                            CallCampaignStatusView.as_view(),
+                            name='organizing-hub-call-campaign-status'
+                        ),
+                    ])),
+>>>>>>> master
                 ])),
             ])),
         ])),

@@ -42,14 +42,12 @@ Calling Dashboard
 
             <tbody>
 
-              {% for campaign in campaigns_as_admin_active %}
+              {% for call_campaign, call_form in campaigns_as_admin_active %}
               {% include "calls/partials/call_campaign_row.html" %}
               {% endfor %}
 
-              {% for campaign in campaigns_as_caller_active %}
-              {% if campaign not in campaigns_as_admin_active %}
+              {% for call_campaign, call_form in campaigns_as_caller_active %}
               {% include "calls/partials/call_campaign_row.html" %}
-              {% endif %}
               {% endfor %}
 
             </tbody>
@@ -66,8 +64,7 @@ Calling Dashboard
         {% endif %}
 
         {% local_group as local_group %}
-        {% has_local_group_permission local_group "calls.add_callcampaign" as can_create_campaign %}
-        {% if can_create_campaign %}
+        {% if can_add_campaign %}
         <a class="btn btn-block btn-success uppercase ls2"
         href="{% url 'organizing-hub-call-campaign-create' %}">
           Create Calling Campaign
@@ -92,7 +89,7 @@ Calling Dashboard
 
             <tbody>
 
-              {% for campaign in campaigns_as_admin_inactive %}
+              {% for call_campaign, call_form in campaigns_as_admin_inactive %}
               {% include "calls/partials/call_campaign_row.html" %}
               {% endfor %}
 

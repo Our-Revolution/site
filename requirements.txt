@@ -32,7 +32,7 @@ django-easy-pdf==0.1.1
 django-localflavor==1.4.1
 django-modelcluster>=3.0,<3.1
 django-multiselectfield==0.1.5
-django-phonenumber-field==1.1.0
+django-phonenumber-field>=1.1,<1.2
 django-recurrence==1.4.1
 django-storages==1.5.1
 django-taggit>=0.20,<0.21
@@ -64,7 +64,7 @@ sqlparse==0.2.2
 stevedore==1.18.0
 tini==3.0.1
 traitlets==4.3.1
-unicodecsv==0.14.1
+unicodecsv>=0.14,<0.15
 virtualenv==15.0.3
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.2

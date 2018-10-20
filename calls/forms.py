@@ -6,7 +6,16 @@ from django.forms import widgets
 from django.forms.widgets import Widget
 from django.forms.utils import flatatt
 from django.utils.html import mark_safe
-from .models import CallCampaign, CallProfile
+from contacts.models import ContactListStatus
+from .models import (
+    call_campaign_statuses_skip_list_validation,
+    CallCampaign,
+    CallProfile
+    CallQuestion,
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
@@ -62,6 +71,56 @@ class ModelCommaSeparatedChoiceField(forms.ModelMultipleChoiceField):
 
         return super(ModelCommaSeparatedChoiceField, self).clean(caller_ids)
 
+class CallForm(forms.Form):
+    call_uuid = forms.UUIDField(required=False, widget=forms.HiddenInput)
+    exit_after_call = forms.BooleanField(required=False)
+    opt_out = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.opt_out.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.opt_out.value[1],
+        required=False,
+    )
+    take_action = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.take_action.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.take_action.value[1],
+        required=False,
+    )
+    talk_to_contact = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.talk_to_contact.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.talk_to_contact.value[1],
+        required=False,
+    )
+    talk_to_contact_why_not = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.talk_to_contact_why_not.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.talk_to_contact_why_not.value[1],
+        required=False,
+    )
+    voice_message = forms.TypedChoiceField(
+        choices=[(None, '')] + [
+            x.value for x in CallQuestion.voice_message.value[2]
+        ],
+        coerce=int,
+        empty_value=None,
+        label=CallQuestion.voice_message.value[1],
+        required=False,
+    )
+
+
 class CallCampaignForm(forms.ModelForm):
     callers = ModelCommaSeparatedChoiceField(
         queryset=CallProfile.objects.all(),
@@ -102,6 +161,22 @@ class CallCampaignUpdateForm(CallCampaignForm):
     state_or_territory = forms.CharField(disabled=True)
 
 class CallCampaignAdminForm(CallCampaignForm):
+
+    def clean_status(self):
+        """Check if status requires a valid Contact List attached"""
+        status = self.cleaned_data['status']
+        if status not in [
+            x.value[0] for x in call_campaign_statuses_skip_list_validation
+        ]:
+            contact_list = self.instance.contact_list
+            if contact_list is None or not (
+                contact_list.status == ContactListStatus.complete.value[0]
+            ) or not (
+                contact_list.contacts.count() > 0
+            ):
+                raise forms.ValidationError(self.fields['status'].help_text)
+        return status
+
     class Meta:
         field_width = '640px'
         widgets = {

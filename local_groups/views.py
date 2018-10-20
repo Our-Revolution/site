@@ -29,6 +29,7 @@ class GroupManageView(
     success_message = "Your group has been updated successfully."
     template_name_suffix = '_manage_form'
     permission_required = 'local_groups.change_group'
+    skip_feature_check = True
 
     def get_local_group(self):
         return self.get_object()
