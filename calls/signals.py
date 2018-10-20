@@ -4,7 +4,7 @@ from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-from contacts.models import add_phone_opt_out
+from contacts.models import add_phone_opt_out, OptOutType
 from .models import CallAnswer, CallQuestion, CallResponse
 import logging
 
@@ -23,21 +23,17 @@ def call_response_post_save_handler(instance, **kwargs):
         """Add Phone Opt Out for Contact phone number"""
         call = call_response.call
         contact = call.contact
-        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
-        source = 'Admin Upload by %s [%s] %s' % (
-            user.email,
-            str(user.id),
-            timestamp,
-        )
-        source = 'Call Response: %s | Contact: %s | %s' % (
-            str(call_response.id),
-            str(contact.id),
-            timestamp,
-        )
-        transaction.on_commit(
-            lambda: add_phone_opt_out(
-                contact.phone_number,
-                OptOutType.calling,
-                source,
+        if contact.phone_number is not None:
+            timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+            source = 'Call Response: %s | Contact: %s | %s' % (
+                str(call_response.id),
+                str(contact.id),
+                timestamp,
             )
-        )
+            transaction.on_commit(
+                lambda: add_phone_opt_out(
+                    contact.phone_number,
+                    OptOutType.calling,
+                    source,
+                )
+            )
