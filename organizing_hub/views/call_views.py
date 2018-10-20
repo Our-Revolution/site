@@ -7,22 +7,17 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-<<<<<<< HEAD
+from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views.generic import (
     CreateView,
     DetailView,
+    FormView,
     TemplateView,
     UpdateView
-)
-from django.views.generic.list import ListView
-from calls.forms import CallCampaignForm, CallCampaignUpdateForm
-=======
-from django.utils import timezone
-from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, FormView, TemplateView
+    )
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
->>>>>>> master
 from calls.models import (
     call_campaign_statuses_active,
     find_calls_made_by_campaign,
@@ -386,7 +381,33 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
         writer.writerow(header_row)
 
-<<<<<<< HEAD
+        """Loop through Calls made and add relevant data to CSV"""
+        for call in calls_made:
+            call_row = []
+            contact = call.contact
+
+            """Always add First and Last Name"""
+            call_row.append(contact.first_name)
+            call_row.append(contact.last_name)
+
+            """Find response to Take Action question and add Answer to CSV"""
+            take_action_response = call.callresponse_set.filter(
+                question=CallQuestion.take_action.value[0]
+            ).first()
+            if take_action_response:
+                call_row.append(take_action_response.get_answer_display())
+
+                """If Answer is Yes, then add Phone and Email"""
+                if take_action_response.answer == CallAnswer.yes.value[0]:
+                    call_row.append(contact.phone_number)
+                    call_row.append(contact.email_address)
+
+            """Write Call data to CSV"""
+            writer.writerow(call_row)
+
+        """Return CSV"""
+        return response
+
 class CallCampaignUpdateView(
     LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
@@ -416,34 +437,6 @@ class CallCampaignUpdateView(
             'organizing-hub-call-campaign-detail',
             kwargs={'uuid': self.object.uuid}
         )
-=======
-        """Loop through Calls made and add relevant data to CSV"""
-        for call in calls_made:
-            call_row = []
-            contact = call.contact
->>>>>>> master
-
-            """Always add First and Last Name"""
-            call_row.append(contact.first_name)
-            call_row.append(contact.last_name)
-
-            """Find response to Take Action question and add Answer to CSV"""
-            take_action_response = call.callresponse_set.filter(
-                question=CallQuestion.take_action.value[0]
-            ).first()
-            if take_action_response:
-                call_row.append(take_action_response.get_answer_display())
-
-                """If Answer is Yes, then add Phone and Email"""
-                if take_action_response.answer == CallAnswer.yes.value[0]:
-                    call_row.append(contact.phone_number)
-                    call_row.append(contact.email_address)
-
-            """Write Call data to CSV"""
-            writer.writerow(call_row)
-
-        """Return CSV"""
-        return response
 
 
 @method_decorator(verified_email_required, name='dispatch')

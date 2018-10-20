@@ -147,18 +147,6 @@ if CALLS_ENABLED:
                         CallCampaignCreateView.as_view(),
                         name='organizing-hub-call-campaign-create'
                     ),
-<<<<<<< HEAD
-                    url(
-                        r'^(?P<uuid>[0-9a-f-]+)/$',
-                        CallCampaignDetailView.as_view(),
-                        name='organizing-hub-call-campaign-detail'
-                    ),
-                    url(
-                        r'^(?P<uuid>[0-9a-f-]+)/update/',
-                        CallCampaignUpdateView.as_view(),
-                        name='organizing-hub-call-campaign-update'
-                    ),
-=======
                     url(r'^(?P<uuid>[0-9a-f-]+)/', include([
                         url(
                             r'^$',
@@ -180,8 +168,12 @@ if CALLS_ENABLED:
                             CallCampaignStatusView.as_view(),
                             name='organizing-hub-call-campaign-status'
                         ),
+                        url(
+                            r'^update/',
+                            CallCampaignUpdateView.as_view(),
+                            name='organizing-hub-call-campaign-update'
+                        ),
                     ])),
->>>>>>> master
                 ])),
             ])),
         ])),
