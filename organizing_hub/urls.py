@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from local_groups.forms import GroupLoginForm, PasswordResetRequestForm
+from local_groups.forms import OrganizingHubLoginForm, PasswordResetRequestForm
 from local_groups.views import (
     GroupManageView,
     SlackInviteView,
@@ -61,7 +61,7 @@ urlpatterns += [
             r'^login/',
             auth_views.login,
             {
-                'authentication_form': GroupLoginForm,
+                'authentication_form': OrganizingHubLoginForm,
                 'redirect_authenticated_user': True
             },
             name='organizing-hub-login'

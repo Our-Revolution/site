@@ -95,13 +95,14 @@ class GroupLeaderSyncForm(forms.Form):
 
 
 # Customize AuthenticationForm as needed
-class GroupLoginForm(AuthenticationForm):
+class OrganizingHubLoginForm(AuthenticationForm):
     username = UsernameField(
         label=_("Email Address"),
         widget=forms.TextInput(attrs={'autofocus': True}),
         help_text='''
-            This should be the official group leader email address registered
-            with Our Revolution, a group admin email, or the email you use for
+            This can be any email address with an Our Revolution account. To
+            manage your group, use a registered group leader
+            or group admin email, or the email you use for
             submitting nominations.
         '''
     )
@@ -179,7 +180,7 @@ class GroupManageForm(forms.ModelForm):
 
 class PasswordResetRequestForm(AuthPasswordResetRequestForm):
     email = forms.EmailField(
-        label=_("Group Admin Email"),
+        label=_("Email Address"),
         max_length=254
     )
 
