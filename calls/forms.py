@@ -1,4 +1,3 @@
-from bsd.models import BSDProfile
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -10,8 +9,8 @@ from contacts.models import ContactListStatus
 from .models import (
     call_campaign_statuses_skip_list_validation,
     CallCampaign,
-    CallProfile
-    CallQuestion,
+    CallProfile,
+    CallQuestion
 )
 import logging
 
@@ -21,55 +20,26 @@ CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
 class CommaSeparatedCallersTextArea(Widget):
+    """
+    Transform many-to-many callers into comma separated values for display.
+    """
     def render(self, name, value, attrs=None, renderer=None):
         final_attrs = self.build_attrs(attrs, {'type':'text', 'name':name})
         caller_emails = []
 
         if value is not None:
+            """Loop through the caller_ids we have stored on the many-to-many
+            relationship and get the corresponding object"""
             for caller_id in value:
                 callprofile = CallProfile.objects.get(pk=caller_id)
                 user = callprofile.user
                 caller_emails.append(str(user.email))
 
+            """Build list of comma seprated values for display"""
             value = ', '.join(caller_emails)
-            if value:
-                final_attrs['value'] = str(value)
+            final_attrs['value'] = str(value)
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
-class ModelCommaSeparatedChoiceField(forms.ModelMultipleChoiceField):
-    widget = CommaSeparatedCallersTextArea(
-        attrs={
-            'rows': '5',
-            'placeholder': 'bob@example.com, sally@example.comm, tom@example.com'
-        }
-    )
-
-    def clean(self, value):
-        caller_ids = []
-
-        if value is not None and value != '':
-            value = [email.strip() for email in value.split(",")]
-
-            for email in value:
-                # TODO: support multiple accounts per email
-                if User.objects.filter(email__iexact=email).exists():
-                    user = User.objects.get(email__iexact=email)
-                else:
-                    user = User.objects.create_user(
-                        username=email,
-                        email=email,
-                        password=None
-                    )
-
-                if not hasattr(user,'bsdprofile'):
-                    BSDProfile.objects.create(user=user)
-
-                if not hasattr(user,'callprofile'):
-                    CallProfile.objects.create(user=user)
-
-                caller_ids.append(user.callprofile.id)
-
-        return super(ModelCommaSeparatedChoiceField, self).clean(caller_ids)
 
 class CallForm(forms.Form):
     call_uuid = forms.UUIDField(required=False, widget=forms.HiddenInput)
@@ -122,8 +92,8 @@ class CallForm(forms.Form):
 
 
 class CallCampaignForm(forms.ModelForm):
-    callers = ModelCommaSeparatedChoiceField(
-        queryset=CallProfile.objects.all(),
+    caller_emails = forms.CharField(
+        widget=CommaSeparatedCallersTextArea(attrs={'rows': '5'}),
         required=False
     )
     max_distance = forms.IntegerField(
@@ -141,7 +111,7 @@ class CallCampaignForm(forms.ModelForm):
 
     class Meta:
         fields = [
-            'callers',
+            'caller_emails',
             'max_distance',
             'max_recipients',
             'postal_code',

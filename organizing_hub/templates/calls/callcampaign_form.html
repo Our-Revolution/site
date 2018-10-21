@@ -72,16 +72,17 @@
 
         <h3>Callers</h3>
         <p>
-          Add callers to your calling campaign. These users will be able to
-          login and make calls using the email address listed after creating an
-          account. You may add or remove callers after campaign creation.
+          Add callers to your calling campaign. You may add or remove callers
+          after campaign creation.
         </p>
+
+        {% include "calls/partials/call_campaign_callers_explainer.html" %}
 
         <p>
           Enter one or more email addresses, separated by commas.
         </p>
 
-        {% bootstrap_field form.callers show_label=False%}
+        {% bootstrap_field form.caller_emails show_label=False%}
 
         <h3 class="mt5">Calling Script</h3>
 

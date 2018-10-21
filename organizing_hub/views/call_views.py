@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from bsd.models import BSDProfile
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
@@ -17,7 +19,7 @@ from django.views.generic import (
     UpdateView
     )
 from django.views.generic.list import ListView
-from calls.forms import CallForm, CallCampaignForm
+from calls.forms import CallForm, CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
     call_campaign_statuses_active,
     find_calls_made_by_campaign,
@@ -125,6 +127,46 @@ def can_make_call_for_campaign(user, call_campaign):
 
     """Otherwise return False"""
     return False
+
+
+def get_or_create_callers(caller_emails):
+    """
+    Get or create callers from a list of caller emails
+
+    Parameters
+    ----------
+    emails : list of str
+        List of email addresses
+
+    Returns
+        -------
+        Callers list
+            Returns list of ints corresponding to callprofile IDs
+    """
+
+    caller_ids = []
+
+    if caller_emails is not None and caller_emails != '':
+        caller_emails = [email.strip() for email in caller_emails.split(",")]
+
+        for email in caller_emails:
+            # TODO: support multiple accounts per email
+            (user, created) = User.objects.get_or_create(
+                email=email,
+                defaults={
+                    'username':email
+                }
+            )
+
+            if not hasattr(user,'bsdprofile'):
+                BSDProfile.objects.create(user=user)
+
+            if not hasattr(user,'callprofile'):
+                CallProfile.objects.create(user=user)
+
+            caller_ids.append(user.callprofile.id)
+
+    return caller_ids
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -298,6 +340,17 @@ class CallCampaignCreateView(
         """Set local group and owner before save"""
         form.instance.local_group = self.get_local_group()
         form.instance.owner = self.request.user.callprofile
+
+        """Take comma separated caller emails and get or create corresponding
+        call profiles"""
+        caller_emails = form.cleaned_data['caller_emails']
+
+        """Save call_campaign because we need a primary key in order to save
+        Many-to-many caller relationships"""
+        call_campaign = form.save()
+        caller_ids = get_or_create_callers(caller_emails)
+        form.instance.callers = caller_ids
+
         return super(CallCampaignCreateView, self).form_valid(form)
 
     def get_local_group(self):
@@ -416,6 +469,7 @@ class CallCampaignUpdateView(
     template_name = "calls/callcampaign_form.html"
     form_class = CallCampaignUpdateForm
     model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
@@ -423,10 +477,28 @@ class CallCampaignUpdateView(
     Your calling campaign has been edited succesfully.
     '''
 
+    def form_valid(self, form):
+        caller_emails = form.cleaned_data['caller_emails']
+        caller_ids = get_or_create_callers(caller_emails)
+        form.instance.callers = caller_ids
+        return super(CallCampaignUpdateView, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
         context['update_view'] = True
         return context
+
+    def get_initial(self, *args, **kwargs):
+        call_campaign = self.get_object()
+        caller_ids = []
+
+        for caller in call_campaign.callers.all():
+            caller_ids.append(caller.id)
+
+        initial = {
+            'caller_emails': caller_ids,
+        }
+        return initial
 
     def get_local_group(self):
         campaign = self.get_object()
