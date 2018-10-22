@@ -101,9 +101,8 @@ class OrganizingHubLoginForm(AuthenticationForm):
         widget=forms.TextInput(attrs={'autofocus': True}),
         help_text='''
             This can be any email address with an Our Revolution account. To
-            manage your group, use a registered group leader
-            or group admin email, or the email you use for
-            submitting nominations.
+            manage your group or nominate candidates, use a registered group
+            leader or group admin email.
         '''
     )
     error_messages = {
