@@ -26,8 +26,12 @@
             {% if not static_content and request.user.is_authenticated %}
             <div class="col-md-6">
               <div class="uppercase text-right">
+                {% local_group as group %}
+                {% if group %}
                 {% group_link %}
-                | <a href="{% url 'groups-logout' %}">Logout</a>
+                |
+                {% endif %}
+                <a href="{% url 'groups-logout' %}">Logout</a>
               </div>
             </div>
             {% endif %}

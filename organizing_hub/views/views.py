@@ -226,8 +226,8 @@ class EventCreateView(SuccessMessageMixin, CreateView):
         messages.error(
             self.request,
             '''
-            This is not a Group Leader account, or your session is out of date.
-            Please logout and log back in with a Group Leader account to access
+            This is not a valid account, or your session is out of date.
+            Please logout and log back in with a valid account to access
             this page.
             '''
         )
