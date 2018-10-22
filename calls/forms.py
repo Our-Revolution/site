@@ -4,7 +4,6 @@ from contacts.models import ContactListStatus
 from .models import (
     call_campaign_statuses_skip_list_validation,
     CallCampaign,
-    CallProfile,
     CallQuestion
 )
 import logging
