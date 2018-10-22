@@ -149,9 +149,7 @@
         </a>
       </p>
 
-      <p>
-        {% include "calls/partials/call_campaign_callers_explainer.html" %}
-      </p>
+      {% include "calls/partials/call_campaign_callers_explainer.html" %}
 
       {% if campaign.callers.all|length > 0 %}
       <div class="mb10 well well-sm">

@@ -19,27 +19,6 @@ logger = logging.getLogger(__name__)
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
 
-class CommaSeparatedCallersTextArea(Widget):
-    """
-    Transform many-to-many callers into comma separated values for display.
-    """
-    def render(self, name, value, attrs=None, renderer=None):
-        final_attrs = self.build_attrs(attrs, {'type':'text', 'name':name})
-        caller_emails = []
-
-        if value is not None:
-            """Loop through the caller_ids we have stored on the many-to-many
-            relationship and get the corresponding object"""
-            for caller_id in value:
-                callprofile = CallProfile.objects.get(pk=caller_id)
-                user = callprofile.user
-                caller_emails.append(str(user.email))
-
-            """Build list of comma seprated values for display"""
-            value = ', '.join(caller_emails)
-            final_attrs['value'] = str(value)
-        return mark_safe(u'<input%s />' % flatatt(final_attrs))
-
 
 class CallForm(forms.Form):
     call_uuid = forms.UUIDField(required=False, widget=forms.HiddenInput)
@@ -93,7 +72,7 @@ class CallForm(forms.Form):
 
 class CallCampaignForm(forms.ModelForm):
     caller_emails = forms.CharField(
-        widget=CommaSeparatedCallersTextArea(attrs={'rows': '5'}),
+        widget=forms.Textarea(attrs={'rows': '5'}),
         required=False
     )
     max_distance = forms.IntegerField(

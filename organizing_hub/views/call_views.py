@@ -490,13 +490,17 @@ class CallCampaignUpdateView(
 
     def get_initial(self, *args, **kwargs):
         call_campaign = self.get_object()
-        caller_ids = []
+        caller_emails = []
 
+        """Build list of caller emails to populate form with instead of IDs"""
         for caller in call_campaign.callers.all():
-            caller_ids.append(caller.id)
+            caller_emails.append(str(caller.user.email))
+
+        """Parse list of caller emails to comma separated values string"""
+        caller_emails_string = ", ".join(caller_emails)
 
         initial = {
-            'caller_emails': caller_ids,
+            'caller_emails': caller_emails_string,
         }
         return initial
 
