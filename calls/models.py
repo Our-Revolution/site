@@ -8,7 +8,7 @@ from django.utils import timezone
 from enum import Enum, unique
 from localflavor.us.models import USStateField
 from contacts.models import (
-    find_phone_opt_out,
+    has_phone_opt_out,
     Contact,
     ContactList,
     OptOutType,
@@ -285,15 +285,13 @@ def find_next_contact_to_call_for_campaign(call_campaign):
         ).first() is None:
 
             """Check if phone number is Opted Out"""
-            if contact.phone_number is not None:
-                phone_opt_out = find_phone_opt_out(
+            if contact.phone_number is not None and has_phone_opt_out(
                     contact.phone_number,
                     OptOutType.calling,
-                )
-                if phone_opt_out is not None:
-                    """Remove from Contact List and skip to next Contact"""
-                    call_campaign.contact_list.contacts.remove(contact)
-                    continue
+            ):
+                """Remove from Contact List and skip to next Contact"""
+                call_campaign.contact_list.contacts.remove(contact)
+                continue
 
             """Check if Contact has received recent Call for any Campaign"""
             last_call_to_contact = find_last_call_to_contact(contact)

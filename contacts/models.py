@@ -80,6 +80,29 @@ def find_phone_opt_out(phone_number, opt_out_type):
         return phone_opt_out
 
 
+def has_phone_opt_out(phone_number, opt_out_type):
+    """
+    Has Phone Opt Out for phone number string, or Not
+
+    Mainly just a call to find_phone_opt_out method and converted to boolean
+
+    Parameters
+    ----------
+    phone_number : str
+        Phone number string to search for
+    opt_out_type : OptOutType
+        Opt Out Type to search for
+
+    Returns
+        -------
+        bool
+            Returns True for existing Phone Opt Out, or False
+    """
+    phone_opt_out = find_phone_opt_out(phone_number, opt_out_type)
+    has_opt_out = phone_opt_out is not None
+    return has_opt_out
+
+
 class Contact(models.Model):
     """
     Contact Model
