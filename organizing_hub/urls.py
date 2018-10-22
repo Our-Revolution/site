@@ -3,12 +3,15 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
-from local_groups.forms import OrganizingHubLoginForm, PasswordResetRequestForm
 from local_groups.views import (
     GroupManageView,
     SlackInviteView,
     VerifyEmailRequestView,
     VerifyEmailConfirmView,
+)
+from organizing_hub.forms import (
+    OrganizingHubLoginForm,
+    PasswordResetRequestForm
 )
 from .views import (
     AccountCreateView,

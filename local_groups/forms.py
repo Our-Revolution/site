@@ -1,12 +1,6 @@
 from django import forms
 from django.conf import settings
 from .models import Group
-from django.contrib.auth.forms import (
-    AuthenticationForm,
-    PasswordResetForm as AuthPasswordResetRequestForm,
-    UsernameField,
-)
-from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
@@ -20,8 +14,6 @@ import os
 import requests
 import logging
 
-# Get bsd api
-bsdApi = BSD().api
 
 logger = logging.getLogger(__name__)
 
@@ -94,25 +86,6 @@ class GroupLeaderSyncForm(forms.Form):
     confirm = forms.BooleanField(required=True)
 
 
-# Customize AuthenticationForm as needed
-class OrganizingHubLoginForm(AuthenticationForm):
-    username = UsernameField(
-        label=_("Email Address"),
-        widget=forms.TextInput(attrs={'autofocus': True}),
-        help_text='''
-            This can be any email address with an Our Revolution account. To
-            manage your group or nominate candidates, use a registered group
-            leader or group admin email.
-        '''
-    )
-    error_messages = {
-        'invalid_login': _(
-            "The email address or password you entered is invalid."
-        ),
-        'inactive': _("This account is inactive."),
-    }
-
-
 class GroupManageForm(forms.ModelForm):
     required_css_class = 'required'
     group_id = forms.CharField(
@@ -175,60 +148,6 @@ class GroupManageForm(forms.ModelForm):
             'constituency': forms.Textarea(attrs={'rows': '2'}),
             'issues': forms.CheckboxSelectMultiple
         }
-
-
-class PasswordResetRequestForm(AuthPasswordResetRequestForm):
-    email = forms.EmailField(
-        label=_("Email Address"),
-        max_length=254
-    )
-
-    def get_users(self, email):
-        """Given an email, return matching user(s) who should receive a reset.
-        This allows subclasses to more easily customize the default policies
-        that prevent inactive users and users with unusable passwords from
-        resetting their password.
-        """
-
-        users = User.objects.filter(email__iexact=email)
-
-        """If user isn't in db, check for bsd account"""
-        if not users:
-            try:
-                '''
-                Get constituents from BSD by email
-
-                https://github.com/bluestatedigital/bsd-api-python#raw-api-method
-                '''
-                api_call = '/cons/get_constituents_by_email'
-                api_params = {'emails': email}
-                apiResult = bsdApi.doRequest(api_call, api_params)
-
-                """Validate response"""
-                assert apiResult.http_status is 200
-                tree = ElementTree().parse(StringIO(apiResult.body))
-                cons = tree.find('cons')
-                assert cons is not None
-                cons_id = cons.get('id')
-                assert cons_id is not None
-                assert cons.findtext('has_account') == "1"
-                assert cons.findtext('is_banned') == "0"
-
-                """Create user in db for valid BSD account"""
-                user = User.objects.create_user(
-                    username=email,
-                    email=email,
-                    password=None
-                )
-                BSDProfile.objects.create(cons_id=cons_id, user=user)
-
-                """Return new user"""
-                users = [user]
-
-            except AssertionError:
-                pass
-
-        return users
 
 
 class SlackInviteForm(forms.Form):
