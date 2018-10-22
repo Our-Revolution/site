@@ -13,8 +13,9 @@ from django.contrib.auth.models import User
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from bsd.models import Account, BSDEvent
-
 import logging
+
+
 ORGANIZING_EMAIL = settings.ORGANIZING_EMAIL
 
 new_password_max_length = 100
