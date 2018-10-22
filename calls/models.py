@@ -7,7 +7,12 @@ from django.db import models
 from django.utils import timezone
 from enum import Enum, unique
 from localflavor.us.models import USStateField
-from contacts.models import Contact, ContactList
+from contacts.models import (
+    has_phone_opt_out,
+    Contact,
+    ContactList,
+    OptOutType,
+)
 from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import datetime
 import googlemaps
@@ -72,7 +77,10 @@ call_campaign_statuses_with_data_download = [
 
 def find_active_call_by_campaign_and_caller(call_campaign, caller):
     """
-    Find active Call for Call Campaign and Caller
+    Find active Call for Call Campaign and Caller.
+
+    Look for a Call by this Caller and Campaign that does not have a Response.
+    Do not exclude Opt Outs or Contacts called recently for other Campaigns.
 
     Parameters
     ----------
@@ -197,47 +205,6 @@ def find_campaigns_as_admin(call_profile):
     return CallCampaign.objects.none()
 
 
-def find_contact_to_call_for_campaign(call_campaign):
-    """
-    Find Contact to call for Call Campaign
-
-
-    Find a Contact that hasn't been called yet for this Campaign, or recently
-    for another Campaign.
-
-    Parameters
-    ----------
-    call_campaign : CallCampaign
-        Call Campaign for Contact
-
-    Returns
-        -------
-        Contact
-            Return available Contact or None
-    """
-
-    recent_call_cutoff = get_recent_call_cutoff()
-    for contact in call_campaign.contact_list.contacts.all():
-        if Call.objects.filter(
-            call_campaign=call_campaign,
-            contact=contact,
-        ).first() is None:
-
-            """Check if Contact has received recent Call for any Campaign"""
-            last_call_to_contact = find_last_call_to_contact(contact)
-            if last_call_to_contact is not None and (
-                last_call_to_contact.date_created > recent_call_cutoff
-            ):
-                """Remove from contact list"""
-                call_campaign.contact_list.contacts.remove(contact)
-            else:
-                """Return Contact"""
-                return contact
-
-    """Otherwise return None"""
-    return None
-
-
 def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
@@ -288,9 +255,66 @@ def find_last_call_to_contact(contact):
     return last_call_created
 
 
+def find_next_contact_to_call_for_campaign(call_campaign):
+    """
+    Find next Contact to call for Call Campaign
+
+
+    Find a Contact from Contact List that hasn't been called yet for this
+    Campaign. Exclude Opt Outs or Contacts called recently for any Campaign.
+
+
+    Parameters
+    ----------
+    call_campaign : CallCampaign
+        Call Campaign for Contact
+
+    Returns
+        -------
+        Contact
+            Return available Contact or None
+    """
+
+    recent_call_cutoff = get_recent_call_cutoff()
+    for contact in call_campaign.contact_list.contacts.all():
+
+        """Check if Contact has not been called yet for this Campaign"""
+        if Call.objects.filter(
+            call_campaign=call_campaign,
+            contact=contact,
+        ).first() is None:
+
+            """Check if phone number is Opted Out"""
+            if contact.phone_number is not None and has_phone_opt_out(
+                    contact.phone_number,
+                    OptOutType.calling,
+            ):
+                """Remove from Contact List and skip to next Contact"""
+                call_campaign.contact_list.contacts.remove(contact)
+                continue
+
+            """Check if Contact has received recent Call for any Campaign"""
+            last_call_to_contact = find_last_call_to_contact(contact)
+            if last_call_to_contact is not None and (
+                last_call_to_contact.date_created > recent_call_cutoff
+            ):
+                """Remove from Contact List and skip to next Contact"""
+                call_campaign.contact_list.contacts.remove(contact)
+                continue
+
+            """Return Contact"""
+            return contact
+
+    """Otherwise return None"""
+    return None
+
+
 def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     """
     Find or Create active Call for Call Campaign and Caller
+
+    For new Calls, exclude Opt Outs or Contacts called recently for any
+    Campaign.
 
     Parameters
     ----------
@@ -315,7 +339,7 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
 
     """Find a Contact that hasn't been called and create a new Call"""
     """TODO: handle race condition error. find new contact and retry."""
-    contact = find_contact_to_call_for_campaign(call_campaign)
+    contact = find_next_contact_to_call_for_campaign(call_campaign)
 
     if contact is None:
         return None

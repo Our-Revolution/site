@@ -17,7 +17,13 @@ from calls.models import (
     find_last_call_by_external_id,
     get_recent_call_cutoff,
 )
-from contacts.models import Contact, ContactList, ContactListStatus
+from contacts.models import (
+    has_phone_opt_out,
+    Contact,
+    ContactList,
+    ContactListStatus,
+    OptOutType
+)
 from events.models import (
     EventPromotion,
     EventPromotionStatus,
@@ -246,23 +252,25 @@ def sync_contact_list_with_bsd_constituent(
     """
     Get constituent phone and check if it's required. If phone is required and
     missing then don't add constituent to List. If phone is missing but not
-    required then just skip phone field and continue.
+    required then just skip phone field and continue. Also check Opt Outs.
     """
     cons_phone = constituent.find('cons_phone')
     if require_phone and cons_phone is None:
         return contact_list
     elif cons_phone is not None:
-        """TODO: TECH-1286: Check if subscribed?"""
-        # is_subscribed = cons_phone.findtext('is_subscribed') == '1'
-        # if require_phone and not is_subscribed:
-        #     return contact_list
 
         """Check if phone number exists"""
         phone_number = cons_phone.findtext('phone')
         if require_phone and phone_number is None:
             return contact_list
         elif phone_number is not None:
-            contact_data['phone_number'] = phone_number
+
+            """Check if phone number is Opted Out"""
+            has_opt_out = has_phone_opt_out(phone_number, OptOutType.calling)
+            if require_phone and has_opt_out:
+                return contact_list
+            elif not has_opt_out:
+                contact_data['phone_number'] = phone_number
 
     """Get constituent location"""
     constituent_address = constituent.find('cons_addr')
