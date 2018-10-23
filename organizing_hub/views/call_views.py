@@ -16,8 +16,8 @@ from django.views.generic import (
     DetailView,
     FormView,
     TemplateView,
-    UpdateView
-    )
+    UpdateView,
+)
 from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
@@ -150,7 +150,7 @@ def get_or_create_callers(caller_emails):
         caller_emails = [email.strip() for email in caller_emails.split(",")]
 
         for email in caller_emails:
-            # TODO: support multiple accounts per email
+            # TODO: TECH-1259 support multiple accounts per email
             (user, created) = User.objects.get_or_create(
                 email=email,
                 defaults={
@@ -158,9 +158,11 @@ def get_or_create_callers(caller_emails):
                 }
             )
 
+            """Create BSD Profile so user can use BSD login"""
             if not hasattr(user,'bsdprofile'):
                 BSDProfile.objects.create(user=user)
 
+            """Create call profile which is used to store caller data"""
             if not hasattr(user,'callprofile'):
                 CallProfile.objects.create(user=user)
 
@@ -466,6 +468,7 @@ class CallCampaignUpdateView(
     SuccessMessageMixin,
     UpdateView
 ):
+    context_object_name = 'campaign'
     template_name = "calls/callcampaign_form.html"
     form_class = CallCampaignUpdateForm
     model = CallCampaign

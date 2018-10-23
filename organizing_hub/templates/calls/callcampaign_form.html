@@ -34,7 +34,7 @@
     <div class="col-md-9">
 
       {% if update_view %}
-      {% url 'organizing-hub-call-campaign-update' object.uuid as action_url %}
+      {% url 'organizing-hub-call-campaign-update' campaign.uuid as action_url %}
       {% else %}
       {% url 'organizing-hub-call-campaign-create' as action_url %}
       {% endif %}
@@ -82,7 +82,7 @@
           Enter one or more email addresses, separated by commas.
         </p>
 
-        {% bootstrap_field form.caller_emails placeholder="joe@example.com, bob@example.com" show_label=False%}
+        {% bootstrap_field form.caller_emails placeholder="jane@example.com, bob@example.com" show_label=False%}
 
         <h3 class="mt5">Calling Script</h3>
 
