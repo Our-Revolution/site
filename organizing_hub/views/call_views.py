@@ -150,11 +150,10 @@ def get_or_create_callers(caller_emails):
         caller_emails = [email.strip() for email in caller_emails.split(",")]
 
         for email in caller_emails:
-            # TODO: TECH-1259 support multiple accounts per email
             (user, created) = User.objects.get_or_create(
-                email=email,
+                username=email,
                 defaults={
-                    'username':email
+                    'email':email
                 }
             )
 
@@ -162,11 +161,12 @@ def get_or_create_callers(caller_emails):
             if not hasattr(user,'bsdprofile'):
                 BSDProfile.objects.create(user=user)
 
-            """Create call profile which is used to store caller data"""
-            if not hasattr(user,'callprofile'):
-                CallProfile.objects.create(user=user)
+            """Get or create call profile which is used to store caller data"""
+            (callprofile, created) = CallProfile.objects.get_or_create(
+                user=user
+            )
 
-            caller_ids.append(user.callprofile.id)
+            caller_ids.append(callprofile.id)
 
     return caller_ids
 
