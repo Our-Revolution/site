@@ -34,11 +34,13 @@ Organizing Hub
 
           {% for block in page.body %}
 
+          {# Check feature access. Make exception for Call Tool & Caller. #}
+
           {% if block.value.feature_access_required %}
-          {% has_organizing_hub_feature block.value.feature_access_required as has_access %}
+          {% has_organizing_hub_feature_access block.value.feature_access_required as has_feature_access %}
           {% endif %}
 
-          {% if not block.value.feature_access_required or has_access %}
+          {% if not block.value.feature_access_required or has_feature_access or is_caller and block.value.feature_access_required == call_tool_feature_id|stringformat:"s" %}
           <li class="card clearfix">
             <a href="{{ block.value.url }}">
               <div class="card__content full">

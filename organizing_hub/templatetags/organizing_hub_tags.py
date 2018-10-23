@@ -177,7 +177,7 @@ def has_local_group_permission(context, local_group, permission):
 
 
 @register.simple_tag(takes_context=True)
-def has_organizing_hub_feature(context, feature_id):
+def has_organizing_hub_feature_access(context, feature_id):
     """
     Check if user has access to Organizing Hub Feature
 
@@ -191,15 +191,14 @@ def has_organizing_hub_feature(context, feature_id):
         bool
             Return True if user has access to Organizing Hub Feature
     """
-    logger.debug('feature_id %s' % feature_id)
     local_group = find_local_group_by_user(context['request'].user)
     if local_group is not None and hasattr(
         local_group,
         'organizinghubaccess',
     ):
         access = local_group.organizinghubaccess
-        has_organizing_hub_feature = access.has_feature_access_by_id(feature_id)
-        return has_organizing_hub_feature
+        has_feature_access = access.has_feature_access_by_id(feature_id)
+        return has_feature_access
     else:
         return False
 

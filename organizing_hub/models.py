@@ -14,6 +14,7 @@ from wagtail.wagtailcore.fields import (
 )
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
+from calls.models import is_caller_for_call_campaign
 from local_groups.models import Group as LocalGroup
 import logging
 
@@ -22,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 @unique
 class OrganizingHubFeature(Enum):
-    calling_tool = (1, 'Calling Tool')
+    call_tool = (1, 'Call Tool')
 
 
 class OrganizingHubAccess(models.Model):
@@ -52,7 +53,7 @@ class OrganizingHubAccess(models.Model):
                 Returns True if Feature is enabled for Access
         """
 
-        return has_feature_access_by_id(feature.value[0])
+        return self.has_feature_access_by_id(feature.value[0])
 
     def has_feature_access_by_id(self, feature_id):
         """
@@ -109,6 +110,22 @@ class OrganizingHubDashboardPage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
     ]
+
+    def get_context(self, request):
+        context = super(OrganizingHubDashboardPage, self).get_context(request)
+
+        """Check if User is a Caller for Call Tool and add to context"""
+        user = request.user
+        if hasattr(user, 'callprofile'):
+            is_caller = is_caller_for_call_campaign(user.callprofile)
+        else:
+            is_caller = False
+        context['is_caller'] = is_caller
+
+        """Add Call Tool Feature id to context"""
+        context['call_tool_feature_id'] = OrganizingHubFeature.call_tool.value[0]
+
+        return context
 
     @method_decorator(login_required)
     def serve(self, request, *args, **kwargs):
