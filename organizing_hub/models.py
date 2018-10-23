@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 @unique
 class OrganizingHubFeature(Enum):
-    call_tool = (1, 'Call Tool')
+    calling_tool = (1, 'Call Tool')
 
 
 class OrganizingHubAccess(models.Model):
