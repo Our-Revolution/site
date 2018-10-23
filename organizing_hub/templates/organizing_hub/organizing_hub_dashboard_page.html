@@ -34,6 +34,11 @@ Organizing Hub
 
           {% for block in page.body %}
 
+          {% if block.value.feature_access_required %}
+          {% has_organizing_hub_feature block.value.feature_access_required as has_access %}
+          {% endif %}
+
+          {% if not block.value.feature_access_required or has_access %}
           <li class="card clearfix">
             <a href="{{ block.value.url }}">
               <div class="card__content full">
@@ -43,6 +48,7 @@ Organizing Hub
               </div>
             </a>
           </li>
+          {% endif %}
 
           {% endfor block %}
 

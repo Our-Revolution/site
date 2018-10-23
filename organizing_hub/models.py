@@ -52,8 +52,25 @@ class OrganizingHubAccess(models.Model):
                 Returns True if Feature is enabled for Access
         """
 
+        return has_feature_access_by_id(feature.value[0])
+
+    def has_feature_access_by_id(self, feature_id):
+        """
+        Check if a specific Feature id is enabled for Access
+
+        Parameters
+        ----------
+        feature_id : int
+            Organizing Hub Feature id
+
+        Returns
+            -------
+            bool
+                Returns True if Feature is enabled for Access
+        """
+
         return self.organizinghubfeatureaccess_set.filter(
-            feature=feature.value[0]
+            feature=feature_id
         ).first() is not None
 
 
