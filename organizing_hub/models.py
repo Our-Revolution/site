@@ -78,6 +78,14 @@ class OrganizingHubDashboardPage(Page):
         ('link_block', blocks.StructBlock([
             ('text', blocks.TextBlock()),
             ('url', blocks.URLBlock()),
+            ('feature_access_required', blocks.ChoiceBlock(
+                choices=[x.value for x in OrganizingHubFeature],
+                help_text='''
+                Select Feature if access should be restricted only to local
+                groups that have this Feature enabled.
+                ''',
+                required=False,
+            )),
         ])),
     ])
 
