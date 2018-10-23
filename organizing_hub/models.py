@@ -123,7 +123,7 @@ class OrganizingHubDashboardPage(Page):
         context['is_caller'] = is_caller
 
         """Add Call Tool Feature id to context"""
-        context['call_tool_feature_id'] = OrganizingHubFeature.call_tool.value[0]
+        context['call_tool_feature_id'] = OrganizingHubFeature.calling_tool.value[0]
 
         return context
 
