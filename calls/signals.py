@@ -16,7 +16,10 @@ def call_response_post_save_handler(instance, **kwargs):
 
     call_response = instance
 
-    """Check if Call Response Answer is Opt Out or Wrong Number"""
+    """
+    Check if Call Response indicates Contact wants to Opt Out, or Contact phone
+    is Wrong Number
+    """
     if (
         call_response.question == CallQuestion.opt_out.value[0] and (
             call_response.answer == CallAnswer.yes.value[0]
