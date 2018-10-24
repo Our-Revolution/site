@@ -14,7 +14,6 @@ from wagtail.wagtailcore.fields import (
 )
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
-from calls.models import is_caller_for_call_campaign
 from local_groups.models import Group as LocalGroup
 import logging
 
