@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -150,12 +151,14 @@ def get_or_create_callers(caller_emails):
         caller_emails = [email.strip() for email in caller_emails.split(",")]
 
         for email in caller_emails:
-            (user, created) = User.objects.get_or_create(
-                username=email,
-                defaults={
-                    'email':email
-                }
-            )
+            """Get a user by email address if it exists"""
+            try:
+                user = User.objects.filter(email__iexact=email).first()
+            except User.DoesNotExist:
+                user = None
+
+            if not user:
+                user = User.objects.create(username=email, email=email)
 
             """Create BSD Profile so user can use BSD login"""
             if not hasattr(user,'bsdprofile'):
