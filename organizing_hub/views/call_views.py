@@ -55,8 +55,6 @@ def can_change_call_campaign(user, call_campaign):
     """
     Check if User has change access for Call Campaign
 
-    TODO: TECH-1480: feature flag check
-
     Parameters
     ----------
     user : User
