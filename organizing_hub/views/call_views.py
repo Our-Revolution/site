@@ -23,8 +23,6 @@ from calls.forms import CallForm, CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
     call_campaign_statuses_active,
     find_calls_made_by_campaign,
-    find_campaigns_as_caller,
-    find_campaigns_as_admin,
     find_or_create_active_call_for_campaign_and_caller,
     save_call_response,
     Call,
@@ -38,7 +36,13 @@ from contacts.models import has_phone_opt_out, OptOutType
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
-from organizing_hub.models import OrganizingHubFeature
+from organizing_hub.models import (
+    find_campaigns_as_admin,
+    find_campaigns_as_caller,
+    has_call_feature_access_for_local_group,
+    has_call_permission_for_local_group,
+    OrganizingHubFeature,
+)
 import logging
 import unicodecsv
 
@@ -76,30 +80,21 @@ def can_change_call_campaign(user, call_campaign):
             Returns True if User can change Call Campaign, otherwise False
     """
 
-    """Check local group permissions and find matching campaigns"""
-    # TODO: use role based feature flag?
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_user(user)
-        if local_group is not None and (
-            local_group == call_campaign.local_group
-        ):
-            permission = 'calls.change_callcampaign'
-            return local_group_profile.has_permission_for_local_group(
-                local_group,
-                permission
-            )
-
-    """Otherwise return False"""
-    return False
+    """Check if User has change access for Campaign"""
+    return has_call_permission_for_local_group(
+        user,
+        call_campaign.local_group,
+        'calls.change_callcampaign'
+    )
 
 
 def can_make_call_for_campaign(user, call_campaign):
     """
     Check if User has access to make a Call for Campaign
 
-    Should have access if User has general permissions for Local Group or is
-    listed as a Caller for the Campaign.
+    Should have access if Campaign is In Progress, Campaign Local Group has
+    Feature Access, and User is either a Caller for Campaign or has change
+    permissions for Campaign.
 
     Parameters
     ----------
@@ -111,7 +106,7 @@ def can_make_call_for_campaign(user, call_campaign):
     Returns
         -------
         bool
-            Return True if User can Call for Campaign, otherwise False
+            Return True if User can Call for Campaign
     """
 
     """Check Campaign status"""
@@ -121,7 +116,10 @@ def can_make_call_for_campaign(user, call_campaign):
         if hasattr(user, 'callprofile') and (
             user.callprofile in call_campaign.callers.all()
         ):
-            return True
+            """Check if Local Group for Campaign has Call Tool Access"""
+            return has_call_feature_access_for_local_group(
+                call_campaign.local_group
+            )
         else:
             """Check if User has change level access on Campaign"""
             return can_change_call_campaign(user, call_campaign)
@@ -178,18 +176,37 @@ class CallView(FormView):
     Call View
 
     Handle submit request for Make Call and also Call Responses
+
+    TODO: separate logic for Make Call request vs Save Call request
     """
 
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
     def can_access(self, call_campaign, call):
+        """
+        Check if current User can access View for Campaign and Call
 
-        """Check if User and Call Campaign are not None"""
-        user = self.request.user
-        if user is not None and call_campaign is not None:
+        If Call is None then just check access for Campaign.
 
-            """Check if User can make call for Campaign"""
+        Parameters
+        ----------
+        call_campaign : CallCampaign
+            Call Campaign for checking access
+        call : Call
+            Call for checking access, or None
+
+        Returns
+            -------
+            bool
+                Return True if current User can access View
+        """
+
+        """Check if Call Campaign is not None"""
+        if call_campaign is not None:
+
+            """Check if User can make Call for Campaign"""
+            user = self.request.user
             if can_make_call_for_campaign(user, call_campaign):
 
                 """If Call is not None then check if User is Caller"""
@@ -198,6 +215,7 @@ class CallView(FormView):
                         call.caller == user.callprofile
                     )
                 else:
+                    """If Call is None then Campaign access is sufficient"""
                     return True
 
         """Otherwise return False"""
@@ -306,9 +324,13 @@ class CallView(FormView):
         call_campaign = CallCampaign.objects.filter(uuid=campaign_uuid).first()
         context['call_campaign'] = call_campaign
 
-        """Find or create active Call for caller"""
+        """Get or create Call if Caller has access to Campaign"""
         user = self.request.user
-        if hasattr(user, 'callprofile'):
+        if self.can_access(call_campaign, call=None) and hasattr(
+            user,
+            'callprofile',
+        ):
+            """Find or create active Call for caller"""
             caller = user.callprofile
             call = find_or_create_active_call_for_campaign_and_caller(
                 call_campaign,
@@ -318,9 +340,19 @@ class CallView(FormView):
             call = None
         context['call'] = call
 
+        """Get Call Form for Call"""
         if call is not None:
-            """Get Call Form"""
-            context['form'] = CallForm(initial={'call_uuid': call.uuid})
+            """TODO: include existing Call Responses?"""
+            call_form = CallForm(initial={'call_uuid': call.uuid})
+        else:
+            call_form = None
+        context['form'] = call_form
+
+        """Check if User can manage Call Campaign"""
+        context['can_manage_campaign'] = can_change_call_campaign(
+            user,
+            call_campaign,
+        )
 
         return context
 
@@ -489,6 +521,7 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         """Return CSV"""
         return response
 
+
 class CallCampaignUpdateView(
     LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
@@ -593,30 +626,17 @@ class CallDashboardView(TemplateView):
 
         """Check if User can create or manage Call Campaigns"""
         local_group = find_local_group_by_user(user)
-        if local_group is not None and local_group.status == 'approved' and (
-            hasattr(local_group, 'organizinghubaccess')
-        ):
-            access = local_group.organizinghubaccess
-            if access.has_feature_access(OrganizingHubFeature.calling_tool):
-
-                """Add Local Group to context to help with access logic"""
-                context['local_group'] = local_group
-
-                """Check permissions against Local Group Profile"""
-                if hasattr(user, 'localgroupprofile'):
-                    profile = user.localgroupprofile
-
-                    if profile.has_permissions_for_local_group(
-                        local_group,
-                        ['calls.add_callcampaign']
-                    ):
-                        context['can_add_campaign'] = True
-
-                    if profile.has_permissions_for_local_group(
-                        local_group,
-                        ['calls.change_callcampaign']
-                    ):
-                        context['can_manage_campaign'] = True
+        context['local_group'] = local_group
+        context['can_add_campaign'] = has_call_permission_for_local_group(
+            user,
+            local_group,
+            'calls.add_callcampaign',
+        )
+        context['can_manage_campaign'] = has_call_permission_for_local_group(
+            user,
+            local_group,
+            'calls.change_callcampaign',
+        )
 
         return context
 

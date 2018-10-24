@@ -40,10 +40,8 @@
 
     <div class="col-md-9">
 
-      {% has_local_group_permission call_campaign.local_group "calls.change_callcampaign" as can_manage %}
-
       <p>
-        {% if can_manage %}
+        {% if can_manage_campaign %}
 
         <strong>{{ call_campaign.calls_made_count }}</strong> of
         {{ call_campaign.contacts_total_count }} contacts called.

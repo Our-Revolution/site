@@ -29,11 +29,23 @@ group_rating_choices = (
 
 
 def find_local_group_by_user(user):
+    """
+    Find approved Local Group for User based on Affiliations and Roles
 
+    Parameters
+    ----------
+    user : User
+        User to check for Local Group match
+
+    Returns
+        -------
+        LocalGroup
+            Return LocalGroup if a match is found, or None
+    """
+
+    """Find affiliation for approved group with non-empty roles"""
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
-
-        """Find affiliation for approved group with non-empty roles"""
         # TODO: support multiple group affiliations?
         local_group_affiliation = LocalGroupAffiliation.objects.filter(
             local_group_profile=local_group_profile,
@@ -43,6 +55,7 @@ def find_local_group_by_user(user):
             local_group = local_group_affiliation.local_group
             return local_group
 
+    """Otherwise return None"""
     return None
 
 

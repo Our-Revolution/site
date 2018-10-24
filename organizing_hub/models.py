@@ -14,11 +14,152 @@ from wagtail.wagtailcore.fields import (
 )
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
-from calls.models import is_caller_for_call_campaign
-from local_groups.models import Group as LocalGroup
+from calls.models import call_campaign_statuses_for_caller, CallCampaign
+from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+def find_campaigns_as_admin(call_profile):
+    """
+    Find Call Campaigns that match Local Group edit access for Call Profile
+
+    Return campaigns where profile has edit access via local group
+
+    Parameters
+    ----------
+    call_profile : CallProfile
+        CallProfile for local group affiliation
+
+    Returns
+        -------
+        CallCampaign list
+            Returns matching CallCampaign list
+    """
+
+    """Check Feature Access and Local Group Permissions"""
+    user = call_profile.user
+    local_group = find_local_group_by_user(user)
+    if local_group is not None and has_call_permission_for_local_group(
+        user,
+        local_group,
+        'calls.change_callcampaign'
+    ):
+        return local_group.callcampaign_set.all().order_by(
+            '-date_created'
+        )
+
+    """Otherwise return empty list"""
+    return CallCampaign.objects.none()
+
+
+def find_campaigns_as_caller(caller):
+    """
+    Find public Call Campaigns that match Call Profile for Caller
+
+    Only return Campaigns with statuses that are meant for display to Callers.
+    Also check if Campaign Local Group has Call Tool Feature Access.
+
+    Parameters
+    ----------
+    caller : CallProfile
+        CallProfile for caller
+
+    Returns
+        -------
+        CallCampaign list
+            Returns public matching CallCampaign list
+    """
+
+    """Get Campaigns for Caller"""
+    campaigns_as_caller = caller.campaigns_as_caller.filter(
+        status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
+    ).order_by('-date_created')
+
+    """Check Call Tool Feature Access for Campaigns"""
+    campaigns = [x for x in campaigns_as_caller if has_call_feature_access_for_local_group(
+        x.local_group
+    )]
+
+    return campaigns
+
+
+def has_call_feature_access_for_local_group(local_group):
+    """
+    Check if Local Group has Call Tool Feature Access
+
+    Parameters
+    ----------
+    local_group : LocalGroup
+        Local Group to check for access
+
+    Returns
+        -------
+        bool
+            Return True if Local Group has Call Feature Access
+    """
+
+    """Check Feature Access"""
+    if hasattr(local_group, 'organizinghubaccess'):
+        access = local_group.organizinghubaccess
+        return access.has_feature_access(OrganizingHubFeature.calling_tool)
+
+    """Otherwise False"""
+    return False
+
+
+def has_call_permission_for_local_group(user, local_group, permission):
+    """
+    Check if User has Call Tool Feature and Permission Access for Local Group
+
+    Parameters
+    ----------
+    user : User
+        User to check for access
+    local_group : LocalGroup
+        Local Group to check for access
+    permission : str
+        Permission code to check for access
+
+    Returns
+        -------
+        bool
+            Return True if User has Call Feature and Permission Access
+    """
+
+    """Check Feature Access and Local Group Permissions"""
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        if has_call_feature_access_for_local_group(local_group):
+            return local_group_profile.has_permission_for_local_group(
+                local_group,
+                permission
+            )
+
+    """Otherwise False"""
+    return False
+
+
+def is_caller_for_call_campaign(call_profile):
+    """
+    Check if Call Profile is a Caller for any public Call Campaigns
+
+    Only count campaigns with statuses that are meant for display to callers
+
+    Parameters
+    ----------
+    call_profile : CallProfile
+        CallProfile for caller
+
+    Returns
+        -------
+        bool
+            Return True if any matches exist
+    """
+    caller_campaigns = find_campaigns_as_caller(call_profile)
+    is_caller = len(caller_campaigns) > 0
+    return is_caller
 
 
 @unique

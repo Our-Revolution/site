@@ -145,66 +145,6 @@ def find_calls_made_by_campaign_and_caller(call_campaign, call_profile):
     return calls_made_by_caller
 
 
-def find_campaigns_as_caller(caller):
-    """
-    Find public Call Campaigns that match Call Profile for Caller
-
-    Only return campaigns with statuses that are meant for display to callers
-
-    Parameters
-    ----------
-    caller : CallProfile
-        CallProfile for caller
-
-    Returns
-        -------
-        CallCampaign list
-            Returns matching CallCampaign list
-    """
-    campaigns_as_caller = caller.campaigns_as_caller.filter(
-        status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
-    ).order_by('-date_created')
-    return campaigns_as_caller
-
-
-def find_campaigns_as_admin(call_profile):
-    """
-    Find Call Campaigns that match Local Group edit access for Call Profile
-
-    Return campaigns where profile has edit access via local group
-
-    TODO: TECH-1480: feature flag check
-
-    Parameters
-    ----------
-    call_profile : CallProfile
-        CallProfile for local group affiliation
-
-    Returns
-        -------
-        CallCampaign list
-            Returns matching CallCampaign list
-    """
-
-    """Check local group permissions and find matching campaigns"""
-    user = call_profile.user
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_user(user)
-        if local_group is not None:
-            permission = 'calls.change_callcampaign'
-            if local_group_profile.has_permission_for_local_group(
-                local_group,
-                permission
-            ):
-                return local_group.callcampaign_set.all().order_by(
-                    '-date_created'
-                )
-
-    """Otherwise return empty list"""
-    return CallCampaign.objects.none()
-
-
 def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
@@ -314,7 +254,7 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     Find or Create active Call for Call Campaign and Caller
 
     For new Calls, exclude Opt Outs or Contacts called recently for any
-    Campaign.
+    Campaign. Assume Caller has permission to make Call.
 
     Parameters
     ----------
@@ -365,27 +305,6 @@ def get_recent_call_cutoff():
         days=CALLS_RECENT_CUTOFF_DAYS
     )
     return recent_call_cutoff
-
-
-def is_caller_for_call_campaign(caller):
-    """
-    Check if any public Call Campaigns exist for Caller
-
-    Only count campaigns with statuses that are meant for display to callers
-
-    Parameters
-    ----------
-    caller : CallProfile
-        CallProfile for caller
-
-    Returns
-        -------
-        bool
-            Return True if any matches exist
-    """
-    caller_campaigns = find_campaigns_as_caller(caller)
-    is_caller = caller_campaigns.count() > 0
-    return is_caller
 
 
 def save_call_response(call, question, answer):
