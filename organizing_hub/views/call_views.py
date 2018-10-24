@@ -16,7 +16,6 @@ from calls.models import (
     call_campaign_statuses_active,
     find_calls_made_by_campaign,
     find_campaigns_as_caller,
-    find_campaigns_as_admin,
     find_or_create_active_call_for_campaign_and_caller,
     save_call_response,
     Call,

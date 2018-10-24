@@ -145,35 +145,6 @@ def group_link(context):
 
 
 @register.simple_tag(takes_context=True)
-def has_local_group_permission(context, local_group, permission):
-    """
-    Check if user has local group permission or not
-
-    Parameters
-    ----------
-    permission : str
-        Permission code
-
-    Returns
-        -------
-        bool
-            Return True if user has local group permission, otherwise False
-    """
-
-    """Check local group permissions"""
-    has_permission = False
-    user = context['request'].user
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        has_permission = local_group_profile.has_permission_for_local_group(
-            local_group,
-            permission
-        )
-
-    return has_permission
-
-
-@register.simple_tag(takes_context=True)
 def local_group(context):
     """TODO move to local groups template tags"""
     return find_local_group_by_user(context['request'].user)
