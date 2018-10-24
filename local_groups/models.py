@@ -54,10 +54,9 @@ def find_local_group_by_user(user):
         if local_group_affiliation:
             local_group = local_group_affiliation.local_group
             return local_group
-        else:
-            return None
-    else:
-        return None
+
+    """Otherwise return None"""
+    return None
 
 
 class Group(models.Model):
