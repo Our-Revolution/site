@@ -419,7 +419,10 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
                 call_row.append('')
 
             """Add Opt Out"""
-            call_row.append(has_opt_out)
+            if has_opt_out:
+                call_row.append(has_opt_out)
+            else:
+                call_row.append('')
 
             """Write Call data to CSV"""
             writer.writerow(call_row)
