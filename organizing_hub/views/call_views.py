@@ -70,27 +70,13 @@ def can_change_call_campaign(user, call_campaign):
             Returns True if User can change Call Campaign, otherwise False
     """
 
-    """Check Feature Access and Local Group Permissions"""
-    # TODO: use role based feature flag?
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_profile(local_group_profile)
-        if local_group is not None and (
-            local_group == call_campaign.local_group
-        ) and hasattr(
-            local_group,
-            'organizinghubaccess',
-        ):
-            access = local_group.organizinghubaccess
-            if access.has_feature_access():
-                permission = 'calls.change_callcampaign'
-                return local_group_profile.has_permission_for_local_group(
-                    local_group,
-                    permission
-                )
-
-    """Otherwise return False"""
-    return False
+    """Check if Campaign is in list of Admin Campaigns"""
+    if hasattr(user, 'callprofile'):
+        campaigns_as_admin = find_campaigns_as_admin(user.callprofile)
+        return call_campaign in campaigns_as_admin
+    else:
+        """Otherwise return False"""
+        return False
 
 
 def can_make_call_for_campaign(user, call_campaign):
@@ -135,8 +121,6 @@ def find_campaigns_as_admin(call_profile):
 
     Return campaigns where profile has edit access via local group
 
-    TODO: TECH-1480: feature flag check
-
     Parameters
     ----------
     call_profile : CallProfile
@@ -148,7 +132,7 @@ def find_campaigns_as_admin(call_profile):
             Returns matching CallCampaign list
     """
 
-    """Check local group permissions and find matching campaigns"""
+    """Check Feature Access and Local Group Permissions"""
     user = call_profile.user
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
@@ -158,7 +142,7 @@ def find_campaigns_as_admin(call_profile):
             'organizinghubaccess',
         ):
             access = local_group.organizinghubaccess
-            if access.has_feature_access():
+            if access.has_feature_access(OrganizingHubFeature.calling_tool):
                 permission = 'calls.change_callcampaign'
                 if local_group_profile.has_permission_for_local_group(
                     local_group,
