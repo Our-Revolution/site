@@ -276,7 +276,7 @@ def find_or_create_active_call_for_campaign_and_caller(call_campaign, caller):
     Find or Create active Call for Call Campaign and Caller
 
     For new Calls, exclude Opt Outs or Contacts called recently for any
-    Campaign.
+    Campaign. Assume Caller has permission to make Call.
 
     Parameters
     ----------

@@ -183,18 +183,37 @@ class CallView(FormView):
     Call View
 
     Handle submit request for Make Call and also Call Responses
+
+    TODO: separate logic for Make Call request vs Save Call request
     """
 
     form_class = CallForm
     template_name = 'calls/call_form.html'
 
     def can_access(self, call_campaign, call):
+        """
+        Check if current User can access View for Campaign and Call
 
-        """Check if User and Call Campaign are not None"""
-        user = self.request.user
-        if user is not None and call_campaign is not None:
+        If Call is None then just check access for Campaign.
 
-            """Check if User can make call for Campaign"""
+        Parameters
+        ----------
+        call_campaign : CallCampaign
+            Call Campaign for checking access
+        call : Call
+            Call for checking access, or None
+
+        Returns
+            -------
+            bool
+                Return True if current User can access View
+        """
+
+        """Check if Call Campaign is not None"""
+        if call_campaign is not None:
+
+            """Check if User can make Call for Campaign"""
+            user = self.request.user
             if can_make_call_for_campaign(user, call_campaign):
 
                 """If Call is not None then check if User is Caller"""
@@ -203,6 +222,7 @@ class CallView(FormView):
                         call.caller == user.callprofile
                     )
                 else:
+                    """If Call is None then Campaign access is sufficient"""
                     return True
 
         """Otherwise return False"""
@@ -311,9 +331,13 @@ class CallView(FormView):
         call_campaign = CallCampaign.objects.filter(uuid=campaign_uuid).first()
         context['call_campaign'] = call_campaign
 
-        """Find or create active Call for caller"""
+        """Get Call if Caller has access to this Campaign"""
         user = self.request.user
-        if hasattr(user, 'callprofile'):
+        if self.can_access(call_campaign, call=None) and hasattr(
+            user,
+            'callprofile',
+        ):
+            """Find or create active Call for caller"""
             caller = user.callprofile
             call = find_or_create_active_call_for_campaign_and_caller(
                 call_campaign,
@@ -323,9 +347,13 @@ class CallView(FormView):
             call = None
         context['call'] = call
 
+        """Get Call Form for Call"""
         if call is not None:
-            """Get Call Form"""
-            context['form'] = CallForm(initial={'call_uuid': call.uuid})
+            """TODO: include existing Call Responses?"""
+            call_form = CallForm(initial={'call_uuid': call.uuid})
+        else:
+            call_form = None
+        context['form'] = call_form
 
         """Check if User can manage Call Campaign"""
         context['can_manage_campaign'] = can_change_call_campaign(
