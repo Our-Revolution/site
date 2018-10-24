@@ -25,10 +25,7 @@ from calls.models import (
     CallProfile,
     CallQuestion,
 )
-from local_groups.models import (
-    find_local_group_by_profile,
-    find_local_group_by_user,
-)
+from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.models import OrganizingHubFeature
@@ -133,26 +130,52 @@ def find_campaigns_as_admin(call_profile):
 
     """Check Feature Access and Local Group Permissions"""
     user = call_profile.user
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_profile(local_group_profile)
-        if local_group is not None and hasattr(
-            local_group,
-            'organizinghubaccess',
-        ):
-            access = local_group.organizinghubaccess
-            if access.has_feature_access(OrganizingHubFeature.calling_tool):
-                permission = 'calls.change_callcampaign'
-                if local_group_profile.has_permission_for_local_group(
-                    local_group,
-                    permission
-                ):
-                    return local_group.callcampaign_set.all().order_by(
-                        '-date_created'
-                    )
+    local_group = find_local_group_by_user(user)
+    if local_group is not None and has_call_permission_for_local_group(
+        user,
+        local_group,
+        'calls.change_callcampaign'
+    ):
+        return local_group.callcampaign_set.all().order_by(
+            '-date_created'
+        )
 
     """Otherwise return empty list"""
     return CallCampaign.objects.none()
+
+
+def has_call_permission_for_local_group(user, local_group, permission):
+    """
+    Check if User has Call Tool Feature and Permission Access for Local Group
+
+    Parameters
+    ----------
+    user : User
+        User to check for access
+    local_group : LocalGroup
+        Local Group to check for access
+    permission : str
+        Permission code to check for access
+
+    Returns
+        -------
+        bool
+            Return True if User has Call Feature and Permission Access
+    """
+
+    """Check Feature Access and Local Group Permissions"""
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        if hasattr(local_group, 'organizinghubaccess'):
+            access = local_group.organizinghubaccess
+            if access.has_feature_access(OrganizingHubFeature.calling_tool):
+                return local_group_profile.has_permission_for_local_group(
+                    local_group,
+                    permission
+                )
+
+    """Otherwise False"""
+    return False
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -304,6 +327,13 @@ class CallView(FormView):
         if call is not None:
             """Get Call Form"""
             context['form'] = CallForm(initial={'call_uuid': call.uuid})
+
+        """Check if User can manage Call Campaign"""
+        context['can_manage_campaign'] = has_call_permission_for_local_group(
+            user,
+            call_campaign.local_group,
+            'calls.change_callcampaign',
+        )
 
         return context
 
@@ -486,30 +516,17 @@ class CallDashboardView(TemplateView):
 
         """Check if User can create or manage Call Campaigns"""
         local_group = find_local_group_by_user(user)
-        if local_group is not None and local_group.status == 'approved' and (
-            hasattr(local_group, 'organizinghubaccess')
-        ):
-            access = local_group.organizinghubaccess
-            if access.has_feature_access(OrganizingHubFeature.calling_tool):
-
-                """Add Local Group to context to help with access logic"""
-                context['local_group'] = local_group
-
-                """Check permissions against Local Group Profile"""
-                if hasattr(user, 'localgroupprofile'):
-                    profile = user.localgroupprofile
-
-                    if profile.has_permissions_for_local_group(
-                        local_group,
-                        ['calls.add_callcampaign']
-                    ):
-                        context['can_add_campaign'] = True
-
-                    if profile.has_permissions_for_local_group(
-                        local_group,
-                        ['calls.change_callcampaign']
-                    ):
-                        context['can_manage_campaign'] = True
+        context['local_group'] = local_group
+        context['can_add_campaign'] = has_call_permission_for_local_group(
+            user,
+            local_group,
+            'calls.add_callcampaign',
+        )
+        context['can_manage_campaign'] = has_call_permission_for_local_group(
+            user,
+            local_group,
+            'calls.change_callcampaign',
+        )
 
         return context
 
