@@ -26,7 +26,10 @@ from calls.models import (
     CallProfile,
     CallQuestion,
 )
-from local_groups.models import find_local_group_by_user
+from local_groups.models import (
+    find_local_group_by_profile,
+    find_local_group_by_user,
+)
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from organizing_hub.models import OrganizingHubFeature
@@ -67,19 +70,24 @@ def can_change_call_campaign(user, call_campaign):
             Returns True if User can change Call Campaign, otherwise False
     """
 
-    """Check local group permissions and find matching campaigns"""
+    """Check Feature Access and Local Group Permissions"""
     # TODO: use role based feature flag?
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_user(user)
+        local_group = find_local_group_by_profile(local_group_profile)
         if local_group is not None and (
             local_group == call_campaign.local_group
+        ) and hasattr(
+            local_group,
+            'organizinghubaccess',
         ):
-            permission = 'calls.change_callcampaign'
-            return local_group_profile.has_permission_for_local_group(
-                local_group,
-                permission
-            )
+            access = local_group.organizinghubaccess
+            if access.has_feature_access():
+                permission = 'calls.change_callcampaign'
+                return local_group_profile.has_permission_for_local_group(
+                    local_group,
+                    permission
+                )
 
     """Otherwise return False"""
     return False
@@ -119,6 +127,49 @@ def can_make_call_for_campaign(user, call_campaign):
 
     """Otherwise return False"""
     return False
+
+
+def find_campaigns_as_admin(call_profile):
+    """
+    Find Call Campaigns that match Local Group edit access for Call Profile
+
+    Return campaigns where profile has edit access via local group
+
+    TODO: TECH-1480: feature flag check
+
+    Parameters
+    ----------
+    call_profile : CallProfile
+        CallProfile for local group affiliation
+
+    Returns
+        -------
+        CallCampaign list
+            Returns matching CallCampaign list
+    """
+
+    """Check local group permissions and find matching campaigns"""
+    user = call_profile.user
+    if hasattr(user, 'localgroupprofile'):
+        local_group_profile = user.localgroupprofile
+        local_group = find_local_group_by_profile(local_group_profile)
+        if local_group is not None and hasattr(
+            local_group,
+            'organizinghubaccess',
+        ):
+            access = local_group.organizinghubaccess
+            if access.has_feature_access():
+                permission = 'calls.change_callcampaign'
+                if local_group_profile.has_permission_for_local_group(
+                    local_group,
+                    permission
+                ):
+                    return local_group.callcampaign_set.all().order_by(
+                        '-date_created'
+                    )
+
+    """Otherwise return empty list"""
+    return CallCampaign.objects.none()
 
 
 @method_decorator(verified_email_required, name='dispatch')

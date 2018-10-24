@@ -167,44 +167,6 @@ def find_campaigns_as_caller(call_profile):
     return campaigns_as_caller
 
 
-def find_campaigns_as_admin(call_profile):
-    """
-    Find Call Campaigns that match Local Group edit access for Call Profile
-
-    Return campaigns where profile has edit access via local group
-
-    TODO: TECH-1480: feature flag check
-
-    Parameters
-    ----------
-    call_profile : CallProfile
-        CallProfile for local group affiliation
-
-    Returns
-        -------
-        CallCampaign list
-            Returns matching CallCampaign list
-    """
-
-    """Check local group permissions and find matching campaigns"""
-    user = call_profile.user
-    if hasattr(user, 'localgroupprofile'):
-        local_group_profile = user.localgroupprofile
-        local_group = find_local_group_by_user(user)
-        if local_group is not None:
-            permission = 'calls.change_callcampaign'
-            if local_group_profile.has_permission_for_local_group(
-                local_group,
-                permission
-            ):
-                return local_group.callcampaign_set.all().order_by(
-                    '-date_created'
-                )
-
-    """Otherwise return empty list"""
-    return CallCampaign.objects.none()
-
-
 def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
