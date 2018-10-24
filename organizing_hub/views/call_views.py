@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from bsd.models import BSDProfile
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
@@ -9,9 +11,15 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, FormView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    FormView,
+    TemplateView,
+    UpdateView,
+)
 from django.views.generic.list import ListView
-from calls.forms import CallForm, CallCampaignForm
+from calls.forms import CallForm, CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
     call_campaign_statuses_active,
     find_calls_made_by_campaign,
@@ -26,6 +34,7 @@ from calls.models import (
     CallProfile,
     CallQuestion,
 )
+from contacts.models import has_phone_opt_out, OptOutType
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
@@ -119,6 +128,48 @@ def can_make_call_for_campaign(user, call_campaign):
 
     """Otherwise return False"""
     return False
+
+
+def get_or_create_callers(caller_emails):
+    """
+    Get or create callers from a list of caller emails
+
+    Parameters
+    ----------
+    emails : list of str
+        List of email addresses
+
+    Returns
+        -------
+        Callers list
+            Returns list of ints corresponding to callprofile IDs
+    """
+
+    caller_ids = []
+
+    if caller_emails is not None and caller_emails != '':
+        caller_emails = [email.strip() for email in caller_emails.split(",")]
+
+        for email in caller_emails:
+            """Get a user by email address if it exists. If we get multiple
+            results, grab the first."""
+            user = User.objects.filter(email__iexact=email).first()
+
+            if not user:
+                user = User.objects.create(username=email, email=email)
+
+            """Create BSD Profile so user can use BSD login"""
+            if not hasattr(user,'bsdprofile'):
+                BSDProfile.objects.create(user=user)
+
+            """Get or create call profile which is used to store caller data"""
+            (callprofile, created) = CallProfile.objects.get_or_create(
+                user=user
+            )
+
+            caller_ids.append(callprofile.id)
+
+    return caller_ids
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -292,6 +343,17 @@ class CallCampaignCreateView(
         """Set local group and owner before save"""
         form.instance.local_group = self.get_local_group()
         form.instance.owner = self.request.user.callprofile
+
+        """Take comma separated caller emails and get or create corresponding
+        call profiles"""
+        caller_emails = form.cleaned_data['caller_emails']
+
+        """Save call_campaign because we need a primary key in order to save
+        Many-to-many caller relationships"""
+        call_campaign = form.save()
+        caller_ids = get_or_create_callers(caller_emails)
+        form.instance.callers = caller_ids
+
         return super(CallCampaignCreateView, self).form_valid(form)
 
     def get_local_group(self):
@@ -372,7 +434,14 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         writer = unicodecsv.writer(response, encoding='utf-8')
 
         """Add header row to CSV"""
-        header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
+        header_row = [
+            'First Name',
+            'Last Name',
+            'Response',
+            'Phone',
+            'Email',
+            'Opt Out',
+        ]
         writer.writerow(header_row)
 
         """Loop through Calls made and add relevant data to CSV"""
@@ -384,23 +453,95 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
             call_row.append(contact.first_name)
             call_row.append(contact.last_name)
 
-            """Find response to Take Action question and add Answer to CSV"""
+            """Find Response to Take Action question and add Answer to CSV"""
             take_action_response = call.callresponse_set.filter(
                 question=CallQuestion.take_action.value[0]
             ).first()
-            if take_action_response:
+            if take_action_response is not None:
                 call_row.append(take_action_response.get_answer_display())
+            else:
+                call_row.append('')
 
-                """If Answer is Yes, then add Phone and Email"""
-                if take_action_response.answer == CallAnswer.yes.value[0]:
-                    call_row.append(contact.phone_number)
-                    call_row.append(contact.email_address)
+            """Check if phone number is on our Opt Out list"""
+            has_opt_out = contact.phone_number is not None and (
+                has_phone_opt_out(contact.phone_number, OptOutType.calling)
+            )
+
+            """Add phone/email if not opted out and wants to take action"""
+            if not has_opt_out and take_action_response is not None and (
+                take_action_response.answer == CallAnswer.yes.value[0]
+            ):
+                call_row.append(contact.phone_number)
+                call_row.append(contact.email_address)
+            else:
+                call_row.append('')
+                call_row.append('')
+
+            """Add Opt Out"""
+            if has_opt_out:
+                call_row.append(has_opt_out)
+            else:
+                call_row.append('')
 
             """Write Call data to CSV"""
             writer.writerow(call_row)
 
         """Return CSV"""
         return response
+
+class CallCampaignUpdateView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
+    context_object_name = 'campaign'
+    template_name = "calls/callcampaign_form.html"
+    form_class = CallCampaignUpdateForm
+    model = CallCampaign
+    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    permission_required = 'calls.change_callcampaign'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'uuid'
+    success_message = '''
+    Your calling campaign has been edited succesfully.
+    '''
+
+    def form_valid(self, form):
+        caller_emails = form.cleaned_data['caller_emails']
+        caller_ids = get_or_create_callers(caller_emails)
+        form.instance.callers = caller_ids
+        return super(CallCampaignUpdateView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
+        context['update_view'] = True
+        return context
+
+    def get_initial(self, *args, **kwargs):
+        call_campaign = self.get_object()
+        caller_emails = []
+
+        """Build list of caller emails to populate form with instead of IDs"""
+        for caller in call_campaign.callers.all():
+            caller_emails.append(str(caller.user.email))
+
+        """Parse list of caller emails to comma separated values string"""
+        caller_emails_string = ", ".join(caller_emails)
+
+        initial = {
+            'caller_emails': caller_emails_string,
+        }
+        return initial
+
+    def get_local_group(self):
+        campaign = self.get_object()
+        return campaign.local_group
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'organizing-hub-call-campaign-detail',
+            kwargs={'uuid': self.object.uuid}
+        )
 
 
 @method_decorator(verified_email_required, name='dispatch')
