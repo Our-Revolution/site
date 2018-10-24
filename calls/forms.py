@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings
-from django.forms import widgets
 from contacts.models import ContactListStatus
 from .models import (
     call_campaign_statuses_skip_list_validation,
@@ -66,6 +65,10 @@ class CallForm(forms.Form):
 
 
 class CallCampaignForm(forms.ModelForm):
+    caller_emails = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': '5'}),
+        required=False
+    )
     max_distance = forms.IntegerField(
         help_text="Max: %s miles" % CALLS_MAX_DISTANCE_MILES,
         label="Radius",
@@ -81,6 +84,7 @@ class CallCampaignForm(forms.ModelForm):
 
     class Meta:
         fields = [
+            'caller_emails',
             'max_distance',
             'max_recipients',
             'postal_code',
@@ -93,6 +97,11 @@ class CallCampaignForm(forms.ModelForm):
             'script': forms.Textarea(attrs={'rows': '14'}),
         }
 
+class CallCampaignUpdateForm(CallCampaignForm):
+    max_distance = forms.IntegerField(disabled=True)
+    max_recipients = forms.IntegerField(disabled=True)
+    postal_code = forms.CharField(disabled=True)
+    state_or_territory = forms.CharField(disabled=True)
 
 class CallCampaignAdminForm(CallCampaignForm):
 
