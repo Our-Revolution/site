@@ -66,13 +66,12 @@ def can_change_call_campaign(user, call_campaign):
             Returns True if User can change Call Campaign, otherwise False
     """
 
-    """Check if Campaign is in list of Admin Campaigns"""
-    if hasattr(user, 'callprofile'):
-        campaigns_as_admin = find_campaigns_as_admin(user.callprofile)
-        return call_campaign in campaigns_as_admin
-    else:
-        """Otherwise return False"""
-        return False
+    """Check if User has change access for Campaign"""
+    return has_call_permission_for_local_group(
+        user,
+        call_campaign.local_group,
+        'calls.change_callcampaign'
+    )
 
 
 def can_make_call_for_campaign(user, call_campaign):
