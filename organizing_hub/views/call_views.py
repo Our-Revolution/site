@@ -150,11 +150,9 @@ def get_or_create_callers(caller_emails):
         caller_emails = [email.strip() for email in caller_emails.split(",")]
 
         for email in caller_emails:
-            """Get a user by email address if it exists"""
-            try:
-                user = User.objects.filter(email__iexact=email).first()
-            except User.DoesNotExist:
-                user = None
+            """Get a user by email address if it exists. If we get multiple
+            results, grab the first."""
+            user = User.objects.filter(email__iexact=email).first()
 
             if not user:
                 user = User.objects.create(username=email, email=email)
