@@ -22,7 +22,6 @@ from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm, CallCampaignUpdateForm
 from calls.models import (
     call_campaign_statuses_active,
-    call_campaign_statuses_for_caller,
     find_calls_made_by_campaign,
     find_or_create_active_call_for_campaign_and_caller,
     save_call_response,

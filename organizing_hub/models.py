@@ -14,7 +14,8 @@ from wagtail.wagtailcore.fields import (
 )
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
-from local_groups.models import Group as LocalGroup
+from calls.models import call_campaign_statuses_for_caller, CallCampaign
+from local_groups.models import find_local_group_by_user, Group as LocalGroup
 import logging
 
 logger = logging.getLogger(__name__)
@@ -157,7 +158,7 @@ def is_caller_for_call_campaign(call_profile):
             Return True if any matches exist
     """
     caller_campaigns = find_campaigns_as_caller(call_profile)
-    is_caller = caller_campaigns.count() > 0
+    is_caller = len(caller_campaigns) > 0
     return is_caller
 
 
