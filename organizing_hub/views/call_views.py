@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
