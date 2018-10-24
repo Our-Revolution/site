@@ -579,7 +579,6 @@ class CallAnswer(Enum):
     wrong_number = (5, 'Wrong number')
     busy = (6, 'Busy')
     not_home = (7, 'Not Home')
-    do_not_call = (8, 'Do not call')
 
 
 @unique
@@ -596,7 +595,6 @@ class CallQuestion(Enum):
             CallAnswer.wrong_number,
             CallAnswer.busy,
             CallAnswer.not_home,
-            CallAnswer.do_not_call,
         )
     )
     take_action = (3, 'Did the contact want to take action?', (
