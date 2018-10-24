@@ -331,7 +331,7 @@ class CallView(FormView):
         call_campaign = CallCampaign.objects.filter(uuid=campaign_uuid).first()
         context['call_campaign'] = call_campaign
 
-        """Get Call if Caller has access to this Campaign"""
+        """Get or create Call if Caller has access to Campaign"""
         user = self.request.user
         if self.can_access(call_campaign, call=None) and hasattr(
             user,
