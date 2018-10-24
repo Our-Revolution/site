@@ -78,8 +78,9 @@ def can_make_call_for_campaign(user, call_campaign):
     """
     Check if User has access to make a Call for Campaign
 
-    Should have access if User has general permissions for Local Group or is
-    listed as a Caller for the Campaign.
+    Should have access if Campaign is In Progress, Campaign Local Group has
+    Feature Access, and User is either a Caller for Campaign or has change
+    permissions for Campaign.
 
     Parameters
     ----------
@@ -91,7 +92,7 @@ def can_make_call_for_campaign(user, call_campaign):
     Returns
         -------
         bool
-            Return True if User can Call for Campaign, otherwise False
+            Return True if User can Call for Campaign
     """
 
     """Check Campaign status"""
@@ -101,7 +102,10 @@ def can_make_call_for_campaign(user, call_campaign):
         if hasattr(user, 'callprofile') and (
             user.callprofile in call_campaign.callers.all()
         ):
-            return True
+            """Check if Local Group for Campaign has Call Tool Access"""
+            return has_call_feature_access_for_local_group(
+                call_campaign.local_group
+            )
         else:
             """Check if User has change level access on Campaign"""
             return can_change_call_campaign(user, call_campaign)
@@ -143,6 +147,30 @@ def find_campaigns_as_admin(call_profile):
     return CallCampaign.objects.none()
 
 
+def has_call_feature_access_for_local_group(local_group):
+    """
+    Check if Local Group has Call Tool Feature Access
+
+    Parameters
+    ----------
+    local_group : LocalGroup
+        Local Group to check for access
+
+    Returns
+        -------
+        bool
+            Return True if Local Group has Call Feature Access
+    """
+
+    """Check Feature Access"""
+    if hasattr(local_group, 'organizinghubaccess'):
+        access = local_group.organizinghubaccess
+        return access.has_feature_access(OrganizingHubFeature.calling_tool)
+
+    """Otherwise False"""
+    return False
+
+
 def has_call_permission_for_local_group(user, local_group, permission):
     """
     Check if User has Call Tool Feature and Permission Access for Local Group
@@ -165,13 +193,11 @@ def has_call_permission_for_local_group(user, local_group, permission):
     """Check Feature Access and Local Group Permissions"""
     if hasattr(user, 'localgroupprofile'):
         local_group_profile = user.localgroupprofile
-        if hasattr(local_group, 'organizinghubaccess'):
-            access = local_group.organizinghubaccess
-            if access.has_feature_access(OrganizingHubFeature.calling_tool):
-                return local_group_profile.has_permission_for_local_group(
-                    local_group,
-                    permission
-                )
+        if has_call_feature_access_for_local_group(local_group):
+            return local_group_profile.has_permission_for_local_group(
+                local_group,
+                permission
+            )
 
     """Otherwise False"""
     return False
