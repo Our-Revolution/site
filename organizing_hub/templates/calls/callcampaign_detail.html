@@ -129,7 +129,10 @@
         </div>
       </div>
 
-      <a class="pull-right" href="todo">
+      <a
+        class="pull-right fs-xs"
+        href="{% url 'organizing-hub-call-campaign-update' campaign.uuid %}"
+      >
         Edit
       </a>
       <div class="mb5"><strong>Script</strong></div>
@@ -141,10 +144,20 @@
       <p>
         <strong>{{ campaign.callers.all|length }}</strong>
         callers on this campaign.
-        <a href="todo">
-          View
+        <a href="{% url 'organizing-hub-call-campaign-update' campaign.uuid %}">
+          Edit
         </a>
       </p>
+
+      {% include "calls/partials/call_campaign_callers_explainer.html" %}
+
+      {% if campaign.callers.all|length > 0 %}
+      <div class="mb10 well well-sm">
+        {% for caller in campaign.callers.all  %}
+        {{ caller.user.email }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
 
       <h3>Contacts</h3>
       <p>

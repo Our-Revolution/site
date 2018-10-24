@@ -6,6 +6,9 @@ from django.urls import reverse_lazy
 from calls.models import CallCampaignStatus
 from local_groups.models import find_local_group_by_user
 from organizing_hub.models import OrganizingHubLoginAlert
+import logging
+
+logger = logging.getLogger(__name__)
 
 register = template.Library()
 
@@ -142,6 +145,33 @@ def group_link(context):
         'group': group,
         'request': context['request'],
     }
+
+
+@register.simple_tag(takes_context=True)
+def has_organizing_hub_feature_access(context, feature_id):
+    """
+    Check if user has access to Organizing Hub Feature
+
+    Parameters
+    ----------
+    feature_id : int
+        Organizing Hub Feature id
+
+    Returns
+        -------
+        bool
+            Return True if user has access to Organizing Hub Feature
+    """
+    local_group = find_local_group_by_user(context['request'].user)
+    if local_group is not None and hasattr(
+        local_group,
+        'organizinghubaccess',
+    ):
+        access = local_group.organizinghubaccess
+        has_feature_access = access.has_feature_access_by_id(feature_id)
+        return has_feature_access
+    else:
+        return False
 
 
 @register.simple_tag(takes_context=True)
