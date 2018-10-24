@@ -145,7 +145,7 @@ def find_calls_made_by_campaign_and_caller(call_campaign, call_profile):
     return calls_made_by_caller
 
 
-def find_campaigns_as_caller(call_profile):
+def find_campaigns_as_caller(caller):
     """
     Find public Call Campaigns that match Call Profile for Caller
 
@@ -153,15 +153,15 @@ def find_campaigns_as_caller(call_profile):
 
     Parameters
     ----------
-    call_profile : CallProfile
+    caller : CallProfile
         CallProfile for caller
 
     Returns
         -------
         CallCampaign list
-            Returns public matching CallCampaign list
+            Returns matching CallCampaign list
     """
-    campaigns_as_caller = call_profile.campaigns_as_caller.filter(
+    campaigns_as_caller = caller.campaigns_as_caller.filter(
         status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
     ).order_by('-date_created')
     return campaigns_as_caller
@@ -365,6 +365,27 @@ def get_recent_call_cutoff():
         days=CALLS_RECENT_CUTOFF_DAYS
     )
     return recent_call_cutoff
+
+
+def is_caller_for_call_campaign(caller):
+    """
+    Check if any public Call Campaigns exist for Caller
+
+    Only count campaigns with statuses that are meant for display to callers
+
+    Parameters
+    ----------
+    caller : CallProfile
+        CallProfile for caller
+
+    Returns
+        -------
+        bool
+            Return True if any matches exist
+    """
+    caller_campaigns = find_campaigns_as_caller(caller)
+    is_caller = caller_campaigns.count() > 0
+    return is_caller
 
 
 def save_call_response(call, question, answer):
@@ -578,7 +599,7 @@ class CallAnswer(Enum):
     no_answer = (4, 'No answer')
     wrong_number = (5, 'Wrong number')
     busy = (6, 'Busy')
-    not_home = (7, 'Not Home')
+    not_home = (7, 'Not home')
 
 
 @unique
