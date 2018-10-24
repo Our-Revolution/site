@@ -14,8 +14,8 @@ from django.views.generic.list import ListView
 from calls.forms import CallForm, CallCampaignForm
 from calls.models import (
     call_campaign_statuses_active,
+    call_campaign_statuses_for_caller,
     find_calls_made_by_campaign,
-    find_campaigns_as_caller,
     find_or_create_active_call_for_campaign_and_caller,
     save_call_response,
     Call,
@@ -145,6 +145,37 @@ def find_campaigns_as_admin(call_profile):
 
     """Otherwise return empty list"""
     return CallCampaign.objects.none()
+
+
+def find_campaigns_as_caller(caller):
+    """
+    Find public Call Campaigns that match Call Profile for Caller
+
+    Only return Campaigns with statuses that are meant for display to Callers.
+    Also check if Campaign Local Group has Call Tool Feature Access.
+
+    Parameters
+    ----------
+    caller : CallProfile
+        CallProfile for caller
+
+    Returns
+        -------
+        CallCampaign list
+            Returns public matching CallCampaign list
+    """
+
+    """Get Campaigns for Caller"""
+    campaigns_as_caller = caller.campaigns_as_caller.filter(
+        status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
+    ).order_by('-date_created')
+
+    """Check Call Tool Feature Access for Campaigns"""
+    campaigns = [x for x in campaigns_as_caller if has_call_feature_access_for_local_group(
+        x.local_group
+    )]
+
+    return campaigns
 
 
 def has_call_feature_access_for_local_group(local_group):

@@ -145,28 +145,6 @@ def find_calls_made_by_campaign_and_caller(call_campaign, call_profile):
     return calls_made_by_caller
 
 
-def find_campaigns_as_caller(call_profile):
-    """
-    Find public Call Campaigns that match Call Profile for Caller
-
-    Only return campaigns with statuses that are meant for display to callers
-
-    Parameters
-    ----------
-    call_profile : CallProfile
-        CallProfile for caller
-
-    Returns
-        -------
-        CallCampaign list
-            Returns public matching CallCampaign list
-    """
-    campaigns_as_caller = call_profile.campaigns_as_caller.filter(
-        status__in=[x.value[0] for x in call_campaign_statuses_for_caller],
-    ).order_by('-date_created')
-    return campaigns_as_caller
-
-
 def find_last_call_by_external_id(contact_external_id):
     """
     Find most recent Call created for Contact based on external id
