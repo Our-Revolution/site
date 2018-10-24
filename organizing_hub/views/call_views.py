@@ -26,6 +26,7 @@ from calls.models import (
     CallProfile,
     CallQuestion,
 )
+from contacts.models import has_phone_opt_out, OptOutType
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
@@ -53,6 +54,8 @@ Would you be able to attend?
 def can_change_call_campaign(user, call_campaign):
     """
     Check if User has change access for Call Campaign
+
+    TODO: TECH-1480: feature flag check
 
     Parameters
     ----------
@@ -372,7 +375,14 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
         writer = unicodecsv.writer(response, encoding='utf-8')
 
         """Add header row to CSV"""
-        header_row = ['First Name', 'Last Name', 'Response', 'Phone', 'Email']
+        header_row = [
+            'First Name',
+            'Last Name',
+            'Response',
+            'Phone',
+            'Email',
+            'Opt Out',
+        ]
         writer.writerow(header_row)
 
         """Loop through Calls made and add relevant data to CSV"""
@@ -384,17 +394,32 @@ class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
             call_row.append(contact.first_name)
             call_row.append(contact.last_name)
 
-            """Find response to Take Action question and add Answer to CSV"""
+            """Find Response to Take Action question and add Answer to CSV"""
             take_action_response = call.callresponse_set.filter(
                 question=CallQuestion.take_action.value[0]
             ).first()
-            if take_action_response:
+            if take_action_response is not None:
                 call_row.append(take_action_response.get_answer_display())
+            else:
+                call_row.append('')
 
-                """If Answer is Yes, then add Phone and Email"""
-                if take_action_response.answer == CallAnswer.yes.value[0]:
-                    call_row.append(contact.phone_number)
-                    call_row.append(contact.email_address)
+            """Check if phone number is on our Opt Out list"""
+            has_opt_out = contact.phone_number is not None and (
+                has_phone_opt_out(contact.phone_number, OptOutType.calling)
+            )
+
+            """Add phone/email if not opted out and wants to take action"""
+            if not has_opt_out and take_action_response is not None and (
+                take_action_response.answer == CallAnswer.yes.value[0]
+            ):
+                call_row.append(contact.phone_number)
+                call_row.append(contact.email_address)
+            else:
+                call_row.append('')
+                call_row.append('')
+
+            """Add Opt Out"""
+            call_row.append(has_opt_out)
 
             """Write Call data to CSV"""
             writer.writerow(call_row)

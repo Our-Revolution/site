@@ -44,6 +44,8 @@ class CallCampaignAdmin(admin.ModelAdmin):
     list_display_links = list_display
     list_filter = ['status', 'state_or_territory']
     readonly_fields = [
+        'id',
+        'uuid',
         'owner',
         'local_group',
         'contact_list',
