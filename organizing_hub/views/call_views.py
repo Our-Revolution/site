@@ -328,10 +328,9 @@ class CallView(FormView):
             context['form'] = CallForm(initial={'call_uuid': call.uuid})
 
         """Check if User can manage Call Campaign"""
-        context['can_manage_campaign'] = has_call_permission_for_local_group(
+        context['can_manage_campaign'] = can_change_call_campaign(
             user,
-            call_campaign.local_group,
-            'calls.change_callcampaign',
+            call_campaign,
         )
 
         return context
