@@ -22,6 +22,7 @@ from bsd.models import (
     assert_valid_account,
     BSDEvent,
     BSDProfile,
+    create_user_with_bsd_profile,
     duration_type_hours,
     find_event_by_id_obfuscated,
 )
@@ -560,13 +561,7 @@ class GroupAdminsView(
         if is_admin:
             """Create User if it doesn't exist and add Role"""
             if not user:
-                user = User.objects.create_user(
-                    username=email,
-                    email=email,
-                    password=None
-                )
-                """Create BSD Profile so user can use BSD login"""
-                BSDProfile.objects.create(user=user)
+                user = create_user_with_bsd_profile(email)
             add_local_group_role_for_user(
                 user,
                 local_group,

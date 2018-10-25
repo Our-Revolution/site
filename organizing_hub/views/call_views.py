@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from bsd.models import BSDProfile
+from bsd.models import create_user_with_bsd_profile, BSDProfile
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -157,8 +157,7 @@ def get_or_create_callers(caller_emails):
                 user = User.objects.filter(email__iexact=email).first()
 
                 if not user:
-                    user = User.objects.create(username=email, email=email)
-                    BSDProfile.objects.create(user=user)
+                    user = create_user_with_bsd_profile(email)
 
                 """Get or create call profile which is used to store caller data"""
                 (callprofile, created) = CallProfile.objects.get_or_create(
