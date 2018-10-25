@@ -70,7 +70,7 @@
 
         </div>
 
-        <h3>Callers</h3>
+        <h3 class="mt5">Callers</h3>
         <p>
           Add callers to your calling campaign. You may add or remove callers
           after campaign creation.
@@ -109,6 +109,21 @@
         </button>
 
       </form>
+
+      <hr />
+
+      <p>
+        {% if update_view %}
+        <a href="{% url 'organizing-hub-call-campaign-detail' campaign.uuid %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Call Campaign
+        </a>
+        {% else %}
+        <a href="{% url 'organizing-hub-call-dashboard' %}">
+          <span class="glyphicon glyphicon-chevron-left"></span>Calling
+          Dashboard
+        </a>
+        {% endif %}
+      </p>
 
   </div>
 </div>
