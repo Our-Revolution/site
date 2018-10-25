@@ -46,6 +46,40 @@ def assert_valid_account(api_result):
     assert cons.findtext('is_banned') == "0"
 
 
+def create_user_with_bsd_profile(email, cons_id=None):
+    """
+    Create User with BSD Profile and set django password to None so User must
+    authenticate via BSD password.
+
+    Parameters
+    ----------
+    email : str
+        Email address for User username and email
+    cons_id : str
+        BSD constituent id if available
+
+    Returns
+        -------
+        User
+            Return new User
+    """
+
+    """Create new User with unusable db password"""
+    user = User.objects.create_user(
+        username=email,
+        email=email,
+        password=None,
+    )
+
+    """Create BSD Profile so User must login with BSD password"""
+    if cons_id is not None:
+        BSDProfile.objects.create(cons_id=cons_id, user=user)
+    else:
+        BSDProfile.objects.create(user=user)
+
+    return user
+
+
 def find_constituents_by_state_cd(
     state_cd,
     cons_group=None,

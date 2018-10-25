@@ -12,7 +12,9 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.models import User
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
-from bsd.models import Account, BSDEvent
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
+from bsd.models import create_user_with_bsd_profile, Account, BSDEvent
 import logging
 
 
@@ -213,12 +215,7 @@ class PasswordResetRequestForm(AuthPasswordResetRequestForm):
                 assert cons.findtext('is_banned') == "0"
 
                 """Create user in db for valid BSD account"""
-                user = User.objects.create_user(
-                    username=email,
-                    email=email,
-                    password=None
-                )
-                BSDProfile.objects.create(cons_id=cons_id, user=user)
+                user = create_user_with_bsd_profile(email, cons_id)
 
                 """Return new user"""
                 users = [user]
@@ -227,6 +224,7 @@ class PasswordResetRequestForm(AuthPasswordResetRequestForm):
                 pass
 
         return users
+
 
 class AccountForm(forms.ModelForm, PasswordResetForm):
     """Max lengths based on bsd api"""

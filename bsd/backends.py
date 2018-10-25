@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
 from .api import BSD
-from .models import BSDProfile
+from .models import create_user_with_bsd_profile, BSDProfile
 import logging
 
 logger = logging.getLogger(__name__)
@@ -61,12 +61,7 @@ class BSDAuthenticationBackend:
             '''
             # Create user and bsd profile but dont set db password
             if (user is None):
-                user = User.objects.create_user(
-                    username=username,
-                    email=username,
-                    password=None
-                )
-                BSDProfile.objects.create(cons_id=cons_id, user=user)
+                user = create_user_with_bsd_profile(username, cons_id)
             else:
                 # Sync cons_id in bsd profile
                 bsdprofile = user.bsdprofile
