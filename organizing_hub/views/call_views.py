@@ -159,9 +159,6 @@ def get_or_create_callers(caller_emails):
 
                 if not user:
                     user = User.objects.create(username=email, email=email)
-
-                """Create BSD Profile so user can use BSD login"""
-                if not hasattr(user,'bsdprofile'):
                     BSDProfile.objects.create(user=user)
 
                 """Get or create call profile which is used to store caller data"""
