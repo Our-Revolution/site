@@ -12,6 +12,8 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.models import User
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
+from StringIO import StringIO
+from xml.etree.ElementTree import ElementTree
 from bsd.models import create_user_with_bsd_profile, Account, BSDEvent
 import logging
 
