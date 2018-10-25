@@ -149,11 +149,10 @@ def get_or_create_callers(caller_emails):
     if caller_emails is not None and caller_emails != '':
         """Replace spaces and linebreaks with commas"""
         caller_emails_stripped = caller_emails.replace(" ", ",").replace("\n", ",").replace("\r", ",")
-
-        caller_emails = [email.strip() for email in caller_emails_stripped.split(",")]
+        caller_emails = caller_emails_stripped.split(",")
 
         for email in caller_emails:
-            if email is not '' and email is not None:
+            if email is not '':
                 """Get a user by email address if it exists. If we get multiple
                 results, grab the first."""
                 user = User.objects.filter(email__iexact=email).first()
