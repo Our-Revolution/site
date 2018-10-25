@@ -158,7 +158,11 @@ def get_or_create_callers(caller_emails):
                 user = User.objects.filter(email__iexact=email).first()
 
                 if not user:
-                    user = User.objects.create(username=email, email=email)
+                    user = User.objects.create(
+                        username=email,
+                        email=email,
+                        password=None
+                    )
                     BSDProfile.objects.create(user=user)
 
                 """Get or create call profile which is used to store caller data"""
