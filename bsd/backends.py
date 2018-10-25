@@ -61,7 +61,7 @@ class BSDAuthenticationBackend:
             '''
             # Create user and bsd profile but dont set db password
             if (user is None):
-                user = create_user_with_bsd_profile(email, cons_id)
+                user = create_user_with_bsd_profile(username, cons_id)
             else:
                 # Sync cons_id in bsd profile
                 bsdprofile = user.bsdprofile
