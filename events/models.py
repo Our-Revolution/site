@@ -89,6 +89,7 @@ class EventPromotion(models.Model):
         default=EVENTS_DEFAULT_FROM_NAME,
         max_length=128
     )
+    sent_count = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(
         choices=[x.value for x in EventPromotionStatus],
         default=EventPromotionStatus.new.value[0]
@@ -103,6 +104,23 @@ class EventPromotion(models.Model):
             x.value[0] for x in event_promotion_statuses_for_list_clear
         ]
     requires_list_clear = property(_requires_list_clear)
+
+    def _success_rate(self):
+        """
+        Percent of sent count divided by Contact List size (0 - 100), rounded
+        to two decimal points.
+        """
+        if self.contact_list is not None and self.sent_count is not None:
+            rate = round(
+                float(self.sent_count) / float(
+                    self.contact_list.contacts.count()
+                ) * 100,
+                2,
+            )
+        else:
+            rate = None
+        return rate
+    success_rate = property(_success_rate)
 
     def __unicode__(self):
         return str(self.id) + " | Event: " + self.event_external_id + " | User: " + self.user_external_id + (
