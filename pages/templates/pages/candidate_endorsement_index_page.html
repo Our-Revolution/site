@@ -145,11 +145,18 @@
     });
 
     candidatesList.on("updated", function(list) {
+
+      // Toggle no results content
       if (list.matchingItems.length > 0) {
         $('.no-result').hide();
       } else {
         $('.no-result').show();
       }
+
+      // Update lazy load images
+      // https://github.com/verlok/lazyload#dynamic-content
+      lazyLoad.update();
+
     });
 
     $(".sort-buttons").on("click", function(e) {
