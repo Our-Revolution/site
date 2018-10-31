@@ -110,7 +110,9 @@ class EventPromotion(models.Model):
         Percent of sent count divided by Contact List size, rounded to two
         decimal points. N = N%.
         """
-        if self.contact_list is not None and self.sent_count is not None:
+        if self.contact_list is not None and (
+            self.contact_list.contacts.count() > 0
+        ) and self.sent_count is not None:
             rate = round(
                 float(self.sent_count) / float(
                     self.contact_list.contacts.count()
