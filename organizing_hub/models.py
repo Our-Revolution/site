@@ -103,7 +103,7 @@ def has_call_feature_access_for_local_group(local_group):
     """Check Feature Access"""
     if hasattr(local_group, 'organizinghubaccess'):
         access = local_group.organizinghubaccess
-        return access.has_feature_access(OrganizingHubFeature.calling_tool)
+        return access.has_feature_access(OrganizingHubFeature.call_tool)
 
     """Otherwise False"""
     return False
@@ -164,7 +164,7 @@ def is_caller_for_call_campaign(call_profile):
 
 @unique
 class OrganizingHubFeature(Enum):
-    calling_tool = (1, 'Call Tool')
+    call_tool = (1, 'Call Tool')
 
 
 class OrganizingHubAccess(models.Model):
@@ -264,7 +264,7 @@ class OrganizingHubDashboardPage(Page):
         context['is_caller'] = is_caller
 
         """Add Call Tool Feature id to context"""
-        context['call_tool_feature_id'] = OrganizingHubFeature.calling_tool.value[0]
+        context['call_tool_feature_id'] = OrganizingHubFeature.call_tool.value[0]
 
         return context
 

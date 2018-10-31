@@ -363,10 +363,10 @@ class CallCampaignCreateView(
 ):
     form_class = CallCampaignForm
     model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    organizing_hub_feature = OrganizingHubFeature.call_tool
     permission_required = 'calls.add_callcampaign'
     success_message = '''
-    Your calling campaign request has been submitted and will be reviewed by
+    Your call campaign request has been submitted and will be reviewed by
     our team.
     '''
 
@@ -410,7 +410,7 @@ class CallCampaignCreateView(
 class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
     context_object_name = 'campaign'
     model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    organizing_hub_feature = OrganizingHubFeature.call_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
@@ -425,7 +425,7 @@ class CallCampaignDetailView(LocalGroupPermissionRequiredMixin, DetailView):
 
 class CallCampaignDownloadView(LocalGroupPermissionRequiredMixin, DetailView):
     model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    organizing_hub_feature = OrganizingHubFeature.call_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
@@ -530,12 +530,12 @@ class CallCampaignUpdateView(
     template_name = "calls/callcampaign_form.html"
     form_class = CallCampaignUpdateForm
     model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    organizing_hub_feature = OrganizingHubFeature.call_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'
     success_message = '''
-    Your calling campaign has been edited succesfully.
+    Your call campaign has been edited succesfully.
     '''
 
     def form_valid(self, form):
@@ -644,7 +644,7 @@ class CallCampaignStatusView(LocalGroupPermissionRequiredMixin, DetailView):
     context_object_name = 'call_campaign'
     template_name = "calls/callcampaign_status.html"
     model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.calling_tool
+    organizing_hub_feature = OrganizingHubFeature.call_tool
     permission_required = 'calls.change_callcampaign'
     slug_field = 'uuid'
     slug_url_kwarg = 'uuid'

@@ -40,6 +40,8 @@
 
     <div class="col-md-9">
 
+      {% include "calls/partials/call_campaign_manage_docs.html" %}
+
       {# Show action buttons for certain statuses #}
       {% if campaign.is_approved or campaign.is_in_progress or campaign.is_paused or campaign.has_data_download %}
       <div class="btn-toolbar mb10" role="toolbar" aria-label="Actions">
@@ -169,7 +171,7 @@
 
       <p>
         <a href="{% url 'organizing-hub-call-dashboard' %}">
-          <span class="glyphicon glyphicon-chevron-left"></span>Calling
+          <span class="glyphicon glyphicon-chevron-left"></span>Call Tool
           Dashboard
         </a>
       </p>
