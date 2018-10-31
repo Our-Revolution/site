@@ -5,7 +5,6 @@ from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 from local_groups.views import (
     GroupManageView,
-    SlackInviteView,
     VerifyEmailRequestView,
     VerifyEmailConfirmView,
 )
@@ -34,10 +33,6 @@ from .views import (
 CALLS_ENABLED = settings.CALLS_ENABLED
 
 urlpatterns = [
-    url(r'^join-us-on-slack', SlackInviteView.as_view())
-]
-
-urlpatterns += [
     url(r'^organizing-hub/', include([
         url(r'^event/', include([
             url(

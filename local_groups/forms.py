@@ -6,8 +6,6 @@ from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from StringIO import StringIO
 from xml.etree.ElementTree import ElementTree
-from bsd.api import BSD
-from bsd.models import BSDProfile
 from endorsements.models import Issue
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 import os
@@ -148,27 +146,3 @@ class GroupManageForm(forms.ModelForm):
             'constituency': forms.Textarea(attrs={'rows': '2'}),
             'issues': forms.CheckboxSelectMultiple
         }
-
-
-class SlackInviteForm(forms.Form):
-    email = forms.EmailField(label="Your Email Address", help_text="We'll send your Slack invite here.")
-    full_name = forms.CharField(required=False, label="Your Full Name", help_text="Optional")
-    state = forms.ChoiceField(label="Invite me to a specific Slack channel", help_text="You can join others once you log in.",initial="C36GU58J0")
-
-    def __init__(self, *args, **kwargs):
-
-        super(SlackInviteForm, self).__init__(*args, **kwargs)
-
-        channel_names = {
-            'gis-nerdery': 'GIS Nerdery',
-            'nc-research': 'NC Research',
-            'techprojects': 'Tech Projects',
-        }
-
-        # fetch Slack channels
-        req = requests.get("https://slack.com/api/channels.list?token=%s" % os.environ['LOCAL_OR_ORGANIZING_API_TOKEN'])
-        channel_choices = [(c['id'], channel_names.get(c['name'], c['name'].replace('_', ' ').title())) for c in req.json()['channels']]
-
-        channel_choices.insert(0, (None, 'None'))
-
-        self.fields['state'].choices = channel_choices
