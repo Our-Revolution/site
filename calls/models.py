@@ -386,7 +386,7 @@ class CallCampaign(models.Model):
     """
     Call Campaign Model
 
-    This represents a calling campaign with potentially many calls and callers
+    This represents a call campaign with potentially many calls and callers
     """
 
     callers = models.ManyToManyField(

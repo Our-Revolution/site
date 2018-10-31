@@ -74,7 +74,7 @@
 
         <h3 class="mt5">Callers</h3>
         <p>
-          Add callers to your calling campaign. You may add or remove callers
+          Add callers to your call campaign. You may add or remove callers
           after campaign creation.
         </p>
 
@@ -86,7 +86,7 @@
 
         {% bootstrap_field form.caller_emails placeholder="jane@example.com, bob@example.com" show_label=False%}
 
-        <h3 class="mt5">Calling Script</h3>
+        <h3 class="mt5">Call Script</h3>
 
         <p>
           This script is what your callers will read to contacts. Make
@@ -107,7 +107,7 @@
 
         <button type="submit"
         class="btn btn-success btn-block uppercase ls2">
-          {% if update_view %}Save{% else %}Create{% endif %} Calling Campaign
+          {% if update_view %}Save{% else %}Create{% endif %} Call Campaign
         </button>
 
       </form>
@@ -121,7 +121,7 @@
         </a>
         {% else %}
         <a href="{% url 'organizing-hub-call-dashboard' %}">
-          <span class="glyphicon glyphicon-chevron-left"></span>Calling
+          <span class="glyphicon glyphicon-chevron-left"></span>Call Tool
           Dashboard
         </a>
         {% endif %}

@@ -2,10 +2,10 @@
 
 {% load bootstrap3 organizing_hub_tags %}
 
-{% block page_title %}Our Revolution - Calling Dashboard{% endblock %}
+{% block page_title %}Our Revolution - Call Tool Dashboard{% endblock %}
 
 {% block content_heading %}
-Calling Dashboard
+Call Tool Dashboard
 {% endblock %}
 
 {% block content %}
@@ -57,7 +57,7 @@ Calling Dashboard
 
       <section>
 
-        <h4 class="mt0">Active Calling Campaigns</h4>
+        <h4 class="mt0">Active Call Campaigns</h4>
 
         {% if campaigns_as_admin_active or campaigns_as_caller_active  %}
 
@@ -85,7 +85,7 @@ Calling Dashboard
         {% else %}
 
         <p>
-          You do not currently have any active calling campaigns.
+          You do not currently have any active call campaigns.
         </p>
 
         {% endif %}
@@ -94,7 +94,7 @@ Calling Dashboard
         {% if can_add_campaign %}
         <a class="btn btn-block btn-success uppercase ls2"
         href="{% url 'organizing-hub-call-campaign-create' %}">
-          Create Calling Campaign
+          Create Call Campaign
         </a>
         {% endif %}
 
@@ -106,7 +106,7 @@ Calling Dashboard
 
       <section>
 
-        <h4 class="mt0">Inactive Calling Campaigns</h4>
+        <h4 class="mt0">Inactive Call Campaigns</h4>
 
         <div class="panel panel-default">
 
