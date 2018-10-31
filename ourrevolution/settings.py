@@ -112,6 +112,8 @@ ORGANIZING_HUB_PROMOTE_ENABLED = bool(int(os.environ.get(
 )))
 
 # Organizing Hub Urls
+ORGANIZING_HUB_CALL_CALLERS_URL = '/docs/call-tool-callers/'
+ORGANIZING_HUB_CALL_MANAGE_URL = '/docs/call-tool-manage/'
 ORGANIZING_HUB_CALL_SCRIPT_URL = '/docs/calling-script/'
 ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'

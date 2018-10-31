@@ -33,6 +33,8 @@
 
     <div class="col-md-9">
 
+      {% include "calls/partials/call_campaign_manage_docs.html" %}
+
       {% if update_view %}
       {% url 'organizing-hub-call-campaign-update' campaign.uuid as action_url %}
       {% else %}
