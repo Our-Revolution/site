@@ -170,34 +170,6 @@
     var sortingBy = "state";
     var sortingAsc = true;
 
-    $('.results-selector a').on('click', function() {
-      var show = $(this).attr('data-show');
-
-      $(".sort-buttons .btn").each(function(e) {
-        $(this).removeClass("active");
-        $(this).removeClass("asc");
-        $(this).removeClass("desc");
-      });
-
-      $('.no-result').hide();
-
-      $('.results-selector a').removeClass('active');
-
-      $(this).addClass('active');
-
-      list = new List(show + '-list', options);
-
-      $('#' + show).show();
-
-      list.on("updated", function(list) {
-        if (list.matchingItems.length > 0) {
-          $('.no-result').hide();
-        } else {
-          $('.no-result').show();
-        }
-      });
-    });
-
     var options = {
       valueNames: [
         'name',
@@ -263,11 +235,18 @@
     });
 
     list.on("updated", function(list) {
+
+      // Toggle no results content
       if (list.matchingItems.length > 0) {
         $('.no-result').hide();
       } else {
         $('.no-result').show();
       }
+
+      // Update lazy load images
+      // https://github.com/verlok/lazyload#dynamic-content
+      lazyLoad.update();
+
     });
 
   });
