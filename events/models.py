@@ -107,8 +107,8 @@ class EventPromotion(models.Model):
 
     def _success_rate(self):
         """
-        Percent of sent count divided by Contact List size (0 - 100), rounded
-        to two decimal points.
+        Percent of sent count divided by Contact List size, rounded to two
+        decimal points. N = N%.
         """
         if self.contact_list is not None and self.sent_count is not None:
             rate = round(
