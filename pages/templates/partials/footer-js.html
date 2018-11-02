@@ -1,26 +1,8 @@
-{% load static %}
+{% load static pages_tags %}
+
+{% splash_modal %}
 
 <script>
-  // TODO: secure cookie
-  // Cookies.set('testlebowski', '1', { secure: true });
-  cookie_name = 'show_splash';
-  cookie_value_show = '1';
-  cookie_value_hide = '0';
-
-  // First set cookie to show splash and confirm that js cookies are enabled
-  if (typeof Cookies.get(cookie_name) === 'undefined') {
-    Cookies.set(cookie_name, cookie_value_show);
-  }
-
-  // Check if cookie is set to show splash
-  if (Cookies.get(cookie_name) === cookie_value_show) {
-
-    // Set cookie to not show splash next time, and then trigger modal
-    Cookies.set(cookie_name, cookie_value_hide);
-    alert('show splash');
-  }
-
-
 
   // Lazy load images
   var lazyLoad = new LazyLoad({

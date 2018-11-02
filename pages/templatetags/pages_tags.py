@@ -126,6 +126,18 @@ def results_2017_url():
     return settings.RESULTS_2017_URL
 
 
+# Splash modal
+@register.inclusion_tag('pages/tags/splash_modal.html', takes_context=True)
+def splash_modal(context):
+    return {
+        'splash_modal': 'lebowski'
+        # 'splash_modal': None
+        # 'splash_modal': SplashModal.objects.filter(
+        #     show=True
+        # ).first(),
+    }
+
+
 @register.simple_tag
 def start_group_url():
     return settings.START_GROUP_URL

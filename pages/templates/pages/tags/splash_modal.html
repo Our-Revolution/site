@@ -1,0 +1,53 @@
+{% if splash_modal %}
+
+<div class="modal fade" id="splash-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script>
+
+  $(document).ready(function () {
+
+    // TODO: secure cookie
+    // TODO: expiration
+    // TODO: js file
+    // TODO: partial
+    // Cookies.set('testlebowski', '1', { secure: true });
+    cookie_name = 'ourrevolution_show_splash';
+    cookie_value_show = '1';
+    cookie_value_hide = '0';
+
+    // First set cookie to show splash and confirm that js cookies are working
+    if (typeof Cookies.get(cookie_name) === 'undefined') {
+      Cookies.set(cookie_name, cookie_value_show);
+    }
+
+    // Check if cookie was successfully set to show splash
+    if (Cookies.get(cookie_name) === cookie_value_show) {
+
+      // Set cookie to not show splash next time, and trigger modal
+      Cookies.set(cookie_name, cookie_value_hide);
+      $('#splash-modal').modal();
+
+    }
+
+  });
+
+</script>
+
+{% endif %}
