@@ -34,13 +34,11 @@
 
   $(document).ready(function () {
 
-    // TODO: secure cookie
-    // TODO: expiration
-    // Cookies.set('testlebowski', '1', { secure: true });
-
     // Get cookie name and expiration
     var cookie_expire_days = {% splash_cookie_expire_days %};
     var cookie_name = '{% splash_cookie_name %}';
+    {% splash_cookie_secure as splash_cookie_secure %}
+    var cookie_secure = {% if splash_cookie_secure %}true{% else %}false{% endif %};
 
     // Get cookie values for hide and show modal
     var cookie_value_hide = '0';
@@ -52,8 +50,8 @@
     // First set cookie to show splash and confirm that js cookies are working
     if (typeof Cookies.get(cookie_name) === 'undefined') {
       Cookies.set(cookie_name, cookie_value_show, {
-        // secure: true,
-        expires: cookie_expire_days
+        expires: cookie_expire_days,
+        secure: cookie_secure
       });
     }
 
@@ -62,8 +60,8 @@
 
       // Set cookie to not show splash next time, and trigger modal
       Cookies.set(cookie_name, cookie_value_hide, {
-        // secure: true,
-        expires: cookie_expire_days
+        expires: cookie_expire_days,
+        secure: cookie_secure
       });
       $splashModal.modal();
 

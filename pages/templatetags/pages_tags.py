@@ -8,6 +8,7 @@ BASE_URL = settings.BASE_URL
 OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
 SPLASH_COOKIE_EXPIRE_DAYS = settings.SPLASH_COOKIE_EXPIRE_DAYS
 SPLASH_COOKIE_NAME = settings.SPLASH_COOKIE_NAME
+SPLASH_COOKIE_SECURE = settings.SPLASH_COOKIE_SECURE
 SPLASH_MODAL_ENABLED = settings.SPLASH_MODAL_ENABLED
 
 
@@ -148,6 +149,11 @@ def splash_cookie_expire_days():
 @register.simple_tag
 def splash_cookie_name():
     return SPLASH_COOKIE_NAME
+
+
+@register.simple_tag
+def splash_cookie_secure():
+    return SPLASH_COOKIE_SECURE
 
 
 @register.simple_tag
