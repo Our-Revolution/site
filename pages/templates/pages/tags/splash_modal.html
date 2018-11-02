@@ -1,3 +1,5 @@
+{% load pages_tags %}
+
 {% if splash_modal %}
 
 <div class="modal fade" id="splash-modal" tabindex="-1" role="dialog">
@@ -8,7 +10,16 @@
         <h4 class="modal-title">Modal title</h4>
       </div>
       <div class="modal-body">
-        <p>One fine body&hellip;</p>
+        <p>
+          duderino if into the let me
+          uh his duder or mr lebowski
+          something to dude so im the
+          um i youre not the whole
+          lebowski youre el duderino i am
+          lebowski im or el duder or
+          dudeness or know that his dudeness
+          duderino if duder or dude so
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -25,24 +36,36 @@
 
     // TODO: secure cookie
     // TODO: expiration
-    // TODO: js file
-    // TODO: partial
     // Cookies.set('testlebowski', '1', { secure: true });
-    cookie_name = 'ourrevolution_show_splash';
-    cookie_value_show = '1';
-    cookie_value_hide = '0';
+
+    // Get cookie name and expiration
+    var cookie_expire_days = {% splash_cookie_expire_days %};
+    var cookie_name = '{% splash_cookie_name %}';
+
+    // Get cookie values for hide and show modal
+    var cookie_value_hide = '0';
+    var cookie_value_show = '1';
+
+    // Get splash modal
+    var $splashModal = $('#splash-modal');
 
     // First set cookie to show splash and confirm that js cookies are working
     if (typeof Cookies.get(cookie_name) === 'undefined') {
-      Cookies.set(cookie_name, cookie_value_show);
+      Cookies.set(cookie_name, cookie_value_show, {
+        // secure: true,
+        expires: cookie_expire_days
+      });
     }
 
     // Check if cookie was successfully set to show splash
     if (Cookies.get(cookie_name) === cookie_value_show) {
 
       // Set cookie to not show splash next time, and trigger modal
-      Cookies.set(cookie_name, cookie_value_hide);
-      $('#splash-modal').modal();
+      Cookies.set(cookie_name, cookie_value_hide, {
+        // secure: true,
+        expires: cookie_expire_days
+      });
+      $splashModal.modal();
 
     }
 

@@ -119,6 +119,12 @@ ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 
+SPLASH_COOKIE_EXPIRE_DAYS = int(os.environ.get('SPLASH_COOKIE_EXPIRE_DAYS', 7))
+SPLASH_COOKIE_NAME = os.environ.get(
+    'SPLASH_COOKIE_NAME',
+    'ourrevolution_show_splash',
+)
+
 SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
 
 # Quick-start development settings - unsuitable for production

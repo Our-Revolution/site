@@ -6,6 +6,8 @@ register = template.Library()
 
 BASE_URL = settings.BASE_URL
 OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
+SPLASH_COOKIE_EXPIRE_DAYS = settings.SPLASH_COOKIE_EXPIRE_DAYS
+SPLASH_COOKIE_NAME = settings.SPLASH_COOKIE_NAME
 
 
 @register.simple_tag
@@ -136,6 +138,16 @@ def splash_modal(context):
         #     show=True
         # ).first(),
     }
+
+
+@register.simple_tag
+def splash_cookie_expire_days():
+    return SPLASH_COOKIE_EXPIRE_DAYS
+
+
+@register.simple_tag
+def splash_cookie_name():
+    return SPLASH_COOKIE_NAME
 
 
 @register.simple_tag
