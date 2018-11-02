@@ -381,6 +381,27 @@ class NotificationBanner(models.Model):
     def __str__(self):
         return self.content
 
+
+@register_snippet
+@python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
+class SplashModal(models.Model):
+    title_max_length = 128
+
+    show = models.BooleanField(
+        default=False,
+        help_text='Show splash modal on all pages.'
+    )
+    title = models.CharField(max_length=title_max_length)
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('show'),
+    ]
+
+    def __str__(self):
+        return self.title
+
+
 class TemplatePage(Page):
     template = models.CharField(max_length=128)
     social_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')

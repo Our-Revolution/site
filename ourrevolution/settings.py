@@ -124,6 +124,7 @@ SPLASH_COOKIE_NAME = os.environ.get(
     'SPLASH_COOKIE_NAME',
     'ourrevolution_show_splash',
 )
+SPLASH_MODAL_ENABLED = bool(int(os.environ.get('SPLASH_MODAL_ENABLED', 0)))
 
 SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
 
