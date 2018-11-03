@@ -1,11 +1,15 @@
 from django import template
 from django.conf import settings
-from pages.models import *
+from pages.models import AlertLevels, NotificationBanner, SplashModal
 
 register = template.Library()
 
 BASE_URL = settings.BASE_URL
 OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
+SPLASH_COOKIE_EXPIRE_DAYS = settings.SPLASH_COOKIE_EXPIRE_DAYS
+SPLASH_COOKIE_NAME = settings.SPLASH_COOKIE_NAME
+SPLASH_COOKIE_SECURE = settings.SPLASH_COOKIE_SECURE
+SPLASH_MODAL_ENABLED = settings.SPLASH_MODAL_ENABLED
 
 
 @register.simple_tag
@@ -124,6 +128,32 @@ def results_2016_url():
 @register.simple_tag
 def results_2017_url():
     return settings.RESULTS_2017_URL
+
+
+# Splash modal
+@register.inclusion_tag('pages/tags/splash_modal.html', takes_context=True)
+def splash_modal(context):
+    """Get splash modal if feature is enabled"""
+    if SPLASH_MODAL_ENABLED:
+        splash_modal = SplashModal.objects.filter(show=True).first()
+    else:
+        splash_modal = None
+    return {'splash_modal': splash_modal}
+
+
+@register.simple_tag
+def splash_cookie_expire_days():
+    return SPLASH_COOKIE_EXPIRE_DAYS
+
+
+@register.simple_tag
+def splash_cookie_name():
+    return SPLASH_COOKIE_NAME
+
+
+@register.simple_tag
+def splash_cookie_secure():
+    return SPLASH_COOKIE_SECURE
 
 
 @register.simple_tag
