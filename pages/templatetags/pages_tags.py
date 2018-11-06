@@ -9,6 +9,7 @@ OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
 SPLASH_COOKIE_EXPIRE_DAYS = settings.SPLASH_COOKIE_EXPIRE_DAYS
 SPLASH_COOKIE_NAME = settings.SPLASH_COOKIE_NAME
 SPLASH_COOKIE_SECURE = settings.SPLASH_COOKIE_SECURE
+SPLASH_DONATE_URL_DEFAULT = settings.SPLASH_DONATE_URL_DEFAULT
 SPLASH_MODAL_ENABLED = settings.SPLASH_MODAL_ENABLED
 
 
@@ -138,7 +139,16 @@ def splash_modal(context):
         splash_modal = SplashModal.objects.filter(show=True).first()
     else:
         splash_modal = None
-    return {'splash_modal': splash_modal}
+
+    if splash_modal is not None and splash_modal.donate_url is not None:
+        donate_url = splash_modal.donate_url
+    else:
+        donate_url = SPLASH_DONATE_URL_DEFAULT
+
+    return {
+        'donate_url': donate_url,
+        'splash_modal': splash_modal,
+    }
 
 
 @register.simple_tag

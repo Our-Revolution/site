@@ -1,31 +1,105 @@
-{% load pages_tags %}
+{% load pages_tags wagtailcore_tags wagtailimages_tags %}
 
 {% if splash_modal %}
 
 <div class="modal fade" id="splash-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Modal title</h4>
+
+    <div class="bg-cover modal-content"
+    {% if splash_modal.background_image %}
+    {% image splash_modal.background_image original as background_image %}
+    style="background-image: url('{{ background_image.url }}') !important;"
+    {% endif %}>
+
+      <div class="dark-wash-md">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+
+        <div class="modal-body pb40 pl0 pr0 pt20">
+
+          <div class="container-fluid">
+            <div class="row">
+
+              <div class="col-xs-12">
+
+                <section class="h-mt0 mb40 white-text">
+                  {{ splash_modal.body | richtext }}
+                </section>
+
+                <section>
+
+                  <form action="{{ donate_url }}" method="GET">
+
+                    <input type="hidden" name="refcode" value="splash-modal-donate">
+
+                    <div class="row grid-tight">
+
+                      <div class="col-xs-2">
+                        <a class="btn btn-block btn-default"
+                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=7">
+                          $7
+                        </a>
+                      </div>
+
+                      <div class="col-xs-2">
+                        <a class="btn btn-block btn-default"
+                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=15">
+                          $15
+                        </a>
+                      </div>
+
+                      <div class="col-xs-2">
+                        <a class="btn btn-block btn-primary"
+                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=27">
+                          $27
+                        </a>
+                      </div>
+
+                      <div class="col-xs-2">
+                        <a class="btn btn-block btn-default"
+                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=75">
+                          $75
+                        </a>
+                      </div>
+
+                      <div class="col-xs-4">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <div class="input-group-addon">$</div>
+                            <input class="form-control height-xxs" name="amount"
+                            type="text">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <button class="btn btn-block btn-danger uppercase ls2 mb20"
+                    type="submit">
+                      {% if splash_modal.donate_button_text %}
+                      {{ splash_modal.donate_button_text }}
+                      {% else %}
+                      Donate
+                      {% endif %}
+                    </button>
+
+                  </form>
+
+                </section>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
       </div>
-      <div class="modal-body">
-        <p>
-          duderino if into the let me
-          uh his duder or mr lebowski
-          something to dude so im the
-          um i youre not the whole
-          lebowski youre el duderino i am
-          lebowski im or el duder or
-          dudeness or know that his dudeness
-          duderino if duder or dude so
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+
     </div><!-- /.modal-content -->
+
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
@@ -56,7 +130,7 @@
     }
 
     // Check if cookie was successfully set to show splash
-    if (Cookies.get(cookie_name) === cookie_value_show) {
+    // if (Cookies.get(cookie_name) === cookie_value_show) {
 
       // Set cookie to not show splash next time, and trigger modal
       Cookies.set(cookie_name, cookie_value_hide, {
@@ -65,7 +139,7 @@
       });
       $splashModal.modal();
 
-    }
+    // }
 
   });
 
