@@ -149,11 +149,10 @@
 
     // Set to 27 if the other amount input is empty
     $('#splash-form').submit(function(event) {
-      var form = this
-      var amount_input = $('#splash-amount')
+      var $splashAmount = $('#splash-amount');
        
-      if (!amount_input.val()) {
-        amount_input.val("27")
+      if (!$splashAmount.val()) {
+        $splashAmount.val("27");
       }
     });
 
