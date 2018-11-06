@@ -33,7 +33,7 @@
 
                 <section>
 
-                  <form action="{{ donate_url }}" method="GET">
+                  <form action="{{ donate_url }}" method="GET" id="splash-form">
 
                     <input name="recurring" type="hidden"
                     value="{{ url_param_recurring }}">
@@ -76,7 +76,7 @@
                           <div class="input-group">
                             <div class="input-group-addon">$</div>
                             <input class="form-control height-xxs" name="amount"
-                            type="text" value="27">
+                            type="text" id="splash-amount">
                           </div>
                         </div>
                       </div>
@@ -146,6 +146,15 @@
       $splashModal.modal();
 
     }
+
+    // Set to 27 if the other amount input is empty
+    $('#splash-form').submit(function(event) {
+      var $splashAmount = $('#splash-amount');
+       
+      if (!$splashAmount.val()) {
+        $splashAmount.val("27");
+      }
+    });
 
   });
 
