@@ -38,12 +38,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+SPLASH_DONATE_URL_DEFAULT = settings.SPLASH_DONATE_URL_DEFAULT
+
+
 @unique
 class AlertLevels(Enum):
     success = (1, 'Success (Green)')
     info = (2, 'Info (Blue)')
     warning = (3, 'Warning (Yellow)')
     danger = (4, 'Danger (Red)')
+
 
 class AboutPage(Page):
     board_description = RichTextField()
@@ -385,17 +389,66 @@ class NotificationBanner(models.Model):
 @register_snippet
 @python_2_unicode_compatible  # provide equivalent __unicode__ and __str__ methods on Python 2
 class SplashModal(models.Model):
+    button_text_max = 128
+    color_help_text = '6 digit CSS color code.'
+    color_max_length = 6
+    donate_button_text_default = 'Donate'
+    donate_button_text_help_text = 'Defaults to "Donate" if field is empty.'
+    donate_recurring_help_text = 'Make recurring donation the default.'
+    donate_url_help_text = (
+        '%s is the default if field is empty.' % SPLASH_DONATE_URL_DEFAULT
+    )
+    show_help_text = 'Show splash modal on all pages.'
+    title_help_text = 'Internal title for CMS use. Not public.'
     title_max_length = 128
 
+    background_color = models.CharField(
+        blank=True,
+        help_text=color_help_text,
+        max_length=color_max_length,
+        null=True,
+    )
+    background_image = models.ForeignKey(
+        'wagtailimages.Image',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    body = RichTextField()
+    donate_button_text = models.CharField(
+        blank=True,
+        help_text=donate_button_text_help_text,
+        max_length=button_text_max,
+        null=True,
+    )
+    donate_recurring = models.BooleanField(
+        default=False,
+        help_text=donate_recurring_help_text,
+    )
+    donate_url = models.URLField(
+        blank=True,
+        help_text=donate_url_help_text,
+        null=True,
+    )
     show = models.BooleanField(
         default=False,
-        help_text='Show splash modal on all pages.'
+        help_text=show_help_text,
     )
-    title = models.CharField(max_length=title_max_length)
+    title = models.CharField(
+        help_text=title_help_text,
+        max_length=title_max_length,
+    )
 
     panels = [
         FieldPanel('title'),
         FieldPanel('show'),
+        FieldPanel('body'),
+        ImageChooserPanel('background_image'),
+        FieldPanel('background_color'),
+        FieldPanel('donate_button_text'),
+        FieldPanel('donate_url'),
+        FieldPanel('donate_recurring'),
     ]
 
     def __str__(self):
