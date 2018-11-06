@@ -396,7 +396,7 @@ class SplashModal(models.Model):
     donate_button_text_help_text = 'Defaults to "Donate" if field is empty.'
     donate_recurring_help_text = 'Make recurring donation the default.'
     donate_url_help_text = (
-        'Defaults to %s if field is empty.' % SPLASH_DONATE_URL_DEFAULT
+        '%s is the default if field is empty.' % SPLASH_DONATE_URL_DEFAULT
     )
     show_help_text = 'Show splash modal on all pages.'
     title_help_text = 'Internal title for CMS use. Not public.'
