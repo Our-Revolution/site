@@ -8660,6 +8660,9 @@ footer {
   .btn-sm, .btn-group-sm > .btn, .form-wrapper #can_embed_form .btn-group-sm > input[type=submit] {
     height: auto;
     padding: 5px 10px; }
+  .btn-tight {
+    padding-left: 0px;
+    padding-right: 0px; }
 
 .btn-round {
   border-radius: 50px; }
@@ -10947,9 +10950,6 @@ div.recurrence-widget {
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-body .rich-text {
       padding-left: 30px; } }
-  .birthday-page .container-fluid > .row > .col-xs-12 {
-    padding-left: 0;
-    padding-right: 0; }
   @media screen and (min-width: 768px) {
     .birthday-page .embed-layout-3 {
       padding: 0 80px; } }
