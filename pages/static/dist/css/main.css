@@ -10947,9 +10947,6 @@ div.recurrence-widget {
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-body .rich-text {
       padding-left: 30px; } }
-  .birthday-page .container-fluid > .row > .col-xs-12 {
-    padding-left: 0;
-    padding-right: 0; }
   @media screen and (min-width: 768px) {
     .birthday-page .embed-layout-3 {
       padding: 0 80px; } }

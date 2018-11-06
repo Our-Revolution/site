@@ -22,12 +22,6 @@
     }
   }
 
-  // Remove duplicate padding for nested containers
-  .container-fluid > .row > .col-xs-12 {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   // Adjust design for square layout
   .embed-layout-3 {
     @include at-least($medium) {
