@@ -145,9 +145,15 @@ def splash_modal(context):
     else:
         donate_url = SPLASH_DONATE_URL_DEFAULT
 
+    if splash_modal is not None:
+        url_param_recurring = '1' if splash_modal.donate_recurring else '0'
+    else:
+        url_param_recurring = '0'
+
     return {
         'donate_url': donate_url,
         'splash_modal': splash_modal,
+        'url_param_recurring': url_param_recurring,
     }
 
 

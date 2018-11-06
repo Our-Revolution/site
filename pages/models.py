@@ -394,6 +394,7 @@ class SplashModal(models.Model):
     color_max_length = 6
     donate_button_text_default = 'Donate'
     donate_button_text_help_text = 'Defaults to "Donate" if field is empty.'
+    donate_recurring_help_text = 'Make recurring donation the default.'
     donate_url_help_text = (
         'Defaults to %s if field is empty.' % SPLASH_DONATE_URL_DEFAULT
     )
@@ -421,6 +422,10 @@ class SplashModal(models.Model):
         max_length=button_text_max,
         null=True,
     )
+    donate_recurring = models.BooleanField(
+        default=False,
+        help_text=donate_recurring_help_text,
+    )
     donate_url = models.URLField(
         blank=True,
         help_text=donate_url_help_text,
@@ -441,8 +446,9 @@ class SplashModal(models.Model):
         FieldPanel('body'),
         ImageChooserPanel('background_image'),
         FieldPanel('background_color'),
-        FieldPanel('donate_url'),
         FieldPanel('donate_button_text'),
+        FieldPanel('donate_url'),
+        FieldPanel('donate_recurring'),
     ]
 
     def __str__(self):

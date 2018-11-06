@@ -33,34 +33,38 @@
 
                   <form action="{{ donate_url }}" method="GET">
 
-                    <input type="hidden" name="refcode" value="splash-modal-donate">
+                    <input name="recurring" type="hidden"
+                    value="{{ url_param_recurring }}">
+
+                    <input name="refcode" type="hidden"
+                    value="splash-modal-donate">
 
                     <div class="row grid-tight">
 
                       <div class="col-xs-2">
                         <a class="btn btn-block btn-default"
-                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=7">
+                        href="{{ donate_url }}?recurring={{ url_param_recurring }}&refcode=splash-modal-donate&amount=7">
                           $7
                         </a>
                       </div>
 
                       <div class="col-xs-2">
                         <a class="btn btn-block btn-default"
-                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=15">
+                        href="{{ donate_url }}?recurring={{ url_param_recurring }}&refcode=splash-modal-donate&amount=15">
                           $15
                         </a>
                       </div>
 
                       <div class="col-xs-2">
                         <a class="btn btn-block btn-primary"
-                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=27">
+                        href="{{ donate_url }}?recurring={{ url_param_recurring }}&refcode=splash-modal-donate&amount=27">
                           $27
                         </a>
                       </div>
 
                       <div class="col-xs-2">
                         <a class="btn btn-block btn-default"
-                        href="{{ donate_url }}?refcode=splash-modal-donate&amount=75">
+                        href="{{ donate_url }}?recurring={{ url_param_recurring }}&refcode=splash-modal-donate&amount=75">
                           $75
                         </a>
                       </div>
