@@ -6,10 +6,12 @@
   <div class="modal-dialog" role="document">
 
     <div class="bg-cover modal-content"
-    {% if splash_modal.background_image %}
+    style="{% if splash_modal.background_image %}
     {% image splash_modal.background_image original as background_image %}
-    style="background-image: url('{{ background_image.url }}') !important;"
-    {% endif %}>
+    background-image: url('{{ background_image.url }}') !important;
+    {% endif %}{% if splash_modal.background_color %}
+    background-color: #{{ splash_modal.background_color }};
+    {% endif %}">
 
       <div class="dark-wash-md">
 
@@ -134,7 +136,7 @@
     }
 
     // Check if cookie was successfully set to show splash
-    // if (Cookies.get(cookie_name) === cookie_value_show) {
+    if (Cookies.get(cookie_name) === cookie_value_show) {
 
       // Set cookie to not show splash next time, and trigger modal
       Cookies.set(cookie_name, cookie_value_hide, {
@@ -143,7 +145,7 @@
       });
       $splashModal.modal();
 
-    // }
+    }
 
   });
 
