@@ -1,40 +1,50 @@
 from __future__ import unicode_literals
-from django.db import models
+
+import csv
+import datetime
+import json
+import logging
+from enum import Enum, unique
+from random import randint
+
 from django.conf import settings
+from django.contrib import messages
 from django.core import serializers
 from django.core.mail import EmailMultiAlternatives
-from django.dispatch import receiver
-from django.template.loader import get_template
-from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import models
 from django.db.models import Case, IntegerField, Q, Value, When
 from django.db.models.signals import pre_delete
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.dispatch import receiver
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from enum import Enum, unique
+from django.template.loader import get_template
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.text import slugify
 from localflavor.us.models import USStateField
+from modelcluster.fields import ParentalKey
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.wagtailfrontendcache.utils import purge_page_from_cache
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
+from wagtail.wagtailadmin.edit_handlers import (
+    FieldPanel,
+    InlinePanel,
+    MultiFieldPanel,
+    PageChooserPanel,
+    StreamFieldPanel
+)
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel, MultiFieldPanel
 from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Orderable, Page
 from wagtail.wagtailcore.signals import page_published, page_unpublished
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
-from modelcluster.fields import ParentalKey
+
 from local_groups.forms import GroupCreateForm
 from local_groups.models import Group
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.text import slugify
-from random import randint
-import csv
-import datetime
-import json
-import logging
+from pages.frontendcache.utils import purge_all_from_cache
 
 logger = logging.getLogger(__name__)
 
@@ -400,6 +410,11 @@ class SplashModal(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """Purge all from cache after save"""
+        super(SplashModal, self).save(*args, **kwargs)
+        purge_all_from_cache()
 
 
 class TemplatePage(Page):

@@ -1,22 +1,31 @@
-from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
-import requests
-import urlparse
 import logging
+import urlparse
+
+from django.conf import settings
+
+import requests
+from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
 
 logger = logging.getLogger(__name__)
+
+FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
+FASTLY_API_KEY = settings.FASTLY_API_KEY
+FASTLY_HOSTS = settings.FASTLY_HOSTS
+CACHE_FRONTEND_ENABLED = settings.CACHE_FRONTEND_ENABLED
 
 
 class FastlyBackend(HTTPBackend):
 
     def __init__(self, params):
-        self.api_key = params.pop('API_KEY')
-        self.hosts = params.pop('HOSTS')
+        """Required by Wagtail"""
+        self.hosts = FASTLY_HOSTS
 
     def purge(self, url):
-        for host in self.hosts:
+        """Purge a single URL with Fastly"""
+        for host in FASTLY_HOSTS:
             req = requests.request(
                 'PURGE',
                 urlparse.urljoin(host, urlparse.urlparse(url).path),
-                headers={'Fastly-Key': self.api_key}
+                headers={'Fastly-Key': FASTLY_API_KEY}
             )
             assert req.status_code == 200
