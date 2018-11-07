@@ -947,6 +947,8 @@ class CandidateEndorsementIndexPage(Page):
             'candidateendorsementpage__state_or_territory',
             'candidateendorsementpage__title',
         )
+
+        """Sort by election date, with pending candidates at bottom of list"""
         candidates_sorted = sorted(
             candidates,
             key=lambda x: (
