@@ -8,10 +8,8 @@ from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
 
 logger = logging.getLogger(__name__)
 
-FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
 FASTLY_API_KEY = settings.FASTLY_API_KEY
 FASTLY_HOSTS = settings.FASTLY_HOSTS
-CACHE_FRONTEND_ENABLED = settings.CACHE_FRONTEND_ENABLED
 
 
 class FastlyBackend(HTTPBackend):
