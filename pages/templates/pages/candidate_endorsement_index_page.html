@@ -67,32 +67,13 @@
       {% for candidate in candidates %}
       {% with candidateendorsementpage=candidate.candidateendorsementpage %}
 
-      {% if not candidateendorsementpage.has_pending_result %}
       {% include "partials/candidate_endorsement_card.html" %}
-      {% endif %}
 
       {% endwith %}
       {% endfor %}
 
     </ul>
   </div>
-
-  <section>
-
-    <ul class="card-list list">
-
-      {% for candidate in candidates %}
-      {% with candidateendorsementpage=candidate.candidateendorsementpage %}
-
-      {% if candidateendorsementpage.has_pending_result %}
-      {% include "partials/candidate_endorsement_card.html" %}
-      {% endif %}
-
-      {% endwith %}
-      {% endfor %}
-
-    </ul>
-  </section>
 
 </div>
 

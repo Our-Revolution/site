@@ -949,7 +949,10 @@ class CandidateEndorsementIndexPage(Page):
         )
         candidates_sorted = sorted(
             candidates,
-            key=lambda x: x.candidateendorsementpage.election_date,
+            key=lambda x: (
+                x.candidateendorsementpage.has_pending_result,
+                x.candidateendorsementpage.election_date,
+            ),
         )
         context['candidates'] = candidates_sorted
 
