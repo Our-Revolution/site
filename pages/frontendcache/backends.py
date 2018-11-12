@@ -20,6 +20,7 @@ class FastlyBackend(HTTPBackend):
 
     def purge(self, url):
         """Purge a single URL with Fastly"""
+        """TODO: TECH-1522 Implement Fastly Python Library"""
         for host in FASTLY_HOSTS:
             req = requests.request(
                 'PURGE',
