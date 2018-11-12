@@ -434,7 +434,7 @@ def build_and_send_event_promotion(event_promotion_id):
         return sent_count
 
     """Create new contact list and add to event promotion"""
-    list_name = 'List for Event Promotion: ' + str(event_promotion)
+    list_name = 'List for Event Promotion: ' + unicode(event_promotion)
     contact_list = ContactList.objects.create(name=list_name)
     event_promotion.contact_list = contact_list
     event_promotion.save()
@@ -547,7 +547,7 @@ def build_list_for_call_campaign(call_campaign_id):
             return 0
 
     """Create New Contact List and add to Call Campaign"""
-    list_name = 'List for Call Campaign: ' + str(call_campaign)
+    list_name = 'List for Call Campaign: ' + unicode(call_campaign)
     contact_list = ContactList.objects.create(name=list_name)
     call_campaign.contact_list = contact_list
     call_campaign.save()
