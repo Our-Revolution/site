@@ -486,6 +486,16 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'NOTSET',
         },
+        'bsd': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['mail_admins', 'console', 'SysLog'],
             'level': 'ERROR',
@@ -493,11 +503,6 @@ LOGGING = {
         },
         'nominations': {
             'handlers': ['console', 'SysLog'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'celery': {
-            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         },
