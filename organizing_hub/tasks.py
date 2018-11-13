@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+from django.core.mail import EmailMultiAlternatives
+from celery import Task
 from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -510,7 +512,29 @@ def build_and_send_event_promotion(event_promotion_id):
     return sent_count
 
 
-@shared_task
+class BaseTask(Task):
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        logger.debug('on_failure')
+
+        plaintext = "test content"
+        htmly = plaintext
+
+        subject = "test error alert"
+        from_email = 'bugtroll@ourrevolution.com'
+        to_email = ["qa@ourrevolution.com"]
+
+        text_content = plaintext
+        html_content = htmly
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+# @shared_task
+# @app.task(base=DatabaseTask)
+# @shared_task
+
+
+@shared_task(base=BaseTask)
 def build_list_for_call_campaign(call_campaign_id):
     """
     Build Contact List for Call Campaign
@@ -528,6 +552,8 @@ def build_list_for_call_campaign(call_campaign_id):
         int
             Return Contact List status
     """
+
+    logger.debug('build_list_for_call_campaign')
 
     """Get Call Campaign"""
     call_campaign = CallCampaign.objects.select_related(

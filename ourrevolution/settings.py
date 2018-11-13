@@ -496,22 +496,27 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        # 'celery': {
-        #     'handlers': ['mail_admins', 'console'],
-        #     'level': 'ERROR',
-        #     'propagate': True,
-        # },
-        # 'celery.app.trace': {
-        #     'handlers': ['mail_admins', 'console'],
-        #     'level': 'ERROR',
-        #     'propagate': True,
-        # },
-        # 'organizing_hub.tasks': {
-        #     'handlers': ['mail_admins', 'console'],
-        #     'level': 'ERROR',
-        #     'propagate': True,
-        # },
-        'organizing_hub.tasks': {
+        'celery': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'celery.app.trace': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'organizing_hub': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'organizing_hub': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
