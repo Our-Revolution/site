@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from celery import Task
-# from celery.app.task import Task
-from celery.signals import task_failure
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -169,8 +166,3 @@ def local_group_post_save_handler(instance, **kwargs):
 @receiver(post_save, sender=User)
 def user_post_save_handler(instance, **kwargs):
     sync_group_leader_affiliation_for_user(instance)
-
-
-@receiver(task_failure, sender=Task)
-def celery_task_failure_handler(instance, **kwargs):
-    logger.debug('celery_task_failure_handler')
