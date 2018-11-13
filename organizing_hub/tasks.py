@@ -41,13 +41,16 @@ logger = logging.getLogger(__name__)
 """Get BSD api"""
 bsd_api = BSD().api
 
+ADMINS = settings.ADMINS
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
+DEBUG = settings.DEBUG
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
+SERVER_EMAIL = settings.SERVER_EMAIL
 
 
 def get_buffer_width_from_miles(miles):
@@ -399,7 +402,25 @@ def sync_contact_list_with_bsd_constituents(
 """Tasks"""
 
 
-@shared_task
+class BaseTask(Task):
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        if not DEBUG:
+            subject = "Task Failure: %s [%s]" % (task_id, exc)
+            text_content = "%s: [%s]" % (timezone.now(), einfo)
+            html_content = text_content
+            msg = EmailMultiAlternatives(
+                subject,
+                text_content,
+                SERVER_EMAIL,
+                # [a[1] for a in ADMINS],
+                ['qa@ourrevolution.com']
+            )
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+
+@shared_task(base=BaseTask)
 def build_and_send_event_promotion(event_promotion_id):
     """
     Build Contact List for Event Promotion and then send it
@@ -512,32 +533,6 @@ def build_and_send_event_promotion(event_promotion_id):
     return sent_count
 
 
-class BaseTask(Task):
-
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        logger.debug('on_failure')
-
-        # logger.debug('self: %s' % unicode(self))
-        # logger.debug('exc: %s' % unicode(exc))
-        # logger.debug('task_id: %s' % unicode(task_id))
-        # logger.debug('args: %s' % unicode(args))
-        # logger.debug('kwargs: %s' % unicode(kwargs))
-        # logger.debug('einfo: %s' % unicode(einfo))
-
-        # plaintext = einfo
-        # htmly = plaintext
-
-        subject = "[Task Failure: %s] %s" % (task_id, exc)
-        from_email = 'bugtroll@ourrevolution.com'
-        to_email = ["qa@ourrevolution.com"]
-
-        text_content = subject
-        html_content = subject
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-
-
 @shared_task(base=BaseTask)
 def build_list_for_call_campaign(call_campaign_id):
     """
@@ -556,8 +551,6 @@ def build_list_for_call_campaign(call_campaign_id):
         int
             Return Contact List status
     """
-
-    logger.debug('build_list_for_call_campaign')
 
     """Get Call Campaign"""
     call_campaign = CallCampaign.objects.select_related(
