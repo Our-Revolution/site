@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task
+from celery import shared_task, Task
 from django.conf import settings
 from django.contrib.gis.gdal import GDALException
 from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
+from django.core.mail import EmailMultiAlternatives
+from django.utils import timezone
 from bsd.api import BSD
 from bsd.models import (
     find_constituents_by_state_cd,
@@ -16,6 +18,10 @@ import time
 
 logger = logging.getLogger(__name__)
 
+ADMINS = settings.ADMINS
+DEBUG = settings.DEBUG
+SERVER_EMAIL = settings.SERVER_EMAIL
+
 """Get BSD api"""
 bsd_api = BSD().api
 
@@ -23,7 +29,29 @@ bsd_api = BSD().api
 """Tasks"""
 
 
-@shared_task
+class BaseTask(Task):
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        if not DEBUG:
+            subject = "Task Failure: %s [%s]" % (task_id, exc)
+            text_content = "Task Failure: %s [%s] [%s] [%s]" % (
+                task_id,
+                exc,
+                timezone.now(),
+                einfo,
+            )
+            html_content = text_content
+            msg = EmailMultiAlternatives(
+                subject,
+                text_content,
+                SERVER_EMAIL,
+                [a[1] for a in ADMINS],
+            )
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+
+@shared_task(base=BaseTask)
 def update_geo_target_result(geo_target_id):
     """
     Update in progress GeoTarget with result from BSD and set as complete

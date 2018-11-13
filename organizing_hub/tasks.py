@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from django.core.mail import EmailMultiAlternatives
-from celery import Task
-from celery import shared_task
+from celery import shared_task, Task
 from django.conf import settings
 from django.contrib.gis.geos import Point
+from django.core.mail import EmailMultiAlternatives
 from django.template.defaultfilters import linebreaks_filter
 from django.utils import timezone
 from django.utils.http import urlquote_plus
@@ -38,9 +37,6 @@ import time
 
 logger = logging.getLogger(__name__)
 
-"""Get BSD api"""
-bsd_api = BSD().api
-
 ADMINS = settings.ADMINS
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
@@ -51,6 +47,9 @@ EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
 SERVER_EMAIL = settings.SERVER_EMAIL
+
+"""Get BSD api"""
+bsd_api = BSD().api
 
 
 def get_buffer_width_from_miles(miles):
@@ -407,14 +406,18 @@ class BaseTask(Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         if not DEBUG:
             subject = "Task Failure: %s [%s]" % (task_id, exc)
-            text_content = "%s: [%s]" % (timezone.now(), einfo)
+            text_content = "Task Failure: %s [%s] [%s] [%s]" % (
+                task_id,
+                exc,
+                timezone.now(),
+                einfo,
+            )
             html_content = text_content
             msg = EmailMultiAlternatives(
                 subject,
                 text_content,
                 SERVER_EMAIL,
-                # [a[1] for a in ADMINS],
-                ['qa@ourrevolution.com']
+                [a[1] for a in ADMINS],
             )
             msg.attach_alternative(html_content, "text/html")
             msg.send()
@@ -457,7 +460,7 @@ def build_and_send_event_promotion(event_promotion_id):
         return sent_count
 
     """Create new contact list and add to event promotion"""
-    list_name = 'List for Event Promotion: ' + str(event_promotion)
+    list_name = 'List for Event Promotion: ' + unicode(event_promotion)
     contact_list = ContactList.objects.create(name=list_name)
     event_promotion.contact_list = contact_list
     event_promotion.save()
@@ -570,7 +573,7 @@ def build_list_for_call_campaign(call_campaign_id):
             return 0
 
     """Create New Contact List and add to Call Campaign"""
-    list_name = 'List for Call Campaign: ' + str(call_campaign)
+    list_name = 'List for Call Campaign: ' + unicode(call_campaign)
     contact_list = ContactList.objects.create(name=list_name)
     call_campaign.contact_list = contact_list
     call_campaign.save()
