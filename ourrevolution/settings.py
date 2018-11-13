@@ -487,14 +487,34 @@ LOGGING = {
             'level': 'NOTSET',
         },
         'django.request': {
-            'handlers': ['mail_admins', 'console','SysLog'],
+            'handlers': ['mail_admins', 'console', 'SysLog'],
             'level': 'ERROR',
             'propagate': True,
         },
         'nominations': {
-            'handlers': ['console','SysLog'],
+            'handlers': ['console', 'SysLog'],
             'level': 'DEBUG',
             'propagate': True,
-        }
+        },
+        # 'celery': {
+        #     'handlers': ['mail_admins', 'console'],
+        #     'level': 'ERROR',
+        #     'propagate': True,
+        # },
+        # 'celery.app.trace': {
+        #     'handlers': ['mail_admins', 'console'],
+        #     'level': 'ERROR',
+        #     'propagate': True,
+        # },
+        # 'organizing_hub.tasks': {
+        #     'handlers': ['mail_admins', 'console'],
+        #     'level': 'ERROR',
+        #     'propagate': True,
+        # },
+        'organizing_hub.tasks': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }
