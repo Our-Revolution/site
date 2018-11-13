@@ -517,21 +517,25 @@ class BaseTask(Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         logger.debug('on_failure')
 
-        plaintext = "test content"
-        htmly = plaintext
+        # logger.debug('self: %s' % unicode(self))
+        # logger.debug('exc: %s' % unicode(exc))
+        # logger.debug('task_id: %s' % unicode(task_id))
+        # logger.debug('args: %s' % unicode(args))
+        # logger.debug('kwargs: %s' % unicode(kwargs))
+        # logger.debug('einfo: %s' % unicode(einfo))
 
-        subject = "test error alert"
+        # plaintext = einfo
+        # htmly = plaintext
+
+        subject = "[Task Failure: %s] %s" % (task_id, exc)
         from_email = 'bugtroll@ourrevolution.com'
         to_email = ["qa@ourrevolution.com"]
 
-        text_content = plaintext
-        html_content = htmly
+        text_content = subject
+        html_content = subject
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
-# @shared_task
-# @app.task(base=DatabaseTask)
-# @shared_task
 
 
 @shared_task(base=BaseTask)
