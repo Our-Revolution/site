@@ -10,6 +10,7 @@ from bsd.models import (
     GeoTarget,
     GeoTargetStatus,
 )
+from tasks.tasks import BaseTask
 import logging
 import json
 import time
@@ -23,7 +24,7 @@ bsd_api = BSD().api
 """Tasks"""
 
 
-@shared_task
+@shared_task(base=BaseTask)
 def update_geo_target_result(geo_target_id):
     """
     Update in progress GeoTarget with result from BSD and set as complete

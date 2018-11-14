@@ -177,6 +177,7 @@ INSTALLED_APPS = [
     'organizing_hub',
     'pages',
     'social_redirects',
+    'tasks',
     'transform',
     'local_groups',
     'nominations',
@@ -487,15 +488,30 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'NOTSET',
         },
+        'bsd': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'django.request': {
-            'handlers': ['mail_admins', 'console','SysLog'],
+            'handlers': ['mail_admins', 'console', 'SysLog'],
             'level': 'ERROR',
             'propagate': True,
         },
         'nominations': {
-            'handlers': ['console','SysLog'],
+            'handlers': ['console', 'SysLog'],
             'level': 'DEBUG',
             'propagate': True,
-        }
+        },
+        'organizing_hub': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }

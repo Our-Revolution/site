@@ -29,6 +29,7 @@ from events.models import (
     EventPromotionStatus,
     find_last_event_promo_sent_to_contact,
 )
+from tasks.tasks import BaseTask
 import datetime
 import logging
 import json
@@ -397,7 +398,7 @@ def sync_contact_list_with_bsd_constituents(
 """Tasks"""
 
 
-@shared_task
+@shared_task(base=BaseTask)
 def build_and_send_event_promotion(event_promotion_id):
     """
     Build Contact List for Event Promotion and then send it
@@ -510,7 +511,7 @@ def build_and_send_event_promotion(event_promotion_id):
     return sent_count
 
 
-@shared_task
+@shared_task(base=BaseTask)
 def build_list_for_call_campaign(call_campaign_id):
     """
     Build Contact List for Call Campaign
