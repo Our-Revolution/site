@@ -5885,6 +5885,9 @@ button.close {
 .mb20 {
   margin-bottom: 20px; }
 
+.mb40 {
+  margin-bottom: 40px; }
+
 .mr20 {
   margin-right: 20px; }
 
@@ -5942,8 +5945,17 @@ button.close {
 .pb20 {
   padding-bottom: 20px; }
 
+.pb40 {
+  padding-bottom: 40px; }
+
+.pl0 {
+  padding-left: 0px; }
+
 .pl20 {
   padding-left: 20px; }
+
+.pr0 {
+  padding-right: 0px; }
 
 .pt5 {
   padding-top: 5px; }
@@ -5956,6 +5968,9 @@ button.close {
 
 .pt20 {
   padding-top: 20px; }
+
+.pt40 {
+  padding-top: 40px; }
 
 .pa10 {
   padding: 10px; }
@@ -6022,6 +6037,9 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 
 .dark-wash {
   background-color: rgba(0, 0, 0, 0.6); }
+
+.dark-wash-md {
+  background-color: rgba(0, 0, 0, 0.4); }
 
 .light-wash {
   background-color: rgba(0, 0, 0, 0.1); }
@@ -7976,6 +7994,13 @@ footer {
   height: auto;
   display: block; }
 
+.grid-tight.row {
+  margin-left: -1px;
+  margin-right: -1px; }
+  .grid-tight.row .col-lg-1, .grid-tight.row .col-lg-10, .grid-tight.row .col-lg-11, .grid-tight.row .col-lg-12, .grid-tight.row .col-lg-2, .grid-tight.row .col-lg-3, .grid-tight.row .col-lg-4, .grid-tight.row .col-lg-5, .grid-tight.row .col-lg-6, .grid-tight.row .col-lg-7, .grid-tight.row .col-lg-8, .grid-tight.row .col-lg-9, .grid-tight.row .col-md-1, .grid-tight.row .col-md-10, .grid-tight.row .col-md-11, .grid-tight.row .col-md-12, .grid-tight.row .col-md-2, .grid-tight.row .col-md-3, .grid-tight.row .col-md-4, .grid-tight.row .col-md-5, .grid-tight.row .col-md-6, .grid-tight.row .col-md-7, .grid-tight.row .col-md-8, .grid-tight.row .col-md-9, .grid-tight.row .col-sm-1, .grid-tight.row .col-sm-10, .grid-tight.row .col-sm-11, .grid-tight.row .col-sm-12, .grid-tight.row .col-sm-2, .grid-tight.row .col-sm-3, .grid-tight.row .col-sm-4, .grid-tight.row .col-sm-5, .grid-tight.row .col-sm-6, .grid-tight.row .col-sm-7, .grid-tight.row .col-sm-8, .grid-tight.row .col-sm-9, .grid-tight.row .col-xs-1, .grid-tight.row .col-xs-10, .grid-tight.row .col-xs-11, .grid-tight.row .col-xs-12, .grid-tight.row .col-xs-2, .grid-tight.row .col-xs-3, .grid-tight.row .col-xs-4, .grid-tight.row .col-xs-5, .grid-tight.row .col-xs-6, .grid-tight.row .col-xs-7, .grid-tight.row .col-xs-8, .grid-tight.row .col-xs-9 {
+    padding-left: 1px;
+    padding-right: 1px; }
+
 .tpp-toolkit p {
   font-size: 18px; }
 
@@ -8635,6 +8660,9 @@ footer {
   .btn-sm, .btn-group-sm > .btn, .form-wrapper #can_embed_form .btn-group-sm > input[type=submit] {
     height: auto;
     padding: 5px 10px; }
+  .btn-tight {
+    padding-left: 0px;
+    padding-right: 0px; }
 
 .btn-round {
   border-radius: 50px; }
@@ -8982,8 +9010,11 @@ footer {
 .v2 .h1, .v2 .h2, .v2 .h3, .v2 .h4, .v2 .h5, .v2 .h6 {
   margin-bottom: 20px; }
 
+.height-xxs {
+  height: 40px; }
+
 .height-xs {
-  height: 50px; }
+  height: 60px; }
 
 .height-sm {
   height: 100px; }
@@ -9020,6 +9051,13 @@ ul.list-plain,
 .logo-sm {
   display: inline-block;
   width: 47px; }
+
+.modal .modal-header {
+  border: none; }
+
+.modal .close {
+  color: #ffffff;
+  opacity: 1; }
 
 .navbar {
   border-radius: 0;
@@ -10912,9 +10950,6 @@ div.recurrence-widget {
   @media screen and (min-width: 992px) {
     .birthday-page .birthday-primary-content-body .rich-text {
       padding-left: 30px; } }
-  .birthday-page .container-fluid > .row > .col-xs-12 {
-    padding-left: 0;
-    padding-right: 0; }
   @media screen and (min-width: 768px) {
     .birthday-page .embed-layout-3 {
       padding: 0 80px; } }

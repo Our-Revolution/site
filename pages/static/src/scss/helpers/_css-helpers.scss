@@ -66,6 +66,10 @@
   margin-bottom: 20px;
 }
 
+.mb40 {
+  margin-bottom: 40px;
+}
+
 .mr20 {
   margin-right: 20px;
 }
@@ -142,8 +146,20 @@
   padding-bottom: 20px;
 }
 
+.pb40 {
+  padding-bottom: 40px;
+}
+
+.pl0 {
+  padding-left: 0px;
+}
+
 .pl20 {
   padding-left: 20px;
+}
+
+.pr0 {
+  padding-right: 0px;
 }
 
 .pt5 {
@@ -160,6 +176,10 @@
 
 .pt20 {
   padding-top: 20px;
+}
+
+.pt40 {
+  padding-top: 40px;
 }
 
 .pa10 {
@@ -261,6 +281,10 @@ a.white-text {
 
 .dark-wash {
   background-color: rgba(0,0,0,0.6);
+}
+
+.dark-wash-md {
+  background-color: rgba(0,0,0,0.4);
 }
 
 .light-wash {

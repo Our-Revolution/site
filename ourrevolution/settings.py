@@ -119,12 +119,17 @@ ORGANIZING_HUB_DASHBOARD_URL = '/organizing-hub/'
 ORGANIZING_GUIDES_URL = '/docs/organizing-guides/'
 ORGANIZING_DOCS_URL = '/docs/'
 
+"""Splash Modal configs"""
 SPLASH_COOKIE_EXPIRE_DAYS = int(os.environ.get('SPLASH_COOKIE_EXPIRE_DAYS', 7))
 SPLASH_COOKIE_NAME = os.environ.get(
     'SPLASH_COOKIE_NAME',
     'ourrevolution_show_splash',
 )
 SPLASH_COOKIE_SECURE = bool(int(os.environ.get('SPLASH_COOKIE_SECURE', 1)))
+SPLASH_DONATE_URL_DEFAULT = os.environ.get(
+    'SPLASH_DONATE_URL_DEFAULT',
+    'https://secure.actblue.com/contribute/page/ourrevolution',
+)
 SPLASH_MODAL_ENABLED = bool(int(os.environ.get('SPLASH_MODAL_ENABLED', 0)))
 
 SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', 0)))
