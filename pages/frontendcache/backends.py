@@ -25,18 +25,20 @@ class FastlyBackend(HTTPBackend):
 
     def get_surrogate_key_for_url(self, url):
 
-        """Get surrogate key from url. Get path without trailing slash."""
-        surrogate_key = urlparse.urlparse(url).path
+        """Get path from url"""
+        path = urlparse.urlparse(url).path
 
         """Strip trailing slash unless homepage"""
-        if surrogate_key != "/":
-            surrogate_key = surrogate_key.rstrip('/')
+        if path != "/":
+            surrogate_key = path.rstrip('/')
+        else:
+            surrogate_key = path
 
         return surrogate_key
 
     def purge(self, url):
 
-        """Get surrogate key from url. Get path without trailing slash."""
+        """Get surrogate key for url"""
         surrogate_key = self.get_surrogate_key_for_url(url)
         logger.debug('surrogate_key: %s' % surrogate_key)
 
