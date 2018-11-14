@@ -17,7 +17,6 @@ import time
 
 logger = logging.getLogger(__name__)
 
-
 """Get BSD api"""
 bsd_api = BSD().api
 
