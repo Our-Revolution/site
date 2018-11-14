@@ -8,8 +8,8 @@ import fastly
 
 logger = logging.getLogger(__name__)
 
-FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
 FASTLY_API_KEY = settings.FASTLY_API_KEY
+FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
 
 fastly_api = fastly.API()
 fastly_api.authenticate_by_key(FASTLY_API_KEY)
