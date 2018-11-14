@@ -30,6 +30,7 @@ from events.models import (
     EventPromotionStatus,
     find_last_event_promo_sent_to_contact,
 )
+from tasks.tasks import BaseTask
 import datetime
 import logging
 import json
@@ -399,28 +400,6 @@ def sync_contact_list_with_bsd_constituents(
 
 
 """Tasks"""
-
-
-class BaseTask(Task):
-
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        if not DEBUG:
-            subject = "Task Failure: %s [%s]" % (task_id, exc)
-            text_content = "Task Failure: %s [%s] [%s] [%s]" % (
-                task_id,
-                exc,
-                timezone.now(),
-                einfo,
-            )
-            html_content = text_content
-            msg = EmailMultiAlternatives(
-                subject,
-                text_content,
-                SERVER_EMAIL,
-                [a[1] for a in ADMINS],
-            )
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
 
 
 @shared_task(base=BaseTask)

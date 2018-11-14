@@ -177,6 +177,7 @@ INSTALLED_APPS = [
     'organizing_hub',
     'pages',
     'social_redirects',
+    'tasks',
     'transform',
     'local_groups',
     'nominations',
