@@ -40,7 +40,6 @@ class FastlyBackend(HTTPBackend):
 
         """Get surrogate key for url"""
         surrogate_key = self.get_surrogate_key_for_url(url)
-        logger.debug('surrogate_key: %s' % surrogate_key)
 
         """Purge surrogate key"""
         fastly_api.purge_key(FASTLY_SERVICE_ID, surrogate_key)
