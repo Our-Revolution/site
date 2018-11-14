@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task, Task
+from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.mail import EmailMultiAlternatives
 from django.template.defaultfilters import linebreaks_filter
 from django.utils import timezone
 from django.utils.http import urlquote_plus
@@ -38,19 +37,16 @@ import time
 
 logger = logging.getLogger(__name__)
 
-ADMINS = settings.ADMINS
+"""Get BSD api"""
+bsd_api = BSD().api
+
 CALLS_MAX_DISTANCE_MILES = settings.CALLS_MAX_DISTANCE_MILES
 CALLS_MAX_LIST_SIZE = settings.CALLS_MAX_LIST_SIZE
-DEBUG = settings.DEBUG
 EVENTS_PROMOTE_MAILING_ID = settings.EVENTS_PROMOTE_MAILING_ID
 EVENTS_PROMOTE_MAX_DISTANCE_MILES = settings.EVENTS_PROMOTE_MAX_DISTANCE_MILES
 EVENTS_PROMOTE_MAX_LIST_SIZE = settings.EVENTS_PROMOTE_MAX_LIST_SIZE
 EVENTS_PROMOTE_RECENT_CUTOFF_DAYS = settings.EVENTS_PROMOTE_RECENT_CUTOFF_DAYS
 EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID = settings.EVENTS_PROMOTE_SENDABLE_CONS_GROUP_ID
-SERVER_EMAIL = settings.SERVER_EMAIL
-
-"""Get BSD api"""
-bsd_api = BSD().api
 
 
 def get_buffer_width_from_miles(miles):

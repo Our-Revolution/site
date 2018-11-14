@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from celery import shared_task, Task
+from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.gdal import GDALException
 from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
-from django.core.mail import EmailMultiAlternatives
-from django.utils import timezone
 from bsd.api import BSD
 from bsd.models import (
     find_constituents_by_state_cd,
@@ -19,9 +17,6 @@ import time
 
 logger = logging.getLogger(__name__)
 
-ADMINS = settings.ADMINS
-DEBUG = settings.DEBUG
-SERVER_EMAIL = settings.SERVER_EMAIL
 
 """Get BSD api"""
 bsd_api = BSD().api
