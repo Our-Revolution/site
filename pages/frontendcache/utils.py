@@ -10,6 +10,7 @@ FASTLY_API_KEY = settings.FASTLY_API_KEY
 api = fastly.API()
 api.authenticate_by_key(FASTLY_API_KEY)
 
+
 def purge_all_from_cache(backend_settings=None, backends=None):
     """Utility method to purge all fastly cache, based on 
     wagtail.contrib.wagtailfrontendcache.utils"""
