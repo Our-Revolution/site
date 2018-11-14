@@ -47,5 +47,4 @@ class FastlyBackend(HTTPBackend):
         fastly_api.purge_key(FASTLY_SERVICE_ID, surrogate_key)
 
     def purge_all(self):
-        logger.info("Purging All")
         fastly_api.purge_service(FASTLY_SERVICE_ID)
