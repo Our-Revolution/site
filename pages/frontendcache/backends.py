@@ -1,23 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf import settings
-from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
-import fastly
-import requests
-import urlparse
+
 import logging
 import urlparse
 
-from django.conf import settings
-
 import requests
+from django.conf import settings
 from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
 
+import fastly
+
 logger = logging.getLogger(__name__)
-
-FASTLY_API_KEY = settings.FASTLY_API_KEY
-FASTLY_HOSTS = settings.FASTLY_HOSTS
-
 
 FASTLY_API_KEY = settings.FASTLY_API_KEY
 FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
@@ -29,8 +22,8 @@ fastly_api.authenticate_by_key(FASTLY_API_KEY)
 class FastlyBackend(HTTPBackend):
 
     def __init__(self, params):
-        """Required by Wagtail"""
-        self.hosts = FASTLY_HOSTS
+        self.api_key = params.pop('API_KEY')
+        self.hosts = params.pop('HOSTS')
 
     def get_surrogate_key_for_url(self, url):
 
