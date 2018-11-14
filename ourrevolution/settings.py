@@ -422,12 +422,12 @@ IGNORABLE_404_URLS = [
 
 WAGTAILEMBEDS_EMBED_FINDER = 'ourrevolution.embeds.oembed_monkeypatched'
 
-# Fastly configs
-FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
-FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
-FASTLY_SERVICE_ID = os.environ.get('FASTLY_SERVICE_ID', None)
-
 if CACHE_FRONTEND_ENABLED and not DEBUG:
+
+    # Fastly configs
+    FASTLY_API_KEY = os.environ.get('FASTLY_API_KEY', None)
+    FASTLY_HOSTS = os.environ.get('FASTLY_HOSTS', None).split(",")
+    FASTLY_SERVICE_ID = os.environ.get('FASTLY_SERVICE_ID', None)
 
     WAGTAILFRONTENDCACHE = {
         'fastly': {
