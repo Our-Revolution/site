@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import logging
+import urlparse
+
+import requests
 from django.conf import settings
 from wagtail.contrib.wagtailfrontendcache.backends import HTTPBackend
+
 import fastly
-import requests
-import urlparse
-import logging
 
 logger = logging.getLogger(__name__)
-
 
 FASTLY_API_KEY = settings.FASTLY_API_KEY
 FASTLY_SERVICE_ID = settings.FASTLY_SERVICE_ID
@@ -43,3 +45,6 @@ class FastlyBackend(HTTPBackend):
 
         """Purge surrogate key"""
         fastly_api.purge_key(FASTLY_SERVICE_ID, surrogate_key)
+
+    def purge_all(self):
+        fastly_api.purge_service(FASTLY_SERVICE_ID)
