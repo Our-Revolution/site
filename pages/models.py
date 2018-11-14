@@ -44,7 +44,6 @@ from wagtail.wagtailsnippets.models import register_snippet
 
 from local_groups.forms import GroupCreateForm
 from local_groups.models import Group
-from pages.frontendcache.utils import purge_all_from_cache
 
 logger = logging.getLogger(__name__)
 
@@ -463,11 +462,6 @@ class SplashModal(models.Model):
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        """Purge all from cache after save"""
-        super(SplashModal, self).save(*args, **kwargs)
-        purge_all_from_cache()
 
 
 class TemplatePage(Page):
