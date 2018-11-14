@@ -40,7 +40,7 @@ django-treebeard==4.0.1
 djangorestframework==3.5.1
 enum34==1.1.6
 env-tools==2.0.0
-fastly>=0.2.3,<0.2.4
+fastly>=0.2,<0.3
 futures==3.0.5
 googlemaps>=2.5,<2.6
 gunicorn==19.6.0
