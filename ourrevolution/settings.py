@@ -374,7 +374,7 @@ NOMINATIONS_QUESTION_ISSUES_ID = 24
 
 ELECTORAL_COORDINATOR_EMAIL = str(os.environ.get(
     'ELECTORAL_COORDINATOR_EMAIL',
-    'political@ourrevolution.com'
+    'qa@ourrevolution.com'
 ))
 ENDORSEMENT_PROCESS_URL = '/docs/our-revolution-endorsement-process/'
 GROUPS_ADD_URL = '/groups/new/'
@@ -418,7 +418,10 @@ ANYMAIL = {
     'MAILGUN_SENDER_DOMAIN': MAILGUN_SENDER_DOMAIN
 }
 
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'anymail.backends.mailgun.MailgunBackend')
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'anymail.backends.mailgun.EmailBackend',
+)
 
 IGNORABLE_404_URLS = [
         re.compile(r'^/favicon\.ico'),
