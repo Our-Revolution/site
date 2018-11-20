@@ -94,6 +94,7 @@
 </script>
 
 <!--  Places Libary for Autocomplete -->
-<script src="//maps.googleapis.com/maps/api/js?key={% google_maps_public_key %}&libraries=places&callback=initAutocomplete" async defer></script>
+{% google_maps_public_key as google_maps_public_key %}
+<script src="//maps.googleapis.com/maps/api/js?{% if google_maps_public_key %}key={{ google_maps_public_key }}&{% endif %}libraries=places&callback=initAutocomplete" async defer></script>
 
 {% endblock %}

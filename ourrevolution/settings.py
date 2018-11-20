@@ -412,10 +412,7 @@ MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY', None)
 MAILGUN_SENDER_DOMAIN = os.environ.get('MAILGUN_SENDER_DOMAIN', None)
 
 """Public key for browser/js calls"""
-GOOGLE_MAPS_PUBLIC_KEY = os.environ.get(
-    'GOOGLE_MAPS_PUBLIC_KEY',
-    "AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg",
-)
+GOOGLE_MAPS_PUBLIC_KEY = os.environ.get('GOOGLE_MAPS_PUBLIC_KEY', None)
 """Secret key for server side calls"""
 GOOGLE_MAPS_SERVER_KEY = os.environ.get('GOOGLE_MAPS_SERVER_KEY', None)
 
