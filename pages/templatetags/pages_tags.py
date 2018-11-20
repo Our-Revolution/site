@@ -5,6 +5,7 @@ from pages.models import AlertLevels, NotificationBanner, SplashModal
 register = template.Library()
 
 BASE_URL = settings.BASE_URL
+GOOGLE_MAPS_PUBLIC_KEY = settings.GOOGLE_MAPS_PUBLIC_KEY
 OR_META_IMAGE_URL = settings.OR_META_IMAGE_URL
 SPLASH_COOKIE_EXPIRE_DAYS = settings.SPLASH_COOKIE_EXPIRE_DAYS
 SPLASH_COOKIE_NAME = settings.SPLASH_COOKIE_NAME
@@ -48,6 +49,11 @@ def get_alert_level_class(value):
 @register.simple_tag
 def groups_url():
     return settings.GROUPS_URL
+
+
+@register.simple_tag
+def google_maps_public_key():
+    return GOOGLE_MAPS_PUBLIC_KEY
 
 
 @register.simple_tag
