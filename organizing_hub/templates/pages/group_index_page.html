@@ -1,6 +1,6 @@
 {% extends "organizing_hub_groups.html" %}
 
-{% load static wagtailcore_tags %}
+{% load static pages_tags wagtailcore_tags %}
 
 {% block content %}
 
@@ -94,6 +94,6 @@
 </script>
 
 <!--  Places Libary for Autocomplete -->
-<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="//maps.googleapis.com/maps/api/js?key={% google_maps_public_key %}&libraries=places&callback=initAutocomplete" async defer></script>
 
 {% endblock %}
