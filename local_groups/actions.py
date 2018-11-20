@@ -1,6 +1,11 @@
 import operator
 import unicodecsv
+from django.conf import settings
 from django.http import HttpResponse
+
+
+GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
+
 
 def export_as_csv_action(description="Export selected objects as CSV file",
                          fields=None, exclude=None, header=True):
@@ -36,7 +41,7 @@ def geocode_groups(modelamin, request, queryset):
     from local_groups.models import Group
     from django.contrib.gis.geos import Point
 
-    geolocator = googlemaps.Client(key="AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg")
+    geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
 
     groups = queryset
 

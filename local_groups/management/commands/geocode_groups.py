@@ -1,14 +1,17 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 import googlemaps
 from local_groups.models import Group
 from django.contrib.gis.geos import Point
 
+GOOGLE_MAPS_SERVER_KEY = settings.GOOGLE_MAPS_SERVER_KEY
+
 
 class Command(BaseCommand):
     help = 'Tries to get lat and long for groups that have none.'
-    
+
     def handle(self, *args, **options):
-        geolocator = googlemaps.Client(key="AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg")
+        geolocator = googlemaps.Client(key=GOOGLE_MAPS_SERVER_KEY)
 
         for group in Group.objects.filter(point__isnull=True):
 
