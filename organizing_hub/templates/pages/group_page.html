@@ -1,6 +1,6 @@
 {% extends "organizing_hub_groups.html" %}
 
-{% load django_bootstrap_breadcrumbs static wagtailcore_tags %}
+{% load django_bootstrap_breadcrumbs pages_tags static wagtailcore_tags %}
 
 {% block breadcrumbs %}
   {{ block.super }}
@@ -85,7 +85,7 @@
                   width="100%"
                   height="300"
                   frameborder="0" style="border:0;"
-                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC1wSXL1blzsn-B_8KJHc-b1QFrxVPyhBg
+                  src="https://www.google.com/maps/embed/v1/place?key={% google_maps_public_key %}
                     &q={{group.recurring_meeting_location.raw|urlencode}}" class="light-wash" allowfullscreen>
                 </iframe>
               </div>
