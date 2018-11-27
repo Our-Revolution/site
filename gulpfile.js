@@ -4,7 +4,6 @@ var gulp = require('gulp'),
   imagemin = require('gulp-imagemin'),
   autoprefixer = require('gulp-autoprefixer'),
   sourcemaps = require('gulp-sourcemaps'),
-  watch = require('gulp-watch'),
   minifycss = require('gulp-minify-css'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
@@ -90,25 +89,7 @@ gulp.task('images', function() {
 gulp.task('fonts', function() {
   return gulp.src('pages/static/src/fonts/**/*')
     .pipe(gulp.dest('pages/static/dist/fonts'))
-})
-
-/* Watch Files For Changes and Live Reload Browser */
-gulp.task('watch', function() {
-    livereload.listen();
-
-    /* Trigger SASS and a live reload on SCSS changes */
-    gulp.watch('pages/static/src/scss/**/*.scss', {interval: 500}, ['sass']);
-
-    /* Trigger imagemin and live reload on image changes */
-    gulp.watch('pages/static/src/img/**/*', {interval: 500}, ['images']);
-
-    /* Trigger browserify and live reload on JS changes */
-    gulp.watch('pages/static/src/js/**/*', {interval: 500}, ['js']);
-
-    /* Trigger a live reload on any Django template changes */
-    gulp.watch('**/templates/*', {interval: 500}).on('change', livereload.changed);
-
 });
 
 gulp.task('build', ['sass', 'js', 'fonts']);
-gulp.task('default', ['sass', 'js', 'watch']);
+gulp.task('default', ['sass', 'js']);
