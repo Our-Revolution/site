@@ -9,7 +9,6 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   gzip = require('gulp-gzip'),
   changed = require('gulp-changed'),
-  watchify = require('watchify'),
   browserify = require('browserify'),
   source = require('vinyl-source-stream'),
   buffer = require('vinyl-buffer'),
@@ -30,7 +29,7 @@ var browserifyOptions = {
   entries: ['pages/static/src/js/app.js'],
   debug: true
 }
-var opts = _.assign({}, watchify.args, browserifyOptions);
+var opts = _.assign({}, browserifyOptions);
 var b = browserify(opts);
 
 gulp.task('js', bundle); // so you can run `gulp js` to build the file
