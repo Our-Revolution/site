@@ -24,7 +24,7 @@
     "gulp-watch": "^4.3.10",
     "jquery": "^3.1.1",
     "js-cookie": "^2.1.x",
-    "lodash": "^4.17.4",
+    "lodash": ">=4.17.5",
     "lodash.clonedeep": "^4.5.0",
     "node-sass": "^4.5.3",
     "smooth-scroll": "^14.2.1",
