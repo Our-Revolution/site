@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
   livereload = require('gulp-livereload'),
   sass = require('gulp-sass'),
-  imagemin = require('gulp-imagemin'),
   autoprefixer = require('gulp-autoprefixer'),
   sourcemaps = require('gulp-sourcemaps'),
   minifycss = require('gulp-minify-css'),
@@ -74,14 +73,6 @@ gulp.task('sass', function() {
   .pipe(gzip(gzipOptions))
   .pipe(gulp.dest('pages/static/dist/css'))
   .pipe(livereload());
-});
-
-/* Optimize Images */
-gulp.task('images', function() {
-  return gulp.src('pages/static/src/img/**')
-    .pipe(changed('pages/static/dist/img/'))
-    .pipe(imagemin())
-    .pipe(gulp.dest('pages/static/dist/img/'))
 });
 
 /* Copy Fonts to Dist */
