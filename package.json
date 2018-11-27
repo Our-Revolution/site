@@ -28,7 +28,6 @@
     "lodash.clonedeep": "^4.5.0",
     "node-sass": "^4.5.3",
     "smooth-scroll": "^14.2.1",
-    "update": "^0.7.4",
     "vanilla-lazyload": "^8.15.x",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
