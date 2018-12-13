@@ -1,0 +1,59 @@
+{% extends "account/organizing_hub_account.html" %}
+
+{% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
+
+{% block page_title %}Our Revolution - My Account{% endblock %}
+
+{% block content_heading %}
+My Account
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="container pt4">
+  <div class="row">
+    <div class="col-md-9 col-md-offset-3">
+
+      {% bootstrap_messages %}
+
+    </div>
+  </div>
+</div>
+
+<div class="container pb4">
+
+  <div class="row">
+
+    <div class="col-md-3">
+      {% organizing_hub_nav %}
+    </div>
+
+    <div class="col-md-9">
+
+      <p>
+        Logged in as
+        <strong>
+          {% if user.email %}
+          {{ user.email }}
+          {% else %}
+          {{ user.username }}
+          {% endif %}
+        </strong>
+      </p>
+
+      <hr />
+
+      <p>
+        <strong><a href="{% url 'organizing-hub-password-change' %}">
+          Change Password
+        </a></strong>
+      </p>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

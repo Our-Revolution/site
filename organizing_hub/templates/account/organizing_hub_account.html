@@ -1,0 +1,8 @@
+{% extends "organizing_hub_layout.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "My Account" "organizing-hub-account" %}
+{% endblock %}
