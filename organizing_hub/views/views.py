@@ -607,6 +607,10 @@ class GroupAdminsView(
         )
 
 
+class MyAccountView(LoginRequiredMixin, TemplateView):
+    template_name = "my_account.html"
+
+
 class PasswordChangeView(
     LoginRequiredMixin,
     SuccessMessageMixin,
@@ -654,7 +658,7 @@ class PasswordChangeView(
                 sure all fields are filled with correct data and try again.
                 '''
             )
-            return redirect('organizing-hub-account')
+            return redirect('organizing-hub-password-change')
 
         """Set new password"""
         try:
@@ -667,7 +671,7 @@ class PasswordChangeView(
                 sure all fields are filled with correct data and try again.
                 '''
             )
-            return redirect('organizing-hub-account')
+            return redirect('organizing-hub-password-change')
 
         return super(PasswordChangeView, self).form_valid(form)
 

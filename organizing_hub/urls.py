@@ -26,6 +26,7 @@ from .views import (
     EventPromoteView,
     EventUpdateView,
     GroupAdminsView,
+    MyAccountView,
     PasswordChangeView,
     PasswordResetView,
 )
@@ -74,7 +75,7 @@ urlpatterns = [
         url(r'^account/', include([
             url(
                 r'^$',
-                PasswordChangeView.as_view(),
+                MyAccountView.as_view(),
                 name='organizing-hub-account',
             ),
             url(
@@ -84,6 +85,11 @@ urlpatterns = [
             ),
         ])),
         url(r'^password/', include([
+            url(
+                r'^change/',
+                PasswordChangeView.as_view(),
+                name='organizing-hub-password-change',
+            ),
             url(r'^reset/', include([
                 url(
                     r'^$',
