@@ -608,7 +608,7 @@ class GroupAdminsView(
 
 
 class MyAccountView(LoginRequiredMixin, TemplateView):
-    template_name = "my_account.html"
+    template_name = "account/my_account.html"
 
 
 class PasswordChangeView(
@@ -619,7 +619,7 @@ class PasswordChangeView(
     form_class = PasswordChangeForm
     success_message = "Your password has been updated successfully."
     success_url = ORGANIZING_HUB_DASHBOARD_URL
-    template_name = "password_change.html"
+    template_name = "account/password_change.html"
 
     def check_old_password(self, form):
         """Check if old password is valid in BSD"""

@@ -1,13 +1,8 @@
-{% extends "organizing_hub_layout.html" %}
+{% extends "account/organizing_hub_account.html" %}
 
 {% load bootstrap3 django_bootstrap_breadcrumbs organizing_hub_tags %}
 
 {% block page_title %}Our Revolution - My Account{% endblock %}
-
-{% block breadcrumbs %}
-    {{ block.super }}
-    {% breadcrumb "My Account" "organizing-hub-account" %}
-{% endblock %}
 
 {% block content_heading %}
 My Account
@@ -50,9 +45,13 @@ My Account
 
         <hr />
 
-        <a href="{% url 'organizing-hub-password-change' %}">
-          Change Password
-        </a>
+        <p>
+          <strong>
+            <a href="{% url 'organizing-hub-password-change' %}">
+              Change Password
+            </a>
+          </strong>
+        </p>
 
       </div>
   </div>
