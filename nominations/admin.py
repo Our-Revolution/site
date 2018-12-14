@@ -366,6 +366,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         'candidate_state',
         'questionnaire.general_election_date',
         'questionnaire.primary_election_date',
+        'questionnaire.candidate_is_member',
         'authorized_email',
         'status',
         'vol_incumbent',
