@@ -1,5 +1,4 @@
 from django import forms
-from django.forms.widgets import CheckboxInput, Select
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
@@ -173,8 +172,6 @@ class QuestionnaireForm(forms.ModelForm):
         widgets = {
             'general_election_date': DateInput(),
             'primary_election_date': DateInput(),
-            # 'candidate_held_office': CheckboxInput(),
-            # 'candidate_is_member': CheckboxInput(),
         }
 
 
