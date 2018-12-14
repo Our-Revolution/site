@@ -306,6 +306,11 @@
           <strong>Party:</strong> {{ app.questionnaire.candidate_party }}
         </p>
 
+        <p>
+          <strong>Is candidate a member of Our Revolution?</strong>
+          {{ app.questionnaire.candidate_is_member|yesno:"Yes,No,Unknown" }}
+        </p>
+
       </section>
 
       <section>
