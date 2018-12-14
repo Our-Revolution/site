@@ -141,7 +141,7 @@ class Questionnaire(models.Model):
         verbose_name="Has the candidate ever held public office?",
     )
     candidate_is_member = models.NullBooleanField(
-        verbose_name="Is the candidate a member of Our Revolution?",
+        verbose_name="Is candidate a member of Our Revolution?",
     )
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
