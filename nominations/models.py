@@ -134,7 +134,12 @@ class Questionnaire(models.Model):
     candidate_office = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Office")
     candidate_district = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate District")
     candidate_party = models.CharField(null=True, max_length=255, blank=False, verbose_name="Candidate Party Affiliation")
-    candidate_held_office = models.NullBooleanField(default=True,null=True, blank=False, verbose_name="Has the candidate ever held public office?")
+    candidate_held_office = models.NullBooleanField(
+        verbose_name="Has the candidate ever held public office?"
+    )
+    candidate_is_member = models.NullBooleanField(
+        verbose_name="Is candidate a member of Our Revolution?"
+    )
     candidate_city = models.CharField(null=True, max_length=255, blank=True, verbose_name="Candidate City")
     candidate_state = USStateField(max_length=2, null=True, blank=False, verbose_name="Candidate State")
     general_election_date = models.DateField(verbose_name = 'General Election Date', null = True, blank = False)
@@ -179,6 +184,7 @@ class Questionnaire(models.Model):
         if not skip_application_save:
             for app in self.application_set.all():
                 app.save()
+
 
 class Question(models.Model):
     text = models.TextField(verbose_name="Question Text")

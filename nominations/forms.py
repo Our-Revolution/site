@@ -111,7 +111,17 @@ class NominationResponseFormsetHelper(FormHelper):
 
 NominationResponseFormset = forms.inlineformset_factory(Nomination, NominationResponse, exclude=[], extra=0, can_delete=False)
 
+
 class QuestionnaireForm(forms.ModelForm):
+    candidate_held_office = forms.BooleanField(
+        label="Has the candidate ever held public office?",
+        required=False,
+    )
+    candidate_is_member = forms.BooleanField(
+        label="Is candidate a member of Our Revolution?",
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super(QuestionnaireForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -122,19 +132,20 @@ class QuestionnaireForm(forms.ModelForm):
             Div(
                 HTML('<h3>Basic Candidate Information</h3>'),
                 Div(
-                    Field('candidate_first_name',wrapper_class='col-md-6'),
-                    Field('candidate_last_name',wrapper_class='col-md-6'),
-                    Field('candidate_bio',wrapper_class='col-md-12'),
-                    Field('candidate_email',wrapper_class='col-md-6'),
-                    Field('candidate_phone',wrapper_class='col-md-6'),
-                    Field('candidate_office',wrapper_class='col-md-6'),
-                    Field('candidate_district',wrapper_class='col-md-6'),
-                    Field('candidate_party',wrapper_class='col-md-6'),
-                    Field('candidate_held_office',wrapper_class='col-md-6'),
-                    Field('candidate_city',wrapper_class='col-md-6'),
-                    Field('candidate_state',wrapper_class='col-md-6'),
-                    Field('general_election_date',wrapper_class='col-md-6'),
-                    Field('primary_election_date',wrapper_class='col-md-6'),
+                    Field('candidate_first_name', wrapper_class='col-md-6'),
+                    Field('candidate_last_name', wrapper_class='col-md-6'),
+                    Field('candidate_bio', wrapper_class='col-md-12'),
+                    Field('candidate_email', wrapper_class='col-md-6'),
+                    Field('candidate_phone', wrapper_class='col-md-6'),
+                    Field('candidate_office', wrapper_class='col-md-6'),
+                    Field('candidate_district', wrapper_class='col-md-6'),
+                    Field('candidate_city', wrapper_class='col-md-6'),
+                    Field('candidate_state', wrapper_class='col-md-6'),
+                    Field('general_election_date', wrapper_class='col-md-6'),
+                    Field('primary_election_date', wrapper_class='col-md-6'),
+                    Div(Field('candidate_held_office'), css_class='col-md-6'),
+                    Div(Field('candidate_is_member'), css_class='col-md-6'),
+                    Field('candidate_party', wrapper_class='col-md-6'),
                     css_class='pt20 br3 f5f5f5-bg mb20 clearfix',
                 ),
                 css_class='col-md-12'
@@ -160,8 +171,9 @@ class QuestionnaireForm(forms.ModelForm):
         exclude = ['status']
         widgets = {
             'general_election_date': DateInput(),
-            'primary_election_date': DateInput()
+            'primary_election_date': DateInput(),
         }
+
 
 class QuestionnaireResponseFormsetHelper(FormHelper):
     def __init__(self, *args, **kwargs):

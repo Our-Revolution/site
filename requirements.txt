@@ -25,7 +25,7 @@ django-bootstrap3>=8.2.3,<8.3
 django-celery-results>=1.0,<1.1
 django-ckeditor==5.3.1
 django-countries==4.1
-django-crispy-forms==1.6.1
+django-crispy-forms>=1.7,<1.8
 django-debug-toolbar==1.6
 django-dotenv==1.4.1
 django-easy-pdf==0.1.1
