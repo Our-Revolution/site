@@ -209,13 +209,10 @@ def find_event_by_id_obfuscated(event_id_obfuscated):
         request_type,
         body
     )
-    logger.debug(
-        'BSD get_event_details result status: ' + str(api_result.http_status)
-    )
+
     """BSD api returns 200 even when there is no event"""
     if api_result.http_status == 200:
         event_json = json.loads(api_result.body)
-        logger.debug('Event JSON from BSD api: ' + str(event_json))
         if event_json != "The event_id_obfuscated '%s' does not exist in the system." % event_id_obfuscated:
             event = BSDEvent.objects.from_json(event_json)
 
@@ -295,8 +292,6 @@ class BSDEventManager(models.Manager):
             BSDEvent
                 Returns BSD Event based on JSON data, or None for invalid data
         """
-
-        logger.debug('Get BSD Event from json data: ' + str(data))
 
         """Assume duration type = minutes for BSD data"""
         duration_type = duration_type_minutes
