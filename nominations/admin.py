@@ -410,6 +410,12 @@ class ApplicationAdmin(admin.ModelAdmin):
     get_general_election.short_description = 'General'
     get_general_election.admin_order_field = 'questionnaire__general_election_date'
 
+    def get_is_member(self, obj):
+        return obj.questionnaire.candidate_is_member
+
+    get_is_member.short_description = 'Is candidate a member of Our Revolution?'
+    get_is_member.admin_order_field = 'questionnaire__candidate_is_member'
+
     def get_primary_election(self, obj):
         return obj.questionnaire.primary_election_date
 
@@ -451,6 +457,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'candidate_state',
                     'get_general_election',
                     'get_primary_election',
+                    'get_is_member',
                     'questionnaire',
                 ),
                 'description': "To edit election dates, visit the questionnaire."
@@ -533,6 +540,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                     'candidate_state',
                     'get_general_election',
                     'get_primary_election',
+                    'get_is_member',
                 ),
             }),
             volunteer_research_fieldset,
@@ -574,6 +582,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         readonly_methods = (
             'get_general_election',
             'get_primary_election',
+            'get_is_member',
         )
         if request.user.has_perm('nominations.admin_application'):
             return readonly_methods
