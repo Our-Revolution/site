@@ -140,9 +140,6 @@ def send_event_promotion(event_promotion_id):
         ):
             sent_count += 1
 
-        """Wait one second before next one for rate limiting"""
-        time.sleep(1)
-
     """Update status, date sent, sent count if emails were sent"""
     if sent_count > 0:
         event_promotion.status = EventPromotionStatus.sent.value[0]
