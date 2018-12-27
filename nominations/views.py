@@ -15,7 +15,9 @@ from django.views.generic import (
     FormView
 )
 from django.http import HttpResponseRedirect
+from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
+from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from .forms import (
     ApplicationForm,
     NominationForm,
@@ -110,17 +112,29 @@ class ApplicationTypeView(LoginRequiredMixin, TemplateView):
     template_name = 'application_type.html'
 
 
-@method_decorator(verified_email_required, name='dispatch')
-class CreateApplicationView(CreateView):
+class CreateApplicationView(
+    LocalGroupPermissionRequiredMixin,
+    CreateView,
+):
     form_class = ApplicationForm
+    permission_required = 'nominations.add_application'
     template_name = "application.html"
+    skip_feature_check = True
     success_url = '/groups/nominations/application'
 
     def form_valid(self, form):
+        """Attach user and local group to application"""
         form.instance.auth_user = self.request.user
+        form.instance.group = self.get_local_group()
+
         super(CreateApplicationView, self).form_valid(form)
 
         return redirect(self.success_url + '?id=' + str(self.object.pk))
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -660,7 +674,10 @@ class CreateInitiativeView(CreateView):
     success_url = '/groups/nominations/initiatives/success'
 
     def form_valid(self, form):
-        form.instance.auth_user = self.request.user
+        user = self.request.user
+        form.instance.auth_user = user
+        """TODO: attach local group"""
+        local_group = find_local_group_by_user(user)
         form.instance.locality = form.cleaned_data['locality']
         form.instance.status = 'submitted'
 

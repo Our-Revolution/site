@@ -8,11 +8,8 @@ import os, requests
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+
 class ApplicationForm(forms.ModelForm):
-    group_name = forms.CharField(label="Group Name")
-    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
-                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
-                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
 
     #crispy forms
@@ -28,8 +25,6 @@ class ApplicationForm(forms.ModelForm):
             Div(
                 HTML('<h3>Your Group Information</h3>'),
                 Div(
-                    Field('group_name', wrapper_class='col-md-8'),
-                    Field('group', wrapper_class='col-md-4'),
                     Field('rep_first_name', wrapper_class='col-md-6'),
                     Field('rep_last_name', wrapper_class='col-md-6'),
                     Field('rep_phone', wrapper_class='col-md-6'),
@@ -66,7 +61,6 @@ class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = [
-            'group',
             'rep_email',
             'rep_first_name',
             'rep_last_name',
@@ -254,11 +248,8 @@ class CandidateSubmitForm(forms.Form):
             Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
 
+
 class InitiativeApplicationForm(forms.ModelForm):
-    group_name = forms.CharField(label="Group Name")
-    group = forms.ModelChoiceField(label="4 Digit Group ID (ex. 0413)", to_field_name="group_id", \
-                        queryset=Group.objects.filter(status='approved'), widget=forms.NumberInput, \
-                        error_messages={'invalid_choice': "We couldn't find a group with that ID - if you need help, email info@ourrevolution.com."})
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
 
     LOCALITIES = (
@@ -282,8 +273,6 @@ class InitiativeApplicationForm(forms.ModelForm):
             Div(
                 HTML('<h3>Your Group Information</h3>'),
                 Div(
-                    Field('group_name',wrapper_class='col-md-8'),
-                    Field('group',wrapper_class='col-md-4'),
                     Field('rep_first_name',wrapper_class='col-md-6'),
                     Field('rep_last_name',wrapper_class='col-md-6'),
                     Field('rep_phone',wrapper_class='col-md-6'),
@@ -326,7 +315,24 @@ class InitiativeApplicationForm(forms.ModelForm):
 
     class Meta:
         model = InitiativeApplication
-        fields = ['group','rep_email','rep_first_name','rep_last_name','rep_phone','name','election_date','website_url','volunteer_url','donate_url','city','county','state','description','question','vote','additional_info']
+        fields = [
+            'rep_email',
+            'rep_first_name',
+            'rep_last_name',
+            'rep_phone',
+            'name',
+            'election_date',
+            'website_url',
+            'volunteer_url',
+            'donate_url',
+            'city',
+            'county',
+            'state',
+            'description',
+            'question',
+            'vote',
+            'additional_info',
+        ]
 
         widgets = {
             'election_date': DateInput(),
