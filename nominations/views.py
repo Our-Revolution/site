@@ -131,6 +131,11 @@ class CreateApplicationView(
 
         return redirect(self.success_url + '?id=' + str(self.object.pk))
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateApplicationView, self).get_context_data(**kwargs)
+        context['local_group'] = self.get_local_group()
+        return context
+
     def get_local_group(self):
         if self.local_group is None:
             self.local_group = find_local_group_by_user(self.request.user)

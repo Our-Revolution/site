@@ -21,7 +21,13 @@
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Start a new application</h1>
-        <p class="fs18"><strong>To start a new candidate endorsement application, you’ll need your Group ID, some basic information about your group, and contact information for one group representative.</strong></p>
+        <p class="fs18">
+          <strong>
+            To start a new candidate endorsement application, you’ll need some
+            basic information about your group and contact information for one
+            group representative.
+          </strong>
+        </p>
       </div>
     </div>
   </div>
@@ -31,6 +37,10 @@
       <div class="col-md-8 col-md-offset-2">
 
         {% nominations_platform_alert %}
+
+        <h2>
+          {{ local_group.name }}
+        </h2>
 
         {% crispy form %}
 
