@@ -248,13 +248,27 @@ class EditQuestionnaireView(UpdateView):
 class DashboardView(TemplateView):
     template_name = 'dashboard.html'
 
+    def can_create_application(self):
+
+        """Check local group permission"""
+        permission = 'nominations.add_application'
+        user = self.request.user
+        local_group = find_local_group_by_user(user)
+        if local_group is not None:
+            can_create = user.localgroupprofile.has_permission_for_local_group(
+                local_group,
+                permission
+            )
+        else:
+            can_create = False
+
+        return can_create
+
     def get_context_data(self, *args, **kwargs):
         context_data = super(DashboardView, self).get_context_data(
             *args,
             **kwargs
         )
-
-        """TODO check if user can create new applications"""
 
         """Get both legacy auth0 applications and new applications"""
         auth0_user_id = get_auth0_user_id_by_email(self.request.user.email)
@@ -272,6 +286,10 @@ class DashboardView(TemplateView):
             ).order_by('-create_dt')
             context_data['initiative_applications'] = InitiativeApplication.objects.all(
             ).filter(auth_user_id=self.request.user.id).order_by('-create_dt')
+
+        """Check if user can create new application"""
+        context_data['can_create_application'] = self.can_create_application()
+
         return context_data
 
 

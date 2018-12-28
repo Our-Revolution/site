@@ -27,7 +27,13 @@
 
         {% bootstrap_messages %}
 
-        <a href="/groups/nominations/application-type" class="btn btn-block btn-success uppercase ls2">Start a new application</a>
+
+        {% if can_create_application %}
+        <a href="/groups/nominations/application-type"
+        class="btn btn-block btn-success uppercase ls2">
+          Start a new application
+        </a>
+        {% endif %}
 
         {% if applications or initiative_applications %}
           {% if applications %}
