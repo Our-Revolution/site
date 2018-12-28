@@ -108,8 +108,18 @@ class NominationsIndexView(TemplateView):
         return context
 
 
-class ApplicationTypeView(LoginRequiredMixin, TemplateView):
+class ApplicationTypeView(
+    LocalGroupPermissionRequiredMixin,
+    TemplateView,
+):
+    permission_required = 'nominations.add_application'
+    skip_feature_check = True
     template_name = 'application_type.html'
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
 
 
 class CreateApplicationView(
@@ -243,6 +253,8 @@ class DashboardView(TemplateView):
             *args,
             **kwargs
         )
+
+        """TODO check if user can create new applications"""
 
         """Get both legacy auth0 applications and new applications"""
         auth0_user_id = get_auth0_user_id_by_email(self.request.user.email)
