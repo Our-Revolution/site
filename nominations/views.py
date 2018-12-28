@@ -672,17 +672,21 @@ class CandidateSubmitView(FormView):
 
 
 # Ballot initiatives
-@method_decorator(verified_email_required, name='dispatch')
-class CreateInitiativeView(CreateView):
+class CreateInitiativeView(
+    LocalGroupPermissionRequiredMixin,
+    CreateView,
+):
     form_class = InitiativeApplicationForm
+    permission_required = 'nominations.add_initiativeapplication'
     template_name = "initiatives/application.html"
+    skip_feature_check = True
     success_url = '/groups/nominations/initiatives/success'
 
     def form_valid(self, form):
-        user = self.request.user
-        form.instance.auth_user = user
-        """TODO: attach local group"""
-        local_group = find_local_group_by_user(user)
+        """Attach user and local group to application"""
+        form.instance.auth_user = self.request.user
+        form.instance.group = self.get_local_group()
+
         form.instance.locality = form.cleaned_data['locality']
         form.instance.status = 'submitted'
 
@@ -691,8 +695,14 @@ class CreateInitiativeView(CreateView):
         return redirect(self.success_url + '?id=' + str(self.object.pk))
 
     def get_context_data(self, *args, **kwargs):
-        context_data = super(CreateInitiativeView, self).get_context_data(
+        context = super(CreateInitiativeView, self).get_context_data(
             *args,
             **kwargs
         )
-        return context_data
+        context['local_group'] = self.get_local_group()
+        return context
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
