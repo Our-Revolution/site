@@ -23,7 +23,7 @@ class ApplicationForm(forms.ModelForm):
 
         self.helper.layout = Layout(
             Div(
-                HTML('<h3>Your Group Information</h3>'),
+                HTML('<h3>Your Information</h3>'),
                 Div(
                     Field('rep_first_name', wrapper_class='col-md-6'),
                     Field('rep_last_name', wrapper_class='col-md-6'),
@@ -271,7 +271,7 @@ class InitiativeApplicationForm(forms.ModelForm):
 
         self.helper.layout = Layout(
             Div(
-                HTML('<h3>Your Group Information</h3>'),
+                HTML('<h3>Your Information</h3>'),
                 Div(
                     Field('rep_first_name',wrapper_class='col-md-6'),
                     Field('rep_last_name',wrapper_class='col-md-6'),
