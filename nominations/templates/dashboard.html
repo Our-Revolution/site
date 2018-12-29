@@ -27,12 +27,16 @@
 
         {% bootstrap_messages %}
 
-
         {% if can_create_application %}
         <a href="/groups/nominations/application-type"
         class="btn btn-block btn-success uppercase ls2">
           Start a new application
         </a>
+        {% else %}
+        <p>
+          In order to start a new application you need to request access from
+          a Group Leader or Admin.
+        </p>
         {% endif %}
 
         {% if applications or initiative_applications %}
@@ -99,10 +103,23 @@
               </table>
             </div>
           {% endif %}
-        {% else %}
-          <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">You haven't started any nomination applications yet. When your group is ready, you can start a new endorsement application by clicking the button above.</p>
 
-          <p class="mt20 text-center"><strong>Questions?</strong> Let us know at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a></p>
+        {% else %}
+
+        <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">
+          You haven't started any nomination applications yet.
+
+          {% if can_create_application %}
+          When your group is ready, you can start a new endorsement application
+          by clicking the button above.
+          {% endif %}
+
+        </p>
+
+          <p class="mt20 text-center">
+            <strong>Questions?</strong> Let us know at
+            <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>
+          </p>
         {% endif %}
 
       </div>
