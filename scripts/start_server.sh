@@ -10,11 +10,13 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
+# TODO: check if task machine mode is enabled
 echo "Restart celery"
 # Stop celery main process gracefully and auto-restart
 # TODO: TECH-1294 debug error code
 celery -A ourrevolution inspect stats | grep '"pid": ' | awk '{print $2}' | awk -F, '{print $1}' | xargs kill -TERM || true
 
+# TODO: check if web app mode is enabled
 echo "Start server"
 supervisorctl start gunicorn
 

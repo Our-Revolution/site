@@ -156,6 +156,13 @@ CANDIDATES_URL = '/candidates/'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
+"""
+Enable both web app and task handler by default. Override to run one at a time.
+
+TODO: move web app and task handler into separate projects.
+"""
+TASK_HANDLER_ENABLED = bool(int(os.environ.get('TASK_HANDLER_ENABLED', '1')))
+WEB_APP_ENABLED = bool(int(os.environ.get('WEB_APP_ENABLED', '1')))
 
 MANAGERS = ADMINS
 
