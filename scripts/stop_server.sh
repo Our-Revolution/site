@@ -10,7 +10,11 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 # TODO: TECH-1294 debug error code
 workon ourrevolution || true
 
-echo "Stop server"
-supervisorctl stop gunicorn
+# Check if web app is disabled
+if [ "$DISABLE_WEB_APP" != "1" ]
+then
+  echo "Stop server"
+  supervisorctl stop gunicorn
+fi
 
 echo "Finished script for stopping server"
