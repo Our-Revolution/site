@@ -22,7 +22,15 @@
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Submit a new ballot initiative application</h1>
 
-        <p class="fs18"><strong>To submit a new endorsement application for a ballot initiative, you’ll need your Group ID, some basic information about your group, contact information for one group representative, and information about the ballot initiative in question.</strong></p>
+        <p class="fs18">
+          <strong>
+            To submit a new endorsement application for a ballot initiative,
+            you'll need some basic information about your group, contact
+            information for one group representative, and information about the
+            ballot initiative in question.
+          </strong>
+        </p>
+
       </div>
     </div>
   </div>
@@ -32,6 +40,8 @@
       <div class="col-md-8 col-md-offset-2">
 
         {% nominations_platform_alert %}
+
+        <h2>{{ local_group.name }}</h2>
 
         {% crispy form %}
       </div>
