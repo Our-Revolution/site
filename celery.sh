@@ -4,6 +4,8 @@ source /home/ubuntu/.virtualenvs/ourrevolution/bin/virtualenvwrapper.sh
 workon ourrevolution
 
 # Check if task handler is disabled
+# Ignore errors in supervisor logs when disabled, this is expected
+# TODO: create separate tasks project and remove conditional logic
 if [ "$DISABLE_TASK_HANDLER" != "1" ]
 then
     # TODO: TECH-1649: debug env var issue
