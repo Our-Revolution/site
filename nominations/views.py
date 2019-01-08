@@ -105,13 +105,18 @@ def is_application_owner(user, application):
         return False
 
 
-def send_app_submitted_notification(application):
+def send_application_submitted_notification(application):
     """
     Send email notification to group/candidate/OR for Candidate Application
     submission
 
     Call this method as needed when the Candidate Application changes to status
     submitted
+
+    Parameters
+    ----------
+    application : CandidateApplication
+        CandidateApplication
     """
     candidate_name = application.candidate_name
     candidate_email = application.authorized_email
@@ -157,6 +162,29 @@ def send_app_submitted_notification(application):
     )
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+def submit_application(application):
+    """
+    Submit Candidate Application and send email notification
+
+    Parameters
+    ----------
+    application : CandidateApplication
+        CandidateApplication
+
+    Returns
+        -------
+        CandidateApplication
+            Returns updated CandidateApplication
+    """
+    if application.questionnaire.status = 'complete' and (
+        application.nomination.status == 'complete'
+    ):
+        application.status = 'submitted'
+        application.save()
+        send_application_submitted_notification(application)
+    return application
 
 
 """Views"""
@@ -452,39 +480,39 @@ class QuestionnaireIndexView(FormView):
         return context_data
 
 
-@method_decorator(verified_email_required, name='dispatch')
-class SubmitView(FormView):
-    template_name = 'submit.html'
-    form_class = SubmitForm
-    success_url = '/groups/nominations/success'
-
-    # TODO: add conditional for candidate submission
-
-    def form_valid(self, form):
-        application = self.get_object()
-        application.status = 'submitted'
-        application.save()
-
-        """Send notification after submit"""
-        self.send_notification(application)
-
-        return super(SubmitView, self).form_valid(form)
-
-    def get_context_data(self, *args, **kwargs):
-        context_data = super(SubmitView, self).get_context_data(
-            *args,
-            **kwargs
-        )
-        context_data['application'] = self.get_object()
-        return context_data
-
-    def get_object(self):
-        app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application, pk=app_id)
-        if is_application_owner(self.request.user, app):
-            return app
-        else:
-            raise Http404(_("No application found matching the query"))
+# @method_decorator(verified_email_required, name='dispatch')
+# class SubmitView(FormView):
+#     template_name = 'submit.html'
+#     form_class = SubmitForm
+#     success_url = '/groups/nominations/success'
+#
+#     # TODO: add conditional for candidate submission
+#
+#     def form_valid(self, form):
+#         application = self.get_object()
+#         application.status = 'submitted'
+#         application.save()
+#
+#         """Send notification after submit"""
+#         self.send_notification(application)
+#
+#         return super(SubmitView, self).form_valid(form)
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context_data = super(SubmitView, self).get_context_data(
+#             *args,
+#             **kwargs
+#         )
+#         context_data['application'] = self.get_object()
+#         return context_data
+#
+#     def get_object(self):
+#         app_id = self.request.GET.get('id')
+#         app = get_object_or_404(Application, pk=app_id)
+#         if is_application_owner(self.request.user, app):
+#             return app
+#         else:
+#             raise Http404(_("No application found matching the query"))
 
     # def send_notification(self, application):
     #     """
@@ -729,39 +757,9 @@ class CandidateSubmitView(FormView):
         application.questionnaire.completed_by_candidate = True
         application.questionnaire.save()
 
-        # TODO: check if nomination is complete too, and submit app if so
-
-        # TODO: move email logic to method for send notification questionnaire complete
-
-        # TODO: refactor logic to only finish step 1 if needed. change submit url?
-
-        rep_email = application.rep_email
-        rep_name = application.rep_first_name + ' ' + application.rep_last_name
-        candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
-        nominations_submit_url = self.request.build_absolute_uri(
-            reverse_lazy('nominations-submit') + ('?id=%i' % application.id)
-        )
-
-        # send email to group
-        # plaintext = get_template('email/group_email.txt')
-        # htmly     = get_template('email/group_email.html')
-        #
-        # d = {
-        #     'rep_name': rep_name,
-        #     'candidate_name': candidate_name,
-        #     'nominations_submit_url': nominations_submit_url,
-        #     'or_logo_secondary': OR_LOGO_SECONDARY,
-        # }
-        #
-        # subject= candidate_name + " has completed your candidate questionnaire!"
-        # from_email='Our Revolution <info@ourrevolution.com>'
-        # to_email=["%s <%s>" % (rep_name,rep_email)]
-        #
-        # text_content = plaintext.render(d)
-        # html_content = htmly.render(d)
-        # msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-        # msg.attach_alternative(html_content, "text/html")
-        # msg.send()
+        """Check if nomination is complete too, and submit application if so"""
+        if application.nomination.status == 'complete':
+            submit_application(application)
 
         return super(CandidateSubmitView, self).form_valid(form)
 
