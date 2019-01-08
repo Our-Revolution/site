@@ -52,11 +52,10 @@ class ApplicationForm(forms.ModelForm):
                 css_class='col-md-12'
             ),
             Div(
-                # Field('agree', id='agree_field'),
                 Submit(
                     'submit',
                     'Start a Nomination',
-                    css_class='btn btn-success btn-block uppercase ls2 disabled',
+                    css_class='btn btn-success btn-block uppercase ls2',
                     css_id='submit_button'
                 ),
                 css_class='col-md-12'

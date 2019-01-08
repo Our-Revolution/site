@@ -40,6 +40,8 @@
 
         <h2>{{ local_group.name }}</h2>
 
+        <hr />
+
         <p class="fs-sm">
           As an official Our Revolution Group, you are in the unique position
           of nominating candidates for a National Our Revolution endorsement.
@@ -75,19 +77,5 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function(){
-
-    $('#agree_field').change(function(){
-      if(this.checked) {
-        $('#submit_button').removeClass('disabled');
-      } else {
-        $('#submit_button').addClass('disabled');
-      }
-    });
-
-  });
-</script>
 
 {% endblock %}
