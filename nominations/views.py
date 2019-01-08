@@ -52,12 +52,17 @@ auth0_domain = settings.AUTH0_DOMAIN
 auth0_client_id = settings.AUTH0_CLIENT_ID
 auth0_client_secret = settings.AUTH0_CLIENT_SECRET
 auth0_candidate_callback_url = settings.AUTH0_CANDIDATE_CALLBACK_URL
+ELECTORAL_COORDINATOR_EMAIL = settings.ELECTORAL_COORDINATOR_EMAIL
+OR_LOGO_SECONDARY = settings.OR_LOGO_SECONDARY
 
 QUESTIONNAIRE_NOT_FOUND_ERROR = """
 We couldn't find that questionnaire. Make sure you're logged in
 with the correct email address and that you have access to edit the current
 application.
 """
+
+
+"""Methods"""
 
 
 def get_auth0_user_id_by_email(email):
@@ -98,6 +103,63 @@ def is_application_owner(user, application):
     else:
         """Otherwise false"""
         return False
+
+
+def send_app_submitted_notification(application):
+    """
+    Send email notification to group/candidate/OR for Candidate Application
+    submission
+
+    Call this method as needed when the Candidate Application changes to status
+    submitted
+    """
+    candidate_name = application.candidate_name
+    candidate_email = application.authorized_email
+    group_name = application.group.name
+    group_email = application.rep_email
+
+    cc_emails = [
+        "%s <%s>" % (candidate_name, candidate_email),
+        "%s <%s>" % (
+            'Our Revolution Electoral Coordinator',
+            ELECTORAL_COORDINATOR_EMAIL
+        ),
+    ]
+    from_email = "%s <%s>" % (
+        'Our Revolution Electoral Coordinator',
+        ELECTORAL_COORDINATOR_EMAIL
+    )
+    to_email = [
+        "%s <%s>" % (group_name, group_email),
+    ]
+
+    subject = """
+    Your nomination for %s has been submitted! Here are the next steps.
+    """ % candidate_name
+
+    d = {
+        'or_logo_secondary': OR_LOGO_SECONDARY,
+        'group_name': group_name,
+        'candidate_name': candidate_name
+    }
+
+    html_template = get_template('email/application_submit_email.html')
+    html_content = html_template.render(d)
+    text_template = get_template('email/application_submit_email.txt')
+    text_content = text_template.render(d)
+
+    msg = EmailMultiAlternatives(
+        subject,
+        text_content,
+        from_email,
+        to_email,
+        cc=cc_emails
+    )
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+"""Views"""
 
 
 class NominationsIndexView(TemplateView):
@@ -180,6 +242,9 @@ class EditNominationView(UpdateView):
             print formset.errors
             return self.form_invalid(form)
 
+        # TODO: submit app if questionnaire is already complete too
+
+        # TODO why return? what is returned?
         return form_valid
 
     def get_context_data(self, *args, **kwargs):
@@ -335,38 +400,38 @@ class QuestionnaireIndexView(FormView):
         application.save()
         application.questionnaire.save()
 
-        plaintext = get_template('email/candidate_email.txt')
-        htmly = get_template('email/candidate_email.html')
-
-        d = {
-            'group_name': group_name,
-            'candidate_name': candidate_name,
-            'group_rep_email': rep_email,
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        }
-
-        subject = "You're being nominated for endorsement by an official Our Revolution group!"
-        from_email = 'Our Revolution <info@ourrevolution.com>'
-        to_email = ["%s <%s>" % (candidate_name, candidate_email)]
-        cc_emails = [
-            "%s <%s>" % (group_name, rep_email),
-            "%s <%s>" % (
-                'Our Revolution National',
-                settings.ELECTORAL_COORDINATOR_EMAIL
-            )
-        ]
-
-        text_content = plaintext.render(d)
-        html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(
-            subject,
-            text_content,
-            from_email,
-            to_email,
-            cc=cc_emails
-        )
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        # plaintext = get_template('email/candidate_email.txt')
+        # htmly = get_template('email/candidate_email.html')
+        #
+        # d = {
+        #     'group_name': group_name,
+        #     'candidate_name': candidate_name,
+        #     'group_rep_email': rep_email,
+        #     'or_logo_secondary': OR_LOGO_SECONDARY,
+        # }
+        #
+        # subject = "You're being nominated for endorsement by an official Our Revolution group!"
+        # from_email = 'Our Revolution <info@ourrevolution.com>'
+        # to_email = ["%s <%s>" % (candidate_name, candidate_email)]
+        # cc_emails = [
+        #     "%s <%s>" % (group_name, rep_email),
+        #     "%s <%s>" % (
+        #         'Our Revolution National',
+        #         ELECTORAL_COORDINATOR_EMAIL
+        #     )
+        # ]
+        #
+        # text_content = plaintext.render(d)
+        # html_content = htmly.render(d)
+        # msg = EmailMultiAlternatives(
+        #     subject,
+        #     text_content,
+        #     from_email,
+        #     to_email,
+        #     cc=cc_emails
+        # )
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
 
         return super(QuestionnaireIndexView, self).form_valid(form)
 
@@ -421,54 +486,57 @@ class SubmitView(FormView):
         else:
             raise Http404(_("No application found matching the query"))
 
-    def send_notification(self, application):
-        """
-        Send email notification for submission to group, candidate, and OR.
-        """
-        candidate_name = application.candidate_name
-        candidate_email = application.authorized_email
-        group_name = application.group.name
-        group_email = application.rep_email
-
-        cc_emails = [
-            "%s <%s>" % (candidate_name, candidate_email),
-            "%s <%s>" % (
-                'Our Revolution Electoral Coordinator',
-                settings.ELECTORAL_COORDINATOR_EMAIL
-            ),
-        ]
-        from_email = "%s <%s>" % (
-            'Our Revolution Electoral Coordinator',
-            settings.ELECTORAL_COORDINATOR_EMAIL
-        )
-        to_email = [
-            "%s <%s>" % (group_name, group_email),
-        ]
-
-        subject = """
-        Your nomination for %s has been submitted! Here are the next steps.
-        """ % candidate_name
-
-        d = {
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-            'group_name': group_name,
-            'candidate_name': candidate_name
-        }
-
-        html_template = get_template('email/application_submit_email.html')
-        html_content = html_template.render(d)
-        text_template = get_template('email/application_submit_email.txt')
-        text_content = text_template.render(d)
-
-        msg = EmailMultiAlternatives(
-            subject,
-            text_content,
-            from_email,
-            to_email,
-            cc=cc_emails
-        )
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+    # def send_notification(self, application):
+    #     """
+    #     Send email notification for submission to group, candidate, and OR.
+    #
+    #     TODO: refactor this method so it's called when the nomination and
+    #     questionnaire are both submitted, instead of during step 3.
+    #     """
+    #     candidate_name = application.candidate_name
+    #     candidate_email = application.authorized_email
+    #     group_name = application.group.name
+    #     group_email = application.rep_email
+    #
+    #     cc_emails = [
+    #         "%s <%s>" % (candidate_name, candidate_email),
+    #         "%s <%s>" % (
+    #             'Our Revolution Electoral Coordinator',
+    #             ELECTORAL_COORDINATOR_EMAIL
+    #         ),
+    #     ]
+    #     from_email = "%s <%s>" % (
+    #         'Our Revolution Electoral Coordinator',
+    #         ELECTORAL_COORDINATOR_EMAIL
+    #     )
+    #     to_email = [
+    #         "%s <%s>" % (group_name, group_email),
+    #     ]
+    #
+    #     subject = """
+    #     Your nomination for %s has been submitted! Here are the next steps.
+    #     """ % candidate_name
+    #
+    #     d = {
+    #         'or_logo_secondary': OR_LOGO_SECONDARY,
+    #         'group_name': group_name,
+    #         'candidate_name': candidate_name
+    #     }
+    #
+    #     html_template = get_template('email/application_submit_email.html')
+    #     html_content = html_template.render(d)
+    #     text_template = get_template('email/application_submit_email.txt')
+    #     text_content = text_template.render(d)
+    #
+    #     msg = EmailMultiAlternatives(
+    #         subject,
+    #         text_content,
+    #         from_email,
+    #         to_email,
+    #         cc=cc_emails
+    #     )
+    #     msg.attach_alternative(html_content, "text/html")
+    #     msg.send()
 
 
 def logout(request):
@@ -661,6 +729,12 @@ class CandidateSubmitView(FormView):
         application.questionnaire.completed_by_candidate = True
         application.questionnaire.save()
 
+        # TODO: check if nomination is complete too, and submit app if so
+
+        # TODO: move email logic to method for send notification questionnaire complete
+
+        # TODO: refactor logic to only finish step 1 if needed. change submit url?
+
         rep_email = application.rep_email
         rep_name = application.rep_first_name + ' ' + application.rep_last_name
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
@@ -669,25 +743,25 @@ class CandidateSubmitView(FormView):
         )
 
         # send email to group
-        plaintext = get_template('email/group_email.txt')
-        htmly     = get_template('email/group_email.html')
-
-        d = {
-            'rep_name': rep_name,
-            'candidate_name': candidate_name,
-            'nominations_submit_url': nominations_submit_url,
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        }
-
-        subject= candidate_name + " has completed your candidate questionnaire!"
-        from_email='Our Revolution <info@ourrevolution.com>'
-        to_email=["%s <%s>" % (rep_name,rep_email)]
-
-        text_content = plaintext.render(d)
-        html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        # plaintext = get_template('email/group_email.txt')
+        # htmly     = get_template('email/group_email.html')
+        #
+        # d = {
+        #     'rep_name': rep_name,
+        #     'candidate_name': candidate_name,
+        #     'nominations_submit_url': nominations_submit_url,
+        #     'or_logo_secondary': OR_LOGO_SECONDARY,
+        # }
+        #
+        # subject= candidate_name + " has completed your candidate questionnaire!"
+        # from_email='Our Revolution <info@ourrevolution.com>'
+        # to_email=["%s <%s>" % (rep_name,rep_email)]
+        #
+        # text_content = plaintext.render(d)
+        # html_content = htmly.render(d)
+        # msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
 
         return super(CandidateSubmitView, self).form_valid(form)
 
