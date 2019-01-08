@@ -40,6 +40,35 @@
 
         <h2>{{ local_group.name }}</h2>
 
+        <p class="fs-sm">
+          As an official Our Revolution Group, you are in the unique position
+          of nominating candidates for a National Our Revolution endorsement.
+          Throughout your process, the core Our Revolution values of
+          democracy and inclusivity are fully embraced.
+        </p>
+
+        <p class="fs-sm">
+          <strong>
+            By submitting this nomination, your Our Revolution Group
+            guarantees that:
+          </strong>
+        </p>
+
+        <ol class="fs-sm">
+          <li>
+            All members of the Group were given an unobstructed opportunity
+            to weigh in on the nomination.
+          </li>
+          <li>
+            A majority of people in the group support the nominated candidate
+            over any other candidates in the election.
+          </li>
+          <li>
+            There is significant support for the candidate and the Group is
+            committed to aiding the progressive champion to victory.
+          </li>
+        </ol>
+
         {% crispy form %}
 
       </div>
@@ -52,9 +81,9 @@
 
     $('#agree_field').change(function(){
       if(this.checked) {
-        $('#submit_button').removeClass('disabled')
+        $('#submit_button').removeClass('disabled');
       } else {
-        $('#submit_button').addClass('disabled')
+        $('#submit_button').addClass('disabled');
       }
     });
 
