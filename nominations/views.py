@@ -279,6 +279,7 @@ class EditNominationView(UpdateView):
             return self.form_invalid(form)
 
         """Submit application if questionnaire is complete too"""
+        application = self.get_object().application
         if application.questionnaire.status == 'complete':
             submit_application(application)
 

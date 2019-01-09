@@ -5,9 +5,6 @@
       <li {% if "/groups/nominations/application" in request.path %}class='active'{% endif %}><a href="/groups/nominations/application?id={{application.id}}">Application Status</a></li>
       <li {% if "/groups/nominations/nomination" in request.path %}class='active'{% endif %}><a href="/groups/nominations/nomination?id={{application.id}}">Nomination Form</a></li>
       <li {% if "/groups/nominations/questionnaire" in request.path %}class='active'{% endif %}><a href="/groups/nominations/questionnaire?id={{application.id}}">Candidate Questionnaire</a></li>
-      {% if application.is_editable %}
-        <li {% if "/groups/nominations/submit" in request.path %}class='active'{% endif %}><a href="/groups/nominations/submit?id={{application.id}}">Submit</a></li>
-      {% endif %}
     </ol>
 
   </div>
