@@ -27,7 +27,6 @@ from .forms import (
     QuestionnaireForm,
     QuestionnaireResponseFormset,
     QuestionnaireResponseFormsetHelper,
-    SubmitForm,
     CandidateEmailForm,
     CandidateSubmitForm,
     InitiativeApplicationForm

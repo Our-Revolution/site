@@ -192,20 +192,6 @@ class QuestionnaireResponseFormsetHelper(FormHelper):
 QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Response, exclude=[], extra=0, can_delete=False)
 
 
-class SubmitForm(forms.Form):
-    agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(SubmitForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_id = 'submit_form'
-        self.helper.layout = Layout(
-            Field('agree',id='agree_field'),
-            Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
-        )
-
 class CandidateEmailForm(forms.Form):
     candidate_email = forms.EmailField()
 
