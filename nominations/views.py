@@ -119,7 +119,11 @@ def send_application_submitted_notification(application):
         CandidateApplication
     """
     candidate_name = application.candidate_name
-    candidate_email = application.authorized_email
+    if application.authorized_email is not None:
+        candidate_email = application.authorized_email
+    else:
+        candidate_email = application.questionnaire.candidate_email
+
     group_name = application.group.name
     group_email = application.rep_email
 
