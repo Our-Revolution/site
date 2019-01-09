@@ -361,7 +361,8 @@ class Application(models.Model):
         ),
         ('needs-questionnaire', 'Needs Questionnaire'),
         ('needs-group-form', 'Needs Group Form'),
-        ('incomplete', 'Needs Submission'),  # Deprecated as of 2019-01-08
+        # Deprecated as of 2019-01-08
+        # ('incomplete', 'Needs Submission'),
         ('submitted', 'Submitted'),
         ('needs-research', 'Needs Research'),
         ('needs-staff-review', 'Needs Staff Review'),
