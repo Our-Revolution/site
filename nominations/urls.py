@@ -25,13 +25,6 @@ from .decorators import is_authenticated_candidate
 urlpatterns = [
     url(r'^groups/nominations/', include([
         url(
-            r'^success/$',
-            login_required(TemplateView.as_view(
-                template_name='success.html'
-            )),
-            name='nominations-submit-success',
-        ),
-        url(
             r'^email-success/$',
             login_required(TemplateView.as_view(
                 template_name='email-success.html'
