@@ -178,12 +178,20 @@ def submit_application(application):
         CandidateApplication
             Returns updated CandidateApplication
     """
+
+    """Check if questionnaire and nomination are complete"""
     if application.questionnaire.status == 'complete' and (
         application.nomination.status == 'complete'
     ):
-        application.status = 'submitted'
-        application.save()
+
+        """Update status to submitted if needed"""
+        if application.is_editable() and application.status != 'submitted':
+            application.status = 'submitted'
+            application.save()
+
+        """Send notification for submitted status"""
         send_application_submitted_notification(application)
+
     return application
 
 
