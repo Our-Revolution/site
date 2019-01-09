@@ -361,7 +361,7 @@ class Application(models.Model):
         ),
         ('needs-questionnaire', 'Needs Questionnaire'),
         ('needs-group-form', 'Needs Group Form'),
-        ('incomplete', 'Needs Submission'),
+        ('incomplete', 'Needs Submission'),  # Deprecated as of 2019-01-08
         ('submitted', 'Submitted'),
         ('needs-research', 'Needs Research'),
         ('needs-staff-review', 'Needs Staff Review'),
@@ -373,12 +373,10 @@ class Application(models.Model):
     )
 
     # Statuses that signify whether a group can still edit an application
-    # TODO: update list
     EDITABLE_STATUSES = [
         'needs-group-form-and-questionnaire',
         'needs-questionnaire',
         'needs-group-form',
-        'incomplete'
     ]
 
     status = models.CharField(
@@ -618,9 +616,6 @@ class Application(models.Model):
 
         Questionnaire is filled out by the candidate with basic information and
         in-depth policy positions.
-
-        When both are complete then the Application should be automatically
-        submitted.
         """
 
         if self.status in self.EDITABLE_STATUSES:
@@ -629,14 +624,15 @@ class Application(models.Model):
                     status = 'needs-group-form'
                 else:
                     status = 'needs-group-form-and-questionnaire'
-            # TODO: else if nom status complete
             else:
                 # nomination complete
                 if self.questionnaire.status == 'complete':
                     # questionnaire complete
 
-                    # TODO: submit instead of incomplete???
-                    status = 'incomplete'
+                    """
+                    Set as submitted if nomination + questionnaire are complete
+                    """
+                    status = 'submitted'
 
                 else:
                     # needs questionaire
@@ -665,15 +661,9 @@ class Application(models.Model):
         self.status = self.generate_application_status()
 
         if self.status == 'submitted' and self.submitted_dt is None:
-            # TODO: move to signals? send notice?
             self.submitted_dt = datetime.datetime.now()
-            send_submitted_notification = True
 
         super(Application, self).save(*args, **kwargs)
-
-        if send_submitted_notification:
-            # TODO: send email for submitted. but not from models? from signals instead?
-            pass
 
     class Meta:
         permissions = (
