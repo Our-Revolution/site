@@ -308,30 +308,38 @@ class EditNominationView(UpdateView):
 class EditQuestionnaireView(UpdateView):
     form_class = QuestionnaireForm
     template_name = "questionnaire.html"
-    success_url = "/groups/nominations/submit"
+
+    def get_application(self):
+        app_id = self.request.GET.get('id')
+        return get_object_or_404(Application, pk=app_id)
 
     def get_object(self):
-        app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application, pk=app_id)
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.questionnaire
         else:
             raise Http404(_("No questionnaire found matching the query"))
 
     def get_success_url(self):
-        return "/groups/nominations/submit?id=" + self.request.GET.get('id')
+        return reverse_lazy('nominations-application') + "?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
         form.instance.status = 'complete'
         form_valid = super(EditQuestionnaireView, self).form_valid(form)
 
         # save responses
+        # TODO: TECH-1669: fix validation logic bug
         formset = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         if formset.is_valid():
             formset.save()
         else:
             print formset.errors
             return self.form_invalid(form)
+
+        """Submit application if nomination is complete too"""
+        application = self.get_application()
+        if application.nomination.status == 'complete':
+            submit_application(application)
 
         return form_valid
 

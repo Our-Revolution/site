@@ -37,7 +37,11 @@ urlpatterns = [
             name='nominations-dashboard'
         ),
         url(r'^logout/$', logout),
-        url(r'^application/$', ApplicationView.as_view()),
+        url(
+            r'^application/$',
+            ApplicationView.as_view(),
+            name='nominations-application'
+        ),
         url(
             r'^questionnaire/$',
             QuestionnaireIndexView.as_view(),
