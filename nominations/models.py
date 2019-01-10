@@ -361,7 +361,8 @@ class Application(models.Model):
         ),
         ('needs-questionnaire', 'Needs Questionnaire'),
         ('needs-group-form', 'Needs Group Form'),
-        ('incomplete', 'Needs Submission'),
+        # Deprecated as of 2019-01-08
+        # ('incomplete', 'Needs Submission'),
         ('submitted', 'Submitted'),
         ('needs-research', 'Needs Research'),
         ('needs-staff-review', 'Needs Staff Review'),
@@ -377,7 +378,6 @@ class Application(models.Model):
         'needs-group-form-and-questionnaire',
         'needs-questionnaire',
         'needs-group-form',
-        'incomplete'
     ]
 
     status = models.CharField(
@@ -609,12 +609,13 @@ class Application(models.Model):
             self.questionnaire = Questionnaire.objects.create()
 
     def generate_application_status(self):
-        """Returns a generated status based on completion of various items.
+        """
+        Returns a generated status based on completion of various items.
 
-        nomination is filled out by the group with basic information about
+        Nomination is filled out by the group with basic information about
         the group and what it will do to help the candidate.
 
-        quesionnaire is filled out by the candidate with basic information and
+        Questionnaire is filled out by the candidate with basic information and
         in-depth policy positions.
         """
 
@@ -628,7 +629,12 @@ class Application(models.Model):
                 # nomination complete
                 if self.questionnaire.status == 'complete':
                     # questionnaire complete
-                    status = 'incomplete'
+
+                    """
+                    Set as submitted if nomination + questionnaire are complete
+                    """
+                    status = 'submitted'
+
                 else:
                     # needs questionaire
                     status = 'needs-questionnaire'

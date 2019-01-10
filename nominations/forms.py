@@ -10,7 +10,7 @@ class DateInput(forms.DateInput):
 
 
 class ApplicationForm(forms.ModelForm):
-    agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated candidate over any other candidates in the election, and that there is significant support for the candidate and the Group is committed to aiding the progressive champion to victory.', required=True)
+    agree = forms.BooleanField(label='I have read and agree to these terms.')
 
     #crispy forms
     def __init__(self, *args, **kwargs):
@@ -23,6 +23,11 @@ class ApplicationForm(forms.ModelForm):
 
         self.helper.layout = Layout(
             Div(
+                Div(
+                    Field('agree', id='agree_field'),
+                    css_class='clearfix fs-sm'
+                ),
+                HTML('<hr />'),
                 HTML('<h3>Your Information</h3>'),
                 Div(
                     Field('rep_first_name', wrapper_class='col-md-6'),
@@ -47,11 +52,10 @@ class ApplicationForm(forms.ModelForm):
                 css_class='col-md-12'
             ),
             Div(
-                Field('agree', id='agree_field'),
                 Submit(
                     'submit',
                     'Start a Nomination',
-                    css_class='btn btn-success btn-block uppercase ls2 disabled',
+                    css_class='btn btn-success btn-block uppercase ls2',
                     css_id='submit_button'
                 ),
                 css_class='col-md-12'
@@ -187,20 +191,6 @@ class QuestionnaireResponseFormsetHelper(FormHelper):
 
 QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Response, exclude=[], extra=0, can_delete=False)
 
-
-class SubmitForm(forms.Form):
-    agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(SubmitForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_id = 'submit_form'
-        self.helper.layout = Layout(
-            Field('agree',id='agree_field'),
-            Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
-        )
 
 class CandidateEmailForm(forms.Form):
     candidate_email = forms.EmailField()

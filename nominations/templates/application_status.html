@@ -41,18 +41,26 @@
             <li class="list-group-item"><span class="glyphicon glyphicon-check"></span> 1. Start an Application</li>
             <li class="list-group-item"><a href="/groups/nominations/nomination?id={{application.id}}"><span class="glyphicon {% if application.nomination.status == 'complete' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 2. Complete the group nomination form</a></li>
             <li class="list-group-item"><a href="/groups/nominations/questionnaire?id={{application.id}}"><span class="glyphicon {% if application.questionnaire.status == 'complete' %}glyphicon-check{% else %}glyphicon-unchecked{% endif %}"></span> 3. Have your candidate fill out the candidate questionaire</a></li>
-            <li class="list-group-item">
-            {% if application.is_editable %}
-              <a href="/groups/nominations/submit?id={{application.id}}"><span class="glyphicon glyphicon-unchecked"></span> 4. Submit your nomination</a>
-            {% else %}
-              <span class="glyphicon glyphicon-check"></span> 4. Submit your nomination
-            {% endif %}
-            </li>
           </ul>
         </div>
 
         {% if application.is_editable %}
           <a href="/groups/nominations/nomination?id={{application.id}}" class="btn btn-success btn-block uppercase ls2">Next Step</a>
+
+        {% else %}
+
+        <p class="fs18">
+          <strong>You've completed your nomination application.</strong> Thank
+          you for being a part of the political revolution. It is because of
+          dedicated individuals like you and those in your group that our
+          movement continues to grow and our shared mission is succeeding.
+        </p>
+
+        <p class="fs18">
+          Your endorsement nomination request will be processed. The staff at
+          Our Revolution looks forward to being in touch with you soon.
+        </p>
+
         {% endif %}
 
       </div>

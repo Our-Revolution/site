@@ -27,7 +27,6 @@ from .forms import (
     QuestionnaireForm,
     QuestionnaireResponseFormset,
     QuestionnaireResponseFormsetHelper,
-    SubmitForm,
     CandidateEmailForm,
     CandidateSubmitForm,
     InitiativeApplicationForm
@@ -52,12 +51,17 @@ auth0_domain = settings.AUTH0_DOMAIN
 auth0_client_id = settings.AUTH0_CLIENT_ID
 auth0_client_secret = settings.AUTH0_CLIENT_SECRET
 auth0_candidate_callback_url = settings.AUTH0_CANDIDATE_CALLBACK_URL
+ELECTORAL_COORDINATOR_EMAIL = settings.ELECTORAL_COORDINATOR_EMAIL
+OR_LOGO_SECONDARY = settings.OR_LOGO_SECONDARY
 
 QUESTIONNAIRE_NOT_FOUND_ERROR = """
 We couldn't find that questionnaire. Make sure you're logged in
 with the correct email address and that you have access to edit the current
 application.
 """
+
+
+"""Methods"""
 
 
 def get_auth0_user_id_by_email(email):
@@ -98,6 +102,103 @@ def is_application_owner(user, application):
     else:
         """Otherwise false"""
         return False
+
+
+def send_application_submitted_notification(application):
+    """
+    Send email notification to group/candidate/OR for Candidate Application
+    submission
+
+    Call this method as needed when the Candidate Application changes to status
+    submitted
+
+    Parameters
+    ----------
+    application : CandidateApplication
+        CandidateApplication
+    """
+    candidate_name = application.candidate_name
+    if application.authorized_email is not None:
+        candidate_email = application.authorized_email
+    else:
+        candidate_email = application.questionnaire.candidate_email
+
+    group_name = application.group.name
+    group_email = application.rep_email
+
+    cc_emails = [
+        "%s <%s>" % (candidate_name, candidate_email),
+        "%s <%s>" % (
+            'Our Revolution Electoral Coordinator',
+            ELECTORAL_COORDINATOR_EMAIL
+        ),
+    ]
+    from_email = "%s <%s>" % (
+        'Our Revolution Electoral Coordinator',
+        ELECTORAL_COORDINATOR_EMAIL
+    )
+    to_email = [
+        "%s <%s>" % (group_name, group_email),
+    ]
+
+    subject = """
+    Your nomination for %s has been submitted! Here are the next steps.
+    """ % candidate_name
+
+    d = {
+        'or_logo_secondary': OR_LOGO_SECONDARY,
+        'group_name': group_name,
+        'candidate_name': candidate_name
+    }
+
+    html_template = get_template('email/application_submit_email.html')
+    html_content = html_template.render(d)
+    text_template = get_template('email/application_submit_email.txt')
+    text_content = text_template.render(d)
+
+    msg = EmailMultiAlternatives(
+        subject,
+        text_content,
+        from_email,
+        to_email,
+        cc=cc_emails
+    )
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+def submit_application(application):
+    """
+    Submit Candidate Application and send email notification
+
+    Parameters
+    ----------
+    application : CandidateApplication
+        CandidateApplication
+
+    Returns
+        -------
+        CandidateApplication
+            Returns updated CandidateApplication
+    """
+
+    """Check if questionnaire and nomination are complete"""
+    if application.questionnaire.status == 'complete' and (
+        application.nomination.status == 'complete'
+    ):
+
+        """Update status to submitted if needed"""
+        if application.is_editable() and application.status != 'submitted':
+            application.status = 'submitted'
+            application.save()
+
+        """Send notification for submitted status"""
+        send_application_submitted_notification(application)
+
+    return application
+
+
+"""Views"""
 
 
 class NominationsIndexView(TemplateView):
@@ -180,6 +281,11 @@ class EditNominationView(UpdateView):
             print formset.errors
             return self.form_invalid(form)
 
+        """Submit application if questionnaire is complete too"""
+        application = self.get_object().application
+        if application.questionnaire.status == 'complete':
+            submit_application(application)
+
         return form_valid
 
     def get_context_data(self, *args, **kwargs):
@@ -201,30 +307,38 @@ class EditNominationView(UpdateView):
 class EditQuestionnaireView(UpdateView):
     form_class = QuestionnaireForm
     template_name = "questionnaire.html"
-    success_url = "/groups/nominations/submit"
+
+    def get_application(self):
+        app_id = self.request.GET.get('id')
+        return get_object_or_404(Application, pk=app_id)
 
     def get_object(self):
-        app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application, pk=app_id)
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.questionnaire
         else:
             raise Http404(_("No questionnaire found matching the query"))
 
     def get_success_url(self):
-        return "/groups/nominations/submit?id=" + self.request.GET.get('id')
+        return reverse_lazy('nominations-application') + "?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
         form.instance.status = 'complete'
         form_valid = super(EditQuestionnaireView, self).form_valid(form)
 
         # save responses
+        # TODO: TECH-1669: fix validation logic bug
         formset = QuestionnaireResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
         if formset.is_valid():
             formset.save()
         else:
             print formset.errors
             return self.form_invalid(form)
+
+        """Submit application if nomination is complete too"""
+        application = self.get_application()
+        if application.nomination.status == 'complete':
+            submit_application(application)
 
         return form_valid
 
@@ -342,7 +456,7 @@ class QuestionnaireIndexView(FormView):
             'group_name': group_name,
             'candidate_name': candidate_name,
             'group_rep_email': rep_email,
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
+            'or_logo_secondary': OR_LOGO_SECONDARY,
         }
 
         subject = "You're being nominated for endorsement by an official Our Revolution group!"
@@ -352,7 +466,7 @@ class QuestionnaireIndexView(FormView):
             "%s <%s>" % (group_name, rep_email),
             "%s <%s>" % (
                 'Our Revolution National',
-                settings.ELECTORAL_COORDINATOR_EMAIL
+                ELECTORAL_COORDINATOR_EMAIL
             )
         ]
 
@@ -385,90 +499,6 @@ class QuestionnaireIndexView(FormView):
         )
         context_data['application'] = self.get_object().application_set.first()
         return context_data
-
-
-@method_decorator(verified_email_required, name='dispatch')
-class SubmitView(FormView):
-    template_name = 'submit.html'
-    form_class = SubmitForm
-    success_url = '/groups/nominations/success'
-
-    # TODO: add conditional for candidate submission
-
-    def form_valid(self, form):
-        application = self.get_object()
-        application.status = 'submitted'
-        application.save()
-
-        """Send notification after submit"""
-        self.send_notification(application)
-
-        return super(SubmitView, self).form_valid(form)
-
-    def get_context_data(self, *args, **kwargs):
-        context_data = super(SubmitView, self).get_context_data(
-            *args,
-            **kwargs
-        )
-        context_data['application'] = self.get_object()
-        return context_data
-
-    def get_object(self):
-        app_id = self.request.GET.get('id')
-        app = get_object_or_404(Application, pk=app_id)
-        if is_application_owner(self.request.user, app):
-            return app
-        else:
-            raise Http404(_("No application found matching the query"))
-
-    def send_notification(self, application):
-        """
-        Send email notification for submission to group, candidate, and OR.
-        """
-        candidate_name = application.candidate_name
-        candidate_email = application.authorized_email
-        group_name = application.group.name
-        group_email = application.rep_email
-
-        cc_emails = [
-            "%s <%s>" % (candidate_name, candidate_email),
-            "%s <%s>" % (
-                'Our Revolution Electoral Coordinator',
-                settings.ELECTORAL_COORDINATOR_EMAIL
-            ),
-        ]
-        from_email = "%s <%s>" % (
-            'Our Revolution Electoral Coordinator',
-            settings.ELECTORAL_COORDINATOR_EMAIL
-        )
-        to_email = [
-            "%s <%s>" % (group_name, group_email),
-        ]
-
-        subject = """
-        Your nomination for %s has been submitted! Here are the next steps.
-        """ % candidate_name
-
-        d = {
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-            'group_name': group_name,
-            'candidate_name': candidate_name
-        }
-
-        html_template = get_template('email/application_submit_email.html')
-        html_content = html_template.render(d)
-        text_template = get_template('email/application_submit_email.txt')
-        text_content = text_template.render(d)
-
-        msg = EmailMultiAlternatives(
-            subject,
-            text_content,
-            from_email,
-            to_email,
-            cc=cc_emails
-        )
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
 
 
 def logout(request):
@@ -661,33 +691,9 @@ class CandidateSubmitView(FormView):
         application.questionnaire.completed_by_candidate = True
         application.questionnaire.save()
 
-        rep_email = application.rep_email
-        rep_name = application.rep_first_name + ' ' + application.rep_last_name
-        candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
-        nominations_submit_url = self.request.build_absolute_uri(
-            reverse_lazy('nominations-submit') + ('?id=%i' % application.id)
-        )
-
-        # send email to group
-        plaintext = get_template('email/group_email.txt')
-        htmly     = get_template('email/group_email.html')
-
-        d = {
-            'rep_name': rep_name,
-            'candidate_name': candidate_name,
-            'nominations_submit_url': nominations_submit_url,
-            'or_logo_secondary': settings.OR_LOGO_SECONDARY,
-        }
-
-        subject= candidate_name + " has completed your candidate questionnaire!"
-        from_email='Our Revolution <info@ourrevolution.com>'
-        to_email=["%s <%s>" % (rep_name,rep_email)]
-
-        text_content = plaintext.render(d)
-        html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        """Submit application if nomination is complete too"""
+        if application.nomination.status == 'complete':
+            submit_application(application)
 
         return super(CandidateSubmitView, self).form_valid(form)
 

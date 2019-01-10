@@ -36,7 +36,6 @@
           {% if application.is_editable %}
             {% if application.questionnaire.status == 'complete' %}
               <a href="/groups/nominations/questionnaire/edit?id={{application.id}}" class="btn btn-primary btn-block uppercase ls2">View Questionnaire</a>
-              <a href="/groups/nominations/submit?id={{application.id}}" class="btn btn-success btn-block uppercase ls2">Submit Your Application</a>
             {% elif not application.questionnaire.status == 'sent' %}
               {% crispy form %}
 
