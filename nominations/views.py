@@ -323,7 +323,6 @@ class EditQuestionnaireView(UpdateView):
         return reverse_lazy('nominations-application') + "?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
-        logger.debug('form_valid')
 
         """Get responses and validate them too"""
         formset = QuestionnaireResponseFormset(
@@ -334,26 +333,21 @@ class EditQuestionnaireView(UpdateView):
         if formset.is_valid():
 
             """Save responses"""
-            logger.debug('formset.save()')
             formset.save()
 
             """Set status to complete and save questionnaire"""
-            logger.debug('complete')
             form.instance.status = 'complete'
             form_valid = super(EditQuestionnaireView, self).form_valid(form)
 
             """Submit application if nomination is complete too"""
             application = self.get_application()
             if application.nomination.status == 'complete':
-                logger.debug('submit_application')
                 submit_application(application)
 
             return form_valid
 
         else:
             """If responses are invalid then return errors"""
-            logger.debug('print formset.errors')
-            print formset.errors
             return self.form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
