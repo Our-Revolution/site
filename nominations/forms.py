@@ -189,7 +189,14 @@ class QuestionnaireResponseFormsetHelper(FormHelper):
             Field('position',wrapper_class='mb0')
         )
 
-QuestionnaireResponseFormset = forms.inlineformset_factory(Questionnaire, Response, exclude=[], extra=0, can_delete=False)
+
+QuestionnaireResponseFormset = forms.inlineformset_factory(
+    Questionnaire,
+    Response,
+    exclude=[],
+    extra=0,
+    can_delete=False,
+)
 
 
 class CandidateEmailForm(forms.Form):
