@@ -1877,9 +1877,11 @@ class GroupPage(RoutablePageMixin, Page):
 
                 subject="Let's get your group on the map!"
                 from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
-                to_email=["%s %s <%s>" % (form.cleaned_data['rep_first_name'],
-                                                form.cleaned_data['rep_last_name'],
-                                                form.cleaned_data['rep_email'])]
+                to_email = ['"%s %s" <%s>' % (
+                    form.cleaned_data['rep_first_name'],
+                    form.cleaned_data['rep_last_name'],
+                    form.cleaned_data['rep_email'],
+                )]
 
                 text_content = plaintext.render(d)
                 html_content = htmly.render(d)

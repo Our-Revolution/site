@@ -127,18 +127,19 @@ def send_application_submitted_notification(application):
     group_email = application.rep_email
 
     cc_emails = [
-        "%s <%s>" % (candidate_name, candidate_email),
-        "%s <%s>" % (
+        '"%s" <%s>' % (candidate_name, candidate_email),
+        '"%s" <%s>' % (
             'Our Revolution Electoral Coordinator',
             ELECTORAL_COORDINATOR_EMAIL
         ),
     ]
-    from_email = "%s <%s>" % (
+    from_email = '"%s" <%s>' % (
         'Our Revolution Electoral Coordinator',
         ELECTORAL_COORDINATOR_EMAIL
     )
     to_email = [
-        "%s <%s>" % (group_name, group_email),
+        # Use double quotes for group name
+        '"%s" <%s>' % (group_name, group_email),
     ]
 
     subject = """
@@ -469,10 +470,11 @@ class QuestionnaireIndexView(FormView):
 
         subject = "You're being nominated for endorsement by an official Our Revolution group!"
         from_email = 'Our Revolution <info@ourrevolution.com>'
-        to_email = ["%s <%s>" % (candidate_name, candidate_email)]
+        to_email = ['"%s" <%s>' % (candidate_name, candidate_email)]
         cc_emails = [
-            "%s <%s>" % (group_name, rep_email),
-            "%s <%s>" % (
+            # Use double quotes for group name
+            '"%s" <%s>' % (group_name, rep_email),
+            '"%s" <%s>' % (
                 'Our Revolution National',
                 ELECTORAL_COORDINATOR_EMAIL
             )
