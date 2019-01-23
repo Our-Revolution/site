@@ -21,7 +21,7 @@
     <div class="col-md-12">
       <div class="mb5"><strong>Candidate Bio</strong></div>
       <div class="mb10 well well-sm">
-        {{ questionnaire.candidate_bio }}
+        {{ questionnaire.candidate_bio|linebreaks }}
       </div>
     </div>
 
@@ -185,7 +185,7 @@
     {% endif %}
 
     <p class="pa20 br3 white-bg mt0 mb0">
-      {{form.instance.position}}
+      {{ form.instance.position|linebreaksbr }}
     </p>
 
   </div>
