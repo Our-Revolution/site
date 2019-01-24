@@ -1,0 +1,195 @@
+<section>
+
+  <h3>Basic Candidate Information</h3>
+
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate First Name</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_first_name }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Last Name</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_last_name }}
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="mb5"><strong>Candidate Bio</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_bio|linebreaksbr }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Email</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_email }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Phone Number</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_phone|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Office</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_office }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate District</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_district|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate City</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_city|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate State</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_state }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>General Election Date</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.general_election_date }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Primary Election Date</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.primary_election_date|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Has the candidate ever held public office?</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_held_office }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Is candidate a member of Our Revolution?</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_is_member }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Party Affiliation</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_party }}
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<section>
+
+  <h3>Candidate Web & Social Information</h3>
+
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Website URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_website_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Volunteer URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_volunteer_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Donate URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_donate_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Facebook URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_facebook_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Twitter URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_twitter_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate Instagram URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_instagram_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb5"><strong>Candidate YouTube URL</strong></div>
+      <div class="mb10 well well-sm">
+        {{ questionnaire.candidate_youtube_url|default_if_none:"&nbsp;" }}
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<section>
+
+  <h3>Platform Questions</h3>
+
+  {% for form in formset %}
+
+  <div class="form-group pa20 br3 f5f5f5-bg">
+
+    <label class="control-label pa20 br3 white-bg mb20 fs16 block"
+      required>
+      {{forloop.counter}}. {{form.instance.question.text}}*
+    </label>
+
+    {% if form.instance.question.include_multi_choice %}
+    <p class="pa20 br3 white-bg mt0">
+      {{form.instance.get_response_display}}
+    </p>
+    {% endif %}
+
+    <p class="pa20 br3 white-bg mt0 mb0">
+      {{ form.instance.position|linebreaksbr }}
+    </p>
+
+  </div>
+
+  {% endfor %}
+
+</section>
