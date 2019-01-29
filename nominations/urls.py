@@ -102,14 +102,11 @@ urlpatterns = [
                 )
             ),
             url(
-                r'^submit/$',
-                is_authenticated_candidate(CandidateSubmitView.as_view())
-            ),
-            url(
                 r'^success/$',
                 is_authenticated_candidate(TemplateView.as_view(
                     template_name='candidate/success.html'
-                ))
+                )),
+                name='nominations-candidate-success',
             ),
             url(
                 r'^verify/$',

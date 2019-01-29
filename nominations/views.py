@@ -28,7 +28,6 @@ from .forms import (
     QuestionnaireResponseFormset,
     QuestionnaireResponseFormsetHelper,
     CandidateEmailForm,
-    CandidateSubmitForm,
     InitiativeApplicationForm
 )
 from .models import (
@@ -595,22 +594,9 @@ class CandidateDashboardView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         user = self.request.session['profile']
-
-
-        logger.debug('Candidate Dashboard:')
-        logger.debug('user:')
-        logger.debug(user)
-
-        logger.debug('user email:')
-        logger.debug(user['email'])
-
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         context_data['applications'] = Application.objects.all().filter(authorized_email__iexact=user['email'])
-
-        logger.debug('applications:')
-        logger.debug(context_data['applications'])
-
         return context_data
 
 
@@ -618,7 +604,6 @@ class CandidateQuestionnaireView(UpdateView):
     model = Questionnaire
     form_class = QuestionnaireForm
     template_name = "candidate/questionnaire.html"
-    success_url = "/groups/nominations/candidate/submit"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -633,7 +618,7 @@ class CandidateQuestionnaireView(UpdateView):
             context = self.get_context_data(object=self.object)
             return self.render_to_response(context)
 
-    def get_object(self):
+    def get_application(self):
         app_id = self.request.GET.get('id')
         user = self.request.session['profile']
         email = user['email']
@@ -643,14 +628,21 @@ class CandidateQuestionnaireView(UpdateView):
                 authorized_email__iexact=email,
                 pk=app_id
             ).first()
-            questionnaire = application.questionnaire
         except (Application.DoesNotExist, AttributeError):
-            questionnaire = None
+            application = None
 
+        return application
+
+    def get_object(self):
+        application = self.get_application()
+        if application is not None:
+            questionnaire = application.questionnaire
+        else:
+            questionnaire = None
         return questionnaire
 
     def get_success_url(self):
-        return "/groups/nominations/candidate/submit?id=" + self.request.GET.get('id')
+        return reverse_lazy('nominations-candidate-success') + "?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
         form_valid = super(CandidateQuestionnaireView, self).form_valid(form)
@@ -663,6 +655,17 @@ class CandidateQuestionnaireView(UpdateView):
         )
         if formset.is_valid():
             formset.save()
+
+            """Update questionnaire to status complete"""
+            application = self.get_application()
+            application.questionnaire.status = 'complete'
+            application.questionnaire.completed_by_candidate = True
+            application.questionnaire.save()
+
+            """Submit application if nomination is complete too"""
+            if application.nomination.status == 'complete':
+                submit_application(application)
+
         else:
             print formset.errors
             return self.form_invalid(form)
@@ -683,37 +686,6 @@ class CandidateQuestionnaireView(UpdateView):
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
         context_data['user'] = self.request.session['profile']
         context_data['questionnaire'] = self.object
-        return context_data
-
-
-class CandidateSubmitView(FormView):
-    template_name = 'candidate/submit.html'
-    form_class = CandidateSubmitForm
-    success_url = '/groups/nominations/candidate/success'
-
-    def form_valid(self, form):
-        app_id = self.request.GET.get('id')
-        email = self.request.session['profile']['email']
-
-        application = Application.objects.all().filter(authorized_email__iexact=email,pk=app_id).first()
-
-        application.questionnaire.status = 'complete'
-        application.questionnaire.completed_by_candidate = True
-        application.questionnaire.save()
-
-        """Submit application if nomination is complete too"""
-        if application.nomination.status == 'complete':
-            submit_application(application)
-
-        return super(CandidateSubmitView, self).form_valid(form)
-
-    def get_context_data(self, *args, **kwargs):
-        app_id = self.request.GET.get('id')
-        email = self.request.session['profile']['email']
-        self.app = get_object_or_404(Application, pk=app_id,authorized_email__iexact=email)
-        context_data = super(CandidateSubmitView, self).get_context_data(*args, **kwargs)
-        context_data['application'] = self.app
-        context_data['user'] = self.request.session['profile']
         return context_data
 
 

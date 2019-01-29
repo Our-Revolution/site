@@ -111,6 +111,7 @@ NominationResponseFormset = forms.inlineformset_factory(Nomination, NominationRe
 
 
 class QuestionnaireForm(forms.ModelForm):
+    agree = forms.BooleanField(label='I have read and agree to these terms.')
     candidate_held_office = forms.BooleanField(
         label="Has the candidate ever held public office?",
         required=False,
@@ -128,6 +129,11 @@ class QuestionnaireForm(forms.ModelForm):
         self.helper.form_action = ''
         self.helper.layout = Layout(
             Div(
+                Div(
+                    Field('agree', id='agree_field'),
+                    css_class='clearfix fs-sm'
+                ),
+                HTML('<hr />'),
                 HTML('<h3>Basic Candidate Information</h3>'),
                 Div(
                     Field('candidate_first_name', wrapper_class='col-md-6'),
@@ -229,20 +235,6 @@ class CandidateLoginForm(forms.Form):
                 Submit('submit','Get Started',css_class='btn btn-block btn-success uppercase ls2'),
                 css_class='col-md-12'
             )
-        )
-
-class CandidateSubmitForm(forms.Form):
-    agree = forms.BooleanField(label='I have read and agree to these terms.', required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(CandidateSubmitForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_id = 'submit_form'
-        self.helper.layout = Layout(
-            Field('agree',id='agree_field'),
-            Submit('submit','Submit',css_class='btn-block uppercase ls2 disabled',css_id='submit_button')
         )
 
 
