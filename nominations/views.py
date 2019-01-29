@@ -596,7 +596,9 @@ class CandidateDashboardView(TemplateView):
         user = self.request.session['profile']
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
-        context_data['applications'] = Application.objects.all().filter(authorized_email__iexact=user['email'])
+        context_data['applications'] = Application.objects.all().filter(
+            authorized_email__iexact=user['email']
+        ).order_by('-create_dt')
         return context_data
 
 
@@ -645,7 +647,6 @@ class CandidateQuestionnaireView(UpdateView):
         return reverse_lazy('nominations-candidate-success') + "?id=" + self.request.GET.get('id')
 
     def form_valid(self, form):
-        form_valid = super(CandidateQuestionnaireView, self).form_valid(form)
 
         # save responses
         formset = QuestionnaireResponseFormset(
@@ -656,21 +657,22 @@ class CandidateQuestionnaireView(UpdateView):
         if formset.is_valid():
             formset.save()
 
-            """Update questionnaire to status complete"""
-            application = self.get_application()
-            application.questionnaire.status = 'complete'
-            application.questionnaire.completed_by_candidate = True
-            application.questionnaire.save()
+            """Set status to complete and save questionnaire"""
+            form.instance.status = 'complete'
+            form.instance.completed_by_candidate = True
+            form_valid = super(CandidateQuestionnaireView, self).form_valid(
+                form
+            )
 
             """Submit application if nomination is complete too"""
+            application = self.get_application()
             if application.nomination.status == 'complete':
                 submit_application(application)
 
-        else:
-            print formset.errors
-            return self.form_invalid(form)
+            return form_valid
 
-        return form_valid
+        else:
+            return self.form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(
