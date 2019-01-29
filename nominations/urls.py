@@ -11,7 +11,6 @@ from .views import (
     EditQuestionnaireView,
     QuestionnaireIndexView,
     CandidateQuestionnaireView,
-    CandidateSubmitView,
     handle_candidate_callback,
     candidate_login,
     ApplicationTypeView,

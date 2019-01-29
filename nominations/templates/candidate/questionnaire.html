@@ -46,11 +46,24 @@
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
           {% if not questionnaire.status == 'complete' %}
+
+          <p class="fs-sm">
+            I agree that I will truthfully answer the questions on the
+            candidate questionnaire and that my answers accurately reflect
+            the positions of my campaign. I understand that I cannot go
+            back and edit these answers after I have submitted this
+            questionnaire.
+          </p>
+
             <form action="" method="POST" class="row">
               {{ formset.management_form|crispy }}
+
               {% crispy form %}
 
               <div class="col-md-12">
+
+                <h3>Platform Questions</h3>
+
                 {% for form in formset %}
                   {% for hidden in form.hidden_fields %}
                     {{ hidden }}
