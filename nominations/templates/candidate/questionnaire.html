@@ -45,37 +45,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
+
           {% if not questionnaire.status == 'complete' %}
 
-          <p class="fs-sm">
-            I agree that I will truthfully answer the questions on the
-            candidate questionnaire and that my answers accurately reflect
-            the positions of my campaign. I understand that I cannot go
-            back and edit these answers after I have submitted this
-            questionnaire.
-          </p>
+          {% include 'partials/questionnaire_form.html' %}
 
-            <form action="" method="POST" class="row">
-              {{ formset.management_form|crispy }}
-
-              {% crispy form %}
-
-              <div class="col-md-12">
-
-                <h3>Platform Questions</h3>
-
-                {% for form in formset %}
-                  {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                  {% endfor %}
-                  <div class="form-group pa20 br3 f5f5f5-bg">
-                    <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
-                    {% crispy form helper %}
-                  </div>
-                {% endfor %}
-                <button type='submit' value='Submit' class='btn btn-block btn-success uppercase ls2'>Next</button>
-              </div>
-            </form>
           {% else %}
 
           {% include 'partials/questionnaire_view.html' %}
@@ -86,15 +60,5 @@
     </div>
   </div>
 </div>
-
-<script>
-// TODO: implement this on server side in a non janky way
-// we don't want the response field on question 23 but it's required
-
-$(document).ready(function(){
-  $('#id_questions-23-response').val("a")
-  $('#div_id_questions-23-response').hide()
-});
-</script>
 
 {% endblock %}
