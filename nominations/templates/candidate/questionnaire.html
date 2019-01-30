@@ -45,24 +45,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
-          {% if not questionnaire.status == 'complete' %}
-            <form action="" method="POST" class="row">
-              {{ formset.management_form|crispy }}
-              {% crispy form %}
 
-              <div class="col-md-12">
-                {% for form in formset %}
-                  {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                  {% endfor %}
-                  <div class="form-group pa20 br3 f5f5f5-bg">
-                    <label class="control-label pa20 br3 white-bg mb20 fs16 block" required>{{forloop.counter}}. {{form.instance.question.text}}*</label>
-                    {% crispy form helper %}
-                  </div>
-                {% endfor %}
-                <button type='submit' value='Submit' class='btn btn-block btn-success uppercase ls2'>Next</button>
-              </div>
-            </form>
+          {% if not questionnaire.status == 'complete' %}
+
+          {% include 'partials/questionnaire_form.html' %}
+
           {% else %}
 
           {% include 'partials/questionnaire_view.html' %}
@@ -73,15 +60,5 @@
     </div>
   </div>
 </div>
-
-<script>
-// TODO: implement this on server side in a non janky way
-// we don't want the response field on question 23 but it's required
-
-$(document).ready(function(){
-  $('#id_questions-23-response').val("a")
-  $('#div_id_questions-23-response').hide()
-});
-</script>
 
 {% endblock %}
