@@ -27,7 +27,9 @@
 
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <h1 class="mb0 mt0">Select Questionnaire</h1>
+        <h1 class="mb0 mt0">
+          Select Candidate Questionnaire
+        </h1>
       </div>
     </div>
   </div>
@@ -38,16 +40,24 @@
 
         {% bootstrap_messages %}
 
+        <h3 class="mt0">
+          {{ application }}
+        </h3>
+
         <p>
-          We see you have already submitted a candidate questionnaire in the
-          past. Would you like to reuse an existing questionnaire and submit it
-          for the current application: <strong>{{ application }}</strong>?
+          Congratulations on receiving an endorsement nomination from a local
+          Our Revolution group!
         </p>
 
         <p>
-          Only select an existing questionnaire if it is for the same campaign.
-          If this is a different office or election, then please submit a new
-          questionnaire.
+          You have already completed a candidate questionnaire in the past.
+          Please select a completed questionnaire to submit for the current
+          nomination if it is for the same office and election.
+        </p>
+
+        <p>
+          If this is a different campaign, then please submit a new
+          questionnaire for the current nomination.
         </p>
 
         <h4 class="mt20">Completed Questionnaires</h4>
