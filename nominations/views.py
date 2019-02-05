@@ -79,7 +79,7 @@ def find_applications_for_candidate(email):
     Returns
         -------
         Application list
-            Returns matching Application list for candidate email
+            Returns matching Application list for candidate
     """
 
     applications = Application.objects.filter(
@@ -107,6 +107,11 @@ def get_auth0_user_id_by_email(email):
         auth0_user_id = None
 
     return auth0_user_id
+
+
+def get_candidate_user_from_request(request):
+    user = request.session['profile']
+    return user
 
 
 def is_application_owner(user, application):
@@ -615,7 +620,7 @@ class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        user = self.request.session['profile']
+        user = get_candidate_user_from_request(self.request)
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
         context_data['applications'] = find_applications_for_candidate(
@@ -644,7 +649,7 @@ class CandidateQuestionnaireView(UpdateView):
 
     def get_application(self):
         app_id = self.request.GET.get('id')
-        user = self.request.session['profile']
+        user = get_candidate_user_from_request(self.request)
         email = user['email']
 
         try:
@@ -708,7 +713,7 @@ class CandidateQuestionnaireView(UpdateView):
             self.request.POST or None, instance=self.object, prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['user'] = self.request.session['profile']
+        context_data['user'] = get_candidate_user_from_request(self.request)
         context_data['questionnaire'] = self.object
         return context_data
 
@@ -717,6 +722,7 @@ class CandidateQuestionnaireSelectView(UpdateView):
     model = Application
     form_class = CandidateQuestionnaireSelectForm
     template_name = "candidate/application.html"
+    # TODO access control
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(
@@ -724,14 +730,18 @@ class CandidateQuestionnaireSelectView(UpdateView):
             self,
         ).get_context_data(*args, **kwargs)
 
+        """Get applications with complete questionnaires"""
+        user = get_candidate_user_from_request(self.request)
+        apps = find_applications_for_candidate(user['email'])
+        apps_with_complete_questionnaires = []
+        for app in apps:
+            questionnaire = app.questionnaire
+            if questionnaire is not None and (
+                questionnaire.status == 'complete'
+            ):
+                apps_with_complete_questionnaires.append(app)
 
-        user['email']
-        context_data['formset'] = QuestionnaireResponseFormset(
-            self.request.POST or None, instance=self.object, prefix="questions"
-        )
-        context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['user'] = self.request.session['profile']
-        context_data['questionnaire'] = self.object
+        context_data['applications'] = apps_with_complete_questionnaires
         return context_data
 
 
