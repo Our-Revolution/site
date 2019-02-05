@@ -10,10 +10,18 @@
   <div class="row blue-bg white-text pb2">
     <div class="back-bar clearfix">
       <div class="container clearfix">
+
+        <span class="pull-left">
+          <a href="{% url 'nominations-candidate-dashboard' %}">
+            &lsaquo; Back
+          </a>
+        </span>
+
         <span class="pull-right">
           {{request.session.profile.email}} |
           <strong><a href="/groups/nominations/logout"> Logout</a></strong>
         </span>
+
       </div>
     </div>
 
@@ -30,7 +38,19 @@
 
         {% bootstrap_messages %}
 
-        <h4 class="mt20">My Questionnaires</h4>
+        <p>
+          We see you have already submitted a candidate questionnaire in the
+          past. Would you like to reuse an existing questionnaire and submit it
+          for the current application: <strong>{{ application }}</strong>?
+        </p>
+
+        <p>
+          Only select an existing questionnaire if it is for the same campaign.
+          If this is a different office or election, then please submit a new
+          questionnaire.
+        </p>
+
+        <h4 class="mt20">Completed Questionnaires</h4>
 
         <div class="panel panel-default mt20">
 
@@ -39,7 +59,8 @@
             <thead>
               <tr>
                 <th>Application</th>
-                <th>Status</th>
+                <th>Office</th>
+                <th>General Election Date</th>
                 <th></th>
               </tr>
             </thead>
@@ -48,16 +69,13 @@
 
               {% for app in applications %}
                 <tr>
-                  <td>{{app}}</td>
-                  <td>{{app.questionnaire.get_status_display}}</td>
+                  <td>{{ app }}</td>
+                  <td>{{ app.questionnaire.candidate_office }}</td>
+                  <td>{{ app.questionnaire.general_election_date }}</td>
                   <td>
                     <a href="/groups/nominations/candidate/questionnaire?id={{app.id}}"
                     class="pull-right btn btn-primary uppercase ls2">
-                      {% if app.questionnaire.status == 'complete' %}
-                      View
-                      {% else %}
-                      Edit
-                      {% endif %}
+                      Select
                     </a>
                   </td>
                 </tr>

@@ -99,7 +99,8 @@ urlpatterns = [
             url(r'^callback/$', handle_candidate_callback),
             url(
                 r'^dashboard/$',
-                is_authenticated_candidate(CandidateDashboardView.as_view())
+                is_authenticated_candidate(CandidateDashboardView.as_view()),
+                name='nominations-candidate-dashboard',
             ),
             url(r'^login/$', candidate_login),
             url(
