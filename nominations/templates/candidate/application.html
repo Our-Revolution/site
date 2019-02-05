@@ -50,27 +50,29 @@
         </p>
 
         <p>
-          You have already completed a candidate questionnaire in the past.
-          Please select a completed questionnaire to submit for the current
-          nomination if it is for the same office and election.
+          <strong>
+            You have already completed a candidate questionnaire in the past.
+            Please select a completed questionnaire to submit for the current
+            nomination if it is for the same office and election.
+          </strong>
         </p>
 
         <p>
-          If this is a different campaign, then please submit a new
-          questionnaire for the current nomination.
+          If the current nomination is for a different campaign, then please
+          submit a new questionnaire.
         </p>
 
         <h4 class="mt20">Completed Questionnaires</h4>
 
         <div class="panel panel-default mt20">
 
-          <table class="table table-striped table-hover">
+          <table class="table table-condensed table-hover table-striped ">
 
             <thead>
               <tr>
-                <th>Application</th>
+                <th>Group</th>
                 <th>Office</th>
-                <th>General Election Date</th>
+                <th>Election</th>
                 <th></th>
               </tr>
             </thead>
@@ -79,15 +81,23 @@
 
               {% for app in applications %}
                 <tr>
-                  <td>{{ app }}</td>
+                  <td>{{ app.group.name }}</td>
                   <td>{{ app.questionnaire.candidate_office }}</td>
-                  <td>{{ app.questionnaire.general_election_date }}</td>
+                  <td>{{ app.questionnaire.general_election_date|date:"Y" }}</td>
+
                   <td>
-                    <a href="/groups/nominations/candidate/questionnaire?id={{app.id}}"
-                    class="pull-right btn btn-primary uppercase ls2">
-                      Select
-                    </a>
+                    <form action="{% url 'nominations-candidate-questionnaire-select' application.id app.questionnaire.id %}"
+                    class="form form-inline inline-block" method="post">
+
+                      {% csrf_token %}
+
+                      <button class="btn btn-primary btn-sm" type="submit">
+                        Select
+                      </button>
+
+                    </form>
                   </td>
+
                 </tr>
               {% endfor %}
 

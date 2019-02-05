@@ -90,7 +90,8 @@ urlpatterns = [
         # Candidate facing pages
         url(r'^candidate/', include([
             url(
-                r'^application/(?P<pk>[0-9]+)/$',
+                # r'^application/(?P<pk>[0-9]+)/(?P<questionnaire_id>[0-9]+)/$',
+                r'application/(?P<pk>[0-9]+)/(?:(?P<questionnaire_id>[0-9]+)/)?$',
                 is_authenticated_candidate(
                     CandidateQuestionnaireSelectView.as_view()
                 ),

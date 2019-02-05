@@ -744,6 +744,9 @@ class CandidateQuestionnaireSelectView(UpdateView):
         context_data['applications'] = apps_with_complete_questionnaires
         return context_data
 
+    def get_success_url(self):
+        return reverse_lazy('nominations-candidate-success') + "?id=" + self.kwargs['pk']
+
 
 # Ballot initiatives
 class CreateInitiativeView(
