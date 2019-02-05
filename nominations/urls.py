@@ -11,6 +11,7 @@ from .views import (
     EditQuestionnaireView,
     QuestionnaireIndexView,
     CandidateQuestionnaireView,
+    CandidateQuestionnaireSelectView,
     handle_candidate_callback,
     candidate_login,
     ApplicationTypeView,
@@ -88,6 +89,13 @@ urlpatterns = [
 
         # Candidate facing pages
         url(r'^candidate/', include([
+            url(
+                r'^application/(?P<pk>[0-9]+)/$',
+                is_authenticated_candidate(
+                    CandidateQuestionnaireSelectView.as_view()
+                ),
+                name='nominations-candidate-questionnaire-select',
+            ),
             url(r'^callback/$', handle_candidate_callback),
             url(
                 r'^dashboard/$',

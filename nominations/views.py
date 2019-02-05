@@ -23,6 +23,7 @@ from .forms import (
     NominationForm,
     NominationResponseFormset,
     CandidateLoginForm,
+    CandidateQuestionnaireSelectForm,
     NominationResponseFormsetHelper,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
@@ -689,6 +690,95 @@ class CandidateQuestionnaireView(UpdateView):
         context_data['user'] = self.request.session['profile']
         context_data['questionnaire'] = self.object
         return context_data
+
+
+class CandidateQuestionnaireSelectView(UpdateView):
+    model = Application
+    form_class = CandidateQuestionnaireSelectForm
+    template_name = "candidate/application.html"
+
+    # def get(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #
+    #     if not self.object:
+    #         messages.error(
+    #             self.request,
+    #             QUESTIONNAIRE_NOT_FOUND_ERROR
+    #         )
+    #         return redirect("/groups/nominations/candidate/dashboard/")
+    #     else:
+    #         context = self.get_context_data(object=self.object)
+    #         return self.render_to_response(context)
+    #
+    # def get_application(self):
+    #     app_id = self.request.GET.get('id')
+    #     user = self.request.session['profile']
+    #     email = user['email']
+    #
+    #     try:
+    #         application = Application.objects.all().filter(
+    #             authorized_email__iexact=email,
+    #             pk=app_id
+    #         ).first()
+    #     except (Application.DoesNotExist, AttributeError):
+    #         application = None
+    #
+    #     return application
+    #
+    # def get_object(self):
+    #     application = self.get_application()
+    #     if application is not None:
+    #         questionnaire = application.questionnaire
+    #     else:
+    #         questionnaire = None
+    #     return questionnaire
+    #
+    # def get_success_url(self):
+    #     return reverse_lazy('nominations-candidate-success') + "?id=" + self.request.GET.get('id')
+    #
+    # def form_valid(self, form):
+    #
+    #     # save responses
+    #     formset = QuestionnaireResponseFormset(
+    #         self.request.POST or None,
+    #         instance=self.object,
+    #         prefix="questions"
+    #     )
+    #     if formset.is_valid():
+    #         formset.save()
+    #
+    #         """Set status to complete and save questionnaire"""
+    #         form.instance.status = 'complete'
+    #         form.instance.completed_by_candidate = True
+    #         form_valid = super(CandidateQuestionnaireView, self).form_valid(
+    #             form
+    #         )
+    #
+    #         """Submit application if nomination is complete too"""
+    #         application = self.get_application()
+    #         if application.nomination.status == 'complete':
+    #             submit_application(application)
+    #
+    #         return form_valid
+    #
+    #     else:
+    #         return self.form_invalid(form)
+    #
+    # def get_context_data(self, *args, **kwargs):
+    #     context_data = super(
+    #         CandidateQuestionnaireView,
+    #         self
+    #     ).get_context_data(
+    #         *args,
+    #         **kwargs
+    #     )
+    #     context_data['formset'] = QuestionnaireResponseFormset(
+    #         self.request.POST or None, instance=self.object, prefix="questions"
+    #     )
+    #     context_data['helper'] = QuestionnaireResponseFormsetHelper()
+    #     context_data['user'] = self.request.session['profile']
+    #     context_data['questionnaire'] = self.object
+    #     return context_data
 
 
 # Ballot initiatives

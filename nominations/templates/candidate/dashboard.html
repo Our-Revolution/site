@@ -45,7 +45,26 @@
                   <tr>
                     <td>{{app}}</td>
                     <td>{{app.questionnaire.get_status_display}}</td>
-                    <td><a href="/groups/nominations/candidate/questionnaire?id={{app.id}}" class="pull-right btn btn-primary uppercase ls2">{% if app.questionnaire.status == 'complete' %}View{% else %}Edit{% endif %}</a></td>
+
+                    <td>
+
+                      {% if app.questionnaire.status == 'complete' %}
+
+                      <a href="/groups/nominations/candidate/questionnaire?id={{app.id}}"
+                      class="pull-right btn btn-primary uppercase ls2">
+                        View
+                      </a>
+
+                      {% else %}
+
+                      <a href="{% url 'nominations-candidate-questionnaire-select' app.id %}"
+                      class="pull-right btn btn-primary uppercase ls2">
+                        Edit
+                      </a>
+
+                      {% endif %}
+
+                    </td>
                   </tr>
                 {% endfor %}
               </tbody>

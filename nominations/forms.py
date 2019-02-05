@@ -220,6 +220,7 @@ class CandidateEmailForm(forms.Form):
             Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
         )
 
+
 class CandidateLoginForm(forms.Form):
     email = forms.EmailField()
 
@@ -236,6 +237,15 @@ class CandidateLoginForm(forms.Form):
                 css_class='col-md-12'
             )
         )
+
+
+class CandidateQuestionnaireSelectForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = [
+            'questionnaire',
+        ]
 
 
 class InitiativeApplicationForm(forms.ModelForm):
