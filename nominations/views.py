@@ -762,6 +762,16 @@ class CandidateQuestionnaireSelectView(DetailView):
         if can_candidate_access(application, email) and (
             application.questionnaire.status != 'complete'
         ):
+
+            """Check if there are any completed questionnaires"""
+            self.object = application
+            context_data = self.get_context_data()
+            if not context_data['applications_complete']:
+                return redirect(
+                    'nominations-candidate-questionnaire',
+                    application.id,
+                )
+
             return super(CandidateQuestionnaireSelectView, self).get(
                 request,
                 *args,
@@ -819,7 +829,10 @@ class CandidateQuestionnaireSelectView(DetailView):
 
             return redirect(self.get_success_url())
         else:
-            return redirect('nominations-candidate-questionnaire-select')
+            return redirect(
+                'nominations-candidate-questionnaire-select',
+                application.id,
+            )
 
 
 # Ballot initiatives
