@@ -50,17 +50,18 @@
         </p>
 
         <p>
-          <strong>
-            You have already completed a candidate questionnaire in the past.
-            Please select a completed questionnaire to submit for the current
-            nomination if it is for the same office and election.
-          </strong>
+          You have already completed a candidate questionnaire in the past.
+          Please select a completed questionnaire to submit for the current
+          nomination if it is for the same office and election.
         </p>
 
         <p>
           If the current nomination is for a different campaign, then please
-          submit a new questionnaire.
+          <a href="{% url 'nominations-candidate-questionnaire' application.id %}">submit
+            a new questionnaire</a>.
         </p>
+
+        <hr />
 
         <h4 class="mt20">Completed Questionnaires</h4>
 
@@ -73,7 +74,7 @@
                 <th>Group</th>
                 <th>Office</th>
                 <th>Election</th>
-                <th></th>
+                <th class="text-right"></th>
               </tr>
             </thead>
 
@@ -81,11 +82,19 @@
 
               {% for app_complete in applications_complete %}
                 <tr>
-                  <td>{{ app_complete.group.name }}</td>
-                  <td>{{ app_complete.questionnaire.candidate_office }}</td>
-                  <td>{{ app_complete.questionnaire.general_election_date|date:"Y" }}</td>
-
                   <td>
+                    <a href="{% url 'nominations-candidate-questionnaire' app_complete.id %}"
+                    target="_blank">
+                    {{ app_complete }}
+                    </a>
+                  </td>
+                  <td>
+                    {{ app_complete.questionnaire.candidate_office }}
+                  </td>
+                  <td>
+                    {{ app_complete.questionnaire.general_election_date|date:"Y" }}
+                  </td>
+                  <td class="text-right">
                     <form action="{% url 'nominations-candidate-questionnaire-select' application.id app_complete.id %}"
                     class="form form-inline inline-block" method="post">
 
