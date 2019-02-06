@@ -701,7 +701,9 @@ class CandidateQuestionnaireView(UpdateView):
         return questionnaire
 
     def get_success_url(self):
-        return reverse_lazy('nominations-candidate-success') + "?id=" + self.request.GET.get('id')
+        return reverse_lazy(
+            'nominations-candidate-success'
+        ) + "?id=" + self.kwargs['app_id']
 
     def form_valid(self, form):
 

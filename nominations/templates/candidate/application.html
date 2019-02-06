@@ -100,7 +100,8 @@
 
                       {% csrf_token %}
 
-                      <button class="btn btn-primary btn-sm" type="submit">
+                      <button class="btn btn-primary btn-sm uppercase"
+                      type="submit">
                         Select
                       </button>
 
@@ -115,6 +116,12 @@
           </table>
 
         </div>
+
+        <a class="btn btn-success btn-block uppercase"
+        href="{% url 'nominations-candidate-questionnaire' application.id %}">
+          Submit new questionnaire
+        </a>
+
 
       </div>
     </div>
