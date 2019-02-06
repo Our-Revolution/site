@@ -79,14 +79,14 @@
 
             <tbody>
 
-              {% for app in applications %}
+              {% for app_complete in applications_complete %}
                 <tr>
-                  <td>{{ app.group.name }}</td>
-                  <td>{{ app.questionnaire.candidate_office }}</td>
-                  <td>{{ app.questionnaire.general_election_date|date:"Y" }}</td>
+                  <td>{{ app_complete.group.name }}</td>
+                  <td>{{ app_complete.questionnaire.candidate_office }}</td>
+                  <td>{{ app_complete.questionnaire.general_election_date|date:"Y" }}</td>
 
                   <td>
-                    <form action="{% url 'nominations-candidate-questionnaire-select' application.id app.questionnaire.id %}"
+                    <form action="{% url 'nominations-candidate-questionnaire-select' application.id app_complete.id %}"
                     class="form form-inline inline-block" method="post">
 
                       {% csrf_token %}

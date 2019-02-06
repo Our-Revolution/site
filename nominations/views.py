@@ -23,7 +23,6 @@ from .forms import (
     NominationForm,
     NominationResponseFormset,
     CandidateLoginForm,
-    CandidateQuestionnaireSelectForm,
     NominationResponseFormsetHelper,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
@@ -62,6 +61,37 @@ application.
 
 
 """Methods"""
+
+
+def can_candidate_access(application, email):
+    """
+    Can candidate access Application
+
+    Match on the authorized email field on Application model. Do not match on
+    the candidate email field on the Questionnaire model.
+
+    Parameters
+    ----------
+    application : Application
+        Application that is potentially being accessed
+    email : str
+        Candidate email address (authorized_email)
+
+    Returns
+        -------
+        bool
+            Returns true for access granted
+    """
+
+    authorized_email = application.authorized_email
+    if authorized_email is not None and (
+        authorized_email.lower() == email.lower()
+    ):
+        can_access = True
+    else:
+        can_access = False
+
+    return can_access
 
 
 def find_applications_for_candidate(email):
@@ -718,11 +748,25 @@ class CandidateQuestionnaireView(UpdateView):
         return context_data
 
 
-class CandidateQuestionnaireSelectView(UpdateView):
+class CandidateQuestionnaireSelectView(DetailView):
     model = Application
-    form_class = CandidateQuestionnaireSelectForm
     template_name = "candidate/application.html"
-    # TODO access control
+
+    def get(self, request, *args, **kwargs):
+        """Check access"""
+        application = self.get_object()
+        user = get_candidate_user_from_request(self.request)
+        email = user['email']
+        if can_candidate_access(application, email) and (
+            application.questionnaire.status != 'complete'
+        ):
+            return super(CandidateQuestionnaireSelectView, self).get(
+                request,
+                *args,
+                **kwargs
+            )
+        else:
+            return redirect('nominations-candidate-dashboard')
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(
@@ -732,20 +776,45 @@ class CandidateQuestionnaireSelectView(UpdateView):
 
         """Get applications with complete questionnaires"""
         user = get_candidate_user_from_request(self.request)
+        application = self.get_object()
         apps = find_applications_for_candidate(user['email'])
-        apps_with_complete_questionnaires = []
+        apps_complete = []
         for app in apps:
-            questionnaire = app.questionnaire
-            if questionnaire is not None and (
-                questionnaire.status == 'complete'
-            ):
-                apps_with_complete_questionnaires.append(app)
+            if app.id != application.id:
+                questionnaire = app.questionnaire
+                if questionnaire is not None and (
+                    questionnaire.status == 'complete'
+                ):
+                    apps_complete.append(app)
 
-        context_data['applications'] = apps_with_complete_questionnaires
+        context_data['applications_complete'] = apps_complete
         return context_data
 
     def get_success_url(self):
         return reverse_lazy('nominations-candidate-success') + "?id=" + self.kwargs['pk']
+
+    def post(self, request, *args, **kwargs):
+        """Check access and status of questionnaire"""
+        application = self.get_object()
+        app_complete = Application.objects.filter(
+            pk=self.kwargs['app_complete']
+        ).first()
+        user = get_candidate_user_from_request(self.request)
+        email = user['email']
+        if can_candidate_access(application, email) and can_candidate_access(
+            app_complete,
+            email
+        ) and application.questionnaire.status != 'complete' and (
+            app_complete.questionnaire.status == 'complete'
+        ):
+
+            """Attach completed questionnaire to the current application"""
+            application.questionnaire = app_complete.questionnaire
+            application.save()
+
+            return redirect(self.get_success_url())
+        else:
+            return redirect('nominations-candidate-questionnaire-select')
 
 
 # Ballot initiatives

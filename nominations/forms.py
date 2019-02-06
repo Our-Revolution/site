@@ -239,15 +239,6 @@ class CandidateLoginForm(forms.Form):
         )
 
 
-class CandidateQuestionnaireSelectForm(forms.ModelForm):
-
-    class Meta:
-        model = Application
-        fields = [
-            'questionnaire',
-        ]
-
-
 class InitiativeApplicationForm(forms.ModelForm):
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
 
