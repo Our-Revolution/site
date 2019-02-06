@@ -220,7 +220,7 @@ module.exports = function() {
         <div class="groups-map__add relative">\
         <h4 class="mt0">We couldn\'t find any groups here.</h4>\
         <p class="mb20">Try searching for a different city, zooming out, or using the buttons below to start your own group.</p>\
-        <a href="https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit" class="btn btn-block btn-success uppercase ls2" target="_blank" onclick="trackOutboundLink(\'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit\', true)">Start a group</a>\
+        <a href="' + ourrevolution_start_group_url + '" class="btn btn-block btn-success uppercase ls2" target="_blank" onclick="trackOutboundLink(\'https://docs.google.com/document/d/1BWp6HCZ6tngr6SJHJB3H1uPTX2Hcv6cMUQondCrBkHg/edit\', true)">Start a group</a>\
         <a href="/groups/new" class="btn btn-block btn-primary uppercase ls2">Add your group</a>\
       </div>');
     }

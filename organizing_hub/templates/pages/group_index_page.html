@@ -66,6 +66,10 @@
 {% include "partials/take_action_content.html" %}
 
 <script>
+
+  // Add start group url to js scope
+  var ourrevolution_start_group_url = '{% start_group_url %}';
+
   var mapDiv = document.getElementById('map-container'),
     inputDiv = document.getElementById('autocomplete-input');
   Groups.init(mapDiv);
