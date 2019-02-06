@@ -3,29 +3,49 @@
 
 Hi {{candidate_name}},
 
-You’ve been nominated by {{group_name}} for an endorsement from Our Revolution! Your local endorsement is a critical first step in building the Political Revolution across the land.
+You’ve been nominated by {{group_name}} for an endorsement from Our Revolution!
+Your local endorsement is a critical first step in building the Political
+Revolution across the land.
 
-We have closed nominations for the 2018 election season. If your election is for 2019, please feel free to fill out the questionnaire you will receive. If your election day is in 2018, there is no need to follow up. We have informed the group that nominated you that we are no longer accepting nominations for this year. We wish you luck for this year regardless.
+In order for Our Revolution to consider your candidacy for a national
+endorsement, you must fill out the candidate questionnaire.
+( https://ourrevolution.com/groups/nominations/candidate/login )
 
-Note, the office you are seeking may not have jurisdiction over some of these issues. Please completely fill out the entire questionnaire as they will be used to determine how aligned you are with our national platform.
+Note, the office you are seeking may not have jurisdiction over some of these
+issues. Please completely fill out the entire questionnaire as they will be
+used to determine how aligned you are with our national platform.
 
-PLEASE KEEP IN MIND THAT THE FOLLOWING FACTORS WILL BE ESSENTIAL FOR CONSIDERATION OF A NATIONAL ENDORSEMENT:
+PLEASE KEEP IN MIND THAT THE FOLLOWING FACTORS WILL BE ESSENTIAL FOR
+CONSIDERATION OF A NATIONAL ENDORSEMENT:
 
 1. VALUES: How aligned is the candidate with Our Revolution’s values?
 
-2. PATHWAY: Our Revolution does not expect all our candidates will win - sometimes we know they won’t. But we want candidates to demonstrate that they have thought about how they would win. This thought exercise is called “a pathway to victory,” we want you to think about what steps you can take to win the race by reaching out to voters and allies.
+2. PATHWAY: Our Revolution does not expect all our candidates will win -
+sometimes we know they won’t. But we want candidates to demonstrate that they
+have thought about how they would win. This thought exercise is called
+“a pathway to victory,” we want you to think about what steps you can take to
+win the race by reaching out to voters and allies.
 
-3. GROUP AND ALLIES SUPPORT: We know strong candidates are ones that are leaders in their communities. Good leaders will have support of not only the Our Revolution groups in the area, but allies of our organization. While only Our Revolution decides who we endorse, we do examine if a campaign can garner support of groups if there is more than one and partners as well.
+3. GROUP AND ALLIES SUPPORT: We know strong candidates are ones that are
+leaders in their communities. Good leaders will have support of not only the
+Our Revolution groups in the area, but allies of our organization. While only
+Our Revolution decides who we endorse, we do examine if a campaign can garner
+support of groups if there is more than one and partners as well.
 
-4. FUNDRAISING AND ORIGIN OF CANDIDATE’S CAMPAIGN CONTRIBUTIONS: Does the candidate have the ability to raise money to make him/her/them competitive without having to compromise their values?
+4. FUNDRAISING AND ORIGIN OF CANDIDATE’S CAMPAIGN CONTRIBUTIONS: Does the
+candidate have the ability to raise money to make him/her/them competitive
+without having to compromise their values?
 
-Once you have filled out and submitted the candidate questionnaire, {{group_name}} can submit your nomination and Our Revolution National will review your candidacy for endorsement. Please understand that we process the applications as quickly as we can but not always as fast as we wish. If you have not heard from us within a month, please feel free to reach out.
+Once you have filled out and submitted the candidate questionnaire,
+{{group_name}} can submit your nomination and Our Revolution National will
+review your candidacy for endorsement. Please understand that we process the
+applications as quickly as we can but not always as fast as we wish. If you
+have not heard from us within a month, please feel free to reach out.
 
-Fill Out Our Questionnaire (https://ourrevolution.com/groups/nominations/candidate/login)
+Fill Out Our Questionnaire
+( https://ourrevolution.com/groups/nominations/candidate/login )
 
-Fill out our platform questionnaire. (https://ourrevolution.com/groups/nominations/candidate/login)
-
-QUESTIONS? You can contact {{group_name}} at {{group_rep_email}} (mailto:{{group_rep_email|urlencode}}).
+QUESTIONS? You can contact {{group_name}} at {{group_rep_email}}.
 
 Thanks,
 OUR REVOLUTION

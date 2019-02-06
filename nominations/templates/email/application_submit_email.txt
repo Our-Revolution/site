@@ -3,13 +3,29 @@
 
 Hi {{group_name}},
 
-Thank you for making a nomination of {{candidate_name}}.
+Thank you for nominating {{candidate_name}} for a national
+endorsement.
 
-We have closed nominations for the 2018 election season. If this nomination for an endorsement is for 2019, we will work on getting back to you in the new year, if not sooner.
+If this nomination for endorsement is for an election
+*before* April 1st, 2019, we will work on getting back to
+you soon.
 
-If this nomination was for the general election of 2018, we are not accepting new nominations for this season.
+If this nomination for endorsement is for an election
+*after* April 1st, 2019, your group needs to attend an
+in-service training on either Thursday, February 21st or
+Saturday, March 2nd. *Attendance is mandatory for nominating a candidate for a
+national endorsement.*
 
-We wish you and your candidate the best and will continue to fight the political revolution with you.
+Your group can RSVP for the February in-service here
+( https://register.gotowebinar.com/register/6686579205477704972 )
+or the March in-service here
+( https://register.gotowebinar.com/register/4798660565981995788 ).
+For more on in-service trainings and for what to do should both in-service
+training dates conflict with your schedule, email organizing@ourrevolution.com.
+
+We wish you and your candidate the best and will continue to
+fight the political revolution with you.
+
 
 Solidarity,
 THE OUR REVOLUTION TEAM
