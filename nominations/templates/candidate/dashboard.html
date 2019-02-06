@@ -50,7 +50,7 @@
 
                       {% if app.questionnaire.status == 'complete' %}
 
-                      <a href="/groups/nominations/candidate/questionnaire?id={{app.id}}"
+                      <a href="{% url 'nominations-candidate-questionnaire' app.id %}"
                       class="pull-right btn btn-primary uppercase ls2">
                         View
                       </a>

@@ -678,7 +678,7 @@ class CandidateQuestionnaireView(UpdateView):
             return self.render_to_response(context)
 
     def get_application(self):
-        app_id = self.request.GET.get('id')
+        app_id = self.kwargs['app_id']
         user = get_candidate_user_from_request(self.request)
         email = user['email']
 
@@ -801,9 +801,12 @@ class CandidateQuestionnaireSelectView(DetailView):
         ).first()
         user = get_candidate_user_from_request(self.request)
         email = user['email']
-        if can_candidate_access(application, email) and can_candidate_access(
+        if app_complete is not None and can_candidate_access(
+            application,
+            email,
+        ) and can_candidate_access(
             app_complete,
-            email
+            email,
         ) and application.questionnaire.status != 'complete' and (
             app_complete.questionnaire.status == 'complete'
         ):

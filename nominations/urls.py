@@ -104,10 +104,11 @@ urlpatterns = [
             ),
             url(r'^login/$', candidate_login),
             url(
-                r'^questionnaire/$',
+                r'^questionnaire/(?P<app_id>[0-9]+)/$',
                 is_authenticated_candidate(
                     CandidateQuestionnaireView.as_view()
-                )
+                ),
+                name='nominations-candidate-questionnaire',
             ),
             url(
                 r'^success/$',
