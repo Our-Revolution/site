@@ -1,0 +1,16 @@
+{% extends "organizing_hub_layout.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Candidate Dashboard" "nominations-candidate-dashboard" %}
+{% endblock %}
+
+{% block content %}
+
+{% with header_only=True %}
+    {{ block.super }}
+{% endwith%}
+
+{% endblock %}

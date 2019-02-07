@@ -1,8 +1,13 @@
-{% extends "nominations_portal.html" %}
+{% extends "candidate/candidate_portal.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 django_bootstrap_breadcrumbs %}
 
-{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+{% block page_title %}Our Revolution - Questionnaire Submitted{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Questionnaire Submitted" request.get_full_path %}
+{% endblock %}
 
 {% block content %}
 
