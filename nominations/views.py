@@ -591,13 +591,14 @@ def reset_questionnaire(request):
     return redirect(next_url)
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(CandidateDashboardView, self).get_context_data(
             *args,
-            **kwargs,
+            **kwargs
         )
         context_data['applications'] = find_applications_for_candidate(
             self.request.user.email
@@ -605,6 +606,7 @@ class CandidateDashboardView(TemplateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateQuestionnaireView(UpdateView):
     model = Questionnaire
     form_class = QuestionnaireForm
@@ -694,6 +696,7 @@ class CandidateQuestionnaireView(UpdateView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateQuestionnaireSelectView(DetailView):
     model = Application
     template_name = "candidate/application.html"
@@ -778,6 +781,11 @@ class CandidateQuestionnaireSelectView(DetailView):
                 'nominations-candidate-questionnaire-select',
                 application.id,
             )
+
+
+@method_decorator(verified_email_required, name='dispatch')
+class CandidateSuccessView(TemplateView):
+    template_name = "candidate/success.html"
 
 
 # Ballot initiatives

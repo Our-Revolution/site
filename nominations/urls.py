@@ -11,6 +11,7 @@ from .views import (
     QuestionnaireIndexView,
     CandidateQuestionnaireView,
     CandidateQuestionnaireSelectView,
+    CandidateSuccessView,
     ApplicationTypeView,
     CreateInitiativeView,
     reset_questionnaire,
@@ -101,9 +102,7 @@ urlpatterns = [
             ),
             url(
                 r'^success/$',
-                TemplateView.as_view(
-                    template_name='candidate/success.html'
-                ),
+                CandidateSuccessView.as_view(),
                 name='nominations-candidate-success',
             ),
         ])),
