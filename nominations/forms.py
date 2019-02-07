@@ -221,24 +221,6 @@ class CandidateEmailForm(forms.Form):
         )
 
 
-class CandidateLoginForm(forms.Form):
-    email = forms.EmailField()
-
-    def __init__(self, *args, **kwargs):
-        super(CandidateLoginForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_class = 'row'
-        self.helper.layout = Layout(
-            Field('email', wrapper_class='col-md-12'),
-            Div(
-                Submit('submit','Get Started',css_class='btn btn-block btn-success uppercase ls2'),
-                css_class='col-md-12'
-            )
-        )
-
-
 class InitiativeApplicationForm(forms.ModelForm):
     agree = forms.BooleanField(label='I agree that members of the Group were given an unobstructive opportunity to weigh in on the nomination, that a majority of people in the group support the nominated initiative, and that there is significant support for the initiative and the Group is committed to aiding the initiative to victory.', required=True)
 

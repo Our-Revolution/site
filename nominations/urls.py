@@ -12,14 +12,11 @@ from .views import (
     QuestionnaireIndexView,
     CandidateQuestionnaireView,
     CandidateQuestionnaireSelectView,
-    handle_candidate_callback,
-    candidate_login,
     ApplicationTypeView,
     CreateInitiativeView,
     reset_questionnaire,
 )
 from django.views.generic import TemplateView
-from .decorators import is_authenticated_candidate
 
 urlpatterns = [
     url(r'^groups/nominations/', include([
@@ -91,35 +88,25 @@ urlpatterns = [
         url(r'^candidate/', include([
             url(
                 r'application/(?P<pk>[0-9]+)/(?:(?P<app_complete>[0-9]+)/)?$',
-                is_authenticated_candidate(
-                    CandidateQuestionnaireSelectView.as_view()
-                ),
+                CandidateQuestionnaireSelectView.as_view(),
                 name='nominations-candidate-questionnaire-select',
             ),
-            url(r'^callback/$', handle_candidate_callback),
             url(
                 r'^dashboard/$',
-                is_authenticated_candidate(CandidateDashboardView.as_view()),
+                CandidateDashboardView.as_view(),
                 name='nominations-candidate-dashboard',
             ),
-            url(r'^login/$', candidate_login),
             url(
                 r'^questionnaire/(?P<app_id>[0-9]+)/$',
-                is_authenticated_candidate(
-                    CandidateQuestionnaireView.as_view()
-                ),
+                CandidateQuestionnaireView.as_view(),
                 name='nominations-candidate-questionnaire',
             ),
             url(
                 r'^success/$',
-                is_authenticated_candidate(TemplateView.as_view(
+                TemplateView.as_view(
                     template_name='candidate/success.html'
-                )),
+                ),
                 name='nominations-candidate-success',
-            ),
-            url(
-                r'^verify/$',
-                TemplateView.as_view(template_name='candidate/verify.html')
             ),
         ])),
     ])),

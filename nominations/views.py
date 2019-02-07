@@ -22,7 +22,6 @@ from .forms import (
     ApplicationForm,
     NominationForm,
     NominationResponseFormset,
-    CandidateLoginForm,
     NominationResponseFormsetHelper,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
@@ -49,7 +48,6 @@ logger = logging.getLogger(__name__)
 auth0_domain = settings.AUTH0_DOMAIN
 auth0_client_id = settings.AUTH0_CLIENT_ID
 auth0_client_secret = settings.AUTH0_CLIENT_SECRET
-auth0_candidate_callback_url = settings.AUTH0_CANDIDATE_CALLBACK_URL
 ELECTORAL_COORDINATOR_EMAIL = settings.ELECTORAL_COORDINATOR_EMAIL
 OR_LOGO_SECONDARY = settings.OR_LOGO_SECONDARY
 
@@ -576,30 +574,6 @@ def logout(request):
     return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))
 
 
-# Candidate Facing Dashboard
-def candidate_login(request):
-    # if user is already logged in
-    if 'profile' in request.session:
-        return redirect('/groups/nominations/candidate/dashboard?c=1')
-
-    if request.method == 'POST':
-        form = CandidateLoginForm(request.POST)
-
-        if form.is_valid():
-            # initiatie Auth0 passwordless
-            passwordless = Passwordless(auth0_domain)
-
-            email = form.cleaned_data['email']
-            passwordless.email(auth0_client_id,email,auth_params={'response_type':'code','redirect_uri':auth0_candidate_callback_url})
-
-            return HttpResponseRedirect('/groups/nominations/candidate/verify')
-
-    else:
-        form = CandidateLoginForm()
-
-    return render(request, 'candidate/login.html', {'form': form})
-
-
 @verified_email_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
@@ -626,24 +600,6 @@ def reset_questionnaire(request):
     application.save()
 
     return redirect(next_url)
-
-
-def handle_candidate_callback(request):
-    code = request.GET.get('code')
-
-    if code:
-        get_token = GetToken(auth0_domain)
-        auth0_users = Users(auth0_domain)
-        token = get_token.authorization_code(auth0_client_id,
-                                             auth0_client_secret, code, auth0_candidate_callback_url)
-        user_info = auth0_users.userinfo(token['access_token'])
-        user = json.loads(user_info)
-        request.session['profile'] = user
-
-        return redirect('/groups/nominations/candidate/dashboard?c=1')
-
-    messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
-    return redirect('/groups/nominations/candidate/dashboard?c=1')
 
 
 class CandidateDashboardView(TemplateView):

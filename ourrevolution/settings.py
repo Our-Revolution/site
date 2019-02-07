@@ -16,7 +16,6 @@ import dj_database_url, mimetypes, os, re
 
 mimetypes.add_type('image/svg+xml', 'svg')
 
-AUTH0_CANDIDATE_CALLBACK_URL = os.environ.get('AUTH0_CANDIDATE_CALLBACK_URL', None)
 AUTH0_CLIENT_ID = os.environ.get('AUTH0_CLIENT_ID', None)
 AUTH0_CLIENT_SECRET = os.environ.get('AUTH0_CLIENT_SECRET', None)
 AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', None)
