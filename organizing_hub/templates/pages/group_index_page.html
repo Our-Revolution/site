@@ -65,32 +65,42 @@
 </div>
 {% include "partials/take_action_content.html" %}
 
+{% endblock %}
+
+{% block footer_scripts %}
 <script>
-  var mapDiv = document.getElementById('map-container'),
-    inputDiv = document.getElementById('autocomplete-input');
-  Groups.init(mapDiv);
-  Groups.monitorAPI(inputDiv);
+  $(document).ready(function() {
 
-  var data = {{groups|safe}}
+    // Add start group url to js scope
+    ourrevolution_start_group_url = '{% start_group_url %}';
 
-  for(i=0; i<data.features.length; i++) {
-    if(data.features[i].properties.status == 'approved'){
+    var mapDiv = document.getElementById('map-container'),
+      inputDiv = document.getElementById('autocomplete-input');
+    Groups.init(mapDiv);
+    Groups.monitorAPI(inputDiv);
 
-      Groups.addGroup(data.features[i]);
+    var data = {{groups|safe}}
+
+    for(i=0; i<data.features.length; i++) {
+      if(data.features[i].properties.status == 'approved'){
+
+        Groups.addGroup(data.features[i]);
+      }
     }
-  }
 
-  $('#autocomplete-input').on('keyup', function(e) {
-    if(e.target.value.length > 0) {
-      $('.groups-map-info__search').addClass('active');
-    } else {
-      $('.groups-map-info__search').removeClass('active');
-    }
+    $('#autocomplete-input').on('keyup', function(e) {
+      if(e.target.value.length > 0) {
+        $('.groups-map-info__search').addClass('active');
+      } else {
+        $('.groups-map-info__search').removeClass('active');
+      }
+    });
+
+    $('.groups-map__heading .glyphicon').on('click touchstart', function(e) {
+      $('.groups-map__intro').toggleClass('collapsed');
+    });
+
   });
-
-  $('.groups-map__heading .glyphicon').on('click touchstart', function(e) {
-    $('.groups-map__intro').toggleClass('collapsed');
-  })
 </script>
 
 <!--  Places Libary for Autocomplete -->
