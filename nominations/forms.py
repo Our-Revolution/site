@@ -220,6 +220,7 @@ class CandidateEmailForm(forms.Form):
             Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
         )
 
+
 class CandidateLoginForm(forms.Form):
     email = forms.EmailField()
 

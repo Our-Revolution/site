@@ -63,6 +63,61 @@ application.
 """Methods"""
 
 
+def can_candidate_access(application, email):
+    """
+    Can candidate access Application
+
+    Match on the authorized email field on Application model. Do not match on
+    the candidate email field on the Questionnaire model.
+
+    Parameters
+    ----------
+    application : Application
+        Application that is potentially being accessed
+    email : str
+        Candidate email address (authorized_email)
+
+    Returns
+        -------
+        bool
+            Returns true for access granted
+    """
+
+    authorized_email = application.authorized_email
+    if authorized_email is not None and (
+        authorized_email.lower() == email.lower()
+    ):
+        can_access = True
+    else:
+        can_access = False
+
+    return can_access
+
+
+def find_applications_for_candidate(email):
+    """
+    Find Applications for Candidate based on email address
+
+    Match on the authorized email field on Application model. Do not match on
+    the candidate email field on the Questionnaire model.
+
+    Parameters
+    ----------
+    email : str
+        Candidate email address (authorized_email)
+
+    Returns
+        -------
+        Application list
+            Returns matching Application list for candidate
+    """
+
+    applications = Application.objects.filter(
+        authorized_email__iexact=email
+    ).order_by('-create_dt')
+    return applications
+
+
 def get_auth0_user_id_by_email(email):
     """Get Auth0 user id by user email"""
 
@@ -82,6 +137,11 @@ def get_auth0_user_id_by_email(email):
         auth0_user_id = None
 
     return auth0_user_id
+
+
+def get_candidate_user_from_request(request):
+    user = request.session['profile']
+    return user
 
 
 def is_application_owner(user, application):
@@ -580,9 +640,6 @@ def handle_candidate_callback(request):
         user = json.loads(user_info)
         request.session['profile'] = user
 
-        # find application where this email is authorized to access
-        application = Application.objects.all().filter(authorized_email__iexact=user['email']).first()
-
         return redirect('/groups/nominations/candidate/dashboard?c=1')
 
     messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
@@ -593,12 +650,12 @@ class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        user = self.request.session['profile']
+        user = get_candidate_user_from_request(self.request)
         context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
         context_data['user'] = user
-        context_data['applications'] = Application.objects.all().filter(
-            authorized_email__iexact=user['email']
-        ).order_by('-create_dt')
+        context_data['applications'] = find_applications_for_candidate(
+            user['email']
+        )
         return context_data
 
 
@@ -621,12 +678,12 @@ class CandidateQuestionnaireView(UpdateView):
             return self.render_to_response(context)
 
     def get_application(self):
-        app_id = self.request.GET.get('id')
-        user = self.request.session['profile']
+        app_id = self.kwargs['app_id']
+        user = get_candidate_user_from_request(self.request)
         email = user['email']
 
         try:
-            application = Application.objects.all().filter(
+            application = Application.objects.filter(
                 authorized_email__iexact=email,
                 pk=app_id
             ).first()
@@ -644,7 +701,9 @@ class CandidateQuestionnaireView(UpdateView):
         return questionnaire
 
     def get_success_url(self):
-        return reverse_lazy('nominations-candidate-success') + "?id=" + self.request.GET.get('id')
+        return reverse_lazy(
+            'nominations-candidate-success'
+        ) + "?id=" + self.kwargs['app_id']
 
     def form_valid(self, form):
 
@@ -686,9 +745,94 @@ class CandidateQuestionnaireView(UpdateView):
             self.request.POST or None, instance=self.object, prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['user'] = self.request.session['profile']
+        context_data['user'] = get_candidate_user_from_request(self.request)
         context_data['questionnaire'] = self.object
         return context_data
+
+
+class CandidateQuestionnaireSelectView(DetailView):
+    model = Application
+    template_name = "candidate/application.html"
+
+    def get(self, request, *args, **kwargs):
+        """Check access"""
+        application = self.get_object()
+        user = get_candidate_user_from_request(self.request)
+        email = user['email']
+        if can_candidate_access(application, email) and (
+            application.questionnaire.status != 'complete'
+        ):
+
+            """Check if there are any completed questionnaires"""
+            self.object = application
+            context_data = self.get_context_data()
+            if not context_data['applications_complete']:
+                return redirect(
+                    'nominations-candidate-questionnaire',
+                    application.id,
+                )
+
+            return super(CandidateQuestionnaireSelectView, self).get(
+                request,
+                *args,
+                **kwargs
+            )
+        else:
+            return redirect('nominations-candidate-dashboard')
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super(
+            CandidateQuestionnaireSelectView,
+            self,
+        ).get_context_data(*args, **kwargs)
+
+        """Get applications with complete questionnaires"""
+        user = get_candidate_user_from_request(self.request)
+        application = self.get_object()
+        apps = find_applications_for_candidate(user['email'])
+        apps_complete = []
+        for app in apps:
+            if app.id != application.id:
+                questionnaire = app.questionnaire
+                if questionnaire is not None and (
+                    questionnaire.status == 'complete'
+                ):
+                    apps_complete.append(app)
+
+        context_data['applications_complete'] = apps_complete
+        return context_data
+
+    def get_success_url(self):
+        return reverse_lazy('nominations-candidate-success') + "?id=" + self.kwargs['pk']
+
+    def post(self, request, *args, **kwargs):
+        """Check access and status of questionnaire"""
+        application = self.get_object()
+        app_complete = Application.objects.filter(
+            pk=self.kwargs['app_complete']
+        ).first()
+        user = get_candidate_user_from_request(self.request)
+        email = user['email']
+        if app_complete is not None and can_candidate_access(
+            application,
+            email,
+        ) and can_candidate_access(
+            app_complete,
+            email,
+        ) and application.questionnaire.status != 'complete' and (
+            app_complete.questionnaire.status == 'complete'
+        ):
+
+            """Attach completed questionnaire to the current application"""
+            application.questionnaire = app_complete.questionnaire
+            application.save()
+
+            return redirect(self.get_success_url())
+        else:
+            return redirect(
+                'nominations-candidate-questionnaire-select',
+                application.id,
+            )
 
 
 # Ballot initiatives
