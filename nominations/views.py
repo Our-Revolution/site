@@ -827,6 +827,10 @@ class CandidateQuestionnaireSelectView(DetailView):
             application.questionnaire = app_complete.questionnaire
             application.save()
 
+            """Submit application if nomination is complete too"""
+            if application.nomination.status == 'complete':
+                submit_application(application)
+
             return redirect(self.get_success_url())
         else:
             return redirect(
