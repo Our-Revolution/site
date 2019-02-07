@@ -4,7 +4,6 @@ from .views import (
     CreateApplicationView,
     NominationsIndexView,
     EditNominationView,
-    logout,
     DashboardView,
     CandidateDashboardView,
     ApplicationView,
@@ -59,7 +58,6 @@ urlpatterns = [
                 template_name='success.html'
             ))),
         ])),
-        url(r'^logout/$', logout),
         url(
             r'^new/$',
             CreateApplicationView.as_view(),

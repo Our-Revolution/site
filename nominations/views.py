@@ -137,11 +137,6 @@ def get_auth0_user_id_by_email(email):
     return auth0_user_id
 
 
-def get_candidate_user_from_request(request):
-    user = request.session['profile']
-    return user
-
-
 def is_application_owner(user, application):
     """Check if a user owns an application"""
 
@@ -568,12 +563,6 @@ class QuestionnaireIndexView(FormView):
         return context_data
 
 
-def logout(request):
-    request.session.clear()
-    base_url = 'https://ourrevolution.com/groups/nominations'
-    return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))
-
-
 @verified_email_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
@@ -606,11 +595,12 @@ class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        user = get_candidate_user_from_request(self.request)
-        context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = user
+        context_data = super(CandidateDashboardView, self).get_context_data(
+            *args,
+            **kwargs,
+        )
         context_data['applications'] = find_applications_for_candidate(
-            user['email']
+            self.request.user.email
         )
         return context_data
 
@@ -635,8 +625,7 @@ class CandidateQuestionnaireView(UpdateView):
 
     def get_application(self):
         app_id = self.kwargs['app_id']
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
 
         try:
             application = Application.objects.filter(
@@ -701,7 +690,6 @@ class CandidateQuestionnaireView(UpdateView):
             self.request.POST or None, instance=self.object, prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['user'] = get_candidate_user_from_request(self.request)
         context_data['questionnaire'] = self.object
         return context_data
 
@@ -713,8 +701,7 @@ class CandidateQuestionnaireSelectView(DetailView):
     def get(self, request, *args, **kwargs):
         """Check access"""
         application = self.get_object()
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
         if can_candidate_access(application, email) and (
             application.questionnaire.status != 'complete'
         ):
@@ -743,9 +730,8 @@ class CandidateQuestionnaireSelectView(DetailView):
         ).get_context_data(*args, **kwargs)
 
         """Get applications with complete questionnaires"""
-        user = get_candidate_user_from_request(self.request)
         application = self.get_object()
-        apps = find_applications_for_candidate(user['email'])
+        apps = find_applications_for_candidate(self.request.user.email)
         apps_complete = []
         for app in apps:
             if app.id != application.id:
@@ -767,8 +753,7 @@ class CandidateQuestionnaireSelectView(DetailView):
         app_complete = Application.objects.filter(
             pk=self.kwargs['app_complete']
         ).first()
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
         if app_complete is not None and can_candidate_access(
             application,
             email,
