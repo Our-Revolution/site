@@ -22,8 +22,10 @@
       <div class="col-md-8 col-md-offset-2">
         {% bootstrap_messages %}
 
+
         {% if applications %}
-          <h4 class="mt20">Manage your questionnaires</h4>
+
+        <h3 class="mt20">Manage your questionnaires</h3>
 
           <div class="panel panel-default mt20">
             <table class="table table-striped table-hover">
@@ -65,10 +67,20 @@
               </tbody>
             </table>
           </div>
-        {% else %}
-          <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">You have not recieved any candidate questionnaires. Make sure that you have signed in with the email that your nomination notification was submitted to.</p>
 
-          <p class="mt20 text-center"><strong>Questions?</strong> Let us know at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a></p>
+        {% else %}
+
+        <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">
+          You have not recieved any candidate questionnaires. Make sure that
+          you sign in with the same email address that your local group
+          nomination was sent to.
+        </p>
+
+        <p class="mt20 text-center">
+          <strong>Questions?</strong> Let us know at
+          <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>
+        </p>
+
         {% endif %}
 
       </div>
