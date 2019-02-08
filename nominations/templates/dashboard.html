@@ -9,12 +9,11 @@
 {{ block.super }}
 
 <div class="container-fluid">
-  <div class="row blue-bg white-text pb2">
 
+  <div class="row blue-bg white-text pb2">
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Dashboard</span>
-        <h1 class="mb0 mt0">Manage your nominations</h1>
+        <h1 class="mb0 mt0">Nominations Dashboard</h1>
       </div>
     </div>
   </div>
@@ -26,6 +25,14 @@
         {% nominations_platform_alert %}
 
         {% bootstrap_messages %}
+
+        <p>
+          This page is for local groups to manage their nominations. If you are
+          a candidate then go to the
+          <a href="{% url 'nominations-candidate-dashboard' %}">Candidate Dashboard</a>.
+        </p>
+
+        <hr />
 
         {% if can_create_application %}
         <a href="/groups/nominations/application-type"

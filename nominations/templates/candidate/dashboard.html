@@ -9,6 +9,7 @@
 {{ block.super }}
 
 <div class="container-fluid">
+
   <div class="row blue-bg white-text pb2">
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
@@ -20,8 +21,21 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
+
         {% bootstrap_messages %}
 
+        <p>
+          This page is for candidates to manage their questionnaires. If you
+          are a local group then go to the
+          <a href="{% url 'nominations-dashboard' %}">Nominations Dashboard</a>.
+        </p>
+
+        <p>
+          To access your candidate questionnaire, make sure you sign in with
+          the same email address that the local group nomination was sent to.
+        </p>
+
+        <hr />
 
         {% if applications %}
 
@@ -71,17 +85,15 @@
         {% else %}
 
         <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">
-          You have not recieved any candidate questionnaires. Make sure that
-          you sign in with the same email address that your local group
-          nomination was sent to.
+          You have not received any candidate questionnaires.
         </p>
+
+        {% endif %}
 
         <p class="mt20 text-center">
           <strong>Questions?</strong> Let us know at
           <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>
         </p>
-
-        {% endif %}
 
       </div>
     </div>
