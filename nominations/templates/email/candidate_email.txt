@@ -9,7 +9,7 @@ Revolution across the land.
 
 In order for Our Revolution to consider your candidacy for a national
 endorsement, you must fill out the candidate questionnaire.
-( https://ourrevolution.com/groups/nominations/candidate/login )
+( {{ candidate_dashboard_url }} )
 
 Note, the office you are seeking may not have jurisdiction over some of these
 issues. Please completely fill out the entire questionnaire as they will be
@@ -43,7 +43,7 @@ applications as quickly as we can but not always as fast as we wish. If you
 have not heard from us within a month, please feel free to reach out.
 
 Fill Out Our Questionnaire
-( https://ourrevolution.com/groups/nominations/candidate/login )
+( {{ candidate_dashboard_url }} )
 
 QUESTIONS? You can contact {{group_name}} at {{group_rep_email}}.
 

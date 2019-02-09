@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import (
@@ -513,9 +513,14 @@ class QuestionnaireIndexView(FormView):
         plaintext = get_template('email/candidate_email.txt')
         htmly = get_template('email/candidate_email.html')
 
+        candidate_dashboard_url = self.request.build_absolute_uri(
+            reverse('nominations-candidate-dashboard')
+        )
+
         d = {
-            'group_name': group_name,
+            'candidate_dashboard_url': candidate_dashboard_url,
             'candidate_name': candidate_name,
+            'group_name': group_name,
             'group_rep_email': rep_email,
             'or_logo_secondary': OR_LOGO_SECONDARY,
         }
