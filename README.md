@@ -29,7 +29,6 @@ echo "SECRET_KEY=lebowski" >> .env
 echo "AUTH0_DOMAIN=lebowski" >> .env
 echo "AUTH0_CLIENT_ID=lebowski" >> .env
 echo "AUTH0_CLIENT_SECRET=lebowski" >> .env
-echo "AUTH0_CANDIDATE_CALLBACK_URL=lebowski" >> .env
 ```
 
 There is a known migration bug as of 2017-09-18.

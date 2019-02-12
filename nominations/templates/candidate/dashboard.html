@@ -1,23 +1,19 @@
-{% extends "pages/base_page.html" %}
+{% extends "candidate/candidate_portal.html" %}
 
 {% load bootstrap3 %}
 
-{% block page_title %}Our Revolution Nominations - Dashboard{% endblock %}
+{% block page_title %}Our Revolution - Candidate Dashboard{% endblock %}
 
 {% block content %}
 
-<div class="container-fluid">
-  <div class="row blue-bg white-text pb2">
-    <div class="back-bar clearfix">
-      <div class="container clearfix">
-        <span class="pull-right">{{request.session.profile.email}} | <strong><a href="/groups/nominations/logout"> Logout</a></strong></span>
-      </div>
-    </div>
+{{ block.super }}
 
+<div class="container-fluid">
+
+  <div class="row blue-bg white-text pb2">
     <div class="container pt2">
       <div class="col-md-8 col-md-offset-2">
-        <span class="article-type">Candidate Questionnaire Dashboard</span>
-        <h1 class="mb0 mt0">Manage your questionnaires</h1>
+        <h1 class="mb0 mt0">Candidate Dashboard</h1>
       </div>
     </div>
   </div>
@@ -25,10 +21,23 @@
   <div class="row pt2 pb2">
     <div class="container">
       <div class="col-md-8 col-md-offset-2">
+
         {% bootstrap_messages %}
 
+        <p>
+          This page is for candidates to manage their questionnaires. If you
+          are a local group then go to the
+          <a href="{% url 'nominations-dashboard' %}">Nominations Dashboard</a>.
+        </p>
+
+        <p>
+          To access your candidate questionnaire, make sure you sign in with
+          the same email address that the local group nomination was sent to.
+        </p>
+
         {% if applications %}
-          <h4 class="mt20">My Questionnaires</h4>
+
+        <h3 class="mt20">Manage your questionnaires</h3>
 
           <div class="panel panel-default mt20">
             <table class="table table-striped table-hover">
@@ -70,11 +79,21 @@
               </tbody>
             </table>
           </div>
-        {% else %}
-          <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">You have not recieved any candidate questionnaires. Make sure that you have signed in with the email that your nomination notification was submitted to.</p>
 
-          <p class="mt20 text-center"><strong>Questions?</strong> Let us know at <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a></p>
+        {% else %}
+
+        <p class="fs18 mt20 text-center pa20 br3 f5f5f5-bg">
+          You have not received any candidate questionnaires.
+        </p>
+
         {% endif %}
+
+        <hr />
+
+        <p>
+          <strong>Questions?</strong> Let us know at
+          <a href="mailto:info@ourrevolution.com">info@ourrevolution.com</a>
+        </p>
 
       </div>
     </div>

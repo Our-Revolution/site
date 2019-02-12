@@ -1,10 +1,17 @@
-{% extends "pages/base_page.html" %}
+{% extends "candidate/candidate_portal.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 django_bootstrap_breadcrumbs %}
 
-{% block page_title %}Our Revolution - Verify Your Email Address{% endblock %}
+{% block page_title %}Our Revolution - Questionnaire Submitted{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Questionnaire Submitted" request.get_full_path %}
+{% endblock %}
 
 {% block content %}
+
+{{ block.super }}
 
 <div class="container-fluid">
   <div class="row blue-bg white-text pt2 pb2">
@@ -14,16 +21,16 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row pt4 pb4">
     <div class="container">
-      <div class="col-md-8 col-md-offset-2 text-center">  
+      <div class="col-md-8 col-md-offset-2 text-center">
         <div class="pa20 br3 f5f5f5-bg">
           <p class="fs18"><strong>You've just completed your candidate questionnaire.</strong>
-          
+
           <p class="fs18">After the local group submits their nomination request, Our Revolution will review this nomination and decide on an endorsement.</p>
         </div>
-        
+
         <a href="/groups/nominations/candidate/dashboard?c=1" class="btn btn-block btn-success ls2 uppercase mt20">Back to the Dashboard</a>
       </div>
     </div>

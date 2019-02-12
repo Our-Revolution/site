@@ -200,6 +200,11 @@ def organizing_hub_nav(context):
 
 
 @register.simple_tag
+def organizing_docs_url():
+    return ORGANIZING_DOCS_URL
+
+
+@register.simple_tag
 def organizing_email():
     return ORGANIZING_EMAIL
 

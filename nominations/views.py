@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import (
@@ -22,7 +22,6 @@ from .forms import (
     ApplicationForm,
     NominationForm,
     NominationResponseFormset,
-    CandidateLoginForm,
     NominationResponseFormsetHelper,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
@@ -49,7 +48,6 @@ logger = logging.getLogger(__name__)
 auth0_domain = settings.AUTH0_DOMAIN
 auth0_client_id = settings.AUTH0_CLIENT_ID
 auth0_client_secret = settings.AUTH0_CLIENT_SECRET
-auth0_candidate_callback_url = settings.AUTH0_CANDIDATE_CALLBACK_URL
 ELECTORAL_COORDINATOR_EMAIL = settings.ELECTORAL_COORDINATOR_EMAIL
 OR_LOGO_SECONDARY = settings.OR_LOGO_SECONDARY
 
@@ -137,11 +135,6 @@ def get_auth0_user_id_by_email(email):
         auth0_user_id = None
 
     return auth0_user_id
-
-
-def get_candidate_user_from_request(request):
-    user = request.session['profile']
-    return user
 
 
 def is_application_owner(user, application):
@@ -520,9 +513,14 @@ class QuestionnaireIndexView(FormView):
         plaintext = get_template('email/candidate_email.txt')
         htmly = get_template('email/candidate_email.html')
 
+        candidate_dashboard_url = self.request.build_absolute_uri(
+            reverse('nominations-candidate-dashboard')
+        )
+
         d = {
-            'group_name': group_name,
+            'candidate_dashboard_url': candidate_dashboard_url,
             'candidate_name': candidate_name,
+            'group_name': group_name,
             'group_rep_email': rep_email,
             'or_logo_secondary': OR_LOGO_SECONDARY,
         }
@@ -570,36 +568,6 @@ class QuestionnaireIndexView(FormView):
         return context_data
 
 
-def logout(request):
-    request.session.clear()
-    base_url = 'https://ourrevolution.com/groups/nominations'
-    return redirect('https://%s/v2/logout?returnTo=%s&client_id=%s' % (auth0_domain, base_url, auth0_client_id))
-
-
-# Candidate Facing Dashboard
-def candidate_login(request):
-    # if user is already logged in
-    if 'profile' in request.session:
-        return redirect('/groups/nominations/candidate/dashboard?c=1')
-
-    if request.method == 'POST':
-        form = CandidateLoginForm(request.POST)
-
-        if form.is_valid():
-            # initiatie Auth0 passwordless
-            passwordless = Passwordless(auth0_domain)
-
-            email = form.cleaned_data['email']
-            passwordless.email(auth0_client_id,email,auth_params={'response_type':'code','redirect_uri':auth0_candidate_callback_url})
-
-            return HttpResponseRedirect('/groups/nominations/candidate/verify')
-
-    else:
-        form = CandidateLoginForm()
-
-    return render(request, 'candidate/login.html', {'form': form})
-
-
 @verified_email_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
@@ -628,37 +596,22 @@ def reset_questionnaire(request):
     return redirect(next_url)
 
 
-def handle_candidate_callback(request):
-    code = request.GET.get('code')
-
-    if code:
-        get_token = GetToken(auth0_domain)
-        auth0_users = Users(auth0_domain)
-        token = get_token.authorization_code(auth0_client_id,
-                                             auth0_client_secret, code, auth0_candidate_callback_url)
-        user_info = auth0_users.userinfo(token['access_token'])
-        user = json.loads(user_info)
-        request.session['profile'] = user
-
-        return redirect('/groups/nominations/candidate/dashboard?c=1')
-
-    messages.error(request, "That link is expired or has already been used - login again to request another. Please contact info@ourrevolution.com if you need help.")
-    return redirect('/groups/nominations/candidate/dashboard?c=1')
-
-
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateDashboardView(TemplateView):
     template_name = 'candidate/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        user = get_candidate_user_from_request(self.request)
-        context_data = super(CandidateDashboardView, self).get_context_data(*args, **kwargs)
-        context_data['user'] = user
+        context_data = super(CandidateDashboardView, self).get_context_data(
+            *args,
+            **kwargs
+        )
         context_data['applications'] = find_applications_for_candidate(
-            user['email']
+            self.request.user.email
         )
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateQuestionnaireView(UpdateView):
     model = Questionnaire
     form_class = QuestionnaireForm
@@ -679,8 +632,7 @@ class CandidateQuestionnaireView(UpdateView):
 
     def get_application(self):
         app_id = self.kwargs['app_id']
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
 
         try:
             application = Application.objects.filter(
@@ -745,11 +697,11 @@ class CandidateQuestionnaireView(UpdateView):
             self.request.POST or None, instance=self.object, prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['user'] = get_candidate_user_from_request(self.request)
         context_data['questionnaire'] = self.object
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class CandidateQuestionnaireSelectView(DetailView):
     model = Application
     template_name = "candidate/application.html"
@@ -757,8 +709,7 @@ class CandidateQuestionnaireSelectView(DetailView):
     def get(self, request, *args, **kwargs):
         """Check access"""
         application = self.get_object()
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
         if can_candidate_access(application, email) and (
             application.questionnaire.status != 'complete'
         ):
@@ -787,9 +738,8 @@ class CandidateQuestionnaireSelectView(DetailView):
         ).get_context_data(*args, **kwargs)
 
         """Get applications with complete questionnaires"""
-        user = get_candidate_user_from_request(self.request)
         application = self.get_object()
-        apps = find_applications_for_candidate(user['email'])
+        apps = find_applications_for_candidate(self.request.user.email)
         apps_complete = []
         for app in apps:
             if app.id != application.id:
@@ -811,8 +761,7 @@ class CandidateQuestionnaireSelectView(DetailView):
         app_complete = Application.objects.filter(
             pk=self.kwargs['app_complete']
         ).first()
-        user = get_candidate_user_from_request(self.request)
-        email = user['email']
+        email = self.request.user.email
         if app_complete is not None and can_candidate_access(
             application,
             email,
@@ -837,6 +786,11 @@ class CandidateQuestionnaireSelectView(DetailView):
                 'nominations-candidate-questionnaire-select',
                 application.id,
             )
+
+
+@method_decorator(verified_email_required, name='dispatch')
+class CandidateSuccessView(TemplateView):
+    template_name = "candidate/success.html"
 
 
 # Ballot initiatives

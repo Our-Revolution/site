@@ -1,20 +1,21 @@
-{% extends "pages/base_page.html" %}
+{% extends "candidate/candidate_portal.html" %}
 
-{% load bootstrap3 %}
-{% load crispy_forms_tags %}
+{% load bootstrap3 crispy_forms_tags django_bootstrap_breadcrumbs%}
 
+{% block page_title %}Our Revolution - Candidate Questionnaire{% endblock %}
 
-{% block page_title %}Our Revolution - Nominate a Candidate or Ballot Initiative{% endblock %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Candidate Questionnaire" request.get_full_path %}
+{% endblock %}
 
 {% block content %}
 
+{{ block.super }}
+
 <div class="container-fluid">
   <div class="row blue-bg white-text pb3">
-    <div class="back-bar clearfix">
-      <div class="container clearfix">
-        <span class="pull-left"><a href="/groups/nominations/candidate/dashboard">&lsaquo; Back</a></span>
-      </div>
-    </div>
+
     <div class="container pt3">
       <div class="col-md-8 col-md-offset-2">
         <h1 class="mb0 mt0">Candidate Questionnaire</h1>
