@@ -568,6 +568,73 @@ class QuestionnaireIndexView(FormView):
         return context_data
 
 
+@method_decorator(verified_email_required, name='dispatch')
+class QuestionnaireSelectView(DetailView):
+    model = Application
+    template_name = "candidate/application.html"
+
+    def get(self, request, *args, **kwargs):
+        """TODO redirect on get"""
+        return redirect('nominations-candidate-dashboard')
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context_data = super(
+    #         CandidateQuestionnaireSelectView,
+    #         self,
+    #     ).get_context_data(*args, **kwargs)
+    #
+    #     """Get applications with complete questionnaires"""
+    #     application = self.get_object()
+    #     apps = find_applications_for_candidate(self.request.user.email)
+    #     apps_complete = []
+    #     for app in apps:
+    #         if app.id != application.id:
+    #             questionnaire = app.questionnaire
+    #             if questionnaire is not None and (
+    #                 questionnaire.status == 'complete'
+    #             ):
+    #                 apps_complete.append(app)
+    #
+    #     context_data['applications_complete'] = apps_complete
+    #     return context_data
+
+    def get_success_url(self):
+        return reverse_lazy('nominations-candidate-success') + "?id=" + self.kwargs['pk']
+
+    def post(self, request, *args, **kwargs):
+
+        """Check access and status of questionnaire"""
+        application = self.get_object()
+        app_complete = Application.objects.filter(
+            pk=self.kwargs['app_complete']
+        ).first()
+        email = self.request.user.email
+        if app_complete is not None and can_candidate_access(
+            application,
+            email,
+        ) and can_candidate_access(
+            app_complete,
+            email,
+        ) and application.questionnaire.status != 'complete' and (
+            app_complete.questionnaire.status == 'complete'
+        ):
+
+            """Attach completed questionnaire to the current application"""
+            application.questionnaire = app_complete.questionnaire
+            application.save()
+
+            """Submit application if nomination is complete too"""
+            if application.nomination.status == 'complete':
+                submit_application(application)
+
+            return redirect(self.get_success_url())
+        else:
+            return redirect(
+                'nominations-candidate-questionnaire-select',
+                application.id,
+            )
+
+
 @verified_email_required
 def reset_questionnaire(request):
     app_id = request.GET.get('id')
