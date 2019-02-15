@@ -116,7 +116,7 @@ def find_applications_for_candidate(email):
     return applications
 
 
-def find_applications_for_local_group(last_name, state_or_territory):
+def find_applications_for_local_group(candidate_last_name, state_or_territory):
     """
     Find Applications with completed Questionnaires for Local Group use
 
@@ -128,7 +128,7 @@ def find_applications_for_local_group(last_name, state_or_territory):
 
     Parameters
     ----------
-    last_name : str
+    candidate_last_name : str
         Candidate email address (authorized_email)
     state_or_territory : str
         Candidate email address (authorized_email)
@@ -140,7 +140,10 @@ def find_applications_for_local_group(last_name, state_or_territory):
     """
 
     applications = Application.objects.filter(
-        authorized_email__iexact=email
+        candidate_state=candidate_state,
+        candidate_last_name__iexact=candidate_last_name,
+        questionnaire__isnull=True,
+        questionnaire__status='complete',
     ).order_by('-create_dt')
     return applications
 
