@@ -116,6 +116,35 @@ def find_applications_for_candidate(email):
     return applications
 
 
+def find_applications_for_local_group(last_name, state_or_territory):
+    """
+    Find Applications with completed Questionnaires for Local Group use
+
+    Match on last name and state field on Application model. Only match on
+    Questionnaires completed by candidate and not Local Groups.
+
+    It is ok to treat completed Candidate Questionnaires from candidates as
+    public.
+
+    Parameters
+    ----------
+    last_name : str
+        Candidate email address (authorized_email)
+    state_or_territory : str
+        Candidate email address (authorized_email)
+
+    Returns
+        -------
+        Application list
+            Returns matching Application list for Local Group
+    """
+
+    applications = Application.objects.filter(
+        authorized_email__iexact=email
+    ).order_by('-create_dt')
+    return applications
+
+
 def get_auth0_user_id_by_email(email):
     """Get Auth0 user id by user email"""
 
@@ -571,11 +600,10 @@ class QuestionnaireIndexView(FormView):
 @method_decorator(verified_email_required, name='dispatch')
 class QuestionnaireSelectView(DetailView):
     model = Application
-    template_name = "candidate/application.html"
 
     def get(self, request, *args, **kwargs):
         """TODO redirect on get"""
-        return redirect('nominations-candidate-dashboard')
+        return redirect('nominations-dashboard')
 
     # def get_context_data(self, *args, **kwargs):
     #     context_data = super(
@@ -599,7 +627,7 @@ class QuestionnaireSelectView(DetailView):
     #     return context_data
 
     def get_success_url(self):
-        return reverse_lazy('nominations-candidate-success') + "?id=" + self.kwargs['pk']
+        return reverse_lazy('nominations-dashboard')
 
     def post(self, request, *args, **kwargs):
 

@@ -9,6 +9,7 @@ from .views import (
     ApplicationView,
     EditQuestionnaireView,
     QuestionnaireIndexView,
+    QuestionnaireSelectView,
     CandidateQuestionnaireView,
     CandidateQuestionnaireSelectView,
     CandidateSuccessView,
