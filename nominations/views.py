@@ -395,7 +395,11 @@ class EditQuestionnaireView(UpdateView):
 
     def get_application(self):
         app_id = self.request.GET.get('id')
-        return get_object_or_404(Application, pk=app_id)
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
 
     def get_object(self):
         app = self.get_application()
@@ -446,8 +450,8 @@ class EditQuestionnaireView(UpdateView):
             prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['application'] = self.object.application_set.first()
-        context_data['questionnaire'] = self.object
+        context_data['application'] = self.get_application()
+        context_data['questionnaire'] = self.get_object()
         return context_data
 
 
@@ -530,7 +534,7 @@ class QuestionnaireIndexView(FormView):
         return "/groups/nominations/email-success"
 
     def form_valid(self, form):
-        application = self.get_object().application_set.first()
+        application = self.get_application()
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
@@ -583,9 +587,16 @@ class QuestionnaireIndexView(FormView):
 
         return super(QuestionnaireIndexView, self).form_valid(form)
 
-    def get_object(self):
+    def get_application(self):
         app_id = self.request.GET.get('id')
         app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
+
+    def get_object(self):
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.questionnaire
         else:
@@ -596,24 +607,8 @@ class QuestionnaireIndexView(FormView):
             *args,
             **kwargs
         )
-        context_data['application'] = self.get_object().application_set.first()
-        return context_data
+        context_data['application'] = self.get_application()
 
-
-@method_decorator(verified_email_required, name='dispatch')
-class QuestionnaireSelectView(DetailView):
-    model = Application
-
-    def get(self, request, *args, **kwargs):
-        """TODO redirect on get"""
-        return redirect('nominations-dashboard')
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context_data = super(
-    #         CandidateQuestionnaireSelectView,
-    #         self,
-    #     ).get_context_data(*args, **kwargs)
-    #
     #     """Get applications with complete questionnaires"""
     #     application = self.get_object()
     #     apps = find_applications_for_candidate(self.request.user.email)
@@ -627,7 +622,17 @@ class QuestionnaireSelectView(DetailView):
     #                 apps_complete.append(app)
     #
     #     context_data['applications_complete'] = apps_complete
-    #     return context_data
+
+        return context_data
+
+
+@method_decorator(verified_email_required, name='dispatch')
+class QuestionnaireSelectView(DetailView):
+    model = Application
+
+    def get(self, request, *args, **kwargs):
+        """TODO redirect on get"""
+        return redirect('nominations-dashboard')
 
     def get_success_url(self):
         return reverse_lazy('nominations-dashboard')
@@ -733,6 +738,8 @@ class CandidateQuestionnaireView(UpdateView):
         email = self.request.user.email
 
         try:
+            """Check access by matching user email with application email"""
+            """TODO: clean up access logic"""
             application = Application.objects.filter(
                 authorized_email__iexact=email,
                 pk=app_id
