@@ -696,11 +696,12 @@ def reset_questionnaire(request):
         default_next_url
     )
 
-    """TODO: tighten up validation rules for status transition"""
-    questionnaire.status = 'incomplete'
-    application.authorized_email = None
-    questionnaire.save(skip_application_save=True)
-    application.save()
+    """Change from sent to incomplete"""
+    if questionnaire.status == 'sent':
+        questionnaire.status = 'incomplete'
+        application.authorized_email = None
+        questionnaire.save(skip_application_save=True)
+        application.save()
 
     return redirect(next_url)
 
