@@ -36,7 +36,7 @@
       <div class="row">
         <div class="col-md-8 col-md-offset-2 clearfix">
 
-          <h3 class="mt0">
+          <h3 class="mb40 mt0">
             {{ application }}
           </h3>
 
@@ -50,94 +50,101 @@
 
             {% if applications_complete %}
 
-            <hr />
+            <section class="mb40">
 
-            <h4>
-              Select Questionnaire
-            </h4>
+              <h4>
+                Select Completed Candidate Questionnaire
+              </h4>
 
-            <p>
-              If this candidate has already completed a questionnaire
-              for this campaign, then please select the matching questionnaire
-              here.
-            </p>
+              <p>
+                If the candidate has already completed a questionnaire
+                for the same campaign, then please select the matching
+                questionnaire here.
+              </p>
 
-            <p>
-              If the current nomination is for a different office or election,
-              then do not select the old questionnaire.
-            </p>
+              <p>
+                If the current nomination is for a different candidate, office,
+                or election, then do not select the old questionnaire.
+              </p>
 
-            <div class="panel panel-default mt20">
+              <div class="panel panel-default mt20 mb40">
 
-              <table class="table table-condensed table-hover table-striped ">
+                <table class="table table-condensed table-hover table-striped">
 
-                <thead>
-                  <tr>
-                    <th>Application</th>
-                    <th>Office</th>
-                    <th>Election</th>
-                    <th class="text-right"></th>
-                  </tr>
-                </thead>
-
-                <tbody>
-
-                  {% for app_complete in applications_complete %}
+                  <thead>
                     <tr>
-                      <td>
-                        {{ app_complete }}
-                      </td>
-                      <td>
-                        {{ app_complete.questionnaire.candidate_office }}
-                      </td>
-                      <td>
-                        {{ app_complete.questionnaire.general_election_date|date:"Y" }}
-                      </td>
-                      <td class="text-right">
-                        <form action="{% url 'nominations-questionnaire-select' application.id app_complete.id %}"
-                        class="form form-inline inline-block" method="post">
-
-                          {% csrf_token %}
-
-                          <button class="btn btn-primary btn-sm uppercase"
-                          type="submit">
-                            Select
-                          </button>
-
-                        </form>
-                      </td>
-
+                      <th>Questionnaire</th>
+                      <th>Office</th>
+                      <th>Election</th>
+                      <th class="text-right"></th>
                     </tr>
-                  {% endfor %}
+                  </thead>
 
-                </tbody>
+                  <tbody>
 
-              </table>
+                    {% for app_complete in applications_complete %}
+                      <tr>
+                        <td>
+                          {{ app_complete.group }} -
+                          {{ app_complete.questionnaire.candidate_first_name }}
+                          {{ app_complete.questionnaire.candidate_last_name }}
+                        </td>
+                        <td>
+                          {{ app_complete.questionnaire.candidate_office }}
+                        </td>
+                        <td>
+                          {{ app_complete.questionnaire.general_election_date|date:"Y" }}
+                        </td>
+                        <td class="text-right">
+                          <form action="{% url 'nominations-questionnaire-select' application.id app_complete.id %}"
+                          class="form form-inline inline-block" method="post">
 
-            </div>
+                            {% csrf_token %}
+
+                            <button class="btn btn-primary btn-sm uppercase"
+                            type="submit">
+                              Select
+                            </button>
+
+                          </form>
+                        </td>
+
+                      </tr>
+                    {% endfor %}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </section>
 
             <hr />
 
             {% endif %}
 
-            <h4>
-              Send Questionnaire
-            </h4>
+            <section class="mb40">
 
-            <p>
-              The candidate questionnaire should be filled out by the candidate
-              for the group’s consideration. Use the form below to send the
-              questionnaire to the candidate and track its progress.
-            </p>
+              <h4>
+                {% if applications_complete %}- OR -{% endif %}
+                Send Questionnaire to Candidate
+              </h4>
 
-            {% crispy form %}
+              <p>
+                The candidate questionnaire should be filled out by the candidate
+                for the group’s consideration. Use the form below to send the
+                questionnaire to the candidate and track its progress.
+              </p>
+
+              {% crispy form %}
+
+            </section>
 
             <hr />
 
-            <h2 class="text-center mb20 mt20">- OR -</h2>
-
             <h4>
-              Fill Out Questionnaire
+              - OR - Fill Out Candidate Questionnaire
             </h4>
 
             <p>

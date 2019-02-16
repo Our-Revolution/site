@@ -140,11 +140,11 @@ def find_applications_for_local_group(candidate_last_name, state_or_territory):
     """
 
     applications = Application.objects.filter(
-        candidate_state=state_or_territory,
-        candidate_last_name__iexact=candidate_last_name,
         authorized_email__isnull=False,
-        questionnaire__status='complete',
+        questionnaire__candidate_last_name__iexact=candidate_last_name,
+        questionnaire__candidate_state=state_or_territory,
         questionnaire__completed_by_candidate=True,
+        questionnaire__status='complete',
     ).order_by('-create_dt')
     return applications
 

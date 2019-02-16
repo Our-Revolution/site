@@ -217,7 +217,11 @@ class CandidateEmailForm(forms.Form):
         self.fields['candidate_email'].label = 'Candidate Email'
         self.helper.layout = Layout(
             Field('candidate_email'),
-            Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
+            Submit(
+                'submit',
+                'Send to Candidate',
+                css_class='btn-block btn-success uppercase ls2',
+            )
         )
 
 
