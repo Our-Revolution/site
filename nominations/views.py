@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import (
@@ -40,6 +41,7 @@ import json
 import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -129,9 +131,9 @@ def find_applications_for_local_group(candidate_last_name, state_or_territory):
     Parameters
     ----------
     candidate_last_name : str
-        Candidate email address (authorized_email)
+        Candidate last name
     state_or_territory : str
-        Candidate email address (authorized_email)
+        Candidate state or territory
 
     Returns
         -------
@@ -139,8 +141,15 @@ def find_applications_for_local_group(candidate_last_name, state_or_territory):
             Returns matching Application list for Local Group
     """
 
+    """Filter by last 2 years so we only show recent questionnaires"""
+    date_cutoff = timezone.now() - datetime.timedelta(
+        days=365*2
+    )
+
+    """Filter by authorized email not none & completed by candidate is true"""
     applications = Application.objects.filter(
         authorized_email__isnull=False,
+        create_dt__gte=date_cutoff,
         questionnaire__candidate_last_name__iexact=candidate_last_name,
         questionnaire__candidate_state=state_or_territory,
         questionnaire__completed_by_candidate=True,
