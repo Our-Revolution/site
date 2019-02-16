@@ -118,12 +118,15 @@ def find_applications_for_candidate(email):
     return applications
 
 
-def find_applications_for_local_group(candidate_last_name, state_or_territory):
+def find_applications_with_complete_questionnaires(
+    candidate_last_name,
+    state_or_territory,
+):
     """
     Find Applications with completed Questionnaires for Local Group use
 
-    Match on last name and state field on Application model. Only match on
-    Questionnaires completed by candidate and not Local Groups.
+    Match on last name and state field on Questionnaire. Only match on
+    Questionnaires completed by candidate. Only return recent Questionnaires.
 
     It is ok to treat completed Candidate Questionnaires from candidates as
     public.
@@ -620,7 +623,7 @@ class QuestionnaireIndexView(FormView):
         application = self.get_application()
         context_data['application'] = application
 
-        applications_complete = find_applications_for_local_group(
+        applications_complete = find_applications_with_complete_questionnaires(
             candidate_last_name=application.candidate_last_name,
             state_or_territory=application.candidate_state,
         )
