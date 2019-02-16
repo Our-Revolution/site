@@ -634,33 +634,33 @@ class QuestionnaireSelectView(DetailView):
     model = Application
 
     def get(self, request, *args, **kwargs):
-        """TODO redirect on get"""
-        return redirect('nominations-dashboard')
+        """Redirect on GET. Should be POST only."""
+        return redirect(reverse_lazy(
+            'nominations-application'
+        ) + "?id=" + self.kwargs['pk'])
 
     def get_success_url(self):
-        return reverse_lazy('nominations-dashboard')
+        return reverse_lazy(
+            'nominations-application'
+        ) + "?id=" + self.kwargs['pk']
 
     def post(self, request, *args, **kwargs):
 
-        """Check access and status of questionnaire"""
+        """Check access and status"""
         application = self.get_object()
         app_complete = Application.objects.filter(
             pk=self.kwargs['app_complete']
         ).first()
-        email = self.request.user.email
-        if app_complete is not None and can_candidate_access(
-            application,
-            email,
-        ) and can_candidate_access(
-            app_complete,
-            email,
-        ) and application.questionnaire.status != 'complete' and (
+        if is_application_owner(self.request.user, application) and (
+            application.questionnaire.status != 'complete'
+        ) and app_complete is not None and (
+            app_complete.authorized_email is not None
+        ) and app_complete.questionnaire.completed_by_candidate and (
             app_complete.questionnaire.status == 'complete'
         ):
 
-            # todo authorized email
-
-            """Attach completed questionnaire to the current application"""
+            """Attach authorized email & questionnaire to application"""
+            application.authorized_email = app_complete.authorized_email
             application.questionnaire = app_complete.questionnaire
             application.save()
 
@@ -670,10 +670,7 @@ class QuestionnaireSelectView(DetailView):
 
             return redirect(self.get_success_url())
         else:
-            return redirect(
-                'nominations-candidate-questionnaire-select',
-                application.id,
-            )
+            raise Http404(_("No application found matching the query"))
 
 
 @verified_email_required
