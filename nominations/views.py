@@ -140,10 +140,11 @@ def find_applications_for_local_group(candidate_last_name, state_or_territory):
     """
 
     applications = Application.objects.filter(
-        candidate_state=candidate_state,
+        candidate_state=state_or_territory,
         candidate_last_name__iexact=candidate_last_name,
-        questionnaire__isnull=True,
+        authorized_email__isnull=False,
         questionnaire__status='complete',
+        questionnaire__completed_by_candidate=True,
     ).order_by('-create_dt')
     return applications
 
@@ -607,21 +608,14 @@ class QuestionnaireIndexView(FormView):
             *args,
             **kwargs
         )
-        context_data['application'] = self.get_application()
+        application = self.get_application()
+        context_data['application'] = application
 
-    #     """Get applications with complete questionnaires"""
-    #     application = self.get_object()
-    #     apps = find_applications_for_candidate(self.request.user.email)
-    #     apps_complete = []
-    #     for app in apps:
-    #         if app.id != application.id:
-    #             questionnaire = app.questionnaire
-    #             if questionnaire is not None and (
-    #                 questionnaire.status == 'complete'
-    #             ):
-    #                 apps_complete.append(app)
-    #
-    #     context_data['applications_complete'] = apps_complete
+        applications_complete = find_applications_for_local_group(
+            candidate_last_name=application.candidate_last_name,
+            state_or_territory=application.candidate_state,
+        )
+        context_data['applications_complete'] = applications_complete
 
         return context_data
 
