@@ -649,6 +649,8 @@ class QuestionnaireSelectView(DetailView):
             app_complete.questionnaire.status == 'complete'
         ):
 
+            # todo authorized email
+
             """Attach completed questionnaire to the current application"""
             application.questionnaire = app_complete.questionnaire
             application.save()
