@@ -1811,7 +1811,13 @@ class DonationPage(Page):
                 'first_name_q4_2017',
                 'last_name_q4_2017',
                 'first_name_q1_2018',
-                'last_name_q1_2018'
+                'last_name_q1_2018',
+                'first_name_q2_2018',
+                'last_name_q2_2018',
+                'first_name_q3_2018',
+                'last_name_q3_2018',
+                'first_name_q4_2018',
+                'last_name_q4_2018',
             ]
         )
         reader.next()
@@ -1819,7 +1825,8 @@ class DonationPage(Page):
 
         return context
 
-## LOCAL GROUPS
+# LOCAL GROUPS
+
 
 class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
