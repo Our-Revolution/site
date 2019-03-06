@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import (
@@ -40,6 +41,7 @@ import json
 import os
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -112,6 +114,49 @@ def find_applications_for_candidate(email):
 
     applications = Application.objects.filter(
         authorized_email__iexact=email
+    ).order_by('-create_dt')
+    return applications
+
+
+def find_applications_with_complete_questionnaires(
+    candidate_last_name,
+    state_or_territory,
+):
+    """
+    Find Applications with completed Questionnaires for Local Group use
+
+    Match on last name and state field on Questionnaire. Only match on
+    Questionnaires completed by candidate. Only return recent Questionnaires.
+
+    It is ok to treat completed Candidate Questionnaires from candidates as
+    public.
+
+    Parameters
+    ----------
+    candidate_last_name : str
+        Candidate last name
+    state_or_territory : str
+        Candidate state or territory
+
+    Returns
+        -------
+        Application list
+            Returns matching Application list for Local Group
+    """
+
+    """Filter by last 2 years so we only show recent questionnaires"""
+    date_cutoff = timezone.now() - datetime.timedelta(
+        days=365*2
+    )
+
+    """Filter by authorized email not none & completed by candidate is true"""
+    applications = Application.objects.filter(
+        authorized_email__isnull=False,
+        create_dt__gte=date_cutoff,
+        questionnaire__candidate_last_name__iexact=candidate_last_name,
+        questionnaire__candidate_state=state_or_territory,
+        questionnaire__completed_by_candidate=True,
+        questionnaire__status='complete',
     ).order_by('-create_dt')
     return applications
 
@@ -363,7 +408,11 @@ class EditQuestionnaireView(UpdateView):
 
     def get_application(self):
         app_id = self.request.GET.get('id')
-        return get_object_or_404(Application, pk=app_id)
+        app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
 
     def get_object(self):
         app = self.get_application()
@@ -414,8 +463,8 @@ class EditQuestionnaireView(UpdateView):
             prefix="questions"
         )
         context_data['helper'] = QuestionnaireResponseFormsetHelper()
-        context_data['application'] = self.object.application_set.first()
-        context_data['questionnaire'] = self.object
+        context_data['application'] = self.get_application()
+        context_data['questionnaire'] = self.get_object()
         return context_data
 
 
@@ -498,7 +547,7 @@ class QuestionnaireIndexView(FormView):
         return "/groups/nominations/email-success"
 
     def form_valid(self, form):
-        application = self.get_object().application_set.first()
+        application = self.get_application()
 
         candidate_name = application.candidate_first_name + ' ' + application.candidate_last_name
         candidate_email = form.cleaned_data['candidate_email']
@@ -551,9 +600,16 @@ class QuestionnaireIndexView(FormView):
 
         return super(QuestionnaireIndexView, self).form_valid(form)
 
-    def get_object(self):
+    def get_application(self):
         app_id = self.request.GET.get('id')
         app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
+
+    def get_object(self):
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.questionnaire
         else:
@@ -564,8 +620,60 @@ class QuestionnaireIndexView(FormView):
             *args,
             **kwargs
         )
-        context_data['application'] = self.get_object().application_set.first()
+        application = self.get_application()
+        context_data['application'] = application
+
+        applications_complete = find_applications_with_complete_questionnaires(
+            candidate_last_name=application.candidate_last_name,
+            state_or_territory=application.candidate_state,
+        )
+        context_data['applications_complete'] = applications_complete
+
         return context_data
+
+
+@method_decorator(verified_email_required, name='dispatch')
+class QuestionnaireSelectView(DetailView):
+    model = Application
+
+    def get(self, request, *args, **kwargs):
+        """Redirect on GET. Should be POST only."""
+        return redirect(reverse_lazy(
+            'nominations-application'
+        ) + "?id=" + self.kwargs['pk'])
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'nominations-application'
+        ) + "?id=" + self.kwargs['pk']
+
+    def post(self, request, *args, **kwargs):
+
+        """Check access and status"""
+        application = self.get_object()
+        app_complete = Application.objects.filter(
+            pk=self.kwargs['app_complete']
+        ).first()
+        if is_application_owner(self.request.user, application) and (
+            application.questionnaire.status != 'complete'
+        ) and app_complete is not None and (
+            app_complete.authorized_email is not None
+        ) and app_complete.questionnaire.completed_by_candidate and (
+            app_complete.questionnaire.status == 'complete'
+        ):
+
+            """Attach authorized email & questionnaire to application"""
+            application.authorized_email = app_complete.authorized_email
+            application.questionnaire = app_complete.questionnaire
+            application.save()
+
+            """Submit application if nomination is complete too"""
+            if application.nomination.status == 'complete':
+                submit_application(application)
+
+            return redirect(self.get_success_url())
+        else:
+            raise Http404(_("No application found matching the query"))
 
 
 @verified_email_required
@@ -588,10 +696,12 @@ def reset_questionnaire(request):
         default_next_url
     )
 
-    questionnaire.status = 'incomplete'
-    application.authorized_email = None
-    questionnaire.save(skip_application_save=True)
-    application.save()
+    """Change from sent to incomplete"""
+    if questionnaire.status == 'sent':
+        questionnaire.status = 'incomplete'
+        application.authorized_email = None
+        questionnaire.save(skip_application_save=True)
+        application.save()
 
     return redirect(next_url)
 
@@ -635,6 +745,8 @@ class CandidateQuestionnaireView(UpdateView):
         email = self.request.user.email
 
         try:
+            """Check access by matching user email with application email"""
+            """TODO: clean up access logic"""
             application = Application.objects.filter(
                 authorized_email__iexact=email,
                 pk=app_id

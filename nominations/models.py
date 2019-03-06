@@ -155,11 +155,13 @@ class Questionnaire(models.Model):
     completed_by_candidate = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
-        try:
-            app = self.application_set.first()
-            return str(app) + ' Questionnaire'
-        except:
-            return 'Questionnaire ' + str(self.pk)
+        return '%s %s | %s | %s [%s]' % (
+            self.candidate_first_name,
+            self.candidate_last_name,
+            self.candidate_office,
+            self.general_election_date,
+            self.id,
+        )
 
     """Get response to question about issues, or None"""
     def _campaign_issues(self, *args, **kwargs):

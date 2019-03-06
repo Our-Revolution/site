@@ -61,9 +61,8 @@
 
             <thead>
               <tr>
-                <th>Application</th>
-                <th>Office</th>
-                <th>Election</th>
+                <th>Questionnaire</th>
+                <th>Campaign</th>
                 <th class="text-right"></th>
               </tr>
             </thead>
@@ -75,13 +74,13 @@
                   <td>
                     <a href="{% url 'nominations-candidate-questionnaire' app_complete.id %}"
                     target="_blank">
-                    {{ app_complete }}
+                      {{ app_complete.questionnaire.candidate_first_name }}
+                      {{ app_complete.questionnaire.candidate_last_name }}
+                      ({{ app_complete.group }})
                     </a>
                   </td>
                   <td>
                     {{ app_complete.questionnaire.candidate_office }}
-                  </td>
-                  <td>
                     {{ app_complete.questionnaire.general_election_date|date:"Y" }}
                   </td>
                   <td class="text-right">

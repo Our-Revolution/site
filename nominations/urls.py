@@ -9,6 +9,7 @@ from .views import (
     ApplicationView,
     EditQuestionnaireView,
     QuestionnaireIndexView,
+    QuestionnaireSelectView,
     CandidateQuestionnaireView,
     CandidateQuestionnaireSelectView,
     CandidateSuccessView,
@@ -27,11 +28,18 @@ urlpatterns = [
             NominationsIndexView.as_view(),
             name='nominations-index'
         ),
-        url(
-            r'^application/$',
-            ApplicationView.as_view(),
-            name='nominations-application'
-        ),
+        url(r'^application/', include([
+            url(
+                r'^$',
+                ApplicationView.as_view(),
+                name='nominations-application'
+            ),
+            url(
+                r'(?P<pk>[0-9]+)/(?:(?P<app_complete>[0-9]+)/)?$',
+                QuestionnaireSelectView.as_view(),
+                name='nominations-questionnaire-select',
+            ),
+        ])),
         url(
             r'^application-type/$',
             ApplicationTypeView.as_view(),

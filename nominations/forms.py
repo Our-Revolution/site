@@ -213,11 +213,15 @@ class CandidateEmailForm(forms.Form):
         self.helper = FormHelper(self)
         self.helper.form_method = 'post'
         self.helper.form_action = ''
-        self.helper.form_class = 'col-md-12 clearfix mb20'
+        self.helper.form_class = 'clearfix mb20'
         self.fields['candidate_email'].label = 'Candidate Email'
         self.helper.layout = Layout(
             Field('candidate_email'),
-            Submit('submit','Send to Candidate',css_class='btn-block uppercase ls2')
+            Submit(
+                'submit',
+                'Send to Candidate',
+                css_class='btn-block btn-success uppercase ls2',
+            )
         )
 
 
