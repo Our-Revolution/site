@@ -557,8 +557,9 @@ class Application(models.Model):
         verbose_name='Local Support:',
         help_text='This will prepopulate from the local group\'s support question if left blank.'
     )
+
     def __unicode__(self):
-        return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
+        return unicode(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
     def _candidate_name(self):
         return self.candidate_first_name + ' ' + self.candidate_last_name
@@ -651,9 +652,6 @@ class Application(models.Model):
             return True
         else:
             return False
-
-    def __unicode__(self):
-        return str(self.group) + ' - ' + self.candidate_first_name + ' ' + self.candidate_last_name
 
     def save(self, *args, **kwargs):
         if not self.nomination or not self.questionnaire:
@@ -797,7 +795,7 @@ class InitiativeApplication(models.Model):
     status = models.CharField(max_length=64, choices=STATUSES, default='submitted')
 
     def __unicode__(self):
-        return str(self.group) + ' - ' + self.name
+        return unicode(self.group) + ' - ' + self.name
 
     def save(self, *args, **kwargs):
         if self.status == 'submitted' and self.submitted_dt is None:
