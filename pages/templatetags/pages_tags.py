@@ -137,6 +137,11 @@ def results_2017_url():
     return settings.RESULTS_2017_URL
 
 
+@register.simple_tag
+def results_2018_url():
+    return settings.RESULTS_2018_URL
+
+
 # Splash modal
 @register.inclusion_tag('pages/tags/splash_modal.html', takes_context=True)
 def splash_modal(context):

@@ -99,9 +99,13 @@
           <ul class="card-list list card-list--results">
 
             {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' in candidate_endorsement_page.result %}
             {% include "partials/candidate_endorsement_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_race_snippet in candidate_race_snippets %}
@@ -111,9 +115,13 @@
             {% endfor %}
 
             {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% with initiative_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' in initiative_endorsement_page.election_result %}
             {% include "partials/initiative_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for initiative_race_snippet in initiative_race_snippets %}
@@ -123,13 +131,21 @@
             {% endfor %}
 
             {% for candidate_endorsement_page in primary_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% include "partials/candidate_endorsement_result.html" %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' not in candidate_endorsement_page.result %}
             {% include "partials/candidate_endorsement_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_race_snippet in candidate_race_snippets %}
@@ -139,9 +155,13 @@
             {% endfor %}
 
             {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% with initiative_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' not in initiative_endorsement_page.election_result %}
             {% include "partials/initiative_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for initiative_race_snippet in initiative_race_snippets %}

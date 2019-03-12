@@ -387,6 +387,7 @@ ORGANIZING_EMAIL = 'organizing@ourrevolution.com'
 RESULTS_URL = '/results/'
 RESULTS_2016_URL = '/election-2016/'
 RESULTS_2017_URL = '/2017-elections-results/'
+RESULTS_2018_URL = '/results/2018/'
 START_GROUP_URL = '/docs/forming-our-revolution-local-group/'
 
 DEFAULT_FILE_STORAGE = os.environ.get(

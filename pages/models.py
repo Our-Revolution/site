@@ -1612,16 +1612,14 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
 
     def get_context(self, *args, **kwargs):
 
-        for arg in args:
-            logger.debug('arg: %s' % arg)
-
-        for kwarg in kwargs:
-            logger.debug('kwarg: %s' % kwarg)
-
-        if 'year' in kwargs:
-            logger.debug('year: %s' % kwargs['year'])
-
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
+
+        """Get year from URL. Otherwise assume current year."""
+        if 'year' in kwargs:
+            year = kwargs['year']
+        else:
+            year = datetime.datetime.now().year
+        context['year'] = str(year)
 
         """
         Get list of endorsements published with results
@@ -1686,8 +1684,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             'initiative_race__initiative__state',
             'initiative_race__initiative__title',
         )
-        if 'state' in kwargs:
-            context['state'] = kwargs['state']
+
         return context
 
     @route(r'^$')
