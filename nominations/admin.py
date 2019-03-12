@@ -434,6 +434,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                 'fields': (
                     'submitted_dt',
                     'status',
+                    'application_type',
                     'authorized_email',
                 )
             }),

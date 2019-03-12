@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from enum import Enum, unique
 from localflavor.us.models import USStateField
 from local_groups.models import Group
 from pages.models import AlertLevels
@@ -212,6 +213,12 @@ class Response(models.Model):
         return unicode(self.question)
 
 
+@unique
+class ApplicationType(Enum):
+    basic = (1, 'Basic Support')
+    priority = (2, 'Priority Support')
+
+
 class Application(models.Model):
     """
     An application is a single submission for an endorsement. Each application
@@ -234,6 +241,12 @@ class Application(models.Model):
         (1, 'Recommend to Endorse'),
         (2, 'Recommend Not to Endorse'),
         (3, 'No Recommendation'),
+    )
+
+    application_type = models.IntegerField(
+        blank=True,
+        choices=[x.value for x in ApplicationType],
+        null=True,
     )
 
     """Django User to use instead of legacy auth0 user"""
