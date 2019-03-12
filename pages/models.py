@@ -1611,7 +1611,26 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         ]
 
     def get_context(self, *args, **kwargs):
+
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
+
+        """
+        Get year from URL for non-legacy pages. Otherwise default to 2019.
+        TODO: rethink how to handle this going forward. This is a temp solution
+        for 2019.
+        """
+        if self.url == settings.RESULTS_2016_URL:
+            year = '2016'
+        elif self.url == settings.RESULTS_2017_URL:
+            year = '2017'
+        elif 'year' in kwargs:
+            year = kwargs['year']
+        else:
+            year = '2019'
+        context['year'] = year
+
+        """Set page title based on year"""
+        context['custom_page_title'] = '%s Election Results' % year
 
         """
         Get list of endorsements published with results
@@ -1676,18 +1695,16 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             'initiative_race__initiative__state',
             'initiative_race__initiative__title',
         )
-        if 'state' in kwargs:
-            context['state'] = kwargs['state']
-        return context
 
+        return context
 
     @route(r'^$')
     def default_view(self, request, view=None, *args, **kwargs):
         return super(ElectionTrackingPage, self).serve(request)
 
-    @route(r'^(?P<state>[\w\-]+)\/?$')
-    def state_view(self, request, state, view=None, *args, **kwargs):
-        kwargs['state'] = state
+    @route(r'^(?P<year>\d+)\/?$')
+    def year_view(self, request, year, view=None, *args, **kwargs):
+        kwargs['year'] = year
         return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
 
 

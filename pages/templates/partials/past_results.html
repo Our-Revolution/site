@@ -20,6 +20,14 @@
           </a>
           {% endif %}
 
+          {% results_2018_url as link_url %}
+          {% if link_url != request.path %}
+          <a href="{{ link_url }}"
+          class="btn btn-block btn-primary ls2 uppercase">
+          2018 Results
+          </a>
+          {% endif %}
+
           {% results_2017_url as link_url %}
           {% if link_url != request.path %}
           <a href="{{ link_url }}"

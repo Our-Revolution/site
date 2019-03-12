@@ -2,9 +2,11 @@
 
 {% load pages_tags wagtailcore_tags wagtailimages_tags %}
 
+{% block page_title %}Our Revolution - {% firstof page.seo_title custom_page_title "Our Revolution" %}{% endblock %}
+
 {% block meta_og %}
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
+    <meta property="og:title" content="{% firstof page.seo_title custom_page_title "Our Revolution" %}" />
     <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta property="og:site_name" content="Our Revolution" />
     {% if state %}
@@ -19,7 +21,7 @@
 
 {% block meta_twitter %}
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="{% firstof page.seo_title page.title "Our Revolution" %}"/>
+    <meta name="twitter:title" content="{% firstof page.seo_title custom_page_title "Our Revolution" %}"/>
     <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
     <meta name="twitter:site" content="@OurRevolution"/>
     {% if state %}
@@ -52,7 +54,7 @@
 
     <div class="container pt6">
       <h1 class="mt0 mb0">
-        {{ page.title }}
+        {{ custom_page_title }}
       </h1>
     </div>
 
@@ -99,9 +101,13 @@
           <ul class="card-list list card-list--results">
 
             {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' in candidate_endorsement_page.result %}
             {% include "partials/candidate_endorsement_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_race_snippet in candidate_race_snippets %}
@@ -111,9 +117,13 @@
             {% endfor %}
 
             {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% with initiative_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' in initiative_endorsement_page.election_result %}
             {% include "partials/initiative_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for initiative_race_snippet in initiative_race_snippets %}
@@ -123,13 +133,21 @@
             {% endfor %}
 
             {% for candidate_endorsement_page in primary_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% include "partials/candidate_endorsement_result.html" %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_endorsement_page in candidate_endorsement_pages %}
+            {% with candidate_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' not in candidate_endorsement_page.result %}
             {% include "partials/candidate_endorsement_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for candidate_race_snippet in candidate_race_snippets %}
@@ -139,9 +157,13 @@
             {% endfor %}
 
             {% for initiative_endorsement_page in initiative_endorsement_pages %}
+            {% with initiative_endorsement_page.election_date|date:"Y" as election_year %}
+            {% if election_year == year %}
             {% if 'win' not in initiative_endorsement_page.election_result %}
             {% include "partials/initiative_result.html" %}
             {% endif %}
+            {% endif %}
+            {% endwith %}
             {% endfor %}
 
             {% for initiative_race_snippet in initiative_race_snippets %}
