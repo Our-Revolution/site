@@ -13,7 +13,7 @@ from .views import (
     CandidateQuestionnaireView,
     CandidateQuestionnaireSelectView,
     CandidateSuccessView,
-    ApplicationTypeView,
+    ApplicationStartView,
     CreateInitiativeView,
     reset_questionnaire,
 )
@@ -42,7 +42,7 @@ urlpatterns = [
         ])),
         url(
             r'^application-type/$',
-            ApplicationTypeView.as_view(),
+            ApplicationStartView.as_view(),
             name='nominations-application-type',
         ),
         url(
