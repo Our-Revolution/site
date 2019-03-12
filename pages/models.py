@@ -1702,7 +1702,7 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
     def default_view(self, request, view=None, *args, **kwargs):
         return super(ElectionTrackingPage, self).serve(request)
 
-    @route(r'^(?P<year>\d+)/?$')
+    @route(r'^(?P<year>\d+)\/?$')
     def year_view(self, request, year, view=None, *args, **kwargs):
         kwargs['year'] = year
         return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
