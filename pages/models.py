@@ -1611,6 +1611,16 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
         ]
 
     def get_context(self, *args, **kwargs):
+
+        for arg in args:
+            logger.debug('arg: %s' % arg)
+
+        for kwarg in kwargs:
+            logger.debug('kwarg: %s' % kwarg)
+
+        if 'year' in kwargs:
+            logger.debug('year: %s' % kwargs['year'])
+
         context = super(ElectionTrackingPage, self).get_context(*args, **kwargs)
 
         """
@@ -1680,14 +1690,13 @@ class ElectionTrackingPage(RoutablePageMixin, Page):
             context['state'] = kwargs['state']
         return context
 
-
     @route(r'^$')
     def default_view(self, request, view=None, *args, **kwargs):
         return super(ElectionTrackingPage, self).serve(request)
 
-    @route(r'^(?P<state>[\w\-]+)\/?$')
-    def state_view(self, request, state, view=None, *args, **kwargs):
-        kwargs['state'] = state
+    @route(r'^(?P<year>\d+)/?$')
+    def year_view(self, request, year, view=None, *args, **kwargs):
+        kwargs['year'] = year
         return super(ElectionTrackingPage, self).serve(request, view, args, kwargs)
 
 
