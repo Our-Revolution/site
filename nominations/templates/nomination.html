@@ -35,6 +35,8 @@
 
           {% if application.is_editable %}
 
+
+          {% if show_nominations_priority %}
           <div class="panel panel-default">
             <div class="panel-body">
 
@@ -54,6 +56,7 @@
           </div>
 
           <hr />
+          {% endif %}
 
             <form action="" method="POST">
               {{ formset.management_form|crispy }}

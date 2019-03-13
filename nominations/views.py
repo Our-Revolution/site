@@ -187,6 +187,33 @@ def get_auth0_user_id_by_email(email):
     return auth0_user_id
 
 
+def has_nominations_priority_access(local_group):
+    """
+    Check if Local Group has access to Priority Support Nominations Feature
+
+    Parameters
+    ----------
+    local_group : Group
+        Local Group
+
+    Returns
+        -------
+        bool
+            Return True if local group has access to feature
+    """
+    if local_group is not None and hasattr(
+        local_group,
+        'organizinghubaccess',
+    ):
+        access = local_group.organizinghubaccess
+        has_feature_access = access.has_feature_access(
+            ApplicationType.priority
+        )
+        return has_feature_access
+    else:
+        return False
+
+
 def is_application_owner(user, application):
     """Check if a user owns an application"""
 
@@ -357,8 +384,14 @@ class CreateApplicationView(
 
 
 @method_decorator(verified_email_required, name='dispatch')
-class EditNominationView(UpdateView):
+class EditNominationView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView,
+):
     form_class = NominationForm
+    permission_required = 'nominations.add_application'
+    skip_feature_check = True
     template_name = "nomination.html"
 
     def get_object(self):
@@ -403,7 +436,17 @@ class EditNominationView(UpdateView):
         )
         context_data['helper'] = NominationResponseFormsetHelper()
         context_data['application'] = self.object.application
+
+        context_data['show_nominations_priority'] = has_nominations_priority_access(
+            self.get_local_group()
+        )
+
         return context_data
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -599,22 +642,6 @@ class PrioritySupportView(
             context['application_candidate_form'] = application_candidate_form
 
         return context
-
-    # def get_initial(self, *args, **kwargs):
-    #     call_campaign = self.get_object()
-    #     caller_emails = []
-    #
-    #     """Build list of caller emails to populate form with instead of IDs"""
-    #     for caller in call_campaign.callers.all():
-    #         caller_emails.append(str(caller.user.email))
-    #
-    #     """Parse list of caller emails to comma separated values string"""
-    #     caller_emails_string = ", ".join(caller_emails)
-    #
-    #     initial = {
-    #         'caller_emails': caller_emails_string,
-    #     }
-    #     return initial
 
     def get_local_group(self):
         if self.local_group is None:
