@@ -95,16 +95,15 @@
 
           </div>
 
-
           <h3>All Candidates</h3>
-
-          {{ application_candidate_form.management_form }}
-          {{ application_candidate_form.non_form_errors }}
 
           <p>
             Enter all the candidates in the race, including the candidate
             you are nominating.
           </p>
+
+          {{ application_candidate_form.management_form }}
+          {{ application_candidate_form.non_form_errors }}
 
           {% for ac_form in application_candidate_form %}
 
@@ -143,10 +142,6 @@
           <hr />
 
           {% endfor %}
-
-
-
-
 
           <button type="submit"
           class="btn btn-success btn-block uppercase ls2">
