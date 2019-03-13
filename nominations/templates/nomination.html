@@ -32,19 +32,25 @@
         <div class="col-md-8 col-md-offset-2">
           {% if application.is_editable %}
 
-            <p>
-              <strong>
-                If you are requesting Priority Support then make sure you
-                <a href="{% url 'nominations-priority-support' application.id %}">fill
-                  out the Priority Support form first</a> before you proceed.
-              </strong>
-            </p>
+          <div class="panel panel-default">
+            <div class="panel-body">
 
-            <p>
-              Otherwise fill out the form below.
-            </p>
+              <p>
+                <strong>
+                  If you are requesting Priority Support then make sure you
+                  <a href="{% url 'nominations-priority-support' application.id %}">fill
+                    out the Priority Support form first</a> before you proceed.
+                </strong>
+              </p>
 
-            <hr />
+              <p>
+                Otherwise fill out the form below.
+              </p>
+
+            </div>
+          </div>
+
+          <hr />
 
             <form action="" method="POST">
               {{ formset.management_form|crispy }}
