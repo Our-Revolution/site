@@ -390,7 +390,6 @@ class CreateApplicationView(
 
 class EditNominationView(
     LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
     UpdateView,
 ):
     form_class = NominationForm
