@@ -218,7 +218,6 @@ ApplicationCandidateFormset = forms.inlineformset_factory(
     ApplicationCandidate,
     exclude=[],
     extra=10,
-    # can_delete=False,
 )
 
 
