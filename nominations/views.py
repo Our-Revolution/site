@@ -558,29 +558,45 @@ class PrioritySupportView(
     # lebowski
     # '''
 
+    def form_invalid(self, form, formset):
+        """
+        If the form is invalid, re-render the context data with the
+        data-filled form and errors.
+        """
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            application_candidate_form=formset,
+        ))
+
     def form_valid(self, form):
 
-        """Get responses and validate them too"""
+        """Save Application Candidates if valid"""
         formset = ApplicationCandidateFormset(
             self.request.POST or None,
             instance=self.get_object(),
             # prefix="questions",
         )
+
         if formset.is_valid():
-            """Save responses"""
             formset.save()
 
-        """Set type to priority for valid form"""
-        form.instance.application_type = ApplicationType.priority.value[0]
-        return super(PrioritySupportView, self).form_valid(form)
+            """Set type to priority for valid form"""
+            form.instance.application_type = ApplicationType.priority.value[0]
+
+            """Save valid form"""
+            return super(PrioritySupportView, self).form_valid(form)
+
+        else:
+            return self.form_invalid(form, formset)
 
     def get_context_data(self, **kwargs):
         context = super(PrioritySupportView, self).get_context_data(**kwargs)
 
-        application_candidate_form = ApplicationCandidateFormset(
-            instance=self.get_object()
-        )
-        context['application_candidate_form'] = application_candidate_form
+        if 'application_candidate_form' not in context:
+            application_candidate_form = ApplicationCandidateFormset(
+                instance=self.get_object()
+            )
+            context['application_candidate_form'] = application_candidate_form
 
         return context
 
