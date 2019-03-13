@@ -207,7 +207,7 @@ def has_nominations_priority_access(local_group):
     ):
         access = local_group.organizinghubaccess
         has_feature_access = access.has_feature_access(
-            ApplicationType.priority
+            OrganizingHubFeature.nominations_priority_support
         )
         return has_feature_access
     else:
