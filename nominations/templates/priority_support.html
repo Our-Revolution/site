@@ -1,0 +1,83 @@
+{% extends "nominations_portal.html" %}
+
+{% load bootstrap3 crispy_forms_tags django_bootstrap_breadcrumbs %}
+
+{% block page_title %}Our Revolution - Priority Support{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Priority Support" request.get_full_path %}
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="blue-bg white-text pb2">
+
+  {% include 'partials/status_bar.html' %}
+
+  <div class="container pt2">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+
+        <h1 class="mb0 mt0">Priority Support</h1>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="pt2 pb2">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+
+        <form action="{% url 'nominations-priority-support' application.id %}"
+        method="post" class="form mb20">
+
+          {% csrf_token %}
+
+          <div class="row">
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.vol_polling %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.vol_endorsements %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.stand_out_information %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.state_of_the_race %}
+            </div>
+
+            <div class="col-xs-12">
+              {% bootstrap_field form.vol_turnout %}
+            </div>
+
+            <div class="col-xs-12">
+              <button type="submit"
+              class="btn btn-success btn-block uppercase ls2">
+                Submit
+              </button>
+            </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

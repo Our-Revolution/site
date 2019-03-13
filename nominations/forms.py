@@ -317,3 +317,63 @@ class InitiativeApplicationForm(forms.ModelForm):
 
 class ApplicationsStatusChangeForm(forms.Form):
     confirm = forms.BooleanField(required=True)
+
+
+class PrioritySupportForm(forms.ModelForm):
+    priority_support_field_rows = 8
+    priority_support_field_maxlength = 1000
+
+    stand_out_information = forms.CharField(
+        label="Stand out information:",
+        max_length=priority_support_field_maxlength,
+        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+    )
+    state_of_the_race = forms.CharField(
+        label="State of the Race:",
+        max_length=priority_support_field_maxlength,
+        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+    )
+    vol_endorsements = forms.CharField(
+        label="Endorsements:",
+        max_length=priority_support_field_maxlength,
+        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+    )
+    vol_polling = forms.CharField(
+        label="Polling:",
+        max_length=priority_support_field_maxlength,
+        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+    )
+
+    # caller_emails = forms.CharField(
+    #     widget=forms.Textarea(attrs={'rows': '5'}),
+    #     required=False
+    # )
+    # max_distance = forms.IntegerField(
+    #     help_text="Max: %s miles" % CALLS_MAX_DISTANCE_MILES,
+    #     label="Radius",
+    #     max_value=CALLS_MAX_DISTANCE_MILES,
+    #     min_value=1
+    # )
+    # max_recipients = forms.IntegerField(
+    #     help_text="Max: %s contacts" % CALLS_MAX_LIST_SIZE,
+    #     label="State of the Race:",
+    #     max_value=CALLS_MAX_LIST_SIZE,
+    #     min_value=1
+    # )
+
+    class Meta:
+        fields = [
+            'stand_out_information',
+            'state_of_the_race',
+            'vol_endorsements',
+            'vol_polling',
+            'vol_turnout',
+            # 'state_or_territory',
+        ]
+        model = Application
+        widgets = {
+            # 'vol_polling': forms.Textarea(attrs={'rows': '8'}),
+            # 'vol_endorsements': forms.Textarea(attrs={'rows': '8'}),
+            # 'stand_out_information': forms.Textarea(attrs={'rows': '8'}),
+            # 'state_of_the_race': forms.Textarea(attrs={'rows': '8'}),
+        }

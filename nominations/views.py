@@ -24,6 +24,7 @@ from .forms import (
     NominationForm,
     NominationResponseFormset,
     NominationResponseFormsetHelper,
+    PrioritySupportForm,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
     QuestionnaireResponseFormsetHelper,
@@ -538,59 +539,59 @@ class ApplicationView(DetailView):
         return context_data
 
 
-class CallCampaignUpdateView(
-    LocalGroupPermissionRequiredMixin,
-    SuccessMessageMixin,
+class PrioritySupportView(
+    # LocalGroupPermissionRequiredMixin,
+    # SuccessMessageMixin,
     UpdateView
 ):
-    context_object_name = 'campaign'
-    template_name = "calls/callcampaign_form.html"
-    form_class = CallCampaignUpdateForm
-    model = CallCampaign
-    organizing_hub_feature = OrganizingHubFeature.call_tool
-    permission_required = 'calls.change_callcampaign'
-    slug_field = 'uuid'
-    slug_url_kwarg = 'uuid'
-    success_message = '''
-    Your call campaign has been edited succesfully.
-    '''
+    context_object_name = 'application'
+    template_name = "priority_support.html"
+    form_class = PrioritySupportForm
+    model = Application
+    # organizing_hub_feature = OrganizingHubFeature.call_tool
+    # permission_required = 'calls.change_callcampaign'
+    # slug_field = 'uuid'
+    # slug_url_kwarg = 'uuid'
+    # success_message = '''
+    # lebowski
+    # '''
 
-    def form_valid(self, form):
-        caller_emails = form.cleaned_data['caller_emails']
-        caller_ids = get_or_create_callers(caller_emails)
-        form.instance.callers = caller_ids
-        return super(CallCampaignUpdateView, self).form_valid(form)
+    # def form_valid(self, form):
+    #     caller_emails = form.cleaned_data['caller_emails']
+    #     caller_ids = get_or_create_callers(caller_emails)
+    #     form.instance.callers = caller_ids
+    #     return super(CallCampaignUpdateView, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
-        context['update_view'] = True
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
+    #     context['update_view'] = True
+    #     return context
 
-    def get_initial(self, *args, **kwargs):
-        call_campaign = self.get_object()
-        caller_emails = []
+    # def get_initial(self, *args, **kwargs):
+    #     call_campaign = self.get_object()
+    #     caller_emails = []
+    #
+    #     """Build list of caller emails to populate form with instead of IDs"""
+    #     for caller in call_campaign.callers.all():
+    #         caller_emails.append(str(caller.user.email))
+    #
+    #     """Parse list of caller emails to comma separated values string"""
+    #     caller_emails_string = ", ".join(caller_emails)
+    #
+    #     initial = {
+    #         'caller_emails': caller_emails_string,
+    #     }
+    #     return initial
 
-        """Build list of caller emails to populate form with instead of IDs"""
-        for caller in call_campaign.callers.all():
-            caller_emails.append(str(caller.user.email))
+    # def get_local_group(self):
+    #     campaign = self.get_object()
+    #     return campaign.local_group
 
-        """Parse list of caller emails to comma separated values string"""
-        caller_emails_string = ", ".join(caller_emails)
-
-        initial = {
-            'caller_emails': caller_emails_string,
-        }
-        return initial
-
-    def get_local_group(self):
-        campaign = self.get_object()
-        return campaign.local_group
-
-    def get_success_url(self):
-        return reverse_lazy(
-            'organizing-hub-call-campaign-detail',
-            kwargs={'uuid': self.object.uuid}
-        )
+    # def get_success_url(self):
+    #     return reverse_lazy(
+    #         'organizing-hub-call-campaign-detail',
+    #         kwargs={'uuid': self.object.uuid}
+    #     )
 
 
 @method_decorator(verified_email_required, name='dispatch')

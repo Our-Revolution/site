@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .views import (
     CreateApplicationView,
     NominationsIndexView,
+    PrioritySupportView,
     EditNominationView,
     DashboardView,
     CandidateDashboardView,
@@ -34,16 +35,23 @@ urlpatterns = [
                 ApplicationView.as_view(),
                 name='nominations-application'
             ),
-            url(
-                r'(?P<pk>[0-9]+)/(?:(?P<app_complete>[0-9]+)/)?$',
-                QuestionnaireSelectView.as_view(),
-                name='nominations-questionnaire-select',
-            ),
+            url(r'^(?P<pk>[0-9]+)/', include([
+                url(
+                    r'^priority-support/$',
+                    PrioritySupportView.as_view(),
+                    name='nominations-priority-support',
+                ),
+                url(
+                    r'(?:(?P<app_complete>[0-9]+)/)?$',
+                    QuestionnaireSelectView.as_view(),
+                    name='nominations-questionnaire-select',
+                ),
+            ])),
         ])),
         url(
-            r'^application-type/$',
+            r'^application-start/$',
             ApplicationStartView.as_view(),
-            name='nominations-application-type',
+            name='nominations-application-start',
         ),
         url(
             r'^dashboard/$',
