@@ -577,7 +577,9 @@ class PrioritySupportView(
     def get_context_data(self, **kwargs):
         context = super(PrioritySupportView, self).get_context_data(**kwargs)
 
-        application_candidate_form = ApplicationCandidateFormset()
+        application_candidate_form = ApplicationCandidateFormset(
+            instance=self.get_object()
+        )
         context['application_candidate_form'] = application_candidate_form
 
         return context

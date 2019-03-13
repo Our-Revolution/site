@@ -21,7 +21,9 @@
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
 
-        <h1 class="mb0 mt0">Priority Support</h1>
+        <h1 class="mb0 mt0">
+          Priority Support
+        </h1>
 
       </div>
     </div>
@@ -35,6 +37,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
+
+        {% bootstrap_messages %}
 
         <p>
           <strong>
@@ -50,6 +54,10 @@
         </p>
 
         <hr />
+
+        <h2>
+          {{ application }}
+        </h2>
 
         <form action="{% url 'nominations-priority-support' application.id %}"
         method="post" class="form mb20">
@@ -78,35 +86,65 @@
               {% bootstrap_field form.vol_turnout %}
             </div>
 
+          </div>
 
 
-            <div class="col-xs-12">
+          <h3>All Candidates</h3>
 
-              <fieldset>
-                  <legend>Recipe Ingredient</legend>
-                  {{ application_candidate_form.management_form }}
-                  {{ application_candidate_form.non_form_errors }}
-                  {% for ac_form in application_candidate_form %}
-                      {{ ac_form.id }}
-                      <div class="inline {{ ingredient_form.prefix }}">
-                          {{ ac_form.description.errors }}
-                          {{ ac_form.description.label_tag }}
-                          {{ ac_form.description }}
-                      </div>
-                  {% endfor %}
-              </fieldset>
+          {{ application_candidate_form.management_form }}
+          {{ application_candidate_form.non_form_errors }}
 
-            </div>
+          <p>
+            Enter all the candidates in the race, including the candidate
+            you are nominating.
+          </p>
+
+          {% for ac_form in application_candidate_form %}
+
+          {% for hidden in ac_form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+
+          <div class="row">
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.first_name %}
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.last_name %}
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.party %}
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.website_url %}
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.description %}
+          </div>
+
+          <div class="col-md-6">
+            {% bootstrap_field ac_form.fundraising %}
+          </div>
+
+        </div>
+
+          <hr />
+
+          {% endfor %}
 
 
 
 
-            <div class="col-xs-12">
-              <button type="submit"
-              class="btn btn-success btn-block uppercase ls2">
-                Submit
-              </button>
-            </div>
+
+          <button type="submit"
+          class="btn btn-success btn-block uppercase ls2">
+            Submit
+          </button>
 
         </form>
 
