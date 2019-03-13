@@ -383,7 +383,6 @@ class CreateApplicationView(
         return self.local_group
 
 
-@method_decorator(verified_email_required, name='dispatch')
 class EditNominationView(
     LocalGroupPermissionRequiredMixin,
     SuccessMessageMixin,
@@ -393,6 +392,31 @@ class EditNominationView(
     permission_required = 'nominations.add_application'
     skip_feature_check = True
     template_name = "nomination.html"
+
+    def form_valid(self, form):
+
+        """Save Responses if valid"""
+        formset = NominationResponseFormset(
+            self.request.POST or None,
+            instance=self.object,
+            prefix="questions",
+        )
+        if formset.is_valid():
+            formset.save()
+
+            """Set nomination status to complete"""
+            form.instance.status = 'complete'
+            form_valid = super(EditNominationView, self).form_valid(form)
+
+            """Submit application if questionnaire is complete too"""
+            application = self.get_object().application
+            if application.questionnaire.status == 'complete':
+                submit_application(application)
+
+            return form_valid
+
+        else:
+            return self.form_invalid(form)
 
     def get_object(self):
         app_id = self.request.GET.get('id')
@@ -404,25 +428,6 @@ class EditNominationView(
 
     def get_success_url(self):
         return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
-
-    def form_valid(self, form):
-        form.instance.status = 'complete'
-        form_valid = super(EditNominationView, self).form_valid(form)
-
-        # save responses
-        formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
-        if formset.is_valid():
-            formset.save()
-        else:
-            print formset.errors
-            return self.form_invalid(form)
-
-        """Submit application if questionnaire is complete too"""
-        application = self.get_object().application
-        if application.questionnaire.status == 'complete':
-            submit_application(application)
-
-        return form_valid
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(EditNominationView, self).get_context_data(
