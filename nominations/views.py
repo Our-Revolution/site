@@ -21,6 +21,7 @@ from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
 from .forms import (
     ApplicationForm,
+    ApplicationCandidateFormset,
     NominationForm,
     NominationResponseFormset,
     NominationResponseFormsetHelper,
@@ -558,14 +559,28 @@ class PrioritySupportView(
     # '''
 
     def form_valid(self, form):
+
+        """Get responses and validate them too"""
+        formset = ApplicationCandidateFormset(
+            self.request.POST or None,
+            instance=self.get_object(),
+            # prefix="questions",
+        )
+        if formset.is_valid():
+            """Save responses"""
+            formset.save()
+
         """Set type to priority for valid form"""
         form.instance.application_type = ApplicationType.priority.value[0]
         return super(PrioritySupportView, self).form_valid(form)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
-    #     context['update_view'] = True
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(PrioritySupportView, self).get_context_data(**kwargs)
+
+        application_candidate_form = ApplicationCandidateFormset()
+        context['application_candidate_form'] = application_candidate_form
+
+        return context
 
     # def get_initial(self, *args, **kwargs):
     #     call_campaign = self.get_object()

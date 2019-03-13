@@ -78,6 +78,29 @@
               {% bootstrap_field form.vol_turnout %}
             </div>
 
+
+
+            <div class="col-xs-12">
+
+              <fieldset>
+                  <legend>Recipe Ingredient</legend>
+                  {{ application_candidate_form.management_form }}
+                  {{ application_candidate_form.non_form_errors }}
+                  {% for ac_form in application_candidate_form %}
+                      {{ ac_form.id }}
+                      <div class="inline {{ ingredient_form.prefix }}">
+                          {{ ac_form.description.errors }}
+                          {{ ac_form.description.label_tag }}
+                          {{ ac_form.description }}
+                      </div>
+                  {% endfor %}
+              </fieldset>
+
+            </div>
+
+
+
+
             <div class="col-xs-12">
               <button type="submit"
               class="btn btn-success btn-block uppercase ls2">

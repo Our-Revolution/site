@@ -2,8 +2,17 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
-from .models import Nomination, Application, NominationResponse, Questionnaire, Response, InitiativeApplication
+from .models import (
+    Application,
+    ApplicationCandidate,
+    Nomination,
+    NominationResponse,
+    Questionnaire,
+    Response,
+    InitiativeApplication,
+)
 import os, requests
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -202,6 +211,14 @@ QuestionnaireResponseFormset = forms.inlineformset_factory(
     exclude=[],
     extra=0,
     can_delete=False,
+)
+
+ApplicationCandidateFormset = forms.inlineformset_factory(
+    Application,
+    ApplicationCandidate,
+    exclude=[],
+    # extra=0,
+    # can_delete=False,
 )
 
 
