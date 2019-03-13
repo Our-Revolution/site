@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
@@ -19,11 +20,14 @@ from django.http import HttpResponseRedirect
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
+from organizing_hub.models import OrganizingHubFeature
 from .forms import (
     ApplicationForm,
+    ApplicationCandidateFormset,
     NominationForm,
     NominationResponseFormset,
     NominationResponseFormsetHelper,
+    PrioritySupportForm,
     QuestionnaireForm,
     QuestionnaireResponseFormset,
     QuestionnaireResponseFormsetHelper,
@@ -32,6 +36,7 @@ from .forms import (
 )
 from .models import (
     Application,
+    ApplicationType,
     InitiativeApplication,
     Questionnaire
 )
@@ -182,6 +187,33 @@ def get_auth0_user_id_by_email(email):
     return auth0_user_id
 
 
+def has_nominations_priority_access(local_group):
+    """
+    Check if Local Group has access to Priority Support Nominations Feature
+
+    Parameters
+    ----------
+    local_group : Group
+        Local Group
+
+    Returns
+        -------
+        bool
+            Return True if local group has access to feature
+    """
+    if local_group is not None and hasattr(
+        local_group,
+        'organizinghubaccess',
+    ):
+        access = local_group.organizinghubaccess
+        has_feature_access = access.has_feature_access(
+            OrganizingHubFeature.nominations_priority_support
+        )
+        return has_feature_access
+    else:
+        return False
+
+
 def is_application_owner(user, application):
     """Check if a user owns an application"""
 
@@ -290,6 +322,11 @@ def submit_application(application):
             application.status = 'submitted'
             application.save()
 
+        """Set to Basic Support if type is missing"""
+        if application.application_type is None:
+            application.application_type = ApplicationType.basic.value[0]
+            application.save()
+
         """Send notification for submitted status"""
         send_application_submitted_notification(application)
 
@@ -307,13 +344,13 @@ class NominationsIndexView(TemplateView):
         return context
 
 
-class ApplicationTypeView(
+class ApplicationStartView(
     LocalGroupPermissionRequiredMixin,
     TemplateView,
 ):
     permission_required = 'nominations.add_application'
     skip_feature_check = True
-    template_name = 'application_type.html'
+    template_name = 'application_start.html'
 
     def get_local_group(self):
         if self.local_group is None:
@@ -351,14 +388,50 @@ class CreateApplicationView(
         return self.local_group
 
 
-@method_decorator(verified_email_required, name='dispatch')
-class EditNominationView(UpdateView):
+class EditNominationView(
+    LocalGroupPermissionRequiredMixin,
+    UpdateView,
+):
     form_class = NominationForm
+    permission_required = 'nominations.add_application'
+    skip_feature_check = True
     template_name = "nomination.html"
 
-    def get_object(self):
+    def form_valid(self, form):
+
+        """Save Responses if valid"""
+        formset = NominationResponseFormset(
+            self.request.POST or None,
+            instance=self.object,
+            prefix="questions",
+        )
+        if formset.is_valid():
+            formset.save()
+
+            """Set nomination status to complete"""
+            form.instance.status = 'complete'
+            form_valid = super(EditNominationView, self).form_valid(form)
+
+            """Submit application if questionnaire is complete too"""
+            application = self.get_application()
+            if application.questionnaire.status == 'complete':
+                submit_application(application)
+
+            return form_valid
+
+        else:
+            return self.form_invalid(form)
+
+    def get_application(self):
         app_id = self.request.GET.get('id')
         app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
+
+    def get_object(self):
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.nomination
         else:
@@ -366,25 +439,6 @@ class EditNominationView(UpdateView):
 
     def get_success_url(self):
         return "/groups/nominations/questionnaire?id=" + self.request.GET.get('id')
-
-    def form_valid(self, form):
-        form.instance.status = 'complete'
-        form_valid = super(EditNominationView, self).form_valid(form)
-
-        # save responses
-        formset = NominationResponseFormset(self.request.POST or None, instance=self.object, prefix="questions")
-        if formset.is_valid():
-            formset.save()
-        else:
-            print formset.errors
-            return self.form_invalid(form)
-
-        """Submit application if questionnaire is complete too"""
-        application = self.get_object().application
-        if application.questionnaire.status == 'complete':
-            submit_application(application)
-
-        return form_valid
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(EditNominationView, self).get_context_data(
@@ -397,8 +451,18 @@ class EditNominationView(UpdateView):
             prefix="questions"
         )
         context_data['helper'] = NominationResponseFormsetHelper()
-        context_data['application'] = self.object.application
+        context_data['application'] = self.get_application()
+
+        context_data['show_nominations_priority'] = has_nominations_priority_access(
+            self.get_local_group()
+        )
+
         return context_data
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
 
 
 @method_decorator(verified_email_required, name='dispatch')
@@ -536,6 +600,115 @@ class ApplicationView(DetailView):
         )
         context_data['application'] = self.object
         return context_data
+
+
+class PrioritySupportView(
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
+    context_object_name = 'application'
+    template_name = "priority_support.html"
+    form_class = PrioritySupportForm
+    model = Application
+    organizing_hub_feature = OrganizingHubFeature.nominations_priority_support
+    permission_required = 'nominations.add_application'
+    success_message = '''
+    The Priority Support form was saved successfully.
+    '''
+
+    def form_invalid(self, form, formset):
+        """
+        If the form is invalid, re-render the context data with the
+        data-filled form and errors.
+        """
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            application_candidate_form=formset,
+        ))
+
+    def form_valid(self, form):
+
+        """Save Application Candidates if valid"""
+        formset = ApplicationCandidateFormset(
+            self.request.POST or None,
+            instance=self.get_object(),
+        )
+
+        if formset.is_valid():
+            formset.save()
+
+            """Set type to priority for valid form"""
+            form.instance.application_type = ApplicationType.priority.value[0]
+
+            """Save valid form"""
+            return super(PrioritySupportView, self).form_valid(form)
+
+        else:
+            return self.form_invalid(form, formset)
+
+    def get(self, request, *args, **kwargs):
+
+        """Check access"""
+        application = self.get_object()
+        if is_application_owner(self.request.user, application):
+
+            """Check status"""
+            if application.is_editable():
+                return super(PrioritySupportView, self).get(
+                    request,
+                    *args,
+                    **kwargs
+                )
+            else:
+                return redirect(reverse_lazy(
+                    'nominations-application'
+                ) + "?id=" + self.kwargs['pk'])
+
+        else:
+            raise Http404(_("No application found matching the query"))
+
+    def get_context_data(self, **kwargs):
+        context = super(PrioritySupportView, self).get_context_data(**kwargs)
+
+        if 'application_candidate_form' not in context:
+            application_candidate_form = ApplicationCandidateFormset(
+                instance=self.get_object()
+            )
+            context['application_candidate_form'] = application_candidate_form
+
+        return context
+
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
+
+    def get_success_url(self):
+        return reverse_lazy('nominations-nomination-edit') + (
+            '?id=%s' % self.get_object().id
+        )
+
+    def post(self, request, *args, **kwargs):
+
+        """Check access"""
+        application = self.get_object()
+        if is_application_owner(self.request.user, application):
+
+            """Check status"""
+            if application.is_editable():
+                return super(PrioritySupportView, self).post(
+                    request,
+                    *args,
+                    **kwargs
+                )
+            else:
+                return redirect(reverse_lazy(
+                    'nominations-application'
+                ) + "?id=" + self.kwargs['pk'])
+
+        else:
+            raise Http404(_("No application found matching the query"))
 
 
 @method_decorator(verified_email_required, name='dispatch')

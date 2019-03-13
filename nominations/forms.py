@@ -2,8 +2,17 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 from local_groups.models import Group
-from .models import Nomination, Application, NominationResponse, Questionnaire, Response, InitiativeApplication
+from .models import (
+    Application,
+    ApplicationCandidate,
+    Nomination,
+    NominationResponse,
+    Questionnaire,
+    Response,
+    InitiativeApplication,
+)
 import os, requests
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -204,6 +213,13 @@ QuestionnaireResponseFormset = forms.inlineformset_factory(
     can_delete=False,
 )
 
+ApplicationCandidateFormset = forms.inlineformset_factory(
+    Application,
+    ApplicationCandidate,
+    exclude=[],
+    extra=10,
+)
+
 
 class CandidateEmailForm(forms.Form):
     candidate_email = forms.EmailField()
@@ -317,3 +333,44 @@ class InitiativeApplicationForm(forms.ModelForm):
 
 class ApplicationsStatusChangeForm(forms.Form):
     confirm = forms.BooleanField(required=True)
+
+
+class PrioritySupportForm(forms.ModelForm):
+    text_maxlength = 10
+    textarea_maxlength = 1000
+    textarea_rows = 4
+
+    stand_out_information = forms.CharField(
+        label="Stand out information:",
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
+    )
+    state_of_the_race = forms.CharField(
+        label="State of the Race:",
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
+    )
+    vol_endorsements = forms.CharField(
+        label="Endorsements:",
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
+    )
+    vol_polling = forms.CharField(
+        label="Polling:",
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
+    )
+    vol_turnout = forms.CharField(
+        label='Previous Election Year Turnout:',
+        max_length=text_maxlength,
+    )
+
+    class Meta:
+        fields = [
+            'stand_out_information',
+            'state_of_the_race',
+            'vol_endorsements',
+            'vol_polling',
+            'vol_turnout',
+        ]
+        model = Application

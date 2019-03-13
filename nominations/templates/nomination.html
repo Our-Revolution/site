@@ -30,7 +30,35 @@
     <div class="row pt2 pb2">
       <div class="container">
         <div class="col-md-8 col-md-offset-2">
+
+          {% bootstrap_messages %}
+
           {% if application.is_editable %}
+
+
+          {% if show_nominations_priority %}
+          <div class="panel panel-default">
+            <div class="panel-body">
+
+              <p>
+                <strong>
+                  If you are requesting Priority Support then make sure you
+                  <a href="{% url 'nominations-priority-support' application.id %}">fill
+                    out the Priority Support form first</a> before you proceed.
+                </strong>
+              </p>
+
+              <p>
+                After that is complete, or for Basic Support only, please fill
+                out the form below.
+              </p>
+
+            </div>
+          </div>
+
+          <hr />
+          {% endif %}
+
             <form action="" method="POST">
               {{ formset.management_form|crispy }}
               {% for form in formset %}
