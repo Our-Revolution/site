@@ -36,6 +36,20 @@
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
 
+        <p>
+          <strong>If you would like Priority Support then please fill
+          out the form below.</strong>
+        </p>
+
+        <p>
+          Otherwise for Basic Support only, you can
+          <a href="{% url 'nominations-nomination-edit' %}?id={{ application.id }}">
+            skip this and go straight to the next step
+          </a>.
+        </p>
+
+        <hr />
+
         <form action="{% url 'nominations-priority-support' application.id %}"
         method="post" class="form mb20">
 
