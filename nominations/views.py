@@ -320,11 +320,11 @@ def submit_application(application):
         """Update status to submitted if needed"""
         if application.is_editable() and application.status != 'submitted':
             application.status = 'submitted'
+            application.save()
 
-            """Set to Basic Support if type is missing"""
-            if application.application_type is None:
-                application.application_type = ApplicationType.basic.value[0]
-
+        """Set to Basic Support if type is missing"""
+        if application.application_type is None:
+            application.application_type = ApplicationType.basic.value[0]
             application.save()
 
         """Send notification for submitted status"""
