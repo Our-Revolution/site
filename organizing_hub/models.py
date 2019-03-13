@@ -165,6 +165,7 @@ def is_caller_for_call_campaign(call_profile):
 @unique
 class OrganizingHubFeature(Enum):
     call_tool = (1, 'Call Tool')
+    nominations_priority_support = (2, 'Nominations: Priority Support')
 
 
 class OrganizingHubAccess(models.Model):
