@@ -339,7 +339,7 @@ class ApplicationsStatusChangeForm(forms.Form):
 class PrioritySupportForm(forms.ModelForm):
     text_maxlength = 10
     textarea_maxlength = 1000
-    textarea_rows = 8
+    textarea_rows = 6
 
     stand_out_information = forms.CharField(
         label="Stand out information:",
