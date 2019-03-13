@@ -80,7 +80,11 @@ urlpatterns = [
             CreateApplicationView.as_view(),
             name='nominations-application-create',
         ),
-        url(r'^nomination/$', EditNominationView.as_view()),
+        url(
+            r'^nomination/$',
+            EditNominationView.as_view(),
+            name='nominations-nomination-edit',
+        ),
         url(r'^questionnaire/', include([
             url(
                 r'^$',

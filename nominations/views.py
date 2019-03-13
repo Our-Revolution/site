@@ -587,11 +587,10 @@ class PrioritySupportView(
     #     campaign = self.get_object()
     #     return campaign.local_group
 
-    # def get_success_url(self):
-    #     return reverse_lazy(
-    #         'organizing-hub-call-campaign-detail',
-    #         kwargs={'uuid': self.object.uuid}
-    #     )
+    def get_success_url(self):
+        return reverse_lazy('nominations-nomination-edit') + (
+            '?id=%s' % self.get_object().id
+        )
 
 
 @method_decorator(verified_email_required, name='dispatch')

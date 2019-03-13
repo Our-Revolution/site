@@ -320,30 +320,34 @@ class ApplicationsStatusChangeForm(forms.Form):
 
 
 class PrioritySupportForm(forms.ModelForm):
-    priority_support_field_rows = 8
-    priority_support_field_maxlength = 1000
+    text_maxlength = 10
+    textarea_maxlength = 1000
+    textarea_rows = 8
 
     stand_out_information = forms.CharField(
         label="Stand out information:",
-        max_length=priority_support_field_maxlength,
-        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
     )
     state_of_the_race = forms.CharField(
         label="State of the Race:",
-        max_length=priority_support_field_maxlength,
-        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
     )
     vol_endorsements = forms.CharField(
         label="Endorsements:",
-        max_length=priority_support_field_maxlength,
-        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
     )
     vol_polling = forms.CharField(
         label="Polling:",
-        max_length=priority_support_field_maxlength,
-        widget=forms.Textarea(attrs={'rows': priority_support_field_rows})
+        max_length=textarea_maxlength,
+        widget=forms.Textarea(attrs={'rows': textarea_rows})
     )
-
+    vol_turnout = forms.CharField(
+        label='Previous Election Year Turnout:',
+        max_length=text_maxlength,
+    )
     # caller_emails = forms.CharField(
     #     widget=forms.Textarea(attrs={'rows': '5'}),
     #     required=False
