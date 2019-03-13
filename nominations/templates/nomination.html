@@ -31,6 +31,22 @@
       <div class="container">
         <div class="col-md-8 col-md-offset-2">
           {% if application.is_editable %}
+
+            <p>
+              <strong>
+                If you are requesting Priority Support then please make sure you
+                <a href="{% url 'nominations-priority-support' application.id %}">
+                  fill out the Priority Support form first
+                </a> before you proceed.
+              </strong>
+            </p>
+
+            <p>
+              Otherwise please fill out the form below.
+            </p>
+
+            <hr />
+
             <form action="" method="POST">
               {{ formset.management_form|crispy }}
               {% for form in formset %}

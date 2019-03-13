@@ -33,6 +33,7 @@ from .forms import (
 )
 from .models import (
     Application,
+    ApplicationType,
     InitiativeApplication,
     Questionnaire
 )
@@ -556,11 +557,10 @@ class PrioritySupportView(
     # lebowski
     # '''
 
-    # def form_valid(self, form):
-    #     caller_emails = form.cleaned_data['caller_emails']
-    #     caller_ids = get_or_create_callers(caller_emails)
-    #     form.instance.callers = caller_ids
-    #     return super(CallCampaignUpdateView, self).form_valid(form)
+    def form_valid(self, form):
+        """Set type to priority for valid form"""
+        form.instance.application_type = ApplicationType.priority.value[0]
+        return super(PrioritySupportView, self).form_valid(form)
 
     # def get_context_data(self, **kwargs):
     #     context = super(CallCampaignUpdateView, self).get_context_data(**kwargs)
