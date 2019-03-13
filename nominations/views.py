@@ -413,7 +413,7 @@ class EditNominationView(
             form_valid = super(EditNominationView, self).form_valid(form)
 
             """Submit application if questionnaire is complete too"""
-            application = self.get_object().application
+            application = self.get_application()
             if application.questionnaire.status == 'complete':
                 submit_application(application)
 
@@ -422,9 +422,16 @@ class EditNominationView(
         else:
             return self.form_invalid(form)
 
-    def get_object(self):
+    def get_application(self):
         app_id = self.request.GET.get('id')
         app = get_object_or_404(Application, pk=app_id)
+        if is_application_owner(self.request.user, app):
+            return app
+        else:
+            raise Http404(_("No application found matching the query"))
+
+    def get_object(self):
+        app = self.get_application()
         if is_application_owner(self.request.user, app):
             return app.nomination
         else:
@@ -444,7 +451,7 @@ class EditNominationView(
             prefix="questions"
         )
         context_data['helper'] = NominationResponseFormsetHelper()
-        context_data['application'] = self.object.application
+        context_data['application'] = self.get_application()
 
         context_data['show_nominations_priority'] = has_nominations_priority_access(
             self.get_local_group()
