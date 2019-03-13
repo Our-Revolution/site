@@ -598,7 +598,7 @@ class PrioritySupportView(
     organizing_hub_feature = OrganizingHubFeature.nominations_priority_support
     permission_required = 'nominations.add_application'
     success_message = '''
-    Your request for Priority Support was submitted.
+    The Priority Support form was saved successfully.
     '''
 
     def form_invalid(self, form, formset):
@@ -632,6 +632,27 @@ class PrioritySupportView(
         else:
             return self.form_invalid(form, formset)
 
+    def get(self, request, *args, **kwargs):
+
+        """Check access"""
+        application = self.get_object()
+        if is_application_owner(self.request.user, application):
+
+            """Check status"""
+            if application.is_editable():
+                return super(PrioritySupportView, self).get(
+                    request,
+                    *args,
+                    **kwargs
+                )
+            else:
+                return redirect(reverse_lazy(
+                    'nominations-application'
+                ) + "?id=" + self.kwargs['pk'])
+
+        else:
+            raise Http404(_("No application found matching the query"))
+
     def get_context_data(self, **kwargs):
         context = super(PrioritySupportView, self).get_context_data(**kwargs)
 
@@ -652,6 +673,27 @@ class PrioritySupportView(
         return reverse_lazy('nominations-nomination-edit') + (
             '?id=%s' % self.get_object().id
         )
+
+    def post(self, request, *args, **kwargs):
+
+        """Check access"""
+        application = self.get_object()
+        if is_application_owner(self.request.user, application):
+
+            """Check status"""
+            if application.is_editable():
+                return super(PrioritySupportView, self).post(
+                    request,
+                    *args,
+                    **kwargs
+                )
+            else:
+                return redirect(reverse_lazy(
+                    'nominations-application'
+                ) + "?id=" + self.kwargs['pk'])
+
+        else:
+            raise Http404(_("No application found matching the query"))
 
 
 @method_decorator(verified_email_required, name='dispatch')

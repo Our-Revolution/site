@@ -2,11 +2,11 @@
 
 {% load bootstrap3 crispy_forms_tags django_bootstrap_breadcrumbs %}
 
-{% block page_title %}Our Revolution - Request Priority Support{% endblock %}
+{% block page_title %}Our Revolution - Priority Support Form{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Request Priority Support" request.get_full_path %}
+    {% breadcrumb "Priority Support Form" request.get_full_path %}
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
       <div class="col-md-8 col-md-offset-2">
 
         <h1 class="mb0 mt0">
-          Request Priority Support
+          Priority Support Form
         </h1>
 
       </div>
@@ -150,7 +150,7 @@
 
           <button type="submit"
           class="btn btn-success btn-block uppercase ls2">
-            Request Priority Support
+            Save
           </button>
 
         </form>
