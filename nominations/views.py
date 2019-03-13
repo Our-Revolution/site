@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
@@ -19,6 +20,7 @@ from django.http import HttpResponseRedirect
 from local_groups.models import find_local_group_by_user
 from organizing_hub.decorators import verified_email_required
 from organizing_hub.mixins import LocalGroupPermissionRequiredMixin
+from organizing_hub.models import OrganizingHubFeature
 from .forms import (
     ApplicationForm,
     ApplicationCandidateFormset,
@@ -542,21 +544,19 @@ class ApplicationView(DetailView):
 
 
 class PrioritySupportView(
-    # LocalGroupPermissionRequiredMixin,
-    # SuccessMessageMixin,
+    LocalGroupPermissionRequiredMixin,
+    SuccessMessageMixin,
     UpdateView
 ):
     context_object_name = 'application'
     template_name = "priority_support.html"
     form_class = PrioritySupportForm
     model = Application
-    # organizing_hub_feature = OrganizingHubFeature.call_tool
-    # permission_required = 'calls.change_callcampaign'
-    # slug_field = 'uuid'
-    # slug_url_kwarg = 'uuid'
-    # success_message = '''
-    # lebowski
-    # '''
+    organizing_hub_feature = OrganizingHubFeature.nominations_priority_support
+    permission_required = 'nominations.add_application'
+    success_message = '''
+    Your request for Priority Support was submitted.
+    '''
 
     def form_invalid(self, form, formset):
         """
@@ -616,9 +616,10 @@ class PrioritySupportView(
     #     }
     #     return initial
 
-    # def get_local_group(self):
-    #     campaign = self.get_object()
-    #     return campaign.local_group
+    def get_local_group(self):
+        if self.local_group is None:
+            self.local_group = find_local_group_by_user(self.request.user)
+        return self.local_group
 
     def get_success_url(self):
         return reverse_lazy('nominations-nomination-edit') + (
