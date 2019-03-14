@@ -9,7 +9,9 @@
 
 {% block content %}
 
-{{ block.super }}
+{% with static_content=True %}
+  {{ block.super }}
+{% endwith%}
 
 <div class="container">
 
