@@ -337,6 +337,8 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     list_filter = ('status', 'candidate_state')
 
+    raw_id_fields = ['group', 'nomination', 'questionnaire']
+
     search_fields = (
         'group__name',
         'group__group_id',
