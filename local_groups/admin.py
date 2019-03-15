@@ -31,6 +31,7 @@ class LocalGroupAffiliationAdmin(admin.ModelAdmin):
 @admin.register(LocalGroupProfile)
 class LocalGroupProfileAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
+    search_fields = ['user__email']
 
 
 @admin.register(LocalGroupRole)
