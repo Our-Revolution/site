@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import GeoTarget
+from .models import BSDProfile, GeoTarget
+
+
+@admin.register(BSDProfile)
+class BSDProfileAdmin(admin.ModelAdmin):
+    raw_id_fields = ['user']
+    search_fields = ['user__email']
 
 
 @admin.register(GeoTarget)

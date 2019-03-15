@@ -14,6 +14,7 @@ from .actions import export_as_csv_action, geocode_groups
 @admin.register(LocalGroupAffiliation)
 class LocalGroupAffiliationAdmin(admin.ModelAdmin):
     list_filter = ['local_group_roles']
+    raw_id_fields = ['local_group', 'local_group_profile']
     search_fields = ['local_group__name', 'local_group_profile__user__email']
 
     def get_urls(self):
@@ -29,7 +30,8 @@ class LocalGroupAffiliationAdmin(admin.ModelAdmin):
 
 @admin.register(LocalGroupProfile)
 class LocalGroupProfileAdmin(admin.ModelAdmin):
-    pass
+    raw_id_fields = ['user']
+    search_fields = ['user__email']
 
 
 @admin.register(LocalGroupRole)
