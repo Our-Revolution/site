@@ -752,7 +752,7 @@ class QuestionnaireIndexView(FormView):
             # Use double quotes for group name
             '"%s" <%s>' % (group_name, rep_email),
             '"%s" <%s>' % (
-                'Our Revolution National',
+                'Our Revolution Electoral Coordinator',
                 ELECTORAL_COORDINATOR_EMAIL
             )
         ]
