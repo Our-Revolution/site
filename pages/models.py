@@ -47,6 +47,7 @@ from local_groups.models import Group
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 SPLASH_DONATE_URL_DEFAULT = settings.SPLASH_DONATE_URL_DEFAULT
 
 
@@ -1900,7 +1901,7 @@ class GroupPage(RoutablePageMixin, Page):
                 d = {'group_id': group.group_id}
 
                 subject="Let's get your group on the map!"
-                from_email='Our Revolution Organizing <organizing@ourrevolution.com>'
+                from_email = 'Our Revolution <%s>' % DEFAULT_FROM_EMAIL
                 to_email = ['"%s %s" <%s>' % (
                     form.cleaned_data['rep_first_name'],
                     form.cleaned_data['rep_last_name'],
@@ -1909,7 +1910,12 @@ class GroupPage(RoutablePageMixin, Page):
 
                 text_content = plaintext.render(d)
                 html_content = htmly.render(d)
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+                msg = EmailMultiAlternatives(
+                    subject,
+                    text_content,
+                    from_email,
+                    to_email,
+                )
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
 

@@ -55,6 +55,7 @@ logger = logging.getLogger(__name__)
 auth0_domain = settings.AUTH0_DOMAIN
 auth0_client_id = settings.AUTH0_CLIENT_ID
 auth0_client_secret = settings.AUTH0_CLIENT_SECRET
+DEFAULT_FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 ELECTORAL_COORDINATOR_EMAIL = settings.ELECTORAL_COORDINATOR_EMAIL
 OR_LOGO_SECONDARY = settings.OR_LOGO_SECONDARY
 
@@ -262,10 +263,7 @@ def send_application_submitted_notification(application):
             ELECTORAL_COORDINATOR_EMAIL
         ),
     ]
-    from_email = '"%s" <%s>' % (
-        'Our Revolution Electoral Coordinator',
-        ELECTORAL_COORDINATOR_EMAIL
-    )
+    from_email = 'Our Revolution <%s>' % DEFAULT_FROM_EMAIL
     to_email = [
         # Use double quotes for group name
         '"%s" <%s>' % (group_name, group_email),
@@ -748,13 +746,13 @@ class QuestionnaireIndexView(FormView):
         }
 
         subject = "You're being nominated for endorsement by an official Our Revolution group!"
-        from_email = 'Our Revolution <info@ourrevolution.com>'
+        from_email = 'Our Revolution <%s>' % DEFAULT_FROM_EMAIL
         to_email = ['"%s" <%s>' % (candidate_name, candidate_email)]
         cc_emails = [
             # Use double quotes for group name
             '"%s" <%s>' % (group_name, rep_email),
             '"%s" <%s>' % (
-                'Our Revolution National',
+                'Our Revolution Electoral Coordinator',
                 ELECTORAL_COORDINATOR_EMAIL
             )
         ]
