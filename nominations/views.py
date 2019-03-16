@@ -263,10 +263,7 @@ def send_application_submitted_notification(application):
             ELECTORAL_COORDINATOR_EMAIL
         ),
     ]
-    from_email = '"%s" <%s>' % (
-        'Our Revolution Electoral Coordinator',
-        DEFAULT_FROM_EMAIL,
-    )
+    from_email = 'Our Revolution <%s>' % DEFAULT_FROM_EMAIL
     to_email = [
         # Use double quotes for group name
         '"%s" <%s>' % (group_name, group_email),
