@@ -6069,6 +6069,14 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .lst0 {
   list-style-type: none; }
 
+.list-2-col {
+  -webkit-column-count: 2;
+  column-count: 2; }
+  @media screen and (max-width: 767px) {
+    .list-2-col {
+      -webkit-column-count: 1;
+      column-count: 1; } }
+
 .list-3-col {
   -webkit-column-count: 3;
   column-count: 3; }

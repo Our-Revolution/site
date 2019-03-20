@@ -335,6 +335,14 @@ a.white-text {
   list-style-type: none;
 }
 
+.list-2-col {
+  column-count: 2;
+
+  @include until($medium) {
+    column-count: 1;
+  };
+}
+
 .list-3-col {
   column-count: 3;
 
