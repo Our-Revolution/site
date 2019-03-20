@@ -4,6 +4,7 @@ import csv
 import datetime
 import json
 import logging
+from collections import defaultdict
 from enum import Enum, unique
 from random import randint
 
@@ -1877,15 +1878,20 @@ class GroupPage(RoutablePageMixin, Page):
                 x.name,
             ),
         )
-        featured_groups = []
+        # featured_groups = []
+        # for group in groups_sorted:
+        #     if group.group_rating is not None and group.group_rating >= 3:
+        #         featured_groups.append(group)
+        featured_groups_by_state = defaultdict(list)
         for group in groups_sorted:
-            if group.group_rating is not None and group.group_rating >= 3:
-                featured_groups.append(group)
+            featured_groups_by_state[group.state].append(
+                group
+            )
 
         return render(request, 'pages/group_index_page.html', {
             'page': self,
             'groups': groups_data,
-            'featured_groups': featured_groups,
+            'featured_groups_by_state': featured_groups_by_state,
         })
 
     @route(r'^new/$')

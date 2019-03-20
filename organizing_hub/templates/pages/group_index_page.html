@@ -23,28 +23,36 @@
 
     <div class="row">
 
-      {% for group in featured_groups %}
+      <div class="col-xs-12">
 
-      <div class="col-xs-6">
+        {% for state, featured_groups in featured_groups_by_state %}
 
+        {% if state is not None %}
+        <h4>
+          {{ state }}
+        </h4>
+        {% endif %}
+
+        {% for featured_group in featured_groups %}
         <strong>
 
-          {% if group.group_type != 1 and group.city is not None %}
-          {{ group.city }}{% if group.state is not None %},{% endif %}
-          {% endif %}
-          {% if group.state is not None %}
-          {{ group.state }}
+          {% if featured_group.group_type != 1 and featured_group.city is not None %}
+          {{ featured_group.city }}
           {% endif %}
 
         </strong>
 
-        {% include 'partials/group_link.html' %}
+        <a href="/groups/{{ featured_group.slug }}">{{ featured_group.name }}</a>
 
-        {% firstof group.group_contact_email group.rep_email %}
+        {% firstof featured_group.group_contact_email featured_group.rep_email %}
+
+        <br />
+
+        {% endfor %}
+
+        {% endfor %}
 
       </div>
-
-      {% endfor %}
 
     </div>
 
