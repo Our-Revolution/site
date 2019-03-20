@@ -82,10 +82,7 @@
     var data = {{groups|safe}}
 
     for(i=0; i<data.features.length; i++) {
-      if(data.features[i].properties.status == 'approved'){
-
-        Groups.addGroup(data.features[i]);
-      }
+      Groups.addGroup(data.features[i]);
     }
 
     $('#autocomplete-input').on('keyup', function(e) {

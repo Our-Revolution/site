@@ -1850,7 +1850,9 @@ class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
         # Order is set by integer value in GROUP_TYPES tuple in models
-        groups = Group.objects.all().order_by('-group_type')
+        groups = Group.objects.filter(status__exact='approved').order_by(
+            '-group_type'
+        )
 
         geojson_data = serializers.serialize("geojson",groups)
 
