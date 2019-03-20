@@ -1870,25 +1870,34 @@ class GroupPage(RoutablePageMixin, Page):
         groups_data = json.dumps(data)
 
         """Get featured groups and sort by city, state"""
-        groups_sorted = sorted(
-            groups,
-            key=lambda x: (
-                (x.state if x.state is not None else 'ZZZ'),
-                # (x.city if x.city is not None else 'ZZZ'),
-                # x.name,
-            ),
-        )
+        # groups_sorted = sorted(
+        #     groups,
+        #     key=lambda x: (
+        #         (x.state if x.state is not None else 'ZZZ'),
+        #         # (x.city if x.city is not None else 'ZZZ'),
+        #         # x.name,
+        #     ),
+        # )
         # featured_groups = []
         # for group in groups_sorted:
         #     if group.group_rating is not None and group.group_rating >= 3:
         #         featured_groups.append(group)
         featured_groups_by_state = defaultdict(list)
-        for group in groups_sorted:
+        for group in groups:
             if group.group_rating is not None and group.group_rating >= 3:
                 featured_groups_by_state[group.state].append(
                     group
                 )
-        featured_groups = featured_groups_by_state.items
+        # featured_groups = featured_groups_by_state.items
+        featured_groups = sorted(
+            featured_groups_by_state.iteritems(),
+            key=lambda (k, v): (
+                k if k is not None else 'ZZZ'
+                # (x.state if x.state is not None else 'ZZZ'),
+                # (x.city if x.city is not None else 'ZZZ'),
+                # x.name,
+            ),
+        )
 
         return render(request, 'pages/group_index_page.html', {
             'page': self,
