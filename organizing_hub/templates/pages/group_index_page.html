@@ -25,24 +25,33 @@
 
             {% for group in state_groups %}
 
-            <div class="fs-xxs mb10">
+            <div class="mb20">
 
-              <strong>
+              <div class="fs-xs">
 
-                {% if group.group_type != 1 and group.city %}
-                {{ group.city }}{% if group.state %},{% else %}:{% endif %}
+                <strong>
+
+                  {% if group.group_type != 1 and group.city %}
+                  {{ group.city }}{% if group.state %},{% else %}:{% endif %}
+                  {% endif %}
+
+                  {% if group.state %}{{ group.state }}:{% endif %}
+
+                  {% include 'partials/group_link.html' %}
+
+                </strong>
+
+              </div>
+
+
+              <div class="fs-xxs">
+
+                {% firstof group.group_contact_email group.rep_email %}
+                {% if group.rep_phone is not None %}
+                {{ group.rep_phone }}
                 {% endif %}
 
-                {% if group.state %}{{ group.state }}:{% endif %}
-
-                {% include 'partials/group_link.html' %}
-
-              </strong>
-
-              {% firstof group.group_contact_email group.rep_email %}
-              {% if group.rep_phone is not None %}
-              | {{ group.rep_phone }}
-              {% endif %}
+              </div>
 
             </div>
 
