@@ -1874,8 +1874,8 @@ class GroupPage(RoutablePageMixin, Page):
             groups,
             key=lambda x: (
                 (x.state if x.state is not None else 'ZZZ'),
-                (x.city if x.city is not None else 'ZZZ'),
-                x.name,
+                # (x.city if x.city is not None else 'ZZZ'),
+                # x.name,
             ),
         )
         # featured_groups = []
@@ -1884,14 +1884,16 @@ class GroupPage(RoutablePageMixin, Page):
         #         featured_groups.append(group)
         featured_groups_by_state = defaultdict(list)
         for group in groups_sorted:
-            featured_groups_by_state[group.state].append(
-                group
-            )
+            if group.group_rating is not None and group.group_rating >= 3:
+                featured_groups_by_state[group.state].append(
+                    group
+                )
+        featured_groups = featured_groups_by_state.items
 
         return render(request, 'pages/group_index_page.html', {
             'page': self,
             'groups': groups_data,
-            'featured_groups_by_state': featured_groups_by_state,
+            'featured_groups': featured_groups,
         })
 
     @route(r'^new/$')
