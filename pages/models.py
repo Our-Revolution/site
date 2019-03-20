@@ -1849,12 +1849,13 @@ class DonationPage(Page):
 class GroupPage(RoutablePageMixin, Page):
     @route(r'^$')
     def index_view(self, request):
-        # Order is set by integer value in GROUP_TYPES tuple in models
+
+        """Get approved Local Groups and order by GROUP_TYPES tuple in model"""
         groups = Group.objects.filter(status__exact='approved').order_by(
             '-group_type'
         )
 
-        geojson_data = serializers.serialize("geojson",groups)
+        geojson_data = serializers.serialize("geojson", groups)
 
         data = json.loads(geojson_data)
 
@@ -1867,9 +1868,24 @@ class GroupPage(RoutablePageMixin, Page):
 
         groups_data = json.dumps(data)
 
+        """Get featured groups and sort by city, state"""
+        groups_sorted = sorted(
+            groups,
+            key=lambda x: (
+                (x.state if x.state is not None else 'ZZZ'),
+                (x.city if x.city is not None else 'ZZZ'),
+                x.name,
+            ),
+        )
+        featured_groups = []
+        for group in groups_sorted:
+            if group.group_rating is not None and group.group_rating >= 3:
+                featured_groups.append(group)
+
         return render(request, 'pages/group_index_page.html', {
             'page': self,
-            'groups':groups_data
+            'groups': groups_data,
+            'featured_groups': featured_groups,
         })
 
     @route(r'^new/$')

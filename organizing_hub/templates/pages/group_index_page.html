@@ -6,6 +6,54 @@
 
 {{ block.super }}
 
+<section>
+
+  <div class="container pt4 pb2">
+
+    <div class="row">
+      <div class="col-xs-12">
+
+        <h3>
+          Browse Featured Groups or scroll down to see the full map with all
+          our Local Groups
+        </h3>
+
+      </div>
+    </div>
+
+    <div class="row">
+
+      {% for group in featured_groups %}
+
+      <div class="col-xs-6">
+
+        <strong>
+
+          {% if group.group_type != 1 and group.city is not None %}
+          {{ group.city }}{% if group.state is not None %},{% endif %}
+          {% endif %}
+          {% if group.state is not None %}
+          {{ group.state }}
+          {% endif %}
+
+        </strong>
+
+        {% include 'partials/group_link.html' %}
+
+        {% firstof group.group_contact_email group.rep_email %}
+
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
   crossorigin=""/>
