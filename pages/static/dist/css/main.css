@@ -6057,6 +6057,10 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 .ts3 {
   text-shadow: 0 0 3px black; }
 
+.nobreak {
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid-column; }
+
 .nowrap {
   white-space: nowrap; }
 

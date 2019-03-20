@@ -319,6 +319,10 @@ a.white-text {
   text-shadow: 0 0 3px rgba(0,0,0,1);
 }
 
+.nobreak {
+  break-inside: avoid-column;
+}
+
 .nowrap {
   white-space: nowrap;
 }

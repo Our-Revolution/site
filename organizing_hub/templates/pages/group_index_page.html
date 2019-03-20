@@ -17,70 +17,42 @@
           Browse Featured Groups or search the map for all Local Groups
         </h3>
 
-        <div class="">
+        <div class="list-2-col">
 
           {% for state, state_groups in featured_groups %}
 
-          <div class="panel panel-default">
-            <div class="panel-body">
+          <div class="nobreak">
 
-              <div class="">
+            {% for group in state_groups %}
 
-                {% if state %}
-                <h4 class="fs-lg mb20 mt0">
-                  {{ state }}
-                </h4>
+            <div class="fs-xxs mb10">
+
+              <strong>
+
+                {% if group.group_type != 1 and group.city %}
+                {{ group.city }}{% if group.state %},{% else %}:{% endif %}
                 {% endif %}
 
-                <div class="list-2-col">
+                {% if group.state %}{{ group.state }}:{% endif %}
 
-                  {% for group in state_groups %}
+                {% include 'partials/group_link.html' %}
 
-                  <div class="mb10">
+              </strong>
 
-                    <div class="fs-xs">
-
-                      <strong>
-
-                        {% if group.group_type != 1 and group.city %}
-                        {{ group.city }}:
-                        {% endif %}
-
-                        {% include 'partials/group_link.html' %}
-
-                      </strong>
-
-                    </div>
-
-                    <div class="fs-xxs">
-
-                      {% firstof group.group_contact_email group.rep_email %}
-                      {% if group.rep_phone is not None %}
-                      | {{ group.rep_phone }}
-                      {% endif %}
-
-                    </div>
-
-                  </div>
-
-                  {% endfor %}
-
-                </div>
-
-
-              </div>
+              {% firstof group.group_contact_email group.rep_email %}
+              {% if group.rep_phone is not None %}
+              | {{ group.rep_phone }}
+              {% endif %}
 
             </div>
+
+            {% endfor %}
+
           </div>
-
-
-
-          <!-- <hr /> -->
 
           {% endfor %}
 
         </div>
-
 
       </div>
     </div>
