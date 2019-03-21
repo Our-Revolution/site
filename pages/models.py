@@ -1878,28 +1878,31 @@ class GroupPage(RoutablePageMixin, Page):
 
         groups_data = json.dumps(data)
 
-        """Get featured groups, sorted, and group by state"""
-        groups_sorted = sorted(
-            groups,
-            key=lambda x: (
-                (x.state if x.state is not None else 'ZZZ'),
-                (x.city if x.city is not None else 'ZZZ'),
-                x.name,
-            ),
-        )
-        featured_groups_by_state = defaultdict(list)
-        for group in groups_sorted:
-            """Add to list if group rating is 3 or better"""
-            if group.group_rating is not None and group.group_rating >= 3:
-                featured_groups_by_state[group.get_state_display()].append(
-                    group
-                )
-        featured_groups = sorted(
-            featured_groups_by_state.iteritems(),
-            key=lambda (k, v): (
-                (k if k is not None else 'ZZZ'),
-            ),
-        )
+        """Get featured groups if enabled, and sort/group by state"""
+        if self.featured_groups_show:
+            groups_sorted = sorted(
+                groups,
+                key=lambda x: (
+                    (x.state if x.state is not None else 'ZZZ'),
+                    (x.city if x.city is not None else 'ZZZ'),
+                    x.name,
+                ),
+            )
+            featured_groups_by_state = defaultdict(list)
+            for group in groups_sorted:
+                """Add to list if group rating is 3 or better"""
+                if group.group_rating is not None and group.group_rating >= 3:
+                    featured_groups_by_state[group.get_state_display()].append(
+                        group
+                    )
+            featured_groups = sorted(
+                featured_groups_by_state.iteritems(),
+                key=lambda (k, v): (
+                    (k if k is not None else 'ZZZ'),
+                ),
+            )
+        else:
+            featured_groups = None
 
         return render(request, 'pages/group_index_page.html', {
             'page': self,
