@@ -321,6 +321,7 @@ a.white-text {
 
 .nobreak {
   break-inside: avoid-column;
+  page-break-inside: avoid;
 }
 
 .nowrap {

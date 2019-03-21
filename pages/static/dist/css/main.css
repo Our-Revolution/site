@@ -6059,7 +6059,8 @@ a.white-text:hover, a.white-text:focus, a.white-text:visited, a.white-text:activ
 
 .nobreak {
   -webkit-column-break-inside: avoid;
-  break-inside: avoid-column; }
+  break-inside: avoid-column;
+  page-break-inside: avoid; }
 
 .nowrap {
   white-space: nowrap; }
