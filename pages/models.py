@@ -1892,7 +1892,7 @@ class GroupPage(RoutablePageMixin, Page):
             for group in groups_sorted:
                 """Add to list if group rating is 3 or better"""
                 if group.group_rating is not None and group.group_rating >= 3:
-                    featured_groups_by_state[group.get_state_display()].append(
+                    featured_groups_by_state[group.state].append(
                         group
                     )
             featured_groups = sorted(
