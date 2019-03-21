@@ -1848,6 +1848,15 @@ class DonationPage(Page):
 
 
 class GroupPage(RoutablePageMixin, Page):
+    featured_groups_show = models.BooleanField(
+        default=False,
+        help_text='Show Featured Groups list.'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('featured_groups_show'),
+    ]
+
     @route(r'^$')
     def index_view(self, request):
 
