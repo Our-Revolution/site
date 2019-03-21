@@ -1884,6 +1884,7 @@ class GroupPage(RoutablePageMixin, Page):
                 groups,
                 key=lambda x: (
                     (x.state if x.state is not None else 'ZZZ'),
+                    (x.get_country_display() if x.country is not None else 'ZZZ'),
                     (x.city if x.city is not None else 'ZZZ'),
                     x.name,
                 ),

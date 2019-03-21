@@ -53,10 +53,14 @@
                 <strong>
 
                   {% if group.group_type != 1 and group.city %}
-                  {{ group.city }}{% if group.state %},{% else %}:{% endif %}
+                  {{ group.city }}{% if group.state or group.country %},{% else %}:{% endif %}
                   {% endif %}
 
-                  {% if group.state %}{{ group.state }}:{% endif %}
+                  {% if group.state %}
+                  {{ group.state }}:
+                  {% elif group.country %}
+                  {{ group.get_country_display }}:
+                  {% endif %}
 
                   {% include 'partials/group_link.html' %}
 
