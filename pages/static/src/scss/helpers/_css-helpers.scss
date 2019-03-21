@@ -319,6 +319,11 @@ a.white-text {
   text-shadow: 0 0 3px rgba(0,0,0,1);
 }
 
+.nobreak {
+  break-inside: avoid-column;
+  page-break-inside: avoid;
+}
+
 .nowrap {
   white-space: nowrap;
 }
@@ -333,6 +338,14 @@ a.white-text {
 
 .lst0 {
   list-style-type: none;
+}
+
+.list-2-col {
+  column-count: 2;
+
+  @include until($medium) {
+    column-count: 1;
+  };
 }
 
 .list-3-col {

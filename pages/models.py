@@ -4,6 +4,7 @@ import csv
 import datetime
 import json
 import logging
+from collections import defaultdict
 from enum import Enum, unique
 from random import randint
 
@@ -1847,12 +1848,24 @@ class DonationPage(Page):
 
 
 class GroupPage(RoutablePageMixin, Page):
+    featured_groups_show = models.BooleanField(
+        default=False,
+        help_text='Show Featured Groups list.'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('featured_groups_show'),
+    ]
+
     @route(r'^$')
     def index_view(self, request):
-        # Order is set by integer value in GROUP_TYPES tuple in models
-        groups = Group.objects.all().order_by('-group_type')
 
-        geojson_data = serializers.serialize("geojson",groups)
+        """Get approved Local Groups and order by GROUP_TYPES tuple in model"""
+        groups = Group.objects.filter(status__exact='approved').order_by(
+            '-group_type'
+        )
+
+        geojson_data = serializers.serialize("geojson", groups)
 
         data = json.loads(geojson_data)
 
@@ -1865,9 +1878,36 @@ class GroupPage(RoutablePageMixin, Page):
 
         groups_data = json.dumps(data)
 
+        """Get featured groups if enabled, and sort/group by state"""
+        if self.featured_groups_show:
+            groups_sorted = sorted(
+                groups,
+                key=lambda x: (
+                    (x.state if x.state is not None else 'ZZZ'),
+                    (x.city if x.city is not None else 'ZZZ'),
+                    x.name,
+                ),
+            )
+            featured_groups_by_state = defaultdict(list)
+            for group in groups_sorted:
+                """Add to list if group rating is 3 or better"""
+                if group.group_rating is not None and group.group_rating >= 3:
+                    featured_groups_by_state[group.get_state_display()].append(
+                        group
+                    )
+            featured_groups = sorted(
+                featured_groups_by_state.iteritems(),
+                key=lambda (k, v): (
+                    (k if k is not None else 'ZZZ'),
+                ),
+            )
+        else:
+            featured_groups = None
+
         return render(request, 'pages/group_index_page.html', {
             'page': self,
-            'groups':groups_data
+            'groups': groups_data,
+            'featured_groups': featured_groups,
         })
 
     @route(r'^new/$')

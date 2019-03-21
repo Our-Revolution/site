@@ -6,6 +6,95 @@
 
 {{ block.super }}
 
+
+{% if featured_groups %}
+
+<section class="pb2 pt4">
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-9">
+
+        <h1 class="fs-xxl mb20 mt0">
+          Local Groups
+        </h1>
+
+        <p class="fs-md mb20">
+          Our Revolution is made up of local groups from all around the world.
+          Browse Featured Groups or search the map to get involved in your area
+          today.
+        </p>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+
+        <hr />
+
+        <h2 class="fs-lg mb20">
+          Featured Groups
+        </h2>
+
+        <div class="list-2-col">
+
+          {% for state, state_groups in featured_groups %}
+
+          <div class="nobreak">
+
+            {% for group in state_groups %}
+
+            <div class="mb20">
+
+              <div class="fs-xs">
+
+                <strong>
+
+                  {% if group.group_type != 1 and group.city %}
+                  {{ group.city }}{% if group.state %},{% else %}:{% endif %}
+                  {% endif %}
+
+                  {% if group.state %}{{ group.state }}:{% endif %}
+
+                  {% include 'partials/group_link.html' %}
+
+                </strong>
+
+              </div>
+
+
+              <div class="fs-xxs">
+
+                {% firstof group.group_contact_email group.rep_email %}
+                {% if group.rep_phone is not None %}
+                {{ group.rep_phone }}
+                {% endif %}
+
+              </div>
+
+            </div>
+
+            {% endfor %}
+
+          </div>
+
+          {% endfor %}
+
+        </div>
+
+        <hr />
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+{% endif %}
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
   crossorigin=""/>
@@ -18,7 +107,7 @@
     <div class="groups-map-info">
       <div class="groups-map__intro pa20 blue-bg action-bg white-text">
         <h3 class="mt0 mb0 groups-map__heading">Local Groups <span class="glyphicon glyphicon-chevron-down"></h3>
-        <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved with in your area today.</p>
+        <p>Our Revolution is made up of local groups from all around the world. Search for a group to get involved in your area today.</p>
       </div>
       <div class="groups-map-info__search">
         <input type="search" class="form-control maps-auto-complete" placeholder="Search for a city" id="autocomplete-input">
@@ -82,10 +171,7 @@
     var data = {{groups|safe}}
 
     for(i=0; i<data.features.length; i++) {
-      if(data.features[i].properties.status == 'approved'){
-
-        Groups.addGroup(data.features[i]);
-      }
+      Groups.addGroup(data.features[i]);
     }
 
     $('#autocomplete-input').on('keyup', function(e) {
