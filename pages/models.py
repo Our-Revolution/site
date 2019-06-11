@@ -1837,6 +1837,8 @@ class DonationPage(Page):
                 'last_name_q3_2018',
                 'first_name_q4_2018',
                 'last_name_q4_2018',
+                'first_name_q1_2019',
+                'last_name_q1_2019',
             ]
         )
         reader.next()

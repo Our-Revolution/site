@@ -43,44 +43,32 @@
 
 						<div id="q1_2019_list" class='donor-list'>
 							{% for donor in donations %}
-								<li>
-									{{ donor.first_name_q1_2019|stringformat:"s" }}
-									{{ donor.last_name_q1_2019|stringformat:"s" }}
-								</li>
-	  					{% endfor %}
+								<li>{{ donor.first_name_q1_2019|stringformat:"s" }} {{ donor.last_name_q1_2019|stringformat:"s" }}</li>
+							{% endfor %}
 						</div>
 						
 						<div id="q4_2018_list" class='donor-list'>
 							{% for donor in donations %}
-								<li>
-									{{ donor.first_name_q4_2018|stringformat:"s" }}
-									{{ donor.last_name_q4_2018|stringformat:"s" }}
-								</li>
-	  					{% endfor %}
+								<li>{{ donor.first_name_q4_2018|stringformat:"s" }} {{ donor.last_name_q4_2018|stringformat:"s" }}</li>
+							{% endfor %}
 						</div>
 
 						<div id="q3_2018_list" class='donor-list'>
 							{% for donor in donations %}
-								<li>
-									{{ donor.first_name_q3_2018|stringformat:"s" }}
-									{{ donor.last_name_q3_2018|stringformat:"s" }}
-								</li>
-	  					{% endfor %}
+								<li>{{ donor.first_name_q3_2018|stringformat:"s" }} {{ donor.last_name_q3_2018|stringformat:"s" }}</li>
+							{% endfor %}
 						</div>
 
 						<div id="q2_2018_list" class='donor-list'>
 							{% for donor in donations %}
-								<li>
-									{{ donor.first_name_q2_2018|stringformat:"s" }}
-									{{ donor.last_name_q2_2018|stringformat:"s" }}
-								</li>
-	  					{% endfor %}
+								<li>{{ donor.first_name_q2_2018|stringformat:"s" }} {{ donor.last_name_q2_2018|stringformat:"s" }}</li>
+							{% endfor %}
 						</div>
 
 						<div id="q1_2018_list" class='donor-list'>
 							{% for donor in donations %}
 								<li>{{ donor.first_name_q1_2018|stringformat:"s" }} {{ donor.last_name_q1_2018|stringformat:"s" }}</li>
-	  					{% endfor %}
+							{% endfor %}
 						</div>
 
 						<div id="q4_2017_list" class='donor-list'>
@@ -92,25 +80,25 @@
 						<div id="q3_2017_list" class='donor-list'>
 							{% for donor in donations %}
 								<li>{{ donor.first_name_q3_2017|stringformat:"s" }} {{ donor.last_name_q3_2017|stringformat:"s" }}</li>
-	  					{% endfor %}
+							{% endfor %}
 						</div>
 
 						<div id="q2_2017_list" class='donor-list'>
 							{% for donor in donations %}
 								<li>{{ donor.first_name_q2_2017|stringformat:"s" }} {{ donor.last_name_q2_2017|stringformat:"s" }}</li>
-	  					{% endfor %}
+							{% endfor %}
 						</div>
 
 						<div id="q1_2017_list" class='donor-list'>
 							{% for donor in donations %}
 								<li>{{ donor.first_name_q1_2017|stringformat:"s" }} {{ donor.last_name_q1_2017|stringformat:"s" }}</li>
-	  					{% endfor %}
+							{% endfor %}
 						</div>
 
 						<div id="2016_list" class="donor-list">
-	  					{% for donor in donations %}
+	  						{% for donor in donations %}
 								<li>{{ donor.first_name_2016|stringformat:"s" }} {{ donor.last_name_2016|stringformat:"s" }}</li>
-	  					{% endfor %}
+							{% endfor %}
 						</div>
   				</ul>
         </div>
