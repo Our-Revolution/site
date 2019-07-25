@@ -9,13 +9,13 @@
     {% block meta %}
 
       {% block meta_seo %}
-        <meta name="description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+        <meta name="description" content="{% firstof page.search_description 'Our Revolution - Elect progressives, fight for our issues, transform the Democratic party.' %}" />
       {% endblock %}
 
       {% block meta_og %}
         <meta property="og:locale" content="en_US" />
         <meta property="og:title" content="{% firstof page.seo_title page.title "Our Revolution" %}" />
-        <meta property="og:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+        <meta property="og:description" content="{% firstof page.search_description 'Our Revolution - Elect progressives, fight for our issues, transform the Democratic party.' %}" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Our Revolution" />
         {% if page.social_image %}
@@ -29,7 +29,7 @@
       {% block meta_twitter %}
         <meta name="twitter:card" content="summary_large_image"/>
         <meta name="twitter:title" content="Our Revolution"/>
-        <meta name="twitter:description" content="{% firstof page.search_description "The next step for Bernie Sanders' movement is a new group called Our Revolution, which will fight to transform America and advance the progressive agenda that we believe in." %}" />
+        <meta name="twitter:description" content="{% firstof page.search_description 'Our Revolution - Elect progressives, fight for our issues, transform the Democratic party.' %}" />
         <meta name="twitter:site" content="@OurRevolution"/>
         {% if page.social_image %}
           {% image page.social_image original as social_image_url %}
