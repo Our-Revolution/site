@@ -485,11 +485,6 @@ class TemplatePage(Page):
 
 
 class IndexPage(Page):
-	body = StreamField([
-        ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
-        ('raw_html', blocks.RawHTMLBlock())
-    ])
     background_color_default = '218fff'
     block_text_help_text = '''
     Main copy in content block/module to provide information on the
