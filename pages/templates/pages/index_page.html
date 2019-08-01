@@ -43,6 +43,20 @@
 {% block content %}
 
 <div class="container-fluid">
+	<div class="row">
+		<div class="container">
+			{% for block in page.body %}
+	            {% if block.block_type == 'heading' %}
+	                <h1>{{ block.value }}</h1>
+	            {% else %}
+	              {{ block.value }}
+	            {% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
   <div class="row row--main home">
     <div class="container">
       <section class="module-container module-container--ppl clearfix">
