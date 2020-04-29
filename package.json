@@ -20,7 +20,7 @@
     "gulp-sourcemaps": "~2.6.4",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
-    "jquery": "^3.1.1",
+    "jquery": "^3.5.0",
     "js-cookie": "^2.1.x",
     "lodash": "^4.17.x",
     "smooth-scroll": "^14.2.1",
