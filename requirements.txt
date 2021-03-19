@@ -37,7 +37,7 @@ django-recurrence==1.4.1
 django-storages==1.5.1
 django-taggit>=0.20,<0.21
 django-treebeard==4.0.1
-djangorestframework==3.5.1
+djangorestframework==3.11.2
 enum34==1.1.6
 env-tools==2.0.0
 fastly>=0.2,<0.3
