@@ -1,6 +1,6 @@
 auth0-python==3.0.0
 awsfabrictasks==1.2.0
-Babel==2.3.4
+Babel==2.9.1
 celery[redis]>=4.2,<4.3
 Django>=1.11,<1.12
 Pillow==3.4.2
